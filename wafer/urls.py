@@ -3,7 +3,7 @@ Created on 29 Jun 2012
 
 @author: euan
 '''
-from django.conf.urls.defaults import patterns, include, url
+from django.conf.urls.defaults import patterns, url
 from django.views import generic as generic_views
 from django.views.generic import RedirectView, TemplateView
 
