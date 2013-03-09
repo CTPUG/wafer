@@ -116,7 +116,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.static',
     'django.core.context_processors.tz',
     'django.contrib.messages.context_processors.messages',
-    'wafer.context_processors.expose_settings',
+    'wafer.context_processors.site_info',
 )
 
 INSTALLED_APPS = (
@@ -177,8 +177,4 @@ django.template.add_to_builtins('django.templatetags.future')
 django.template.add_to_builtins('django.templatetags.i18n')
 
 # Wafer settings
-
-WAFER_CONFERENCE_NAME = 'Wafer 2013'
-# No trailing /
-WAFER_BASE_URL = 'http://localhost:8000'
 WAFER_BILLABLE_ME = "http://billable.me/pdf/"

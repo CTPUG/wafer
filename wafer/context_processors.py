@@ -1,9 +1,11 @@
-from django.conf import settings
+from django.contrib.sites.models import get_current_site
 
 
-def expose_settings(request):
-    '''Add some settings to the template's context'''
-    context = {}
-    for setting in ('WAFER_CONFERENCE_NAME',):
-        context[setting] = getattr(settings, setting)
+def site_info(request):
+    '''Expose the site's info to templates'''
+    site = get_current_site(request)
+    context = {
+        'WAFER_CONFERENCE_NAME': site.name,
+        'WAFER_BASE_URL': 'http://%s' % site.domain,
+    }
     return context
