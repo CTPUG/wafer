@@ -108,6 +108,17 @@ TEMPLATE_DIRS = (
     # Don't forget to use absolute paths, not relative paths.
 )
 
+TEMPLATE_CONTEXT_PROCESSORS = (
+    'django.contrib.auth.context_processors.auth',
+    'django.core.context_processors.debug',
+    'django.core.context_processors.i18n',
+    'django.core.context_processors.media',
+    'django.core.context_processors.static',
+    'django.core.context_processors.tz',
+    'django.contrib.messages.context_processors.messages',
+    'wafer.context_processors.expose_settings',
+)
+
 INSTALLED_APPS = (
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -157,6 +168,8 @@ LOGGING = {
 
 # Django registration:
 ACCOUNT_ACTIVATION_DAYS = 7
+
+YOUR_CONFERENCE_NAME = 'Wafer 2013'
 
 import django.template
 django.template.add_to_builtins('django.templatetags.future')
