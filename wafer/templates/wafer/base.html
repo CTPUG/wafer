@@ -31,9 +31,15 @@
                         </a></li>
                     </ul>
                     <ul class="nav pull-right">
+                    {% if user.is_authenticated %}
+                        <li><a href="{% url 'wafer_index' %}">
+                            {% trans 'Logged in' %}
+                        </a></li>
+                    {% else %}
                         <li><a href="{% url 'auth_login' %}">
                             {% trans 'Register / Log In' %}
                         </a></li>
+                    {% endif %}
                     </ul>
                 </div>
             </div>
