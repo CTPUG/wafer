@@ -1,0 +1,44 @@
+{% extends "wafer/base.html" %}
+{% block content %}
+
+<div class="row">
+    {% if profile.photo %}
+    <div class="span2">
+        <img src="{{ MEDIA_URL }}{{ profile.photo }}">
+    </div>
+    {% endif %}
+    <div class="span10">
+        {% spaceless %}
+        <h1>
+            {% if profile.homepage %}
+                <a href="{{ profile.homepage }}">
+            {% endif %}
+            {{ subject.get_full_name|default:user.username }}
+            {% if profile.homepage %}
+                </a>
+            {% endif %}
+        </h1>
+        {% if profile.twitter_handle %}
+        <p>
+            <a href="https://twitter.com/{{ profile.twitter_handle }}" class="twitter-follow-button" data-show-count="false">
+                {% blocktrans with handle=profile.twitter_handle %}Follow @{{ handle }}{% endblocktrans %}
+            </a>
+        </p>
+        {% endif %}
+        {% if profile.github_username %}
+        <p>
+            <a href="https://github.com/{{ profile.github_username }}">
+                {% blocktrans with username=profile.github_username %}GitHub: {{ username }}{% endblocktrans %}
+            </a>
+        </p>
+        {% endif %}
+        {% endspaceless %}
+    </div>
+</div>
+<div class="well">
+{{ profile.bio }}
+</div>
+{% endblock %}
+{% block extra_foot %}
+    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+{% endblock %}
