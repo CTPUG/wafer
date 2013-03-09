@@ -173,3 +173,4 @@ YOUR_CONFERENCE_NAME = 'Wafer 2013'
 
 import django.template
 django.template.add_to_builtins('django.templatetags.future')
+django.template.add_to_builtins('django.templatetags.i18n')
