@@ -1,5 +1,8 @@
 from django.conf.urls.defaults import include, patterns, url
 from django.views.generic import RedirectView, TemplateView
+from django.contrib import admin
+
+admin.autodiscover()
 
 urlpatterns = patterns('',
     url(r'^$',
@@ -14,4 +17,5 @@ urlpatterns = patterns('',
     (r'^accounts/', include('registration.backends.default.urls')),
     (r'^users/', include('wafer.users.urls')),
     (r'^talks/', include('wafer.talks.urls')),
+    (r'^admin/', include(admin.site.urls)),
 )

@@ -26,11 +26,12 @@ class InvoiceTemplate(models.Model):
     DEFAULT_ADDITIONAL_NOTES = "Created with Billable.me"
 
     default = models.BooleanField(default=False)
+    name = models.CharField(max_length=255, default='Unnamed')
     company_name = models.TextField(default=DEFAULT_COMPANY_NAME)
     company_info = models.TextField(default=DEFAULT_COMPANY_INFO)
     tax_name = models.TextField(default="VAT")
     tax_percentage = models.DecimalField(max_digits=12, decimal_places=2,
-                                         null=True, default=None)
+                                         null=True, blank=True, default=None)
     currency_symbol = models.CharField(max_length=16, default='R')
     payment_details = models.TextField(
         default=DEFAULT_PAYMENT_DETAILS,
@@ -42,6 +43,9 @@ class InvoiceTemplate(models.Model):
         help_text="You should use '%(invoice_no)s' to include the invoice"
                   " number.")
 
+    def __unicode__(self):
+        return self.name
+
 
 class Invoice(models.Model):
 
@@ -49,6 +53,7 @@ class Invoice(models.Model):
         'provisional', 'unpaid', 'paid', 'cancelled')
 
     STATES = (
+        (PROVISIONAL, 'Provisional'),
         (UNPAID, 'Unpaid'),
         (PAID, 'Paid'),
         (CANCELLED, 'Cancelled'),
