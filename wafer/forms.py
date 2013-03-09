@@ -7,6 +7,7 @@ from django import forms
 
 from pycon import models
 
+
 class AttendeeRegistrationForm(forms.ModelForm):
 
     class Meta:
@@ -15,11 +16,11 @@ class AttendeeRegistrationForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
 
-        self.base_fields['name'].widget.attrs.update({'class' : 'required', 'tabindex' : 1})
-        self.base_fields['surname'].widget.attrs.update({'class' : 'required', 'tabindex' : 2})
-        self.base_fields['contact_number'].widget.attrs.update({'tabindex' : 3})
-        self.base_fields['email'].widget.attrs.update({'class' : 'required email', 'tabindex' : 4})
-        self.base_fields['registration_type'].widget.attrs.update({'class' : 'required', 'tabindex' : 5})
+        self.base_fields['name'].widget.attrs.update({'class': 'required', 'tabindex': 1})
+        self.base_fields['surname'].widget.attrs.update({'class': 'required', 'tabindex': 2})
+        self.base_fields['contact_number'].widget.attrs.update({'tabindex': 3})
+        self.base_fields['email'].widget.attrs.update({'class': 'required email', 'tabindex': 4})
+        self.base_fields['registration_type'].widget.attrs.update({'class': 'required', 'tabindex': 5})
 
         super(AttendeeRegistrationForm, self).__init__(*args, **kwargs)
 
