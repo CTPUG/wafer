@@ -120,6 +120,7 @@ INSTALLED_APPS = (
     'django_nose',
     'registration',
     'wafer',
+    'wafer.invoices',
 )
 
 TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
