@@ -9,7 +9,7 @@ backend = 'registration.backends.default.DefaultBackend'
 urlpatterns = patterns('',
     url(r'^profile/$', redirect_profile),
 
-    # registration.backends.default.urls, modified with our backend
+    # registration.backends.default.urls, but Django 1.5 compatible
     url(r'^activate/complete/$',
         TemplateView.as_view(
             template_name='registration/activation_complete.html'
