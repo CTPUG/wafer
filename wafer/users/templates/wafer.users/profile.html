@@ -13,7 +13,7 @@
             {% if profile.homepage %}
                 <a href="{{ profile.homepage }}">
             {% endif %}
-            {{ subject.get_full_name|default:user.username }}
+            {{ subject.get_full_name|default:subject.username }}
             {% if profile.homepage %}
                 </a>
             {% endif %}
