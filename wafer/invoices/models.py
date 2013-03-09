@@ -2,7 +2,7 @@ import requests
 
 from django.db import models
 from django.core.files.base import ContentFile
-from django import settings
+from django.conf import settings
 
 from wafer.models import AttendeeRegistration
 
@@ -26,23 +26,19 @@ class InvoiceTemplate(models.Model):
     DEFAULT_ADDITIONAL_NOTES = "Created with Billable.me"
 
     default = models.BooleanField(default=False)
-    company_name = models.TextField(
-        required=True, default=DEFAULT_COMPANY_NAME)
-    company_info = models.TextField(
-        required=True, default=DEFAULT_COMPANY_INFO)
-    tax_name = models.TextField(required=True, default="VAT")
+    company_name = models.TextField(default=DEFAULT_COMPANY_NAME)
+    company_info = models.TextField(default=DEFAULT_COMPANY_INFO)
+    tax_name = models.TextField(default="VAT")
     tax_percentage = models.DecimalField(max_digits=12, decimal_places=2,
                                          null=True, default=None)
-    currency_symbol = models.CharField(max_length=16, required=True,
-                                       default='R')
+    currency_symbol = models.CharField(max_length=16, default='R')
     payment_details = models.TextField(
-        required=True, default=DEFAULT_PAYMENT_DETAILS,
+        default=DEFAULT_PAYMENT_DETAILS,
         help_text="You should use '%(reference)s' to include the invoice"
                   " reference.")
-    additional_notes = models.TextField(
-        required=True, default=DEFAULT_ADDITIONAL_NOTES)
+    additional_notes = models.TextField(default=DEFAULT_ADDITIONAL_NOTES)
     reference_template = models.TextField(
-        required=True, default="INVOICE:%(invoice_no)s",
+        default="INVOICE:%(invoice_no)s",
         help_text="You should use '%(invoice_no)s' to include the invoice"
                   " number.")
 
@@ -73,19 +69,19 @@ class Invoice(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)
     state = models.CharField(max_length=32, choices=STATES,
                              default=PROVISIONAL)
-    recipient_info = models.TextField(required=True)
+    recipient_info = models.TextField()
     pdf = models.FileField(upload_to='invoices', null=True)
 
     # templated fields
-    company_name = models.TextField(required=True)
-    company_info = models.TextField(required=True)
-    tax_name = models.TextField(required=True)
+    company_name = models.TextField()
+    company_info = models.TextField()
+    tax_name = models.TextField()
     tax_percentage = models.DecimalField(max_digits=12, decimal_places=2,
-                                         null=True, required=True)
-    currency_symbol = models.CharField(max_length=16, required=True)
-    payment_details = models.TextField(required=True)
-    additional_notes = models.TextField(required=True)
-    reference_template = models.TextField(required=True)
+                                         null=True)
+    currency_symbol = models.CharField(max_length=16)
+    payment_details = models.TextField()
+    additional_notes = models.TextField()
+    reference_template = models.TextField()
 
     TEMPLATED_FIELDS = (company_name, company_info, tax_name,
                         tax_percentage, currency_symbol, payment_details,
@@ -183,7 +179,7 @@ class Invoice(models.Model):
 
 
 class InvoiceItem(models.Model):
-    description = models.CharField(max_length=255, required=True)
-    quantity = models.IntegerField(require=True)
+    description = models.CharField(max_length=255)
+    quantity = models.IntegerField()
     price = models.DecimalField(max_digits=12, decimal_places=2)
     invoice = models.ForeignKey(Invoice)
