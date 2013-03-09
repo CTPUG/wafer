@@ -20,9 +20,26 @@
                 <a class="brand" href="#">Wafer</a>
                 <div class="nav-collapse collapse">
                     <ul class="nav">
-                        <li class="active"><a href="{% url 'index' %}">{% trans 'Home' %}</a></li>
-                        <li><a href="#about">{% trans 'About' %}</a></li>
-                        <li><a href="#contact">{% trans 'Contact' %}</a></li>
+                        <li class="active">< a href="{% url 'wafer_index' %}">
+                            {% trans 'Home' %}
+                        </a></li>
+                        <li><a href="#about">
+                            {% trans 'About' %}
+                        </a></li>
+                        <li><a href="#contact">
+                            {% trans 'Contact' %}
+                        </a></li>
+                    </ul>
+                    <ul class="nav pull-right">
+                    {% if user.is_authenticated %}
+                        <li><a href="{% url 'wafer_index' %}">
+                            {% trans 'Logged in' %}
+                        </a></li>
+                    {% else %}
+                        <li><a href="{% url 'auth_login' %}">
+                            {% trans 'Register / Log In' %}
+                        </a></li>
+                    {% endif %}
                     </ul>
                 </div>
             </div>

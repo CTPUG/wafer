@@ -133,6 +133,7 @@ INSTALLED_APPS = (
     'registration',
     'wafer',
     'wafer.invoices',
+    'wafer.talks',
 )
 
 TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
@@ -176,4 +177,6 @@ django.template.add_to_builtins('django.templatetags.i18n')
 # Wafer settings
 
 WAFER_CONFERENCE_NAME = 'Wafer 2013'
+# No trailing /
+WAFER_BASE_URL = 'http://localhost:8000'
 WAFER_BILLABLE_ME = "http://billable.me/pdf/"

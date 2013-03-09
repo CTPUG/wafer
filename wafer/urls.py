@@ -4,11 +4,10 @@ from django.views.generic import RedirectView, TemplateView
 urlpatterns = patterns('',
     url(r'^$',
         TemplateView.as_view(template_name='wafer/index.html'),
-        name='index'),
+        name='wafer_index'),
 
     url(r'^index.html$',
-        RedirectView.as_view(url='/'),
-        name='index_redirect'),
+        RedirectView.as_view(url='/')),
 
     url('^contact.html', 'wafer.views.contact', name='wafer_contact'),
 

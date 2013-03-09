@@ -1,0 +1,30 @@
+{% extends 'wafer/base.html' %}
+{% block content %}
+<div class="container-fluid">
+    <div class="row-fluid">
+        <div class="span6">
+            <h2>{% trans 'Log in' %}</h2>
+            {% if form.errors %}
+            {% blocktrans %}
+            <p>Your username and password didn't match. Please try again.</p>
+            {% endblocktrans %}
+            {% endif %}
+            <p>
+            <form method="post" action="{% url 'django.contrib.auth.views.login' %}">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <input type="hidden" name="next" value="{{ next }}" />
+                <button type="submit" class="btn btn-primary">{% trans 'Log in' %}</button>
+            </form>
+            </p>
+        </div>
+        <div class="span6">
+            <h2>{% trans 'Sign up' %}</h2>
+            {% url 'registration_register' as signup_url %}
+            {% blocktrans %}
+            Not registered? Please <a href="{{signup_url}}">sign up</a>.
+            {% endblocktrans %}
+        </div>
+    </div>
+</div>
+{% endblock %}

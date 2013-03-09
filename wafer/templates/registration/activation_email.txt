@@ -1,0 +1,23 @@
+{% spaceless %}
+{% load wafer_registration %}
+{% url 'registration_activate' activation_key as activation_url %}
+{% url 'index' as index_url %}
+{% wafer_conference_name as WAFER_CONFERENCE_NAME %}
+{% wafer_base_url as WAFER_BASE_URL %}
+{% endspaceless %}{% blocktrans %}TLDR; Click {{ WAFER_BASE_URL }}{{ activation_url }}
+
+Thank you for signing up for {{ WAFER_CONFERENCE_NAME }}.
+
+To verify your e-mail address, please follow the link above, and complete your
+registration process.
+
+You have {{ expiration_days }} days left to do so.
+
+We hope to see you soon.
+
+Thanks,
+
+The {{ WAFER_CONFERENCE_NAME }} website.
+
+{{ WAFER_BASE_URL }}{{ index_url }}
+{% endblocktrans %}
