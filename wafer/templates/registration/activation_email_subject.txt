@@ -1,0 +1,3 @@
+{% blocktrans %}
+Activate your {{ WAFER_CONFERENCE_NAME }} account [{{ expiration_days }} days left]
+{% blocktrans %}
