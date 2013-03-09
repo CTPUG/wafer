@@ -270,7 +270,7 @@ class SpeakerRegistration(models.Model):
     talk_description = models.TextField(null=True)
     talk_abstract = models.TextField(null=True)
     talk_notes = models.TextField(null=True)
-    
+
     approved = models.BooleanField(default=False)
 
     def __unicode__(self):
