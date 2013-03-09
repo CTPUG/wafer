@@ -3,8 +3,8 @@ from optparse import make_option
 from django.core.management.base import BaseCommand
 from django.db import models
 
-from pycon.models import AttendeeRegistration, post_registration_save
-from pycon import constants
+from wafer.models import AttendeeRegistration, post_registration_save
+from wafer import constants
 
 
 class Command(BaseCommand):

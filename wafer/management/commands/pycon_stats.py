@@ -3,8 +3,8 @@ from optparse import make_option
 from django.core.management.base import BaseCommand
 from django.db import models
 
-from pycon.models import AttendeeRegistration, SpeakerRegistration
-from pycon.constants import (REGISTRATION_TYPE_CORPORATE,
+from wafer.models import AttendeeRegistration, SpeakerRegistration
+from wafer.constants import (REGISTRATION_TYPE_CORPORATE,
                              REGISTRATION_TYPE_INDIVIDUAL,
                              REGISTRATION_TYPE_STUDENT)
 

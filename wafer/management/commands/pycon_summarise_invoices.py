@@ -6,7 +6,7 @@ import re
 
 from django.core.management.base import BaseCommand
 
-from pycon.models import AttendeeRegistration
+from wafer.models import AttendeeRegistration
 
 
 class Command(BaseCommand):

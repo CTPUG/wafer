@@ -5,7 +5,7 @@ Created on 29 Jun 2012
 '''
 from django import forms
 
-from pycon import models
+from wafer import models
 
 
 class AttendeeRegistrationForm(forms.ModelForm):

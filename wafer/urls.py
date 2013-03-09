@@ -7,7 +7,7 @@ from django.conf.urls.defaults import patterns, include, url
 from django.views import generic as generic_views
 from django.views.generic import simple as simple_views
 
-from pycon import forms, models, views
+from wafer import forms, models, views
 
 urlpatterns = patterns('',
 
