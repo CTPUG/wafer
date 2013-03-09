@@ -1,9 +1,10 @@
 {% extends 'wafer/base.html' %}
+{% load i18n %}
 {% block content %}
-<h1>Registration</h1>
+<h1>{% trans 'Registration' %}</h1>
 <form action='{% url 'registration_register' %}' method='post'>
 {{ form.as_p }}
 {% csrf_token %}
-<button type="submit" class="btn btn-primary">Register</button>
+<button type="submit" class="btn btn-primary">{% trans 'Register' %}</button>
 </form>
 {% endblock %}

@@ -1,9 +1,12 @@
 {% extends 'wafer/base.html' %}
+{% load i18n %}
 {% block content %}
-<h1>Registration Complete</h1>
+<h1>{% trans 'Registration Complete' %}</h1>
 <p>
+{% blocktrans %}
     Thank you for registering for {{ YOUR_CONFERENCE_NAME }}.
     We have sent you an e-mail to confirm your registration.
     Please follow the instructions in it.
+{% endblocktrans %}
 </p>
 {% endblock %}
