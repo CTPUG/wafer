@@ -9,4 +9,5 @@ class SubmitTalkForm(forms.Form):
 
     abstract = forms.CharField(widget=forms.Textarea)
 
-    other_authors = forms.CharField(required=False)
+    other_speakers = forms.CharField(required=False,
+            widget=forms.Textarea)
