@@ -1,0 +1,6 @@
+req=`cat requirements*`
+for i in $req
+do
+  echo 'Installing ' $i
+  sudo pip install $i
+done

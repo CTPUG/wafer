@@ -116,6 +116,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.admin',
+    'crispy_forms',
     'south',
     'django_nose',
     'registration',
@@ -153,3 +154,6 @@ LOGGING = {
         },
     }
 }
+
+# Django registration:
+ACCOUNT_ACTIVATION_DAYS = 7
