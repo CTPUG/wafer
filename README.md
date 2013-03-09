@@ -7,6 +7,22 @@ A wafer-thin web application for running small conferences. Built using Django.
 
 Licensed under the [ISC License](LICENSE).
 
+Installation
+============
+
+1. TODO: Explain it all
+
+2. If you don't have one yet, create a superuser with
+   ``manage.py createsuperuser``.
+
+3. Log in and configure the Site:
+
+   * The domain will be used as the base for e-mails sent during
+     registration.
+
+   * The name will be the conference's name.
+
+4. Have a fun conference.
 
 TODO
 ====
