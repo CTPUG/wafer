@@ -3,102 +3,84 @@ Created on 29 Jun 2012
 
 @author: euan
 '''
-from django.conf.urls.defaults import patterns, include, url
+from django.conf.urls.defaults import patterns, url
 from django.views import generic as generic_views
-from django.views.generic import simple as simple_views
+from django.views.generic import RedirectView, TemplateView
 
 from wafer import forms, models, views
 
 urlpatterns = patterns('',
 
     url(r'^$',
-        simple_views.direct_to_template,
-        {'template': 'pycon/index.html'},
+        TemplateView.as_view(template_name='pycon/index.html'),
         name='index'),
 
     url(r'^index.html$',
-        simple_views.redirect_to,
-        {'url': '/'},
+        RedirectView.as_view(url='/'),
         name='index_redirect'),
 
     url(r'^about.html$',
-        simple_views.direct_to_template,
-        {'template': 'pycon/about.html'},
+        TemplateView.as_view(template_name='pycon/about.html'),
         name='about'),
 
     url(r'^venue.html$',
-        simple_views.direct_to_template,
-        {'template': 'pycon/venue.html'},
+        TemplateView.as_view(template_name='pycon/venue.html'),
         name='venue'),
 
     url(r'^location.html$',
-        simple_views.direct_to_template,
-        {'template': 'pycon/location.html'},
+        TemplateView.as_view(template_name='pycon/location.html'),
         name='location'),
 
     url(r'^schedule.html$',
-        simple_views.direct_to_template,
-        {'template': 'pycon/schedule.html'},
+        TemplateView.as_view(template_name='pycon/schedule.html'),
         name='schedule'),
 
     url(r'^sponsors.html$',
-        simple_views.direct_to_template,
-        {'template': 'pycon/sponsors.html'},
+        TemplateView.as_view(template_name='pycon/sponsors.html'),
         name='sponsors'),
 
     url(r'^sponsors_amazon.html$',
-        simple_views.direct_to_template,
-        {'template': 'pycon/sponsors_amazon.html'},
+        TemplateView.as_view(template_name='pycon/sponsors_amazon.html'),
         name='sponsors_amazon'),
 
     url(r'^sponsors_google.html$',
-        simple_views.direct_to_template,
-        {'template': 'pycon/sponsors_google.html'},
+        TemplateView.as_view(template_name='pycon/sponsors_google.html'),
         name='sponsors_google'),
 
     url(r'^sponsors_thoughtworks.html$',
-        simple_views.direct_to_template,
-        {'template': 'pycon/sponsors_thoughtworks.html'},
+        TemplateView.as_view(template_name='pycon/sponsors_thoughtworks.html'),
         name='sponsors_thoughtworks'),
 
     url(r'^sponsors_sjs.html$',
-        simple_views.direct_to_template,
-        {'template': 'pycon/sponsors_sjs.html'},
+        TemplateView.as_view(template_name='pycon/sponsors_sjs.html'),
         name='sponsors_sjs'),
 
     url(r'^sponsors_psf.html$',
-        simple_views.direct_to_template,
-        {'template': 'pycon/sponsors_psf.html'},
+        TemplateView.as_view(template_name='pycon/sponsors_psf.html'),
         name='sponsors_psf'),
 
     url(r'^sponsors_basho.html$',
-        simple_views.direct_to_template,
-        {'template': 'pycon/sponsors_basho.html'},
+        TemplateView.as_view(template_name='pycon/sponsors_basho.html'),
         name='sponsors_basho'),
 
     url(r'^sponsors_praekelt_foundation.html$',
-        simple_views.direct_to_template,
-        {'template': 'pycon/sponsors_praekelt_foundation.html'},
+        TemplateView.as_view(template_name='pycon/sponsors_praekelt_foundation.html'),
         name='sponsors_praekelt_foundation'),
 
     url(r'^sponsors_information_logistics.html$',
-        simple_views.direct_to_template,
-        {'template': 'pycon/sponsors_information_logistics.html'},
+        TemplateView.as_view(template_name='pycon/sponsors_information_logistics.html'),
         name='sponsors_information_logistics'),
 
     url(r'^sponsors_clickatell.html$',
-        simple_views.direct_to_template,
-        {'template': 'pycon/sponsors_clickatell.html'},
+        TemplateView.as_view(template_name='pycon/sponsors_clickatell.html'),
         name='sponsors_clickatell'),
 
     url(r'^sponsors_packages.html$',
-        simple_views.direct_to_template,
-        {'template': 'pycon/sponsors_packages.html'},
+        TemplateView.as_view(template_name='pycon/sponsors_packages.html'),
         name='sponsors_packages'),
 
     url(r'^contact.html$',
-        simple_views.direct_to_template,
-        {'template': 'pycon/contact.html'},
+        TemplateView.as_view(template_name='pycon/contact.html'),
         name='contact'),
 
     url(r'^register.html$',
@@ -108,8 +90,7 @@ urlpatterns = patterns('',
         name='register'),
 
     url(r'^register_thanks.html$',
-        simple_views.direct_to_template,
-        {'template': 'pycon/register_thanks.html'},
+        TemplateView.as_view(template_name='pycon/register_thanks.html'),
         name='register_thanks'),
 
     url(r'^speaker.html$',
@@ -120,8 +101,7 @@ urlpatterns = patterns('',
         name='speaker'),
 
     url(r'^speaker_thanks.html$',
-        simple_views.direct_to_template,
-        {'template': 'pycon/speaker_thanks.html'},
+        TemplateView.as_view(template_name='pycon/speaker_thanks.html'),
         name='speaker_thanks'),
 
     url(r'^invoice/(.*)/$',
@@ -129,63 +109,51 @@ urlpatterns = patterns('',
         name='attendee_invoice'),
 
     url(r'^book.html$',
-        simple_views.direct_to_template,
-        {'template': 'pycon/book.html'},
+        TemplateView.as_view(template_name='pycon/book.html'),
         name='book'),
 
     url(r'^book_thanks.html$',
-        simple_views.direct_to_template,
-        {'template': 'pycon/book_thanks.html'},
+        TemplateView.as_view(template_name='pycon/book_thanks.html'),
         name='book_thanks'),
 
     url(r'^news.html$',
-        simple_views.direct_to_template,
-        {'template': 'pycon/news.html'},
+        TemplateView.as_view(template_name='pycon/news.html'),
         name='news'),
 
     url(r'^news_pr1.html$',
-        simple_views.direct_to_template,
-        {'template': 'pycon/news_pr1.html'},
+        TemplateView.as_view(template_name='pycon/news_pr1.html'),
         name='news_pr1'),
 
     url(r'^news_umbono.html$',
-        simple_views.direct_to_template,
-        {'template': 'pycon/news_umbono.html'},
+        TemplateView.as_view(template_name='pycon/news_umbono.html'),
         name='news_umbono'),
 
     url(r'^news_umonya.html$',
-        simple_views.direct_to_template,
-        {'template': 'pycon/news_umonya.html'},
+        TemplateView.as_view(template_name='pycon/news_umonya.html'),
         name='news_umonya'),
 
     url(r'^news_3weeks.html$',
-        simple_views.direct_to_template,
-        {'template': 'pycon/news_3weeks.html'},
+        TemplateView.as_view(template_name='pycon/news_3weeks.html'),
         name='news_3weeks'),
 
     url(r'^news_sponsors.html$',
-        simple_views.direct_to_template,
-        {'template': 'pycon/news_sponsors.html'},
+        TemplateView.as_view(template_name='pycon/news_sponsors.html'),
         name='news_sponsors'),
 
     url(r'^news_speakers.html$',
-        simple_views.direct_to_template,
-        {'template': 'pycon/news_speakers.html'},
+        TemplateView.as_view(template_name='pycon/news_speakers.html'),
         name='news_speakers'),
 
     url(r'^news_recordings.html$',
-        simple_views.direct_to_template,
-        {'template': 'pycon/news_recordings.html'},
+        TemplateView.as_view(template_name='pycon/news_recordings.html'),
         name='news_recordings'),
 
     url(r'^news_lightning.html$',
-        simple_views.direct_to_template,
-        {'template': 'pycon/news_lightning.html'},
+        TemplateView.as_view(template_name='pycon/news_lightning.html'),
         name='news_lightning'),
 
     url(r'^news_spaces.html$',
-        simple_views.direct_to_template,
-        {'template': 'pycon/news_spaces.html'},
+        TemplateView.as_view(template_name='pycon/news_spaces.html'),
         name='news_spaces'),
 
     url(r'^speakers.html$',
