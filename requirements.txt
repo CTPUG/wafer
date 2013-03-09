@@ -2,3 +2,4 @@ Django
 South
 pytz
 requests
+pillow
