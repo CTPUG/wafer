@@ -17,3 +17,7 @@ class RegisterView(generic_views.CreateView):
                              "and we'll contact you as places become "
                              "available.")
         return super(RegisterView, self).dispatch(request, *args, **kwargs)
+
+
+def contact(request):
+    raise NotImplemented()
