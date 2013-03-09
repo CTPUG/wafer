@@ -4,7 +4,7 @@ from optparse import make_option
 
 from django.core.management.base import BaseCommand
 
-from pycon.models import AttendeeRegistration, SpeakerRegistration
+from wafer.models import AttendeeRegistration, SpeakerRegistration
 
 
 class Command(BaseCommand):

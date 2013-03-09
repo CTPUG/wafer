@@ -1,4 +1,6 @@
 Django
 South
-requests
+django-nose
 pytz
+requests
+pillow

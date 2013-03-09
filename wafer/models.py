@@ -17,7 +17,7 @@ from django.core.urlresolvers import reverse
 from django.contrib.sites.models import get_current_site
 from django.core.files.base import ContentFile
 
-from pycon import constants
+from wafer import constants
 
 WAITING_LIST_ON = getattr(settings, 'WAITING_LIST_ON', False)
 

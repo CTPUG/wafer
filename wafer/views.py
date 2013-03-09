@@ -8,7 +8,7 @@ from django.shortcuts import get_object_or_404
 from django.views import generic as generic_views
 from django.contrib import messages
 
-from pycon.models import AttendeeRegistration, WAITING_LIST_ON
+from wafer.models import AttendeeRegistration, WAITING_LIST_ON
 
 
 class RegisterView(generic_views.CreateView):
