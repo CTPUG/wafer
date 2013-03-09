@@ -133,6 +133,7 @@ INSTALLED_APPS = (
     'registration',
     'wafer',
     'wafer.invoices',
+    'wafer.registration',
     'wafer.talks',
     'wafer.users',
 )
