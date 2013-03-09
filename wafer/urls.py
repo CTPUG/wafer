@@ -197,29 +197,4 @@ urlpatterns = patterns('',
                                          template_name='pycon/speaker_detail.html'), 
         name='speaker_detail'),
 
-# Old URL's
-
-#    url(r'^register/attendee/$',
-#        generic_views.CreateView.as_view(model=models.AttendeeRegistration,
-#                                         template_name='pycon/popups/attendee.html',
-#                                         success_url='/register/attendee/thanks/'),
-#        name='register_attendee'),
-#
-#    url(r'^register/speaker/$',
-#        
-#        generic_views.CreateView.as_view(model=models.SpeakerRegistration,
-#                                         template_name='pycon/popups/speaker.html',
-#                                         success_url='/register/speaker/thanks/'),
-#        name='register_speaker'),
-#                       
-#    url(r'^register/attendee/thanks/$',
-#        simple_views.direct_to_template, 
-#        {'template' : 'pycon/popups/attendee_thanks.html'}, 
-#        name='attendee_thanks'),
-#                       
-#    url(r'^register/speaker/thanks/$',
-#        simple_views.direct_to_template, 
-#        {'template' : 'pycon/popups/speaker_thanks.html'}, 
-#        name='speaker_thanks'),
-
 )
