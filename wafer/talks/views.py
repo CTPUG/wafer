@@ -1,17 +1,20 @@
-from django.http import HttpResponse, HttpResponseNotFound
-from django.shortcuts import get_object_or_404
+from django.shortcuts import render
+from django.http import HttpResponseRedirect
 
-from wafer.models import SpeakerRegistration
-
-
-def attendee_talk(request, speaker_name):
-    """Display the submitted talks associated with the given user"""
-    speaker = get_object_or_404(SpeakerRegistration, name=speak_nam)
-    if speaker.talk_title is None:
-        return HttpResponseNotFound("Talk details not found.",
-                                    content_type="text/plain")
+from wafer.talks.models import Talks
+from wafer.talks.forms import SubmitTalkForm
 
 
-    return HttpResponse(
-            content="<html><body>Talks still to be done</body></html>",
-            content_type="text/html")
+def submit(request):
+    """Submit a talk proposal"""
+    if request.method == 'POST':
+        form = SubmitTalkForm(request.POST)
+        if form.is_valid():
+            # FIXME
+            return HttpResponseRedirect('/')
+    else:
+        form = SubmitTalkForm()
+
+    return render(request, 'talks/submittalk.html', {
+            'form': form,
+            })

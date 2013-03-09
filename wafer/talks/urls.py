@@ -1,8 +1,7 @@
 from django.conf.urls.defaults import patterns, url
-from django.views.generic import TemplateView
+
+from wafer.talks.views import submit
 
 urlpatterns = patterns('',
-      url(r'^$',
-         TemplateView.as_view(template_name='talks/submittalk.html'),
-         name='talk_submit'),
+      url(r'^$', submit, name='talk_submit'),
       )

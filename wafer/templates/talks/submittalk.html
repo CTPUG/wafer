@@ -51,7 +51,11 @@
       <h2>{% trans "Talk Submission" %}</h2>
 {% endblock %}
 {% if user.is_authenticated %}
-      <p>This is where you will want to submit talks. Still to be implemented</p>
+      <form method="post" action="/talks/">
+         {% csrf_token %}
+         {{ form.as_p }}
+         <input type="submit" value="Submit" />
+      </form>
 {% else %}
       <p>{% trans "Please login before submitting a talk proposal" %}</p>
 {% endif %}
