@@ -36,3 +36,7 @@ nosetests.xml
 
 # The database shouldn't be under revision control
 wafer.db
+
+# Editor cruft
+.*.swp
+*~
