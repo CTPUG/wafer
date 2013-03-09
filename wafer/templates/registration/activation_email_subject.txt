@@ -1,3 +1,5 @@
+{% load wafer_registration %}
+{% wafer_conference_name as WAFER_CONFERENCE_NAME %}
 {% blocktrans %}
 Activate your {{ WAFER_CONFERENCE_NAME }} account [{{ expiration_days }} days left]
 {% endblocktrans %}
