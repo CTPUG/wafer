@@ -1,9 +1,14 @@
 wafer
 =====
 
+|build|_
+
 A wafer-thin web application for running small conferences. Built using Django.
 
 Licensed under the [ISC License](LICENSE).
+
+.. |build| image:: https://secure.travis-ci.org/CTPUG/wafer.png?branch=master
+.. _build: http://travis-ci.org/CTPUG/wafer
 
 TODO
 ====
