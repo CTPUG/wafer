@@ -3,6 +3,8 @@ wafer
 
 A wafer-thin web application for running small conferences. Built using Django.
 
+Licensed under the [ISC License](LICENSE).
+
 TODO
 ====
 
