@@ -157,3 +157,6 @@ LOGGING = {
 
 # Django registration:
 ACCOUNT_ACTIVATION_DAYS = 7
+
+import django.template
+django.template.add_to_builtins('django.templatetags.future')
