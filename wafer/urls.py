@@ -1,4 +1,4 @@
-from django.conf.urls.defaults import patterns, url
+from django.conf.urls.defaults import include, patterns, url
 from django.views.generic import RedirectView, TemplateView
 
 urlpatterns = patterns('',
@@ -9,4 +9,6 @@ urlpatterns = patterns('',
     url(r'^index.html$',
         RedirectView.as_view(url='/'),
         name='index_redirect'),
+
+    (r'^accounts/', include('registration.backends.default.urls')),
 )
