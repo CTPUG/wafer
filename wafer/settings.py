@@ -118,6 +118,7 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     'south',
     'django_nose',
+    'registration',
     'wafer',
 )
 
