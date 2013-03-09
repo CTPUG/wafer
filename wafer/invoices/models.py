@@ -1,128 +1,189 @@
-import re
-import json
-from uuid import uuid4
-
 import requests
 
 from django.db import models
-from django.core.urlresolvers import reverse
-from django.contrib.sites.models import get_current_site
 from django.core.files.base import ContentFile
+from django import settings
 
 from wafer.models import AttendeeRegistration
-from wafer.utils import normalize_unicode
-from wafer import constants
+
+
+class InvoiceTemplate(models.Model):
+
+    DEFAULT_COMPANY_NAME = "Wafercon 20XX"
+    DEFAULT_COMPANY_INFO = (
+        "Wafercon Foundation\n"
+        "wafercon.example.com\n"
+        "team@waferconf.example.com"
+    )
+    DEFAULT_PAYMENT_DETAILS = (
+        "Pay by EFT to:\n"
+        "Account number: XXX\n"
+        "Branch code: YYY\n"
+        "Account name: Wafercon\n"
+        "Bank: ZZZ\n"
+        "Reference: %(reference)s"
+    )
+    DEFAULT_ADDITIONAL_NOTES = "Created with Billable.me"
+
+    default = models.BooleanField(default=False)
+    company_name = models.TextField(
+        required=True, default=DEFAULT_COMPANY_NAME)
+    company_info = models.TextField(
+        required=True, default=DEFAULT_COMPANY_INFO)
+    tax_name = models.TextField(required=True, default="VAT")
+    tax_percentage = models.DecimalField(max_digits=12, decimal_places=2,
+                                         null=True, default=None)
+    currency_symbol = models.CharField(max_length=16, required=True,
+                                       default='R')
+    payment_details = models.TextField(
+        required=True, default=DEFAULT_PAYMENT_DETAILS,
+        help_text="You should use '%(reference)s' to include the invoice"
+                  " reference.")
+    additional_notes = models.TextField(
+        required=True, default=DEFAULT_ADDITIONAL_NOTES)
+    reference_template = models.TextField(
+        required=True, default="INVOICE:%(invoice_no)s",
+        help_text="You should use '%(invoice_no)s' to include the invoice"
+                  " number.")
 
 
 class Invoice(models.Model):
 
-    invoice_id = models.CharField(max_length=32, editable=False,
-                                  default=lambda: uuid4().hex)
-    invoice_paid = models.BooleanField(default=False)
-    invoice_pdf = models.FileField(upload_to='invoices', null=True,
-                                   editable=False)
-    # invoice_billable_params is JSON encoded
-    invoice_billable_params = models.TextField(null=True, editable=False)
+    PROVISIONAL, UNPAID, PAID, CANCELLED = (
+        'provisional', 'unpaid', 'paid', 'cancelled')
+
+    STATES = (
+        (UNPAID, 'Unpaid'),
+        (PAID, 'Paid'),
+        (CANCELLED, 'Cancelled'),
+    )
+
+    STATIC_BILLABLEME_PARAMS = {
+        'kind': 'INVOICE',
+        'invoice_number_label': 'Invoice #',
+        'invoice_date_label': 'Date',
+        'description_label': 'Item & Description',
+        'quantity_label': 'Quantity',
+        'price_label': 'Price',
+        'subtotal_label': 'Subtotal',
+        'total_label': 'Total',
+    }
 
     attendees = models.ManyToManyField(AttendeeRegistration)
+    timestamp = models.DateTimeField(auto_now_add=True)
+    state = models.CharField(max_length=32, choices=STATES,
+                             default=PROVISIONAL)
+    recipient_info = models.TextField(required=True)
+    pdf = models.FileField(upload_to='invoices', null=True)
 
-    def payment_reference(self):
-        initial = self.name[0] if self.name else u''
-        ref = u"PYCON: %s%s" % (initial.upper(), self.surname.upper())
-        return normalize_unicode(ref)
+    # templated fields
+    company_name = models.TextField(required=True)
+    company_info = models.TextField(required=True)
+    tax_name = models.TextField(required=True)
+    tax_percentage = models.DecimalField(max_digits=12, decimal_places=2,
+                                         null=True, required=True)
+    currency_symbol = models.CharField(max_length=16, required=True)
+    payment_details = models.TextField(required=True)
+    additional_notes = models.TextField(required=True)
+    reference_template = models.TextField(required=True)
 
-    def invoice_url(self):
-        site = get_current_site(None)
-        path = reverse('attendee_invoice', args=(self.invoice_id,))
-        return "http://%s%s" % (site.domain, path)
+    TEMPLATED_FIELDS = (company_name, company_info, tax_name,
+                        tax_percentage, currency_symbol, payment_details,
+                        additional_notes, reference_template)
 
-    def invoice_pdf_filename(self):
-        filename = u"%s-%s-invoice.pdf" % (self.name, self.surname)
-        return normalize_unicode(filename).lower()
+    @property
+    def reference(self):
+        return self.reference_template % {'invoice_no': self.pk}
+
+    @property
+    def pdf_filename(self):
+        return u"invoice-%s.pdf" % self.pk
+
+    @classmethod
+    def invoice_for_attendee(cls, attendee):
+        templates = InvoiceTemplate.objects.filter(default=True)
+        if not templates:
+            template = InvoiceTemplate(default=True)
+            template.save()
+        else:
+            template = templates[0]
+        params = cls.params_from_template(template)
+
+        recipient_info = "%s %s\n%s" % (
+            attendee.name, attendee.surname,
+            attendee.email,
+        )
+
+        invoice = cls(recipient_info=recipient_info,
+                      attendees=[attendee],
+                      **params)
+        return invoice
+
+    @classmethod
+    def params_from_template(cls, template):
+        params = {}
+        for field in cls.TEMPLATED_FIELDS:
+            params[field.name] = getattr(template, field.name)
+        return params
 
     def get_invoice_pdf(self):
-        self.invoice_pdf.open("b")
+        self.pdf.open("b")
         try:
-            return self.invoice_pdf.name, self.invoice_pdf.read()
-        except:
-            self.invoice_pdf.close()
+            return self.pdf.name, self.pdf.read()
+        finally:
+            self.pdf.close()
 
-    def generate_invoice_pdf(self, reg_kind=None, reg_price=None):
-        """Generate PDF data by calling billable.me.
+    def finalize_invoice(self):
+        """Generate PDF and mark invoice as unpaid."""
+        self._generate_invoice_pdf()
+        self.state = self.UNPAID
+        self.save()
 
-        :param str reg_kind:
-            Override the string used to describe the kind of
-            registration.
-        :param int reg_price:
-            Override the price of the registration.
-        """
-        billable_me_url = "http://billable.me/pdf/"
-        params = {
-            'kind': 'INVOICE',
-            'company_name': 'PyConZA 2012',
-            'company_info': (
-                'Praekelt Foundation\n'
-                'za.pycon.org | praekeltfoundation.org\n'
-                'team@za.pycon.org | accounts@praekelt.com\n'
-            ),
-            'invoice_number_label': 'Invoice #',
-            'invoice_date_label': 'Date',
-            'description_label': 'Item & Description',
-            'quantity_label': 'Quantity',
-            'price_label': 'Price',
-            'subtotal_label': 'Subtotal',
-            'tax_name': 'VAT',
+    def _generate_invoice_pdf(self):
+        """Generate PDF data by calling billable.me."""
+        params = self.STATIC_BILLABLEME_PARAMS.copy()
+        params.update({
+            'invoice_number': str(self.pk),
+            'invoice_date': self.timestamp.date().isoformat(),
+            'company_name': self.company_name,
+            'company_info': self.company_info,
+            'recipient_info': self.recipient_info,
+            'tax_name': self.tax_name,
             'tax_percentage': '',
-            'total_label': 'Total',
-            'currency_symbol': 'R',
-            'notes_a': '',
-            'notes_b': '\nCreated with Billable.me',
-        }
+            'currency_symbol': self.currency_symbol,
+            'notes_a': self.payment_details % {
+                'reference': self.reference,
+            },
+            'notes_b': self.additional_notes,
+        })
 
-        params['notes_a'] = (
-            "Pay by EFT to:\n"
-            "\n"
-            "Account number: 9275706696\n"
-            "Branch code: 632005\n"
-            "Account name: PyCon Conference\n"
-            "Bank: ABSA\n"
-            "Reference: %(reference)s\n"
-        ) % {
-            'reference': self.payment_reference(),
-        }
+        for i, item in enumerate(self.items):
+            params['items.%d.description'] = item.description
+            params['items.%d.quantity'] = str(item.quantity)
+            params['items.%d.price'] = str(item.price)
 
-        reg_desc = dict(constants.REGISTRATION_TYPES)[self.registration_type]
-        match = re.match(r"(?P<kind>.*) \(R(?P<price>\d+)\)", reg_desc)
-        if reg_kind is None:
-            reg_kind = match.group('kind')
-        if reg_price is None:
-            reg_price = int(match.group('price'))
+        subtotal = sum([i.price for i in self.items])
+        params['subtotal'] = "%.2f" % subtotal
 
-        params['invoice_number'] = str(self.pk)
-        params['invoice_date'] = self.timestamp.date().isoformat()
+        if self.tax_percentage:
+            tax_amount = "%.2f" % (subtotal * self.tax_percentage)
+            total = subtotal + tax_amount
+        else:
+            tax_amount = "N/A"
+            total = subtotal
 
-        params['recipient_info'] = (
-            u"%(name)s %(surname)s\n"
-            u"%(email)s\n"
-        ) % {
-            "name": self.name,
-            "surname": self.surname,
-            "email": self.email,
-        }
+        params['tax_amount'] = tax_amount
+        params['total'] = "%.2f" % total
 
-        params['items.0.description'] = ('PyConZA 2012 registration (%s)'
-                                         % reg_kind)
-        params['items.0.quantity'] = '1'
-        params['items.0.price'] = "%.2f" % reg_price
-
-        params['subtotal'] = "%.2f" % reg_price
-        params['tax_amount'] = "N/A"
-        params['total'] = "%.2f" % reg_price
-        params = dict((k, v.encode('utf-8')) for k, v in params.iteritems())
-
-        response = requests.post(billable_me_url, data=params)
+        response = requests.post(settings.WAFER_BILLABLE_ME, data=params)
         pdf_data = response.content
 
-        self.invoice_billable_params = json.dumps(params)
-        self.invoice_pdf.save(self.invoice_pdf_filename(),
-                              ContentFile(pdf_data))
+        self.pdf.save(self.invoice_pdf_filename(),
+                      ContentFile(pdf_data))
+
+
+class InvoiceItem(models.Model):
+    description = models.CharField(max_length=255, required=True)
+    quantity = models.IntegerField(require=True)
+    price = models.DecimalField(max_digits=12, decimal_places=2)
+    invoice = models.ForeignKey(Invoice)
