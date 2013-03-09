@@ -40,6 +40,9 @@
                                     {{ name }}'s profile
                                     {% endblocktrans %}
                                 </a></li>
+                                <li><a href="{% url 'auth_logout' %}">
+                                    {% trans 'Log out' %}
+                                </a></li>
                             </ul>
                         </li>
                     {% else %}
