@@ -1,4 +1,5 @@
 from django.core.urlresolvers import reverse
+from django.utils.translation import ugettext as _
 
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit
@@ -10,7 +11,7 @@ class RegistrationFormHelper(FormHelper):
 
     def __init__(self, *args, **kwargs):
         super(RegistrationFormHelper, self).__init__(*args, **kwargs)
-        self.add_input(Submit('submit', 'Register'))
+        self.add_input(Submit('submit', _('Register')))
 
 
 class LoginFormHelper(FormHelper):
@@ -20,4 +21,4 @@ class LoginFormHelper(FormHelper):
     def __init__(self, *args, **kwargs):
         super(LoginFormHelper, self).__init__(*args, **kwargs)
         # TODO: next field
-        self.add_input(Submit('submit', 'Log in'))
+        self.add_input(Submit('submit', _('Log in')))
