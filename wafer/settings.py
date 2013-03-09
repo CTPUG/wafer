@@ -169,7 +169,10 @@ LOGGING = {
 # Django registration:
 ACCOUNT_ACTIVATION_DAYS = 7
 
-YOUR_CONFERENCE_NAME = 'Wafer 2013'
-
 import django.template
 django.template.add_to_builtins('django.templatetags.future')
+
+# Wafer settings
+
+WAFER_CONFERENCE_NAME = 'Wafer 2013'
+WAFER_BILLABLE_ME = "http://billable.me/pdf/"
