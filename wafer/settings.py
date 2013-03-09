@@ -134,6 +134,7 @@ INSTALLED_APPS = (
     'wafer',
     'wafer.invoices',
     'wafer.talks',
+    'wafer.users',
 )
 
 TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
@@ -169,6 +170,7 @@ LOGGING = {
 
 # Django registration:
 ACCOUNT_ACTIVATION_DAYS = 7
+AUTH_PROFILE_MODULE = 'users.UserProfile'
 
 import django.template
 django.template.add_to_builtins('django.templatetags.future')

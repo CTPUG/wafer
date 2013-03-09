@@ -12,5 +12,6 @@ urlpatterns = patterns('',
     url('^contact.html', 'wafer.views.contact', name='wafer_contact'),
 
     (r'^accounts/', include('registration.backends.default.urls')),
+    (r'^users/', include('wafer.users.urls')),
     (r'^talks/', include('wafer.talks.urls')),
 )

@@ -20,4 +20,4 @@ class RegisterView(generic_views.CreateView):
 
 
 def contact(request):
-    raise NotImplemented()
+    raise NotImplementedError()

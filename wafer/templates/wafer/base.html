@@ -32,8 +32,8 @@
                     </ul>
                     <ul class="nav pull-right">
                     {% if user.is_authenticated %}
-                        <li><a href="{% url 'wafer_index' %}">
-                            {% trans 'Logged in' %}
+                        <li><a href="{{ user.get_absolute_url }}">
+                            {{ user.username }}
                         </a></li>
                     {% else %}
                         <li><a href="{% url 'auth_login' %}">
