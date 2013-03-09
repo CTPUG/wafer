@@ -171,6 +171,7 @@ ACCOUNT_ACTIVATION_DAYS = 7
 
 import django.template
 django.template.add_to_builtins('django.templatetags.future')
+django.template.add_to_builtins('django.templatetags.i18n')
 
 # Wafer settings
 

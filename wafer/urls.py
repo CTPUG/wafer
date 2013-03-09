@@ -10,5 +10,7 @@ urlpatterns = patterns('',
         RedirectView.as_view(url='/'),
         name='index_redirect'),
 
+    url('^contact.html', 'wafer.views.contact', name='wafer_contact'),
+
     (r'^accounts/', include('registration.backends.default.urls')),
 )
