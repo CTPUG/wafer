@@ -1,55 +1,7 @@
-<!DOCTYPE html>
-<html>
-   <head>
-      <title>{{ WAFER_CONFERENCE_NAME }}</title>
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <link href="{{ STATIC_URL }}css/bootstrap.min.css" rel="stylesheet" media="screen">
-      <link href="{{ STATIC_URL }}css/wafer.css" rel="stylesheet" media="screen">
-      {% block extra_head %}{% endblock %}
-   </head>
-   <body>
-      <div class="navbar navbar-inverse navbar-fixed-top">
-         <div class="navbar-inner">
-            <div class="container">
-               <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-                  <!-- To display a nav menu button on a small screen -->
-                  <span class="icon-bar"></span>
-                  <span class="icon-bar"></span>
-                  <span class="icon-bar"></span>
-               </button>
-               <a class="brand" href="#">Wafer</a>
-               <div class="nav-collapse collapse">
-                  <ul class="nav">
-                     <li class="active">< a href="{% url 'wafer_index' %}">
-                        {% trans 'Home' %}
-                     </a></li>
-                     <li><a href="#about">
-                        {% trans 'About' %}
-                     </a></li>
-                     <li><a href="#contact">
-                        {% trans 'Contact' %}
-                     </a></li>
-                  </ul>
-                  <ul class="nav pull-right">
-                  {% if user.is_authenticated %}
-                     <li><a href="{% url 'wafer_index' %}">
-                        {% trans 'Logged in' %}
-                     </a></li>
-                  {% else %}
-                     <li><a href="{% url 'auth_login' %}">
-                        {% trans 'Register / Log In' %}
-                     </a></li>
-                  {% endif %}
-                  </ul>
-               </div>
-            </div>
-         </div>
-      </div>
-      <div class="container">
+{% extends 'wafer/base.html' %}
 {% block content %}
       <h1>{{ WAFER_CONFERENCE_NAME }}</h1>
       <h2>{% trans "Talk Submission" %}</h2>
-{% endblock %}
 {% if user.is_authenticated %}
       <form method="post" action="/talks/">
          {% csrf_token %}
@@ -59,8 +11,4 @@
 {% else %}
       <p>{% trans "Please login before submitting a talk proposal" %}</p>
 {% endif %}
-      </div>
-      <script src="{{ STATIC_URL }}/js/jquery-1.9.1.min.js"></script>
-      <script src="{{ STATIC_URL }}/js/bootstrap.min.js"></script>
-   </body>
-</html>
+{% endblock %}
