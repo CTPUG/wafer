@@ -1,15 +1,14 @@
 {% spaceless %}
 {% url 'registration_activate' activation_key as activation_url %}
 {% url 'index' as index_url %}
-{% endspaceless %}{% blocktrans with WAFER_CONFERENCE_NAME=site.name domain=site.domain %}
+{% endspaceless %}{% blocktrans with WAFER_CONFERENCE_NAME=site.name domain=site.domain %}Hi,
+
 TL;DR Click http://{{ domain }}{{ activation_url }}
 
 Thank you for signing up for {{ WAFER_CONFERENCE_NAME }}.
 
 To verify your e-mail address, please follow the link above, and complete your
-registration process.
-
-You have {{ expiration_days }} days left to do so.
+registration process. You have {{ expiration_days }} days left to do so.
 
 We hope to see you soon.
 
@@ -17,5 +16,7 @@ Thanks,
 
 The {{ WAFER_CONFERENCE_NAME }} website.
 
-http://{{ domain }}{{ index_url }}
+-- 
+ {{ WAFER_CONFERENCE_NAME }}
+ http://{{ domain }}{{ index_url }}
 {% endblocktrans %}
