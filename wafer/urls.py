@@ -1,5 +1,6 @@
 from django.conf.urls.defaults import include, patterns, url
 from django.views.generic import RedirectView, TemplateView
+from django.conf import settings
 from django.contrib import admin
 
 admin.autodiscover()
@@ -19,3 +20,10 @@ urlpatterns = patterns('',
     (r'^talks/', include('wafer.talks.urls')),
     (r'^admin/', include(admin.site.urls)),
 )
+
+# Serve media
+if settings.DEBUG:
+    urlpatterns += patterns('',
+        url(r'^media/(?P<path>.*)$', 'django.views.static.serve',
+            {'document_root': settings.MEDIA_ROOT}),
+   )

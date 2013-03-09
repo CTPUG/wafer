@@ -33,10 +33,13 @@ nosetests.xml
 .mr.developer.cfg
 .project
 .pydevproject
-
-# The database shouldn't be under revision control
-wafer.db
+/virtualenv/
+/ve/
 
 # Editor cruft
 .*.swp
 *~
+
+# Wafer
+/wafer.db
+/media/
