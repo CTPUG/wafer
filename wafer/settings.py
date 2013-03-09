@@ -173,6 +173,9 @@ LOGGING = {
 ACCOUNT_ACTIVATION_DAYS = 7
 AUTH_PROFILE_MODULE = 'users.UserProfile'
 
+# Forms:
+CRISPY_FAIL_SILENTLY = not DEBUG
+
 import django.template
 django.template.add_to_builtins('django.templatetags.future')
 django.template.add_to_builtins('django.templatetags.i18n')

@@ -1,9 +1,8 @@
 {% extends 'wafer/base.html' %}
+{% load crispy_forms_tags %}
+{% load wafer_crispy %}
 {% block content %}
 <h1>{% trans 'Registration' %}</h1>
-<form action='{% url 'registration_register' %}' method='post'>
-{{ form.as_p }}
-{% csrf_token %}
-<button type="submit" class="btn btn-primary">{% trans 'Register' %}</button>
-</form>
+{% wafer_form_helper 'wafer.registration.forms.RegistrationFormHelper' as form_helper %}
+{% crispy form form_helper %}
 {% endblock %}

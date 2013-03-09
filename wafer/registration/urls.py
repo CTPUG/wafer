@@ -5,7 +5,7 @@ from registration.views import activate, register
 from wafer.registration.views import redirect_profile
 
 
-backend = 'wafer.registration.backends.WaferBackend'
+backend = 'registration.backends.default.DefaultBackend'
 urlpatterns = patterns('',
     url(r'^profile/$', redirect_profile),
 

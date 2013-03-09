@@ -1,22 +1,13 @@
 {% extends 'wafer/base.html' %}
+{% load crispy_forms_tags %}
+{% load wafer_crispy %}
 {% block content %}
 <div class="container-fluid">
     <div class="row-fluid">
         <div class="span6">
             <h2>{% trans 'Log in' %}</h2>
-            {% if form.errors %}
-            {% blocktrans %}
-            <p>Your username and password didn't match. Please try again.</p>
-            {% endblocktrans %}
-            {% endif %}
-            <p>
-            <form method="post" action="{% url 'django.contrib.auth.views.login' %}">
-                {% csrf_token %}
-                {{ form.as_p }}
-                <input type="hidden" name="next" value="{{ next }}" />
-                <button type="submit" class="btn btn-primary">{% trans 'Log in' %}</button>
-            </form>
-            </p>
+            {% wafer_form_helper 'wafer.registration.forms.LoginFormHelper' as form_helper %}
+            {% crispy form form_helper %}
         </div>
         <div class="span6">
             <h2>{% trans 'Sign up' %}</h2>
