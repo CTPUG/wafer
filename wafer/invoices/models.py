@@ -102,13 +102,7 @@ class Invoice(models.Model):
 
     @classmethod
     def invoice_for_attendee(cls, attendee):
-        templates = InvoiceTemplate.objects.filter(default=True)
-        if not templates:
-            template = InvoiceTemplate(default=True)
-            template.save()
-        else:
-            template = templates[0]
-        params = cls.params_from_template(template)
+        params = cls.default_params()
 
         recipient_info = "%s %s\n%s" % (
             attendee.name, attendee.surname,
@@ -119,6 +113,16 @@ class Invoice(models.Model):
                       attendees=[attendee],
                       **params)
         return invoice
+
+    @classmethod
+    def default_params(cls):
+        templates = InvoiceTemplate.objects.filter(default=True)
+        if not templates:
+            template = InvoiceTemplate(default=True)
+            template.save()
+        else:
+            template = templates[0]
+        return cls.params_from_template(template)
 
     @classmethod
     def params_from_template(cls, template):
