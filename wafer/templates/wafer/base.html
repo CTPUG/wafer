@@ -3,12 +3,14 @@
 <head>
     <title>Wafer</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="{{ STATIC_URL }}css/bootstrap.min.css" rel="stylesheet" media="screen">
     {% block extra_head %}{% endblock %}
 </head>
 <body>
 {% block content %}
     <h1>Wafer</h1>
 {% endblock %}
-    <script src="http://code.jquery.com/jquery.js"></script>
+    <script src="{{ STATIC_URL }}/js/jquery-1.9.1.min.js"></script>
+    <script src="{{ STATIC_URL }}/js/bootstrap.min.js"></script>
 </body>
 </html>
