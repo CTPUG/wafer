@@ -6,7 +6,6 @@ from crispy_forms.layout import Submit
 
 
 class RegistrationFormHelper(FormHelper):
-    form_method = 'post'
     form_action = reverse('registration_register')
 
     def __init__(self, *args, **kwargs):
@@ -15,7 +14,6 @@ class RegistrationFormHelper(FormHelper):
 
 
 class LoginFormHelper(FormHelper):
-    form_method = 'post'
     form_action = reverse('django.contrib.auth.views.login')
 
     def __init__(self, *args, **kwargs):
