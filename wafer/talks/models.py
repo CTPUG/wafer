@@ -1,17 +1,5 @@
-import re
-import json
-from uuid import uuid4
-
-import requests
-
 from django.db import models
-from django.core.urlresolvers import reverse
-from django.contrib.sites.models import get_current_site
-from django.core.files.base import ContentFile
 from django.contrib.auth.models import User
-
-from wafer.utils import normalize_unicode
-from wafer import constants
 
 
 class Talks(models.Model):
