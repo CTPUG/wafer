@@ -1,8 +1,11 @@
 from django.conf.urls.defaults import patterns, url
 
-from wafer.users.views import ProfileView, EditProfileView, EditUserView
+from wafer.users.views import (UsersView, ProfileView, EditProfileView,
+                               EditUserView)
 
 urlpatterns = patterns('',
+      url(r'^$', UsersView.as_view(),
+          name='wafer_users'),
       url(r'^(?P<username>[\w.@+-]+)/$', ProfileView.as_view(),
           name='wafer_user_profile'),
       url(r'^(?P<username>[\w.@+-]+)/edit/$', EditUserView.as_view(),

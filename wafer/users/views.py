@@ -2,9 +2,16 @@ from django.contrib.auth.models import User
 from django.core.exceptions import PermissionDenied
 from django.core.urlresolvers import reverse
 from django.views.generic import DetailView, UpdateView
+from django.views.generic.list import ListView
 
 from wafer.users.forms import UserForm, UserProfileForm
 from wafer.users.models import UserProfile
+
+
+class UsersView(ListView):
+    template_name = 'wafer.users/users.html'
+    model = User
+    paginate_by = 25
 
 
 class ProfileView(DetailView):
