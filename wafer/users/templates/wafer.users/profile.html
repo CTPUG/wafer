@@ -1,6 +1,6 @@
 {% extends "wafer/base.html" %}
 {% block content %}
-
+{% with profile=object.get_profile %}
 <div class="row">
     {% if profile.photo %}
     <div class="span2">
@@ -13,7 +13,7 @@
             {% if profile.homepage %}
                 <a href="{{ profile.homepage }}">
             {% endif %}
-            {{ subject.get_full_name|default:subject.username }}
+            {{ object.get_full_name|default:object.username }}
             {% if profile.homepage %}
                 </a>
             {% endif %}
@@ -40,6 +40,7 @@
 {{ profile.bio }}
 </div>
 {% endif %}
+{% endwith %}
 {% endblock %}
 {% block extra_foot %}
     <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>

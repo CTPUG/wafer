@@ -1,17 +1,9 @@
 from django.contrib.auth.models import User
-from django.http import Http404
-from django.views.generic import TemplateView
+from django.views.generic import DetailView
 
 
-class ProfileView(TemplateView):
+class ProfileView(DetailView):
     template_name = 'wafer.users/profile.html'
-
-    def get_context_data(self, username):
-        try:
-            subject = User.objects.get(username=username)
-        except User.DoesNotExist:
-            raise Http404
-        return {
-            'subject': subject,
-            'profile': subject.get_profile(),
-        }
+    queryset = User.objects.all()
+    slug_field = 'username'
+    slug_url_kwarg = 'username'
