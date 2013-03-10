@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 
 
-class Talks(models.Model):
+class Talk(models.Model):
 
     talk_id = models.IntegerField(primary_key=True)
 

@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 
-from wafer.talks.models import Talks
+from wafer.talks.models import Talk
 from wafer.talks.forms import SubmitTalkForm
 
 
@@ -18,7 +18,7 @@ def submit(request):
             user = request.user
             # FIXME: Valid that all the authors exist in the
             # database
-            talk = Talks.objects.create(title=title,
+            talk = Talk.objects.create(title=title,
                     abstract=abstract, corresponding_author=user)
             return HttpResponseRedirect('/')
     else:
