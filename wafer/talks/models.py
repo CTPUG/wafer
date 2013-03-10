@@ -16,3 +16,10 @@ class Talk(models.Model):
     corresponding_author = models.ForeignKey(User,
             related_name='contact_talks')
     authors = models.ManyToManyField(User)
+
+    def __unicode__(self):
+        return u'%s: %s' % (self.corresponding_author, self.title)
+
+    def get_absolute_url(self):
+        # FIXME: Temporary
+        return '/'

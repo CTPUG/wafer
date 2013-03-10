@@ -1,7 +1,7 @@
 from django.conf.urls.defaults import patterns, url
 
-from wafer.talks.views import submit
+from wafer.talks.views import TalkCreate
 
 urlpatterns = patterns('',
-      url(r'^$', submit, name='talk_submit'),
-      )
+      url(r'^new/$', TalkCreate.as_view(), name='talk_submit'),
+)

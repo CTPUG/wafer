@@ -1,14 +1,6 @@
 {% extends 'wafer/base.html' %}
+{% load crispy_forms_tags %}
 {% block content %}
-      <h1>{{ WAFER_CONFERENCE_NAME }}</h1>
-      <h2>{% trans "Talk Submission" %}</h2>
-{% if user.is_authenticated %}
-      <form method="post" action="/talks/">
-         {% csrf_token %}
-         {{ form.as_p }}
-         <input type="submit" value="Submit" />
-      </form>
-{% else %}
-      <p>{% trans "Please login before submitting a talk proposal" %}</p>
-{% endif %}
+<h1>{% trans "Talk Submission" %}</h1>
+{% crispy form %}
 {% endblock %}

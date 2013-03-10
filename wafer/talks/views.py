@@ -1,29 +1,36 @@
-from django.shortcuts import render
+from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
+from django.utils.decorators import method_decorator
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
 
 from wafer.talks.models import Talk
-from wafer.talks.forms import SubmitTalkForm
+from wafer.talks.forms import TalkForm
 
 
-def submit(request):
-    """Submit a talk proposal"""
-    if request.method == 'POST':
-        form = SubmitTalkForm(request.POST)
-        if form.is_valid():
-            if not request.user.is_authenticated():
-                # Shouldn't happen, but let's be paranoid
-                return HttpResponseRedirect('/')
-            title = form.cleaned_data['title']
-            abstract = form.cleaned_data['abstract']
-            user = request.user
-            # FIXME: Valid that all the authors exist in the
-            # database
-            talk = Talk.objects.create(title=title,
-                    abstract=abstract, corresponding_author=user)
-            return HttpResponseRedirect('/')
-    else:
-        form = SubmitTalkForm()
+class LoginRequiredMixin(object):
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(LoginRequiredMixin, self).dispatch(*args, **kwargs)
 
-    return render(request, 'talks/submittalk.html', {
-            'form': form,
-            })
+
+class TalkCreate(LoginRequiredMixin, CreateView):
+    model = Talk
+    form_class = TalkForm
+    template_name = 'talks/submittalk.html'
+
+    def form_valid(self, form):
+        # Eaaargh we have to do the work of CreateView if we want to set values
+        # before saving
+        self.object = form.save(commit=False)
+        self.object.corresponding_author = self.request.user
+        self.object.save()
+        #TODO: authors doesn't seem to be saving
+        return HttpResponseRedirect(self.get_success_url())
+
+
+class TalkUpdate(LoginRequiredMixin, UpdateView):
+    model = Talk
+
+
+class TalkDelete(LoginRequiredMixin, DeleteView):
+    model = Talk
