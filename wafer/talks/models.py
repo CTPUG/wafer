@@ -1,5 +1,6 @@
-from django.db import models
 from django.contrib.auth.models import User
+from django.core.urlresolvers import reverse
+from django.db import models
 
 
 class Talk(models.Model):
@@ -21,5 +22,4 @@ class Talk(models.Model):
         return u'%s: %s' % (self.corresponding_author, self.title)
 
     def get_absolute_url(self):
-        # FIXME: Temporary
-        return '/'
+        return reverse('wafer_talk', args=(self.talk_id,))
