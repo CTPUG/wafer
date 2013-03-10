@@ -16,7 +16,7 @@ class LoginRequiredMixin(object):
 class TalkCreate(LoginRequiredMixin, CreateView):
     model = Talk
     form_class = TalkForm
-    template_name = 'talks/submittalk.html'
+    template_name = 'wafer.talks/talk_form.html'
 
     def form_valid(self, form):
         # Eaaargh we have to do the work of CreateView if we want to set values
