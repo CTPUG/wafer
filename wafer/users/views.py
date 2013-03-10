@@ -22,37 +22,32 @@ class ProfileView(DetailView):
 
 
 # TODO: Combine these
-class EditUserView(UpdateView):
+class EditOneselfMixin(object):
+    def get_object(self, *args, **kwargs):
+        object_ = super(EditOneselfMixin, self).get_object(*args, **kwargs)
+        if object_ == self.request.user or self.request.user.is_staff:
+            return object_
+        else:
+            raise PermissionDenied
+
+
+class EditUserView(EditOneselfMixin, UpdateView):
     template_name = 'wafer.users/edit_user.html'
     slug_field = 'username'
     slug_url_kwarg = 'username'
     model = User
     form_class = UserForm
 
-    def get_object(self, queryset=None):
-        object_ = super(EditUserView, self).get_object(queryset)
-        if object_ == self.request.user or self.request.user.is_staff:
-            return object_
-        else:
-            raise PermissionDenied
-
     def get_success_url(self):
         return reverse('wafer_user_profile', args=(self.object.username,))
 
 
-class EditProfileView(UpdateView):
+class EditProfileView(EditOneselfMixin, UpdateView):
     template_name = 'wafer.users/edit_profile.html'
     slug_field = 'user__username'
     slug_url_kwarg = 'username'
     model = UserProfile
     form_class = UserProfileForm
-
-    def get_object(self, queryset=None):
-        object_ = super(EditProfileView, self).get_object(queryset)
-        if object_.user == self.request.user or self.request.user.is_staff:
-            return object_
-        else:
-            raise PermissionDenied
 
     def get_success_url(self):
         return reverse('wafer_user_profile', args=(self.object.user.username,))
