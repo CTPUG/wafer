@@ -1,5 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
+from django.core.urlresolvers import reverse_lazy
 from django.http import HttpResponseRedirect
 from django.utils.decorators import method_decorator
 from django.views.generic import DetailView
@@ -65,7 +66,7 @@ class TalkCreate(LoginRequiredMixin, CreateView):
         self.object = form.save(commit=False)
         self.object.corresponding_author = self.request.user
         self.object.save()
-        #TODO: authors doesn't seem to be saving
+        #FIXME: authors doesn't seem to be saving on initial creation
         return HttpResponseRedirect(self.get_success_url())
 
 
@@ -77,3 +78,5 @@ class TalkUpdate(EditOwnTalksMixin, UpdateView):
 
 class TalkDelete(EditOwnTalksMixin, DeleteView):
     model = Talk
+    template_name = 'wafer.talks/talk_delete.html'
+    success_url = reverse_lazy('wafer_index')
