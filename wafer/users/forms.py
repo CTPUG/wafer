@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext as _
 
+from crispy_forms.bootstrap import PrependedText
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit
 
@@ -15,7 +16,7 @@ class UserForm(forms.ModelForm):
         self.helper = FormHelper()
         username = kwargs['instance'].username
         self.helper.form_action = reverse('wafer_user_edit',
-                args=(username,))
+                                          args=(username,))
         self.helper.add_input(Submit('submit', _('Save')))
 
     class Meta:
@@ -27,10 +28,14 @@ class UserForm(forms.ModelForm):
 class UserProfileForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(UserProfileForm, self).__init__(*args, **kwargs)
-        self.helper = FormHelper()
+        self.helper = FormHelper(self)
         username = kwargs['instance'].user.username
         self.helper.form_action = reverse('wafer_user_edit_profile',
-                args=(username,))
+                                          args=(username,))
+        self.helper['twitter_handle'].wrap(PrependedText, 'twitter_handle',
+                                           '@', placeholder=_('handle'))
+        self.helper['github_username'].wrap(PrependedText, 'github_username',
+                                            '@', placeholder=_('username'))
         self.helper.add_input(Submit('submit', _('Save')))
 
     class Meta:
