@@ -7,7 +7,7 @@
         <img src="{{ MEDIA_URL }}{{ profile.photo }}">
     </div>
     {% endif %}
-    <div class="span10">
+    <div class="span9">
         {% spaceless %}
         <h1>
             {% if profile.homepage %}
@@ -34,6 +34,12 @@
         {% endif %}
         {% endspaceless %}
     </div>
+    {% if user = object or user.is_staff %}
+    <div class="span1 pull-righ">
+        <a href="{% url 'wafer_user_edit' object.username %}" class="btn">{% trans 'Edit User' %}</a>
+        <a href="{% url 'wafer_user_edit_profile' object.username %}" class="btn">{% trans 'Edit Profile' %}</a>
+    </div>
+    {% endif %}
 </div>
 {% if profile.bio %}
 <div class="well">

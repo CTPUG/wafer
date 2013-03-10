@@ -1,9 +1,36 @@
 from django.contrib.auth.models import User
-from django.views.generic import DetailView
+from django.core.urlresolvers import reverse
+from django.views.generic import DetailView, UpdateView
+
+from wafer.users.forms import UserForm, UserProfileForm
+from wafer.users.models import UserProfile
 
 
 class ProfileView(DetailView):
     template_name = 'wafer.users/profile.html'
-    queryset = User.objects.all()
+    model = User
     slug_field = 'username'
     slug_url_kwarg = 'username'
+
+
+# TODO: Combine these
+class EditUserView(UpdateView):
+    template_name = 'wafer.users/edit_user.html'
+    slug_field = 'username'
+    slug_url_kwarg = 'username'
+    model = User
+    form_class = UserForm
+
+    def get_success_url(self):
+        return reverse('wafer_user_profile', args=(self.object.username,))
+
+
+class EditProfileView(UpdateView):
+    template_name = 'wafer.users/edit_profile.html'
+    slug_field = 'user__username'
+    slug_url_kwarg = 'username'
+    model = UserProfile
+    form_class = UserProfileForm
+
+    def get_success_url(self):
+        return reverse('wafer_user_profile', args=(self.object.user.username,))

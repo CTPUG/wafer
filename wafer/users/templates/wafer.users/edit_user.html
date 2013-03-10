@@ -1,0 +1,6 @@
+{% extends "wafer/base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+<h1>{% trans 'Edit User:' %}</h1>
+{% crispy form %}
+{% endblock %}
