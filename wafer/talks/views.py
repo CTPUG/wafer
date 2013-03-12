@@ -66,7 +66,8 @@ class TalkCreate(LoginRequiredMixin, CreateView):
         self.object = form.save(commit=False)
         self.object.corresponding_author = self.request.user
         self.object.save()
-        #FIXME: authors doesn't seem to be saving on initial creation
+        # Save the author information as well (many-to-many fun)
+        form.save_m2m()
         return HttpResponseRedirect(self.get_success_url())
 
 
