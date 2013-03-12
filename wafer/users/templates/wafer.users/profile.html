@@ -48,6 +48,15 @@
 {{ profile.bio }}
 </div>
 {% endif %}
+{% if profile.accepted_talks.exists %}
+<h2>{% trans 'Accepted Talks:' %}</h2>
+{% for talk in profile.accepted_talks %}
+<div class="well">
+    <a href="{{ talk.get_absolute_url }}">{{ talk.title }}</a>
+    <p>{{ talk.abstract }}</p>
+</div>
+{% endfor %}
+{% endif %}
 {% endwith %}
 {% endblock %}
 {% block extra_foot %}

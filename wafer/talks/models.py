@@ -19,7 +19,7 @@ class Talk(models.Model):
 
     corresponding_author = models.ForeignKey(User,
         related_name='contact_talks')
-    authors = models.ManyToManyField(User)
+    authors = models.ManyToManyField(User, related_name='talks')
 
     def __unicode__(self):
         return u'%s: %s' % (self.corresponding_author, self.title)

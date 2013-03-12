@@ -27,6 +27,9 @@ class UserProfile(models.Model):
     def __unicode__(self):
         return unicode(self.user)
 
+    def accepted_talks(self):
+        return self.user.talks.filter(accepted=True)
+
 
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
