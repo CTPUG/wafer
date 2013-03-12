@@ -1,6 +1,6 @@
-req=`cat requirements*`
-for i in $req
-do
-  echo 'Installing ' $i
-  sudo pip install $i
-done
+#!/bin/sh
+
+virtualenv ve
+ve/bin/python ve/bin/pip install -r requirements.txt -r requirements-dev.txt
+
+echo "Now run . ve/bin/activate"
