@@ -6,7 +6,7 @@ from django.db import models
 
 class Talk(models.Model):
 
-    talk_id = models.IntegerField(primary_key=True)
+    talk_id = models.AutoField(primary_key=True)
 
     title = models.CharField(max_length=1024)
 
