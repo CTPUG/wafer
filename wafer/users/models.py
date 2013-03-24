@@ -4,6 +4,8 @@ from django.contrib.auth.models import User
 from django.db import models
 from django.db.models.signals import post_save
 
+from wafer.talks.models import ACCEPTED
+
 
 def photo_fn(instance, filename):
     '''Return the preferred filename for user photos'''
@@ -28,7 +30,7 @@ class UserProfile(models.Model):
         return unicode(self.user)
 
     def accepted_talks(self):
-        return self.user.talks.filter(accepted=True)
+        return self.user.talks.filter(status=ACCEPTED)
 
 
 def create_user_profile(sender, instance, created, **kwargs):

@@ -6,17 +6,18 @@ from django.utils.decorators import method_decorator
 from django.views.generic import DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 
-from wafer.talks.models import Talk
+from wafer.talks.models import Talk, ACCEPTED, PENDING
 from wafer.talks.forms import TalkForm
 
 
 class EditOwnTalksMixin(object):
-    '''Users can edit their own talks unless the talk is finalised'''
+    '''Users can edit their own talks as long as the talk is
+       "Under Consideration"'''
     def get_object(self, *args, **kwargs):
         object_ = super(EditOwnTalksMixin, self).get_object(*args, **kwargs)
         username = self.request.user.username
         if ((object_.authors.filter(username=username).exists()
-                    and not object_.finalised)
+            and object_.status == PENDING)
                 or self.request.user.is_staff):
             return object_
         else:
@@ -40,7 +41,7 @@ class TalkView(DetailView):
         username = self.request.user.username
         if (object_.authors.filter(username=username).exists()
                 or self.request.user.is_staff
-                or object_.accepted):
+                or object_.status == ACCEPTED):
             return object_
         else:
             raise PermissionDenied
@@ -50,7 +51,7 @@ class TalkView(DetailView):
         username = self.request.user.username
         context['can_edit'] = (
             (self.object.authors.filter(username=username).exists()
-                 and not self.object.finalised)
+             and self.object.status == PENDING)
             or self.request.user.is_staff)
         return context
 

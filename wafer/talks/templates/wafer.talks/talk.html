@@ -20,12 +20,9 @@
 {% if user.is_staff %}
 <div>
     {% trans 'Status:' %}
-    {% if object.finalized %}
-    <span class="label">{% trans 'Finalized' %}</span>
-    {% else %}
-    <span class="label label-important">{% trans 'Not yet finalized' %}</span>
-    {% endif %}
-    {% if object.accepted %}
+    {% if object.pending %}
+    <span class="label label-important">{% trans 'Under consideration' %}</span>
+    {% elif object.accepted %}
     <span class="label label-success">{% trans 'Accepted' %}</span>
     {% else %}
     <span class="label label-warning">{% trans 'Not accepted' %}</span>
