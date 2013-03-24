@@ -25,7 +25,9 @@ class ProfileView(DetailView):
 class EditOneselfMixin(object):
     def get_object(self, *args, **kwargs):
         object_ = super(EditOneselfMixin, self).get_object(*args, **kwargs)
-        if object_ == self.request.user or self.request.user.is_staff:
+        if object_ == self.request.user or self.request.user.is_staff or (
+                hasattr(object_, 'user') and
+                object_.user == self.request.user):
             return object_
         else:
             raise PermissionDenied
