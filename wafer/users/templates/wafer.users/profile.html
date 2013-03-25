@@ -2,14 +2,10 @@
 {% block content %}
 {% with profile=object.get_profile %}
 <div class="row">
-    {% if profile.photo %}
     <div class="span2">
-        <img src="{{ MEDIA_URL }}{{ profile.photo }}">
+        <img src="{{ profile.avatar_url }}">
     </div>
     <div class="span10">
-    {% else %}
-    <div class="span12">
-    {% endif %}
         {% if user = object or user.is_staff %}
         <div class="pull-right">
             <a href="{% url 'wafer_user_edit' object.username %}" class="btn">{% trans 'Edit User' %}</a>
