@@ -131,44 +131,6 @@ class AttendeeRegistration(models.Model):
         fin_mail.send(fail_silently=True)
 
 
-class SpeakerRegistration(models.Model):
-
-    name = models.CharField(max_length=128)
-    surname = models.CharField(max_length=128, null=True)
-    email = models.EmailField()
-    contact_number = models.CharField(max_length=16, null=True, blank=True)
-    comments = models.TextField(null=True, blank=True)
-    bio = models.TextField(null=True)
-    photo = models.ImageField(upload_to='speaker-photos', null=True,
-                              blank=True)
-    timestamp = models.DateTimeField(auto_now_add=True)
-
-    talk_title = models.CharField(max_length=128, null=True)
-    talk_type = models.IntegerField(choices=constants.TALK_TYPES, null=True)
-    talk_level = models.IntegerField(choices=constants.TALK_LEVELS, null=True)
-    talk_category = models.CharField(max_length=64, null=True)
-    talk_duration = models.CharField(max_length=32, null=True)
-    talk_description = models.TextField(null=True)
-    talk_abstract = models.TextField(null=True)
-    talk_notes = models.TextField(null=True)
-
-    approved = models.BooleanField(default=False)
-
-    def __unicode__(self):
-        return u'%s %s (%s)' % (self.name, self.surname, self.email)
-
-    def fullname(self):
-        return u"%s %s" % (self.name.strip(), self.surname.strip())
-
-    def send_registration_email(self):
-        text = (
-            "Thanks for showing your interest. "
-            "We'll get in touch shortly."
-        )
-        send_mail('PyCon ZA 2012', text, settings.DEFAULT_FROM_EMAIL,
-                  [self.email], fail_silently=True)
-
-
 def post_registration_save(sender, instance, created, **kwargs):
     if created:
         instance.send_registration_email()
@@ -176,6 +138,3 @@ def post_registration_save(sender, instance, created, **kwargs):
 
 models.signals.post_save.connect(post_registration_save,
                                  sender=AttendeeRegistration)
-
-models.signals.post_save.connect(post_registration_save,
-                                 sender=SpeakerRegistration)
