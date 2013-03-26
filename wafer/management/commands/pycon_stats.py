@@ -3,10 +3,12 @@ from optparse import make_option
 from django.core.management.base import BaseCommand
 from django.db import models
 
-from wafer.models import AttendeeRegistration, SpeakerRegistration
+from wafer.models import AttendeeRegistration
 from wafer.constants import (REGISTRATION_TYPE_CORPORATE,
                              REGISTRATION_TYPE_INDIVIDUAL,
                              REGISTRATION_TYPE_STUDENT)
+
+from django.contrib.auth.models import User
 
 
 class Command(BaseCommand):
@@ -19,7 +21,8 @@ class Command(BaseCommand):
         return AttendeeRegistration.objects.filter(*args, **kwargs).count()
 
     def _speakers(self, *args, **kwargs):
-        return SpeakerRegistration.objects.filter(*args, **kwargs).count()
+        return User.objects.filter(contact_talks__isnull=False).filter(
+            *args, **kwargs).count()
 
     def handle(self, *args, **options):
         print "Attendees:", self._attendees()
@@ -56,4 +59,5 @@ class Command(BaseCommand):
         print "Speakers:"
         print
 
+        # FIXME: more stats - accepted, rejected, pending, etc.
         print "  Total:", self._speakers()

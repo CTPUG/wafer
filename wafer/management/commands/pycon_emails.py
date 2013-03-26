@@ -4,7 +4,9 @@ from optparse import make_option
 
 from django.core.management.base import BaseCommand
 
-from wafer.models import AttendeeRegistration, SpeakerRegistration
+from wafer.models import AttendeeRegistration
+
+from django.contrib.auth.models import User
 
 
 class Command(BaseCommand):
@@ -51,13 +53,15 @@ class Command(BaseCommand):
             csv_file.writerow(row)
 
     def _speaker_emails(self, options):
-        people = SpeakerRegistration.objects.filter()
+        # Should grow more options - accepted talks, under consideration, etc.
+        people = User.objects.filter(contact_talks__isnull=False).all()
 
         csv_file = csv.writer(sys.stdout)
         for person in people:
+            titles = [x.titles for x in person.contact_talks.all()]
             row = [x.encode("utf-8")
-                   for x in (person.fullname(), person.email,
-                             person.talk_title)]
+                   for x in (person.get_full_name(), person.email,
+                             ' '.join(titles))]
             csv_file.writerow(row)
 
     def handle(self, *args, **options):
