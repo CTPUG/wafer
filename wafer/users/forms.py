@@ -11,10 +11,6 @@ from wafer.users.models import UserProfile
 
 
 class UserForm(forms.ModelForm):
-    # Because django.contrib.auth.models.User doesn't make these required...
-    first_name = forms.CharField(required=True)
-    email = forms.EmailField(required=True)
-
     def __init__(self, *args, **kwargs):
         super(UserForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
@@ -22,6 +18,8 @@ class UserForm(forms.ModelForm):
         self.helper.form_action = reverse('wafer_user_edit',
                                           args=(username,))
         self.helper.add_input(Submit('submit', _('Save')))
+        self.fields['first_name'].required = True
+        self.fields['email'].required = True
 
     class Meta:
         # TODO: Password reset
