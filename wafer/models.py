@@ -5,7 +5,7 @@ Created on 29 Jun 2012
 '''
 from django.db import models
 from django.conf import settings
-from django.core.mail import send_mail, EmailMessage
+from django.core.mail import EmailMessage
 
 from wafer import constants
 
