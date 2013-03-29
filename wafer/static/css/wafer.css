@@ -2,3 +2,26 @@ body {
 	/* ICK bootstrap */
 	padding-top: 60px;
 } 
+
+#profile-avatar {
+	position: relative;
+}
+
+#profile-avatar img {
+	position: relative;
+}
+
+#profile-avatar [rel=popover] {
+	position: absolute;
+	top: 5px;
+	right: 5px;
+	z-order: 1;
+}
+
+#profile-avatar .popover {
+	width: 20em;
+}
+
+#profile-avatar .popover-contents {
+	display: none;
+}

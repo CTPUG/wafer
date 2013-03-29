@@ -3,6 +3,8 @@ South
 django-crispy-forms
 django-nose
 django-registration
+pillow
+pyLibravatar
+pydns
 pytz
 requests
-pillow

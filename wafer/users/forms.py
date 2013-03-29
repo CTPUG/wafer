@@ -18,6 +18,8 @@ class UserForm(forms.ModelForm):
         self.helper.form_action = reverse('wafer_user_edit',
                                           args=(username,))
         self.helper.add_input(Submit('submit', _('Save')))
+        self.fields['first_name'].required = True
+        self.fields['email'].required = True
 
     class Meta:
         # TODO: Password reset

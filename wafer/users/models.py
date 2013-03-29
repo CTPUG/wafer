@@ -1,24 +1,15 @@
-import os
-
 from django.contrib.auth.models import User
 from django.db import models
 from django.db.models.signals import post_save
+from libravatar import libravatar_url
 
 from wafer.talks.models import ACCEPTED
-
-
-def photo_fn(instance, filename):
-    '''Return the preferred filename for user photos'''
-    ext = os.path.splitext(filename)[1]
-    fn = ''.join((instance.user.username, ext))
-    return os.path.join('users', fn)
 
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User)
     contact_number = models.CharField(max_length=16, null=True, blank=True)
     bio = models.TextField(null=True, blank=True)
-    photo = models.ImageField(upload_to=photo_fn, null=True, blank=True)
 
     homepage = models.CharField(max_length=256, null=True, blank=True)
     # We should probably do social auth instead
@@ -31,6 +22,10 @@ class UserProfile(models.Model):
 
     def accepted_talks(self):
         return self.user.talks.filter(status=ACCEPTED)
+
+    def avatar_url(self, size=96, https=True, default='mm'):
+        return libravatar_url(self.user.email, size=size, https=https,
+                              default=default)
 
 
 def create_user_profile(sender, instance, created, **kwargs):
