@@ -32,5 +32,12 @@ class RegisteredAttendee(models.Model):
     email = models.CharField(max_length=255)
     items = models.ManyToManyField(
             ConferenceOption, related_name='attendees')
+
+
+class Registration(models.Model):
+    """Manages a unified registration of several attendees"""
+
+    attendees = models.ManyToManyField(
+            RegisteredAttendee, related_name='attendees')
     registered_by = models.ForeignKey(
-            User, related_name='registerations')
+            User, related_name='registeration')
