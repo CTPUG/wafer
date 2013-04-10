@@ -32,6 +32,8 @@ class RegisteredAttendee(models.Model):
     email = models.CharField(max_length=255)
     items = models.ManyToManyField(
             ConferenceOption, related_name='attendees')
+    created_by = models.ForeignKey(
+            User, related_name='registeration')
 
 
 class Registration(models.Model):

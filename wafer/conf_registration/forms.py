@@ -6,7 +6,7 @@ from crispy_forms.bootstrap import FormActions
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit, HTML
 
-from wafer.conf_registration.models import Registration
+from wafer.conf_registration.models import Registration, RegisteredAttendee
 
 
 class RegistrationForm(forms.ModelForm):
@@ -29,3 +29,9 @@ class RegistrationForm(forms.ModelForm):
 
     class Meta:
         model = Registration
+
+
+class AttendeeForm(forms.ModelForm):
+
+    class Meta:
+        model = RegisteredAttendee

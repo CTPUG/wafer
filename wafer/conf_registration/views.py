@@ -6,8 +6,8 @@ from django.utils.decorators import method_decorator
 from django.views.generic import DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 
-from wafer.conf_registration.models import Registration
-from wafer.conf_registration.forms import RegistrationForm
+from wafer.conf_registration.models import Registration, RegisteredAttendee
+from wafer.conf_registration.forms import RegistrationForm, AttendeeForm
 
 
 class EditRegMixin(object):
@@ -53,6 +53,36 @@ class RegistrationView(DetailView):
         return context
 
 
+class AttendeeView(DetailView):
+    template_name = 'wafer.conf_registration/attendee.html'
+    model = RegisteredAttendee
+
+    def get_object(self, *args, **kwargs):
+        '''Only the person responsible for the registration, and staff, can
+           see the full details'''
+        object_ = super(RegistrationView, self).get_object(*args, **kwargs)
+        username = self.request.user.username
+        if (object_.created_by.filter(username=username).exists()
+                or self.request.user.is_staff):
+            return object_
+        else:
+            raise PermissionDenied
+
+    def get_context_data(self, **kwargs):
+        context = super(RegistrationView, self).get_context_data(**kwargs)
+        username = self.request.user.username
+        context['can_edit'] = (
+            self.object.created_by.filter(username=username).exists()
+            or self.request.user.is_staff)
+        return context
+
+
+class AttendeeCreate(LoginRequiredMixin, CreateView):
+    model = RegisteredAttendee
+    form_class = AttendeeForm
+    template_name = 'wafer.conf_registration/attendee_new.html'
+
+
 class RegistrationCreate(LoginRequiredMixin, CreateView):
     model = Registration
     form_class = RegistrationForm
@@ -66,10 +96,22 @@ class RegistrationCreate(LoginRequiredMixin, CreateView):
         return HttpResponseRedirect(self.get_success_url())
 
 
+class AttendeeUpdate(EditRegMixin, UpdateView):
+    model = RegisteredAttendee
+    form_class = AttendeeForm
+    template_name = 'wafer.conf_registration/attendee_new.html'
+
+
 class RegistrationUpdate(EditRegMixin, UpdateView):
     model = Registration
     form_class = RegistrationForm
     template_name = 'wafer.conf_registration/reg_new.html'
+
+
+class AttendeeDelete(EditRegMixin, DeleteView):
+    model = RegisteredAttendee
+    template_name = 'wafer.conf_registration/attendee_delete.html'
+    success_url = reverse_lazy('wafer_index')
 
 
 class RegistrationCancel(EditRegMixin, DeleteView):
