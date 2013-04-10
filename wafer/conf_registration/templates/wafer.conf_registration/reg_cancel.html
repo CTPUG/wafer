@@ -1,0 +1,16 @@
+{% extends 'wafer/base.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+<h1>{% trans "Confirm Registration Cancellation" %}</h1>
+<div class="alert alert-error">
+    {% blocktrans with reg_number=object.attendees.count reg_url=object.get_absolute_url %}
+    You are about to cancel the registration for
+    <a href="{{ reg_url }}">"{{ reg_number }} attendees"</a>.<br>
+    This cannot be undone.
+    {% endblocktrans %}
+</div>
+<form action="" method="post">
+    {% csrf_token %}
+    <input type="submit" class="btn-danger" value="{% trans 'Confirm Cancellation' %}">
+</form>
+{% endblock %}
