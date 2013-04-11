@@ -33,7 +33,7 @@ class RegisteredAttendee(models.Model):
     items = models.ManyToManyField(
             ConferenceOption, related_name='attendees')
     created_by = models.ForeignKey(
-            User, related_name='registeration')
+            User, related_name='created')
 
 
 class Registration(models.Model):
@@ -42,4 +42,4 @@ class Registration(models.Model):
     attendees = models.ManyToManyField(
             RegisteredAttendee, related_name='attendees')
     registered_by = models.ForeignKey(
-            User, related_name='registeration')
+            User, related_name='registered')
