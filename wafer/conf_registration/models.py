@@ -1,4 +1,5 @@
 from django.contrib.auth.models import User
+from django.core.urlresolvers import reverse
 from django.db import models
 
 
@@ -28,18 +29,21 @@ class ConferenceOption(models.Model):
 
 class RegisteredAttendee(models.Model):
 
+    class Meta:
+        unique_together = (('name', 'email'))
+
     name = models.CharField(max_length=255)
-    email = models.CharField(max_length=255)
+    email = models.EmailField(max_length=255)
     items = models.ManyToManyField(
             ConferenceOption, related_name='attendees')
-    created_by = models.ForeignKey(
+    registered_by = models.ForeignKey(
             User, related_name='created')
 
+    def get_absolute_url(self):
+        return reverse('wafer_registration', args=(self.pk,))
 
-class Registration(models.Model):
-    """Manages a unified registration of several attendees"""
 
-    attendees = models.ManyToManyField(
-            RegisteredAttendee, related_name='attendees')
-    registered_by = models.ForeignKey(
-            User, related_name='registered')
+    def __unicode__(self):
+        return u'%s (%s)' % (self.name, self.email)
+
+

@@ -1,4 +1,5 @@
 from django import forms
+from django.forms.models import inlineformset_factory
 from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext as _
 
@@ -6,13 +7,13 @@ from crispy_forms.bootstrap import FormActions
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit, HTML
 
-from wafer.conf_registration.models import Registration, RegisteredAttendee
+from wafer.conf_registration.models import RegisteredAttendee
 
 
-class RegistrationForm(forms.ModelForm):
+class RegisteredAttendeeForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
-        super(RegistrationForm, self).__init__(*args, **kwargs)
+        super(RegisteredAttendeeForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper(self)
         submit_button = Submit('submit', _('Submit'))
         instance = kwargs['instance']
@@ -28,10 +29,5 @@ class RegistrationForm(forms.ModelForm):
             self.helper.add_input(submit_button)
 
     class Meta:
-        model = Registration
-
-
-class AttendeeForm(forms.ModelForm):
-
-    class Meta:
         model = RegisteredAttendee
+        exclude = ('registered_by',)

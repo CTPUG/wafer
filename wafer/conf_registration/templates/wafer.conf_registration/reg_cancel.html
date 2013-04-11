@@ -1,16 +1,16 @@
 {% extends 'wafer/base.html' %}
 {% load crispy_forms_tags %}
 {% block content %}
-<h1>{% trans "Confirm Registration Cancellation" %}</h1>
+<h1>{% trans "Confirm Attendee Deletion" %}</h1>
 <div class="alert alert-error">
-    {% blocktrans with reg_number=object.attendees.count reg_url=object.get_absolute_url %}
+    {% blocktrans with attendee_name=object.name attendee_email=object.email attendee_url=object.get_absolute_url %}
     You are about to cancel the registration for
-    <a href="{{ reg_url }}">"{{ reg_number }} attendees"</a>.<br>
+    <a href="{{ attendee_url }}">"{{ attendee_name }}"</a> (email address {{ attendee_email }}.<br>
     This cannot be undone.
     {% endblocktrans %}
 </div>
 <form action="" method="post">
     {% csrf_token %}
-    <input type="submit" class="btn-danger" value="{% trans 'Confirm Cancellation' %}">
+    <input type="submit" class="btn-danger" value="{% trans 'Confirm Deletion' %}">
 </form>
 {% endblock %}
