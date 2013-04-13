@@ -1,5 +1,4 @@
 from django import forms
-from django.forms.models import inlineformset_factory
 from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext as _
 

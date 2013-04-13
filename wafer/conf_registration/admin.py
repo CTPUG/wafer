@@ -30,6 +30,7 @@ class AttendeeAdminForm(forms.ModelForm):
     class Meta:
         model = RegisteredAttendee
 
+
 class AttendeeAdmin(admin.ModelAdmin):
     form = AttendeeAdminForm
 
