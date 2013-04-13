@@ -39,11 +39,12 @@ class RegisteredAttendee(models.Model):
     registered_by = models.ForeignKey(
             User, related_name='created')
 
+    # Waitlist management stuff
+    waitlist = models.BooleanField(default=False)
+    waitlist_date = models.DateTimeField()
+
     def get_absolute_url(self):
         return reverse('wafer_registration', args=(self.pk,))
 
-
     def __unicode__(self):
         return u'%s (%s)' % (self.name, self.email)
-
-

@@ -4,9 +4,15 @@
 {% for attendee in object %}
 <div>
    {{ attendee.name }} {{ attendee.email }}
-   {% for item in attendee.items.all %}
-      {{ item.name }}, {{ item.price }}
-   {% endfor %}
+   {% if attendee.waitlist %}
+      {% blocktrans %}
+      Currently the waitlist. Added to the waitlist on
+      {{ attendee.waitlist_date.date.isoformat }}.
+   {% else %}
+      {% for item in attendee.items.all %}
+         {{ item.name }}, {{ item.price }}
+      {% endfor %}
+   {% endif %}
    {% if can_edit %}
    <div class="pull-right">
        <a href="{% url 'wafer_registration_edit' attendee.pk %}" class="btn">{% trans 'Edit' %}</a>

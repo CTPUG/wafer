@@ -29,4 +29,4 @@ class RegisteredAttendeeForm(forms.ModelForm):
 
     class Meta:
         model = RegisteredAttendee
-        exclude = ('registered_by',)
+        exclude = ('registered_by', 'waitlist', 'waitlist_date')
