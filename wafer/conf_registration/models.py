@@ -34,14 +34,16 @@ class RegisteredAttendee(models.Model):
 
     name = models.CharField(max_length=255)
     email = models.EmailField(max_length=255)
+    # items will be blank when we're on the waitlist
     items = models.ManyToManyField(
-            ConferenceOption, related_name='attendees')
+            ConferenceOption, related_name='attendees',
+            blank=True)
     registered_by = models.ForeignKey(
             User, related_name='created')
 
     # Waitlist management stuff
     waitlist = models.BooleanField(default=False)
-    waitlist_date = models.DateTimeField()
+    waitlist_date = models.DateTimeField(blank=True)
 
     def get_absolute_url(self):
         return reverse('wafer_registration', args=(self.pk,))

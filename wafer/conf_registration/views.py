@@ -1,3 +1,5 @@
+import datetime
+
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
 from django.core.urlresolvers import reverse_lazy
@@ -7,7 +9,8 @@ from django.views.generic import DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 
 from wafer.conf_registration.models import RegisteredAttendee
-from wafer.conf_registration.forms import RegisteredAttendeeForm
+from wafer.conf_registration.forms import (RegisteredAttendeeForm,
+        WAFER_WAITLIST_ON, WAFER_REGISTRATION_OPEN, WAFER_REGISTRATION_LIMIT)
 
 
 class EditRegMixin(object):
@@ -85,11 +88,34 @@ class AttendeeCreate(LoginRequiredMixin, CreateView):
     template_name = 'wafer.conf_registration/reg_new.html'
 
     def form_valid(self, form):
-        self.object = form.save(commit=False)
-        self.object.registered_by = self.request.user
-        self.object.save()
-        form.save_m2m()
+        registered = RegisteredAttendee.objects.filter(waitlist=False)
+        waitlist = (WAFER_WAITLIST_ON
+                and registered.count >= WAFER_REGISTRATION_LIMIT)
+        reg_open = WAFER_REGISTRATION_OPEN
+        if (not reg_open and not waitlist):
+            # Closed
+            raise PermissionDenied
+        elif waitlist:
+            # Add to waitlist
+            self.object = form.save(commit=False)
+            self.object.registered_by = self.request.user
+            self.object.waitlist = True
+            self.object.waitlist_date = datetime.now()
+            self.object.save()
+        else:
+            self.object = form.save(commit=False)
+            self.object.registered_by = self.request.user
+            self.object.save()
+            form.save_m2m()
         return HttpResponseRedirect(self.get_success_url())
+
+    def get_context_data(self, **kwargs):
+        context = super(AttendeeCreate, self).get_context_data(**kwargs)
+        registered = RegisteredAttendee.objects.filter(waitlist=False)
+        context['waitlist'] = (WAFER_WAITLIST_ON
+                and registered.count >= WAFER_REGISTRATION_LIMIT)
+        context['open'] = WAFER_REGISTRATION_OPEN
+        return context
 
 
 class AttendeeUpdate(EditRegMixin, UpdateView):

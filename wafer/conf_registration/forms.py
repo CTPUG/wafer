@@ -1,12 +1,17 @@
 from django import forms
 from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext as _
+from django.conf import settings
 
 from crispy_forms.bootstrap import FormActions
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit, HTML
 
 from wafer.conf_registration.models import RegisteredAttendee
+
+WAFER_WAITLIST_ON = getattr(settings, 'WAFER_WAITLIST_ON', False)
+WAFER_REGISTRATION_OPEN = getattr(settings, 'WAFER_REGISTRATION_OPEN', False)
+WAFER_REGISTRATION_LIMIT = getattr(settings, 'WAFER_REGISTRATION_LIMIT', 250)
 
 
 class RegisteredAttendeeForm(forms.ModelForm):

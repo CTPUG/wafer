@@ -188,3 +188,18 @@ django.template.add_to_builtins('django.templatetags.i18n')
 
 # Wafer settings
 WAFER_BILLABLE_ME = "http://billable.me/pdf/"
+
+# Registration mode
+# This controls what happens when a user attempts to register
+# if both WAITLIST and REGISTRATION_OPEN are false, no registration is possible
+# if REGISTRTION_OPEN is true, and WAITLIST in false, registration proceeds
+# as normal (registration items are created in the admin interface)
+# if WAITLIST is true, registration puts people on the waitlist rather
+# than registring. In this case, REGISTRATION_OPEN determines message sent
+# to the user.
+# Registration will also go to the WAITLIST if REGISTER_LIMIT is > 0 and
+# the number of attendees exceeds that limit
+WAFER_WAITLIST_ON = False
+WAFER_REGISTRATION_OPEN = False
+# Set to 0 for no limit
+WAFER_REGISTER_LIMIT = 250
