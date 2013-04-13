@@ -90,7 +90,8 @@ class AttendeeCreate(LoginRequiredMixin, CreateView):
     def form_valid(self, form):
         registered = RegisteredAttendee.objects.filter(waitlist=False)
         waitlist = (WAFER_WAITLIST_ON
-                and registered.count >= WAFER_REGISTRATION_LIMIT)
+                or (registered.count() >= WAFER_REGISTRATION_LIMIT and
+                    WAFER_REGISTRATION_LIMIT > 0))
         reg_open = WAFER_REGISTRATION_OPEN
         if (not reg_open and not waitlist):
             # Closed
@@ -113,7 +114,8 @@ class AttendeeCreate(LoginRequiredMixin, CreateView):
         context = super(AttendeeCreate, self).get_context_data(**kwargs)
         registered = RegisteredAttendee.objects.filter(waitlist=False)
         context['waitlist'] = (WAFER_WAITLIST_ON
-                and registered.count >= WAFER_REGISTRATION_LIMIT)
+                or (registered.count() >= WAFER_REGISTRATION_LIMIT and
+                    WAFER_REGISTRATION_LIMIT > 0))
         context['open'] = WAFER_REGISTRATION_OPEN
         return context
 

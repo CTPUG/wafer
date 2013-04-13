@@ -43,7 +43,7 @@ class RegisteredAttendee(models.Model):
 
     # Waitlist management stuff
     waitlist = models.BooleanField(default=False)
-    waitlist_date = models.DateTimeField(blank=True)
+    waitlist_date = models.DateTimeField(null=True, blank=True)
 
     def get_absolute_url(self):
         return reverse('wafer_registration', args=(self.pk,))

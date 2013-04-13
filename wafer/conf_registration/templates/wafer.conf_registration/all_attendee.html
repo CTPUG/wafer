@@ -8,6 +8,7 @@
       {% blocktrans %}
       Currently the waitlist. Added to the waitlist on
       {{ attendee.waitlist_date.date.isoformat }}.
+      {% endblocktrans %}
    {% else %}
       {% for item in attendee.items.all %}
          {{ item.name }}, {{ item.price }}

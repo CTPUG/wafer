@@ -11,14 +11,18 @@ from wafer.conf_registration.models import RegisteredAttendee
 
 WAFER_WAITLIST_ON = getattr(settings, 'WAFER_WAITLIST_ON', False)
 WAFER_REGISTRATION_OPEN = getattr(settings, 'WAFER_REGISTRATION_OPEN', False)
-WAFER_REGISTRATION_LIMIT = getattr(settings, 'WAFER_REGISTRATION_LIMIT', 250)
+WAFER_REGISTRATION_LIMIT = getattr(settings, 'WAFER_REGISTRATION_LIMIT', 0)
 
 
 class RegisteredAttendeeForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(RegisteredAttendeeForm, self).__init__(*args, **kwargs)
-        if not WAFER_WAITLIST_ON and WAFER_REGISTRATION_OPEN:
+        registered = RegisteredAttendee.objects.filter(waitlist=False)
+        waitlist = WAFER_WAITLIST_ON or (
+            registered.count() >= WAFER_REGISTRATION_LIMIT
+            and WAFER_REGISTRATION_LIMIT > 0)
+        if not waitlist and WAFER_REGISTRATION_OPEN:
             self.fields['items'].required = True
         else:
             del self.fields['items']
