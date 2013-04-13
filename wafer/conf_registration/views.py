@@ -55,11 +55,36 @@ class AttendeeView(DetailView):
         return context
 
 
+class AllAttendeeView(DetailView):
+    template_name = 'wafer.conf_registration/all_attendee.html'
+    model = RegisteredAttendee
+
+    def get_object(self, *args, **kwargs):
+        '''Only the person responsible for the registration, and staff, can
+           see the full details'''
+        user_id = self.request.user.pk
+        if (RegisteredAttendee.objects.filter(
+                registered_by_id=user_id).exists()):
+            return RegisteredAttendee.objects.filter(
+                    registered_by_id=user_id).all()
+        else:
+            raise PermissionDenied
+
+    def get_context_data(self, **kwargs):
+        context = super(AllAttendeeView, self).get_context_data(**kwargs)
+        username = self.request.user.username
+        user_id = self.request.user.pk
+        context['can_edit'] = (RegisteredAttendee.objects.filter(
+                registered_by_id=user_id).exists()
+                or self.request.user.is_staff)
+        context['username'] = username
+        return context
+
+
 class AttendeeCreate(LoginRequiredMixin, CreateView):
     model = RegisteredAttendee
     form_class = RegisteredAttendeeForm
     template_name = 'wafer.conf_registration/reg_new.html'
-
 
     def form_valid(self, form):
         self.object = form.save(commit=False)

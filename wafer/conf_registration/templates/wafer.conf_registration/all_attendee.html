@@ -1,0 +1,17 @@
+{% extends "wafer/base.html" %}
+{% block content %}
+<h1>{% trans Registrations %} {{ username }}</h1>
+{% for attendee in object %}
+<div>
+   {{ attendee.name }} {{ attendee.email }}
+   {% for item in attendee.items.all %}
+      {{ item.name }}, {{ item.price }}
+   {% endfor %}
+   {% if can_edit %}
+   <div class="pull-right">
+       <a href="{% url 'wafer_registration_edit' attendee.pk %}" class="btn">{% trans 'Edit' %}</a>
+   </div>
+   {% endif %}
+</div>
+{% endfor %}
+{% endblock %}
