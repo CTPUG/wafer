@@ -18,6 +18,10 @@ class RegisteredAttendeeForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(RegisteredAttendeeForm, self).__init__(*args, **kwargs)
+        if not WAFER_WAITLIST_ON and WAFER_REGISTRATION_OPEN:
+            self.fields['items'].required = True
+        else:
+            del self.fields['items']
         self.helper = FormHelper(self)
         submit_button = Submit('submit', _('Submit'))
         instance = kwargs['instance']
