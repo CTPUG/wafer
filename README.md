@@ -27,6 +27,9 @@ Installation
 TODO
 ====
 
+* Add a dashboard for logged in users showing them:
+  * A list of their talks (with a button to add one).
+  * A list of their invoices (and whether they're finalized / paid).
 * Make the code easier to use for other conferences (split out theming, etc)
 * Add support for editing talk submissions.
 * Add support for editing and arranging the schedule via Django admin.
