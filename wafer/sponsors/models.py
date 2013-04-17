@@ -24,12 +24,12 @@ class SponsorshipPackage(models.Model):
     description = MarkdownTextField(
         help_text=_("Describe what the package gives the sponsor."))
     files = models.ManyToManyField(
-        File, related_name="packages",
+        File, related_name="packages", null=True, blank=True,
         help_text=_("Images and other files for use in"
                     " the description markdown field."))
 
     def __unicode__(self):
-        return u'%s (amount: %.f2)' % (self.name, self.price)
+        return u'%s (amount: %.0f)' % (self.name, self.price)
 
 
 class Sponsor(models.Model):
@@ -40,7 +40,7 @@ class Sponsor(models.Model):
     description = MarkdownTextField(
         help_text=_("Write some nice things about the sponsor."))
     files = models.ManyToManyField(
-        File, related_name="sponsors",
+        File, related_name="sponsors", null=True, blank=True,
         help_text=_("Images and other files for use in"
                     " the description markdown field."))
 
