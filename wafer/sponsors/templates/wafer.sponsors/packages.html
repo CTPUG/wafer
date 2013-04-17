@@ -1,14 +1,14 @@
 {% extends "wafer/base.html" %}
 {% block content %}
 <h1>{% trans 'Sponsorship Packages:' %}</h1>
-{% for package in sponsorship_package_list %}
+{% for package in sponsorshippackage_list %}
 <div>
     <h1>{{ package.name }} - ({{ package.price }})</h1>
     {% if package.number_available %}
         <p>{% trans 'Number available:' %} {{ package.number_available }}</p>
     {% endif %}
     <p>{{ package.short_description }}</p>
-    {{ sponsor.description_html | safe }}
+    {{ package.description_html | safe }}
 </div>
 {% endfor %}
 {% endblock %}
