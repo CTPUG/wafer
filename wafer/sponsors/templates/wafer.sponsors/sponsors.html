@@ -1,0 +1,10 @@
+{% extends "wafer/base.html" %}
+{% block content %}
+<h1>{% trans 'Sponsors:' %}</h1>
+{% for sponsor in sponsor_list %}
+<div>
+    <h2>{{ sponsor.name }}</h1>
+    {{ sponsor.description_html | safe }}
+</div>
+{% endfor %}
+{% endblock %}

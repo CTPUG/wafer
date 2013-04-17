@@ -19,6 +19,7 @@ urlpatterns = patterns(
     (r'^accounts/', include('wafer.registration.urls')),
     (r'^users/', include('wafer.users.urls')),
     (r'^talks/', include('wafer.talks.urls')),
+    (r'^sponsors/', include('wafer.sponsors.urls')),
     (r'^admin/', include(admin.site.urls)),
 )
 

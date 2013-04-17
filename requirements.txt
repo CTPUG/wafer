@@ -8,3 +8,4 @@ pyLibravatar
 pydns
 pytz
 requests
+markdown
