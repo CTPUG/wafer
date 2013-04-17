@@ -26,6 +26,9 @@
                         <li><a href="{% url 'wafer_users' %}">
                             {% trans 'Attendees' %}
                         </a></li>
+                        <li><a href="{% url 'wafer_users_talks' %}">
+                            {% trans 'Talks' %}
+                        </a></li>
                     </ul>
                     <ul class="nav pull-right">
                     {% if user.is_authenticated %}

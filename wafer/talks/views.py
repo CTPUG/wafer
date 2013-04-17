@@ -5,6 +5,7 @@ from django.http import HttpResponseRedirect
 from django.utils.decorators import method_decorator
 from django.views.generic import DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django.views.generic.list import ListView
 
 from wafer.talks.models import Talk, ACCEPTED, PENDING
 from wafer.talks.forms import TalkForm
@@ -29,6 +30,12 @@ class LoginRequiredMixin(object):
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):
         return super(LoginRequiredMixin, self).dispatch(*args, **kwargs)
+
+
+class UsersTalks(ListView):
+    template_name = 'wafer.talks/talks.html'
+    model = Talk
+    paginate_by = 10
 
 
 class TalkView(DetailView):
