@@ -24,6 +24,12 @@ Installation
 
 4. Have a fun conference.
 
+Features
+========
+
+* Support for adding and editing sponsors via Django admin.
+
+
 TODO
 ====
 
@@ -40,7 +46,6 @@ TODO
   * Allow multiple people per invoice.
   * Allow cancelling (but not deletion) of invoices.
 * Support for adding news (and other templated pages) via Django admin.
-* Support for adding and editing sponsors via Django admin.
 * Maybe add some cool visualizations with  d3:
   * Number of people signed up in various categories.
   * Places remaining.
