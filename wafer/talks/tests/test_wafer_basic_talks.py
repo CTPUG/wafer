@@ -19,8 +19,7 @@ def test_filter_talk():
     """Create a second user and check some filters"""
     from django.contrib.auth.models import User
 
-    User.objects.create_user('james', 'best@wafer.test',
-                                     'johnpassword')
+    User.objects.create_user('james', 'best@wafer.test', 'johnpassword')
 
     assert User.objects.filter(contact_talks__isnull=False).count() == 1
     assert User.objects.filter(contact_talks__isnull=True).count() == 1

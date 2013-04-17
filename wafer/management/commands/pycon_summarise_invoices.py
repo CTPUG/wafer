@@ -15,7 +15,7 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         parser = InvoiceParser()
         people = AttendeeRegistration.objects.filter(
-                on_waiting_list=False, active=True)
+            on_waiting_list=False, active=True)
 
         csv_file = csv.writer(sys.stdout)
         csv_file.writerow(["name", "email", "invoice no.", "reference",

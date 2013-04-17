@@ -6,7 +6,8 @@ from wafer.registration.views import redirect_profile
 
 
 backend = 'registration.backends.default.DefaultBackend'
-urlpatterns = patterns('',
+urlpatterns = patterns(
+    '',
     url(r'^profile/$', redirect_profile),
 
     # registration.backends.default.urls, but Django 1.5 compatible

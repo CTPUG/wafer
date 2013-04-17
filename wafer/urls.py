@@ -5,7 +5,8 @@ from django.contrib import admin
 
 admin.autodiscover()
 
-urlpatterns = patterns('',
+urlpatterns = patterns(
+    '',
     url(r'^$',
         TemplateView.as_view(template_name='wafer/index.html'),
         name='wafer_index'),
@@ -23,7 +24,8 @@ urlpatterns = patterns('',
 
 # Serve media
 if settings.DEBUG:
-    urlpatterns += patterns('',
+    urlpatterns += patterns(
+        '',
         url(r'^media/(?P<path>.*)$', 'django.views.static.serve',
             {'document_root': settings.MEDIA_ROOT}),
-   )
+    )
