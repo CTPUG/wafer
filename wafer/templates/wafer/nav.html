@@ -1,0 +1,59 @@
+<div class="navbar navbar-inverse navbar-fixed-top">
+  <div class="navbar-inner">
+    <div class="container">
+      <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+        <!-- To display a nav menu button on a small screen -->
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="brand" href="{% url 'wafer_index' %}">{{ WAFER_CONFERENCE_NAME }}</a>
+      <div class="nav-collapse collapse">
+        <ul class="nav">
+          <li class="active"><a href="{% url 'wafer_index' %}">
+              {% trans 'Home' %}
+          </a></li>
+          <li class="dropdown">
+            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+              Sponsors<b class="caret"></b>
+            </a>
+            <ul class="dropdown-menu">
+              <li><a href="{% url 'wafer_sponsors' %}">
+                  {% trans 'Our sponsors' %}
+              </a></li>
+              <li><a href="{% url 'wafer_sponsorship_packages' %}">
+                  {% trans 'Sponsorship packages' %}
+              </a></li>
+            </ul>
+          </li>
+          <li><a href="{% url 'wafer_users_talks' %}">
+              {% trans 'Talks' %}
+          </a></li>
+        </ul>
+        <ul class="nav pull-right">
+          {% if user.is_authenticated %}
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+              {{ user.username }}<b class="caret"></b>
+            </a>
+            <ul class="dropdown-menu">
+              <li><a href="{{ user.get_absolute_url }}">
+                  {% blocktrans with name=user.get_full_name|default:user.username %}
+                  {{ name }}'s profile
+                  {% endblocktrans %}
+              </a></li>
+              <li><a href="{% url 'auth_logout' %}">
+                  {% trans 'Log out' %}
+              </a></li>
+            </ul>
+          </li>
+          {% else %}
+          <li><a href="{% url 'auth_login' %}">
+              {% trans 'Register / Log In' %}
+          </a></li>
+          {% endif %}
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
