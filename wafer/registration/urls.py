@@ -1,11 +1,10 @@
-from django.conf.urls.defaults import include, patterns, url
+from django.conf.urls import include, patterns, url
 from django.views.generic import TemplateView
-from registration.views import activate, register
+from registration.views import ActivationView, RegistrationView
 
 from wafer.registration.views import redirect_profile
 
 
-backend = 'registration.backends.default.DefaultBackend'
 urlpatterns = patterns(
     '',
     url(r'^profile/$', redirect_profile),
@@ -16,10 +15,13 @@ urlpatterns = patterns(
             template_name='registration/activation_complete.html'
         ), name='registration_activation_complete'),
     url(r'^activate/(?P<activation_key>\w+)/$',
-        activate, {'backend': backend},
-        name='registration_activate'),
+        ActivationView.as_view(
+            template_name='registration/activate.html'
+        ), name='registration_activate'),
     url(r'^register/$',
-        register, {'backend': backend},
+        RegistrationView.as_view(
+            template_name='registration/registration_form.html'
+        ),
         name='registration_register'),
     url(r'^register/complete/$',
         TemplateView.as_view(

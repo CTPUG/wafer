@@ -1,4 +1,4 @@
-from django.conf.urls.defaults import include, patterns, url
+from django.conf.urls import include, patterns, url
 from django.views.generic import RedirectView, TemplateView
 from django.conf import settings
 from django.contrib import admin
