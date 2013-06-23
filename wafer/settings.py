@@ -119,6 +119,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.tz',
     'django.contrib.messages.context_processors.messages',
     'wafer.context_processors.site_info',
+    'wafer.context_processors.menu_info',
 )
 
 INSTALLED_APPS = (
