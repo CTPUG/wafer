@@ -65,6 +65,14 @@
 </div>
 {% endfor %}
 {% endif %}
+{% if profile.manages_registration %}
+<h2>{% trans 'Manager for the following registrations' %}</h2>
+{% for attendee in profile.registrations %}
+<div class="well">
+   <a href="{{ attendee.get_absolute_url }}">{{ attendee.name }}</a>
+</div>
+{% endfor %}
+{% endif %}
 {% endwith %}
 {% endblock %}
 {% block extra_foot %}
