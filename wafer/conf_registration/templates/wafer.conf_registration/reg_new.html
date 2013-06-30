@@ -1,0 +1,27 @@
+{% extends 'wafer/base.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+<h1>{% trans "New Registration" %}</h1>
+{% if not waitlist and not open %}
+{% blocktrans %}
+<em>Conference registration is closed</em>
+{% endblocktrans %}
+{% else %}
+   {% if waitlist %}
+      {% if open %}
+         {% blocktrans %}
+         <em>The conference is currently full. New registrations will be added
+            to the waiting list and notified if space for new registrations
+            becomes available.</em>
+         {% endblocktrans %}
+      {% else %}
+         {% blocktrans %}
+         <em>The conference has not yet opened for registration. Attendees will
+            be added to the waitlist and notified when registration opens</em>
+         {% endblocktrans %}
+      {% endif %}
+   {% endif %}
+   {% crispy form %}
+{% endif %}
+{% endblock %}
+

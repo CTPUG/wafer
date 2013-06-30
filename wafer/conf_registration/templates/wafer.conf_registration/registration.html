@@ -1,0 +1,17 @@
+{% extends "wafer/base.html" %}
+{% block content %}
+{% if can_edit %}
+<div class="pull-right">
+    <a href="{% url 'wafer_registration_edit' object.pk %}" class="btn">{% trans 'Edit' %}</a>
+</div>
+{% endif %}
+<h1>{% trans Register %}</h1>
+</div>
+<div>
+    {% blocktrans count counter=object.attendees.count %}
+    Attendee:
+    {% plural %}
+    Attendees:
+    {% endblocktrans %}
+</div>
+{% endblock %}
