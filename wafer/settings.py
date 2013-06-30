@@ -192,10 +192,10 @@ WAFER_BILLABLE_ME = "http://billable.me/pdf/"
 # Registration mode
 # This controls what happens when a user attempts to register
 # if both WAITLIST and REGISTRATION_OPEN are false, no registration is possible
-# if REGISTRTION_OPEN is true, and WAITLIST in false, registration proceeds
+# if REGISTRTION_OPEN is true, and WAITLIST is false, registration proceeds
 # as normal (registration items are created in the admin interface)
 # if WAITLIST is true, registration puts people on the waitlist rather
-# than registring. In this case, REGISTRATION_OPEN determines message sent
+# than registering. In this case, REGISTRATION_OPEN determines message sent
 # to the user.
 # Registration will also go to the WAITLIST if REGISTER_LIMIT is > 0 and
 # the number of attendees exceeds that limit
