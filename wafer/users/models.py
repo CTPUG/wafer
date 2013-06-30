@@ -23,6 +23,12 @@ class UserProfile(models.Model):
     def accepted_talks(self):
         return self.user.talks.filter(status=ACCEPTED)
 
+    def manages_registration(self):
+        return self.user.created.count() > 0
+
+    def registrations(self):
+        return self.user.created.all()
+
     def avatar_url(self, size=96, https=True, default='mm'):
         return libravatar_url(self.user.email, size=size, https=https,
                               default=default)
