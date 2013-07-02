@@ -3,7 +3,7 @@ from django.db import models
 from django.db.models.signals import post_save
 from libravatar import libravatar_url
 
-from wafer.talks.models import ACCEPTED
+from wafer.talks.models import ACCEPTED, PENDING
 
 
 class UserProfile(models.Model):
@@ -22,6 +22,9 @@ class UserProfile(models.Model):
 
     def accepted_talks(self):
         return self.user.talks.filter(status=ACCEPTED)
+
+    def pending_talks(self):
+        return self.user.talks.filter(status=PENDING)
 
     def manages_registration(self):
         return self.user.created.count() > 0

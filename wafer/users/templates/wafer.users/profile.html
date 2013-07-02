@@ -56,6 +56,7 @@
 {{ profile.bio }}
 </div>
 {% endif %}
+{# Accepted talks are globally visible #}
 {% if profile.accepted_talks.exists %}
 <h2>{% trans 'Accepted Talks:' %}</h2>
 {% for talk in profile.accepted_talks %}
@@ -64,6 +65,18 @@
     <p>{{ talk.abstract }}</p>
 </div>
 {% endfor %}
+{% endif %}
+{# Submitted talk proposals are only visible to the owner #}
+{% if user == object or user.is_staff %}
+{% if profile.pending_talks.exists %}
+<h2>{% trans 'Submitted Talks (under consideration):' %}</h2>
+{% for talk in profile.pending_talks %}
+<div class="well">
+    <a href="{{ talk.get_absolute_url }}">{{ talk.title }}</a>
+    <p>{{ talk.abstract }}</p>
+</div>
+{% endfor %}
+{% endif %}
 {% endif %}
 {# We only show the registrations for the owner or staff on their profile #}
 {% if user == object or user.is_staff %}
