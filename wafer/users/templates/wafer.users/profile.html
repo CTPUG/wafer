@@ -65,6 +65,8 @@
 </div>
 {% endfor %}
 {% endif %}
+{# We only show the registrations for the owner or staff on their profile #}
+{% if user == object or user.is_staff %}
 {% if profile.manages_registration %}
 <h2>{% trans 'Manager for the following registrations' %}</h2>
 {% for attendee in profile.registrations %}
@@ -72,6 +74,7 @@
    <a href="{{ attendee.get_absolute_url }}">{{ attendee.name }}</a>
 </div>
 {% endfor %}
+{% endif %}
 {% endif %}
 {% endwith %}
 {% endblock %}
