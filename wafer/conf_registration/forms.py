@@ -24,10 +24,12 @@ class RegisteredAttendeeForm(forms.ModelForm):
             and WAFER_REGISTRATION_LIMIT > 0)
         if not waitlist and WAFER_REGISTRATION_OPEN:
             self.fields['items'].required = True
+            self.helper = FormHelper(self)
+            submit_button = Submit('submit', _('Submit'))
         else:
             del self.fields['items']
-        self.helper = FormHelper(self)
-        submit_button = Submit('submit', _('Submit'))
+            self.helper = FormHelper(self)
+            submit_button = Submit('submit', _('Sign up for waitlist'))
         instance = kwargs['instance']
         if instance:
             self.helper.layout.append(
