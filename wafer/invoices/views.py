@@ -1,7 +1,7 @@
 from django.http import HttpResponse, HttpResponseNotFound
 from django.shortcuts import get_object_or_404
 
-from wafer.models import AttendeeRegistration
+from wafer.conf_registration.models import RegisteredAttendee
 
 
 def attendee_invoice(request, invoice_id):

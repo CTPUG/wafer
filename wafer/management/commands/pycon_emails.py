@@ -4,9 +4,8 @@ from optparse import make_option
 
 from django.core.management.base import BaseCommand
 
-from wafer.models import AttendeeRegistration
-
 from django.contrib.auth.models import User
+from wafer.conf_registration.models import RegisteredAttendee
 
 
 class Command(BaseCommand):
@@ -15,41 +14,21 @@ class Command(BaseCommand):
     option_list = BaseCommand.option_list + tuple([
         make_option('--speakers', action="store_true", default=False,
                     help='List speaker email addresses only'),
-        make_option('--unpaid', action="store_true", default=False,
-                    help='Only list people who have not paid.'),
-        make_option('--paid', action="store_true", default=False,
-                    help='Only list people who have paid.'),
-        make_option('--registered', action="store_true", default=False,
-                    help='Only list people not on the waiting list.'),
         make_option('--waiting', action="store_true", default=False,
                     help='Only list people on the waiting list.'),
-        make_option('--active', action="store_true", default=False,
-                    help='Only list people who are active.'),
-        make_option('--inactive', action="store_true", default=False,
-                    help='Only list people who are inactive.'),
     ])
 
     def _attendee_emails(self, options):
         query = {}
-        if options['unpaid']:
-            query['invoice_paid'] = False
-        if options['paid']:
-            query['invoice_paid'] = True
-        if options['registered']:
-            query['on_waiting_list'] = False
         if options['waiting']:
-            query['on_waiting_list'] = True
-        if options['active']:
-            query['active'] = True
-        if options['inactive']:
-            query['active'] = False
+            query['waitlist'] = True
 
-        people = AttendeeRegistration.objects.filter(**query)
+        people = RegisteredAttendee.objects.filter(**query)
 
         csv_file = csv.writer(sys.stdout)
         for person in people:
             row = [x.encode("utf-8")
-                   for x in (person.fullname(), person.email)]
+                   for x in (person.name, person.email)]
             csv_file.writerow(row)
 
     def _speaker_emails(self, options):
@@ -58,7 +37,9 @@ class Command(BaseCommand):
 
         csv_file = csv.writer(sys.stdout)
         for person in people:
-            titles = [x.titles for x in person.contact_talks.all()]
+            titles = [x.title for x in person.contact_talks.all()]
+            # XXX: Should we check for username here, since full name
+            # may be blank
             row = [x.encode("utf-8")
                    for x in (person.get_full_name(), person.email,
                              ' '.join(titles))]
