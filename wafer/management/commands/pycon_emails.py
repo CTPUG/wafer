@@ -27,8 +27,13 @@ class Command(BaseCommand):
 
         csv_file = csv.writer(sys.stdout)
         for person in people:
-            row = [x.encode("utf-8")
-                   for x in (person.name, person.email)]
+            if options['waiting']:
+                row = [x.encode("utf-8")
+                       for x in (person.name, person.email,
+                           person.waitlist_date.strftime("%Y-%m-%d %H:%M"))]
+            else:
+                row = [x.encode("utf-8")
+                       for x in (person.name, person.email)]
             csv_file.writerow(row)
 
     def _speaker_emails(self, options):
