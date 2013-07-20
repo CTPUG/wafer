@@ -5,6 +5,7 @@ from django.core.exceptions import PermissionDenied
 from django.core.urlresolvers import reverse_lazy
 from django.http import HttpResponseRedirect
 from django.utils.decorators import method_decorator
+from django.utils.timezone import utc
 from django.views.generic import DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.conf import settings
@@ -112,7 +113,9 @@ class AttendeeCreate(LoginRequiredMixin, CreateView):
                 self.object.name = self.request.user.username
             self.object.email = self.request.user.email
             self.object.waitlist = True
-            self.object.waitlist_date = datetime.datetime.now()
+            # django.utils.timezone.now is neater, but 1.5 only
+            now = datetime.datetime.utcnow().replace(tzinfo=utc)
+            self.object.waitlist_date = now
             self.object.save()
         else:
             self.object = form.save(commit=False)
