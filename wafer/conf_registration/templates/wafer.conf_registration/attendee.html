@@ -7,5 +7,9 @@
 {% endif %}
 <h1>{% trans Attendee %}</h1>
 <div>
+   {{ object.name }}
+   {% if object.waitlist %}
+   <span class="label label-important">On the waitlist</span>
+   {% endif %}
 </div>
 {% endblock %}
