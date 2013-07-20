@@ -104,7 +104,7 @@ class Menu(object):
         menu_items = self.items
         if menu is not None:
             matches = [item for item in menu_items
-                       if "items" in item and item["menu"] == menu]
+                       if "items" in item and item.get("menu") == menu]
             if len(matches) != 1:
                 raise MenuError("Unable to find sub-menu %r." % (menu,))
             menu_items = matches[0]["items"]
