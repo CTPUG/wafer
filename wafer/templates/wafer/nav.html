@@ -10,28 +10,26 @@
       <a class="brand" href="{% url 'wafer_index' %}">{{ WAFER_CONFERENCE_NAME }}</a>
       <div class="nav-collapse collapse">
         <ul class="nav">
-          <li class="active"><a href="{% url 'wafer_index' %}">
-              {% trans 'Home' %}
+        {% for item in WAFER_MENUS.items %}
+          {% if item.url %}
+          <li class="active"><a href="{{ item.url }}">
+              {{ item.label }}
           </a></li>
+          {% else %}
           <li class="dropdown">
             <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-              Sponsors<b class="caret"></b>
+              {{ item.label }}<b class="caret"></b>
             </a>
             <ul class="dropdown-menu">
-              <li><a href="{% url 'wafer_sponsors' %}">
-                  {% trans 'Our sponsors' %}
+              {% for subitem in item.items %}
+              <li><a href="{{ subitem.url }}">
+                  {{ subitem.label }}
               </a></li>
-              <li><a href="{% url 'wafer_sponsorship_packages' %}">
-                  {% trans 'Sponsorship packages' %}
-              </a></li>
+              {% endfor %}
             </ul>
           </li>
-          <li><a href="{% url 'wafer_users_talks' %}">
-              {% trans 'Talks' %}
-          </a></li>
-          <li><a href="{% url 'wafer_contact' %}">
-              {% trans 'Contact' %}
-          </a></li>
+          {% endif %}
+        {% endfor %}
         </ul>
         <ul class="nav pull-right">
           {% if user.is_authenticated %}

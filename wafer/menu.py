@@ -1,15 +1,36 @@
 from django.core.cache import cache
+from django.core.urlresolvers import reverse
+from django.conf import settings
+from django.utils.translation import ugettext as _
 
 CACHE_KEY = "WAFER_MENU_CACHE"
+
+WAFER_MENUS = [
+    {"name": "home", "label": _("Home"),
+     "url": reverse("wafer_index")},
+    {"name": "sponsors", "label": _("Sponsors"),
+     "items": [
+         {"name": "sponsors", "label": _("Our sponsors"),
+          "url": reverse("wafer_sponsors")},
+         {"name": "packages", "label": _("Sponsorship packages"),
+          "url": reverse("wafer_sponsorship_packages")},
+     ]},
+    {"name": "talks", "label": _("Talks"),
+     "url": reverse("wafer_users_talks")},
+    {"name": "contact", "label": _("Contact"),
+     "url": reverse("wafer_contact")},
+]
 
 
 def get_cached_menus():
     """Return the menus from the cache or generate them if needed."""
-    menus = cache.get(CACHE_KEY)
-    if menus is None:
-        menus = generate_menus()
-        cache.set(CACHE_KEY, menus)
-    return menus
+    items = cache.get(CACHE_KEY)
+    if items is None:
+        menu = generate_menu()
+        cache.set(CACHE_KEY, menu.items)
+    else:
+        menu = Menu(items)
+    return menu
 
 
 def clear_menu_cache():
@@ -17,6 +38,65 @@ def clear_menu_cache():
     cache.delete(CACHE_KEY)
 
 
-def generate_menus():
+def generate_menu():
     """Generate a new list of menus."""
-    return {}
+    root_menu = Menu(getattr(settings, 'WAFER_MENUS', WAFER_MENUS))
+    return root_menu
+
+
+class MenuError(Exception):
+    """Raised when attempting illegal operations while constructiong menus."""
+
+
+class Menu(object):
+    """Utility class for manipulating a hierarchy of menus.
+
+    A menu is maintained as a list of dictionaries (for ease of caching).
+
+    Menu items are dictionaries with the keys: name, label and url. E.g.::
+
+        {"name": "home", "label": _("Home"),
+         "url": reverse("wafer_index")},
+
+    Sub-menus are dictionaries with the keys: name, label and items.
+
+        {"name": "sponsors", "label": _("Sponsors"),
+         "items": [
+             {"name": "sponsors", "label": _("Our sponsors"),
+              "url": reverse("wafer_sponsors")},
+             {"name": "packages", "label": _("Sponsorship packages"),
+              "url": reverse("wafer_sponsorship_packages")},
+         ]},
+    """
+
+    def __init__(self, items):
+        self.items = items
+
+    @staticmethod
+    def mk_item(self, name, label, url, sort_key=None):
+        return {"name": name, "label": label, "url": url}
+
+    @staticmethod
+    def mk_menu(self, name, label, items, sort_key=None):
+        return {"name": name, "label": label, "items": items}
+
+    def _descend_items(self, parts):
+        menu_items = self.items
+        for sub_menu in parts[:-1]:
+            matches = [item for item in menu_items if item["name"] == sub_menu]
+            if len(matches) == 1:
+                menu_items = matches[0]
+            else:
+                raise MenuError("Unable to find sub-menu %r of %r"
+                                % (sub_menu, ".".join(parts)))
+        return menu_items
+
+    def add_item(self, name, label, url, sort_key=None):
+        parts = name.split('.')
+        menu_items = self._descend_items(parts[:-1])
+        menu_items.append(self.mk_item(parts[-1], label, url))
+
+    def add_menu(self, name, label, items):
+        parts = name.split('.')
+        menu_items = self._descend_items(parts[:-1])
+        menu_items.append(self.mk_menu(parts[-1], label, items))
