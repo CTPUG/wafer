@@ -189,7 +189,27 @@ django.template.add_to_builtins('django.templatetags.i18n')
 # Wafer settings
 WAFER_BILLABLE_ME = "http://billable.me/pdf/"
 
-# Wafer dynamic menu functions
+# Wafer menu settings
+
+from django.utils.translation import ugettext_lazy as _
+from django.core.urlresolvers import reverse
+
+WAFER_MENUS = [
+    {"name": "home", "label": _("Home"),
+     "url": reverse("wafer_page", args=('index',))},
+    {"name": "sponsors", "label": _("Sponsors"),
+     "items": [
+         {"name": "sponsors", "label": _("Our sponsors"),
+          "url": reverse("wafer_sponsors")},
+         {"name": "packages", "label": _("Sponsorship packages"),
+          "url": reverse("wafer_sponsorship_packages")},
+     ]},
+    {"name": "talks", "label": _("Talks"),
+     "url": reverse("wafer_users_talks")},
+    {"name": "contact", "label": _("Contact"),
+     "url": reverse("wafer_page", args=('contact',))},
+]
+
 WAFER_DYNAMIC_MENUS = [
     'wafer.pages.models.page_menus',
 ]

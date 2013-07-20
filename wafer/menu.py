@@ -1,27 +1,7 @@
 from django.core.cache import cache
-from django.core.urlresolvers import reverse
 from django.conf import settings
-from django.utils.translation import ugettext as _
 
 CACHE_KEY = "WAFER_MENU_CACHE"
-
-WAFER_MENUS = [
-    {"name": "home", "label": _("Home"),
-     "url": reverse("wafer_page", args=('index',))},
-    {"name": "sponsors", "label": _("Sponsors"),
-     "items": [
-         {"name": "sponsors", "label": _("Our sponsors"),
-          "url": reverse("wafer_sponsors")},
-         {"name": "packages", "label": _("Sponsorship packages"),
-          "url": reverse("wafer_sponsorship_packages")},
-     ]},
-    {"name": "talks", "label": _("Talks"),
-     "url": reverse("wafer_users_talks")},
-    {"name": "contact", "label": _("Contact"),
-     "url": reverse("wafer_page", args=('contact',))},
-]
-
-WAFER_DYNAMIC_MENUS = []
 
 
 def get_cached_menus():
@@ -65,9 +45,8 @@ def maybe_obj(str_or_obj):
 
 def generate_menu():
     """Generate a new list of menus."""
-    root_menu = Menu(getattr(settings, 'WAFER_MENUS', WAFER_MENUS))
-    for dynamic_menu_func in getattr(
-            settings, 'WAFER_DYNAMIC_MENUS', WAFER_DYNAMIC_MENUS):
+    root_menu = Menu(settings.WAFER_MENUS)
+    for dynamic_menu_func in settings.WAFER_DYNAMIC_MENUS:
         dynamic_menu_func = maybe_obj(dynamic_menu_func)
         dynamic_menu_func(root_menu)
     return root_menu
