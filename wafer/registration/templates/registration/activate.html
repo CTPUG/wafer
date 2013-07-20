@@ -3,7 +3,7 @@
 <h1>{% trans 'Oops, Registration failed' %}</h1>
 <p>
 {% url 'registration_register' as register_url %}
-{% url 'wafer_contact' as contact_url %}
+{% url 'wafer_page' 'contact' as contact_url %}
 {% blocktrans %}
     We seem to have had some diffilty with our registration.
     Please <a href="{{ register_url }}">try again</a>

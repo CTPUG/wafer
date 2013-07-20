@@ -88,4 +88,4 @@ class TalkUpdate(EditOwnTalksMixin, UpdateView):
 class TalkDelete(EditOwnTalksMixin, DeleteView):
     model = Talk
     template_name = 'wafer.talks/talk_delete.html'
-    success_url = reverse_lazy('wafer_index')
+    success_url = reverse_lazy('wafer_page', args=('index',))

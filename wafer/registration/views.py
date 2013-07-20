@@ -10,4 +10,4 @@ def redirect_profile(request):
         return HttpResponseRedirect(reverse('wafer_user_profile',
                                             args=(request.user.username,)))
     else:
-        return HttpResponseRedirect(reverse('wafer_index'))
+        return HttpResponseRedirect(reverse('wafer_page', args=('index',)))
