@@ -38,8 +38,9 @@ class Command(BaseCommand):
         csv_file = csv.writer(sys.stdout)
         for person in people:
             titles = [x.title for x in person.contact_talks.all()]
-            # XXX: Should we check for username here, since full name
-            # may be blank
+            # get_full_name may be blank, since we don't require that
+            # the user specify it, but we will have the email as an
+            # identifier
             row = [x.encode("utf-8")
                    for x in (person.get_full_name(), person.email,
                              ' '.join(titles))]
