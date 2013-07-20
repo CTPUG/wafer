@@ -1,8 +1,7 @@
 from optparse import make_option
 
 from django.core.management.base import BaseCommand
-
-from wafer.models import AttendeeRegistration
+from wafer.conf_registration.models import RegisteredAttendee
 
 
 class Command(BaseCommand):
@@ -18,18 +17,5 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         email = options.get('email_address')
         overwrite = options.get('overwrite')
-        if email is not None:
-            attendee = AttendeeRegistration.objects.get(email=email)
-            attendees = [attendee]
-        else:
-            attendees = AttendeeRegistration.objects.all()
-
-        for attendee in attendees:
-            who = "%s %s (%s)" % (attendee.name, attendee.surname,
-                                  attendee.email)
-            if attendee.invoice_pdf.name is None or overwrite:
-                print "Generated invoice for %s." % (who,)
-                attendee.generate_invoice_pdf()
-            else:
-                print "Skipping existing invoice for %s." % (who,)
-                continue
+        # FIXME: Reimplement
+        print 'Unimplemented - to be redone when registration is finished'
