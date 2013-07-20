@@ -1,4 +1,4 @@
-from django.http import Http404, HttpResponseRedirect
+from django.http import Http404
 from django.views.generic import DetailView, TemplateView
 
 from wafer.pages.models import Page
@@ -11,9 +11,6 @@ class ShowPage(DetailView):
 
 def slug(request, url):
     """Look up a page by url (which is a tree of slugs)"""
-    if url in ('index', 'index.html'):
-        return HttpResponseRedirect('/')
-
     page = None
     for slug in url.split('/'):
         if not slug:
