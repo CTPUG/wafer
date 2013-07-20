@@ -101,7 +101,7 @@ class AttendeeCreate(LoginRequiredMixin, CreateView):
             self.object = form.save(commit=False)
             self.object.registered_by = self.request.user
             self.object.waitlist = True
-            self.object.waitlist_date = datetime.now()
+            self.object.waitlist_date = datetime.datetime.now()
             self.object.save()
         else:
             self.object = form.save(commit=False)
