@@ -29,6 +29,8 @@ class RegisteredAttendeeForm(forms.ModelForm):
             submit_button = Submit('submit', _('Submit'))
         else:
             del self.fields['items']
+            del self.fields['name']
+            del self.fields['email']
             self.helper = FormHelper(self)
             submit_button = Submit('submit', _('Sign up for waitlist'))
         instance = kwargs['instance']
