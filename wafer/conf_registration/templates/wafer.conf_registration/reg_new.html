@@ -6,6 +6,8 @@
 {% blocktrans %}
 <em>Conference registration is closed</em>
 {% endblocktrans %}
+{% elif on_waitlist %}
+<em>You are already on the waitlist</em>
 {% else %}
    {% if waitlist %}
       {% if open %}

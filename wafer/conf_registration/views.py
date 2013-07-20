@@ -131,12 +131,23 @@ class AttendeeCreate(LoginRequiredMixin, CreateView):
         WAFER_REGISTRATION_LIMIT = getattr(settings,
                 'WAFER_REGISTRATION_LIMIT', 0)
 
+        # Check if the user is already on the waitlist
+        # FIXME: This is a hack'ish work-around until we finish the
+        # registration
+        on_waitlist = False
+        profile = self.request.user.get_profile()
+        for registered in profile.registrations():
+            if (registered.name == self.request.user.username or
+                    registered.name == self.request.user.get_full_name()):
+                if registered.email == self.request.user.email:
+                    on_waitlist = True
         context = super(AttendeeCreate, self).get_context_data(**kwargs)
         registered = RegisteredAttendee.objects.filter(waitlist=False)
         context['waitlist'] = (WAFER_WAITLIST_ON
                 or (registered.count() >= WAFER_REGISTRATION_LIMIT and
                     WAFER_REGISTRATION_LIMIT > 0))
         context['open'] = WAFER_REGISTRATION_OPEN
+        context['on_waitlist'] = on_waitlist
         return context
 
 
