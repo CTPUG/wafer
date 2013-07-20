@@ -1,4 +1,7 @@
 import os
+
+from django.utils.translation import ugettext_lazy as _
+
 # Django settings for wafer project.
 
 DEBUG = True
@@ -191,27 +194,25 @@ WAFER_BILLABLE_ME = "http://billable.me/pdf/"
 
 # Wafer menu settings
 
-from django.utils.translation import ugettext_lazy as _
-from django.core.urlresolvers import reverse
 
-WAFER_MENUS = [
+WAFER_MENUS = (
     {"label": _("Home"),
-     "url": reverse("wafer_page", args=('index',))},
-    {"menu": "sponsors",
-     "label": _("Sponsors"),
-     "items": [
-         {"name": "sponsors", "label": _("Our sponsors"),
-          "url": reverse("wafer_sponsors")},
-         {"name": "packages", "label": _("Sponsorship packages"),
-          "url": reverse("wafer_sponsorship_packages")},
-     ]},
-    {"label": _("Talks"),
-     "url": reverse("wafer_users_talks")},
-]
+     "url": '/'},
+#    {"menu": "sponsors",
+#     "label": _("Sponsors"),
+#     "items": [
+#         {"name": "sponsors", "label": _("Our sponsors"),
+#          "url": reverse("wafer_sponsors")},
+#         {"name": "packages", "label": _("Sponsorship packages"),
+#          "url": reverse("wafer_sponsorship_packages")},
+#     ]},
+#    {"label": _("Talks"),
+#     "url": reverse("wafer_users_talks")},
+)
 
-WAFER_DYNAMIC_MENUS = [
+WAFER_DYNAMIC_MENUS = (
     'wafer.pages.models.page_menus',
-]
+)
 
 # Registration mode
 # This controls what happens when a user attempts to register

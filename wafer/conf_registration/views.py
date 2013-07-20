@@ -5,6 +5,7 @@ from django.core.exceptions import PermissionDenied
 from django.core.urlresolvers import reverse_lazy
 from django.http import HttpResponseRedirect
 from django.utils.decorators import method_decorator
+from django.utils.timezone import utc
 from django.views.generic import DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.conf import settings
@@ -106,8 +107,15 @@ class AttendeeCreate(LoginRequiredMixin, CreateView):
             # Add to waitlist
             self.object = form.save(commit=False)
             self.object.registered_by = self.request.user
+            if self.request.user.get_full_name():
+                self.object.name = self.request.user.get_full_name()
+            else:
+                self.object.name = self.request.user.username
+            self.object.email = self.request.user.email
             self.object.waitlist = True
-            self.object.waitlist_date = datetime.datetime.now()
+            # django.utils.timezone.now is neater, but 1.5 only
+            now = datetime.datetime.utcnow().replace(tzinfo=utc)
+            self.object.waitlist_date = now
             self.object.save()
         else:
             self.object = form.save(commit=False)
@@ -123,12 +131,23 @@ class AttendeeCreate(LoginRequiredMixin, CreateView):
         WAFER_REGISTRATION_LIMIT = getattr(settings,
                 'WAFER_REGISTRATION_LIMIT', 0)
 
+        # Check if the user is already on the waitlist
+        # FIXME: This is a hack'ish work-around until we finish the
+        # registration
+        on_waitlist = False
+        profile = self.request.user.get_profile()
+        for registered in profile.registrations():
+            if (registered.name == self.request.user.username or
+                    registered.name == self.request.user.get_full_name()):
+                if registered.email == self.request.user.email:
+                    on_waitlist = True
         context = super(AttendeeCreate, self).get_context_data(**kwargs)
         registered = RegisteredAttendee.objects.filter(waitlist=False)
         context['waitlist'] = (WAFER_WAITLIST_ON
                 or (registered.count() >= WAFER_REGISTRATION_LIMIT and
                     WAFER_REGISTRATION_LIMIT > 0))
         context['open'] = WAFER_REGISTRATION_OPEN
+        context['on_waitlist'] = on_waitlist
         return context
 
 
