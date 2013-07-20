@@ -9,14 +9,15 @@ from crispy_forms.layout import Submit, HTML
 
 from wafer.conf_registration.models import RegisteredAttendee
 
-WAFER_WAITLIST_ON = getattr(settings, 'WAFER_WAITLIST_ON', False)
-WAFER_REGISTRATION_OPEN = getattr(settings, 'WAFER_REGISTRATION_OPEN', False)
-WAFER_REGISTRATION_LIMIT = getattr(settings, 'WAFER_REGISTRATION_LIMIT', 0)
-
 
 class RegisteredAttendeeForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
+        WAFER_WAITLIST_ON = getattr(settings, 'WAFER_WAITLIST_ON', False)
+        WAFER_REGISTRATION_OPEN = getattr(settings, 'WAFER_REGISTRATION_OPEN',
+                False)
+        WAFER_REGISTRATION_LIMIT = getattr(settings,
+                'WAFER_REGISTRATION_LIMIT', 0)
         super(RegisteredAttendeeForm, self).__init__(*args, **kwargs)
         registered = RegisteredAttendee.objects.filter(waitlist=False)
         waitlist = WAFER_WAITLIST_ON or (

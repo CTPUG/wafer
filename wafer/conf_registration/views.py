@@ -7,10 +7,10 @@ from django.http import HttpResponseRedirect
 from django.utils.decorators import method_decorator
 from django.views.generic import DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django.conf import settings
 
 from wafer.conf_registration.models import RegisteredAttendee
-from wafer.conf_registration.forms import (RegisteredAttendeeForm,
-        WAFER_WAITLIST_ON, WAFER_REGISTRATION_OPEN, WAFER_REGISTRATION_LIMIT)
+from wafer.conf_registration.forms import RegisteredAttendeeForm
 
 
 class EditRegMixin(object):
@@ -88,6 +88,12 @@ class AttendeeCreate(LoginRequiredMixin, CreateView):
     template_name = 'wafer.conf_registration/reg_new.html'
 
     def form_valid(self, form):
+        WAFER_WAITLIST_ON = getattr(settings, 'WAFER_WAITLIST_ON', False)
+        WAFER_REGISTRATION_OPEN = getattr(settings, 'WAFER_REGISTRATION_OPEN',
+                False)
+        WAFER_REGISTRATION_LIMIT = getattr(settings,
+                'WAFER_REGISTRATION_LIMIT', 0)
+
         registered = RegisteredAttendee.objects.filter(waitlist=False)
         waitlist = (WAFER_WAITLIST_ON
                 or (registered.count() >= WAFER_REGISTRATION_LIMIT and
@@ -111,6 +117,12 @@ class AttendeeCreate(LoginRequiredMixin, CreateView):
         return HttpResponseRedirect(self.get_success_url())
 
     def get_context_data(self, **kwargs):
+        WAFER_WAITLIST_ON = getattr(settings, 'WAFER_WAITLIST_ON', False)
+        WAFER_REGISTRATION_OPEN = getattr(settings, 'WAFER_REGISTRATION_OPEN',
+                False)
+        WAFER_REGISTRATION_LIMIT = getattr(settings,
+                'WAFER_REGISTRATION_LIMIT', 0)
+
         context = super(AttendeeCreate, self).get_context_data(**kwargs)
         registered = RegisteredAttendee.objects.filter(waitlist=False)
         context['waitlist'] = (WAFER_WAITLIST_ON
