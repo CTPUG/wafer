@@ -129,4 +129,4 @@ class AttendeeUpdate(EditRegMixin, UpdateView):
 class AttendeeDelete(EditRegMixin, DeleteView):
     model = RegisteredAttendee
     template_name = 'wafer.conf_registration/reg_cancel.html'
-    success_url = reverse_lazy('wafer_index')
+    success_url = reverse_lazy('wafer_page', args=('index',))

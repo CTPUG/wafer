@@ -7,7 +7,7 @@ CACHE_KEY = "WAFER_MENU_CACHE"
 
 WAFER_MENUS = [
     {"name": "home", "label": _("Home"),
-     "url": reverse("wafer_index")},
+     "url": reverse("wafer_page", args=('index',))},
     {"name": "sponsors", "label": _("Sponsors"),
      "items": [
          {"name": "sponsors", "label": _("Our sponsors"),
@@ -18,7 +18,7 @@ WAFER_MENUS = [
     {"name": "talks", "label": _("Talks"),
      "url": reverse("wafer_users_talks")},
     {"name": "contact", "label": _("Contact"),
-     "url": reverse("wafer_contact")},
+     "url": reverse("wafer_page", args=('contact',))},
 ]
 
 
@@ -56,7 +56,7 @@ class Menu(object):
     Menu items are dictionaries with the keys: name, label and url. E.g.::
 
         {"name": "home", "label": _("Home"),
-         "url": reverse("wafer_index")},
+         "url": reverse("wafer_page", args=('index',))},
 
     Sub-menus are dictionaries with the keys: name, label and items.
 
