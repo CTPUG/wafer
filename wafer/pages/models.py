@@ -32,3 +32,8 @@ class Page(models.Model):
 
     class Model:
         unique_together = (('parent', 'slug'),)
+
+
+def page_menus(root_menu):
+    """Add page menus."""
+    pass

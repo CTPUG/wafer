@@ -189,6 +189,11 @@ django.template.add_to_builtins('django.templatetags.i18n')
 # Wafer settings
 WAFER_BILLABLE_ME = "http://billable.me/pdf/"
 
+# Wafer dynamic menu functions
+WAFER_DYNAMIC_MENUS = [
+    'wafer.pages.models.page_menus',
+]
+
 # Registration mode
 # This controls what happens when a user attempts to register
 # if both WAITLIST and REGISTRATION_OPEN are false, no registration is possible

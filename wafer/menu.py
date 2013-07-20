@@ -21,6 +21,8 @@ WAFER_MENUS = [
      "url": reverse("wafer_page", args=('contact',))},
 ]
 
+WAFER_DYNAMIC_MENUS = []
+
 
 def get_cached_menus():
     """Return the menus from the cache or generate them if needed."""
@@ -38,9 +40,36 @@ def clear_menu_cache():
     cache.delete(CACHE_KEY)
 
 
+def maybe_obj(str_or_obj):
+    """If argument is not a string, return it.
+
+    Otherwise import the dotted name and return that.
+    """
+    if not isinstance(str_or_obj, basestring):
+        return str_or_obj
+    parts = str_or_obj.split(".")
+    mod, modname = None, None
+    for p in parts:
+        modname = p if modname is None else "%s.%s" % (modname, p)
+        try:
+            mod = __import__(modname)
+        except ImportError:
+            if mod is None:
+                raise
+            break
+    obj = mod
+    for p in parts[1:]:
+        obj = getattr(obj, p)
+    return obj
+
+
 def generate_menu():
     """Generate a new list of menus."""
     root_menu = Menu(getattr(settings, 'WAFER_MENUS', WAFER_MENUS))
+    for dynamic_menu_func in getattr(
+            settings, 'WAFER_DYNAMIC_MENUS', WAFER_DYNAMIC_MENUS):
+        dynamic_menu_func = maybe_obj(dynamic_menu_func)
+        dynamic_menu_func(root_menu)
     return root_menu
 
 
