@@ -23,6 +23,7 @@ urlpatterns = patterns(
     (r'^pages/', include('wafer.pages.urls')),
     (r'^register/', include('wafer.conf_registration.urls')),
     (r'^admin/', include(admin.site.urls)),
+    (r'^(.*)$', 'wafer.pages.views.slug'),
 )
 
 # Serve media
