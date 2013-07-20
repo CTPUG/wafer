@@ -56,7 +56,7 @@ def maybe_obj(str_or_obj):
 
 def generate_menu():
     """Generate a new list of menus."""
-    root_menu = Menu(copy.deepcopy(settings.WAFER_MENUS))
+    root_menu = Menu(list(copy.deepcopy(settings.WAFER_MENUS)))
     for dynamic_menu_func in settings.WAFER_DYNAMIC_MENUS:
         dynamic_menu_func = maybe_obj(dynamic_menu_func)
         dynamic_menu_func(root_menu)
@@ -92,31 +92,27 @@ class Menu(object):
         self.items = items
 
     @staticmethod
-    def mk_item(name, label, url, sort_key=None):
-        return {"name": name, "label": label, "url": url}
+    def mk_item(label, url, sort_key=None):
+        return {"label": label, "url": url, "sort_key": sort_key}
 
     @staticmethod
     def mk_menu(name, label, items, sort_key=None):
-        return {"name": name, "label": label, "items": items}
+        return {"name": name, "label": label, "items": items,
+                "sort_key": sort_key}
 
-    def _descend_items(self, parts):
+    def _descend_items(self, menu):
         menu_items = self.items
-        for sub_menu in parts:
+        if menu is not None:
             matches = [item for item in menu_items
-                       if item["name"] == sub_menu and "items" in item]
-            if len(matches) == 1:
-                menu_items = matches[0]["items"]
-            else:
-                raise MenuError("Unable to find sub-menu %r of %r"
-                                % (sub_menu, ".".join(parts)))
+                       if "items" in item and item["menu"] == menu]
+            if len(matches) != 1:
+                raise MenuError("Unable to find sub-menu %r." % (menu,))
+            menu_items = matches[0]["items"]
         return menu_items
 
-    def add_item(self, name, label, url, sort_key=None):
-        parts = name.split('.')
-        menu_items = self._descend_items(parts[:-1])
-        menu_items.append(self.mk_item(parts[-1], label, url))
+    def add_item(self, label, url, menu=None, sort_key=None):
+        menu_items = self._descend_items(menu)
+        menu_items.append(self.mk_item(label, url, sort_key=sort_key))
 
-    def add_menu(self, name, label, items):
-        parts = name.split('.')
-        menu_items = self._descend_items(parts[:-1])
-        menu_items.append(self.mk_menu(parts[-1], label, items))
+    def add_menu(self, name, label, items, sort_key=None):
+        self.items.append(self.mk_menu(name, label, items, sort_key=sort_key))
