@@ -15,6 +15,8 @@ class File(models.Model):
 class Page(models.Model):
     """An extra page for the site."""
     name = models.CharField(max_length=255)
+    slug = models.SlugField(help_text=_("Last component of the page URL"))
+    parent = models.ForeignKey('self', null=True, blank=True)
     content = MarkdownTextField(
         help_text=_("Markdown contents for the page."))
     files = models.ManyToManyField(
@@ -27,3 +29,6 @@ class Page(models.Model):
 
     def get_absolute_url(self):
         return reverse('wafer_page', args=(self.pk,))
+
+    class Model:
+        unique_together = (('parent', 'slug'),)
