@@ -10,7 +10,7 @@ class ShowPage(DetailView):
 
 
 def slug(request, url):
-    """Look up a page by url (which is a tree of slugs"""
+    """Look up a page by url (which is a tree of slugs)"""
     if url in ('index', 'index.html'):
         return HttpResponseRedirect('/')
 
