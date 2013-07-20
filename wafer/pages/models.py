@@ -24,10 +24,9 @@ class Page(models.Model):
     parent = models.ForeignKey('self', null=True, blank=True)
     content = MarkdownTextField(
         help_text=_("Markdown contents for the page."))
-    menu = models.CharField(
-        max_length=255,
-        help_text=_("Dotted name of menu to put this page in."),
-        blank=True, null=True, default=None)
+    include_in_menu = models.BooleanField(
+        help_text=_("Whether to include in menus."),
+        default=False)
     files = models.ManyToManyField(
         File, related_name="pages", null=True, blank=True,
         help_text=_("Images and other files for use in"
@@ -36,8 +35,16 @@ class Page(models.Model):
     def __unicode__(self):
         return u'%s' % (self.name,)
 
+    def get_path(self):
+        path, parent = [self.slug], self.parent
+        while parent is not None:
+            path.insert(0, parent.slug)
+            parent = parent.parent
+        return path
+
     def get_absolute_url(self):
-        return reverse('wafer_page', args=(self.slug,))
+        url = "/".join(self.get_path())
+        return reverse('wafer_page', args=(url,))
 
     class Model:
         unique_together = (('parent', 'slug'),)
@@ -45,10 +52,11 @@ class Page(models.Model):
 
 def page_menus(root_menu):
     """Add page menus."""
-    for page in Page.objects.filter(menu__isnull=False):
-        item_name = "%s.%s" % (page.menu, page.slug)
+    for page in Page.objects.filter(include_in_menu=True):
+        path = page.get_path()
+        menu = path[0] if len(path) > 1 else None
         try:
-            root_menu.add_item(item_name, page.name, page.get_absolute_url())
+            root_menu.add_item(page.name, page.get_absolute_url(), menu=menu)
         except MenuError, e:
             logger.error("Bad menu item %r for page with slug %r."
                          % (e, page.slug))

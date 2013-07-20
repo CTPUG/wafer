@@ -196,19 +196,18 @@ WAFER_BILLABLE_ME = "http://billable.me/pdf/"
 
 
 WAFER_MENUS = (
-    {"name": "home", "label": _("Home"),
+    {"label": _("Home"),
      "url": '/'},
-#    {"name": "sponsors", "label": _("Sponsors"),
+#    {"menu": "sponsors",
+#     "label": _("Sponsors"),
 #     "items": [
 #         {"name": "sponsors", "label": _("Our sponsors"),
 #          "url": reverse("wafer_sponsors")},
 #         {"name": "packages", "label": _("Sponsorship packages"),
 #          "url": reverse("wafer_sponsorship_packages")},
 #     ]},
-#    {"name": "talks", "label": _("Talks"),
+#    {"label": _("Talks"),
 #     "url": reverse("wafer_users_talks")},
-#    {"name": "contact", "label": _("Contact"),
-#     "url": reverse("wafer_page", args=('contact',))},
 )
 
 WAFER_DYNAMIC_MENUS = (
