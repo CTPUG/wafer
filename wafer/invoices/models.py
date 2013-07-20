@@ -4,8 +4,7 @@ from django.db import models
 from django.core.files.base import ContentFile
 from django.conf import settings
 
-from wafer.models import AttendeeRegistration
-
+from wafer.conf_registration.models import RegisteredAttendee
 
 class InvoiceTemplate(models.Model):
 
@@ -70,7 +69,7 @@ class Invoice(models.Model):
         'total_label': 'Total',
     }
 
-    attendees = models.ManyToManyField(AttendeeRegistration)
+    attendees = models.ManyToManyField(RegisteredAttendee)
     timestamp = models.DateTimeField(auto_now_add=True)
     state = models.CharField(max_length=32, choices=STATES,
                              default=PROVISIONAL)
