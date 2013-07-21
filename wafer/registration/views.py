@@ -36,8 +36,14 @@ def github_login(request):
     assert r.status_code == 200
     gh = r.json()
 
-    user = authenticate(github_login=gh['login'], name=gh['name'],
-                        email=gh['email'], blog=gh['blog'])
+    email = gh['email']
+    if not email:  # No public e-mail address
+        r = requests.get('https://api.github.com/user/emails?%s' % token)
+        assert r.status_code == 200
+        email = r.json()[0]
+
+    user = authenticate(github_login=gh['login'], name=gh['name'], email=email,
+                        blog=gh['blog'])
     assert user
     login(request, user)
     return HttpResponseRedirect(reverse(redirect_profile))
