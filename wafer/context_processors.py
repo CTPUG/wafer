@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.contrib.sites.models import get_current_site
 from wafer.menu import get_cached_menus
 
@@ -18,4 +19,12 @@ def menu_info(request):
     context = {
         'WAFER_MENUS': menus,
     }
+    return context
+
+
+def registration_settings(request):
+    '''Expose selected settinsg to templates'''
+    context = {}
+    for setting in ('WAFER_GITHUB_CLIENT_ID',):
+        context[setting] = getattr(settings, setting, None)
     return context
