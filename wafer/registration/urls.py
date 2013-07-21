@@ -2,12 +2,12 @@ from django.conf.urls import include, patterns, url
 from django.views.generic import TemplateView
 from registration.views import ActivationView, RegistrationView
 
-from wafer.registration.views import redirect_profile
-
 
 urlpatterns = patterns(
-    '',
-    url(r'^profile/$', redirect_profile),
+    'wafer.registration.views',
+    url(r'^profile/$', 'redirect_profile'),
+
+    url(r'^github-login/$', 'github_login'),
 
     # registration.backends.default.urls, but Django 1.5 compatible
     url(r'^activate/complete/$',

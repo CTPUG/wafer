@@ -15,6 +15,13 @@
             {% blocktrans %}
             Not registered? Please <a href="{{signup_url}}">sign up</a>.
             {% endblocktrans %}
+            {% if WAFER_GITHUB_CLIENT_ID %}
+            <h2>{% trans 'Social Log in / Sign up' %}</h2>
+            <ul>
+                {% url 'wafer.registration.views.github_login' as redirect_url %}
+                <li><a href="https://github.com/login/oauth/authorize?client_id={{WAFER_GITHUB_CLIENT_ID}}&redirect_uri={{ WAFER_BASE_URL | urlencode }}{{ redirect_url | urlencode }}&scope=user:email&state={{csrf_token}}">GitHub</a>
+            </ul>
+            {% endif %}
         </div>
     </div>
 </div>
