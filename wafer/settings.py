@@ -123,6 +123,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.contrib.messages.context_processors.messages',
     'wafer.context_processors.site_info',
     'wafer.context_processors.menu_info',
+    'wafer.context_processors.registration_settings',
 )
 
 INSTALLED_APPS = (
@@ -228,3 +229,11 @@ WAFER_WAITLIST_ON = False
 WAFER_REGISTRATION_OPEN = False
 # Set to 0 for no limit
 WAFER_REGISTRATION_LIMIT = 250
+
+# Log in with GitHub:
+# AUTHENTICATION_BACKENDS = (
+#     'django.contrib.auth.backends.ModelBackend',
+#     'wafer.registration.backends.GitHubBackend',
+# )
+# WAFER_GITHUB_CLIENT_ID = 'register on github'
+# WAFER_GITHUB_CLIENT_SECRET = 'to get these secrets'
