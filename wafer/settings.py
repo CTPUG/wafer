@@ -203,12 +203,12 @@ WAFER_MENUS = (
 #     "label": _("Sponsors"),
 #     "items": [
 #         {"name": "sponsors", "label": _("Our sponsors"),
-#          "url": reverse("wafer_sponsors")},
+#          "url": reverse_lazy("wafer_sponsors")},
 #         {"name": "packages", "label": _("Sponsorship packages"),
-#          "url": reverse("wafer_sponsorship_packages")},
+#          "url": reverse_lazy("wafer_sponsorship_packages")},
 #     ]},
 #    {"label": _("Talks"),
-#     "url": reverse("wafer_users_talks")},
+#     "url": reverse_lazy("wafer_users_talks")},
 )
 
 WAFER_DYNAMIC_MENUS = (
