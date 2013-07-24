@@ -2,5 +2,11 @@
 {% load crispy_forms_tags %}
 {% block content %}
 <h1>{% trans "Talk Submission" %}</h1>
+{% if not can_submit %}
+{% blocktrans %}
+<em>Talk submission is closed</em>
+{% endblocktrans %}
+{% else %}
 {% crispy form %}
+{% endif %}
 {% endblock %}

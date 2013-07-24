@@ -1,11 +1,12 @@
 from django.contrib.auth.decorators import login_required
-from django.core.exceptions import PermissionDenied
+from django.core.exceptions import PermissionDenied, ValidationError
 from django.core.urlresolvers import reverse_lazy
 from django.http import HttpResponseRedirect
 from django.utils.decorators import method_decorator
 from django.views.generic import DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic.list import ListView
+from django.conf import settings
 
 from wafer.talks.models import Talk, ACCEPTED, PENDING
 from wafer.talks.forms import TalkForm
@@ -68,7 +69,14 @@ class TalkCreate(LoginRequiredMixin, CreateView):
     form_class = TalkForm
     template_name = 'wafer.talks/talk_form.html'
 
+    def get_context_data(self, **kwargs):
+        context = super(TalkCreate, self).get_context_data(**kwargs)
+        context['can_submit'] = getattr(settings, 'WAFER_TALKS_OPEN', True)
+        return context
+
     def form_valid(self, form):
+        if not getattr(settings, 'WAFER_TALKS_OPEN', True):
+            raise ValidationError  # Should this be SuspiciousOperation?
         # Eaaargh we have to do the work of CreateView if we want to set values
         # before saving
         self.object = form.save(commit=False)
