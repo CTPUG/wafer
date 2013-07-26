@@ -2,10 +2,11 @@
 # Copyright carljm (http://djangosnippets.org/users/carljm/)
 
 from django.db.models import TextField
+from south.modelsinspector import add_introspection_rules
 from markdown import markdown
 
 
-class MarkdownTextField (TextField):
+class MarkdownTextField(TextField):
     """
     A TextField that automatically implements DB-cached Markdown translation.
 
@@ -42,3 +43,12 @@ class MarkdownTextField (TextField):
 
     def __unicode__(self):
         return unicode(self.attname)
+
+
+add_introspection_rules([(
+    [MarkdownTextField], [], {
+        "allow_html": ["_markdown_safe", {"default": True}],
+        "html_field_suffix": ["_html_field_suffix", {"default": "_html"}],
+    },
+)],
+["^wafer\.snippets\.markdown_field\.MarkdownTextField"])
