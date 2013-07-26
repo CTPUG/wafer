@@ -15,12 +15,12 @@ class File(models.Model):
 
 class SponsorshipPackage(models.Model):
     """A description of a sponsorship package."""
-    order = models.IntegerField()
+    order = models.IntegerField(default=1)
     name = models.CharField(max_length=255)
     number_available = models.IntegerField(
         null=True, validators=[MinValueValidator(0)])
     currency = models.CharField(
-        max_length=16,
+        max_length=16, default='$',
         help_text=_("Currency symbol for the sponsorship amount."))
     price = models.DecimalField(
         max_digits=12, decimal_places=2,
