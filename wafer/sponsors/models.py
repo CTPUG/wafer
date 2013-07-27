@@ -15,10 +15,16 @@ class File(models.Model):
 
 class SponsorshipPackage(models.Model):
     """A description of a sponsorship package."""
+    order = models.IntegerField(default=1)
     name = models.CharField(max_length=255)
     number_available = models.IntegerField(
         null=True, validators=[MinValueValidator(0)])
-    price = models.DecimalField(max_digits=12, decimal_places=2)
+    currency = models.CharField(
+        max_length=16, default='$',
+        help_text=_("Currency symbol for the sponsorship amount."))
+    price = models.DecimalField(
+        max_digits=12, decimal_places=2,
+        help_text=_("Amount to be sponsored."))
     short_description = models.TextField(
         help_text=_("One sentence overview of the package."))
     description = MarkdownTextField(
@@ -27,6 +33,9 @@ class SponsorshipPackage(models.Model):
         File, related_name="packages", null=True, blank=True,
         help_text=_("Images and other files for use in"
                     " the description markdown field."))
+
+    class Meta:
+        ordering = ['order', 'price', 'name']
 
     def __unicode__(self):
         return u'%s (amount: %.0f)' % (self.name, self.price)
