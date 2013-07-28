@@ -35,7 +35,7 @@ class SponsorshipPackage(models.Model):
                     " the description markdown field."))
 
     class Meta:
-        ordering = ['order', 'price', 'name']
+        ordering = ['order', '-price', 'name']
 
     def __unicode__(self):
         return u'%s (amount: %.0f)' % (self.name, self.price)
