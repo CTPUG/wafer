@@ -3,7 +3,7 @@
 <h1>{% trans 'Sponsorship Packages:' %}</h1>
 {% for package in sponsorshippackage_list %}
 <div>
-    <h2>{{ package.name }} ({{ package.currency }} {{ package.price }})</h1>
+    <h2>{{ package.name }} ({{ package.currency }} {{ package.price|floatformat:0 }})</h1>
     {% if package.number_available %}
         <p>{% trans 'Number available:' %} {{ package.number_available }}</p>
     {% endif %}
