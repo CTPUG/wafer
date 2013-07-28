@@ -1,13 +1,17 @@
 {% extends "wafer/base.html" %}
 {% block content %}
-<h1>{% trans 'Talks:' %}</h1>
-{% for talk in talk_list %}
-<a href="{{ talk.get_absolute_url }}">
-    <div class="well">
-        {{ talk.title }}
-    </div>
-</a>
-{% endfor %}
+<h1>{% trans 'Talks' %}</h1>
+<div class="wafer list">
+    {% for talk in talk_list %}
+    <a href="{{ talk.get_absolute_url }}">
+        <div class="well">
+            {{ talk.title }}
+        </div>
+    </a>
+    {% empty %}
+    <p>No talks accepted yet.</p>
+    {% endfor %}
+</div>
 {% if is_paginated %}
 <div class="pagination">
     <ul>

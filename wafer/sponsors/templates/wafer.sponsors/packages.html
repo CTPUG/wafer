@@ -1,14 +1,18 @@
 {% extends "wafer/base.html" %}
 {% block content %}
-<h1>{% trans 'Sponsorship Packages:' %}</h1>
-{% for package in sponsorshippackage_list %}
-<div>
-    <h2>{{ package.name }} ({{ package.currency }} {{ package.price|floatformat:0 }})</h1>
-    {% if package.number_available %}
-        <p>{% trans 'Number available:' %} {{ package.number_available }}</p>
-    {% endif %}
-    <p>{{ package.short_description }}</p>
-    {{ package.description_html|safe }}
+<h1>{% trans 'Sponsorship Packages' %}</h1>
+<div class="wafer list">
+    {% for package in sponsorshippackage_list %}
+    <div>
+        <h2>{{ package.name }} ({{ package.currency }} {{ package.price|floatformat:0 }})</h1>
+        {% if package.number_available %}
+            <p>{% trans 'Number available:' %} {{ package.number_available }}</p>
+        {% endif %}
+        <p>{{ package.short_description }}</p>
+        {{ package.description_html|safe }}
+    </div>
+    {% empty %}
+    <p>No sponsorship packages available yet.</p>
+    {% endfor %}
 </div>
-{% endfor %}
 {% endblock %}
