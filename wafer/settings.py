@@ -196,9 +196,11 @@ WAFER_BILLABLE_ME = "http://billable.me/pdf/"
 # Wafer menu settings
 
 
-WAFER_MENUS = (
-    {"label": _("Home"),
-     "url": '/'},
+WAFER_MENUS = ()
+# Example menus entries:
+#
+#    {"label": _("Home"),
+#     "url": '/'},
 #    {"menu": "sponsors",
 #     "label": _("Sponsors"),
 #     "items": [
@@ -209,7 +211,6 @@ WAFER_MENUS = (
 #     ]},
 #    {"label": _("Talks"),
 #     "url": reverse_lazy("wafer_users_talks")},
-)
 
 WAFER_DYNAMIC_MENUS = (
     'wafer.pages.models.page_menus',
