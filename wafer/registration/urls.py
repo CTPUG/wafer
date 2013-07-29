@@ -1,6 +1,6 @@
 from django.conf.urls import include, patterns, url
 from django.views.generic import TemplateView
-from registration.views import ActivationView, RegistrationView
+from registration.backends.default.views import ActivationView, RegistrationView
 
 
 urlpatterns = patterns(
