@@ -92,6 +92,15 @@ class TalkUpdate(EditOwnTalksMixin, UpdateView):
     form_class = TalkForm
     template_name = 'wafer.talks/talk_form.html'
 
+    def get_context_data(self, **kwargs):
+        context = super(TalkUpdate, self).get_context_data(**kwargs)
+        username = self.request.user.username
+        context['can_edit'] = (
+            (self.object.authors.filter(username=username).exists()
+             and self.object.status == PENDING)
+            or self.request.user.is_staff)
+        return context
+
 
 class TalkDelete(EditOwnTalksMixin, DeleteView):
     model = Talk
