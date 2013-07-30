@@ -35,8 +35,12 @@ class LoginRequiredMixin(object):
 
 class UsersTalks(ListView):
     template_name = 'wafer.talks/talks.html'
-    model = Talk
     paginate_by = 10
+
+    def get_queryset(self):
+        if (self.request.user.is_staff):
+            return Talk.objects.all()
+        return Talk.objects.filter(status=ACCEPTED)
 
 
 class TalkView(DetailView):
