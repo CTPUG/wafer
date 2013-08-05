@@ -33,17 +33,23 @@ def github_login(request):
     token = r.content
 
     r = requests.get('https://api.github.com/user?%s' % token)
-    assert r.status_code == 200
+    if r.status_code != 200:
+        return HttpResponseForbidden('Unexpected response from github',
+                content_type='text/plain')
     gh = r.json()
 
     email = gh.get('email', None)
     if not email:  # No public e-mail address
         r = requests.get('https://api.github.com/user/emails?%s' % token)
-        assert r.status_code == 200
+        if r.status_code != 200:
+            return HttpResponseForbidden('Failed to obtain email address from'
+                    ' github - unexpected response', content_type='text/plain')
         email = r.json()[0]
 
     user = authenticate(github_login=gh['login'], name=gh['name'], email=email,
                         blog=gh['blog'])
-    assert user
+    if not user:
+        return HttpResponseForbidden('Authentication with github credentials'
+                ' failed', content_type='text/plain')
     login(request, user)
     return HttpResponseRedirect(reverse(redirect_profile))
