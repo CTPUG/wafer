@@ -36,7 +36,7 @@ def github_login(request):
     assert r.status_code == 200
     gh = r.json()
 
-    email = gh['email']
+    email = gh.get('email', None)
     if not email:  # No public e-mail address
         r = requests.get('https://api.github.com/user/emails?%s' % token)
         assert r.status_code == 200
