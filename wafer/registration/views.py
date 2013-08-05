@@ -48,7 +48,7 @@ def github_login(request):
     user = authenticate(github_login=gh['login'], name=gh['name'], email=email,
                         blog=gh['blog'])
     if not user:
-        return HttpResponseForbidden('Authentication failed',
-                content_type='text/plain')
+        return HttpResponseForbidden('Authentication with github credentials'
+                ' failed', content_type='text/plain')
     login(request, user)
     return HttpResponseRedirect(reverse(redirect_profile))
