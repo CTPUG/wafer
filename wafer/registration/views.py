@@ -34,7 +34,8 @@ def github_login(request):
 
     r = requests.get('https://api.github.com/user?%s' % token)
     if r.status_code != 200:
-        return HttpResponseForbidden('Unexpected response from github', content_type='text/plain')
+        return HttpResponseForbidden('Unexpected response from github',
+                content_type='text/plain')
     gh = r.json()
 
     email = gh.get('email', None)
