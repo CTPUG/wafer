@@ -25,3 +25,11 @@
 #profile-avatar .popover-contents {
 	display: none;
 }
+
+/* Icons float to the right of the menu */
+.nav li.icon {
+   float: right;
+   padding: 0 0 0 5px;
+   width: 29px;
+   height: 29px;
+}
