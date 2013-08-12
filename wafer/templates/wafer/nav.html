@@ -11,7 +11,13 @@
       <div class="nav-collapse collapse">
         <ul class="nav">
         {% for item in WAFER_MENUS.items %}
-          {% if item.url %}
+          {% if item.image and item.url %}
+          <li class="icon">
+             <a href="{{ item.url }}" alt="{{ item.label }}">
+                   <img src="{{ item.image }}" />
+             </a>
+          </li>
+          {% elif item.url %}
           <li class="active"><a href="{{ item.url }}">
               {{ item.label }}
           </a></li>

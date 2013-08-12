@@ -86,14 +86,23 @@ class Menu(object):
              {"name": "packages", "label": _("Sponsorship packages"),
               "url": reverse("wafer_sponsorship_packages")},
          ]},
+
+    Image button items can be adding an "image" key to the item.
+    The label for the icon will be used as the alt-text for the image.
+
+        {"name": "twitter", "label": _("Twitter"),
+         "image": "/static/twitter.png",
+         "url": "http://twitter.com/wafer"},
+
     """
 
     def __init__(self, items):
         self.items = items
 
     @staticmethod
-    def mk_item(label, url, sort_key=None):
-        return {"label": label, "url": url, "sort_key": sort_key}
+    def mk_item(label, url, sort_key=None, image=None):
+        return {"label": label, "url": url, "sort_key": sort_key,
+                "image": image}
 
     @staticmethod
     def mk_menu(name, label, items, sort_key=None):
@@ -110,9 +119,10 @@ class Menu(object):
             menu_items = matches[0]["items"]
         return menu_items
 
-    def add_item(self, label, url, menu=None, sort_key=None):
+    def add_item(self, label, url, menu=None, sort_key=None, image=None):
         menu_items = self._descend_items(menu)
-        menu_items.append(self.mk_item(label, url, sort_key=sort_key))
+        menu_items.append(self.mk_item(label, url, sort_key=sort_key,
+            image=image))
 
     def add_menu(self, name, label, items, sort_key=None):
         self.items.append(self.mk_menu(name, label, items, sort_key=sort_key))
