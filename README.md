@@ -35,11 +35,14 @@ Features
 TODO
 ====
 
-* Add a dashboard for logged in users showing them:
-  * A list of their talks (with a button to add one).
+* Improve the dashboard for logged in users showing them:
   * A list of their invoices (and whether they're finalized / paid).
 * Make the code easier to use for other conferences (split out theming, etc)
-* Add support for editing talk submissions.
+* Improve the talk submission management module
+  * Use markdown to allow better formatting of talk abstracts
+  * Better display of accepted talks
+* Finish the conference registration module
+  * Make various messages easier to customise
 * Add support for editing and arranging the schedule via Django admin.
 * Better invoice management
   * Invoices should be a separate table.
@@ -54,4 +57,5 @@ TODO
   * Sponsorship slots remaining.
   * Days until various deadlines.
 * Other improvements
+* Add tests
 
