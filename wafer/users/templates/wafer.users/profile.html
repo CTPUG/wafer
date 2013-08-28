@@ -69,7 +69,7 @@
 {% for talk in profile.accepted_talks %}
 <div class="well">
     <a href="{{ talk.get_absolute_url }}">{{ talk.title }}</a>
-    <p>{{ talk.abstract }}</p>
+    <p>{{ talk.abstract|linebreaks }}</p>
 </div>
 {% endfor %}
 {% endif %}
@@ -80,7 +80,7 @@
 {% for talk in profile.pending_talks %}
 <div class="well">
     <a href="{{ talk.get_absolute_url }}">{{ talk.title }}</a>
-    <p>{{ talk.abstract }}</p>
+    <p>{{ talk.abstract|linebreaks }}</p>
 </div>
 {% endfor %}
 {% endif %}
