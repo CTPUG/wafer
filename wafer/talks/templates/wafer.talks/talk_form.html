@@ -1,8 +1,12 @@
 {% extends 'wafer/base.html' %}
 {% load crispy_forms_tags %}
 {% block content %}
+{% if can_edit %}
+<h1>{% trans "Edit Talk" %}</h1>
+{% else %}
 <h1>{% trans "Talk Submission" %}</h1>
-{% if not can_submit %}
+{% endif %}
+{% if not can_edit and not can_submit %}
 {% blocktrans %}
 <em>Talk submission is closed</em>
 {% endblocktrans %}
