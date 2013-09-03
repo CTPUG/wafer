@@ -3,11 +3,12 @@
 <h1>{% trans 'Talks' %}</h1>
 <div class="wafer list">
     {% for talk in talk_list %}
-    <a href="{{ talk.get_absolute_url }}">
-        <div class="well">
-            {{ talk.title }}
-        </div>
-    </a>
+    <div>
+        <a href="{{ talk.get_absolute_url }}">{{ talk.title }}</a>
+        by
+        <span class="author">{{ talk.corresponding_author.firstname }} {{talk.corresponding_author.lastname}}</span>
+        </a>
+    </div>
     {% empty %}
     <p>No talks accepted yet.</p>
     {% endfor %}
