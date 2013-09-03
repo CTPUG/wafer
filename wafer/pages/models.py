@@ -16,6 +16,9 @@ class File(models.Model):
     description = models.TextField()
     item = models.FileField(upload_to='pages_files')
 
+    def __unicode__(self):
+        return u'%s' % (self.name,)
+
 
 class Page(models.Model):
     """An extra page for the site."""
