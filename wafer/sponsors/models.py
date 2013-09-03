@@ -12,6 +12,9 @@ class File(models.Model):
     description = models.TextField()
     item = models.FileField(upload_to='sponsors_files')
 
+    def __unicode__(self):
+        return u'%s' % (self.name,)
+
 
 class SponsorshipPackage(models.Model):
     """A description of a sponsorship package."""
