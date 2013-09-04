@@ -11,13 +11,6 @@
 	position: relative;
 }
 
-#profile-avatar [rel=popover] {
-	position: absolute;
-	top: 5px;
-	right: 5px;
-	z-order: 1;
-}
-
 #profile-avatar .popover {
 	width: 20em;
 }
