@@ -3,6 +3,8 @@ from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.db import models
 
+from wafer.snippets.markdown_field import MarkdownTextField
+
 
 # constants to make things clearer elsewhere
 ACCEPTED = 'A'
@@ -22,8 +24,14 @@ class Talk(models.Model):
 
     title = models.CharField(max_length=1024)
 
-    abstract = models.TextField(
-        help_text=_("Write two or three paragraphs describing your talk"))
+    abstract = MarkdownTextField(
+        help_text=_("Write two or three paragraphs describing your talk. "
+                    "Who is your audience? What will they get out of it? "
+                    "What will you cover?<br />"
+                    "You can use Markdown syntax."))
+    notes = models.TextField(
+        null=True, blank=True,
+        help_text=_("Any notes for the conference organisers?"))
 
     status = models.CharField(max_length=1, choices=TALK_STATUS,
                               default=PENDING)

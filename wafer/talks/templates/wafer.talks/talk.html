@@ -29,6 +29,6 @@
 </div>
 {% endif %}
 <div class="well">
-    {{ object.abstract|linebreaks }}
+    {{ object.abstract_html|safe }}
 </div>
 {% endblock %}
