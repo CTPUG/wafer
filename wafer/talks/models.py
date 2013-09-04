@@ -26,6 +26,9 @@ class Talk(models.Model):
 
     abstract = MarkdownTextField(
         help_text=_("Write two or three paragraphs describing your talk"))
+    notes = models.TextField(
+        null=True, blank=True,
+        help_text=_("Any notes for the conference organisers?"))
 
     status = models.CharField(max_length=1, choices=TALK_STATUS,
                               default=PENDING)

@@ -27,6 +27,6 @@ class TalkForm(forms.ModelForm):
 
     class Meta:
         model = Talk
-        fields = ('title', 'abstract', 'authors')
+        fields = ('title', 'abstract', 'authors', 'notes')
 
 # TODO: authors widget is ugly
