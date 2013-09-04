@@ -19,7 +19,7 @@
             <h2>{% trans 'Social Log in / Sign up' %}</h2>
             <ul>
                 {% url 'wafer.registration.views.github_login' as redirect_url %}
-                <li><a href="{{ redirect_url }}">GitHub</a></li>
+                <li><a href="{{ WAFER_BASE_URL }}{{ redirect_url }}">GitHub</a></li>
             </ul>
             {% endif %}
         </div>
