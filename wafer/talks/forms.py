@@ -27,6 +27,11 @@ class TalkForm(forms.ModelForm):
 
     class Meta:
         model = Talk
-        fields = ('title', 'abstract', 'authors')
+        fields = ('title', 'abstract', 'authors', 'notes')
+        widgets = {
+            'abstract': forms.Textarea(attrs={'class': 'input-xxlarge',
+                                              'rows': 20}),
+            'notes': forms.Textarea(attrs={'class': 'input-xxlarge'}),
+        }
 
 # TODO: authors widget is ugly
