@@ -20,11 +20,11 @@
 <div>
     {% trans 'Status:' %}
     {% if object.pending %}
-    <span class="label label-important">{% trans 'Under consideration' %}</span>
+    <span class="label label-warning">{% trans 'Under consideration' %}</span>
     {% elif object.accepted %}
     <span class="label label-success">{% trans 'Accepted' %}</span>
     {% else %}
-    <span class="label label-warning">{% trans 'Not accepted' %}</span>
+    <span class="label label-important">{% trans 'Not accepted' %}</span>
     {% endif %}
 </div>
 {% endif %}
