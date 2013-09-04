@@ -25,7 +25,10 @@ class Talk(models.Model):
     title = models.CharField(max_length=1024)
 
     abstract = MarkdownTextField(
-        help_text=_("Write two or three paragraphs describing your talk"))
+        help_text=_("Write two or three paragraphs describing your talk. "
+                    "Who is your audience? What will they get out of it? "
+                    "What will you cover?<br />"
+                    "You can use Markdown syntax."))
     notes = models.TextField(
         null=True, blank=True,
         help_text=_("Any notes for the conference organisers?"))
