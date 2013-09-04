@@ -4,6 +4,11 @@
 <div class="wafer list">
     {% for talk in talk_list %}
     <div>
+        {% if talk.pending %}
+        <span class="label label-warning" title="{% trans 'Under consideration' %}">P</span>
+        {% elif talk.reject %}
+        <span class="label label-important" title="{% trans 'Not accepted' %}">R</span>
+        {% endif %}
         <a href="{{ talk.get_absolute_url }}">{{ talk.title }}</a>
         by
         <span class="author">{{ talk.corresponding_author.first_name }} {{talk.corresponding_author.last_name}}</span>
