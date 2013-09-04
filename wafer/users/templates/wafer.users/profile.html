@@ -19,9 +19,14 @@
     </div>
     <div class="span10">
         {% if user = object or user.is_staff %}
-        <div class="pull-right">
+        <div class="pull-right btn-group btn-group-vertical">
             <a href="{% url 'wafer_user_edit' object.username %}" class="btn">{% trans 'Edit User' %}</a>
             <a href="{% url 'wafer_user_edit_profile' object.username %}" class="btn">{% trans 'Edit Profile' %}</a>
+            {# These are only relevant to the user, not staff #}
+            {% if user = object %}
+                <a href="{% url 'wafer_registration_submit' %}" class="btn">{% trans 'Register' %}</a>
+                <a href="{% url 'wafer_talk_submit' %}" class="btn">{% trans 'Submit Talk Proposal' %}</a>
+            {% endif %}
         </div>
         {% endif %}
         {% spaceless %}
@@ -50,13 +55,6 @@
         {% endif %}
         {% endspaceless %}
     </div>
-    {# These are only relevant to the user, not staff #}
-    {% if user = object %}
-    <div class="pull-right">
-        <a href="{% url 'wafer_registration_submit' %}" class="btn">{% trans 'Register' %}</a>
-        <a href="{% url 'wafer_talk_submit' %}" class="btn">{% trans 'Submit Talk Proposal' %}</a>
-    </div>
-    {% endif %}
 </div>
 {% if profile.bio %}
 <div class="well">
