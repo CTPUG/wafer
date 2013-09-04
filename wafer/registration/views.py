@@ -1,4 +1,7 @@
+import urllib
+
 from django.contrib.auth import authenticate, login
+from django.contrib.sites.models import get_current_site
 from django.core.urlresolvers import reverse
 from django.conf import settings
 from django.http import HttpResponseRedirect, HttpResponseForbidden
@@ -18,6 +21,17 @@ def redirect_profile(request):
 
 
 def github_login(request):
+    if 'code' not in request.GET:
+        return HttpResponseRedirect(
+            'https://github.com/login/oauth/authorize?' + urllib.urlencode({
+                'client_id': settings.WAFER_GITHUB_CLIENT_ID,
+                'redirect_uri': 'http://%s%s'
+                                % (get_current_site(request).domain,
+                                   reverse(github_login)),
+                'scope': 'user:email',
+                'state': request.META['CSRF_COOKIE'],
+            }))
+
     if request.GET['state'] != request.META['CSRF_COOKIE']:
         return HttpResponseForbidden('Incorrect state',
                                      content_type='text/plain')
