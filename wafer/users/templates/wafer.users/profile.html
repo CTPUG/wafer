@@ -3,7 +3,11 @@
 {% with profile=object.get_profile %}
 <div class="row">
     <div class="span2" id="profile-avatar">
-        <img src="{{ profile.avatar_url }}">
+        {% with profile.avatar_url as avatar_url %}
+            {% if avatar_url != None %}
+            <img src="{{ profile.avatar_url }}">
+            {% endif %}
+        {% endwith %}
         {% if user = object or user.is_staff %}
             <a class="btn btn-small" href="#" rel="popover" data-toggle="popover"
                 data-title="{% trans 'Changing your mugshot' %}" data-html="true"
