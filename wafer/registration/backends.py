@@ -23,7 +23,8 @@ class GitHubBackend(ModelBackend):
             return self._create_user(github_login, name, email, blog,
                                      append + 1)
 
-        user.first_name, _,  user.last_name = name.partition(' ')
+        if name:
+            user.first_name, _,  user.last_name = name.partition(' ')
         user.email = email
         user.save()
 
