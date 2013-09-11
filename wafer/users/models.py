@@ -33,7 +33,7 @@ class UserProfile(models.Model):
         return self.user.created.all()
 
     def avatar_url(self, size=96, https=True, default='mm'):
-        if self.user.email is None:
+        if not self.user.email:
             return None
         return libravatar_url(self.user.email, size=size, https=https,
                               default=default)
