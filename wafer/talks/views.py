@@ -35,7 +35,7 @@ class LoginRequiredMixin(object):
 
 class UsersTalks(ListView):
     template_name = 'wafer.talks/talks.html'
-    paginate_by = 10
+    paginate_by = 25
 
     def get_queryset(self):
         if (self.request.user.is_staff):
