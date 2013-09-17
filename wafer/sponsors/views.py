@@ -8,16 +8,7 @@ class ShowSponsors(ListView):
     model = Sponsor
 
     def get_queryset(self):
-        packages = SponsorshipPackage.objects.all()
-        package_order = dict((p.pk, i) for i, p in enumerate(packages))
-
-        def sponsor_key(sponsor):
-            order = min(package_order[p.pk] for p in sponsor.packages)
-            return (order, sponsor.name)
-
-        sponsors = list(Sponsor.objects.all())
-        sponsors.sort(key=sponsor_key)
-        return sponsors
+        return Sponsor.objects.all().order_by('packages')
 
 
 class ShowPackages(ListView):
