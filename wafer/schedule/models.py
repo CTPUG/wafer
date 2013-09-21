@@ -16,7 +16,7 @@ class Venue(models.Model):
 
     notes = MarkdownTextField(
         help_text=_("Notes or directions that will be useful to"
-            " conference attendees"))
+                    " conference attendees"))
 
     def __unicode__(self):
         return u'%s' % self.name
@@ -25,13 +25,23 @@ class Venue(models.Model):
         return reverse('wafer_venue', args=(self.pk,))
 
 
-class ScheduleItem(models.Model):
+class Slot(models.Model):
 
-    venue = models.ForeignKey(Venue)
+    # XXX: We're trading flexibility for ease of implementation here.
+    #      Revisit this when we have a better idea of the actual
+    #      requirements.
 
     start_time = models.DateTimeField(null=True, blank=True)
 
     end_time = models.DateTimeField(null=True, blank=True)
+
+
+class ScheduleItem(models.Model):
+
+    venue = models.ForeignKey(Venue)
+
+    # Items can span multiple slots (tutorials, etc).
+    slot = models.ManyToMany(Slot)
 
     talk = models.ForeignKey(Talk, null=True)
     page = models.ForeignKey(Page, null=True)
