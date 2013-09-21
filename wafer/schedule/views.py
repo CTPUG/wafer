@@ -3,6 +3,7 @@ from django.conf import settings
 
 from wafer.schedule.models import Venue, ScheduleItem
 
+
 class VenueView(DetailView):
     template_name = 'wafer.schedule/venue.html'
     model = Venue
