@@ -38,6 +38,10 @@ class Slot(models.Model):
 
     end_time = models.DateTimeField(null=True, blank=True)
 
+    def __unicode__(self):
+        return u'Slot: %s - %s' % (self.start_time.isoformat(),
+                                   self.end_time.isoformat())
+
 
 class ScheduleItem(models.Model):
 
