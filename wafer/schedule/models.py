@@ -18,6 +18,9 @@ class Venue(models.Model):
         help_text=_("Notes or directions that will be useful to"
                     " conference attendees"))
 
+    class Meta:
+        ordering = ['order', 'name']
+
     def __unicode__(self):
         return u'%s' % self.name
 
@@ -41,11 +44,11 @@ class ScheduleItem(models.Model):
     venue = models.ForeignKey(Venue)
 
     # Items can span multiple slots (tutorials, etc).
-    slot = models.ManyToMany(Slot)
+    slots = models.ManyToManyField(Slot)
 
     talk = models.ForeignKey(Talk, null=True)
     page = models.ForeignKey(Page, null=True)
-    details = models.MarkdownTextField(
+    details = MarkdownTextField(
         null=False, blank=True,
         help_text=_("Additional details (if required)"))
 
