@@ -1,4 +1,36 @@
 {% extends "wafer/base.html" %}
 {% block content %}
-<h1>Schedule</h1>
+<h1>{% trans Schedule %}</h1>
+<div class="wafer schedul">
+   <table cellspacing=1 cellpadding=0>
+      <tr>
+         <th>Time</th>
+      {% for venue in venue_list %}
+      <th>{{ venue.name }}</th>
+      {% endfor %}
+      </tr>
+      {# We assume that the admin has created a valid timetable #}
+      {% for day, table_rows in table_days %}
+      <tr>
+         <td span="{{ venues_list|length|add:"1" }}">{{ day|date:"l" }}</td>
+      </tr>
+      {% for row in table_rows %}
+      <tr>
+         <td>{{ row.slot.start_time|time:"H:i" }} - {{ row.slot.end_time|time:"H:i" }}</td>
+         {% for item in row.items %}
+         {% if item %}
+         <td span="{{ item.colspan }}" rowspan="{{ item.rowspan }}">
+            {% if item.item.get_url %}
+            <a href="{{ item.item.get_url }}">
+               {{ item.item.get_details|escape }}</a>
+            {% else %}
+            {{ item.item.get_details|escape }}
+            {% endif %}
+         </td>
+         {% endif %}
+         {% endfor %}
+      </tr>
+      {% endfor %}
+      {% endfor %}
+   </table>
 {% endblock %}
