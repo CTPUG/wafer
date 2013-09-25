@@ -6,6 +6,7 @@ from django.core.management.base import BaseCommand
 
 from django.contrib.auth.models import User
 from wafer.conf_registration.models import RegisteredAttendee
+from wafer.talks.models import ACCEPTED
 
 
 class Command(BaseCommand):
@@ -13,9 +14,12 @@ class Command(BaseCommand):
 
     option_list = BaseCommand.option_list + tuple([
         make_option('--authors', action="store_true", default=False,
-                    help='List author email addresses only'),
+                    help='List author email addresses only'
+                    ' (for accepted talks)'),
         make_option('--waiting', action="store_true", default=False,
                     help='Only list people on the waiting list.'),
+        make_option('--allauthors', action="store_true", default=False,
+                    help='List author emails only (for all talks)')
     ])
 
     def _attendee_emails(self, options):
@@ -42,7 +46,13 @@ class Command(BaseCommand):
 
         csv_file = csv.writer(sys.stdout)
         for person in people:
-            titles = [x.title for x in person.contact_talks.all()]
+            if options['allauthors']:
+                titles = [x.title for x in person.contact_talks.all()]
+            else:
+                titles = [x.title for x in
+                          person.contact_talks.filter(status=ACCEPTED)]
+                if not titles:
+                    continue
             # get_full_name may be blank, since we don't require that
             # the user specify it, but we will have the email as an
             # identifier
@@ -53,7 +63,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
 
-        if options['authors']:
+        if options['authors'] or options['allauthors']:
             self._author_emails(options)
         else:
             self._attendee_emails(options)
