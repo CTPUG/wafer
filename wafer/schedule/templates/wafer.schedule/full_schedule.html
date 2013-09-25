@@ -10,7 +10,7 @@
       {% endfor %}
       </tr>
       {# We assume that the admin has created a valid timetable #}
-      {% for day, table_rows in table_days %}
+      {% for day, table_rows in table_days.iteritems %}
       <tr>
          <td span="{{ venues_list|length|add:"1" }}">{{ day|date:"l" }}</td>
       </tr>
@@ -18,7 +18,6 @@
       <tr>
          <td>{{ row.slot.start_time|time:"H:i" }} - {{ row.slot.end_time|time:"H:i" }}</td>
          {% for item in row.items %}
-         {% if item %}
          <td span="{{ item.colspan }}" rowspan="{{ item.rowspan }}">
             {% if item.item.get_url %}
             <a href="{{ item.item.get_url }}">
@@ -27,7 +26,6 @@
             {{ item.item.get_details|escape }}
             {% endif %}
          </td>
-         {% endif %}
          {% endfor %}
       </tr>
       {% endfor %}

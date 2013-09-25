@@ -73,5 +73,15 @@ class ScheduleItem(models.Model):
             return self.page.name
         return ''
 
+    def get_url(self):
+        if self.talk:
+            return self.talk.get_absolute_url()
+        elif self.page:
+            return self.page.get_absolute_url()
+        return None
+
+    def get_details(self):
+        return self.get_desc()
+
     def __unicode__(self):
         return u'%s in %s' % (self.get_desc(), self.venue)
