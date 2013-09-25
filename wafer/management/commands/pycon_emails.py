@@ -38,7 +38,7 @@ class Command(BaseCommand):
 
     def _speaker_emails(self, options):
         # Should grow more options - accepted talks, under consideration, etc.
-        people = User.objects.filter(contact_talks__isnull=False).all()
+        people = User.objects.filter(contact_talks__isnull=False).distinct()
 
         csv_file = csv.writer(sys.stdout)
         for person in people:
