@@ -64,7 +64,7 @@ class Command(BaseCommand):
             # identifier
             row = [x.encode("utf-8")
                    for x in (person.get_full_name(), person.email,
-                             ' '.join(titles))]
+                             ';'.join(titles))]
             csv_file.writerow(row)
 
     def _speaker_emails(self, options):
@@ -84,7 +84,7 @@ class Command(BaseCommand):
             # identifier
             row = [x.encode("utf-8")
                    for x in (person.get_full_name(), person.email,
-                             ' '.join(titles))]
+                             ';'.join(titles))]
             csv_file.writerow(row)
 
     def handle(self, *args, **options):
