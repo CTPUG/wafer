@@ -9,11 +9,11 @@ from wafer.conf_registration.models import RegisteredAttendee
 
 
 class Command(BaseCommand):
-    help = "List speaker or attendee email addresses."
+    help = "List author or attendee email addresses."
 
     option_list = BaseCommand.option_list + tuple([
-        make_option('--speakers', action="store_true", default=False,
-                    help='List speaker email addresses only'),
+        make_option('--authors', action="store_true", default=False,
+                    help='List author email addresses only'),
         make_option('--waiting', action="store_true", default=False,
                     help='Only list people on the waiting list.'),
     ])
@@ -36,7 +36,7 @@ class Command(BaseCommand):
                        for x in (person.name, person.email)]
             csv_file.writerow(row)
 
-    def _speaker_emails(self, options):
+    def _author_emails(self, options):
         # Should grow more options - accepted talks, under consideration, etc.
         people = User.objects.filter(contact_talks__isnull=False).distinct()
 
@@ -53,7 +53,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
 
-        if options['speakers']:
-            self._speaker_emails(options)
+        if options['authors']:
+            self._author_emails(options)
         else:
             self._attendee_emails(options)
