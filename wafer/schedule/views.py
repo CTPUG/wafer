@@ -29,6 +29,7 @@ class ScheduleView(TemplateView):
         # logic involves less back-tracking
         for item in ScheduleItem.objects.all():
             slots = list(item.slots.all())
+            # We should be dealing with single timezone, so this is safe
             day = slots[0].start_time.date()
             if day not in days:
                 days.setdefault(day, [])
@@ -41,18 +42,12 @@ class ScheduleView(TemplateView):
                         found = True
                         if rowspan == 0:
                             append_row = row
-                        else:
-                            # Flag this as blank
-                            row.append(None)
                         rowspan += 1
                 if not days[day] or not found:
                     row = ScheduleRow(slot)
                     days[day].append(row)
                     if rowspan == 0:
                         append_row = row
-                    else:
-                        # Flag this as blank
-                        row.append(None)
                     rowspan += 1
             scheditem = {'item': item, 'rowspan': rowspan, 'colspan': 1}
             append_row.items.append(scheditem)
