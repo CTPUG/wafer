@@ -10,3 +10,4 @@ pytz
 requests
 markdown
 django-medusa
+django-markitup
