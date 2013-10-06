@@ -134,6 +134,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.admin',
+    'django_medusa',
     'crispy_forms',
     'south',
     'django_nose',
@@ -245,3 +246,7 @@ WAFER_HIDE_LOGIN = False
 # Talk submissions open
 # Set this to False to disable talk submissions
 WAFER_TALKS_OPEN = True
+
+# django_medusa -- disk-based renderer
+MEDUSA_RENDERER_CLASS = "wafer.management.static.WaferDiskStaticSiteRenderer"
+MEDUSA_DEPLOY_DIR = os.path.join(project_root, 'static_mirror')
