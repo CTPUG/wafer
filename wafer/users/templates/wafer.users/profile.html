@@ -36,7 +36,7 @@
         {% spaceless %}
         <h1>
             {% if profile.homepage %}
-                <a href="{{ profile.homepage }}">
+                <a href="{{ profile.homepage_url }}">
             {% endif %}
             {{ object.get_full_name|default:object.username }}
             {% if profile.homepage %}
