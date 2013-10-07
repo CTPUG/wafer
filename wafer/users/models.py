@@ -56,8 +56,8 @@ class UserProfile(models.Model):
         return self.homepage
 
 
-def create_user_profile(sender, instance, created, **kwargs):
-    if kwargs['raw']:
+def create_user_profile(sender, instance, created, raw=False, **kwargs):
+    if raw:
         return
     if created:
         UserProfile.objects.create(user=instance)
