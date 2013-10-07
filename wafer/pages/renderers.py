@@ -8,6 +8,9 @@ class PagesRenderer(StaticSiteRenderer):
 
         items = Page.objects.all()
         for item in items:
+            if item.exclude_from_static:
+                # Container page
+                continue
             url = item.get_absolute_url()
             # FIXME: Can we introspect this easily from urls?
             if url == '/index' or url == '/index.html':

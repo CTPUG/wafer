@@ -30,6 +30,10 @@ class Page(models.Model):
     include_in_menu = models.BooleanField(
         help_text=_("Whether to include in menus."),
         default=False)
+    exclude_from_static = models.BooleanField(
+        help_text=_("Whether to exclude this page from the static version of"
+                    " the site (Container pages, etc.)"),
+        default=False)
     files = models.ManyToManyField(
         File, related_name="pages", null=True, blank=True,
         help_text=_("Images and other files for use in"
