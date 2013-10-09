@@ -25,6 +25,6 @@ def menu_info(request):
 def registration_settings(request):
     '''Expose selected settings to templates'''
     context = {}
-    for setting in ('WAFER_GITHUB_CLIENT_ID',):
+    for setting in ('WAFER_GITHUB_CLIENT_ID', 'WAFER_HIDE_LOGIN'):
         context[setting] = getattr(settings, setting, None)
     return context

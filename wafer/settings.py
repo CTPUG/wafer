@@ -239,6 +239,9 @@ WAFER_REGISTRATION_LIMIT = 250
 # WAFER_GITHUB_CLIENT_ID = 'register on github'
 # WAFER_GITHUB_CLIENT_SECRET = 'to get these secrets'
 
+# Set this to true to disable the login button on the navigation toolbar
+WAFER_HIDE_LOGIN = False
+
 # Talk submissions open
 # Set this to False to disable talk submissions
 WAFER_TALKS_OPEN = True
