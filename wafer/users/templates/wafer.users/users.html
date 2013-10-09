@@ -12,15 +12,15 @@
 <div class="pagination">
     <ul>
         {% if page_obj.has_previous %}
-        <li><a href="page{{ page_obj.previous_page_number }}">&laquo;</a></li>
+        <li><a href="{% url 'wafer_users_page' page=page_obj.previous_page_number %}">&laquo;</a></li>
         {% else %}
         <li class="disabled"><a href="#">&laquo;</a></li>
         {% endif %}
         {% for page in paginator.page_range %}
-        <li><a href="page{{ page }}">{{ page }}</a></li>
+        <li><a href="{% url 'wafer_users_page' page=page %}">{{ page }}</a></li>
         {% endfor %}
         {% if page_obj.has_next %}
-        <li><a href="page{{ page_obj.next_page_number }}">&raquo;</a></li>
+        <li><a href="{% url 'wafer_users_page' page=page_obj.next_page_number %}">&raquo;</a></li>
         {% else %}
         <li class="disabled"><a href="#">&raquo;</a></li>
         {% endif %}
