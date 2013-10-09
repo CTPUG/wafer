@@ -59,7 +59,7 @@
               {% endif %}
             </ul>
           </li>
-          {% else %}
+          {% elif not WAFER_HIDE_LOGIN %}
           <li><a href="{% url 'auth_login' %}">
               {% trans 'Create Account / Log In' %}
           </a></li>
