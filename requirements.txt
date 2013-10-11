@@ -9,3 +9,4 @@ pydns
 pytz
 requests
 markdown
+django-medusa
