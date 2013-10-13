@@ -38,7 +38,9 @@ class UsersTalks(ListView):
     paginate_by = 25
 
     def get_queryset(self):
-        if (self.request.user.is_staff):
+        # self.request will be None when we come here via the staticsite
+        # renderer
+        if (self.request and self.request.user.is_staff):
             return Talk.objects.all()
         return Talk.objects.filter(status=ACCEPTED)
 
