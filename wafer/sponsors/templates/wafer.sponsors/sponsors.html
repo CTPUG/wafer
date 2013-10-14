@@ -5,7 +5,7 @@
     {% for sponsor in sponsor_list %}
     <div>
         <h2>{{ sponsor.name }}</h1>
-        {{ sponsor.description_html|safe }}
+        {{ sponsor.description.rendered|safe }}
     </div>
     {% empty %}
     <p>No sponsors yet.</p>

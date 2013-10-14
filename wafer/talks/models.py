@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.db import models
 
-from wafer.snippets.markdown_field import MarkdownTextField
+from markitup.fields import MarkupField
 
 
 # constants to make things clearer elsewhere
@@ -24,7 +24,7 @@ class Talk(models.Model):
 
     title = models.CharField(max_length=1024)
 
-    abstract = MarkdownTextField(
+    abstract = MarkupField(
         help_text=_("Write two or three paragraphs describing your talk. "
                     "Who is your audience? What will they get out of it? "
                     "What will you cover?<br />"

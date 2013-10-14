@@ -3,7 +3,7 @@ from django.core.urlresolvers import reverse
 from django.core.validators import MinValueValidator
 from django.db import models
 
-from wafer.snippets.markdown_field import MarkdownTextField
+from markitup.fields import MarkupField
 
 
 class File(models.Model):
@@ -30,7 +30,7 @@ class SponsorshipPackage(models.Model):
         help_text=_("Amount to be sponsored."))
     short_description = models.TextField(
         help_text=_("One sentence overview of the package."))
-    description = MarkdownTextField(
+    description = MarkupField(
         help_text=_("Describe what the package gives the sponsor."))
     files = models.ManyToManyField(
         File, related_name="packages", null=True, blank=True,
@@ -49,7 +49,7 @@ class Sponsor(models.Model):
     name = models.CharField(max_length=255)
     packages = models.ManyToManyField(SponsorshipPackage,
                                       related_name="sponsors")
-    description = MarkdownTextField(
+    description = MarkupField(
         help_text=_("Write some nice things about the sponsor."))
     files = models.ManyToManyField(
         File, related_name="sponsors", null=True, blank=True,

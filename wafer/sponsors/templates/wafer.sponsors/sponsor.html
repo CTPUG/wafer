@@ -2,6 +2,6 @@
 {% block content %}
 <h1>{{ object.name }}</h1>
 <div class="sponsor-detail">
-{{ object.description_html|safe }}
+{{ object.description.rendered|safe }}
 </div>
 {% endblock %}

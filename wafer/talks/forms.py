@@ -5,6 +5,7 @@ from django.utils.translation import ugettext as _
 from crispy_forms.bootstrap import FormActions
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit, HTML
+from markitup.widgets import MarkItUpWidget
 
 from wafer.talks.models import Talk
 
@@ -29,8 +30,7 @@ class TalkForm(forms.ModelForm):
         model = Talk
         fields = ('title', 'abstract', 'authors', 'notes')
         widgets = {
-            'abstract': forms.Textarea(attrs={'class': 'input-xxlarge',
-                                              'rows': 20}),
+            'abstract': MarkItUpWidget(),
             'notes': forms.Textarea(attrs={'class': 'input-xxlarge'}),
         }
 
