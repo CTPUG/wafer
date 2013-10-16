@@ -6,7 +6,7 @@ from django.core.urlresolvers import reverse
 from django.db import models
 from django.db.models.signals import post_save
 
-from wafer.snippets.markdown_field import MarkdownTextField
+from markitup.fields import MarkupField
 from wafer.menu import MenuError, refresh_menu_cache
 
 
@@ -25,7 +25,7 @@ class Page(models.Model):
     name = models.CharField(max_length=255)
     slug = models.SlugField(help_text=_("Last component of the page URL"))
     parent = models.ForeignKey('self', null=True, blank=True)
-    content = MarkdownTextField(
+    content = MarkupField(
         help_text=_("Markdown contents for the page."))
     include_in_menu = models.BooleanField(
         help_text=_("Whether to include in menus."),

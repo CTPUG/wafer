@@ -9,7 +9,7 @@
             <p>{% trans 'Number available:' %} {{ package.number_available }}</p>
         {% endif %}
         <p>{{ package.short_description }}</p>
-        {{ package.description_html|safe }}
+        {{ package.description.rendered|safe }}
     </div>
     {% empty %}
     <p>No sponsorship packages available yet.</p>
