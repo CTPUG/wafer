@@ -27,6 +27,7 @@ class ScheduleView(TemplateView):
         days = {}
         # This can be made efficient, be we run multiple passes so the
         # logic involves less back-tracking
+        used_venues = {}
         for item in ScheduleItem.objects.all():
             slots = list(item.slots.all())
             # We should be dealing with single timezone, so this is safe
@@ -36,6 +37,7 @@ class ScheduleView(TemplateView):
             rowspan = 0
             append_row = None
             for slot in slots:
+                used_venues.setdefault(slot, {})
                 found = False
                 for row in days[day]:
                     if row.slot == slot:
@@ -51,12 +53,26 @@ class ScheduleView(TemplateView):
                     rowspan += 1
             scheditem = {'item': item, 'rowspan': rowspan, 'colspan': 1}
             append_row.items.append(scheditem)
+            for slot in slots:
+                used_venues[slot][item.venue] = scheditem
         # Need to fix up col spans
         for day, rows in days.iteritems():
             for table_row in rows:
                 if len(table_row.items) == len(venue_list):
                     # All venues filled
                     continue
+                cur_item = None
+                colspan = 1
+                for venue in venue_list:
+                    if venue not in used_venues[table_row.slot]:
+                        colspan += 1
+                    else:
+                        if cur_item:
+                            cur_item['colspan'] = colspan
+                            colspan = 1
+                        cur_item = used_venues[table_row.slot][venue]
+                        cur_item['colspan'] = colspan
+                cur_item['colspan'] = colspan
 
         context['table_days'] = days
 
