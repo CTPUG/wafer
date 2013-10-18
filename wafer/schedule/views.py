@@ -6,9 +6,17 @@ from wafer.schedule.models import Venue, ScheduleItem
 
 class ScheduleRow(object):
     """This is a helpfule containter for the schedule view to keep sanity"""
-    def __init__(self, slot):
+    def __init__(self, slot, venue_list):
         self.slot = slot
-        self.items = []
+        self.venue_list = venue_list
+        self.items = {}
+
+    def get_sorted_items(self):
+        sorted_items = []
+        for venue in self.venue_list:
+            if venue in self.items:
+                sorted_items.append(self.items[venue])
+        return sorted_items
 
 
 class VenueView(DetailView):
@@ -46,13 +54,13 @@ class ScheduleView(TemplateView):
                             append_row = row
                         rowspan += 1
                 if not days[day] or not found:
-                    row = ScheduleRow(slot)
+                    row = ScheduleRow(slot, venue_list)
                     days[day].append(row)
                     if rowspan == 0:
                         append_row = row
                     rowspan += 1
             scheditem = {'item': item, 'rowspan': rowspan, 'colspan': 1}
-            append_row.items.append(scheditem)
+            append_row.items[item.venue] = scheditem
             for slot in slots:
                 used_venues[slot][item.venue] = scheditem
         # Need to fix up col spans
