@@ -15,6 +15,7 @@ class Venue(models.Model):
     name = models.CharField(max_length=1024)
 
     notes = MarkdownTextField(
+        null=False, blank=True,
         help_text=_("Notes or directions that will be useful to"
                     " conference attendees"))
 
@@ -50,8 +51,8 @@ class ScheduleItem(models.Model):
     # Items can span multiple slots (tutorials, etc).
     slots = models.ManyToManyField(Slot)
 
-    talk = models.ForeignKey(Talk, null=True)
-    page = models.ForeignKey(Page, null=True)
+    talk = models.ForeignKey(Talk, null=True, blank=True)
+    page = models.ForeignKey(Page, null=True, blank=True)
     details = MarkdownTextField(
         null=False, blank=True,
         help_text=_("Additional details (if required)"))
