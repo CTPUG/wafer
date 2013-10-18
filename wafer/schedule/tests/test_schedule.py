@@ -68,21 +68,21 @@ class ScheduleTests(TestCase):
         assert len(days[thedate][1].items) == 2
         assert len(days[thedate][2].items) == 2
 
-        assert days[thedate][0].items[0]['item'] == item1
-        assert days[thedate][0].items[0]['rowspan'] == 1
-        assert days[thedate][0].items[0]['colspan'] == 1
+        assert days[thedate][0].get_sorted_items()[0]['item'] == item1
+        assert days[thedate][0].get_sorted_items()[0]['rowspan'] == 1
+        assert days[thedate][0].get_sorted_items()[0]['colspan'] == 1
 
-        assert days[thedate][0].items[1]['item'] == item4
-        assert days[thedate][0].items[1]['rowspan'] == 1
-        assert days[thedate][0].items[1]['colspan'] == 1
+        assert days[thedate][0].get_sorted_items()[1]['item'] == item4
+        assert days[thedate][0].get_sorted_items()[1]['rowspan'] == 1
+        assert days[thedate][0].get_sorted_items()[1]['colspan'] == 1
 
-        assert days[thedate][1].items[0]['item'] == item2
-        assert days[thedate][1].items[0]['rowspan'] == 1
-        assert days[thedate][1].items[0]['colspan'] == 1
+        assert days[thedate][1].get_sorted_items()[0]['item'] == item2
+        assert days[thedate][1].get_sorted_items()[0]['rowspan'] == 1
+        assert days[thedate][1].get_sorted_items()[0]['colspan'] == 1
 
-        assert days[thedate][2].items[1]['item'] == item6
-        assert days[thedate][2].items[1]['rowspan'] == 1
-        assert days[thedate][2].items[1]['colspan'] == 1
+        assert days[thedate][2].get_sorted_items()[1]['item'] == item6
+        assert days[thedate][2].get_sorted_items()[1]['rowspan'] == 1
+        assert days[thedate][2].get_sorted_items()[1]['colspan'] == 1
 
     def test_multiple_days(self):
         """Create a multiple day table with 3 slots and 2 venues and
@@ -136,13 +136,13 @@ class ScheduleTests(TestCase):
         assert len(days[date1][1].items) == 2
         assert len(days[date2][0].items) == 2
 
-        assert days[date1][0].items[0]['item'] == item1
-        assert days[date1][0].items[0]['rowspan'] == 1
-        assert days[date1][0].items[0]['colspan'] == 1
+        assert days[date1][0].get_sorted_items()[0]['item'] == item1
+        assert days[date1][0].get_sorted_items()[0]['rowspan'] == 1
+        assert days[date1][0].get_sorted_items()[0]['colspan'] == 1
 
-        assert days[date2][0].items[1]['item'] == item6
-        assert days[date2][0].items[1]['rowspan'] == 1
-        assert days[date2][0].items[1]['colspan'] == 1
+        assert days[date2][0].get_sorted_items()[1]['item'] == item6
+        assert days[date2][0].get_sorted_items()[1]['rowspan'] == 1
+        assert days[date2][0].get_sorted_items()[1]['colspan'] == 1
 
     def test_col_span(self):
         """Create table with 3 venues and some interesting 
@@ -166,8 +166,8 @@ class ScheduleTests(TestCase):
 
         item1 = ScheduleItem.objects.create(venue=venue1, details="Item 1")
         item2 = ScheduleItem.objects.create(venue=venue1, details="Item 2")
-        item3 = ScheduleItem.objects.create(venue=venue1, details="Item 3")
-        item4 = ScheduleItem.objects.create(venue=venue2, details="Item 4")
+        item3 = ScheduleItem.objects.create(venue=venue2, details="Item 3")
+        item4 = ScheduleItem.objects.create(venue=venue3, details="Item 4")
         item5 = ScheduleItem.objects.create(venue=venue3, details="Item 5")
         item6 = ScheduleItem.objects.create(venue=venue3, details="Item 6")
         item7 = ScheduleItem.objects.create(venue=venue2, details="Item 7")
@@ -207,45 +207,45 @@ class ScheduleTests(TestCase):
         assert len(days[thedate][3].items) == 1
         assert len(days[thedate][4].items) == 2
 
-        assert days[thedate][0].items[0]['item'] == item1
-        assert days[thedate][0].items[0]['rowspan'] == 1
-        assert days[thedate][0].items[0]['colspan'] == 2
+        assert days[thedate][0].get_sorted_items()[0]['item'] == item1
+        assert days[thedate][0].get_sorted_items()[0]['rowspan'] == 1
+        assert days[thedate][0].get_sorted_items()[0]['colspan'] == 2
 
-        assert days[thedate][0].items[1]['item'] == item5
-        assert days[thedate][0].items[1]['rowspan'] == 1
-        assert days[thedate][0].items[1]['colspan'] == 1
+        assert days[thedate][0].get_sorted_items()[1]['item'] == item5
+        assert days[thedate][0].get_sorted_items()[1]['rowspan'] == 1
+        assert days[thedate][0].get_sorted_items()[1]['colspan'] == 1
 
-        assert days[thedate][1].items[0]['item'] == item2
-        assert days[thedate][1].items[0]['rowspan'] == 1
-        assert days[thedate][1].items[0]['colspan'] == 1
+        assert days[thedate][1].get_sorted_items()[0]['item'] == item2
+        assert days[thedate][1].get_sorted_items()[0]['rowspan'] == 1
+        assert days[thedate][1].get_sorted_items()[0]['colspan'] == 1
 
-        assert days[thedate][1].items[1]['item'] == item3
-        assert days[thedate][1].items[1]['rowspan'] == 1
-        assert days[thedate][1].items[1]['colspan'] == 1
+        assert days[thedate][1].get_sorted_items()[1]['item'] == item3
+        assert days[thedate][1].get_sorted_items()[1]['rowspan'] == 1
+        assert days[thedate][1].get_sorted_items()[1]['colspan'] == 1
 
-        assert days[thedate][1].items[2]['item'] == item4
-        assert days[thedate][1].items[2]['rowspan'] == 1
-        assert days[thedate][1].items[2]['colspan'] == 1
+        assert days[thedate][1].get_sorted_items()[2]['item'] == item4
+        assert days[thedate][1].get_sorted_items()[2]['rowspan'] == 1
+        assert days[thedate][1].get_sorted_items()[2]['colspan'] == 1
 
-        assert days[thedate][2].items[0]['item'] == item6
-        assert days[thedate][2].items[0]['rowspan'] == 1
-        assert days[thedate][2].items[0]['colspan'] == 1
+        assert days[thedate][2].get_sorted_items()[0]['item'] == item7
+        assert days[thedate][2].get_sorted_items()[0]['rowspan'] == 1
+        assert days[thedate][2].get_sorted_items()[0]['colspan'] == 2
 
-        assert days[thedate][2].items[1]['item'] == item7
-        assert days[thedate][2].items[1]['rowspan'] == 1
-        assert days[thedate][2].items[1]['colspan'] == 2
+        assert days[thedate][2].get_sorted_items()[1]['item'] == item6
+        assert days[thedate][2].get_sorted_items()[1]['rowspan'] == 1
+        assert days[thedate][2].get_sorted_items()[1]['colspan'] == 1
 
-        assert days[thedate][3].items[0]['item'] == item8
-        assert days[thedate][3].items[0]['rowspan'] == 1
-        assert days[thedate][3].items[0]['colspan'] == 3
+        assert days[thedate][3].get_sorted_items()[0]['item'] == item8
+        assert days[thedate][3].get_sorted_items()[0]['rowspan'] == 1
+        assert days[thedate][3].get_sorted_items()[0]['colspan'] == 3
 
-        assert days[thedate][4].items[0]['item'] == item9
-        assert days[thedate][4].items[0]['rowspan'] == 1
-        assert days[thedate][4].items[0]['colspan'] == 2
+        assert days[thedate][4].get_sorted_items()[0]['item'] == item9
+        assert days[thedate][4].get_sorted_items()[0]['rowspan'] == 1
+        assert days[thedate][4].get_sorted_items()[0]['colspan'] == 2
 
-        assert days[thedate][4].items[1]['item'] == item10
-        assert days[thedate][4].items[1]['rowspan'] == 1
-        assert days[thedate][4].items[1]['colspan'] == 1
+        assert days[thedate][4].get_sorted_items()[1]['item'] == item10
+        assert days[thedate][4].get_sorted_items()[1]['rowspan'] == 1
+        assert days[thedate][4].get_sorted_items()[1]['colspan'] == 1
 
     def test_row_span(self):
         """Create a day table with multiple slot items"""
@@ -303,30 +303,30 @@ class ScheduleTests(TestCase):
         assert len(days[thedate][3].items) == 1
         assert len(days[thedate][4].items) == 1
 
-        assert days[thedate][0].items[0]['item'] == item1
-        assert days[thedate][0].items[0]['rowspan'] == 2
-        assert days[thedate][0].items[0]['colspan'] == 1
+        assert days[thedate][0].get_sorted_items()[0]['item'] == item1
+        assert days[thedate][0].get_sorted_items()[0]['rowspan'] == 2
+        assert days[thedate][0].get_sorted_items()[0]['colspan'] == 1
 
-        assert days[thedate][0].items[1]['item'] == item5
-        assert days[thedate][0].items[1]['rowspan'] == 1
-        assert days[thedate][0].items[1]['colspan'] == 1
+        assert days[thedate][0].get_sorted_items()[1]['item'] == item5
+        assert days[thedate][0].get_sorted_items()[1]['rowspan'] == 1
+        assert days[thedate][0].get_sorted_items()[1]['colspan'] == 1
 
-        assert days[thedate][1].items[0]['item'] == item6
-        assert days[thedate][1].items[0]['rowspan'] == 1
-        assert days[thedate][1].items[0]['colspan'] == 1
+        assert days[thedate][1].get_sorted_items()[0]['item'] == item6
+        assert days[thedate][1].get_sorted_items()[0]['rowspan'] == 1
+        assert days[thedate][1].get_sorted_items()[0]['colspan'] == 1
 
-        assert days[thedate][2].items[0]['item'] == item2
-        assert days[thedate][2].items[0]['rowspan'] == 1
-        assert days[thedate][2].items[0]['colspan'] == 1
+        assert days[thedate][2].get_sorted_items()[0]['item'] == item2
+        assert days[thedate][2].get_sorted_items()[0]['rowspan'] == 1
+        assert days[thedate][2].get_sorted_items()[0]['colspan'] == 1
 
-        assert days[thedate][2].items[1]['item'] == item7
-        assert days[thedate][2].items[1]['rowspan'] == 3
-        assert days[thedate][2].items[1]['colspan'] == 1
+        assert days[thedate][2].get_sorted_items()[1]['item'] == item7
+        assert days[thedate][2].get_sorted_items()[1]['rowspan'] == 3
+        assert days[thedate][2].get_sorted_items()[1]['colspan'] == 1
 
-        assert days[thedate][3].items[0]['item'] == item3
-        assert days[thedate][3].items[0]['rowspan'] == 1
-        assert days[thedate][3].items[0]['colspan'] == 1
+        assert days[thedate][3].get_sorted_items()[0]['item'] == item3
+        assert days[thedate][3].get_sorted_items()[0]['rowspan'] == 1
+        assert days[thedate][3].get_sorted_items()[0]['colspan'] == 1
 
-        assert days[thedate][4].items[0]['item'] == item4
-        assert days[thedate][4].items[0]['rowspan'] == 1
-        assert days[thedate][4].items[0]['colspan'] == 1
+        assert days[thedate][4].get_sorted_items()[0]['item'] == item4
+        assert days[thedate][4].get_sorted_items()[0]['rowspan'] == 1
+        assert days[thedate][4].get_sorted_items()[0]['colspan'] == 1
