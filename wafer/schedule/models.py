@@ -35,13 +35,28 @@ class Slot(models.Model):
     #      Revisit this when we have a better idea of the actual
     #      requirements.
 
-    start_time = models.DateTimeField(null=True, blank=True)
+    previous_slot = models.ForeignKey('self', null=True, blank=True,
+                                      help_text=_("Previous slot"))
+    start_time = models.DateTimeField(null=True, blank=True,
+                                      help_text=_("Start time (if no"
+                                                  " previous slot)"))
+    end_time = models.DateTimeField(null=True, help_text=_("Slot end time"))
 
-    end_time = models.DateTimeField(null=True, blank=True)
+    name = models.CharField(max_length=1024, null=True, blank=True,
+                            help_text=_("Identifier for use in the admin"
+                                        " panel"))
+
+    class Meta:
+        ordering = ['end_time', 'start_time']
 
     def __unicode__(self):
         return u'Slot: %s - %s' % (self.start_time.isoformat(),
                                    self.end_time.isoformat())
+
+    def get_start_time(self):
+        if self.previous_slot:
+            return self.previous_slot.end_time
+        return self.start_time
 
 
 class ScheduleItem(models.Model):

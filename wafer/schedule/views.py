@@ -39,7 +39,7 @@ class ScheduleView(TemplateView):
         for item in ScheduleItem.objects.all():
             slots = list(item.slots.all())
             # We should be dealing with single timezone, so this is safe
-            day = slots[0].start_time.date()
+            day = slots[0].get_start_time().date()
             if day not in days:
                 days.setdefault(day, [])
             rowspan = 0

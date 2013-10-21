@@ -16,7 +16,7 @@
       </tr>
       {% for row in table_rows %}
       <tr>
-         <td>{{ row.slot.start_time|time:"H:i" }} - {{ row.slot.end_time|time:"H:i" }}</td>
+         <td>{{ row.slot.get_start_time|time:"H:i" }} - {{ row.slot.end_time|time:"H:i" }}</td>
          {% for item in row.get_sorted_items %}
          <td colspan="{{ item.colspan }}" rowspan="{{ item.rowspan }}">
             {% if item.item.get_url %}

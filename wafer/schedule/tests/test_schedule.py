@@ -33,8 +33,8 @@ class ScheduleTests(TestCase):
         end = D.datetime(2013, 9, 22, 13, 0, 0, tzinfo=utc)
 
         slot1 = Slot.objects.create(start_time=start1, end_time=start2)
-        slot2 = Slot.objects.create(start_time=start2, end_time=start3)
-        slot3 = Slot.objects.create(start_time=start3, end_time=end)
+        slot2 = Slot.objects.create(previous_slot=slot1, end_time=start3)
+        slot3 = Slot.objects.create(previous_slot=slot2, end_time=end)
         item1 = ScheduleItem.objects.create(venue=venue1, details="Item 1")
         item2 = ScheduleItem.objects.create(venue=venue1, details="Item 2")
         item3 = ScheduleItem.objects.create(venue=venue1, details="Item 3")
@@ -57,11 +57,11 @@ class ScheduleTests(TestCase):
 
         assert thedate in days
         assert len(days[thedate]) == 3
-        assert days[thedate][0].slot.start_time == start1
+        assert days[thedate][0].slot.get_start_time() == start1
         assert days[thedate][0].slot.end_time == start2
-        assert days[thedate][1].slot.start_time == start2
+        assert days[thedate][1].slot.get_start_time() == start2
         assert days[thedate][1].slot.end_time == start3
-        assert days[thedate][2].slot.start_time == start3
+        assert days[thedate][2].slot.get_start_time() == start3
         assert days[thedate][2].slot.end_time == end
 
         assert len(days[thedate][0].items) == 2
@@ -125,11 +125,11 @@ class ScheduleTests(TestCase):
         assert date2 in days
         assert len(days[date1]) == 2
         assert len(days[date2]) == 1
-        assert days[date1][0].slot.start_time == start1
+        assert days[date1][0].slot.get_start_time() == start1
         assert days[date1][0].slot.end_time == start2
-        assert days[date1][1].slot.start_time == start2
+        assert days[date1][1].slot.get_start_time() == start2
         assert days[date1][1].slot.end_time == end1
-        assert days[date2][0].slot.start_time == start3
+        assert days[date2][0].slot.get_start_time() == start3
         assert days[date2][0].slot.end_time == end2
 
         assert len(days[date1][0].items) == 2
@@ -195,11 +195,11 @@ class ScheduleTests(TestCase):
 
         assert thedate in days
         assert len(days[thedate]) == 5
-        assert days[thedate][0].slot.start_time == start1
-        assert days[thedate][1].slot.start_time == start2
-        assert days[thedate][2].slot.start_time == start3
-        assert days[thedate][3].slot.start_time == start4
-        assert days[thedate][4].slot.start_time == start5
+        assert days[thedate][0].slot.get_start_time() == start1
+        assert days[thedate][1].slot.get_start_time() == start2
+        assert days[thedate][2].slot.get_start_time() == start3
+        assert days[thedate][3].slot.get_start_time() == start4
+        assert days[thedate][4].slot.get_start_time() == start5
 
         assert len(days[thedate][0].items) == 2
         assert len(days[thedate][1].items) == 3
@@ -293,8 +293,8 @@ class ScheduleTests(TestCase):
 
         assert thedate in days
         assert len(days[thedate]) == 5
-        assert days[thedate][0].slot.start_time == start1
-        assert days[thedate][1].slot.start_time == start2
+        assert days[thedate][0].slot.get_start_time() == start1
+        assert days[thedate][1].slot.get_start_time() == start2
         assert days[thedate][4].slot.end_time == end
 
         assert len(days[thedate][0].items) == 2
