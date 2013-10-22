@@ -37,7 +37,7 @@ class Command(BaseCommand):
             # the user specify it, but we will have the email as an
             # identifier
             row = [x.encode("utf-8")
-                   for x in (person.get_full_name(),
+                   for x in (person.get_full_name(), person.email,
                    person.get_profile().contact_number or 'NO CONTACT INFO',
                    ';'.join(titles))]
             csv_file.writerow(row)
