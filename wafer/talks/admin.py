@@ -4,7 +4,8 @@ from wafer.talks.models import Talk
 
 
 class TalkAdmin(admin.ModelAdmin):
-    list_display = ('title', 'corresponding_author', 'status')
+    list_display = ('title', 'get_author_name', 'get_author_contact',
+                    'status')
     list_editable = ('status',)
 
 

@@ -46,6 +46,24 @@ class Talk(models.Model):
     def get_absolute_url(self):
         return reverse('wafer_talk', args=(self.talk_id,))
 
+    def get_author_contact(self):
+        email = self.corresponding_author.email
+        profile = self.corresponding_author.get_profile()
+        if profile.contact_number:
+            contact = profile.contact_number
+        else:
+            # Should we wrap this in a span for styling?
+            contact = 'NO CONTACT INFO'
+        return '%s - %s' % (email, contact)
+    get_author_contact.short_description = 'Contact Details'
+
+    def get_author_name(self):
+        return '%s (%s)' % (self.corresponding_author,
+                            self.corresponding_author.get_full_name())
+
+    get_author_name.admin_order_field = 'corresponding_author'
+    get_author_name.short_description = 'Corresponding Author'
+
     # Helpful properties for the templates
     accepted = property(fget=lambda x: x.status == ACCEPTED)
     pending = property(fget=lambda x: x.status == PENDING)
