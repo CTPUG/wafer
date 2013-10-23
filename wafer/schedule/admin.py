@@ -25,6 +25,14 @@ class ScheduleItemAdmin(admin.ModelAdmin):
 
     def changelist_view(self, request, extra_context=None):
         extra_context = extra_context or {}
+        extra_context['conflicts'] = None
+        talks = [x for x in Talk.objects.filter(status=ACCEPTED)
+                 if not x.scheduleitem_set.all()]
+        extra_context['missed_talks'] = talks
+        pages = [x for x in Page.objects.filter(include_in_menu=True)
+                 if not x.scheduleitem_set.all()]
+        extra_context['missed_pages'] = pages
+
         return super(ScheduleItemAdmin, self).changelist_view(request,
                                                               extra_context)
 
