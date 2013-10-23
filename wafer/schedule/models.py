@@ -111,5 +111,13 @@ class ScheduleItem(models.Model):
     def get_details(self):
         return self.get_desc()
 
+    def get_start_time(self):
+        start_time = localtime(list(self.slots.all())[0].get_start_time(),
+                               get_current_timezone())
+        day = start_time.strftime('%b %d (%a)')
+        start = start_time.strftime('%H:%M')
+        return u'%s, %s' % (day, start)
+
     def __unicode__(self):
-        return u'%s in %s' % (self.get_desc(), self.venue)
+        return u'%s in %s at %s' % (self.get_desc(), self.venue,
+                                 self.get_start_time())
