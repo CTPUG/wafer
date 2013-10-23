@@ -24,9 +24,37 @@
           </ul>
        </div>
        {% endif %}
-       {% if conflicts %}
-       <div name="conflicts">
-          <h2>{% trans "Conflicts in the schedule" %}</h2>
+       {% if errors %}
+       <div name="errors">
+          <h2>{% trans "Errors in the schedule" %}</h2>
+          {% if errors.clashes %}
+          <h3>{% trans "Clashes" %}</h3>
+          <ul>
+             {% for pos, items in errors.clashes.iteritems %}
+             <li>{{ pos.0 }} at {{ pos.1.get_start_time|time:"H:i" }} --
+                 {% for item in items %}
+                     {{ item.get_title }},
+                 {% endfor %}
+             </li>
+             {% endfor %}
+          </ul>
+          {% endif %}
+          {% if errors.validation %}
+          <h3>{% trans "Validation errors" %}</h3>
+          <ul>
+             {% for item in errors.validation %}
+             <li>{{ item.get_title }}</li>
+             {% endfor %}
+          </ul>
+          {% endif %}
+          {% if errors.validation %}
+          <h3>{% trans "Duplicates in the schedule" %}</h3>
+          <ul>
+             {% for item in errors.duplicates %}
+             <li>{{ item.get_title }}</li>
+             {% endfor %}
+          </ul>
+          {% endif %}
        </div>
        {% endif %}
     </div>

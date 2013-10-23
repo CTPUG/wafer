@@ -88,6 +88,15 @@ class ScheduleItem(models.Model):
         null=False, blank=True,
         help_text=_("Notes for the conference organisers"))
 
+    def get_title(self):
+        if self.talk:
+            return self.talk.title
+        elif self.page:
+            return self.page.name
+        elif self.details:
+            return self.details
+        return 'No title'
+
     def get_desc(self):
         if self.details:
             if self.talk:
