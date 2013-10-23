@@ -1,4 +1,5 @@
 from django.utils.translation import ugettext_lazy as _
+from django.utils.timezone import get_current_timezone, localtime
 from django.core.urlresolvers import reverse
 from django.db import models
 
@@ -40,6 +41,7 @@ class Slot(models.Model):
     start_time = models.DateTimeField(null=True, blank=True,
                                       help_text=_("Start time (if no"
                                                   " previous slot)"))
+    # Should we rather specify slot length instead of end time?
     end_time = models.DateTimeField(null=True, help_text=_("Slot end time"))
 
     name = models.CharField(max_length=1024, null=True, blank=True,
@@ -50,8 +52,18 @@ class Slot(models.Model):
         ordering = ['end_time', 'start_time']
 
     def __unicode__(self):
-        return u'Slot: %s - %s' % (self.start_time.isoformat(),
-                                   self.end_time.isoformat())
+        if self.name:
+            slot = u'Slot %s' % self.name
+        else:
+            slot = u'Slot'
+        # Should we be doing this with datetime.utils.timezone.activate?
+        # If so, where?
+        start_time = localtime(self.get_start_time(), get_current_timezone())
+        end_time = localtime(self.end_time, get_current_timezone())
+        day = self.get_start_time().strftime('%b %d (%a)')
+        start = start_time.strftime('%H:%M')
+        end = end_time.strftime('%H:%M')
+        return u'%s: %s: %s - %s' % (slot, day, start, end)
 
     def get_start_time(self):
         if self.previous_slot:
