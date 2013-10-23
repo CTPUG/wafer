@@ -35,6 +35,9 @@ class SlotAdminForm(forms.ModelForm):
 class SlotAdmin(admin.ModelAdmin):
     form = SlotAdminForm
 
+    list_display = ('__unicode__', 'end_time')
+    list_editable = ('end_time',)
+
 
 admin.site.register(Slot, SlotAdmin)
 admin.site.register(Venue)
