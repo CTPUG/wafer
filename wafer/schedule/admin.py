@@ -17,6 +17,18 @@ class ScheduleItemAdmin(admin.ModelAdmin):
     form = ScheduleItemAdminForm
 
 
-admin.site.register(Slot)
+class SlotAdminForm(forms.ModelForm):
+    class Meta:
+        model = Slot
+
+    class Media:
+        js = ('js/scheduledatetime.js',)
+
+
+class SlotAdmin(admin.ModelAdmin):
+    form = SlotAdminForm
+
+
+admin.site.register(Slot, SlotAdmin)
 admin.site.register(Venue)
 admin.site.register(ScheduleItem, ScheduleItemAdmin)
