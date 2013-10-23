@@ -3,6 +3,7 @@ from django import forms
 
 from wafer.schedule.models import Venue, Slot, ScheduleItem
 from wafer.talks.models import Talk, ACCEPTED
+from wafer.pages.models import Page
 
 class ScheduleItemAdminForm(forms.ModelForm):
     class Meta:
@@ -11,6 +12,10 @@ class ScheduleItemAdminForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(ScheduleItemAdminForm, self).__init__(*args, **kwargs)
         self.fields['talk'].queryset = Talk.objects.filter(status=ACCEPTED)
+        # We assume items not in the menu aren't intended for the schedule
+        # either - Is this the best assumption?
+        self.fields['page'].queryset = Page.objects.filter(
+            include_in_menu=True)
 
 
 class ScheduleItemAdmin(admin.ModelAdmin):
