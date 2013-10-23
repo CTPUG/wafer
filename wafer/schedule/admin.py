@@ -16,6 +16,13 @@ class ScheduleItemAdminForm(forms.ModelForm):
 class ScheduleItemAdmin(admin.ModelAdmin):
     form = ScheduleItemAdminForm
 
+    change_list_template = 'admin/scheduleitem_list.html'
+
+    def changelist_view(self, request, extra_context=None):
+        extra_context = extra_context or {}
+        return super(ScheduleItemAdmin, self).changelist_view(request,
+                                                              extra_context)
+
 
 class SlotAdminForm(forms.ModelForm):
     class Meta:

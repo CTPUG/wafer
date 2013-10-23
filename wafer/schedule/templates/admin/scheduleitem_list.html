@@ -1,0 +1,17 @@
+{% extends "admin/change_list.html" %}
+{# This plugs our extra validation information into the end of the content
+   block #}
+{% block content %}
+    {{ block.super }}
+    <div class="validation_info">
+       <div name="missed_talks">
+          <h2>{% trans "Talks not assigned in the schedule" %}</h2>
+       </div>
+       <div name="missed pages">
+          <h2>{% trans "Pages not assigned in the schedule" %}</h2>
+       </div>
+       <div name="conflicts">
+          <h2>{% trans "Conflicts in the schedule" %}</h2>
+       </div>
+    </div>
+{% endblock %}
