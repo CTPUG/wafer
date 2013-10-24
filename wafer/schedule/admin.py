@@ -5,6 +5,28 @@ from wafer.schedule.models import Venue, Slot, ScheduleItem
 from wafer.talks.models import Talk, ACCEPTED
 from wafer.pages.models import Page
 
+
+# These are functions to simplify testing
+def validate_slots():
+    """Find any slots that overlap"""
+    pass
+
+
+def validate_talks():
+    """Find pending / rejected talks that are assigned to slots"""
+    pass
+
+
+def find_duplicate_schedule_items():
+    """Find talks / pages assigned to mulitple schedule items"""
+    pass
+
+
+def find_clashes():
+    """Find schedule items which clash (common slot and venue)"""
+    return []
+
+
 class ScheduleItemAdminForm(forms.ModelForm):
     class Meta:
         model = ScheduleItem

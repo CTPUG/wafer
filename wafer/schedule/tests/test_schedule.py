@@ -3,6 +3,9 @@ from django.utils.timezone import utc
 
 import datetime as D
 from wafer.schedule.models import Venue, Slot, ScheduleItem
+from wafer.schedule.admin import (validate_slots, validate_talks,
+                                  find_duplicate_schedule_items,
+                                  find_clashes)
 
 
 class ScheduleTests(TestCase):
@@ -357,3 +360,61 @@ class ScheduleTests(TestCase):
         assert days[thedate][4].get_sorted_items()[0]['item'] == item4
         assert days[thedate][4].get_sorted_items()[0]['rowspan'] == 1
         assert days[thedate][4].get_sorted_items()[0]['colspan'] == 1
+
+
+class ValidationTests(TestCase):
+
+    def test_slot(self):
+        pass
+
+    def test_clashes(self):
+        """Test that we can detect clashes correctly"""
+        # Schedule is
+        venue1 = Venue.objects.create(order=1, name='Venue 1')
+        venue2 = Venue.objects.create(order=2, name='Venue 2')
+
+        start1 = D.datetime(2013, 9, 22, 10, 0, 0, tzinfo=utc)
+        start2 = D.datetime(2013, 9, 22, 11, 0, 0, tzinfo=utc)
+        end = D.datetime(2013, 9, 22, 12, 0, 0, tzinfo=utc)
+
+        slot1 = Slot.objects.create(start_time=start1, end_time=start2)
+        slot2 = Slot.objects.create(start_time=start2, end_time=end)
+
+        item1 = ScheduleItem.objects.create(venue=venue1, details="Item 1")
+        item2 = ScheduleItem.objects.create(venue=venue1, details="Item 2")
+        # Create a simple venue/slot clash
+        item1.slots.add(slot1)
+        item2.slots.add(slot1)
+        clashes = find_clashes()
+        assert len(clashes) == 2
+        assert item1 in clashes
+        assert item2 in clashes
+        # Create a overlapping clashes
+        item2.slots.remove(slot1)
+        item1.slots.add(slot2)
+        item2.slots.add(slot2)
+        clashes = find_clashes()
+        assert len(clashes) == 2
+        assert item1 in clashes
+        assert item2 in clashes
+        # Add a clash in a second venue
+        item3 = ScheduleItem.objects.create(venue=venue2, details="Item 3")
+        item4 = ScheduleItem.objects.create(venue=venue2, details="Item 4")
+        item3.slots.add(slot2)
+        item4.slots.add(slot2)
+        clashes = find_clashes()
+        assert len(clashes) == 4
+        assert item3 in clashes
+        assert item4 in clashes
+        # Fix clashes
+        item1.slots.remove(slot2)
+        item3.slots.remove(slot2)
+        item3.slots.add(slot1)
+        clashes = find_clashes()
+        assert len(clashes) == 0
+
+    def test_talks(self):
+        pass
+
+    def test_duplicates(self):
+        pass
