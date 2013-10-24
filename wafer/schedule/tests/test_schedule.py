@@ -473,4 +473,56 @@ class ValidationTests(TestCase):
         assert item2 not in invalid
 
     def test_duplicates(self):
-        pass
+        """Test that we can detect duplicates talks and pages"""
+        # Final chedule is
+        #       Venue 1  Venue 2
+        # 10-11 Talk 1   Page 1
+        # 11-12 Talk 1   Page 1
+        venue1 = Venue.objects.create(order=1, name='Venue 1')
+        venue2 = Venue.objects.create(order=2, name='Venue 2')
+
+        start1 = D.datetime(2013, 9, 22, 10, 0, 0, tzinfo=utc)
+        start2 = D.datetime(2013, 9, 22, 11, 0, 0, tzinfo=utc)
+        end = D.datetime(2013, 9, 22, 12, 0, 0, tzinfo=utc)
+
+        slot1 = Slot.objects.create(start_time=start1, end_time=start2)
+        slot2 = Slot.objects.create(start_time=start1, end_time=end)
+
+        user = User.objects.create_user('john', 'best@wafer.test',
+                                        'johnpassword')
+        talk = Talk.objects.create(title="Test talk", status=ACCEPTED,
+                                   corresponding_author_id=user.id)
+        page1 = Page.objects.create(name="test page", slug="test")
+        page2 = Page.objects.create(name="test page 2", slug="test2")
+
+        item1 = ScheduleItem.objects.create(venue=venue1,
+                                            talk_id=talk.pk)
+        item1.slots.add(slot1)
+        item2 = ScheduleItem.objects.create(venue=venue1,
+                                            talk_id=talk.pk)
+        item2.slots.add(slot2)
+
+        duplicates = find_duplicate_schedule_items()
+        assert len(duplicates) == 2
+        assert item1 in duplicates
+        assert item2 in duplicates
+
+        item3 = ScheduleItem.objects.create(venue=venue2,
+                                            page_id=page1.pk)
+        item3.slots.add(slot1)
+        item4 = ScheduleItem.objects.create(venue=venue2,
+                                            page_id=page1.pk)
+        item4.slots.add(slot2)
+
+        duplicates = find_duplicate_schedule_items()
+        assert len(duplicates) == 4
+        assert item3 in duplicates
+        assert item4 in duplicates
+
+        item4.page_id = page2.pk
+        item4.save()
+
+        duplicates = find_duplicate_schedule_items()
+        assert len(duplicates) == 2
+        assert item3 not in duplicates
+        assert item4 not in duplicates
