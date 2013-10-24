@@ -24,7 +24,18 @@ def find_duplicate_schedule_items():
 
 def find_clashes():
     """Find schedule items which clash (common slot and venue)"""
-    return []
+    clashes = {}
+    seen_venue_slots = {}
+    for item in ScheduleItem.objects.all():
+        for slot in item.slots.all():
+            pos = (item.venue, slot)
+            if pos in seen_venue_slots:
+                if seen_venue_slots[pos] not in clashes:
+                    clashes[pos] = [seen_venue_slots[pos]]
+                clashes[pos].append(item)
+            else:
+                seen_venue_slots[pos] = item
+    return clashes
 
 
 class ScheduleItemAdminForm(forms.ModelForm):
@@ -61,10 +72,8 @@ class ScheduleItemAdmin(admin.ModelAdmin):
         # Two schedule items with the same venue and at least 1 common slot
         seen_talks = set()
         seen_pages = set()
-        seen_venue_slots = {}
         duplicates = []
         validation = []
-        clashes = {}
         for item in ScheduleItem.objects.all():
             if item.talk and item.page:
                 validation.append(item)
@@ -76,14 +85,7 @@ class ScheduleItemAdmin(admin.ModelAdmin):
                 duplicates.append(item)
             else:
                 seen_pages.add(item.page)
-            for slot in item.slots.all():
-                pos = (item.venue, slot)
-                if pos in seen_venue_slots:
-                    if seen_venue_slots[pos] not in clashes:
-                        clashes[pos] = [seen_venue_slots[pos]]
-                    clashes[pos].append(item)
-                else:
-                    seen_venue_slots[pos] = item
+        clashes = find_clashes()
         errors = {}
         if clashes:
             errors['clashes'] = clashes
