@@ -19,6 +19,11 @@ def validate_items():
          - items with both talks and pages assigned
          """
     validation = []
+    for item in ScheduleItem.objects.all():
+        if item.talk is not None and item.page is not None:
+            validation.append(item)
+        elif item.talk and item.talk.status != ACCEPTED:
+            validation.append(item)
     return validation
 
 
@@ -79,10 +84,7 @@ class ScheduleItemAdmin(admin.ModelAdmin):
         seen_talks = set()
         seen_pages = set()
         duplicates = []
-        validation = []
         for item in ScheduleItem.objects.all():
-            if item.talk and item.page:
-                validation.append(item)
             if item.talk and item.talk in seen_talks:
                 duplicates.append(item)
             else:
@@ -92,6 +94,7 @@ class ScheduleItemAdmin(admin.ModelAdmin):
             else:
                 seen_pages.add(item.page)
         clashes = find_clashes()
+        validation = validate_items()
         errors = {}
         if clashes:
             errors['clashes'] = clashes
