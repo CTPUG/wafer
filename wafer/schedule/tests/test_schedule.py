@@ -164,7 +164,7 @@ class ScheduleTests(TestCase):
         assert days[date2][0].get_sorted_items()[1]['colspan'] == 1
 
     def test_col_span(self):
-        """Create table with 3 venues and some interesting 
+        """Create table with 3 venues and some interesting
            venue spanning items"""
         # Schedule is
         #         Venue 1     Venue 2   Venue3
@@ -289,9 +289,8 @@ class ScheduleTests(TestCase):
         start2 = D.datetime(2013, 9, 22, 11, 0, 0, tzinfo=utc)
         start3 = D.datetime(2013, 9, 22, 12, 0, 0, tzinfo=utc)
         start4 = D.datetime(2013, 9, 22, 13, 0, 0, tzinfo=utc)
-        start5= D.datetime(2013, 9, 22, 14, 0, 0, tzinfo=utc)
+        start5 = D.datetime(2013, 9, 22, 14, 0, 0, tzinfo=utc)
         end = D.datetime(2013, 9, 22, 15, 0, 0, tzinfo=utc)
-
 
         slot1 = Slot.objects.create(start_time=start1, end_time=start2)
         slot2 = Slot.objects.create(start_time=start2, end_time=start3)
@@ -456,7 +455,6 @@ class ValidationTests(TestCase):
         clashes = find_clashes()
         assert len(clashes) == 1
         pos = (venue1, slot2)
-        values = clashes.values()
         assert pos in clashes
         assert item1 in clashes[pos]
         assert item2 in clashes[pos]

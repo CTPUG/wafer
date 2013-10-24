@@ -138,4 +138,4 @@ class ScheduleItem(models.Model):
 
     def __unicode__(self):
         return u'%s in %s at %s' % (self.get_desc(), self.venue,
-                                 self.get_start_time())
+                                    self.get_start_time())
