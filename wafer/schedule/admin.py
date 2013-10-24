@@ -103,6 +103,10 @@ class ScheduleItemAdmin(admin.ModelAdmin):
 
     change_list_template = 'admin/scheduleitem_list.html'
 
+    # We stuff these validation results into the view, rather than
+    # enforcing conditions on the actual model, since it can be hard
+    # to edit the schedule and keep it entirely consistent at every
+    # step (think exchanging talks and so forth)
     def changelist_view(self, request, extra_context=None):
         extra_context = extra_context or {}
         # Find issues in the schedule
