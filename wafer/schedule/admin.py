@@ -84,18 +84,7 @@ class ScheduleItemAdmin(admin.ModelAdmin):
 
     def changelist_view(self, request, extra_context=None):
         extra_context = extra_context or {}
-        talks = [x for x in Talk.objects.filter(status=ACCEPTED)
-                 if not x.scheduleitem_set.all()]
-        extra_context['missed_talks'] = talks
-        pages = [x for x in Page.objects.filter(include_in_menu=True)
-                 if not x.scheduleitem_set.all()]
-        extra_context['missed_pages'] = pages
-
-        # errors are the following
-        # Schedule items with both page and talk set
-        # Same talk scheduled in multiple items
-        # Same page scheduled in multiple items
-        # Two schedule items with the same venue and at least 1 common slot
+        # Find issues in the schedule
         clashes = find_clashes()
         validation = validate_items()
         duplicates = find_duplicate_schedule_items()

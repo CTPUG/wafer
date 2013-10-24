@@ -4,26 +4,6 @@
 {% block content %}
     {{ block.super }}
     <div class="validation_info">
-       {% if missed_talks %}
-       <div name="missed_talks">
-          <h2>{% trans "Talks not assigned in the schedule" %}</h2>
-          <ul>
-             {% for talk in missed_talks %}
-             <li>{{ talk }}</li>
-             {% endfor %}
-          </ul>
-       </div>
-       {% endif %}
-       {% if missed_pages %}
-       <div name="missed pages">
-          <h2>{% trans "Pages not assigned in the schedule" %}</h2>
-          <ul>
-             {% for page in missed_pages %}
-             <li>{{ page }}</li>
-             {% endfor %}
-          </ul>
-       </div>
-       {% endif %}
        {% if errors %}
        <div name="errors">
           <h2>{% trans "Errors in the schedule" %}</h2>
