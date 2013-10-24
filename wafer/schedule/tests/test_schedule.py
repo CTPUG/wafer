@@ -386,26 +386,33 @@ class ValidationTests(TestCase):
         item1.slots.add(slot1)
         item2.slots.add(slot1)
         clashes = find_clashes()
-        assert len(clashes) == 2
-        assert item1 in clashes
-        assert item2 in clashes
+        assert len(clashes) == 1
+        pos = (venue1, slot1)
+        assert pos in clashes
+        assert item1 in clashes[pos]
+        assert item2 in clashes[pos]
         # Create a overlapping clashes
         item2.slots.remove(slot1)
         item1.slots.add(slot2)
         item2.slots.add(slot2)
         clashes = find_clashes()
-        assert len(clashes) == 2
-        assert item1 in clashes
-        assert item2 in clashes
+        assert len(clashes) == 1
+        pos = (venue1, slot2)
+        values = clashes.values()
+        assert pos in clashes
+        assert item1 in clashes[pos]
+        assert item2 in clashes[pos]
         # Add a clash in a second venue
         item3 = ScheduleItem.objects.create(venue=venue2, details="Item 3")
         item4 = ScheduleItem.objects.create(venue=venue2, details="Item 4")
         item3.slots.add(slot2)
         item4.slots.add(slot2)
         clashes = find_clashes()
-        assert len(clashes) == 4
-        assert item3 in clashes
-        assert item4 in clashes
+        assert len(clashes) == 2
+        pos = (venue2, slot2)
+        assert pos in clashes
+        assert item3 in clashes[pos]
+        assert item4 in clashes[pos]
         # Fix clashes
         item1.slots.remove(slot2)
         item3.slots.remove(slot2)
