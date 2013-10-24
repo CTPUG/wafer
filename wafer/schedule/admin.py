@@ -139,6 +139,19 @@ class SlotAdmin(admin.ModelAdmin):
     list_display = ('__unicode__', 'end_time')
     list_editable = ('end_time',)
 
+    change_list_template = 'admin/slot_list.html'
+
+    def changelist_view(self, request, extra_context=None):
+        extra_context = extra_context or {}
+        # Find issues with the slots
+        errors = {}
+        overlaps = validate_slots()
+        if overlaps:
+            errors['overlaps'] = overlaps
+        extra_context['errors'] = errors
+        return super(SlotAdmin, self).changelist_view(request,
+                                                      extra_context)
+
 
 admin.site.register(Slot, SlotAdmin)
 admin.site.register(Venue)
