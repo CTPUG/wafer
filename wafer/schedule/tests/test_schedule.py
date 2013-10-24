@@ -368,7 +368,63 @@ class ScheduleTests(TestCase):
 class ValidationTests(TestCase):
 
     def test_slot(self):
-        pass
+        """Test detection of overlapping slots"""
+        start1 = D.datetime(2013, 9, 22, 10, 0, 0, tzinfo=utc)
+        start2 = D.datetime(2013, 9, 22, 11, 0, 0, tzinfo=utc)
+        start3 = D.datetime(2013, 9, 22, 12, 0, 0, tzinfo=utc)
+        start35 = D.datetime(2013, 9, 22, 12, 30, 0, tzinfo=utc)
+        start4 = D.datetime(2013, 9, 22, 13, 0, 0, tzinfo=utc)
+        start45 = D.datetime(2013, 9, 22, 13, 30, 0, tzinfo=utc)
+        start5 = D.datetime(2013, 9, 22, 14, 0, 0, tzinfo=utc)
+        end = D.datetime(2013, 9, 22, 15, 0, 0, tzinfo=utc)
+
+        # Test common start time
+        slot1 = Slot.objects.create(start_time=start1, end_time=start2)
+        slot2 = Slot.objects.create(start_time=start1, end_time=end)
+
+        overlaps = validate_slots()
+        assert len(overlaps) == 2
+        assert slot1 in overlaps
+        assert slot2 in overlaps
+
+        slot2.start_time = start5
+        slot2.save()
+
+        # Test interleaved slot
+        slot3 = Slot.objects.create(start_time=start2, end_time=start3)
+        slot4 = Slot.objects.create(start_time=start4, end_time=start5)
+        slot5 = Slot.objects.create(start_time=start35, end_time=start45)
+
+        overlaps = validate_slots()
+        assert len(overlaps) == 2
+        assert slot4 in overlaps
+        assert slot5 in overlaps
+
+        # Test no overlap
+        slot5.start_time = start3
+        slot5.end_time = start4
+        slot5.save()
+        overlaps = validate_slots()
+        assert len(overlaps) == 0
+
+        # Test common end time
+        slot5.end_time = start5
+        slot5.save()
+        overlaps = validate_slots()
+        assert len(overlaps) == 2
+        assert slot4 in overlaps
+        assert slot5 in overlaps
+
+        # Test overlap detect with previous slot set
+        slot5.start_time = None
+        slot5.end_time = start5
+        slot5.previous_slot = slot1
+        slot5.save()
+        overlaps = validate_slots()
+        assert len(overlaps) == 3
+        assert slot5 in overlaps
+        assert slot3 in overlaps
+        assert slot4 in overlaps
 
     def test_clashes(self):
         """Test that we can detect clashes correctly"""
