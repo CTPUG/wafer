@@ -64,6 +64,14 @@ class Talk(models.Model):
     get_author_name.admin_order_field = 'corresponding_author'
     get_author_name.short_description = 'Corresponding Author'
 
+    def get_in_schedule(self):
+        if self.scheduleitem_set.all():
+            return True
+        return False
+
+    get_in_schedule.short_description = 'Added to schedule'
+    get_in_schedule.boolean = True
+
     # Helpful properties for the templates
     accepted = property(fget=lambda x: x.status == ACCEPTED)
     pending = property(fget=lambda x: x.status == PENDING)

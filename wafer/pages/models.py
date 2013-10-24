@@ -53,6 +53,14 @@ class Page(models.Model):
         url = "/".join(self.get_path())
         return reverse('wafer_page', args=(url,))
 
+    def get_in_schedule(self):
+        if self.scheduleitem_set.all():
+            return True
+        return False
+
+    get_in_schedule.short_description = 'Added to schedule'
+    get_in_schedule.boolean = True
+
     class Model:
         unique_together = (('parent', 'slug'),)
 
