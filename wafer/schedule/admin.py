@@ -30,6 +30,21 @@ def validate_items():
 def find_duplicate_schedule_items():
     """Find talks / pages assigned to mulitple schedule items"""
     duplicates = []
+    seen_talks = {}
+    seen_pages = {}
+    for item in ScheduleItem.objects.all():
+        if item.talk and item.talk in seen_talks:
+            duplicates.append(item)
+            if seen_talks[item.talk] not in duplicates:
+                duplicates.append(seen_talks[item.talk])
+        else:
+            seen_talks[item.talk] = item
+        if item.page and item.page in seen_pages:
+            duplicates.append(item)
+            if seen_pages[item.page] not in duplicates:
+                duplicates.append(seen_pages[item.page])
+        else:
+            seen_pages[item.page] = item
     return duplicates
 
 
@@ -81,20 +96,9 @@ class ScheduleItemAdmin(admin.ModelAdmin):
         # Same talk scheduled in multiple items
         # Same page scheduled in multiple items
         # Two schedule items with the same venue and at least 1 common slot
-        seen_talks = set()
-        seen_pages = set()
-        duplicates = []
-        for item in ScheduleItem.objects.all():
-            if item.talk and item.talk in seen_talks:
-                duplicates.append(item)
-            else:
-                seen_talks.add(item.talk)
-            if item.page and item.page in seen_pages:
-                duplicates.append(item)
-            else:
-                seen_pages.add(item.page)
         clashes = find_clashes()
         validation = validate_items()
+        duplicates = find_duplicate_schedule_items()
         errors = {}
         if clashes:
             errors['clashes'] = clashes
