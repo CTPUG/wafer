@@ -24,6 +24,12 @@ class ScheduleTests(TestCase):
     def test_simple_table(self):
         """Create a simple, single day table with 3 slots and 2 venues and
            check we get the expected results"""
+
+        # Schedule is
+        #         Venue 1     Venue 2
+        # 10-11   Item1       Item4
+        # 11-12   Item2       Item5
+        # 12-13   Item3       Item6
         venue1 = Venue.objects.create(order=1, name='Venue 1')
         venue2 = Venue.objects.create(order=2, name='Venue 2')
 
@@ -87,6 +93,13 @@ class ScheduleTests(TestCase):
     def test_multiple_days(self):
         """Create a multiple day table with 3 slots and 2 venues and
            check we get the expected results"""
+        # Schedule is
+        #         Venue 1     Venue 2
+        # Day1
+        # 10-11   Item1       Item4
+        # 11-12   Item2       Item5
+        # Day2
+        # 12-13   Item3       Item6
         venue1 = Venue.objects.create(order=1, name='Venue 1')
         venue2 = Venue.objects.create(order=2, name='Venue 2')
 
@@ -147,6 +160,13 @@ class ScheduleTests(TestCase):
     def test_col_span(self):
         """Create table with 3 venues and some interesting 
            venue spanning items"""
+        # Schedule is
+        #         Venue 1     Venue 2   Venue3
+        # 10-11   Item1       --        Item5
+        # 11-12   Item2       Item3     Item4
+        # 12-13   --          Item7     Item6
+        # 13-14   Item8       --        --
+        # 14-15   --          Item9     Item10
         venue1 = Venue.objects.create(order=1, name='Venue 1')
         venue2 = Venue.objects.create(order=2, name='Venue 2')
         venue3 = Venue.objects.create(order=3, name='Venue 3')
@@ -249,6 +269,13 @@ class ScheduleTests(TestCase):
 
     def test_row_span(self):
         """Create a day table with multiple slot items"""
+        # Schedule is
+        #         Venue 1     Venue 2
+        # 10-11   Item1       Item5
+        # 11-12     |         Item6
+        # 12-13   Item2       Item7
+        # 13-14   Item3         |
+        # 14-15   Item4         |
         venue1 = Venue.objects.create(order=1, name='Venue 1')
         venue2 = Venue.objects.create(order=2, name='Venue 2')
 
