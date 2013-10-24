@@ -1,6 +1,7 @@
 from django.utils.translation import ugettext_lazy as _
 from django.utils.timezone import get_current_timezone, localtime
 from django.core.urlresolvers import reverse
+from django.core.exceptions import ValidationError
 from django.db import models
 
 from wafer.snippets.markdown_field import MarkdownTextField
@@ -69,6 +70,14 @@ class Slot(models.Model):
         if self.previous_slot:
             return self.previous_slot.end_time
         return self.start_time
+
+    def clean(self):
+        """Ensure we start_time < end_time"""
+        if not self.previous_slot and not self.start_time:
+            raise ValidationError("Slots must have a start time"
+                                  " or previous slot set")
+        if self.get_start_time() >= self.end_time:
+            raise ValidationError("Start time must be before end time")
 
 
 class ScheduleItem(models.Model):
