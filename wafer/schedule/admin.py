@@ -9,17 +9,23 @@ from wafer.pages.models import Page
 # These are functions to simplify testing
 def validate_slots():
     """Find any slots that overlap"""
-    pass
+    overlaps = []
+    return overlaps
 
 
-def validate_talks():
-    """Find pending / rejected talks that are assigned to slots"""
-    pass
+def validate_items():
+    """Find errors in the schedule. Check for:
+         - pending / rejected talks in the schedule
+         - items with both talks and pages assigned
+         """
+    validation = []
+    return validation
 
 
 def find_duplicate_schedule_items():
     """Find talks / pages assigned to mulitple schedule items"""
-    pass
+    duplicates = []
+    return duplicates
 
 
 def find_clashes():

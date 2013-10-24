@@ -3,7 +3,7 @@ from django.utils.timezone import utc
 
 import datetime as D
 from wafer.schedule.models import Venue, Slot, ScheduleItem
-from wafer.schedule.admin import (validate_slots, validate_talks,
+from wafer.schedule.admin import (validate_slots, validate_items,
                                   find_duplicate_schedule_items,
                                   find_clashes)
 
