@@ -47,7 +47,7 @@
              {% endfor %}
           </ul>
           {% endif %}
-          {% if errors.validation %}
+          {% if errors.duplicates %}
           <h3>{% trans "Duplicates in the schedule" %}</h3>
           <ul>
              {% for item in errors.duplicates %}
