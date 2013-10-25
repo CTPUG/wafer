@@ -60,6 +60,7 @@ class ScheduleView(TemplateView):
                 if not days[day] or not found:
                     row = ScheduleRow(slot, venue_list)
                     days[day].append(row)
+                    days[day].sort(key = lambda x: x.slot.end_time)
                     if rowspan == 0:
                         append_row = row
                     rowspan += 1
