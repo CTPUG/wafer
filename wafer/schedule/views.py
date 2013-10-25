@@ -2,6 +2,7 @@ from django.views.generic import DetailView, TemplateView
 from django.conf import settings
 
 from wafer.schedule.models import Venue, ScheduleItem
+from wafer.schedule.admin import check_schedule
 
 
 class ScheduleRow(object):
@@ -29,6 +30,9 @@ class ScheduleView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(ScheduleView, self).get_context_data(**kwargs)
+        # Check if the schedule is valid
+        if not check_schedule():
+            return context
         venue_list = list(Venue.objects.all())
         context['venue_list'] = venue_list
         # We create a list of slots and schedule items

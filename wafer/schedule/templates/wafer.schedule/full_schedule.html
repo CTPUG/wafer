@@ -2,6 +2,12 @@
 {% block content %}
 <h1>{% trans Schedule %}</h1>
 <div class="wafer schedul">
+   {% if not venue_list %}
+   {# Schedule is incomplete / invalid, so show nothing #}
+   {% blocktrans %}
+   <p>The final schedule has not been published yet.</p>
+   {% endblocktrans %}
+   {% else %}
    <table cellspacing=1 cellpadding=0>
       <tr>
          <th>Time</th>
@@ -31,4 +37,5 @@
       {% endfor %}
       {% endfor %}
    </table>
+   {% endif %}
 {% endblock %}

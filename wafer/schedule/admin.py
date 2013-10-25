@@ -85,6 +85,19 @@ def find_clashes():
     return clashes
 
 
+def check_schedule():
+    """Helper routine to eaily test if the schedule is valid"""
+    if find_clashes():
+        return False
+    if find_duplicate_schedule_items():
+        return False
+    if validate_items():
+        return False
+    if validate_slots():
+        return False
+    return True
+
+
 class ScheduleItemAdminForm(forms.ModelForm):
     class Meta:
         model = ScheduleItem
