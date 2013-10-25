@@ -68,3 +68,14 @@ class Talk(models.Model):
     accepted = property(fget=lambda x: x.status == ACCEPTED)
     pending = property(fget=lambda x: x.status == PENDING)
     reject = property(fget=lambda x: x.status == REJECTED)
+
+
+class TalkUrl(models.Model):
+    """An url to stuff relevant to the talk - videos, slides, etc.
+
+       Note that these are explicitly not intended to be exposed to the
+       user, but exist for use by the conference organisers."""
+
+    description =  models.CharField(max_length=256)
+    url = models.URLField()
+    talk = models.ForeignKey(Talk)

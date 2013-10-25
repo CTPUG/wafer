@@ -1,6 +1,9 @@
 from django.contrib import admin
 
-from wafer.talks.models import Talk
+from wafer.talks.models import Talk, TalkUrl
+
+class TalkUrlInline(admin.TabularInline):
+    model = TalkUrl
 
 
 class TalkAdmin(admin.ModelAdmin):
@@ -8,5 +11,10 @@ class TalkAdmin(admin.ModelAdmin):
                     'status')
     list_editable = ('status',)
 
+    inlines = [
+              TalkUrlInline,
+              ]
+
 
 admin.site.register(Talk, TalkAdmin)
+admin.site.register(TalkUrl)
