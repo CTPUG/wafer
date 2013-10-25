@@ -96,6 +96,74 @@ class ScheduleTests(TestCase):
         assert days[thedate][2].get_sorted_items()[1]['rowspan'] == 1
         assert days[thedate][2].get_sorted_items()[1]['colspan'] == 1
 
+    def test_ordering(self):
+        """Ensure we handle oddly ordered creation of items correctly"""
+        # Schedule is
+        #         Venue 1     Venue 2
+        # 10-11   Item3       Item6
+        # 11-12   Item2       Item5
+        # 12-13   Item1       Item4
+        venue1 = Venue.objects.create(order=1, name='Venue 1')
+        venue2 = Venue.objects.create(order=2, name='Venue 2')
+
+        start1 = D.datetime(2013, 9, 22, 10, 0, 0, tzinfo=utc)
+        start2 = D.datetime(2013, 9, 22, 11, 0, 0, tzinfo=utc)
+        start3 = D.datetime(2013, 9, 22, 12, 0, 0, tzinfo=utc)
+        end = D.datetime(2013, 9, 22, 13, 0, 0, tzinfo=utc)
+
+        slot1 = Slot.objects.create(start_time=start1, end_time=start2)
+        slot2 = Slot.objects.create(previous_slot=slot1, end_time=start3)
+        slot3 = Slot.objects.create(previous_slot=slot2, end_time=end)
+        item1 = ScheduleItem.objects.create(venue=venue1, details="Item 1")
+        item2 = ScheduleItem.objects.create(venue=venue1, details="Item 2")
+        item3 = ScheduleItem.objects.create(venue=venue1, details="Item 3")
+        item4 = ScheduleItem.objects.create(venue=venue2, details="Item 4")
+        item5 = ScheduleItem.objects.create(venue=venue2, details="Item 5")
+        item6 = ScheduleItem.objects.create(venue=venue2, details="Item 6")
+        item1.slots.add(slot3)
+        item4.slots.add(slot3)
+        item2.slots.add(slot2)
+        item5.slots.add(slot2)
+        item3.slots.add(slot1)
+        item6.slots.add(slot1)
+
+        c = Client()
+        response = c.get('/schedule/')
+
+        days = response.context['table_days']
+
+        thedate = start1.date()
+
+        assert thedate in days
+        assert len(days[thedate]) == 3
+        assert days[thedate][0].slot.get_start_time() == start1
+        assert days[thedate][0].slot.end_time == start2
+        assert days[thedate][1].slot.get_start_time() == start2
+        assert days[thedate][1].slot.end_time == start3
+        assert days[thedate][2].slot.get_start_time() == start3
+        assert days[thedate][2].slot.end_time == end
+
+        assert len(days[thedate][0].items) == 2
+        assert len(days[thedate][1].items) == 2
+        assert len(days[thedate][2].items) == 2
+
+        assert days[thedate][0].get_sorted_items()[0]['item'] == item3
+        assert days[thedate][0].get_sorted_items()[0]['rowspan'] == 1
+        assert days[thedate][0].get_sorted_items()[0]['colspan'] == 1
+
+        assert days[thedate][0].get_sorted_items()[1]['item'] == item6
+        assert days[thedate][0].get_sorted_items()[1]['rowspan'] == 1
+        assert days[thedate][0].get_sorted_items()[1]['colspan'] == 1
+
+        assert days[thedate][1].get_sorted_items()[0]['item'] == item2
+        assert days[thedate][1].get_sorted_items()[0]['rowspan'] == 1
+        assert days[thedate][1].get_sorted_items()[0]['colspan'] == 1
+
+        assert days[thedate][2].get_sorted_items()[1]['item'] == item4
+        assert days[thedate][2].get_sorted_items()[1]['rowspan'] == 1
+        assert days[thedate][2].get_sorted_items()[1]['colspan'] == 1
+
+
     def test_multiple_days(self):
         """Create a multiple day table with 3 slots and 2 venues and
            check we get the expected results"""
