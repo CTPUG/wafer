@@ -87,6 +87,8 @@ class ScheduleView(TemplateView):
                         cur_item['colspan'] = colspan
                 cur_item['colspan'] = colspan
 
-        context['table_days'] = days
+        # We turn the dict into a list here so we have the correct
+        # ordering
+        context['table_days'] = sorted(days.items())
 
         return context

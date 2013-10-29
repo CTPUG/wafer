@@ -63,7 +63,7 @@ class ScheduleTests(TestCase):
         c = Client()
         response = c.get('/schedule/')
 
-        days = response.context['table_days']
+        days = dict(response.context['table_days'])
 
         thedate = start1.date()
 
@@ -130,7 +130,7 @@ class ScheduleTests(TestCase):
         c = Client()
         response = c.get('/schedule/')
 
-        days = response.context['table_days']
+        days = dict(response.context['table_days'])
 
         thedate = start1.date()
 
@@ -203,7 +203,7 @@ class ScheduleTests(TestCase):
         c = Client()
         response = c.get('/schedule/')
 
-        days = response.context['table_days']
+        days = dict(response.context['table_days'])
 
         date1 = start1.date()
         date2 = start3.date()
@@ -283,7 +283,7 @@ class ScheduleTests(TestCase):
         c = Client()
         response = c.get('/schedule/')
 
-        days = response.context['table_days']
+        days = dict(response.context['table_days'])
 
         thedate = start1.date()
 
@@ -387,7 +387,7 @@ class ScheduleTests(TestCase):
         c = Client()
         response = c.get('/schedule/')
 
-        days = response.context['table_days']
+        days = dict(response.context['table_days'])
 
         thedate = start1.date()
 

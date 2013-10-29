@@ -16,7 +16,7 @@
       {% endfor %}
       </tr>
       {# We assume that the admin has created a valid timetable #}
-      {% for day, table_rows in table_days.iteritems %}
+      {% for day, table_rows in table_days %}
       <tr>
          <td colspan="{{ venue_list|length|add:1 }}" class="title">{{ day|date:"l (d b)" }}</td>
       </tr>
