@@ -12,6 +12,15 @@ PENDING = 'P'
 REJECTED = 'R'
 
 
+class TalkType(models.Model):
+    """A type of talk."""
+    name = models.CharField(max_length=255)
+    description = models.TextField(max_length=1024)
+
+    def __unicode__(self):
+        return u'%s' % (self.name,)
+
+
 class Talk(models.Model):
 
     TALK_STATUS = (
@@ -21,6 +30,7 @@ class Talk(models.Model):
     )
 
     talk_id = models.AutoField(primary_key=True)
+    talk_type = models.ForeignKey(TalkType, null=True)
 
     title = models.CharField(max_length=1024)
 
