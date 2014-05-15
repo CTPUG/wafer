@@ -19,7 +19,7 @@
     </p>
     <p>
     Type:
-    {% object.talk_type.name|default:'Talk' %}
+    {{ object.talk_type.name|default:'Talk' }}
     </p>
 </div>
 {% if user.is_staff %}
