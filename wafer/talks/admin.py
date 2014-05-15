@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from wafer.talks.models import Talk, TalkUrl
+from wafer.talks.models import TalkType, Talk, TalkUrl
 
 class TalkUrlInline(admin.TabularInline):
     model = TalkUrl
@@ -17,4 +17,5 @@ class TalkAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Talk, TalkAdmin)
+admin.site.register(TalkType)
 admin.site.register(TalkUrl)
