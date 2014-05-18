@@ -28,7 +28,7 @@ class TalkForm(forms.ModelForm):
 
     class Meta:
         model = Talk
-        fields = ('title', 'abstract', 'authors', 'notes')
+        fields = ('title', 'talk_type', 'abstract', 'authors', 'notes')
         widgets = {
             'abstract': MarkItUpWidget(),
             'notes': forms.Textarea(attrs={'class': 'input-xxlarge'}),

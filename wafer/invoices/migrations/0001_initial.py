@@ -7,6 +7,10 @@ from django.db import models
 
 class Migration(SchemaMigration):
 
+    depends_on = (
+        ("conf_registration", "0001_initial"),
+    )
+
     def forwards(self, orm):
         # Adding model 'InvoiceTemplate'
         db.create_table(u'invoices_invoicetemplate', (
