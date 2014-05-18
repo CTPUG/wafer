@@ -6,7 +6,7 @@ from wafer.schedule.admin import check_schedule
 
 
 class ScheduleRow(object):
-    """This is a helpfule containter for the schedule view to keep sanity"""
+    """This is a helpful containter for the schedule view to keep sanity"""
     def __init__(self, slot, venue_list):
         self.slot = slot
         self.venue_list = venue_list
