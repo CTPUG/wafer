@@ -450,9 +450,7 @@ class ValidationTests(TestCase):
         slot2 = Slot.objects.create(start_time=start1, end_time=end)
 
         overlaps = find_overlapping_slots()
-        assert len(overlaps) == 2
-        assert slot1 in overlaps
-        assert slot2 in overlaps
+        assert overlaps == set([slot1, slot2])
 
         slot2.start_time = start5
         slot2.save()
@@ -463,9 +461,7 @@ class ValidationTests(TestCase):
         slot5 = Slot.objects.create(start_time=start35, end_time=start45)
 
         overlaps = find_overlapping_slots()
-        assert len(overlaps) == 2
-        assert slot4 in overlaps
-        assert slot5 in overlaps
+        assert overlaps == set([slot4, slot5])
 
         # Test no overlap
         slot5.start_time = start3
@@ -478,9 +474,7 @@ class ValidationTests(TestCase):
         slot5.end_time = start5
         slot5.save()
         overlaps = find_overlapping_slots()
-        assert len(overlaps) == 2
-        assert slot4 in overlaps
-        assert slot5 in overlaps
+        assert overlaps == set([slot4, slot5])
 
         # Test overlap detect with previous slot set
         slot5.start_time = None
@@ -488,10 +482,7 @@ class ValidationTests(TestCase):
         slot5.previous_slot = slot1
         slot5.save()
         overlaps = find_overlapping_slots()
-        assert len(overlaps) == 3
-        assert slot5 in overlaps
-        assert slot3 in overlaps
-        assert slot4 in overlaps
+        assert overlaps == set([slot3, slot4, slot5])
 
     def test_clashes(self):
         """Test that we can detect clashes correctly"""
@@ -568,8 +559,7 @@ class ValidationTests(TestCase):
         item1.slots.add(slot1)
 
         invalid = validate_items()
-        assert len(invalid) == 1
-        assert item1 in invalid
+        assert set(invalid) == set([item1])
 
         item2 = ScheduleItem.objects.create(venue=venue1,
                                             talk_id=talk.pk)
@@ -579,20 +569,17 @@ class ValidationTests(TestCase):
         talk.status = REJECTED
         talk.save()
         invalid = validate_items()
-        assert len(invalid) == 2
-        assert item2 in invalid
+        assert set(invalid) == set([item1, item2])
 
         talk.status = PENDING
         talk.save()
         invalid = validate_items()
-        assert len(invalid) == 2
-        assert item2 in invalid
+        assert set(invalid) == set([item1, item2])
 
         talk.status = ACCEPTED
         talk.save()
         invalid = validate_items()
-        assert len(invalid) == 1
-        assert item2 not in invalid
+        assert set(invalid) == set([item1])
 
     def test_duplicates(self):
         """Test that we can detect duplicates talks and pages"""
@@ -625,9 +612,7 @@ class ValidationTests(TestCase):
         item2.slots.add(slot2)
 
         duplicates = find_duplicate_schedule_items()
-        assert len(duplicates) == 2
-        assert item1 in duplicates
-        assert item2 in duplicates
+        assert set(duplicates) == set([item1, item2])
 
         item3 = ScheduleItem.objects.create(venue=venue2,
                                             page_id=page1.pk)
@@ -637,14 +622,10 @@ class ValidationTests(TestCase):
         item4.slots.add(slot2)
 
         duplicates = find_duplicate_schedule_items()
-        assert len(duplicates) == 4
-        assert item3 in duplicates
-        assert item4 in duplicates
+        assert set(duplicates) == set([item1, item2, item3, item4])
 
         item4.page_id = page2.pk
         item4.save()
 
         duplicates = find_duplicate_schedule_items()
-        assert len(duplicates) == 2
-        assert item3 not in duplicates
-        assert item4 not in duplicates
+        assert set(duplicates) == set([item1, item2])
