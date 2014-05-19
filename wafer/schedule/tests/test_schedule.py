@@ -6,7 +6,7 @@ import datetime as D
 from wafer.talks.models import Talk, ACCEPTED, REJECTED, PENDING
 from wafer.pages.models import Page
 from wafer.schedule.models import Venue, Slot, ScheduleItem
-from wafer.schedule.admin import (validate_slots, validate_items,
+from wafer.schedule.admin import (find_overlapping_slots, validate_items,
                                   find_duplicate_schedule_items,
                                   find_clashes)
 
@@ -449,7 +449,7 @@ class ValidationTests(TestCase):
         slot1 = Slot.objects.create(start_time=start1, end_time=start2)
         slot2 = Slot.objects.create(start_time=start1, end_time=end)
 
-        overlaps = validate_slots()
+        overlaps = find_overlapping_slots()
         assert len(overlaps) == 2
         assert slot1 in overlaps
         assert slot2 in overlaps
@@ -462,7 +462,7 @@ class ValidationTests(TestCase):
         slot4 = Slot.objects.create(start_time=start4, end_time=start5)
         slot5 = Slot.objects.create(start_time=start35, end_time=start45)
 
-        overlaps = validate_slots()
+        overlaps = find_overlapping_slots()
         assert len(overlaps) == 2
         assert slot4 in overlaps
         assert slot5 in overlaps
@@ -471,13 +471,13 @@ class ValidationTests(TestCase):
         slot5.start_time = start3
         slot5.end_time = start4
         slot5.save()
-        overlaps = validate_slots()
+        overlaps = find_overlapping_slots()
         assert len(overlaps) == 0
 
         # Test common end time
         slot5.end_time = start5
         slot5.save()
-        overlaps = validate_slots()
+        overlaps = find_overlapping_slots()
         assert len(overlaps) == 2
         assert slot4 in overlaps
         assert slot5 in overlaps
@@ -487,7 +487,7 @@ class ValidationTests(TestCase):
         slot5.end_time = start5
         slot5.previous_slot = slot1
         slot5.save()
-        overlaps = validate_slots()
+        overlaps = find_overlapping_slots()
         assert len(overlaps) == 3
         assert slot5 in overlaps
         assert slot3 in overlaps

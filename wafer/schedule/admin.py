@@ -7,7 +7,7 @@ from wafer.pages.models import Page
 
 
 # These are functions to simplify testing
-def validate_slots():
+def find_overlapping_slots():
     """Find any slots that overlap"""
     overlaps = set([])
     for slot in Slot.objects.all():
@@ -93,7 +93,7 @@ def check_schedule():
         return False
     if validate_items():
         return False
-    if validate_slots():
+    if find_overlapping_slots():
         return False
     return True
 
@@ -158,7 +158,7 @@ class SlotAdmin(admin.ModelAdmin):
         extra_context = extra_context or {}
         # Find issues with the slots
         errors = {}
-        overlaps = validate_slots()
+        overlaps = find_overlapping_slots()
         if overlaps:
             errors['overlaps'] = overlaps
         extra_context['errors'] = errors
