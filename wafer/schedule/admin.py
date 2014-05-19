@@ -38,10 +38,13 @@ def validate_items():
     """Find errors in the schedule. Check for:
          - pending / rejected talks in the schedule
          - items with both talks and pages assigned
+         - items with neither talks nor pages assigned
          """
     validation = []
     for item in ScheduleItem.objects.all():
         if item.talk is not None and item.page is not None:
+            validation.append(item)
+        elif item.talk is None and item.page is None:
             validation.append(item)
         elif item.talk and item.talk.status != ACCEPTED:
             validation.append(item)

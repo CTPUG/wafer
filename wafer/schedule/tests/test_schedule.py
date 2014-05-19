@@ -44,15 +44,28 @@ class ScheduleTests(TestCase):
         start3 = D.datetime(2013, 9, 22, 12, 0, 0, tzinfo=utc)
         end = D.datetime(2013, 9, 22, 13, 0, 0, tzinfo=utc)
 
+        page1 = Page.objects.create(name="test page", slug="test")
+        page2 = Page.objects.create(name="test page 2", slug="test2")
+        page3 = Page.objects.create(name="test page 3", slug="test3")
+        page4 = Page.objects.create(name="test page 4", slug="test4")
+        page5 = Page.objects.create(name="test page 5", slug="test5")
+        page6 = Page.objects.create(name="test page 6", slug="test6")
+
         slot1 = Slot.objects.create(start_time=start1, end_time=start2)
         slot2 = Slot.objects.create(previous_slot=slot1, end_time=start3)
         slot3 = Slot.objects.create(previous_slot=slot2, end_time=end)
-        item1 = ScheduleItem.objects.create(venue=venue1, details="Item 1")
-        item2 = ScheduleItem.objects.create(venue=venue1, details="Item 2")
-        item3 = ScheduleItem.objects.create(venue=venue1, details="Item 3")
-        item4 = ScheduleItem.objects.create(venue=venue2, details="Item 4")
-        item5 = ScheduleItem.objects.create(venue=venue2, details="Item 5")
-        item6 = ScheduleItem.objects.create(venue=venue2, details="Item 6")
+        item1 = ScheduleItem.objects.create(venue=venue1, details="Item 1",
+                                            page_id=page1.pk)
+        item2 = ScheduleItem.objects.create(venue=venue1, details="Item 2",
+                                            page_id=page2.pk)
+        item3 = ScheduleItem.objects.create(venue=venue1, details="Item 3",
+                                            page_id=page3.pk)
+        item4 = ScheduleItem.objects.create(venue=venue2, details="Item 4",
+                                            page_id=page4.pk)
+        item5 = ScheduleItem.objects.create(venue=venue2, details="Item 5",
+                                            page_id=page5.pk)
+        item6 = ScheduleItem.objects.create(venue=venue2, details="Item 6",
+                                            page_id=page6.pk)
         item1.slots.add(slot1)
         item4.slots.add(slot1)
         item2.slots.add(slot2)
@@ -111,15 +124,28 @@ class ScheduleTests(TestCase):
         start3 = D.datetime(2013, 9, 22, 12, 0, 0, tzinfo=utc)
         end = D.datetime(2013, 9, 22, 13, 0, 0, tzinfo=utc)
 
+        page1 = Page.objects.create(name="test page", slug="test")
+        page2 = Page.objects.create(name="test page 2", slug="test2")
+        page3 = Page.objects.create(name="test page 3", slug="test3")
+        page4 = Page.objects.create(name="test page 4", slug="test4")
+        page5 = Page.objects.create(name="test page 5", slug="test5")
+        page6 = Page.objects.create(name="test page 6", slug="test6")
+
         slot1 = Slot.objects.create(start_time=start1, end_time=start2)
         slot2 = Slot.objects.create(previous_slot=slot1, end_time=start3)
         slot3 = Slot.objects.create(previous_slot=slot2, end_time=end)
-        item1 = ScheduleItem.objects.create(venue=venue1, details="Item 1")
-        item2 = ScheduleItem.objects.create(venue=venue1, details="Item 2")
-        item3 = ScheduleItem.objects.create(venue=venue1, details="Item 3")
-        item4 = ScheduleItem.objects.create(venue=venue2, details="Item 4")
-        item5 = ScheduleItem.objects.create(venue=venue2, details="Item 5")
-        item6 = ScheduleItem.objects.create(venue=venue2, details="Item 6")
+        item1 = ScheduleItem.objects.create(venue=venue1, details="Item 1",
+                                            page_id=page1.pk)
+        item2 = ScheduleItem.objects.create(venue=venue1, details="Item 2",
+                                            page_id=page2.pk)
+        item3 = ScheduleItem.objects.create(venue=venue1, details="Item 3",
+                                            page_id=page3.pk)
+        item4 = ScheduleItem.objects.create(venue=venue2, details="Item 4",
+                                            page_id=page4.pk)
+        item5 = ScheduleItem.objects.create(venue=venue2, details="Item 5",
+                                            page_id=page5.pk)
+        item6 = ScheduleItem.objects.create(venue=venue2, details="Item 6",
+                                            page_id=page6.pk)
         item1.slots.add(slot3)
         item4.slots.add(slot3)
         item2.slots.add(slot2)
@@ -184,15 +210,28 @@ class ScheduleTests(TestCase):
         start3 = D.datetime(2013, 9, 23, 12, 0, 0, tzinfo=utc)
         end2 = D.datetime(2013, 9, 23, 13, 0, 0, tzinfo=utc)
 
+        page1 = Page.objects.create(name="test page", slug="test")
+        page2 = Page.objects.create(name="test page 2", slug="test2")
+        page3 = Page.objects.create(name="test page 3", slug="test3")
+        page4 = Page.objects.create(name="test page 4", slug="test4")
+        page5 = Page.objects.create(name="test page 5", slug="test5")
+        page6 = Page.objects.create(name="test page 6", slug="test6")
+
         slot1 = Slot.objects.create(start_time=start1, end_time=start2)
         slot2 = Slot.objects.create(start_time=start2, end_time=end1)
         slot3 = Slot.objects.create(start_time=start3, end_time=end2)
-        item1 = ScheduleItem.objects.create(venue=venue1, details="Item 1")
-        item2 = ScheduleItem.objects.create(venue=venue1, details="Item 2")
-        item3 = ScheduleItem.objects.create(venue=venue1, details="Item 3")
-        item4 = ScheduleItem.objects.create(venue=venue2, details="Item 4")
-        item5 = ScheduleItem.objects.create(venue=venue2, details="Item 5")
-        item6 = ScheduleItem.objects.create(venue=venue2, details="Item 6")
+        item1 = ScheduleItem.objects.create(venue=venue1, details="Item 1",
+                                            page_id=page1.pk)
+        item2 = ScheduleItem.objects.create(venue=venue1, details="Item 2",
+                                            page_id=page2.pk)
+        item3 = ScheduleItem.objects.create(venue=venue1, details="Item 3",
+                                            page_id=page3.pk)
+        item4 = ScheduleItem.objects.create(venue=venue2, details="Item 4",
+                                            page_id=page4.pk)
+        item5 = ScheduleItem.objects.create(venue=venue2, details="Item 5",
+                                            page_id=page5.pk)
+        item6 = ScheduleItem.objects.create(venue=venue2, details="Item 6",
+                                            page_id=page6.pk)
         item1.slots.add(slot1)
         item4.slots.add(slot1)
         item2.slots.add(slot2)
@@ -258,16 +297,37 @@ class ScheduleTests(TestCase):
         slot4 = Slot.objects.create(start_time=start4, end_time=start5)
         slot5 = Slot.objects.create(start_time=start5, end_time=end)
 
-        item1 = ScheduleItem.objects.create(venue=venue1, details="Item 1")
-        item2 = ScheduleItem.objects.create(venue=venue1, details="Item 2")
-        item3 = ScheduleItem.objects.create(venue=venue2, details="Item 3")
-        item4 = ScheduleItem.objects.create(venue=venue3, details="Item 4")
-        item5 = ScheduleItem.objects.create(venue=venue3, details="Item 5")
-        item6 = ScheduleItem.objects.create(venue=venue3, details="Item 6")
-        item7 = ScheduleItem.objects.create(venue=venue2, details="Item 7")
-        item8 = ScheduleItem.objects.create(venue=venue1, details="Item 8")
-        item9 = ScheduleItem.objects.create(venue=venue2, details="Item 9")
-        item10 = ScheduleItem.objects.create(venue=venue3, details="Item 10")
+        page1 = Page.objects.create(name="test page", slug="test")
+        page2 = Page.objects.create(name="test page 2", slug="test2")
+        page3 = Page.objects.create(name="test page 3", slug="test3")
+        page4 = Page.objects.create(name="test page 4", slug="test4")
+        page5 = Page.objects.create(name="test page 5", slug="test5")
+        page6 = Page.objects.create(name="test page 6", slug="test6")
+        page7 = Page.objects.create(name="test page 6", slug="test7")
+        page8 = Page.objects.create(name="test page 6", slug="test8")
+        page9 = Page.objects.create(name="test page 6", slug="test9")
+        page10 = Page.objects.create(name="test page 6", slug="test10")
+
+        item1 = ScheduleItem.objects.create(venue=venue1, details="Item 1",
+                                            page_id=page1.pk)
+        item2 = ScheduleItem.objects.create(venue=venue1, details="Item 2",
+                                            page_id=page2.pk)
+        item3 = ScheduleItem.objects.create(venue=venue2, details="Item 3",
+                                            page_id=page3.pk)
+        item4 = ScheduleItem.objects.create(venue=venue3, details="Item 4",
+                                            page_id=page4.pk)
+        item5 = ScheduleItem.objects.create(venue=venue3, details="Item 5",
+                                            page_id=page5.pk)
+        item6 = ScheduleItem.objects.create(venue=venue3, details="Item 6",
+                                            page_id=page6.pk)
+        item7 = ScheduleItem.objects.create(venue=venue2, details="Item 7",
+                                            page_id=page7.pk)
+        item8 = ScheduleItem.objects.create(venue=venue1, details="Item 8",
+                                            page_id=page8.pk)
+        item9 = ScheduleItem.objects.create(venue=venue2, details="Item 9",
+                                            page_id=page9.pk)
+        item10 = ScheduleItem.objects.create(venue=venue3, details="Item 10",
+                                             page_id=page10.pk)
 
         item1.slots.add(slot1)
         item5.slots.add(slot1)
@@ -366,13 +426,28 @@ class ScheduleTests(TestCase):
         slot4 = Slot.objects.create(start_time=start4, end_time=start5)
         slot5 = Slot.objects.create(start_time=start5, end_time=end)
 
-        item1 = ScheduleItem.objects.create(venue=venue1, details="Item 1")
-        item2 = ScheduleItem.objects.create(venue=venue1, details="Item 2")
-        item3 = ScheduleItem.objects.create(venue=venue1, details="Item 3")
-        item4 = ScheduleItem.objects.create(venue=venue1, details="Item 4")
-        item5 = ScheduleItem.objects.create(venue=venue2, details="Item 5")
-        item6 = ScheduleItem.objects.create(venue=venue2, details="Item 6")
-        item7 = ScheduleItem.objects.create(venue=venue2, details="Item 7")
+        page1 = Page.objects.create(name="test page", slug="test")
+        page2 = Page.objects.create(name="test page 2", slug="test2")
+        page3 = Page.objects.create(name="test page 3", slug="test3")
+        page4 = Page.objects.create(name="test page 4", slug="test4")
+        page5 = Page.objects.create(name="test page 5", slug="test5")
+        page6 = Page.objects.create(name="test page 6", slug="test6")
+        page7 = Page.objects.create(name="test page 7", slug="test7")
+
+        item1 = ScheduleItem.objects.create(venue=venue1, details="Item 1",
+                                            page_id=page1.pk)
+        item2 = ScheduleItem.objects.create(venue=venue1, details="Item 2",
+                                            page_id=page2.pk)
+        item3 = ScheduleItem.objects.create(venue=venue1, details="Item 3",
+                                            page_id=page3.pk)
+        item4 = ScheduleItem.objects.create(venue=venue1, details="Item 4",
+                                            page_id=page4.pk)
+        item5 = ScheduleItem.objects.create(venue=venue2, details="Item 5",
+                                            page_id=page5.pk)
+        item6 = ScheduleItem.objects.create(venue=venue2, details="Item 6",
+                                            page_id=page6.pk)
+        item7 = ScheduleItem.objects.create(venue=venue2, details="Item 7",
+                                            page_id=page7.pk)
         item1.slots.add(slot1)
         item1.slots.add(slot2)
         item5.slots.add(slot1)
@@ -580,6 +655,13 @@ class ValidationTests(TestCase):
         talk.save()
         invalid = validate_items()
         assert set(invalid) == set([item1])
+
+        item3 = ScheduleItem.objects.create(venue=venue1,
+                                            talk_id=None, page_id=None)
+        item3.slots.add(slot2)
+
+        invalid = validate_items()
+        assert set(invalid) == set([item1, item3])
 
     def test_duplicates(self):
         """Test that we can detect duplicates talks and pages"""
