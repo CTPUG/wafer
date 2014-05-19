@@ -105,10 +105,8 @@ class ScheduleItemAdminForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(ScheduleItemAdminForm, self).__init__(*args, **kwargs)
         self.fields['talk'].queryset = Talk.objects.filter(status=ACCEPTED)
-        # We assume items not in the menu aren't intended for the schedule
-        # either - Is this the best assumption?
-        self.fields['page'].queryset = Page.objects.filter(
-            include_in_menu=True)
+        # Present all pages as possible entries in the schedule
+        self.fields['page'].queryset = Page.objects.all()
 
 
 class ScheduleItemAdmin(admin.ModelAdmin):
