@@ -13,6 +13,25 @@ from wafer.schedule.admin import (find_overlapping_slots, validate_items,
 
 class ScheduleTests(TestCase):
 
+    def _make_pages(self, n):
+        # Utility function
+        pages = []
+        for x in range(n):
+            page = Page.objects.create(name="test page %s" % x,
+                                       slug="test%s" % x)
+            pages.append(page)
+        return pages
+
+    def _make_items(self, venues, pages):
+        # Utility function
+        items = []
+        for x, (venue, page) in enumerate(zip(venues, pages)):
+            item = ScheduleItem.objects.create(venue=venue,
+                                               details="Item %s" % x,
+                                               page_id=page.pk)
+            items.append(item)
+        return items
+
     def test_venue_list(self):
         """Create venues and check that we get the expected list back"""
         Venue.objects.create(order=2, name='Venue 2')
@@ -44,34 +63,20 @@ class ScheduleTests(TestCase):
         start3 = D.datetime(2013, 9, 22, 12, 0, 0, tzinfo=utc)
         end = D.datetime(2013, 9, 22, 13, 0, 0, tzinfo=utc)
 
-        page1 = Page.objects.create(name="test page", slug="test")
-        page2 = Page.objects.create(name="test page 2", slug="test2")
-        page3 = Page.objects.create(name="test page 3", slug="test3")
-        page4 = Page.objects.create(name="test page 4", slug="test4")
-        page5 = Page.objects.create(name="test page 5", slug="test5")
-        page6 = Page.objects.create(name="test page 6", slug="test6")
+        pages = self._make_pages(6)
+        venues = [venue1, venue1, venue1, venue2, venue2, venue2]
+        items = self._make_items(venues, pages)
 
         slot1 = Slot.objects.create(start_time=start1, end_time=start2)
         slot2 = Slot.objects.create(previous_slot=slot1, end_time=start3)
         slot3 = Slot.objects.create(previous_slot=slot2, end_time=end)
-        item1 = ScheduleItem.objects.create(venue=venue1, details="Item 1",
-                                            page_id=page1.pk)
-        item2 = ScheduleItem.objects.create(venue=venue1, details="Item 2",
-                                            page_id=page2.pk)
-        item3 = ScheduleItem.objects.create(venue=venue1, details="Item 3",
-                                            page_id=page3.pk)
-        item4 = ScheduleItem.objects.create(venue=venue2, details="Item 4",
-                                            page_id=page4.pk)
-        item5 = ScheduleItem.objects.create(venue=venue2, details="Item 5",
-                                            page_id=page5.pk)
-        item6 = ScheduleItem.objects.create(venue=venue2, details="Item 6",
-                                            page_id=page6.pk)
-        item1.slots.add(slot1)
-        item4.slots.add(slot1)
-        item2.slots.add(slot2)
-        item5.slots.add(slot2)
-        item3.slots.add(slot3)
-        item6.slots.add(slot3)
+
+        items[0].slots.add(slot1)
+        items[3].slots.add(slot1)
+        items[1].slots.add(slot2)
+        items[4].slots.add(slot2)
+        items[2].slots.add(slot3)
+        items[5].slots.add(slot3)
 
         c = Client()
         response = c.get('/schedule/')
@@ -93,19 +98,19 @@ class ScheduleTests(TestCase):
         assert len(days[thedate][1].items) == 2
         assert len(days[thedate][2].items) == 2
 
-        assert days[thedate][0].get_sorted_items()[0]['item'] == item1
+        assert days[thedate][0].get_sorted_items()[0]['item'] == items[0]
         assert days[thedate][0].get_sorted_items()[0]['rowspan'] == 1
         assert days[thedate][0].get_sorted_items()[0]['colspan'] == 1
 
-        assert days[thedate][0].get_sorted_items()[1]['item'] == item4
+        assert days[thedate][0].get_sorted_items()[1]['item'] == items[3]
         assert days[thedate][0].get_sorted_items()[1]['rowspan'] == 1
         assert days[thedate][0].get_sorted_items()[1]['colspan'] == 1
 
-        assert days[thedate][1].get_sorted_items()[0]['item'] == item2
+        assert days[thedate][1].get_sorted_items()[0]['item'] == items[1]
         assert days[thedate][1].get_sorted_items()[0]['rowspan'] == 1
         assert days[thedate][1].get_sorted_items()[0]['colspan'] == 1
 
-        assert days[thedate][2].get_sorted_items()[1]['item'] == item6
+        assert days[thedate][2].get_sorted_items()[1]['item'] == items[5]
         assert days[thedate][2].get_sorted_items()[1]['rowspan'] == 1
         assert days[thedate][2].get_sorted_items()[1]['colspan'] == 1
 
@@ -124,34 +129,20 @@ class ScheduleTests(TestCase):
         start3 = D.datetime(2013, 9, 22, 12, 0, 0, tzinfo=utc)
         end = D.datetime(2013, 9, 22, 13, 0, 0, tzinfo=utc)
 
-        page1 = Page.objects.create(name="test page", slug="test")
-        page2 = Page.objects.create(name="test page 2", slug="test2")
-        page3 = Page.objects.create(name="test page 3", slug="test3")
-        page4 = Page.objects.create(name="test page 4", slug="test4")
-        page5 = Page.objects.create(name="test page 5", slug="test5")
-        page6 = Page.objects.create(name="test page 6", slug="test6")
+        pages = self._make_pages(6)
+        venues = [venue1, venue1, venue1, venue2, venue2, venue2]
+        items = self._make_items(venues, pages)
 
         slot1 = Slot.objects.create(start_time=start1, end_time=start2)
         slot2 = Slot.objects.create(previous_slot=slot1, end_time=start3)
         slot3 = Slot.objects.create(previous_slot=slot2, end_time=end)
-        item1 = ScheduleItem.objects.create(venue=venue1, details="Item 1",
-                                            page_id=page1.pk)
-        item2 = ScheduleItem.objects.create(venue=venue1, details="Item 2",
-                                            page_id=page2.pk)
-        item3 = ScheduleItem.objects.create(venue=venue1, details="Item 3",
-                                            page_id=page3.pk)
-        item4 = ScheduleItem.objects.create(venue=venue2, details="Item 4",
-                                            page_id=page4.pk)
-        item5 = ScheduleItem.objects.create(venue=venue2, details="Item 5",
-                                            page_id=page5.pk)
-        item6 = ScheduleItem.objects.create(venue=venue2, details="Item 6",
-                                            page_id=page6.pk)
-        item1.slots.add(slot3)
-        item4.slots.add(slot3)
-        item2.slots.add(slot2)
-        item5.slots.add(slot2)
-        item3.slots.add(slot1)
-        item6.slots.add(slot1)
+
+        items[0].slots.add(slot3)
+        items[3].slots.add(slot3)
+        items[1].slots.add(slot2)
+        items[4].slots.add(slot2)
+        items[2].slots.add(slot1)
+        items[5].slots.add(slot1)
 
         c = Client()
         response = c.get('/schedule/')
@@ -173,19 +164,19 @@ class ScheduleTests(TestCase):
         assert len(days[thedate][1].items) == 2
         assert len(days[thedate][2].items) == 2
 
-        assert days[thedate][0].get_sorted_items()[0]['item'] == item3
+        assert days[thedate][0].get_sorted_items()[0]['item'] == items[2]
         assert days[thedate][0].get_sorted_items()[0]['rowspan'] == 1
         assert days[thedate][0].get_sorted_items()[0]['colspan'] == 1
 
-        assert days[thedate][0].get_sorted_items()[1]['item'] == item6
+        assert days[thedate][0].get_sorted_items()[1]['item'] == items[5]
         assert days[thedate][0].get_sorted_items()[1]['rowspan'] == 1
         assert days[thedate][0].get_sorted_items()[1]['colspan'] == 1
 
-        assert days[thedate][1].get_sorted_items()[0]['item'] == item2
+        assert days[thedate][1].get_sorted_items()[0]['item'] == items[1]
         assert days[thedate][1].get_sorted_items()[0]['rowspan'] == 1
         assert days[thedate][1].get_sorted_items()[0]['colspan'] == 1
 
-        assert days[thedate][2].get_sorted_items()[1]['item'] == item4
+        assert days[thedate][2].get_sorted_items()[1]['item'] == items[3]
         assert days[thedate][2].get_sorted_items()[1]['rowspan'] == 1
         assert days[thedate][2].get_sorted_items()[1]['colspan'] == 1
 
@@ -210,34 +201,20 @@ class ScheduleTests(TestCase):
         start3 = D.datetime(2013, 9, 23, 12, 0, 0, tzinfo=utc)
         end2 = D.datetime(2013, 9, 23, 13, 0, 0, tzinfo=utc)
 
-        page1 = Page.objects.create(name="test page", slug="test")
-        page2 = Page.objects.create(name="test page 2", slug="test2")
-        page3 = Page.objects.create(name="test page 3", slug="test3")
-        page4 = Page.objects.create(name="test page 4", slug="test4")
-        page5 = Page.objects.create(name="test page 5", slug="test5")
-        page6 = Page.objects.create(name="test page 6", slug="test6")
+        pages = self._make_pages(6)
+        venues = [venue1, venue1, venue1, venue2, venue2, venue2]
+        items = self._make_items(venues, pages)
 
         slot1 = Slot.objects.create(start_time=start1, end_time=start2)
         slot2 = Slot.objects.create(start_time=start2, end_time=end1)
         slot3 = Slot.objects.create(start_time=start3, end_time=end2)
-        item1 = ScheduleItem.objects.create(venue=venue1, details="Item 1",
-                                            page_id=page1.pk)
-        item2 = ScheduleItem.objects.create(venue=venue1, details="Item 2",
-                                            page_id=page2.pk)
-        item3 = ScheduleItem.objects.create(venue=venue1, details="Item 3",
-                                            page_id=page3.pk)
-        item4 = ScheduleItem.objects.create(venue=venue2, details="Item 4",
-                                            page_id=page4.pk)
-        item5 = ScheduleItem.objects.create(venue=venue2, details="Item 5",
-                                            page_id=page5.pk)
-        item6 = ScheduleItem.objects.create(venue=venue2, details="Item 6",
-                                            page_id=page6.pk)
-        item1.slots.add(slot1)
-        item4.slots.add(slot1)
-        item2.slots.add(slot2)
-        item5.slots.add(slot2)
-        item3.slots.add(slot3)
-        item6.slots.add(slot3)
+
+        items[0].slots.add(slot1)
+        items[3].slots.add(slot1)
+        items[1].slots.add(slot2)
+        items[4].slots.add(slot2)
+        items[2].slots.add(slot3)
+        items[5].slots.add(slot3)
 
         c = Client()
         response = c.get('/schedule/')
@@ -262,11 +239,11 @@ class ScheduleTests(TestCase):
         assert len(days[date1][1].items) == 2
         assert len(days[date2][0].items) == 2
 
-        assert days[date1][0].get_sorted_items()[0]['item'] == item1
+        assert days[date1][0].get_sorted_items()[0]['item'] == items[0]
         assert days[date1][0].get_sorted_items()[0]['rowspan'] == 1
         assert days[date1][0].get_sorted_items()[0]['colspan'] == 1
 
-        assert days[date2][0].get_sorted_items()[1]['item'] == item6
+        assert days[date2][0].get_sorted_items()[1]['item'] == items[5]
         assert days[date2][0].get_sorted_items()[1]['rowspan'] == 1
         assert days[date2][0].get_sorted_items()[1]['colspan'] == 1
 
@@ -297,48 +274,22 @@ class ScheduleTests(TestCase):
         slot4 = Slot.objects.create(start_time=start4, end_time=start5)
         slot5 = Slot.objects.create(start_time=start5, end_time=end)
 
-        page1 = Page.objects.create(name="test page", slug="test")
-        page2 = Page.objects.create(name="test page 2", slug="test2")
-        page3 = Page.objects.create(name="test page 3", slug="test3")
-        page4 = Page.objects.create(name="test page 4", slug="test4")
-        page5 = Page.objects.create(name="test page 5", slug="test5")
-        page6 = Page.objects.create(name="test page 6", slug="test6")
-        page7 = Page.objects.create(name="test page 6", slug="test7")
-        page8 = Page.objects.create(name="test page 6", slug="test8")
-        page9 = Page.objects.create(name="test page 6", slug="test9")
-        page10 = Page.objects.create(name="test page 6", slug="test10")
 
-        item1 = ScheduleItem.objects.create(venue=venue1, details="Item 1",
-                                            page_id=page1.pk)
-        item2 = ScheduleItem.objects.create(venue=venue1, details="Item 2",
-                                            page_id=page2.pk)
-        item3 = ScheduleItem.objects.create(venue=venue2, details="Item 3",
-                                            page_id=page3.pk)
-        item4 = ScheduleItem.objects.create(venue=venue3, details="Item 4",
-                                            page_id=page4.pk)
-        item5 = ScheduleItem.objects.create(venue=venue3, details="Item 5",
-                                            page_id=page5.pk)
-        item6 = ScheduleItem.objects.create(venue=venue3, details="Item 6",
-                                            page_id=page6.pk)
-        item7 = ScheduleItem.objects.create(venue=venue2, details="Item 7",
-                                            page_id=page7.pk)
-        item8 = ScheduleItem.objects.create(venue=venue1, details="Item 8",
-                                            page_id=page8.pk)
-        item9 = ScheduleItem.objects.create(venue=venue2, details="Item 9",
-                                            page_id=page9.pk)
-        item10 = ScheduleItem.objects.create(venue=venue3, details="Item 10",
-                                             page_id=page10.pk)
+        pages = self._make_pages(10)
+        venues = [venue1, venue1, venue2, venue3, venue3, venue3,
+                  venue2, venue1, venue2, venue3]
+        items = self._make_items(venues, pages)
 
-        item1.slots.add(slot1)
-        item5.slots.add(slot1)
-        item2.slots.add(slot2)
-        item3.slots.add(slot2)
-        item4.slots.add(slot2)
-        item6.slots.add(slot3)
-        item7.slots.add(slot3)
-        item8.slots.add(slot4)
-        item9.slots.add(slot5)
-        item10.slots.add(slot5)
+        items[0].slots.add(slot1)
+        items[4].slots.add(slot1)
+        items[1].slots.add(slot2)
+        items[2].slots.add(slot2)
+        items[3].slots.add(slot2)
+        items[5].slots.add(slot3)
+        items[6].slots.add(slot3)
+        items[7].slots.add(slot4)
+        items[8].slots.add(slot5)
+        items[9].slots.add(slot5)
 
         c = Client()
         response = c.get('/schedule/')
@@ -361,43 +312,43 @@ class ScheduleTests(TestCase):
         assert len(days[thedate][3].items) == 1
         assert len(days[thedate][4].items) == 2
 
-        assert days[thedate][0].get_sorted_items()[0]['item'] == item1
+        assert days[thedate][0].get_sorted_items()[0]['item'] == items[0]
         assert days[thedate][0].get_sorted_items()[0]['rowspan'] == 1
         assert days[thedate][0].get_sorted_items()[0]['colspan'] == 2
 
-        assert days[thedate][0].get_sorted_items()[1]['item'] == item5
+        assert days[thedate][0].get_sorted_items()[1]['item'] == items[4]
         assert days[thedate][0].get_sorted_items()[1]['rowspan'] == 1
         assert days[thedate][0].get_sorted_items()[1]['colspan'] == 1
 
-        assert days[thedate][1].get_sorted_items()[0]['item'] == item2
+        assert days[thedate][1].get_sorted_items()[0]['item'] == items[1]
         assert days[thedate][1].get_sorted_items()[0]['rowspan'] == 1
         assert days[thedate][1].get_sorted_items()[0]['colspan'] == 1
 
-        assert days[thedate][1].get_sorted_items()[1]['item'] == item3
+        assert days[thedate][1].get_sorted_items()[1]['item'] == items[2]
         assert days[thedate][1].get_sorted_items()[1]['rowspan'] == 1
         assert days[thedate][1].get_sorted_items()[1]['colspan'] == 1
 
-        assert days[thedate][1].get_sorted_items()[2]['item'] == item4
+        assert days[thedate][1].get_sorted_items()[2]['item'] == items[3]
         assert days[thedate][1].get_sorted_items()[2]['rowspan'] == 1
         assert days[thedate][1].get_sorted_items()[2]['colspan'] == 1
 
-        assert days[thedate][2].get_sorted_items()[0]['item'] == item7
+        assert days[thedate][2].get_sorted_items()[0]['item'] == items[6]
         assert days[thedate][2].get_sorted_items()[0]['rowspan'] == 1
         assert days[thedate][2].get_sorted_items()[0]['colspan'] == 2
 
-        assert days[thedate][2].get_sorted_items()[1]['item'] == item6
+        assert days[thedate][2].get_sorted_items()[1]['item'] == items[5]
         assert days[thedate][2].get_sorted_items()[1]['rowspan'] == 1
         assert days[thedate][2].get_sorted_items()[1]['colspan'] == 1
 
-        assert days[thedate][3].get_sorted_items()[0]['item'] == item8
+        assert days[thedate][3].get_sorted_items()[0]['item'] == items[7]
         assert days[thedate][3].get_sorted_items()[0]['rowspan'] == 1
         assert days[thedate][3].get_sorted_items()[0]['colspan'] == 3
 
-        assert days[thedate][4].get_sorted_items()[0]['item'] == item9
+        assert days[thedate][4].get_sorted_items()[0]['item'] == items[8]
         assert days[thedate][4].get_sorted_items()[0]['rowspan'] == 1
         assert days[thedate][4].get_sorted_items()[0]['colspan'] == 2
 
-        assert days[thedate][4].get_sorted_items()[1]['item'] == item10
+        assert days[thedate][4].get_sorted_items()[1]['item'] == items[9]
         assert days[thedate][4].get_sorted_items()[1]['rowspan'] == 1
         assert days[thedate][4].get_sorted_items()[1]['colspan'] == 1
 
@@ -426,38 +377,20 @@ class ScheduleTests(TestCase):
         slot4 = Slot.objects.create(start_time=start4, end_time=start5)
         slot5 = Slot.objects.create(start_time=start5, end_time=end)
 
-        page1 = Page.objects.create(name="test page", slug="test")
-        page2 = Page.objects.create(name="test page 2", slug="test2")
-        page3 = Page.objects.create(name="test page 3", slug="test3")
-        page4 = Page.objects.create(name="test page 4", slug="test4")
-        page5 = Page.objects.create(name="test page 5", slug="test5")
-        page6 = Page.objects.create(name="test page 6", slug="test6")
-        page7 = Page.objects.create(name="test page 7", slug="test7")
+        pages = self._make_pages(7)
+        venues = [venue1, venue1, venue1, venue1, venue2, venue2, venue2]
+        items = self._make_items(venues, pages)
 
-        item1 = ScheduleItem.objects.create(venue=venue1, details="Item 1",
-                                            page_id=page1.pk)
-        item2 = ScheduleItem.objects.create(venue=venue1, details="Item 2",
-                                            page_id=page2.pk)
-        item3 = ScheduleItem.objects.create(venue=venue1, details="Item 3",
-                                            page_id=page3.pk)
-        item4 = ScheduleItem.objects.create(venue=venue1, details="Item 4",
-                                            page_id=page4.pk)
-        item5 = ScheduleItem.objects.create(venue=venue2, details="Item 5",
-                                            page_id=page5.pk)
-        item6 = ScheduleItem.objects.create(venue=venue2, details="Item 6",
-                                            page_id=page6.pk)
-        item7 = ScheduleItem.objects.create(venue=venue2, details="Item 7",
-                                            page_id=page7.pk)
-        item1.slots.add(slot1)
-        item1.slots.add(slot2)
-        item5.slots.add(slot1)
-        item6.slots.add(slot2)
-        item7.slots.add(slot3)
-        item7.slots.add(slot4)
-        item7.slots.add(slot5)
-        item2.slots.add(slot3)
-        item3.slots.add(slot4)
-        item4.slots.add(slot5)
+        items[0].slots.add(slot1)
+        items[0].slots.add(slot2)
+        items[4].slots.add(slot1)
+        items[5].slots.add(slot2)
+        items[6].slots.add(slot3)
+        items[6].slots.add(slot4)
+        items[6].slots.add(slot5)
+        items[1].slots.add(slot3)
+        items[2].slots.add(slot4)
+        items[3].slots.add(slot5)
 
         c = Client()
         response = c.get('/schedule/')
@@ -478,31 +411,31 @@ class ScheduleTests(TestCase):
         assert len(days[thedate][3].items) == 1
         assert len(days[thedate][4].items) == 1
 
-        assert days[thedate][0].get_sorted_items()[0]['item'] == item1
+        assert days[thedate][0].get_sorted_items()[0]['item'] == items[0]
         assert days[thedate][0].get_sorted_items()[0]['rowspan'] == 2
         assert days[thedate][0].get_sorted_items()[0]['colspan'] == 1
 
-        assert days[thedate][0].get_sorted_items()[1]['item'] == item5
+        assert days[thedate][0].get_sorted_items()[1]['item'] == items[4]
         assert days[thedate][0].get_sorted_items()[1]['rowspan'] == 1
         assert days[thedate][0].get_sorted_items()[1]['colspan'] == 1
 
-        assert days[thedate][1].get_sorted_items()[0]['item'] == item6
+        assert days[thedate][1].get_sorted_items()[0]['item'] == items[5]
         assert days[thedate][1].get_sorted_items()[0]['rowspan'] == 1
         assert days[thedate][1].get_sorted_items()[0]['colspan'] == 1
 
-        assert days[thedate][2].get_sorted_items()[0]['item'] == item2
+        assert days[thedate][2].get_sorted_items()[0]['item'] == items[1]
         assert days[thedate][2].get_sorted_items()[0]['rowspan'] == 1
         assert days[thedate][2].get_sorted_items()[0]['colspan'] == 1
 
-        assert days[thedate][2].get_sorted_items()[1]['item'] == item7
+        assert days[thedate][2].get_sorted_items()[1]['item'] == items[6]
         assert days[thedate][2].get_sorted_items()[1]['rowspan'] == 3
         assert days[thedate][2].get_sorted_items()[1]['colspan'] == 1
 
-        assert days[thedate][3].get_sorted_items()[0]['item'] == item3
+        assert days[thedate][3].get_sorted_items()[0]['item'] == items[2]
         assert days[thedate][3].get_sorted_items()[0]['rowspan'] == 1
         assert days[thedate][3].get_sorted_items()[0]['colspan'] == 1
 
-        assert days[thedate][4].get_sorted_items()[0]['item'] == item4
+        assert days[thedate][4].get_sorted_items()[0]['item'] == items[3]
         assert days[thedate][4].get_sorted_items()[0]['rowspan'] == 1
         assert days[thedate][4].get_sorted_items()[0]['colspan'] == 1
 
