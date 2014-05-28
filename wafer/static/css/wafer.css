@@ -9,6 +9,7 @@
 
 #profile-avatar img {
 	position: relative;
+	margin-bottom: 10px;
 }
 
 #profile-avatar .popover {
