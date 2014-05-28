@@ -20,6 +20,12 @@
 	display: none;
 }
 
+.profile-links li{
+	list-style: none;
+	display: inline-block;
+	margin-left: 5px;
+}
+
 /* Icons float to the right of the menu */
 .nav li.icon {
    float: right;
