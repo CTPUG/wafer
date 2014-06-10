@@ -12,7 +12,7 @@
       <tr>
          <th>Time</th>
       {% for venue in venue_list %}
-      <th>{{ venue.name }}</th>
+      <th><a href="{{ venue.get_absolute_url }}">{{ venue.name }}</a></th>
       {% endfor %}
       </tr>
       {# We assume that the admin has created a valid timetable #}
