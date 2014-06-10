@@ -10,7 +10,7 @@
    {% else %}
    <table cellspacing=1 cellpadding=0>
       <tr>
-         <th>Time</th>
+         <th>{% trans Time %}</th>
       {% for venue in venue_list %}
       <th><a href="{{ venue.get_absolute_url }}">{{ venue.name }}</a></th>
       {% endfor %}
