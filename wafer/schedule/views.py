@@ -1,6 +1,6 @@
 from django.views.generic import DetailView, TemplateView
 
-from wafer.schedule.models import Venue, Day, Slot
+from wafer.schedule.models import Venue, Slot
 from wafer.schedule.admin import check_schedule
 
 
@@ -41,48 +41,45 @@ class ScheduleView(TemplateView):
         # We create a list of slots and schedule items
         schedule_days = {}
         seen_items = {}
-        for day in Day.objects.all():
+        for slot in Slot.objects.all():
+            day = slot.get_day()
             schedule_days.setdefault(day, [])
-            # Because of Slot.previous_slot juggling, we can't just use
-            # the related objects to get all the slots
-            slots = [x for x in Slot.objects.all() if x.get_day() == day]
-            for slot in slots:
-                row = ScheduleRow(slot, venue_list)
-                schedule_days[day].append(row)
-                skip = []
-                for item in slot.scheduleitem_set.all():
-                    if item in seen_items:
-                        # Inc rowspan
-                        seen_items[item]['rowspan'] += 1
-                        # Note that we need to skip this during colspan checks
-                        skip.append(item.venue)
-                        continue
-                    scheditem = {'item': item, 'rowspan': 1, 'colspan': 1}
-                    row.items[item.venue] = scheditem
-                    seen_items[item] = scheditem
-                cur_item = None
-                colspan = 1
-                # Fixup colspans
-                for venue in venue_list:
-                    # This may create holes in the table - the administrator
-                    # needs to sort that out by ordering the venues correctly
-                    if day not in venue.days.all():
-                        scheditem = {'item': 'unavailable',
-                                     'rowspan': 1, 'colspan': 1}
-                        row.items[venue] = scheditem
-                        colspan = 1
-                    elif venue in skip:
-                        # Nothing to see here
-                        continue
-                    elif venue not in row.items:
-                        if cur_item:
-                            cur_item['colspan'] += 1
-                        else:
-                            colspan += 1
+            row = ScheduleRow(slot, venue_list)
+            schedule_days[day].append(row)
+            skip = []
+            for item in slot.scheduleitem_set.all():
+                if item in seen_items:
+                    # Inc rowspan
+                    seen_items[item]['rowspan'] += 1
+                    # Note that we need to skip this during colspan checks
+                    skip.append(item.venue)
+                    continue
+                scheditem = {'item': item, 'rowspan': 1, 'colspan': 1}
+                row.items[item.venue] = scheditem
+                seen_items[item] = scheditem
+            cur_item = None
+            colspan = 1
+            # Fixup colspans
+            for venue in venue_list:
+                # This may create holes in the table - the administrator
+                # needs to sort that out by ordering the venues correctly
+                if day not in venue.days.all():
+                    scheditem = {'item': 'unavailable',
+                                 'rowspan': 1, 'colspan': 1}
+                    row.items[venue] = scheditem
+                    colspan = 1
+                elif venue in skip:
+                    # Nothing to see here
+                    continue
+                elif venue not in row.items:
+                    if cur_item:
+                        cur_item['colspan'] += 1
                     else:
-                        cur_item = row.items[venue]
-                        cur_item['colspan'] = colspan
-                        colspan = 1
+                        colspan += 1
+                else:
+                    cur_item = row.items[venue]
+                    cur_item['colspan'] = colspan
+                    colspan = 1
         # We turn the dict into a list here so we have the correct
         # ordering
         context['table_days'] = sorted(schedule_days.items())
