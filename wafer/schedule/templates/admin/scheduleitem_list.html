@@ -13,7 +13,7 @@
              {% for pos, items in errors.clashes.iteritems %}
              <li>{{ pos.0 }} at {{ pos.1.get_start_time|time:"H:i" }} --
                  {% for item in items %}
-                     {{ item.get_title }},
+                     {{ item }},
                  {% endfor %}
              </li>
              {% endfor %}
@@ -23,7 +23,7 @@
           <h3>{% trans "Validation errors" %}</h3>
           <ul>
              {% for item in errors.validation %}
-             <li>{{ item.get_title }}</li>
+             <li>{{ item }}</li>
              {% endfor %}
           </ul>
           {% endif %}
@@ -31,7 +31,19 @@
           <h3>{% trans "Duplicates in the schedule" %}</h3>
           <ul>
              {% for item in errors.duplicates %}
-             <li>{{ item.get_title }}</li>
+             <li>{{ item }}</li>
+             {% endfor %}
+          </ul>
+          {% endif %}
+          {% if errors.venues %}
+          <h3>{% trans "Venues assigned on days they are not available" %}</h3>
+          <ul>
+             {% for venue, items in errors.venues.iteritems %}
+             <li>{{ venue }} --
+                 {% for item in items %}
+                    {{ item }},
+                 {% endfor %}
+             </li>
              {% endfor %}
           </ul>
           {% endif %}

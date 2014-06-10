@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django import forms
 
-from wafer.schedule.models import Venue, Slot, ScheduleItem
+from wafer.schedule.models import Day, Venue, Slot, ScheduleItem
 from wafer.talks.models import Talk, ACCEPTED
 from wafer.pages.models import Page
 
@@ -18,6 +18,9 @@ def find_overlapping_slots():
         end = slot.end_time
         for other_slot in Slot.objects.all():
             if other_slot.pk == slot.pk:
+                continue
+            if other_slot.get_day() != slot.get_day():
+                # different days, can't overlap
                 continue
             # Overlap if the start_time or end_time is bounded by our times
             # start_time <= other.start_time < end_time
@@ -88,6 +91,23 @@ def find_clashes():
     return clashes
 
 
+def find_invalid_venues():
+    """Find venues assigned slots that aren't on the allowed list
+       of days."""
+    venues = {}
+    for item in ScheduleItem.objects.all():
+        valid = False
+        for slot in item.slots.all():
+            for day in item.venue.days.all():
+                if day == slot.get_day():
+                    valid = True
+                    break
+        if not valid:
+            venues.setdefault(item.venue, [])
+            venues[item.venue].append(item)
+    return venues
+
+
 def check_schedule():
     """Helper routine to eaily test if the schedule is valid"""
     if find_clashes():
@@ -97,6 +117,8 @@ def check_schedule():
     if validate_items():
         return False
     if find_overlapping_slots():
+        return False
+    if find_invalid_venues():
         return False
     return True
 
@@ -126,6 +148,7 @@ class ScheduleItemAdmin(admin.ModelAdmin):
         # Find issues in the schedule
         clashes = find_clashes()
         validation = validate_items()
+        venues = find_invalid_venues()
         duplicates = find_duplicate_schedule_items()
         errors = {}
         if clashes:
@@ -134,6 +157,8 @@ class ScheduleItemAdmin(admin.ModelAdmin):
             errors['duplicates'] = duplicates
         if validation:
             errors['validation'] = validation
+        if venues:
+            errors['venues'] = venues
         extra_context['errors'] = errors
         return super(ScheduleItemAdmin, self).changelist_view(request,
                                                               extra_context)
@@ -167,6 +192,7 @@ class SlotAdmin(admin.ModelAdmin):
                                                       extra_context)
 
 
+admin.site.register(Day)
 admin.site.register(Slot, SlotAdmin)
 admin.site.register(Venue)
 admin.site.register(ScheduleItem, ScheduleItemAdmin)

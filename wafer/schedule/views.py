@@ -1,7 +1,6 @@
 from django.views.generic import DetailView, TemplateView
-from django.conf import settings
 
-from wafer.schedule.models import Venue, ScheduleItem
+from wafer.schedule.models import Venue, Day, Slot
 from wafer.schedule.admin import check_schedule
 
 
@@ -18,6 +17,10 @@ class ScheduleRow(object):
             if venue in self.items:
                 sorted_items.append(self.items[venue])
         return sorted_items
+
+    def __repr__(self):
+        """Debugging aid"""
+        return '%s - %s' % (self.slot, self.get_sorted_items())
 
 
 class VenueView(DetailView):
@@ -36,59 +39,52 @@ class ScheduleView(TemplateView):
         venue_list = list(Venue.objects.all())
         context['venue_list'] = venue_list
         # We create a list of slots and schedule items
-        days = {}
-        # This can be made efficient, be we run multiple passes so the
-        # logic involves less back-tracking
-        used_venues = {}
-        for item in ScheduleItem.objects.all():
-            slots = list(item.slots.all())
-            # We should be dealing with single timezone, so this is safe
-            day = slots[0].get_start_time().date()
-            if day not in days:
-                days.setdefault(day, [])
-            rowspan = 0
-            append_row = None
+        schedule_days = {}
+        seen_items = {}
+        for day in Day.objects.all():
+            schedule_days.setdefault(day, [])
+            # Because of Slot.previous_slot juggling, we can't just use
+            # the related objects to get all the slots
+            slots = [x for x in Slot.objects.all() if x.get_day() == day]
             for slot in slots:
-                used_venues.setdefault(slot, {})
-                found = False
-                for row in days[day]:
-                    if row.slot == slot:
-                        found = True
-                        if rowspan == 0:
-                            append_row = row
-                        rowspan += 1
-                if not days[day] or not found:
-                    row = ScheduleRow(slot, venue_list)
-                    days[day].append(row)
-                    days[day].sort(key = lambda x: x.slot.end_time)
-                    if rowspan == 0:
-                        append_row = row
-                    rowspan += 1
-            scheditem = {'item': item, 'rowspan': rowspan, 'colspan': 1}
-            append_row.items[item.venue] = scheditem
-            for slot in slots:
-                used_venues[slot][item.venue] = scheditem
-        # Need to fix up col spans
-        for day, rows in days.iteritems():
-            for table_row in rows:
-                if len(table_row.items) == len(venue_list):
-                    # All venues filled
-                    continue
+                row = ScheduleRow(slot, venue_list)
+                schedule_days[day].append(row)
+                skip = []
+                for item in slot.scheduleitem_set.all():
+                    if item in seen_items:
+                        # Inc rowspan
+                        seen_items[item]['rowspan'] += 1
+                        # Note that we need to skip this during colspan checks
+                        skip.append(item.venue)
+                        continue
+                    scheditem = {'item': item, 'rowspan': 1, 'colspan': 1}
+                    row.items[item.venue] = scheditem
+                    seen_items[item] = scheditem
                 cur_item = None
                 colspan = 1
+                # Fixup colspans
                 for venue in venue_list:
-                    if venue not in used_venues[table_row.slot]:
-                        colspan += 1
-                    else:
+                    # This may create holes in the table - the administrator
+                    # needs to sort that out by ordering the venues correctly
+                    if day not in venue.days.all():
+                        scheditem = {'item': 'unavailable',
+                                     'rowspan': 1, 'colspan': 1}
+                        row.items[venue] = scheditem
+                        colspan = 1
+                    elif venue in skip:
+                        # Nothing to see here
+                        continue
+                    elif venue not in row.items:
                         if cur_item:
-                            cur_item['colspan'] = colspan
-                            colspan = 1
-                        cur_item = used_venues[table_row.slot][venue]
+                            cur_item['colspan'] += 1
+                        else:
+                            colspan += 1
+                    else:
+                        cur_item = row.items[venue]
                         cur_item['colspan'] = colspan
-                cur_item['colspan'] = colspan
-
+                        colspan = 1
         # We turn the dict into a list here so we have the correct
         # ordering
-        context['table_days'] = sorted(days.items())
+        context['table_days'] = sorted(schedule_days.items())
 
         return context

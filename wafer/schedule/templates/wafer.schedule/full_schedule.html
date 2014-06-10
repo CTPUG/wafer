@@ -24,14 +24,20 @@
       <tr>
          <td>{{ row.slot.get_start_time|time:"H:i" }} - {{ row.slot.end_time|time:"H:i" }}</td>
          {% for item in row.get_sorted_items %}
-         <td colspan="{{ item.colspan }}" rowspan="{{ item.rowspan }}">
-            {% if item.item.get_url %}
-            <a href="{{ item.item.get_url }}">
-               {{ item.item.get_details|escape }}</a>
-            {% else %}
-            {{ item.item.get_details|escape }}
-            {% endif %}
-         </td>
+         {% if item.item == "unavailable" %}
+            {# Venue isn't available, so we add an empty table element with the 'unavailable' class #}
+            <td colspan="{{ item.colspan }}" rowspan="{{ item.rowspan }}" class="unavailable"></td>
+         {% else %}
+            {# Add item details #}
+            <td colspan="{{ item.colspan }}" rowspan="{{ item.rowspan }}">
+               {% if item.item.get_url %}
+               <a href="{{ item.item.get_url }}">
+                  {{ item.item.get_details|escape }}</a>
+               {% else %}
+               {{ item.item.get_details|escape }}
+               {% endif %}
+            </td>
+         {% endif %}
          {% endfor %}
       </tr>
       {% endfor %}
