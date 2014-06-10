@@ -80,8 +80,9 @@ class ScheduleView(TemplateView):
                     cur_item = row.items[venue]
                     cur_item['colspan'] = colspan
                     colspan = 1
-        # We turn the dict into a list here so we have the correct
-        # ordering
-        context['table_days'] = sorted(schedule_days.items())
+        # We turn the dict into a list here so we have a specified
+        # ordering by date
+        context['table_days'] = sorted(schedule_days.items(),
+                                       key=lambda x: x[0].date)
 
         return context
