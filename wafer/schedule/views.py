@@ -67,6 +67,8 @@ class ScheduleView(TemplateView):
                     scheditem = {'item': 'unavailable',
                                  'rowspan': 1, 'colspan': 1}
                     row.items[venue] = scheditem
+                    # Make holes more obvious
+                    cur_item = scheditem
                     colspan = 1
                 elif venue in skip:
                     # Nothing to see here
