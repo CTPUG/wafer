@@ -1,0 +1,5 @@
+{% extends "wafer/base.html" %}
+{% block content %}
+<h1>{{ object.name }}</h1>
+{{ object.description_html|safe }}
+{% endblock %}

@@ -1,0 +1,21 @@
+{% extends "admin/change_list.html" %}
+{# This plugs our extra validation information into the end of the content
+   block #}
+{% block content %}
+    {{ block.super }}
+    <div class="validation_info">
+       {% if errors %}
+       <div name="errors">
+          <h2>{% trans "Errors in the slots" %}</h2>
+          {% if errors.overlaps %}
+          <h3>{% trans "OVerlapping slots" %}</h3>
+          <ul>
+             {% for item in errors.overlaps %}
+             <li>{{ item }}</li>
+             {% endfor %}
+          </ul>
+          {% endif %}
+       </div>
+       {% endif %}
+    </div>
+{% endblock %}

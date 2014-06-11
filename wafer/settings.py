@@ -144,6 +144,7 @@ INSTALLED_APPS = (
     'wafer.invoices',
     'wafer.registration',
     'wafer.talks',
+    'wafer.schedule',
     'wafer.users',
     'wafer.sponsors',
     'wafer.pages',

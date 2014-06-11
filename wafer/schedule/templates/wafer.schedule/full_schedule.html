@@ -1,0 +1,47 @@
+{% extends "wafer/base.html" %}
+{% block content %}
+<h1>{% trans Schedule %}</h1>
+<div class="wafer_schedule">
+   {% if not venue_list %}
+   {# Schedule is incomplete / invalid, so show nothing #}
+   {% blocktrans %}
+   <p>The final schedule has not been published yet.</p>
+   {% endblocktrans %}
+   {% else %}
+   <table cellspacing=1 cellpadding=0>
+      <tr>
+         <th>{% trans Time %}</th>
+      {% for venue in venue_list %}
+      <th><a href="{{ venue.get_absolute_url }}">{{ venue.name }}</a></th>
+      {% endfor %}
+      </tr>
+      {# We assume that the admin has created a valid timetable #}
+      {% for day, table_rows in table_days %}
+      <tr>
+         <td colspan="{{ venue_list|length|add:1 }}" class="title">{{ day.date|date:"l (d b)" }}</td>
+      </tr>
+      {% for row in table_rows %}
+      <tr>
+         <td>{{ row.slot.get_start_time|time:"H:i" }} - {{ row.slot.end_time|time:"H:i" }}</td>
+         {% for item in row.get_sorted_items %}
+         {% if item.item == "unavailable" %}
+            {# Venue isn't available, so we add an empty table element with the 'unavailable' class #}
+            <td colspan="{{ item.colspan }}" rowspan="{{ item.rowspan }}" class="unavailable"></td>
+         {% else %}
+            {# Add item details #}
+            <td colspan="{{ item.colspan }}" rowspan="{{ item.rowspan }}">
+               {% if item.item.get_url %}
+               <a href="{{ item.item.get_url }}">
+                  {{ item.item.get_details|escape }}</a>
+               {% else %}
+               {{ item.item.get_details|escape }}
+               {% endif %}
+            </td>
+         {% endif %}
+         {% endfor %}
+      </tr>
+      {% endfor %}
+      {% endfor %}
+   </table>
+   {% endif %}
+{% endblock %}
