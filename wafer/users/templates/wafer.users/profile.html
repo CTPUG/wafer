@@ -9,7 +9,7 @@
             {% endif %}
         {% endwith %}
         {% if user = object or user.is_staff %}
-            <a class="btn btn-small" href="#" rel="popover" data-toggle="popover"
+            <a class="btn btn-default btn-small" href="#" rel="popover" data-toggle="popover"
                 data-title="{% trans 'Changing your mugshot' %}" data-html="true"
                 data-placement="bottom">{% trans 'Edit Mugshot' %}</a>
             <div class="popover-contents">
@@ -24,12 +24,12 @@
     <div class="span10">
         {% if user = object or user.is_staff %}
         <ul class="pull-right btn-group btn-group-vertical profile-links">
-            <li><a href="{% url 'wafer_user_edit' object.username %}" class="btn">{% trans 'Edit User' %}</a></li>
-            <li><a href="{% url 'wafer_user_edit_profile' object.username %}" class="btn">{% trans 'Edit Profile' %}</a></li>
+            <li><a href="{% url 'wafer_user_edit' object.username %}" class="btn btn-default">{% trans 'Edit User' %}</a></li>
+            <li><a href="{% url 'wafer_user_edit_profile' object.username %}" class="btn btn-default">{% trans 'Edit Profile' %}</a></li>
             {# These are only relevant to the user, not staff #}
             {% if user = object %}
-                <li><a href="{% url 'wafer_registration_submit' %}" class="btn">{% trans 'Register' %}</a></li>
-                <li><a href="{% url 'wafer_talk_submit' %}" class="btn">{% trans 'Submit Talk Proposal' %}</a></li>
+                <li><a href="{% url 'wafer_registration_submit' %}" class="btn btn-default">{% trans 'Register' %}</a></li>
+                <li><a href="{% url 'wafer_talk_submit' %}" class="btn btn-default">{% trans 'Submit Talk Proposal' %}</a></li>
             {% endif %}
         </ul>
         {% endif %}
