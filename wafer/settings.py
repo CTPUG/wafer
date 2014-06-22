@@ -147,6 +147,7 @@ INSTALLED_APPS = (
     'wafer.users',
     'wafer.sponsors',
     'wafer.pages',
+    'wafer.tickets',
 )
 
 TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
