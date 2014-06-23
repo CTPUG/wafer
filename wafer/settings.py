@@ -193,6 +193,8 @@ import django.template
 django.template.add_to_builtins('django.templatetags.future')
 django.template.add_to_builtins('django.templatetags.i18n')
 
+CRISPY_TEMPLATE_PACK = 'bootstrap3'
+
 # Wafer settings
 WAFER_BILLABLE_ME = "http://billable.me/pdf/"
 

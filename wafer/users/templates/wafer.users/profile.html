@@ -2,14 +2,14 @@
 {% block content %}
 {% with profile=object.get_profile %}
 <div class="row">
-    <div class="span2" id="profile-avatar">
+    <div class="col-md-2" id="profile-avatar">
         {% with profile.avatar_url as avatar_url %}
             {% if avatar_url != None %}
             <img src="{{ profile.avatar_url }}">
             {% endif %}
         {% endwith %}
         {% if user = object or user.is_staff %}
-            <a class="btn btn-default btn-small" href="#" rel="popover" data-toggle="popover"
+            <a class="btn btn-default btn-sm" href="#" rel="popover" data-toggle="popover"
                 data-title="{% trans 'Changing your mugshot' %}" data-html="true"
                 data-placement="bottom">{% trans 'Edit Mugshot' %}</a>
             <div class="popover-contents">
@@ -21,7 +21,7 @@
             </div>
         {% endif %}
     </div>
-    <div class="span10">
+    <div class="col-md-10">
         {% if user = object or user.is_staff %}
         <ul class="pull-right btn-group btn-group-vertical profile-links">
             <li><a href="{% url 'wafer_user_edit' object.username %}" class="btn btn-default">{% trans 'Edit User' %}</a></li>
