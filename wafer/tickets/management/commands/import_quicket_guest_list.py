@@ -26,4 +26,4 @@ class Command(BaseCommand):
     def import_ticket(self, ticket_number, ticket_barcode, purchase_date,
                       ticket_type, ticket_holder, email, cellphone, checked_in,
                       checked_in_date, checked_in_by, complimentary):
-        import_ticket(ticket_number, ticket_barcode, ticket_type, email)
+        import_ticket(ticket_barcode, ticket_type, email)

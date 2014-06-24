@@ -28,31 +28,23 @@ def quicket_hook(request):
           "attendee_name": "",
           "attendee_email": "",
           "ticket_type": "Free Ticket",
-          "price": 0.00
-        },
-        {
-          "id": 122,
-          "attendee_name": "",
-          "attendee_email": "",
-          "ticket_type": "Free Ticket",
           "price": 0.00,
+          "barcode": 12345,
         },
+        ...
       ],
     }
     '''
     payload = json.load(request)
     for ticket in payload['tickets']:
-        # Aaargh, these ticket IDs seem to be some ephemeral integer
-        # Filed Quicket Case #9232, querying this
-        #import_ticket(ticket['id'], None, ticket['ticket_type'],
-        #              ticket['attendee_email'])
-        pass
+        import_ticket(ticket['barcode'], ticket['ticket_type'],
+                      ticket['attendee_email'])
 
     return HttpResponse("Noted\n", content_type='text/plain')
 
 
-def import_ticket(ticket_number, ticket_barcode, ticket_type, email):
-    if Ticket.objects.filter(id=ticket_number).exists():
+def import_ticket(ticket_barcode, ticket_type, email):
+    if Ticket.objects.filter(barcode=ticket_barcode).exists():
         return
 
     type_, created = TicketType.objects.get_or_create(name=ticket_type)
@@ -63,9 +55,8 @@ def import_ticket(ticket_number, ticket_barcode, ticket_type, email):
         user = None
 
     ticket = Ticket.objects.create(
-        id=ticket_number,
-        type=type_,
         barcode=ticket_barcode,
+        type=type_,
         user=user,
     )
     ticket.save()
