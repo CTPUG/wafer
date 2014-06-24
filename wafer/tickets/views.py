@@ -1,11 +1,34 @@
 import json
 
 from django.contrib.auth.models import User
-from django.http import HttpResponse
+from django.core.urlresolvers import reverse
+from django.http import HttpResponse, HttpResponseRedirect
+from django.shortcuts import render_to_response
+from django.template import RequestContext
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 
 from wafer.tickets.models import Ticket, TicketType
+from wafer.tickets.forms import TicketForm
+
+
+def claim(request):
+    if request.method == 'POST':
+        form = TicketForm(request.POST)
+        if form.is_valid():
+            ticket = Ticket.objects.get(barcode=form.cleaned_data['barcode'])
+            ticket.user = request.user
+            ticket.save()
+            return HttpResponseRedirect(reverse('wafer_user_profile',
+                                                args=(request.user.username,)))
+    else:
+        form = TicketForm()
+
+    context = {
+        'form': form,
+    }
+    return render_to_response('wafer.tickets/claim.html', context,
+                              context_instance=RequestContext(request))
 
 
 @csrf_exempt
