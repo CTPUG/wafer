@@ -6,6 +6,7 @@
 # Packages
 *.egg
 *.egg-info
+bower_components/
 dist
 build
 eggs

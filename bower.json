@@ -1,0 +1,16 @@
+{
+  "name": "wafer",
+  "version": "0.0.1",
+  "homepage": "https://github.com/CTPUG/wafer",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "~3.1.1"
+  }
+}

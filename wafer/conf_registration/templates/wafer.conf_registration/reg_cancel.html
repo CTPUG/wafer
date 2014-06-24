@@ -2,7 +2,7 @@
 {% load crispy_forms_tags %}
 {% block content %}
 <h1>{% trans "Confirm Attendee Deletion" %}</h1>
-<div class="alert alert-error">
+<div class="alert alert-danger">
     {% blocktrans with attendee_name=object.name attendee_email=object.email attendee_url=object.get_absolute_url %}
     You are about to cancel the registration for
     <a href="{{ attendee_url }}">"{{ attendee_name }}"</a> (email address {{ attendee_email }}.<br>
@@ -11,6 +11,6 @@
 </div>
 <form action="" method="post">
     {% csrf_token %}
-    <input type="submit" class="btn-danger" value="{% trans 'Confirm Deletion' %}">
+    <input type="submit" class="btn btn-danger" value="{% trans 'Confirm Deletion' %}">
 </form>
 {% endblock %}
