@@ -1,6 +1,8 @@
 import json
 
+from django.conf import settings
 from django.contrib.auth.models import User
+from django.core.exceptions import PermissionDenied
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render_to_response
@@ -58,6 +60,9 @@ def quicket_hook(request):
       ],
     }
     '''
+    if request.GET.get('secret') != settings.WAFER_TICKETS_SECRET:
+        raise PermissionDenied('Incorrect secret')
+
     payload = json.load(request)
     for ticket in payload['tickets']:
         import_ticket(ticket['barcode'], ticket['ticket_type'],

@@ -250,6 +250,9 @@ WAFER_HIDE_LOGIN = False
 # Set this to False to disable talk submissions
 WAFER_TALKS_OPEN = True
 
+# Ticket registration with Quicket
+# WAFER_TICKET_SECRET = "i'm a shared secret"
+
 # django_medusa -- disk-based renderer
 MEDUSA_RENDERER_CLASS = "wafer.management.static.WaferDiskStaticSiteRenderer"
 MEDUSA_DEPLOY_DIR = os.path.join(project_root, 'static_mirror')
