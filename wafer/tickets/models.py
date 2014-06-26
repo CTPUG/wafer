@@ -8,6 +8,7 @@ class TicketType(models.Model):
 
 class Ticket(models.Model):
     barcode = models.IntegerField(primary_key=True)
+    email = models.EmailField(blank=True)
     type = models.ForeignKey(TicketType)
     user = models.ForeignKey(User, related_name='ticket',
                              blank=True, null=True, on_delete=models.SET_NULL)

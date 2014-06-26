@@ -84,6 +84,7 @@ def import_ticket(ticket_barcode, ticket_type, email):
 
     ticket = Ticket.objects.create(
         barcode=ticket_barcode,
+        email=email,
         type=type_,
         user=user,
     )

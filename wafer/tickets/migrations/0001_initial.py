@@ -17,6 +17,7 @@ class Migration(SchemaMigration):
         # Adding model 'Ticket'
         db.create_table(u'tickets_ticket', (
             ('barcode', self.gf('django.db.models.fields.IntegerField')(primary_key=True)),
+            ('email', self.gf('django.db.models.fields.EmailField')(max_length=75, blank=True)),
             ('type', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['tickets.TicketType'])),
             ('user', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='ticket', null=True, on_delete=models.SET_NULL, to=orm['auth.User'])),
         ))
@@ -71,6 +72,7 @@ class Migration(SchemaMigration):
         u'tickets.ticket': {
             'Meta': {'object_name': 'Ticket'},
             'barcode': ('django.db.models.fields.IntegerField', [], {'primary_key': 'True'}),
+            'email': ('django.db.models.fields.EmailField', [], {'max_length': '75', 'blank': 'True'}),
             'type': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['tickets.TicketType']"}),
             'user': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'ticket'", 'null': 'True', 'on_delete': 'models.SET_NULL', 'to': u"orm['auth.User']"})
         },
