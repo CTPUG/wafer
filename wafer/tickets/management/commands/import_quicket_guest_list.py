@@ -13,17 +13,21 @@ class Command(BaseCommand):
         if len(args) != 1:
             raise CommandError('1 CSV File required')
 
+        columns = ('Ticket Number', 'Ticket Barcode', 'Purchase Date',
+                   'Ticket Type', 'Ticket Holder', 'Email', 'Cellphone',
+                   'Checked in', 'Checked in date', 'Checked in by',
+                   'Complimentary')
+        keys = [column.lower().replace(' ', '_') for column in columns]
+
         with open(args[0], 'r') as f:
             reader = csv.reader(f)
 
-            header = next(reader)
-            if len(header) != 11:
+            header = tuple(next(reader))
+            if header != columns:
                 raise CommandError('CSV format has changed. Update wafer')
 
-            for ticket in reader:
-                self.import_ticket(*ticket)
-
-    def import_ticket(self, ticket_number, ticket_barcode, purchase_date,
-                      ticket_type, ticket_holder, email, cellphone, checked_in,
-                      checked_in_date, checked_in_by, complimentary):
-        import_ticket(ticket_barcode, ticket_type, email)
+            for row in reader:
+                ticket = dict(zip(keys, row))
+                import_ticket(ticket['ticket_barcode'],
+                              ticket['ticket_type'],
+                              ticket['email'])
