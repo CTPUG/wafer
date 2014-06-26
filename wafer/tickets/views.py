@@ -1,4 +1,5 @@
 import json
+import logging
 
 from django.conf import settings
 from django.contrib.auth.models import User
@@ -12,6 +13,8 @@ from django.views.decorators.http import require_POST
 
 from wafer.tickets.models import Ticket, TicketType
 from wafer.tickets.forms import TicketForm
+
+log = logging.getLogger(__name__)
 
 
 def claim(request):
@@ -73,6 +76,7 @@ def quicket_hook(request):
 
 def import_ticket(ticket_barcode, ticket_type, email):
     if Ticket.objects.filter(barcode=ticket_barcode).exists():
+        log.debug('Ticket already registered: %s', ticket_barcode)
         return
 
     type_, created = TicketType.objects.get_or_create(name=ticket_type)
@@ -89,3 +93,10 @@ def import_ticket(ticket_barcode, ticket_type, email):
         user=user,
     )
     ticket.save()
+
+    if user:
+        log.info('Ticket registered: %s (%s) and linked to user',
+                 ticket_barcode, email)
+    else:
+        log.info('Ticket registered: %s (%s). Unclaimed',
+                 ticket_barcode, email)

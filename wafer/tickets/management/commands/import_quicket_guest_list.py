@@ -1,4 +1,5 @@
 import csv
+import logging
 
 from django.core.management.base import BaseCommand, CommandError
 
@@ -12,6 +13,8 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         if len(args) != 1:
             raise CommandError('1 CSV File required')
+
+        logging.basicConfig(level=logging.INFO)
 
         columns = ('Ticket Number', 'Ticket Barcode', 'Purchase Date',
                    'Ticket Type', 'Ticket Holder', 'Email', 'Cellphone',
