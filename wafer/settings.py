@@ -141,14 +141,13 @@ INSTALLED_APPS = (
     'registration',
     'markitup',
     'wafer',
-    'wafer.invoices',
     'wafer.registration',
     'wafer.talks',
     'wafer.schedule',
     'wafer.users',
     'wafer.sponsors',
     'wafer.pages',
-    'wafer.conf_registration',
+    'wafer.tickets',
 )
 
 TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
@@ -250,6 +249,9 @@ WAFER_HIDE_LOGIN = False
 # Talk submissions open
 # Set this to False to disable talk submissions
 WAFER_TALKS_OPEN = True
+
+# Ticket registration with Quicket
+# WAFER_TICKET_SECRET = "i'm a shared secret"
 
 # django_medusa -- disk-based renderer
 MEDUSA_RENDERER_CLASS = "wafer.management.static.WaferDiskStaticSiteRenderer"

@@ -16,6 +16,7 @@ urlpatterns = patterns(
     (r'^admin/', include(admin.site.urls)),
     (r'^markitup/', include('markitup.urls')),
     (r'^schedule/', include('wafer.schedule.urls')),
+    (r'^tickets/', include('wafer.tickets.urls')),
 
     # Pages occupy the entire URL space, and must come last
     url(r'', include('wafer.pages.urls')),

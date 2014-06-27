@@ -8,7 +8,7 @@
             <img src="{{ profile.avatar_url }}">
             {% endif %}
         {% endwith %}
-        {% if user = object or user.is_staff %}
+        {% if user == object or user.is_staff %}
             <a class="btn btn-default btn-sm" href="#" rel="popover" data-toggle="popover"
                 data-title="{% trans 'Changing your mugshot' %}" data-html="true"
                 data-placement="bottom">{% trans 'Edit Mugshot' %}</a>
@@ -22,14 +22,16 @@
         {% endif %}
     </div>
     <div class="col-md-10">
-        {% if user = object or user.is_staff %}
+        {% if user == object or user.is_staff %}
         <ul class="pull-right btn-group btn-group-vertical profile-links">
             <li><a href="{% url 'wafer_user_edit' object.username %}" class="btn btn-default">{% trans 'Edit User' %}</a></li>
             <li><a href="{% url 'wafer_user_edit_profile' object.username %}" class="btn btn-default">{% trans 'Edit Profile' %}</a></li>
             {# These are only relevant to the user, not staff #}
-            {% if user = object %}
-                <li><a href="{% url 'wafer_registration_submit' %}" class="btn btn-default">{% trans 'Register' %}</a></li>
-                <li><a href="{% url 'wafer_talk_submit' %}" class="btn btn-default">{% trans 'Submit Talk Proposal' %}</a></li>
+            {% if user == object %}
+                {% if not user.ticket.exists %}
+                    <li><a href="{% url 'wafer_ticket_claim' %}" class="btn btn-default">{% trans 'Register' %}</a></li>
+                {% endif %}
+                    <li><a href="{% url 'wafer_talk_submit' %}" class="btn btn-default">{% trans 'Submit Talk Proposal' %}</a></li>
             {% endif %}
         </ul>
         {% endif %}
@@ -64,6 +66,25 @@
 <div class="well">
 {{ profile.bio }}
 </div>
+{% endif %}
+{% if user == object or user.is_staff %}
+    {% if profile.pending_talks.exists or profile.accepted_talks.exists %}
+        {% if user.ticket.exists %}
+            <div class="label label-success">
+                {% blocktrans %}
+                    Ticket purchased
+                {% endblocktrans %}
+            </div>
+        {% else %}
+            <div class="alert alert-danger">
+                {% blocktrans %}
+                    <strong>WARNING:</strong>
+                    Talk proposal submitted, but no ticket purchased.
+                    Register now!
+                {% endblocktrans %}
+            </div>
+        {% endif %}
+    {% endif %}
 {% endif %}
 {# Accepted talks are globally visible #}
 {% if profile.accepted_talks.exists %}
