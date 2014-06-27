@@ -95,8 +95,6 @@ def import_ticket(ticket_barcode, ticket_type, email):
     ticket.save()
 
     if user:
-        log.info('Ticket registered: %s (%s) and linked to user',
-                 ticket_barcode, email)
+        log.info('Ticket registered: %s and linked to user', ticket)
     else:
-        log.info('Ticket registered: %s (%s). Unclaimed',
-                 ticket_barcode, email)
+        log.info('Ticket registered: %s. Unclaimed', ticket)
