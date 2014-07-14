@@ -4,7 +4,7 @@
 <div class="wafer list">
     {% for sponsor in sponsor_list %}
     <div>
-        <h2>{{ sponsor.name }}</h1>
+        <h2>{{ sponsor.name }}</h2>
         {{ sponsor.description.rendered|safe }}
     </div>
     {% empty %}
