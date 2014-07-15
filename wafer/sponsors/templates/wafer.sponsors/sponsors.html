@@ -4,10 +4,12 @@
 <h1>{% trans 'Sponsors' %}</h1>
 <div class="wafer list">
     {% for sponsor in sponsor_list %}
+    <section class="wafer wafer-sponsor">
     <div>
         <h2>{{ sponsor.name }}</h2>
         {{ sponsor.description.rendered|safe }}
     </div>
+    </section>
     {% empty %}
     <p>No sponsors yet.</p>
     {% endfor %}
