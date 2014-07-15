@@ -38,15 +38,15 @@
 <div class="well">
     {{ object.abstract.rendered|safe }}
 </div>
+{% if talk.talkurl_set.all %}
 <div class="well" id="urls">
-   {% if talk.talkurl_set.all %}
    <div>{% trans "URLS" %}</div>
    <ul>
       {% for talkurl in talk.talkurl_set.all %}
       <li><a href="{{ talkurl.url }}">{{ talkurl.description }}</a></li>
       {% endfor %}
    </ul>
-   {% endif %}
 </div>
+{% endif %}
 </section>
 {% endblock %}
