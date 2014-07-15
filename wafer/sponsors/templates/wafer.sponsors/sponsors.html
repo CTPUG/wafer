@@ -1,5 +1,6 @@
 {% extends "wafer/base.html" %}
 {% block content %}
+<section class="wafer wafer-sponsors">
 <h1>{% trans 'Sponsors' %}</h1>
 <div class="wafer list">
     {% for sponsor in sponsor_list %}
@@ -11,4 +12,5 @@
     <p>No sponsors yet.</p>
     {% endfor %}
 </div>
+</section>
 {% endblock %}

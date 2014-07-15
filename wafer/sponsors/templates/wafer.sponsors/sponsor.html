@@ -1,7 +1,9 @@
 {% extends "wafer/base.html" %}
 {% block content %}
+<section class="wafer wafer-sponsor">
 <h1>{{ object.name }}</h1>
 <div class="sponsor-detail">
 {{ object.description.rendered|safe }}
 </div>
+</section>
 {% endblock %}
