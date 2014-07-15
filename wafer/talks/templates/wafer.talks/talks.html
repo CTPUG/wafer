@@ -1,6 +1,6 @@
 {% extends "wafer/base.html" %}
 {% block content %}
-<section class="wafer-talks">
+<section class="wafer wafer-talks">
 <h1>{% trans 'Talks' %}</h1>
 <div class="wafer list">
     {% for talk in talk_list %}
@@ -21,7 +21,7 @@
 </div>
 </section>
 {% if is_paginated %}
-<section class="wafer-pagination">
+<section class="wafer wafer-pagination">
 <div class="pagination">
     <ul>
         {% if page_obj.has_previous %}

@@ -1,5 +1,6 @@
 {% extends "wafer/base.html" %}
 {% block content %}
+<section class="wafer wafer-talk">
 {% if can_edit %}
 <div class="pull-right">
     <a href="{% url 'wafer_talk_edit' object.pk %}" class="btn btn-default">{% trans 'Edit' %}</a>
@@ -47,4 +48,5 @@
    </ul>
    {% endif %}
 </div>
+</section>
 {% endblock %}

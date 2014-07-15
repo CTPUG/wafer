@@ -1,6 +1,7 @@
 {% extends 'wafer/base.html' %}
 {% load crispy_forms_tags %}
 {% block content %}
+<section class="wafer wafer-talk-edit">
 {% if can_edit %}
 <h1>{% trans "Edit Talk" %}</h1>
 {% else %}
@@ -14,4 +15,5 @@
 {{ form.media }}
 {% crispy form %}
 {% endif %}
+</section>
 {% endblock %}
