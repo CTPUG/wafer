@@ -12,4 +12,4 @@ markdown
 django-medusa
 # markitup 2.2 breaks on python 2 with module level imports, which we
 # need to use for markdown, so avoid using that
-django-markitup<=2.1
+django-markitup<=2.1,>2.2
