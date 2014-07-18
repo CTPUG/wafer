@@ -27,12 +27,6 @@ class UserProfile(models.Model):
     def pending_talks(self):
         return self.user.talks.filter(status=PENDING)
 
-    def manages_registration(self):
-        return self.user.created.count() > 0
-
-    def registrations(self):
-        return self.user.created.all()
-
     def avatar_url(self, size=96, https=True, default='mm'):
         if not self.user.email:
             return None
