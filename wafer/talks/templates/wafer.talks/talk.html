@@ -25,6 +25,7 @@
 </div>
 {% if user.is_staff %}
 <div>
+    <p>
     {% trans 'Status:' %}
     {% if object.pending %}
     <span class="label label-warning">{% trans 'Under consideration' %}</span>
@@ -33,6 +34,7 @@
     {% else %}
     <span class="label label-danger">{% trans 'Not accepted' %}</span>
     {% endif %}
+    </p>
 </div>
 {% endif %}
 <div class="well">
