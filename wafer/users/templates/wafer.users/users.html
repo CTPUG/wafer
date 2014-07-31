@@ -9,8 +9,8 @@
 </a>
 {% endfor %}
 {% if is_paginated %}
-<div class="pagination">
-    <ul>
+<section class="wafer wafer-pagination">
+    <ul class="pagination">
         {% if page_obj.has_previous %}
         <li><a href="{% url 'wafer_users_page' page=page_obj.previous_page_number %}">&laquo;</a></li>
         {% else %}
@@ -25,6 +25,6 @@
         <li class="disabled"><a href="#">&raquo;</a></li>
         {% endif %}
     </ul>
-</div>
+</section>
 {% endif %}
 {% endblock %}
