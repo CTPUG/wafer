@@ -56,7 +56,7 @@ def github_login(request):
         if r.status_code != 200:
             return HttpResponseForbidden('Failed to obtain email address from'
                     ' github - unexpected response', content_type='text/plain')
-        email = r.json()[0]
+        email = r.json()[0]['email']
 
     user = authenticate(github_login=gh['login'], name=gh['name'], email=email,
                         blog=gh['blog'])
