@@ -1,4 +1,5 @@
 import urllib
+import logging
 
 from django.contrib.auth import authenticate, login
 from django.core.urlresolvers import reverse
@@ -6,6 +7,8 @@ from django.conf import settings
 from django.http import HttpResponseRedirect, HttpResponseForbidden
 
 import requests
+
+log = logging.getLogger(__name__)
 
 
 def redirect_profile(request):
@@ -56,10 +59,21 @@ def github_login(request):
         if r.status_code != 200:
             return HttpResponseForbidden('Failed to obtain email address from'
                     ' github - unexpected response', content_type='text/plain')
-        email = r.json()[0]['email']
+        try:
+            email = r.json()[0]['email']
+        except (KeyError, IndexError) as e:
+            log.debug('Error extracting github email address: %s', e)
+            return HttpResponseForbidden('Failed to obtain email address from'
+                    ' github - unexpected response', content_type='text/plain')
 
-    user = authenticate(github_login=gh['login'], name=gh['name'], email=email,
-                        blog=gh['blog'])
+    try:
+        user = authenticate(github_login=gh['login'], name=gh['name'], email=email,
+                            blog=gh['blog'])
+    except KeyError as e:
+        log.debug('Error creating account from github information: %s', e)
+        return HttpResponseForbidden('Unexpected response from github.'
+                ' Authentication failed', content_type='text/plain')
+
     if not user:
         return HttpResponseForbidden('Authentication with github credentials'
                 ' failed', content_type='text/plain')
