@@ -688,13 +688,14 @@ class ValidationTests(TestCase):
                                             page_id=page1.pk)
         item3.slots.add(slot1)
         item4 = ScheduleItem.objects.create(venue=venue2,
-                                            page_id=page1.pk)
+                                            talk_id=talk.pk)
         item4.slots.add(slot2)
 
         duplicates = find_duplicate_schedule_items()
-        assert set(duplicates) == set([item1, item2, item3, item4])
+        assert set(duplicates) == set([item1, item2, item4])
 
         item4.page_id = page2.pk
+        item4.talk_id = None
         item4.save()
 
         duplicates = find_duplicate_schedule_items()
