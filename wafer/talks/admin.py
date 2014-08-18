@@ -8,7 +8,7 @@ class TalkUrlInline(admin.TabularInline):
 
 class TalkAdmin(admin.ModelAdmin):
     list_display = ('title', 'get_author_name', 'get_author_contact',
-                    'get_in_schedule', 'status')
+                    'talk_type', 'get_in_schedule', 'status')
     list_editable = ('status',)
 
     inlines = [
