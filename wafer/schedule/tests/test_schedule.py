@@ -296,14 +296,19 @@ class ScheduleTests(TestCase):
         start5 = D.time(14, 0, 0)
         end = D.time(15, 0, 0)
 
+        # We create the slots out of order to tt
         slot1 = Slot.objects.create(start_time=start1, end_time=start2,
                                     day=day1)
-        slot2 = Slot.objects.create(start_time=start2, end_time=start3,
-                                    day=day1)
-        slot3 = Slot.objects.create(start_time=start3, end_time=start4,
-                                    day=day1)
+
         slot4 = Slot.objects.create(start_time=start4, end_time=start5,
                                     day=day1)
+
+        slot2 = Slot.objects.create(start_time=start2, end_time=start3,
+                                    day=day1)
+
+        slot3 = Slot.objects.create(start_time=start3, end_time=start4,
+                                    day=day1)
+
         slot5 = Slot.objects.create(start_time=start5, end_time=end,
                                     day=day1)
 
