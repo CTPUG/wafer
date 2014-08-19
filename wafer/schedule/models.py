@@ -127,8 +127,6 @@ class ScheduleItem(models.Model):
         if self.details:
             if self.talk:
                 return '%s - %s' % (self.talk.title, self.details)
-            elif self.page:
-                return '%s - %s' % (self.page.name, self.details)
             return self.details
         elif self.talk:
             return self.talk.title
