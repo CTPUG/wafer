@@ -147,17 +147,17 @@ class CurrentView(TemplateView):
         for slot in Slot.objects.all():
             if slot.get_day() != today:
                 continue
-            if slot.get_start_time() <= time and slot.end_time >= time:
+            if slot.get_start_time() <= time and slot.end_time > time:
                 cur_slot = slot
-            elif slot.end_time < time:
+            elif slot.end_time <= time:
                 if prev_slot:
-                    if prev_slot.end_time <= slot.end_time:
+                    if prev_slot.end_time < slot.end_time:
                         prev_slot = slot
                 else:
                     prev_slot = slot
             elif slot.get_start_time() >= time:
                 if next_slot:
-                    if next_slot.end_time >= slot.end_time:
+                    if next_slot.end_time > slot.end_time:
                         next_slot = slot
                 else:
                     next_slot = slot
