@@ -1,0 +1,53 @@
+{% extends "wafer/base.html" %}
+{% block content %}
+<h1>{% trans Current %}</h1>
+<div class="wafer_schedule">
+   {% if not active %}
+   {# Schedule is incomplete / invalid, so show nothing #}
+   {% blocktrans %}
+   <p>The final schedule has not been published yet.</p>
+   {% endblocktrans %}
+   {% elif not slots %}
+   {% blocktrans %}
+   <p>Nothing happening right now.</p>
+   {% endblocktrans %}
+   {% else %}
+   <table cellspacing=1 cellpadding=0>
+      <tr>
+         <th>{% trans Time %}</th>
+         {% for venue in venue_list %}
+         <th><a href="{{ venue.get_absolute_url }}">{{ venue.name }}</a></th>
+        {% endfor %}
+      </tr>
+      {% for row in slots %}
+      <tr>
+        {% if row.slot == cur_slot %}
+           <td>{{ row.slot.get_start_time|time:"H:i" }} - {{ row.slot.end_time|time:"H:i" }} (Now On)</td>
+        {% else %}
+           <td>{{ row.slot.get_start_time|time:"H:i" }} - {{ row.slot.end_time|time:"H:i" }}</td>
+        {% endif %}
+        {% for item in row.get_sorted_items %}
+        {% if item.item == "unavailable" %}
+           <td colspan="{{ item.colspan }}" rowspan="{{ item.rowspan }}" class="unavailable"></td>
+        {% else %}
+           {% if item.note == "complete" %}
+              <td colspan="{{ item.colspan }}" rowspan="{{ item.rowspan }}" class="completed">
+           {% elif item.note == "current" %}
+              <td colspan="{{ item.colspan }}" rowspan="{{ item.rowspan }}" class="current_active">
+           {% else %}
+              <td colspan="{{ item.colspan }}" rowspan="{{ item.rowspan }}" class="future">
+           {% endif %}
+              {% if item.item.get_url %}
+                 <a href="{{ item.item.get_url }}">{{ item.item.get_details|escape }}</a>
+              {% else %}
+                 {{ item.item.get_details|escape }}
+              {% endif %}
+           </td>
+        {% endif %}
+        {% endfor %}
+      </tr>
+      {% endfor %}
+   </table>
+   {% endif %}
+</div>
+{% endblock %}

@@ -475,6 +475,230 @@ class ScheduleTests(TestCase):
         assert days[day1][4].get_sorted_items()[0]['rowspan'] == 1
         assert days[day1][4].get_sorted_items()[0]['colspan'] == 1
 
+    def test_current_view_simple(self):
+        """Create a schedule and check that the current view looks sane."""
+        day1 = Day.objects.create(date=D.date(2013, 9, 22))
+        day2 = Day.objects.create(date=D.date(2013, 9, 23))
+        venue1 = Venue.objects.create(order=1, name='Venue 1')
+        venue2 = Venue.objects.create(order=2, name='Venue 2')
+        venue1.days.add(day1)
+        venue2.days.add(day1)
+
+        start1 = D.time(10, 0, 0)
+        start2 = D.time(11, 0, 0)
+        start3 = D.time(12, 0, 0)
+        start4 = D.time(13, 0, 0)
+        start5 = D.time(14, 0, 0)
+
+        # During the first slot
+        cur1 = D.time(10, 30, 0)
+        # Middle of the day
+        cur2 = D.time(11, 30, 0)
+        cur3 = D.time(12, 30, 0)
+        # During the last slot
+        cur4 = D.time(13, 30, 0)
+        # After the last slot
+        cur5 = D.time(15, 30, 0)
+
+        slots=[]
+
+        slots.append(Slot.objects.create(start_time=start1, end_time=start2,
+                                         day=day1))
+        slots.append(Slot.objects.create(start_time=start2, end_time=start3,
+                                         day=day1))
+        slots.append(Slot.objects.create(start_time=start3, end_time=start4,
+                                         day=day1))
+        slots.append(Slot.objects.create(start_time=start4, end_time=start5,
+                                         day=day1))
+
+        pages = self._make_pages(8)
+        venues = [venue1, venue2] * 4
+        items = self._make_items(venues, pages)
+
+        for index, item in enumerate(items):
+            item.slots.add(slots[index // 2])
+
+        c = Client()
+        response = c.get('/schedule/current/',
+                         {'day': day1.date.strftime('%Y-%m-%d'),
+                          'time': cur1.strftime('%H:%M')})
+        context = response.context
+
+        assert context['cur_slot'] == slots[0]
+        assert len(context['venue_list']) == 2
+        # Only cur and next slot
+        assert len(context['slots']) == 2
+        assert context['slots'][0].items[venue1]['note'] == 'current'
+        assert context['slots'][1].items[venue1]['note'] == 'forthcoming'
+
+        response = c.get('/schedule/current/',
+                         {'day': day1.date.strftime('%Y-%m-%d'),
+                          'time': cur2.strftime('%H:%M')})
+        context = response.context
+        assert context['cur_slot'] == slots[1]
+        assert len(context['venue_list']) == 2
+        # prev, cur and next slot
+        assert len(context['slots']) == 3
+        assert context['slots'][0].items[venue1]['note'] == 'complete'
+        assert context['slots'][1].items[venue1]['note'] == 'current'
+        assert context['slots'][2].items[venue1]['note'] == 'forthcoming'
+
+
+        response = c.get('/schedule/current/',
+                         {'day': day1.date.strftime('%Y-%m-%d'),
+                          'time': cur3.strftime('%H:%M')})
+        context = response.context
+        assert context['cur_slot'] == slots[2]
+        assert len(context['venue_list']) == 2
+        # prev and cur 
+        assert len(context['slots']) == 3
+        assert context['slots'][0].items[venue1]['note'] == 'complete'
+        assert context['slots'][1].items[venue1]['note'] == 'current'
+        assert context['slots'][2].items[venue1]['note'] == 'forthcoming'
+
+
+        response = c.get('/schedule/current/',
+                         {'day': day1.date.strftime('%Y-%m-%d'),
+                          'time': cur4.strftime('%H:%M')})
+        context = response.context
+        assert context['cur_slot'] == slots[3]
+        assert len(context['venue_list']) == 2
+        # preve and cur slot
+        assert len(context['slots']) == 2
+        assert context['slots'][0].items[venue1]['note'] == 'complete'
+        assert context['slots'][1].items[venue1]['note'] == 'current'
+
+
+        response = c.get('/schedule/current/',
+                         {'day': day1.date.strftime('%Y-%m-%d'),
+                          'time': cur5.strftime('%H:%M')})
+        context = response.context
+        assert context['cur_slot'] is None
+        assert len(context['venue_list']) == 2
+        # prev slot only
+        assert len(context['slots']) == 1
+        assert context['slots'][0].items[venue1]['note'] == 'complete'
+
+        # Check that next day is an empty current view
+        response = c.get('/schedule/current/',
+                         {'day': day2.date.strftime('%Y-%m-%d'),
+                          'time': cur3.strftime('%H:%M')})
+        assert len(response.context['slots']) == 0
+
+    def test_current_view_complex(self):
+        """Create a schedule with overlapping venues and slotes and check that
+           the current view looks sane."""
+        # Schedule is
+        #         Venue 1     Venue 2   Venue3
+        # 10-11   Item1       --        Item5
+        # 11-12   Item2       Item3     Item4
+        # 12-13     |         Item7     Item6
+        # 13-14   Item8         |         |
+        # 14-15   --          Item9     Item10
+        day1 = Day.objects.create(date=D.date(2013, 9, 22))
+        venue1 = Venue.objects.create(order=1, name='Venue 1')
+        venue2 = Venue.objects.create(order=2, name='Venue 2')
+        venue3 = Venue.objects.create(order=3, name='Venue 3')
+        venue1.days.add(day1)
+        venue2.days.add(day1)
+        venue3.days.add(day1)
+
+        start1 = D.time(10, 0, 0)
+        start2 = D.time(11, 0, 0)
+        start3 = D.time(12, 0, 0)
+        start4 = D.time(13, 0, 0)
+        start5 = D.time(14, 0, 0)
+        end = D.time(15, 0, 0)
+
+        slot1 = Slot.objects.create(start_time=start1, end_time=start2,
+                                    day=day1)
+        slot2 = Slot.objects.create(start_time=start2, end_time=start3,
+                                    day=day1)
+        slot3 = Slot.objects.create(start_time=start3, end_time=start4,
+                                    day=day1)
+        slot4 = Slot.objects.create(start_time=start4, end_time=start5,
+                                    day=day1)
+        slot5 = Slot.objects.create(start_time=start5, end_time=end,
+                                    day=day1)
+
+        pages = self._make_pages(10)
+        venues = [venue1, venue1, venue2, venue3, venue3, venue3,
+                  venue2, venue1, venue2, venue3]
+        items = self._make_items(venues, pages)
+
+        items[0].slots.add(slot1)
+        items[4].slots.add(slot1)
+        items[1].slots.add(slot2)
+        items[1].slots.add(slot3)
+        items[2].slots.add(slot2)
+        items[3].slots.add(slot2)
+        items[5].slots.add(slot3)
+        items[5].slots.add(slot4)
+        items[6].slots.add(slot3)
+        items[6].slots.add(slot4)
+        items[7].slots.add(slot4)
+        items[8].slots.add(slot5)
+        items[9].slots.add(slot5)
+
+        # During the first slot
+        cur1 = D.time(10, 30, 0)
+        # Middle of the day
+        cur2 = D.time(11, 30, 0)
+        cur3 = D.time(12, 30, 0)
+        # During the last slot
+        cur4 = D.time(14, 30, 0)
+
+        c = Client()
+        response = c.get('/schedule/current/',
+                         {'day': day1.date.strftime('%Y-%m-%d'),
+                          'time': cur1.strftime('%H:%M')})
+        context = response.context
+        assert context['cur_slot'] == slot1
+        assert len(context['venue_list']) == 3
+        assert len(context['slots']) == 2
+        assert context['slots'][0].items[venue1]['note'] == 'current'
+        assert context['slots'][0].items[venue1]['colspan'] == 2
+
+        response = c.get('/schedule/current/',
+                         {'day': day1.date.strftime('%Y-%m-%d'),
+                          'time': cur2.strftime('%H:%M')})
+        context = response.context
+        assert context['cur_slot'] == slot2
+        assert len(context['slots']) == 3
+        assert context['slots'][0].items[venue1]['note'] == 'complete'
+        assert context['slots'][1].items[venue1]['note'] == 'current'
+        assert context['slots'][1].items[venue1]['rowspan'] == 2
+        assert context['slots'][1].items[venue2]['note'] == 'current'
+        assert context['slots'][1].items[venue2]['rowspan'] == 1
+        # We truncate the rowspan for this event
+        assert context['slots'][2].items[venue2]['note'] == 'forthcoming'
+        assert context['slots'][2].items[venue2]['rowspan'] == 1
+
+        response = c.get('/schedule/current/',
+                         {'day': day1.date.strftime('%Y-%m-%d'),
+                          'time': cur3.strftime('%H:%M')})
+        context = response.context
+        assert context['cur_slot'] == slot3
+        assert len(context['slots']) == 3
+        # This event is still current, even though it started last slot
+        assert context['slots'][0].items[venue1]['note'] == 'current'
+        assert context['slots'][0].items[venue1]['rowspan'] == 2
+        # Venue 2 now has rowspan 2
+        assert context['slots'][1].items[venue2]['note'] == 'current'
+        assert context['slots'][1].items[venue2]['rowspan'] == 2
+
+        response = c.get('/schedule/current/',
+                         {'day': day1.date.strftime('%Y-%m-%d'),
+                          'time': cur4.strftime('%H:%M')})
+        context = response.context
+        assert context['cur_slot'] == slot5
+        assert len(context['slots']) == 2
+        assert context['slots'][0].items[venue1]['note'] == 'complete'
+        assert context['slots'][0].items[venue1]['rowspan'] == 1
+        # Items are truncated to 1 row
+        assert context['slots'][0].items[venue2]['note'] == 'complete'
+        assert context['slots'][0].items[venue2]['rowspan'] == 1
+
 
 class ValidationTests(TestCase):
 
@@ -749,3 +973,36 @@ class ValidationTests(TestCase):
         assert set(venues) == set([venue1, venue2])
         assert set(venues[venue1]) == set([item4])
         assert set(venues[venue2]) == set([item2, item5])
+
+    def test_current_view_invalid(self):
+        """Test that invalid schedules return a inactive current view."""
+        day1 = Day.objects.create(date=D.date(2013, 9, 22))
+        venue1 = Venue.objects.create(order=1, name='Venue 1')
+        venue1.days.add(day1)
+        start1 = D.time(10, 0, 0)
+        start2 = D.time(11, 0, 0)
+        end = D.time(12, 0, 0)
+        cur1 = D.time(10, 30, 0)
+
+        slot1 = Slot.objects.create(start_time=start1, end_time=start2,
+                                    day=day1)
+        slot2 = Slot.objects.create(start_time=start1, end_time=end,
+                                    day=day1)
+
+        user = User.objects.create_user('john', 'best@wafer.test',
+                                        'johnpassword')
+        talk = Talk.objects.create(title="Test talk", status=ACCEPTED,
+                                   corresponding_author_id=user.id)
+
+        item1 = ScheduleItem.objects.create(venue=venue1,
+                                            talk_id=talk.pk)
+        item1.slots.add(slot1)
+        item2 = ScheduleItem.objects.create(venue=venue1,
+                                            talk_id=talk.pk)
+        item2.slots.add(slot2)
+
+        c = Client()
+        response = c.get('/schedule/current/',
+                         {'day': day1.date.strftime('%Y-%m-%d'),
+                          'time': cur1.strftime('%H:%M')})
+        assert response.context['active'] is False
