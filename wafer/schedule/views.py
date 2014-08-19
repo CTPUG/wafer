@@ -78,7 +78,7 @@ def generate_schedule_dict(venue_list, today=None):
     # We create a list of slots and schedule items
     schedule_days = {}
     seen_items = {}
-    for slot in Slot.objects.all():
+    for slot in Slot.objects.all().order_by('end_time', 'start_time', 'day'):
         day = slot.get_day()
         if today and day != today:
             # Restrict ourselves to only today
