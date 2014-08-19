@@ -166,12 +166,6 @@ class CurrentView(TemplateView):
         context['cur_slot'] = None
         if prev_slot:
             prev_row = make_schedule_row(venue_list, prev_slot, seen_items)
-            for item in prev_row.items.values():
-                if item['rowspan'] == 1:
-                    item['note'] = 'complete'
-                else:
-                    # Must overlap with current slot
-                    item['note'] = 'current'
             context['slots'].append(prev_row)
         if cur_slot:
             cur_row = make_schedule_row(venue_list, cur_slot, seen_items)
@@ -181,11 +175,21 @@ class CurrentView(TemplateView):
             context['cur_slot'] = cur_slot
         if next_slot:
             next_row = make_schedule_row(venue_list, next_slot, seen_items)
+            context['slots'].append(next_row)
+        # Add styling hints. Needs to be after all the schedule rows are
+        # created so the spans are set correctly
+        if prev_slot:
+            for item in prev_row.items.values():
+                if item['rowspan'] == 1:
+                    item['note'] = 'complete'
+                else:
+                    # Must overlap with current slot
+                    item['note'] = 'current'
+        if next_slot:
             for item in next_row.items.values():
                 if item['rowspan'] == 1:
                     item['note'] = 'forthcoming'
                 else:
                     # Must overlap with current slot
                     item['note'] = 'current'
-            context['slots'].append(next_row)
         return context
