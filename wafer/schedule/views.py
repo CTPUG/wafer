@@ -163,6 +163,7 @@ class CurrentView(TemplateView):
                     next_slot = slot
         current_items = {}
         seen_items = {}
+        context['cur_slot'] = None
         if prev_slot:
             prev_row = make_schedule_row(venue_list, prev_slot, seen_items)
             for item in prev_row.items.values():
@@ -177,6 +178,7 @@ class CurrentView(TemplateView):
             for item in cur_row.items.values():
                 item['note'] = 'current'
             context['slots'].append(cur_row)
+            context['cur_slot'] = cur_slot
         if next_slot:
             next_row = make_schedule_row(venue_list, next_slot, seen_items)
             for item in next_row.items.values():

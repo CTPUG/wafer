@@ -21,7 +21,11 @@
       </tr>
       {% for row in slots %}
       <tr>
-         <td>{{ row.slot.get_start_time|time:"H:i" }} - {{ row.slot.end_time|time:"H:i" }}</td>
+        {% if row.slot == cur_slot %}
+           <td>{{ row.slot.get_start_time|time:"H:i" }} - {{ row.slot.end_time|time:"H:i" }} (Now On)</td>
+        {% else %}
+           <td>{{ row.slot.get_start_time|time:"H:i" }} - {{ row.slot.end_time|time:"H:i" }}</td>
+        {% endif %}
         {% for item in row.get_sorted_items %}
         {% if item.item == "unavailable" %}
            <td colspan="{{ item.colspan }}" rowspan="{{ item.rowspan }}" class="unavailable"></td>
