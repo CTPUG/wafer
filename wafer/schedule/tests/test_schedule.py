@@ -151,12 +151,16 @@ class ScheduleTests(TestCase):
         venues = [venue1, venue1, venue1, venue2, venue2, venue2]
         items = self._make_items(venues, pages)
 
+        # Create the slots not in date order either
+
         slot1 = Slot.objects.create(start_time=start1, end_time=start2,
+                                    day=day1)
+        slot3 = Slot.objects.create(previous_slot=slot1, end_time=end,
                                     day=day1)
         slot2 = Slot.objects.create(previous_slot=slot1, end_time=start3,
                                     day=day1)
-        slot3 = Slot.objects.create(previous_slot=slot2, end_time=end,
-                                    day=day1)
+        slot3.previous_slot = slot2
+        slot3.save()
 
         items[0].slots.add(slot3)
         items[3].slots.add(slot3)
