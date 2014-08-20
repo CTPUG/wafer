@@ -114,6 +114,10 @@ class ScheduleItem(models.Model):
         null=False, blank=True,
         help_text=_("Notes for the conference organisers"))
 
+    css_class = models.CharField(
+        max_length=128, null=False, blank=True,
+        help_text=_("Custom css class for this schedule item"))
+
     def get_title(self):
         if self.talk:
             return self.talk.title
