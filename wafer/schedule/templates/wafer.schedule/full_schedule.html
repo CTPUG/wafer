@@ -22,14 +22,14 @@
       </tr>
       {% for row in table_rows %}
       <tr>
-         <td>{{ row.slot.get_start_time|time:"H:i" }} - {{ row.slot.end_time|time:"H:i" }}</td>
+         <td class="scheduleslot">{{ row.slot.get_start_time|time:"H:i" }} - {{ row.slot.end_time|time:"H:i" }}</td>
          {% for item in row.get_sorted_items %}
          {% if item.item == "unavailable" %}
             {# Venue isn't available, so we add an empty table element with the 'unavailable' class #}
             <td colspan="{{ item.colspan }}" rowspan="{{ item.rowspan }}" class="unavailable"></td>
          {% else %}
             {# Add item details #}
-            <td colspan="{{ item.colspan }}" rowspan="{{ item.rowspan }}">
+            <td colspan="{{ item.colspan }}" rowspan="{{ item.rowspan }}" class="{{ item.item.css_class|default:'schedule' }}">
                {% if item.item.get_url %}
                <a href="{{ item.item.get_url }}">
                   {{ item.item.get_details|escape }}</a>
