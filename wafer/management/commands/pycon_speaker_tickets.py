@@ -9,12 +9,12 @@ from wafer.talks.models import ACCEPTED
 
 
 class Command(BaseCommand):
-    help = "List speakers and associated tickets."
+    help = ("List speakers and associated tickets. By default, only lists"
+            " speakers for accepted talk, but this can be overriden by"
+            " the --all option")
 
     option_list = BaseCommand.option_list + tuple([
-        make_option('--speakers', action="store_true", default=False,
-                    help='List speakers and tickets (for accepted talks)'),
-        make_option('--allspeakers', action="store_true", default=False,
+        make_option('--all', action="store_true", default=False,
                     help='List speakers and tickets (for all talks)'),
     ])
 
@@ -25,7 +25,7 @@ class Command(BaseCommand):
         for person in people:
             # We query talks to filter out the speakers from ordinary
             # accounts
-            if options['allspeakers']:
+            if options['all']:
                 titles = [x.title for x in person.talks.all()]
             else:
                 titles = [x.title for x in
