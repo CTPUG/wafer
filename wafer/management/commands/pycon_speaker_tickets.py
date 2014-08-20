@@ -34,9 +34,9 @@ class Command(BaseCommand):
                 continue
             tickets = person.ticket.all()
             if tickets:
-                ticket = '%d' % tickets[0].barcode
+                ticket = u'%d' % tickets[0].barcode
             else:
-                ticket = 'NO TICKET PURCHASED'
+                ticket = u'NO TICKET PURCHASED'
             row = [x.encode("utf-8") for x in (person.get_full_name(),
                    person.email,
                    ticket)]
