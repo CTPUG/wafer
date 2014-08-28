@@ -85,6 +85,11 @@ def import_ticket(ticket_barcode, ticket_type, email):
         user = User.objects.get(email=email, ticket=None)
     except User.DoesNotExist:
         user = None
+    except User.MultipleObjectsReturned:
+        # We're can't uniquely identify the user to associate this ticket
+        # with, so leave it for them to figure out via the 'claim ticket'
+        # interface
+        user = None
 
     ticket = Ticket.objects.create(
         barcode=ticket_barcode,
