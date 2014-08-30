@@ -8,6 +8,8 @@ from django.http import HttpResponseRedirect, HttpResponseForbidden
 
 import requests
 
+from wafer.users.models import UserProfile
+
 log = logging.getLogger(__name__)
 
 
@@ -73,6 +75,14 @@ def github_login(request):
         log.debug('Error creating account from github information: %s', e)
         return HttpResponseForbidden('Unexpected response from github.'
                 ' Authentication failed', content_type='text/plain')
+    except UserProfile.MultipleObjectsReturned as e:
+        # FIXME: This is a short term workaround. Find a better fix
+        # later
+        log.debug('Duplicate accounts for github login %s: %s',
+                  gh['login'], e)
+        return HttpResponseForbidden('Multiple accounts associated with'
+                ' these github credentials. Authentication failed',
+                content_type='text/plain')
 
     if not user:
         return HttpResponseForbidden('Authentication with github credentials'
