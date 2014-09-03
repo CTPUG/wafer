@@ -588,7 +588,7 @@ class ScheduleTests(TestCase):
         context = response.context
 
         assert context['cur_slot'] == slots[0]
-        assert len(context['venue_list']) == 2
+        assert len(context['schedule_day'].venues) == 2
         # Only cur and next slot
         assert len(context['slots']) == 2
         assert context['slots'][0].items[venue1]['note'] == 'current'
@@ -599,7 +599,7 @@ class ScheduleTests(TestCase):
                           'time': cur2.strftime('%H:%M')})
         context = response.context
         assert context['cur_slot'] == slots[1]
-        assert len(context['venue_list']) == 2
+        assert len(context['schedule_day'].venues) == 2
         # prev, cur and next slot
         assert len(context['slots']) == 3
         assert context['slots'][0].items[venue1]['note'] == 'complete'
@@ -612,7 +612,7 @@ class ScheduleTests(TestCase):
                           'time': cur3.strftime('%H:%M')})
         context = response.context
         assert context['cur_slot'] == slots[2]
-        assert len(context['venue_list']) == 2
+        assert len(context['schedule_day'].venues) == 2
         # prev and cur 
         assert len(context['slots']) == 3
         assert context['slots'][0].items[venue1]['note'] == 'complete'
@@ -625,7 +625,7 @@ class ScheduleTests(TestCase):
                           'time': cur4.strftime('%H:%M')})
         context = response.context
         assert context['cur_slot'] == slots[3]
-        assert len(context['venue_list']) == 2
+        assert len(context['schedule_day'].venues) == 2
         # preve and cur slot
         assert len(context['slots']) == 2
         assert context['slots'][0].items[venue1]['note'] == 'complete'
@@ -637,7 +637,7 @@ class ScheduleTests(TestCase):
                           'time': cur5.strftime('%H:%M')})
         context = response.context
         assert context['cur_slot'] is None
-        assert len(context['venue_list']) == 2
+        assert len(context['schedule_day'].venues) == 2
         # prev slot only
         assert len(context['slots']) == 1
         assert context['slots'][0].items[venue1]['note'] == 'complete'
@@ -717,7 +717,7 @@ class ScheduleTests(TestCase):
                           'time': cur1.strftime('%H:%M')})
         context = response.context
         assert context['cur_slot'] == slot1
-        assert len(context['venue_list']) == 3
+        assert len(context['schedule_day'].venues) == 3
         assert len(context['slots']) == 2
         assert context['slots'][0].items[venue1]['note'] == 'current'
         assert context['slots'][0].items[venue1]['colspan'] == 2

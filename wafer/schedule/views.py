@@ -125,7 +125,7 @@ class CurrentView(TemplateView):
         # get the associated day object
         today = dates[day]
         now = datetime.datetime.now().time()
-        if 'time' in  self.request.GET:
+        if 'time' in self.request.GET:
             time = self.request.GET['time']
             try:
                 time = datetime.datetime.strptime(time, '%H:%M').time()
@@ -134,7 +134,6 @@ class CurrentView(TemplateView):
         else:
             time = now
         venue_list = list(Venue.objects.select_related('day').all())
-        context['venue_list'] = venue_list
         # Find the slot that includes now
         cur_slot = None
         prev_slot = None
@@ -161,6 +160,7 @@ class CurrentView(TemplateView):
                     next_slot = slot
         seen_items = {}
         context['cur_slot'] = None
+        context['schedule_day'] = schedule_day
         if prev_slot:
             prev_row = make_schedule_row(schedule_day, prev_slot, seen_items)
             context['slots'].append(prev_row)
