@@ -13,7 +13,7 @@
    <table cellspacing=1 cellpadding=0>
       {# We assume that the admin has created a valid timetable #}
       <tr>
-         <td colspan="{{ venue_list|length|add:1 }}" class="title">{{ schedule_day.day.date|date:"l (d b)" }}</td>
+         <td colspan="{{ schedule_day.venues|length|add:1 }}" class="title">{{ schedule_day.day.date|date:"l (d b)" }}</td>
       </tr>
       <tr>
          <th>{% trans "Time" %}</th>
