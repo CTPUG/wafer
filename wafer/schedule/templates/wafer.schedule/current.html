@@ -15,7 +15,7 @@
    <table cellspacing=1 cellpadding=0>
       <tr>
          <th>{% trans "Time" %}</th>
-         {% for venue in venue_list %}
+         {% for venue in schedule_day.venues %}
          <th><a href="{{ venue.get_absolute_url }}">{{ venue.name }}</a></th>
         {% endfor %}
       </tr>
