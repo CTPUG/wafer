@@ -122,6 +122,8 @@ def check_schedule():
 class ScheduleItemAdminForm(forms.ModelForm):
     class Meta:
         model = ScheduleItem
+        fields = ('slots', 'venue', 'talk', 'page', 'details', 'notes',
+                  'css_class')
 
     def __init__(self, *args, **kwargs):
         super(ScheduleItemAdminForm, self).__init__(*args, **kwargs)
@@ -164,6 +166,7 @@ class ScheduleItemAdmin(admin.ModelAdmin):
 class SlotAdminForm(forms.ModelForm):
     class Meta:
         model = Slot
+        fields = ('name', 'previous_slot', 'day', 'start_time', 'end_time')
 
     class Media:
         js = ('js/scheduledatetime.js',)
