@@ -1,6 +1,6 @@
 {% extends "wafer/base.html" %}
 {% block content %}
-<h1>{% trans Registrations %} {{ username }}</h1>
+<h1>{% trans "Registrations" %} {{ username }}</h1>
 {% for attendee in object %}
 <div>
    {{ attendee.name }} {{ attendee.email }}

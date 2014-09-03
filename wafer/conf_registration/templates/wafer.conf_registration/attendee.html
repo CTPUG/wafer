@@ -5,7 +5,7 @@
     <a href="{% url 'wafer_registration_edit' object.pk %}" class="btn btn-default">{% trans 'Edit' %}</a>
 </div>
 {% endif %}
-<h1>{% trans Attendee %}</h1>
+<h1>{% trans "Attendee" %}</h1>
 <div>
    {{ object.name }}
    {% if object.waitlist %}

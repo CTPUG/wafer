@@ -1,7 +1,7 @@
 {% extends "wafer/base.html" %}
 {% block content %}
 <section class="wafer wafer-schedule">
-<h1>{% trans Schedule %}</h1>
+<h1>{% trans "Schedule" %}</h1>
 <div class="wafer_schedule">
    {% if not venue_list %}
    {# Schedule is incomplete / invalid, so show nothing #}
@@ -11,7 +11,7 @@
    {% else %}
    <table cellspacing=1 cellpadding=0>
       <tr>
-         <th>{% trans Time %}</th>
+         <th>{% trans "Time" %}</th>
       {% for venue in venue_list %}
       <th><a href="{{ venue.get_absolute_url }}">{{ venue.name }}</a></th>
       {% endfor %}
