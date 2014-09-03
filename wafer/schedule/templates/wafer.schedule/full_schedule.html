@@ -9,19 +9,19 @@
    <p>The final schedule has not been published yet.</p>
    {% endblocktrans %}
    {% else %}
+   {% for schedule_day in schedule_days %}
    <table cellspacing=1 cellpadding=0>
+      {# We assume that the admin has created a valid timetable #}
+      <tr>
+         <td colspan="{{ venue_list|length|add:1 }}" class="title">{{ schedule_day.day.date|date:"l (d b)" }}</td>
+      </tr>
       <tr>
          <th>{% trans "Time" %}</th>
-      {% for venue in venue_list %}
-      <th><a href="{{ venue.get_absolute_url }}">{{ venue.name }}</a></th>
+      {% for venue in schedule_day.venues %}
+         <th><a href="{{ venue.get_absolute_url }}">{{ venue.name }}</a></th>
       {% endfor %}
       </tr>
-      {# We assume that the admin has created a valid timetable #}
-      {% for day, table_rows in table_days %}
-      <tr>
-         <td colspan="{{ venue_list|length|add:1 }}" class="title">{{ day.date|date:"l (d b)" }}</td>
-      </tr>
-      {% for row in table_rows %}
+      {% for row in schedule_day.rows %}
       <tr>
          <td class="scheduleslot">{{ row.slot.get_start_time|time:"H:i" }} - {{ row.slot.end_time|time:"H:i" }}</td>
          {% for item in row.get_sorted_items %}
@@ -42,8 +42,8 @@
          {% endfor %}
       </tr>
       {% endfor %}
-      {% endfor %}
    </table>
+   {% endfor %}
    {% endif %}
 </div>
 </section>
