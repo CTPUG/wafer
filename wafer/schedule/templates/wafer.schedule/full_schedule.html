@@ -1,5 +1,6 @@
 {% extends "wafer/base.html" %}
 {% block content %}
+<section class="wafer wafer-schedule">
 <h1>{% trans Schedule %}</h1>
 <div class="wafer_schedule">
    {% if not venue_list %}
@@ -44,4 +45,6 @@
       {% endfor %}
    </table>
    {% endif %}
+</div>
+</section>
 {% endblock %}
