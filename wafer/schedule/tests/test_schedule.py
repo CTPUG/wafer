@@ -42,20 +42,6 @@ class ScheduleTests(TestCase):
 
         assert output == ["Sep 22 (Sun)", "Sep 23 (Mon)"]
 
-    def test_venue_list(self):
-        """Create venues and check that we get the expected list back"""
-        Venue.objects.create(order=2, name='Venue 2')
-        Venue.objects.create(order=1, name='Venue 1')
-
-        assert Venue.objects.count() == 2
-
-        c = Client()
-        response = c.get('/schedule/')
-
-        assert len(response.context['venue_list']) == 2
-        assert response.context["venue_list"][0].name == "Venue 1"
-        assert response.context["venue_list"][1].name == "Venue 2"
-
     def test_simple_table(self):
         """Create a simple, single day table with 3 slots and 2 venues and
            check we get the expected results"""
@@ -98,36 +84,36 @@ class ScheduleTests(TestCase):
         c = Client()
         response = c.get('/schedule/')
 
-        days = dict(response.context['table_days'])
+        [day1] = response.context['schedule_days']
 
-        assert day1 in days
-        assert len(days[day1]) == 3
-        assert days[day1][0].slot.get_start_time() == start1
-        assert days[day1][0].slot.end_time == start2
-        assert days[day1][1].slot.get_start_time() == start2
-        assert days[day1][1].slot.end_time == start3
-        assert days[day1][2].slot.get_start_time() == start3
-        assert days[day1][2].slot.end_time == end
+        assert len(day1.rows) == 3
+        assert day1.venues == [venue1, venue2]
+        assert day1.rows[0].slot.get_start_time() == start1
+        assert day1.rows[0].slot.end_time == start2
+        assert day1.rows[1].slot.get_start_time() == start2
+        assert day1.rows[1].slot.end_time == start3
+        assert day1.rows[2].slot.get_start_time() == start3
+        assert day1.rows[2].slot.end_time == end
 
-        assert len(days[day1][0].items) == 2
-        assert len(days[day1][1].items) == 2
-        assert len(days[day1][2].items) == 2
+        assert len(day1.rows[0].items) == 2
+        assert len(day1.rows[1].items) == 2
+        assert len(day1.rows[2].items) == 2
 
-        assert days[day1][0].get_sorted_items()[0]['item'] == items[0]
-        assert days[day1][0].get_sorted_items()[0]['rowspan'] == 1
-        assert days[day1][0].get_sorted_items()[0]['colspan'] == 1
+        assert day1.rows[0].get_sorted_items()[0]['item'] == items[0]
+        assert day1.rows[0].get_sorted_items()[0]['rowspan'] == 1
+        assert day1.rows[0].get_sorted_items()[0]['colspan'] == 1
 
-        assert days[day1][0].get_sorted_items()[1]['item'] == items[3]
-        assert days[day1][0].get_sorted_items()[1]['rowspan'] == 1
-        assert days[day1][0].get_sorted_items()[1]['colspan'] == 1
+        assert day1.rows[0].get_sorted_items()[1]['item'] == items[3]
+        assert day1.rows[0].get_sorted_items()[1]['rowspan'] == 1
+        assert day1.rows[0].get_sorted_items()[1]['colspan'] == 1
 
-        assert days[day1][1].get_sorted_items()[0]['item'] == items[1]
-        assert days[day1][1].get_sorted_items()[0]['rowspan'] == 1
-        assert days[day1][1].get_sorted_items()[0]['colspan'] == 1
+        assert day1.rows[1].get_sorted_items()[0]['item'] == items[1]
+        assert day1.rows[1].get_sorted_items()[0]['rowspan'] == 1
+        assert day1.rows[1].get_sorted_items()[0]['colspan'] == 1
 
-        assert days[day1][2].get_sorted_items()[1]['item'] == items[5]
-        assert days[day1][2].get_sorted_items()[1]['rowspan'] == 1
-        assert days[day1][2].get_sorted_items()[1]['colspan'] == 1
+        assert day1.rows[2].get_sorted_items()[1]['item'] == items[5]
+        assert day1.rows[2].get_sorted_items()[1]['rowspan'] == 1
+        assert day1.rows[2].get_sorted_items()[1]['colspan'] == 1
 
     def test_ordering(self):
         """Ensure we handle oddly ordered creation of items correctly"""
@@ -172,36 +158,36 @@ class ScheduleTests(TestCase):
         c = Client()
         response = c.get('/schedule/')
 
-        days = dict(response.context['table_days'])
+        [day1] = response.context['schedule_days']
 
-        assert day1 in days
-        assert len(days[day1]) == 3
-        assert days[day1][0].slot.get_start_time() == start1
-        assert days[day1][0].slot.end_time == start2
-        assert days[day1][1].slot.get_start_time() == start2
-        assert days[day1][1].slot.end_time == start3
-        assert days[day1][2].slot.get_start_time() == start3
-        assert days[day1][2].slot.end_time == end
+        assert len(day1.rows) == 3
+        assert day1.venues == [venue1, venue2]
+        assert day1.rows[0].slot.get_start_time() == start1
+        assert day1.rows[0].slot.end_time == start2
+        assert day1.rows[1].slot.get_start_time() == start2
+        assert day1.rows[1].slot.end_time == start3
+        assert day1.rows[2].slot.get_start_time() == start3
+        assert day1.rows[2].slot.end_time == end
 
-        assert len(days[day1][0].items) == 2
-        assert len(days[day1][1].items) == 2
-        assert len(days[day1][2].items) == 2
+        assert len(day1.rows[0].items) == 2
+        assert len(day1.rows[1].items) == 2
+        assert len(day1.rows[2].items) == 2
 
-        assert days[day1][0].get_sorted_items()[0]['item'] == items[2]
-        assert days[day1][0].get_sorted_items()[0]['rowspan'] == 1
-        assert days[day1][0].get_sorted_items()[0]['colspan'] == 1
+        assert day1.rows[0].get_sorted_items()[0]['item'] == items[2]
+        assert day1.rows[0].get_sorted_items()[0]['rowspan'] == 1
+        assert day1.rows[0].get_sorted_items()[0]['colspan'] == 1
 
-        assert days[day1][0].get_sorted_items()[1]['item'] == items[5]
-        assert days[day1][0].get_sorted_items()[1]['rowspan'] == 1
-        assert days[day1][0].get_sorted_items()[1]['colspan'] == 1
+        assert day1.rows[0].get_sorted_items()[1]['item'] == items[5]
+        assert day1.rows[0].get_sorted_items()[1]['rowspan'] == 1
+        assert day1.rows[0].get_sorted_items()[1]['colspan'] == 1
 
-        assert days[day1][1].get_sorted_items()[0]['item'] == items[1]
-        assert days[day1][1].get_sorted_items()[0]['rowspan'] == 1
-        assert days[day1][1].get_sorted_items()[0]['colspan'] == 1
+        assert day1.rows[1].get_sorted_items()[0]['item'] == items[1]
+        assert day1.rows[1].get_sorted_items()[0]['rowspan'] == 1
+        assert day1.rows[1].get_sorted_items()[0]['colspan'] == 1
 
-        assert days[day1][2].get_sorted_items()[1]['item'] == items[3]
-        assert days[day1][2].get_sorted_items()[1]['rowspan'] == 1
-        assert days[day1][2].get_sorted_items()[1]['colspan'] == 1
+        assert day1.rows[2].get_sorted_items()[1]['item'] == items[3]
+        assert day1.rows[2].get_sorted_items()[1]['rowspan'] == 1
+        assert day1.rows[2].get_sorted_items()[1]['colspan'] == 1
 
     def test_multiple_days(self):
         """Create a multiple day table with 3 slots and 2 venues and
@@ -250,30 +236,98 @@ class ScheduleTests(TestCase):
         c = Client()
         response = c.get('/schedule/')
 
-        days = dict(response.context['table_days'])
+        [day1, day2] = response.context['schedule_days']
 
-        assert day1 in days
-        assert day2 in days
-        assert len(days[day1]) == 2
-        assert len(days[day2]) == 1
-        assert days[day1][0].slot.get_start_time() == start1
-        assert days[day1][0].slot.end_time == start2
-        assert days[day1][1].slot.get_start_time() == start2
-        assert days[day1][1].slot.end_time == end1
-        assert days[day2][0].slot.get_start_time() == start3
-        assert days[day2][0].slot.end_time == end2
+        assert len(day1.rows) == 2
+        assert day1.venues == [venue1, venue2]
+        assert len(day2.rows) == 1
+        assert day2.venues == [venue1, venue2]
+        assert day1.rows[0].slot.get_start_time() == start1
+        assert day1.rows[0].slot.end_time == start2
+        assert day1.rows[1].slot.get_start_time() == start2
+        assert day1.rows[1].slot.end_time == end1
+        assert day2.rows[0].slot.get_start_time() == start3
+        assert day2.rows[0].slot.end_time == end2
 
-        assert len(days[day1][0].items) == 2
-        assert len(days[day1][1].items) == 2
-        assert len(days[day2][0].items) == 2
+        assert len(day1.rows[0].items) == 2
+        assert len(day1.rows[1].items) == 2
+        assert len(day2.rows[0].items) == 2
 
-        assert days[day1][0].get_sorted_items()[0]['item'] == items[0]
-        assert days[day1][0].get_sorted_items()[0]['rowspan'] == 1
-        assert days[day1][0].get_sorted_items()[0]['colspan'] == 1
+        assert day1.rows[0].get_sorted_items()[0]['item'] == items[0]
+        assert day1.rows[0].get_sorted_items()[0]['rowspan'] == 1
+        assert day1.rows[0].get_sorted_items()[0]['colspan'] == 1
 
-        assert days[day2][0].get_sorted_items()[1]['item'] == items[5]
-        assert days[day2][0].get_sorted_items()[1]['rowspan'] == 1
-        assert days[day2][0].get_sorted_items()[1]['colspan'] == 1
+        assert day2.rows[0].get_sorted_items()[1]['item'] == items[5]
+        assert day2.rows[0].get_sorted_items()[1]['rowspan'] == 1
+        assert day2.rows[0].get_sorted_items()[1]['colspan'] == 1
+
+    def test_multiple_days_with_disjoint_venues(self):
+        """Create a multiple day table with 3 slots and 2 venues and
+           check we get the expected results"""
+        # Schedule is
+        # Day1
+        #         Venue 1
+        # 10-11   Item1
+        # 11-12   Item2
+        # Day2
+        #         Venue 2
+        # 12-13   Item3
+        day1 = Day.objects.create(date=D.date(2013, 9, 22))
+        day2 = Day.objects.create(date=D.date(2013, 9, 23))
+        venue1 = Venue.objects.create(order=1, name='Venue 1')
+        venue1.days.add(day1)
+        venue2 = Venue.objects.create(order=2, name='Venue 2')
+        venue2.days.add(day2)
+
+        start1 = D.time(10, 0, 0)
+        start2 = D.time(11, 0, 0)
+        end1 = D.time(12, 0, 0)
+
+        start3 = D.time(12, 0, 0)
+        end2 = D.time(13, 0, 0)
+
+        pages = self._make_pages(3)
+        venues = [venue1, venue1, venue2]
+        items = self._make_items(venues, pages)
+
+        slot1 = Slot.objects.create(start_time=start1, end_time=start2,
+                                    day=day1)
+        slot2 = Slot.objects.create(start_time=start2, end_time=end1,
+                                    day=day1)
+        slot3 = Slot.objects.create(start_time=start3, end_time=end2,
+                                    day=day2)
+
+        items[0].slots.add(slot1)
+        items[1].slots.add(slot2)
+        items[2].slots.add(slot3)
+
+        c = Client()
+        response = c.get('/schedule/')
+
+        [day1, day2] = response.context['schedule_days']
+
+        assert len(day1.rows) == 2
+        assert day1.venues == [venue1]
+        assert len(day2.rows) == 1
+        assert day2.venues == [venue2]
+        assert day1.rows[0].slot.get_start_time() == start1
+        assert day1.rows[0].slot.end_time == start2
+        assert day1.rows[1].slot.get_start_time() == start2
+        assert day1.rows[1].slot.end_time == end1
+        assert day2.rows[0].slot.get_start_time() == start3
+        assert day2.rows[0].slot.end_time == end2
+
+        assert len(day1.rows[0].items) == 1
+        assert len(day1.rows[1].items) == 1
+        assert len(day2.rows[0].items) == 1
+
+        assert day1.rows[0].get_sorted_items()[0]['item'] == items[0]
+        assert day1.rows[0].get_sorted_items()[0]['rowspan'] == 1
+        assert day1.rows[0].get_sorted_items()[0]['colspan'] == 1
+
+        assert day2.rows[0].get_sorted_items()[0]['item'] == items[2]
+        assert day2.rows[0].get_sorted_items()[0]['rowspan'] == 1
+        assert day2.rows[0].get_sorted_items()[0]['colspan'] == 1
 
     def test_col_span(self):
         """Create table with 3 venues and some interesting
@@ -335,61 +389,61 @@ class ScheduleTests(TestCase):
         c = Client()
         response = c.get('/schedule/')
 
-        days = dict(response.context['table_days'])
+        [day1] = response.context['schedule_days']
 
-        assert day1 in days
-        assert len(days[day1]) == 5
-        assert days[day1][0].slot.get_start_time() == start1
-        assert days[day1][1].slot.get_start_time() == start2
-        assert days[day1][2].slot.get_start_time() == start3
-        assert days[day1][3].slot.get_start_time() == start4
-        assert days[day1][4].slot.get_start_time() == start5
+        assert len(day1.rows) == 5
+        assert day1.venues == [venue1, venue2, venue3]
+        assert day1.rows[0].slot.get_start_time() == start1
+        assert day1.rows[1].slot.get_start_time() == start2
+        assert day1.rows[2].slot.get_start_time() == start3
+        assert day1.rows[3].slot.get_start_time() == start4
+        assert day1.rows[4].slot.get_start_time() == start5
 
-        assert len(days[day1][0].items) == 2
-        assert len(days[day1][1].items) == 3
-        assert len(days[day1][2].items) == 2
-        assert len(days[day1][3].items) == 1
-        assert len(days[day1][4].items) == 2
+        assert len(day1.rows[0].items) == 2
+        assert len(day1.rows[1].items) == 3
+        assert len(day1.rows[2].items) == 2
+        assert len(day1.rows[3].items) == 1
+        assert len(day1.rows[4].items) == 2
 
-        assert days[day1][0].get_sorted_items()[0]['item'] == items[0]
-        assert days[day1][0].get_sorted_items()[0]['rowspan'] == 1
-        assert days[day1][0].get_sorted_items()[0]['colspan'] == 2
+        assert day1.rows[0].get_sorted_items()[0]['item'] == items[0]
+        assert day1.rows[0].get_sorted_items()[0]['rowspan'] == 1
+        assert day1.rows[0].get_sorted_items()[0]['colspan'] == 2
 
-        assert days[day1][0].get_sorted_items()[1]['item'] == items[4]
-        assert days[day1][0].get_sorted_items()[1]['rowspan'] == 1
-        assert days[day1][0].get_sorted_items()[1]['colspan'] == 1
+        assert day1.rows[0].get_sorted_items()[1]['item'] == items[4]
+        assert day1.rows[0].get_sorted_items()[1]['rowspan'] == 1
+        assert day1.rows[0].get_sorted_items()[1]['colspan'] == 1
 
-        assert days[day1][1].get_sorted_items()[0]['item'] == items[1]
-        assert days[day1][1].get_sorted_items()[0]['rowspan'] == 1
-        assert days[day1][1].get_sorted_items()[0]['colspan'] == 1
+        assert day1.rows[1].get_sorted_items()[0]['item'] == items[1]
+        assert day1.rows[1].get_sorted_items()[0]['rowspan'] == 1
+        assert day1.rows[1].get_sorted_items()[0]['colspan'] == 1
 
-        assert days[day1][1].get_sorted_items()[1]['item'] == items[2]
-        assert days[day1][1].get_sorted_items()[1]['rowspan'] == 1
-        assert days[day1][1].get_sorted_items()[1]['colspan'] == 1
+        assert day1.rows[1].get_sorted_items()[1]['item'] == items[2]
+        assert day1.rows[1].get_sorted_items()[1]['rowspan'] == 1
+        assert day1.rows[1].get_sorted_items()[1]['colspan'] == 1
 
-        assert days[day1][1].get_sorted_items()[2]['item'] == items[3]
-        assert days[day1][1].get_sorted_items()[2]['rowspan'] == 1
-        assert days[day1][1].get_sorted_items()[2]['colspan'] == 1
+        assert day1.rows[1].get_sorted_items()[2]['item'] == items[3]
+        assert day1.rows[1].get_sorted_items()[2]['rowspan'] == 1
+        assert day1.rows[1].get_sorted_items()[2]['colspan'] == 1
 
-        assert days[day1][2].get_sorted_items()[0]['item'] == items[6]
-        assert days[day1][2].get_sorted_items()[0]['rowspan'] == 1
-        assert days[day1][2].get_sorted_items()[0]['colspan'] == 2
+        assert day1.rows[2].get_sorted_items()[0]['item'] == items[6]
+        assert day1.rows[2].get_sorted_items()[0]['rowspan'] == 1
+        assert day1.rows[2].get_sorted_items()[0]['colspan'] == 2
 
-        assert days[day1][2].get_sorted_items()[1]['item'] == items[5]
-        assert days[day1][2].get_sorted_items()[1]['rowspan'] == 1
-        assert days[day1][2].get_sorted_items()[1]['colspan'] == 1
+        assert day1.rows[2].get_sorted_items()[1]['item'] == items[5]
+        assert day1.rows[2].get_sorted_items()[1]['rowspan'] == 1
+        assert day1.rows[2].get_sorted_items()[1]['colspan'] == 1
 
-        assert days[day1][3].get_sorted_items()[0]['item'] == items[7]
-        assert days[day1][3].get_sorted_items()[0]['rowspan'] == 1
-        assert days[day1][3].get_sorted_items()[0]['colspan'] == 3
+        assert day1.rows[3].get_sorted_items()[0]['item'] == items[7]
+        assert day1.rows[3].get_sorted_items()[0]['rowspan'] == 1
+        assert day1.rows[3].get_sorted_items()[0]['colspan'] == 3
 
-        assert days[day1][4].get_sorted_items()[0]['item'] == items[8]
-        assert days[day1][4].get_sorted_items()[0]['rowspan'] == 1
-        assert days[day1][4].get_sorted_items()[0]['colspan'] == 2
+        assert day1.rows[4].get_sorted_items()[0]['item'] == items[8]
+        assert day1.rows[4].get_sorted_items()[0]['rowspan'] == 1
+        assert day1.rows[4].get_sorted_items()[0]['colspan'] == 2
 
-        assert days[day1][4].get_sorted_items()[1]['item'] == items[9]
-        assert days[day1][4].get_sorted_items()[1]['rowspan'] == 1
-        assert days[day1][4].get_sorted_items()[1]['colspan'] == 1
+        assert day1.rows[4].get_sorted_items()[1]['item'] == items[9]
+        assert day1.rows[4].get_sorted_items()[1]['rowspan'] == 1
+        assert day1.rows[4].get_sorted_items()[1]['colspan'] == 1
 
     def test_row_span(self):
         """Create a day table with multiple slot items"""
@@ -442,47 +496,47 @@ class ScheduleTests(TestCase):
         c = Client()
         response = c.get('/schedule/')
 
-        days = dict(response.context['table_days'])
+        [day1] = response.context['schedule_days']
 
-        assert day1 in days
-        assert len(days[day1]) == 5
-        assert days[day1][0].slot.get_start_time() == start1
-        assert days[day1][1].slot.get_start_time() == start2
-        assert days[day1][4].slot.end_time == end
+        assert len(day1.rows) == 5
+        assert day1.venues == [venue1, venue2]
+        assert day1.rows[0].slot.get_start_time() == start1
+        assert day1.rows[1].slot.get_start_time() == start2
+        assert day1.rows[4].slot.end_time == end
 
-        assert len(days[day1][0].items) == 2
-        assert len(days[day1][1].items) == 1
-        assert len(days[day1][2].items) == 2
-        assert len(days[day1][3].items) == 1
-        assert len(days[day1][4].items) == 1
+        assert len(day1.rows[0].items) == 2
+        assert len(day1.rows[1].items) == 1
+        assert len(day1.rows[2].items) == 2
+        assert len(day1.rows[3].items) == 1
+        assert len(day1.rows[4].items) == 1
 
-        assert days[day1][0].get_sorted_items()[0]['item'] == items[0]
-        assert days[day1][0].get_sorted_items()[0]['rowspan'] == 2
-        assert days[day1][0].get_sorted_items()[0]['colspan'] == 1
+        assert day1.rows[0].get_sorted_items()[0]['item'] == items[0]
+        assert day1.rows[0].get_sorted_items()[0]['rowspan'] == 2
+        assert day1.rows[0].get_sorted_items()[0]['colspan'] == 1
 
-        assert days[day1][0].get_sorted_items()[1]['item'] == items[4]
-        assert days[day1][0].get_sorted_items()[1]['rowspan'] == 1
-        assert days[day1][0].get_sorted_items()[1]['colspan'] == 1
+        assert day1.rows[0].get_sorted_items()[1]['item'] == items[4]
+        assert day1.rows[0].get_sorted_items()[1]['rowspan'] == 1
+        assert day1.rows[0].get_sorted_items()[1]['colspan'] == 1
 
-        assert days[day1][1].get_sorted_items()[0]['item'] == items[5]
-        assert days[day1][1].get_sorted_items()[0]['rowspan'] == 1
-        assert days[day1][1].get_sorted_items()[0]['colspan'] == 1
+        assert day1.rows[1].get_sorted_items()[0]['item'] == items[5]
+        assert day1.rows[1].get_sorted_items()[0]['rowspan'] == 1
+        assert day1.rows[1].get_sorted_items()[0]['colspan'] == 1
 
-        assert days[day1][2].get_sorted_items()[0]['item'] == items[1]
-        assert days[day1][2].get_sorted_items()[0]['rowspan'] == 1
-        assert days[day1][2].get_sorted_items()[0]['colspan'] == 1
+        assert day1.rows[2].get_sorted_items()[0]['item'] == items[1]
+        assert day1.rows[2].get_sorted_items()[0]['rowspan'] == 1
+        assert day1.rows[2].get_sorted_items()[0]['colspan'] == 1
 
-        assert days[day1][2].get_sorted_items()[1]['item'] == items[6]
-        assert days[day1][2].get_sorted_items()[1]['rowspan'] == 3
-        assert days[day1][2].get_sorted_items()[1]['colspan'] == 1
+        assert day1.rows[2].get_sorted_items()[1]['item'] == items[6]
+        assert day1.rows[2].get_sorted_items()[1]['rowspan'] == 3
+        assert day1.rows[2].get_sorted_items()[1]['colspan'] == 1
 
-        assert days[day1][3].get_sorted_items()[0]['item'] == items[2]
-        assert days[day1][3].get_sorted_items()[0]['rowspan'] == 1
-        assert days[day1][3].get_sorted_items()[0]['colspan'] == 1
+        assert day1.rows[3].get_sorted_items()[0]['item'] == items[2]
+        assert day1.rows[3].get_sorted_items()[0]['rowspan'] == 1
+        assert day1.rows[3].get_sorted_items()[0]['colspan'] == 1
 
-        assert days[day1][4].get_sorted_items()[0]['item'] == items[3]
-        assert days[day1][4].get_sorted_items()[0]['rowspan'] == 1
-        assert days[day1][4].get_sorted_items()[0]['colspan'] == 1
+        assert day1.rows[4].get_sorted_items()[0]['item'] == items[3]
+        assert day1.rows[4].get_sorted_items()[0]['rowspan'] == 1
+        assert day1.rows[4].get_sorted_items()[0]['colspan'] == 1
 
     def test_current_view_simple(self):
         """Create a schedule and check that the current view looks sane."""

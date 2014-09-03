@@ -7,14 +7,14 @@ from wafer.schedule.admin import check_schedule
 
 class ScheduleRow(object):
     """This is a helpful containter for the schedule view to keep sanity"""
-    def __init__(self, slot, venue_list):
+    def __init__(self, schedule_day, slot):
+        self.schedule_day = schedule_day
         self.slot = slot
-        self.venue_list = venue_list
         self.items = {}
 
     def get_sorted_items(self):
         sorted_items = []
-        for venue in self.venue_list:
+        for venue in self.schedule_day.venues:
             if venue in self.items:
                 sorted_items.append(self.items[venue])
         return sorted_items
@@ -24,16 +24,22 @@ class ScheduleRow(object):
         return '%s - %s' % (self.slot, self.get_sorted_items())
 
 
+class ScheduleDay(object):
+    """A helpful container for information a days in a schedule view."""
+    def __init__(self, day, all_venues):
+        self.day = day
+        self.venues = [v for v in all_venues if day in v.days.all()]
+        self.rows = []
+
+
 class VenueView(DetailView):
     template_name = 'wafer.schedule/venue.html'
     model = Venue
 
 
-
-def make_schedule_row(venue_list, slot, seen_items):
+def make_schedule_row(schedule_day, slot, seen_items):
     """Create a row for the schedule table."""
-    day = slot.get_day()
-    row = ScheduleRow(slot, venue_list)
+    row = ScheduleRow(schedule_day, slot)
     skip = []
     for item in slot.scheduleitem_set.all():
         if item in seen_items:
@@ -48,17 +54,8 @@ def make_schedule_row(venue_list, slot, seen_items):
     cur_item = None
     colspan = 1
     # Fixup colspans
-    for venue in venue_list:
-        # This may create holes in the table - the administrator
-        # needs to sort that out by ordering the venues correctly
-        if day not in venue.days.all():
-            scheditem = {'item': 'unavailable',
-                         'rowspan': 1, 'colspan': 1}
-            row.items[venue] = scheditem
-            # Make holes more obvious
-            cur_item = scheditem
-            colspan = 1
-        elif venue in skip:
+    for venue in schedule_day.venues:
+        if venue in skip:
             # Nothing to see here
             continue
         elif venue not in row.items:
@@ -73,8 +70,8 @@ def make_schedule_row(venue_list, slot, seen_items):
     return row
 
 
-def generate_schedule_dict(venue_list, today=None):
-    """Helper function which creates a dictionary of the schedule"""
+def generate_schedule(all_venues, today=None):
+    """Helper function which creates an ordered list of schedule days"""
     # We create a list of slots and schedule items
     schedule_days = {}
     seen_items = {}
@@ -83,10 +80,12 @@ def generate_schedule_dict(venue_list, today=None):
         if today and day != today:
             # Restrict ourselves to only today
             continue
-        schedule_days.setdefault(day, [])
-        row = make_schedule_row(venue_list, slot, seen_items)
-        schedule_days[day].append(row)
-    return schedule_days
+        schedule_day = schedule_days.get(day)
+        if schedule_day is None:
+            schedule_day = schedule_days[day] = ScheduleDay(day, all_venues)
+        row = make_schedule_row(schedule_day, slot, seen_items)
+        schedule_day.rows.append(row)
+    return sorted(schedule_days.values(), key=lambda x: x.day.date)
 
 
 class ScheduleView(TemplateView):
@@ -97,14 +96,10 @@ class ScheduleView(TemplateView):
         # Check if the schedule is valid
         if not check_schedule():
             return context
-        venue_list = list(Venue.objects.all())
-        context['venue_list'] = venue_list
-        schedule_days = generate_schedule_dict(venue_list)
-        # We turn the dict into a list here so we have a specified
-        # ordering by date
-        context['table_days'] = sorted(schedule_days.items(),
-                                       key=lambda x: x[0].date)
-
+        # Fetch venues with days so that we can efficiently check venue
+        # days later.
+        all_venues = list(Venue.objects.select_related('day').all())
+        context['schedule_days'] = generate_schedule(all_venues)
         return context
 
 
@@ -138,15 +133,18 @@ class CurrentView(TemplateView):
                 time = now
         else:
             time = now
-        venue_list = list(Venue.objects.all())
+        venue_list = list(Venue.objects.select_related('day').all())
         context['venue_list'] = venue_list
         # Find the slot that includes now
         cur_slot = None
         prev_slot = None
         next_slot = None
+        schedule_day = None
         for slot in Slot.objects.all():
             if slot.get_day() != today:
                 continue
+            if schedule_day is None:
+                schedule_day = ScheduleDay(slot.get_day(), venue_list)
             if slot.get_start_time() <= time and slot.end_time > time:
                 cur_slot = slot
             elif slot.end_time <= time:
@@ -161,20 +159,19 @@ class CurrentView(TemplateView):
                         next_slot = slot
                 else:
                     next_slot = slot
-        current_items = {}
         seen_items = {}
         context['cur_slot'] = None
         if prev_slot:
-            prev_row = make_schedule_row(venue_list, prev_slot, seen_items)
+            prev_row = make_schedule_row(schedule_day, prev_slot, seen_items)
             context['slots'].append(prev_row)
         if cur_slot:
-            cur_row = make_schedule_row(venue_list, cur_slot, seen_items)
+            cur_row = make_schedule_row(schedule_day, cur_slot, seen_items)
             for item in cur_row.items.values():
                 item['note'] = 'current'
             context['slots'].append(cur_row)
             context['cur_slot'] = cur_slot
         if next_slot:
-            next_row = make_schedule_row(venue_list, next_slot, seen_items)
+            next_row = make_schedule_row(schedule_day, next_slot, seen_items)
             context['slots'].append(next_row)
         # Add styling hints. Needs to be after all the schedule rows are
         # created so the spans are set correctly
