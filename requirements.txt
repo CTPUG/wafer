@@ -1,4 +1,4 @@
-Django<=1.6
+Django
 South
 django-crispy-forms
 django-nose
