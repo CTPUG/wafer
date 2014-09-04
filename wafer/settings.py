@@ -137,7 +137,6 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     'django_medusa',
     'crispy_forms',
-    'south',
     'django_nose',
     'registration',
     'markitup',
@@ -150,6 +149,12 @@ INSTALLED_APPS = (
     'wafer.pages',
     'wafer.tickets',
 )
+
+# Only add south if we're on a version that doesn't support native migrations
+try:
+    from django.db import migrations
+except ImportError:
+    INSTALLED_APPS += ('south', )
 
 TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
 
