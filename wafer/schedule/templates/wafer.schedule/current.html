@@ -1,5 +1,6 @@
 {% extends "wafer/base.html" %}
 {% block content %}
+<section class="wafer wafer-schedule">
 <h1>{% trans "Current" %}</h1>
 <div class="wafer_schedule">
    {% if not active %}
@@ -50,4 +51,5 @@
    </table>
    {% endif %}
 </div>
+</section>
 {% endblock %}
