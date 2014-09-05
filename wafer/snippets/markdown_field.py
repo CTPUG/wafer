@@ -27,12 +27,17 @@ class MarkdownTextField(TextField):
     """
     def __init__(self, *args, **kwargs):
         self._markdown_safe = not kwargs.pop('allow_html', True)
+        self._add_html_field = kwargs.pop('add_html_field', True)
         self._html_field_suffix = kwargs.pop('html_field_suffix', '_html')
         super(MarkdownTextField, self).__init__(*args, **kwargs)
 
     def contribute_to_class(self, cls, name):
-        self._html_field = "%s%s" % (name, self._html_field_suffix)
-        TextField(editable=False).contribute_to_class(cls, self._html_field)
+        # During migrations, the column will already be in the new schema,
+        # so we need to skip adding the column. The deconstruct serialization
+        # will set _add_html_field to False for us in this case
+        if self._add_html_field:
+            self._html_field = "%s%s" % (name, self._html_field_suffix)
+            TextField(editable=False).contribute_to_class(cls, self._html_field)
         super(MarkdownTextField, self).contribute_to_class(cls, name)
 
     def pre_save(self, model_instance, add):
@@ -40,6 +45,14 @@ class MarkdownTextField(TextField):
         html = markdown(value, safe_mode=self._markdown_safe)
         setattr(model_instance, self._html_field, html)
         return value
+
+    def deconstruct(self):
+        # Django 1.7 migration serializer
+        name, path, args, kwargs = super(MarkdownTextField, self).deconstruct()
+        kwargs['add_html_field'] = False
+        kwargs['allow_html'] = self._markdown_safe
+        kwargs['html_field_suffix'] = self._html_field_suffix
+        return name, path, args, kwargs
 
     def __unicode__(self):
         return unicode(self.attname)
