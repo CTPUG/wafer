@@ -67,7 +67,7 @@ class Slot(models.Model):
 
     class Meta:
         order_with_respect_to = 'day'
-        ordering = ['end_time', 'start_time']
+        ordering = ['day', 'end_time', 'start_time']
 
     def __unicode__(self):
         if self.name:
