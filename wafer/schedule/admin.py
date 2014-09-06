@@ -134,6 +134,7 @@ class ScheduleItemAdmin(admin.ModelAdmin):
     form = ScheduleItemAdminForm
 
     change_list_template = 'admin/scheduleitem_list.html'
+    list_display = ['get_start_time', 'venue', 'get_title']
 
     # We stuff these validation results into the view, rather than
     # enforcing conditions on the actual model, since it can be hard
