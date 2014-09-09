@@ -3,8 +3,21 @@ from django.db import models
 from django.db.models.signals import post_save
 from libravatar import libravatar_url
 from urllib2 import urlparse
+from django.utils.http import urlquote
 
 from wafer.talks.models import ACCEPTED, PENDING
+
+
+class WaferUser(User):
+    # Django 1.7 see drop get_absolute_url from AbstractUser, and thus User
+    # (see https://code.djangoproject.com/ticket/20881 for the justification)
+    # We sometimes need it, so we add a proxy model to add it back for those
+    # cases
+    class Meta:
+        proxy = True
+
+    def get_absolute_url(self):
+        return "/users/%s/" % urlquote(self.username)
 
 
 class UserProfile(models.Model):
