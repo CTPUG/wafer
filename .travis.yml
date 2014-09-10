@@ -16,4 +16,4 @@ install:
    - pip install 'Django<='"$DJANGO_VERSION"
    - pip install -r requirements.txt -r requirements-dev.txt --use-mirrors
 # command to run tests
-script: python manage.py test --with-coverage
+script: NOSE_WITH_COVERAGE=1 python manage.py test
