@@ -2,7 +2,9 @@ Django
 South
 django-crispy-forms
 django-nose
-django-registration
+# Force the 1.7 compatible version of django-registration until the
+# pypi situation gets sorted out.
+git+https://github.com/macropin/django-registration.git
 pillow
 pyLibravatar
 pydns
