@@ -13,7 +13,7 @@ matrix:
 # command to install dependencies,
 install:
    # Install the right version of Django first
-   - pip install Django<=$DJANGO_VERSION
+   - pip install 'Django<='"$DJANGO_VERSION"
    - pip install -r requirements.txt -r requirements-dev.txt --use-mirrors
 # command to run tests
 script: python manage.py test --with-coverage
