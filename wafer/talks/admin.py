@@ -16,7 +16,9 @@ class ScheduleListFilter(admin.SimpleListFilter):
     def queryset(self, request, queryset):
         if self.value() == 'in':
             return queryset.filter(scheduleitem__isnull=False)
-        return queryset.filter(scheduleitem__isnull=True)
+        elif self.value() == 'out':
+            return queryset.filter(scheduleitem__isnull=True)
+        return queryset
 
 class TalkUrlInline(admin.TabularInline):
     model = TalkUrl
