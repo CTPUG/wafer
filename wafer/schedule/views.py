@@ -26,9 +26,9 @@ class ScheduleRow(object):
 
 class ScheduleDay(object):
     """A helpful container for information a days in a schedule view."""
-    def __init__(self, day, all_venues):
+    def __init__(self, day):
         self.day = day
-        self.venues = [v for v in all_venues if day in v.days.all()]
+        self.venues = list(day.venue_set.all())
         self.rows = []
 
 
@@ -70,7 +70,7 @@ def make_schedule_row(schedule_day, slot, seen_items):
     return row
 
 
-def generate_schedule(all_venues, today=None):
+def generate_schedule(today=None):
     """Helper function which creates an ordered list of schedule days"""
     # We create a list of slots and schedule items
     schedule_days = {}
@@ -82,7 +82,7 @@ def generate_schedule(all_venues, today=None):
             continue
         schedule_day = schedule_days.get(day)
         if schedule_day is None:
-            schedule_day = schedule_days[day] = ScheduleDay(day, all_venues)
+            schedule_day = schedule_days[day] = ScheduleDay(day)
         row = make_schedule_row(schedule_day, slot, seen_items)
         schedule_day.rows.append(row)
     return sorted(schedule_days.values(), key=lambda x: x.day.date)
@@ -96,10 +96,7 @@ class ScheduleView(TemplateView):
         # Check if the schedule is valid
         if not check_schedule():
             return context
-        # Fetch venues with days so that we can efficiently check venue
-        # days later.
-        all_venues = list(Venue.objects.select_related('day').all())
-        context['schedule_days'] = generate_schedule(all_venues)
+        context['schedule_days'] = generate_schedule()
         return context
 
 
@@ -133,7 +130,6 @@ class CurrentView(TemplateView):
                 time = now
         else:
             time = now
-        venue_list = list(Venue.objects.select_related('day').all())
         # Find the slot that includes now
         cur_slot = None
         prev_slot = None
@@ -143,7 +139,7 @@ class CurrentView(TemplateView):
             if slot.get_day() != today:
                 continue
             if schedule_day is None:
-                schedule_day = ScheduleDay(slot.get_day(), venue_list)
+                schedule_day = ScheduleDay(slot.get_day())
             if slot.get_start_time() <= time and slot.end_time > time:
                 cur_slot = slot
             elif slot.end_time <= time:
