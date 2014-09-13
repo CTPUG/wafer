@@ -38,14 +38,16 @@ def find_overlapping_slots():
     return overlaps
 
 
-def validate_items():
+def validate_items(all_items=None):
     """Find errors in the schedule. Check for:
          - pending / rejected talks in the schedule
          - items with both talks and pages assigned
          - items with neither talks nor pages assigned
          """
+    if all_items is None:
+        all_items = prefetch_schedule_items()
     validation = []
-    for item in ScheduleItem.objects.all():
+    for item in all_items:
         if item.talk is not None and item.page is not None:
             validation.append(item)
         elif item.talk is None and item.page is None:
@@ -55,11 +57,13 @@ def validate_items():
     return validation
 
 
-def find_duplicate_schedule_items():
+def find_duplicate_schedule_items(all_items=None):
     """Find talks / pages assigned to mulitple schedule items"""
+    if all_items is None:
+        all_items = prefetch_schedule_items()
     duplicates = []
     seen_talks = {}
-    for item in ScheduleItem.objects.all():
+    for item in all_items:
         if item.talk and item.talk in seen_talks:
             duplicates.append(item)
             if seen_talks[item.talk] not in duplicates:
@@ -72,11 +76,13 @@ def find_duplicate_schedule_items():
     return duplicates
 
 
-def find_clashes():
+def find_clashes(all_items=None):
     """Find schedule items which clash (common slot and venue)"""
+    if all_items is None:
+        all_items = prefetch_schedule_items()
     clashes = {}
     seen_venue_slots = {}
-    for item in ScheduleItem.objects.all():
+    for item in all_items:
         for slot in item.slots.all():
             pos = (item.venue, slot)
             if pos in seen_venue_slots:
@@ -88,14 +94,17 @@ def find_clashes():
     return clashes
 
 
-def find_invalid_venues():
+def find_invalid_venues(all_items=None):
     """Find venues assigned slots that aren't on the allowed list
        of days."""
+    if all_items is None:
+        all_items = prefetch_schedule_items()
     venues = {}
-    for item in ScheduleItem.objects.all():
+    for item in all_items:
         valid = False
+        item_days = list(item.venue.days.all())
         for slot in item.slots.all():
-            for day in item.venue.days.all():
+            for day in item_days:
                 if day == slot.get_day():
                     valid = True
                     break
@@ -105,17 +114,24 @@ def find_invalid_venues():
     return venues
 
 
+def prefetch_schedule_items():
+    """Prefetch all schedule items and related objects."""
+    return list(ScheduleItem.objects.select_related(
+        'talk', 'page', 'venue').all())
+
+
 def check_schedule():
     """Helper routine to eaily test if the schedule is valid"""
-    if find_clashes():
+    all_items = prefetch_schedule_items()
+    if find_clashes(all_items):
         return False
-    if find_duplicate_schedule_items():
+    if find_duplicate_schedule_items(all_items):
         return False
-    if validate_items():
+    if validate_items(all_items):
         return False
     if find_overlapping_slots():
         return False
-    if find_invalid_venues():
+    if find_invalid_venues(all_items):
         return False
     return True
 
