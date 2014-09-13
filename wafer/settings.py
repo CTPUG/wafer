@@ -198,8 +198,22 @@ CRISPY_TEMPLATE_PACK = 'bootstrap3'
 # Wafer settings
 WAFER_BILLABLE_ME = "http://billable.me/pdf/"
 
-# Wafer menu settings
 
+# Wafer cache settings
+# We assume that the WAFER_CACHE is cross-process
+WAFER_CACHE = 'wafer_cache'
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+    },
+    WAFER_CACHE: {
+        'BACKEND': 'django.core.cache.backends.db.DatabaseCache',
+        'LOCATION': 'wafer_cache_table',
+    },
+}
+
+
+# Wafer menu settings
 
 WAFER_MENUS = ()
 # Example menus entries:

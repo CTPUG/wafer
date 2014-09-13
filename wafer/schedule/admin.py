@@ -125,7 +125,7 @@ def prefetch_schedule_items():
                 .all())
 
 
-@cache_result('default', 'wafer_schedule_check_schedule', 60*60)
+@cache_result('wafer_schedule_check_schedule', 60*60)
 def check_schedule():
     """Helper routine to eaily test if the schedule is valid"""
     all_items = prefetch_schedule_items()

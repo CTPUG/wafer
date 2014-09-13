@@ -1,6 +1,7 @@
 import functools
 import unicodedata
 from django.core.cache import get_cache
+from django.conf import settings
 
 
 def normalize_unicode(u):
@@ -10,9 +11,11 @@ def normalize_unicode(u):
     return unicodedata.normalize('NFKD', u).encode('ascii', 'ignore')
 
 
-def cache_result(cache_name, cache_key, timeout):
+def cache_result(cache_key, timeout):
     """A decorator for caching the result of a function."""
     def decorator(f):
+        cache_name = settings.WAFER_CACHE
+
         @functools.wraps(f)
         def wrapper(*args, **kw):
             # replace this with cache.caches when we drop Django 1.6
