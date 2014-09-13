@@ -15,6 +15,9 @@
    {% else %}
    <table cellspacing=1 cellpadding=0>
       <tr>
+         <td colspan="{{ schedule_day.venues|length|add:1 }}" class="title">{{ schedule_day.day.date|date:"l (d b)" }}</td>
+      </tr>
+      <tr>
          <th>{% trans "Time" %}</th>
          {% for venue in schedule_day.venues %}
          <th><a href="{{ venue.get_absolute_url }}">{{ venue.name }}</a></th>
