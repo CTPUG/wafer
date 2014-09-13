@@ -10,13 +10,14 @@ from wafer.pages.models import Page
 def find_overlapping_slots():
     """Find any slots that overlap"""
     overlaps = set([])
-    for slot in Slot.objects.all():
+    all_slots = list(Slot.objects.all())
+    for slot in all_slots:
         # Because slots are ordered, we can be more efficient than this
         # N^2 loop, but this is simple and, since the number of slots
         # should be low, this should be "fast enough"
         start = slot.get_start_time()
         end = slot.end_time
-        for other_slot in Slot.objects.all():
+        for other_slot in all_slots:
             if other_slot.pk == slot.pk:
                 continue
             if other_slot.get_day() != slot.get_day():
