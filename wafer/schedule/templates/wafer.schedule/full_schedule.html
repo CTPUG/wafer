@@ -31,12 +31,7 @@
          {% else %}
             {# Add item details #}
             <td colspan="{{ item.colspan }}" rowspan="{{ item.rowspan }}" class="{{ item.item.css_class|default:'schedule' }}">
-               {% if item.item.get_url %}
-               <a href="{{ item.item.get_url }}">
-                  {{ item.item.get_details|escape }}</a>
-               {% else %}
-               {{ item.item.get_details|escape }}
-               {% endif %}
+              {% include "wafer.schedule/schedule_item.html" with item=item.item %}
             </td>
          {% endif %}
          {% endfor %}
