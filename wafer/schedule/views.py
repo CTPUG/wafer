@@ -41,7 +41,7 @@ def make_schedule_row(schedule_day, slot, seen_items):
     """Create a row for the schedule table."""
     row = ScheduleRow(schedule_day, slot)
     skip = []
-    for item in slot.scheduleitem_set.all():
+    for item in slot.scheduleitem_set.select_related('talk', 'page').all():
         if item in seen_items:
             # Inc rowspan
             seen_items[item]['rowspan'] += 1
