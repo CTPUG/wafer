@@ -116,8 +116,12 @@ def find_invalid_venues(all_items=None):
 
 def prefetch_schedule_items():
     """Prefetch all schedule items and related objects."""
-    return list(ScheduleItem.objects.select_related(
-        'talk', 'page', 'venue').all())
+    return list(ScheduleItem.objects
+                .select_related(
+                    'talk', 'page', 'venue')
+                .prefetch_related(
+                    'slots', 'slots__previous_slot', 'slots__day')
+                .all())
 
 
 def check_schedule():
