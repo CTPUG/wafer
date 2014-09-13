@@ -117,6 +117,7 @@ class CurrentView(TemplateView):
         context['active'] = True
         context['slots'] = []
         # We allow url parameters to override the default
+        context['refresh'] = self.request.GET.get('refresh', None)
         day = self.request.GET.get('day', datetime.date.today())
         dates = dict([(x.date.strftime('%Y-%m-%d'), x) for x in
                       Day.objects.all()])

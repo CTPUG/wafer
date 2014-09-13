@@ -1,4 +1,10 @@
 {% extends "wafer/base.html" %}
+{% block extra_head %}
+{# Add a refresh header for the specified interval #}
+{% if refresh %}
+<meta http-equiv="refresh" content="{{ refresh }}">
+{% endif %}
+{% endblock %}
 {% block content %}
 <section class="wafer wafer-schedule">
 <h1>{% trans "Current" %}</h1>
