@@ -2,6 +2,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse
 from django.core.exceptions import ValidationError
 from django.db import models
+from django.db.models.signals import post_save
 
 from wafer.snippets.markdown_field import MarkdownTextField
 
@@ -156,3 +157,14 @@ class ScheduleItem(models.Model):
     def __unicode__(self):
         return u'%s in %s at %s' % (self.get_desc(), self.venue,
                                     self.get_start_time())
+
+
+def invalidate_check_schedule(*args, **kw):
+    from wafer.schedule.admin import check_schedule
+    check_schedule.invalidate()
+
+
+post_save.connect(invalidate_check_schedule, sender=Day)
+post_save.connect(invalidate_check_schedule, sender=Venue)
+post_save.connect(invalidate_check_schedule, sender=Slot)
+post_save.connect(invalidate_check_schedule, sender=ScheduleItem)

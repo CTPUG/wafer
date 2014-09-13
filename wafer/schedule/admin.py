@@ -4,6 +4,7 @@ from django import forms
 from wafer.schedule.models import Day, Venue, Slot, ScheduleItem
 from wafer.talks.models import Talk, ACCEPTED
 from wafer.pages.models import Page
+from wafer.utils import cache_result
 
 
 # These are functions to simplify testing
@@ -124,6 +125,7 @@ def prefetch_schedule_items():
                 .all())
 
 
+@cache_result('default', 'wafer_schedule_check_schedule', 60*60)
 def check_schedule():
     """Helper routine to eaily test if the schedule is valid"""
     all_items = prefetch_schedule_items()
