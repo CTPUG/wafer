@@ -12,7 +12,7 @@
         {% endif %}
         <a href="{{ talk.get_absolute_url }}">{{ talk.title }}</a>
         by
-        <span class="author">{{ talk.corresponding_author.get_full_name|default:talk.corresponding_author.username }}</span>
+        <span class="author">{{ talk.get_author_display_name }}</span>
         </a>
     </div>
     {% empty %}

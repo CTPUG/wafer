@@ -74,6 +74,12 @@ class Talk(models.Model):
     get_author_name.admin_order_field = 'corresponding_author'
     get_author_name.short_description = 'Corresponding Author'
 
+    def get_author_display_name(self):
+        full_name = self.corresponding_author.get_full_name()
+        if full_name:
+            return full_name
+        return self.corresponding_author.username
+
     def get_in_schedule(self):
         if self.scheduleitem_set.all():
             return True
