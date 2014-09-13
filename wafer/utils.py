@@ -34,3 +34,24 @@ def cache_result(cache_key, timeout):
         wrapper.invalidate = invalidate
         return wrapper
     return decorator
+
+
+class QueryTracker(object):
+    """ Track queries to database. """
+
+    def __enter__(self):
+        from django.conf import settings
+        from django.db import connection
+        self._debug = settings.DEBUG
+        settings.DEBUG = True
+        connection.queries = []
+        return self
+
+    def __exit__(self, *args, **kw):
+        from django.conf import settings
+        settings.DEBUG = self._debug
+
+    @property
+    def queries(self):
+        from django.db import connection
+        return connection.queries[:]
