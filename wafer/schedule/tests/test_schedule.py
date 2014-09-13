@@ -8,10 +8,10 @@ from wafer.schedule.models import Day, Venue, Slot, ScheduleItem
 from wafer.schedule.admin import (find_overlapping_slots, validate_items,
                                   find_duplicate_schedule_items,
                                   find_clashes, find_invalid_venues)
+from wafer.utils import QueryTracker
 
 
 class ScheduleTests(TestCase):
-
     def _make_pages(self, n):
         # Utility function
         pages = []
@@ -82,7 +82,9 @@ class ScheduleTests(TestCase):
         items[5].slots.add(slot3)
 
         c = Client()
-        response = c.get('/schedule/')
+        with QueryTracker() as tracker:
+            response = c.get('/schedule/')
+            self.assertTrue(len(tracker.queries) < 40)
 
         [day1] = response.context['schedule_days']
 
