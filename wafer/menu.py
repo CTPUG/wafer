@@ -35,7 +35,7 @@ def refresh_menu_cache(**kwargs):
         # During data loads, treat this as non-fatal, since we'll come back
         # here again with hopefully all the stuff required loaded eventually
         # (we use ObjectDoesNotExist to avoid awkard circular import issues)
-        if not kwargs['raw']:
+        if not kwargs.get('raw'):
             raise e
 
 
