@@ -2,6 +2,7 @@ import copy
 
 from django.core.cache import cache
 from django.conf import settings
+from django.core.exceptions import ObjectDoesNotExist
 
 CACHE_KEY = "WAFER_MENU_CACHE"
 
@@ -27,8 +28,15 @@ def refresh_menu_cache(**kwargs):
 
     Takes **kwargs to make it easier to use as a Django signal handler.
     """
-    clear_menu_cache()
-    get_cached_menus()
+    try:
+        clear_menu_cache()
+        get_cached_menus()
+    except ObjectDoesNotExist as e:
+        # During data loads, treat this as non-fatal, since we'll come back
+        # here again with hopefully all the stuff required loaded eventually
+        # (we use ObjectDoesNotExist to avoid awkard circular import issues)
+        if not kwargs.get('raw'):
+            raise e
 
 
 def maybe_obj(str_or_obj):
