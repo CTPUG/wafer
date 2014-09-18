@@ -69,7 +69,7 @@
 {% endif %}
 {% if user == object or user.is_staff %}
     {% if profile.pending_talks.exists or profile.accepted_talks.exists %}
-        {% if user.ticket.exists %}
+        {% if object.ticket.exists %}
             <div class="label label-success">
                 {% blocktrans %}
                     Ticket purchased
