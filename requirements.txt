@@ -1,5 +1,6 @@
 Django
-South
+# we need South >= 1.0 so that is finds migrations in south_migrations
+South>=1.0
 django-crispy-forms
 django-nose
 django-registration-redux
