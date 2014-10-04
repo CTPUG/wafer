@@ -14,7 +14,7 @@ matrix:
 install:
    # Install the right version of Django first
    - pip install 'Django<='"$DJANGO_VERSION"
-   - if [ "$DJANGO_VERSION" = "1.6" ]; then pip install 'South>1.0'; fi
+   - if [ "$DJANGO_VERSION" = "1.6" ]; then pip install 'South>=1.0'; fi
    - pip install -r requirements.txt -r requirements-dev.txt --use-mirrors
 # command to run tests
 script: NOSE_WITH_COVERAGE=1 python manage.py test
