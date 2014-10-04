@@ -1,8 +1,8 @@
 # From http://djangosnippets.org/snippets/882/
 # Copyright carljm (http://djangosnippets.org/users/carljm/)
 
+from django.conf.settings import WAFER_NEEDS_SOUTH
 from django.db.models import TextField
-from south.modelsinspector import add_introspection_rules
 from markdown import markdown
 
 
@@ -58,10 +58,12 @@ class MarkdownTextField(TextField):
         return unicode(self.attname)
 
 
-add_introspection_rules([(
-    [MarkdownTextField], [], {
-        "allow_html": ["_markdown_safe", {"default": True}],
-        "html_field_suffix": ["_html_field_suffix", {"default": "_html"}],
-    },
-)],
-["^wafer\.snippets\.markdown_field\.MarkdownTextField"])
+if WAFER_NEEDS_SOUTH:
+    from south.modelsinspector import add_introspection_rules
+
+    add_introspection_rules([(
+        [MarkdownTextField], [], {
+            "allow_html": ["_markdown_safe", {"default": True}],
+            "html_field_suffix": ["_html_field_suffix", {"default": "_html"}],
+        },
+    )], ["^wafer\.snippets\.markdown_field\.MarkdownTextField"])
