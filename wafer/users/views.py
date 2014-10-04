@@ -5,12 +5,12 @@ from django.views.generic import DetailView, UpdateView
 from django.views.generic.list import ListView
 
 from wafer.users.forms import UserForm, UserProfileForm
-from wafer.users.models import UserProfile
+from wafer.users.models import UserProfile, WaferUser
 
 
 class UsersView(ListView):
     template_name = 'wafer.users/users.html'
-    model = User
+    model = WaferUser
     paginate_by = 25
 
 

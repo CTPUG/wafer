@@ -1,8 +1,8 @@
-Django<=1.6
+Django
 South
 django-crispy-forms
 django-nose
-django-registration
+django-registration-redux
 pillow
 pyLibravatar
 pydns
