@@ -4,7 +4,7 @@ from optparse import make_option
 
 from django.core.management.base import BaseCommand
 
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from wafer.talks.models import ACCEPTED
 
 
@@ -47,7 +47,8 @@ class Command(BaseCommand):
 
     def _author_emails(self, options):
         # Should grow more options - accepted talks, under consideration, etc.
-        people = User.objects.filter(contact_talks__isnull=False).distinct()
+        people = get_user_model().objects.filter(
+            contact_talks__isnull=False).distinct()
 
         csv_file = csv.writer(sys.stdout)
         for person in people:
@@ -67,7 +68,7 @@ class Command(BaseCommand):
             csv_file.writerow(row)
 
     def _speaker_emails(self, options):
-        people = User.objects.filter(talks__isnull=False).distinct()
+        people = get_user_model().objects.filter(talks__isnull=False).distinct()
 
         csv_file = csv.writer(sys.stdout)
         for person in people:

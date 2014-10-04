@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 
 from wafer.users.models import UserProfile
 
@@ -15,5 +15,5 @@ class UserAdmin(UserAdmin):
     inlines = (UserProfileInline,)
 
 
-admin.site.unregister(User)
-admin.site.register(User, UserAdmin)
+admin.site.unregister(get_user_model())
+admin.site.register(get_user_model(), UserAdmin)

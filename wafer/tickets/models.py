@@ -1,5 +1,5 @@
-from django.contrib.auth.models import User
 from django.db import models
+from django.conf import settings
 
 
 class TicketType(models.Model):
@@ -13,7 +13,7 @@ class Ticket(models.Model):
     barcode = models.IntegerField(primary_key=True)
     email = models.EmailField(blank=True)
     type = models.ForeignKey(TicketType)
-    user = models.ForeignKey(User, related_name='ticket',
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='ticket',
                              blank=True, null=True, on_delete=models.SET_NULL)
 
     def __unicode__(self):

@@ -1,5 +1,5 @@
 from django.test import Client, TestCase
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 
 import datetime as D
 from wafer.talks.models import Talk, ACCEPTED, REJECTED, PENDING
@@ -894,8 +894,8 @@ class ValidationTests(TestCase):
         slot2 = Slot.objects.create(start_time=start1, end_time=end,
                                     day=day1)
 
-        user = User.objects.create_user('john', 'best@wafer.test',
-                                        'johnpassword')
+        user = get_user_model().objects.create_user('john', 'best@wafer.test',
+                                                    'johnpassword')
         talk = Talk.objects.create(title="Test talk", status=ACCEPTED,
                                    corresponding_author_id=user.id)
         page = Page.objects.create(name="test page", slug="test")
@@ -956,8 +956,8 @@ class ValidationTests(TestCase):
         slot2 = Slot.objects.create(start_time=start1, end_time=end,
                                     day=day1)
 
-        user = User.objects.create_user('john', 'best@wafer.test',
-                                        'johnpassword')
+        user = get_user_model().objects.create_user('john', 'best@wafer.test',
+                                                    'johnpassword')
         talk = Talk.objects.create(title="Test talk", status=ACCEPTED,
                                    corresponding_author_id=user.id)
         page1 = Page.objects.create(name="test page", slug="test")
@@ -1054,8 +1054,8 @@ class ValidationTests(TestCase):
         slot2 = Slot.objects.create(start_time=start1, end_time=end,
                                     day=day1)
 
-        user = User.objects.create_user('john', 'best@wafer.test',
-                                        'johnpassword')
+        user = get_user_model().objects.create_user('john', 'best@wafer.test',
+                                                    'johnpassword')
         talk = Talk.objects.create(title="Test talk", status=ACCEPTED,
                                    corresponding_author_id=user.id)
 

@@ -2,7 +2,7 @@ import json
 import logging
 
 from django.conf import settings
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from django.core.exceptions import PermissionDenied
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse, HttpResponseRedirect
@@ -81,11 +81,13 @@ def import_ticket(ticket_barcode, ticket_type, email):
 
     type_, created = TicketType.objects.get_or_create(name=ticket_type)
 
+    UserModel = get_user_model()
+
     try:
-        user = User.objects.get(email=email, ticket=None)
-    except User.DoesNotExist:
+        user = UserModel.objects.get(email=email, ticket=None)
+    except UserModel.DoesNotExist:
         user = None
-    except User.MultipleObjectsReturned:
+    except UserModel.MultipleObjectsReturned:
         # We're can't uniquely identify the user to associate this ticket
         # with, so leave it for them to figure out via the 'claim ticket'
         # interface
