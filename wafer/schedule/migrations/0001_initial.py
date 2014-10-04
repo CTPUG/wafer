@@ -28,7 +28,7 @@ class Migration(migrations.Migration):
             name='ScheduleItem',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('details', wafer.snippets.markdown_field.MarkdownTextField(help_text='Additional details (if required)', blank=True, add_html_field=False)),
+                ('details', wafer.snippets.markdown_field.MarkdownTextField(help_text='Additional details (if required)', blank=True, add_html_field=False, allow_html=False, html_field_suffix=b'_html')),
                 ('notes', models.TextField(help_text='Notes for the conference organisers', blank=True)),
                 ('css_class', models.CharField(help_text='Custom css class for this schedule item', max_length=128, blank=True)),
                 ('details_html', models.TextField(editable=False)),
@@ -59,7 +59,7 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('order', models.IntegerField(default=1)),
                 ('name', models.CharField(max_length=1024)),
-                ('notes', wafer.snippets.markdown_field.MarkdownTextField(help_text='Notes or directions that will be useful to conference attendees', blank=True, add_html_field=False)),
+                ('notes', wafer.snippets.markdown_field.MarkdownTextField(help_text='Notes or directions that will be useful to conference attendees', blank=True, add_html_field=False, allow_html=False, html_field_suffix=b'_html')),
                 ('notes_html', models.TextField(editable=False)),
                 ('days', models.ManyToManyField(help_text='Days on which this venue will be used.', to='schedule.Day')),
             ],
