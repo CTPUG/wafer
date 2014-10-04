@@ -154,8 +154,11 @@ INSTALLED_APPS = (
 # (native migrations were added in Django 1.7)
 try:
     from django.db import migrations
+    WAFER_NEEDS_SOUTH = False
 except ImportError:
     INSTALLED_APPS += ('south', )
+    WAFER_NEEDS_SOUTH = True
+
 
 TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
 
