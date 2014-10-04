@@ -151,6 +151,7 @@ INSTALLED_APPS = (
 )
 
 # Only add south if we're on a version that doesn't support native migrations
+# (native migrations were added in Django 1.7)
 try:
     from django.db import migrations
 except ImportError:
