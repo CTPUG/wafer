@@ -5,7 +5,6 @@ from optparse import make_option
 from django.core.management.base import BaseCommand
 
 from django.contrib.auth.models import User
-from wafer.conf_registration.models import RegisteredAttendee
 from wafer.talks.models import ACCEPTED
 
 
