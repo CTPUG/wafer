@@ -1,5 +1,5 @@
 from django.contrib.auth.backends import ModelBackend
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from django.db import IntegrityError
 
 from wafer.users.models import UserProfile
@@ -17,8 +17,9 @@ class GitHubBackend(ModelBackend):
 
     def _create_user(self, github_login, name, email, blog, append=0):
         try:
-            user = User.objects.create(username=(github_login + str(append)
-                                                 if append else github_login))
+            user = get_user_model().objects.create(
+                    username=(github_login + str(append)
+                              if append else github_login))
         except IntegrityError:
             return self._create_user(github_login, name, email, blog,
                                      append + 1)

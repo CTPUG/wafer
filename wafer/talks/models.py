@@ -1,6 +1,6 @@
 from django.utils.translation import ugettext_lazy as _
-from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
+from django.conf import settings
 from django.db import models
 
 from markitup.fields import MarkupField
@@ -47,8 +47,9 @@ class Talk(models.Model):
                               default=PENDING)
 
     corresponding_author = models.ForeignKey(
-        User, related_name='contact_talks')
-    authors = models.ManyToManyField(User, related_name='talks')
+        settings.AUTH_USER_MODEL, related_name='contact_talks')
+    authors = models.ManyToManyField(settings.AUTH_USER_MODEL,
+                                     related_name='talks')
 
     def __unicode__(self):
         return u'%s: %s' % (self.corresponding_author, self.title)

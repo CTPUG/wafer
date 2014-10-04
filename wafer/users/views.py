@@ -1,8 +1,8 @@
-from django.contrib.auth.models import User
 from django.core.exceptions import PermissionDenied
 from django.core.urlresolvers import reverse
 from django.views.generic import DetailView, UpdateView
 from django.views.generic.list import ListView
+from django.contrib.auth import get_user_model
 
 from wafer.users.forms import UserForm, UserProfileForm
 from wafer.users.models import UserProfile, WaferUser
@@ -16,7 +16,7 @@ class UsersView(ListView):
 
 class ProfileView(DetailView):
     template_name = 'wafer.users/profile.html'
-    model = User
+    model = get_user_model()
     slug_field = 'username'
     slug_url_kwarg = 'username'
 
@@ -37,7 +37,7 @@ class EditUserView(EditOneselfMixin, UpdateView):
     template_name = 'wafer.users/edit_user.html'
     slug_field = 'username'
     slug_url_kwarg = 'username'
-    model = User
+    model = get_user_model()
     form_class = UserForm
 
     def get_success_url(self):
