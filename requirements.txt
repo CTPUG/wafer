@@ -2,8 +2,6 @@ Django
 South
 django-crispy-forms
 django-nose
-# Force the 1.7 compatible version of django-registration until the
-# pypi situation gets sorted out.
 django-registration-redux
 pillow
 pyLibravatar
