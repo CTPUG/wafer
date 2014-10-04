@@ -3,15 +3,13 @@ python:
    - "2.7"
    - "2.6"
 env:
-   - DJANGO_VERSION=1.6
-     DJANGO_MIGRATOR='South>=1.0'
-   - DJANGO_VERSION=1.7
-     DJANGO_MIGRATOR=''
+   - DJANGO_VERSION=1.6 DJANGO_MIGRATOR='South>=1.0'
+   - DJANGO_VERSION=1.7 DJANGO_MIGRATOR=''
 # Django 1.7 doesn't support python 2.6, so explicitly exclude that
 matrix:
    exclude:
       - python: "2.6"
-        env: DJANGO_VERSION=1.7
+        env: DJANGO_VERSION=1.7 DJANGO_MIGRATOR='South>=1.0'
 # command to install dependencies,
 install:
    # Install the right version of Django first
