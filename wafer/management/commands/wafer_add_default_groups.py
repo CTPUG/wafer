@@ -11,18 +11,23 @@ class Command(BaseCommand):
     ])
 
     GROUPS = {
-       # Permissions are specified as (app, code_name) pairs
-       'Page Editors': (('pages', 'add_page'), ('pages', 'delete_page'),
-                        ('pages', 'change_page'), ('pages', 'add_file'),
-                        ('pages', 'delete_file'), ('pages', 'change_file')),
-       'Talk Mentors': (('talks', 'change_talk'),),
+        # Permissions are specified as (app, code_name) pairs
+        'Page Editors': (
+            ('pages', 'add_page'), ('pages', 'delete_page'),
+            ('pages', 'change_page'), ('pages', 'add_file'),
+            ('pages', 'delete_file'), ('pages', 'change_file'),
+        ),
+        'Talk Mentors': (
+            ('talks', 'change_talk'), ('talks', 'view_all_talks'),
+        ),
     }
 
     def add_wafer_groups(self):
         # This creates the groups we need for page editor and talk mentor
         # roles.
         for wafer_group, permission_list in self.GROUPS.items():
-            group, created = Group.objects.all().get_or_create(name=wafer_group)
+            group, created = Group.objects.all().get_or_create(
+                name=wafer_group)
             if not created:
                 print 'Using existing %s group' % wafer_group
             for app, perm_code in permission_list:
