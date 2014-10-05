@@ -20,7 +20,7 @@ install:
    # fixed version from upstream - see
    # https://bitbucket.org/andrewgodwin/south/pull-request/162/fixed-a-python-3-incompatibility-by
    # for the details
-   - if [ "$DJANGO_VERSION" = "1.6" ]; then pip install 'pip install https://bitbucket.org/andrewgodwin/south/get/e2c9102ee033.zip#egg=South'; fi
+   - if [ "$DJANGO_VERSION" = "1.6" ]; then pip install 'https://bitbucket.org/andrewgodwin/south/get/e2c9102ee033.zip#egg=South'; fi
    - pip install -r requirements.txt -r requirements-dev.txt --use-mirrors
 # command to run tests
 script: NOSE_WITH_COVERAGE=1 python manage.py test
