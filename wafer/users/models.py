@@ -2,7 +2,10 @@ from django.contrib.auth.models import User
 from django.db import models
 from django.db.models.signals import post_save
 from libravatar import libravatar_url
-from urllib2 import urlparse
+try:
+    from urllib2 import urlparse
+except ImportError:
+    from urllib import parse as urlparse
 from django.utils.http import urlquote
 
 from wafer.talks.models import ACCEPTED, PENDING
