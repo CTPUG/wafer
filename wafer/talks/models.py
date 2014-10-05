@@ -25,7 +25,7 @@ class Talk(models.Model):
 
     class Meta:
         permissions = (
-            ("view_all", "Can see all talks"),
+            ("view_all_talks", "Can see all talks"),
         )
 
     TALK_STATUS = (
@@ -98,6 +98,27 @@ class Talk(models.Model):
     accepted = property(fget=lambda x: x.status == ACCEPTED)
     pending = property(fget=lambda x: x.status == PENDING)
     reject = property(fget=lambda x: x.status == REJECTED)
+
+    def can_view(self, user):
+        if user.has_perm('talks.view_all_talks'):
+            return True
+        if self.authors.filter(username=user.username).exists():
+            return True
+        if self.accepted:
+            return True
+        return False
+
+    @classmethod
+    def can_view_all(cls, user):
+        return user.has_perm('talks.view_all_talks')
+
+    def can_edit(self, user):
+        if self.has_perm('talks.change_talk'):
+            return True
+        if self.pending:
+            if self.authors.filter(username=user.username).exists():
+                return True
+        return False
 
 
 class TalkUrl(models.Model):
