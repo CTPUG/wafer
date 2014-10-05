@@ -22,9 +22,9 @@ REQUIRES2 = [
     # support 2.6 either, so we can drop this restriction
     # when we move to Django 1.7
     'markdown<2.5',
-    # markitup 2.2 breaks on python 2 with module level imports, which we
-    # need to use for markdown, so avoid using that
-    'django-markitup<=2.1',
+    # We need django-markitup >= 2.2.2 to support django 1.7 properly
+    # on python 2
+    'django-markitup>=2.2.1',
 ]
 
 SOURCES2 = []
