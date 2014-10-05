@@ -22,8 +22,8 @@ class Migration(migrations.Migration):
                 ('notes', models.TextField(help_text='Any notes for the conference organisers?', null=True, blank=True)),
                 ('status', models.CharField(default=b'P', max_length=1, choices=[(b'A', b'Accepted'), (b'R', b'Not Accepted'), (b'P', b'Under Consideration')])),
                 ('_abstract_rendered', models.TextField(editable=False, blank=True)),
-                ('authors', models.ManyToManyField(related_name=b'talks', to=settings.AUTH_USER_MODEL)),
-                ('corresponding_author', models.ForeignKey(related_name=b'contact_talks', to=settings.AUTH_USER_MODEL)),
+                ('authors', models.ManyToManyField(related_name='talks', to=settings.AUTH_USER_MODEL)),
+                ('corresponding_author', models.ForeignKey(related_name='contact_talks', to=settings.AUTH_USER_MODEL)),
             ],
             options={
             },

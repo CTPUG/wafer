@@ -31,7 +31,7 @@ class Migration(migrations.Migration):
                 ('name', models.CharField(max_length=255)),
                 ('description', markitup.fields.MarkupField(help_text='Write some nice things about the sponsor.', no_rendered_field=True)),
                 ('_description_rendered', models.TextField(editable=False, blank=True)),
-                ('files', models.ManyToManyField(help_text='Images and other files for use in the description markdown field.', related_name=b'sponsors', null=True, to='sponsors.File', blank=True)),
+                ('files', models.ManyToManyField(help_text='Images and other files for use in the description markdown field.', related_name='sponsors', null=True, to='sponsors.File', blank=True)),
             ],
             options={
             },
@@ -49,7 +49,7 @@ class Migration(migrations.Migration):
                 ('short_description', models.TextField(help_text='One sentence overview of the package.')),
                 ('description', markitup.fields.MarkupField(help_text='Describe what the package gives the sponsor.', no_rendered_field=True)),
                 ('_description_rendered', models.TextField(editable=False, blank=True)),
-                ('files', models.ManyToManyField(help_text='Images and other files for use in the description markdown field.', related_name=b'packages', null=True, to='sponsors.File', blank=True)),
+                ('files', models.ManyToManyField(help_text='Images and other files for use in the description markdown field.', related_name='packages', null=True, to='sponsors.File', blank=True)),
             ],
             options={
                 'ordering': ['order', '-price', 'name'],
@@ -59,7 +59,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='sponsor',
             name='packages',
-            field=models.ManyToManyField(related_name=b'sponsors', to='sponsors.SponsorshipPackage'),
+            field=models.ManyToManyField(related_name='sponsors', to='sponsors.SponsorshipPackage'),
             preserve_default=True,
         ),
     ]
