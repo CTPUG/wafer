@@ -22,9 +22,10 @@ Installation
 
    * The name will be the conference's name.
 
-   * Create the registration levels and other items.
+4. Create the default 'Page Editors' and 'Talk Mentors' groups using
+   ``manage.py wafer_add_default_groups``.
 
-4. Have a fun conference.
+5. Have a fun conference.
 
 Features
 ========
