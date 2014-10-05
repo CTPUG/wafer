@@ -10,6 +10,7 @@ class ShowPage(DetailView):
     template_name = 'wafer.pages/page.html'
     model = Page
 
+
 class EditPage(UpdateView):
     template_name = 'wafer.pages/page_form.html'
     model = Page
@@ -35,7 +36,7 @@ def slug(request, url):
             return TemplateView.as_view(
                 template_name='wafer/index.html')(request)
 
-    if 'edit' in request.GET.keys():# and request.user.has_perm('pages.change_page'):
+    if 'edit' in request.GET.keys():
         if not request.user.has_perm('pages.change_page'):
             raise PermissionDenied
         return EditPage.as_view()(request, pk=page.id)
