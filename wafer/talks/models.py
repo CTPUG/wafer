@@ -2,6 +2,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse
 from django.conf import settings
 from django.db import models
+from django.utils.encoding import python_2_unicode_compatible
 
 from markitup.fields import MarkupField
 
@@ -12,15 +13,17 @@ PENDING = 'P'
 REJECTED = 'R'
 
 
+@python_2_unicode_compatible
 class TalkType(models.Model):
     """A type of talk."""
     name = models.CharField(max_length=255)
     description = models.TextField(max_length=1024)
 
-    def __unicode__(self):
+    def __str__(self):
         return u'%s' % (self.name,)
 
 
+@python_2_unicode_compatible
 class Talk(models.Model):
 
     TALK_STATUS = (
@@ -51,7 +54,7 @@ class Talk(models.Model):
     authors = models.ManyToManyField(settings.AUTH_USER_MODEL,
                                      related_name='talks')
 
-    def __unicode__(self):
+    def __str__(self):
         return u'%s: %s' % (self.corresponding_author, self.title)
 
     def get_absolute_url(self):

@@ -5,21 +5,25 @@ from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse
 from django.db import models
 from django.db.models.signals import post_save
+from django.utils.encoding import python_2_unicode_compatible
+
 
 from markitup.fields import MarkupField
 from wafer.menu import MenuError, refresh_menu_cache
 
 
+@python_2_unicode_compatible
 class File(models.Model):
     """A file for use in page markup."""
     name = models.CharField(max_length=255)
     description = models.TextField()
     item = models.FileField(upload_to='pages_files')
 
-    def __unicode__(self):
+    def __str__(self):
         return u'%s' % (self.name,)
 
 
+@python_2_unicode_compatible
 class Page(models.Model):
     """An extra page for the site."""
     name = models.CharField(max_length=255)
@@ -39,7 +43,7 @@ class Page(models.Model):
         help_text=_("Images and other files for use in"
                     " the content markdown field."))
 
-    def __unicode__(self):
+    def __str__(self):
         return u'%s' % (self.name,)
 
     def get_path(self):

@@ -57,6 +57,9 @@ class MarkdownTextField(TextField):
     def __unicode__(self):
         return unicode(self.attname)
 
+    def __str__(self):
+        return self.attname
+
 
 if settings.WAFER_NEEDS_SOUTH:
     from south.modelsinspector import add_introspection_rules

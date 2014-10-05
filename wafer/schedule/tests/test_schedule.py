@@ -39,6 +39,7 @@ class ScheduleTests(TestCase):
         assert Day.objects.count() == 2
 
         output = ["%s" % x for x in Day.objects.all()]
+        print(output)
 
         assert output == ["Sep 22 (Sun)", "Sep 23 (Mon)"]
 
