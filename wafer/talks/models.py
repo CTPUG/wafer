@@ -113,7 +113,7 @@ class Talk(models.Model):
         return user.has_perm('talks.view_all_talks')
 
     def can_edit(self, user):
-        if self.has_perm('talks.change_talk'):
+        if user.has_perm('talks.change_talk'):
             return True
         if self.pending:
             if self.authors.filter(username=user.username).exists():
