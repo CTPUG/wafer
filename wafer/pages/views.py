@@ -1,12 +1,20 @@
 from django.http import Http404
-from django.views.generic import DetailView, TemplateView
+from django.core.exceptions import PermissionDenied
+from django.views.generic import DetailView, TemplateView, UpdateView
 
 from wafer.pages.models import Page
+from wafer.pages.forms import PageForm
 
 
 class ShowPage(DetailView):
     template_name = 'wafer.pages/page.html'
     model = Page
+
+class EditPage(UpdateView):
+    template_name = 'wafer.pages/page_form.html'
+    model = Page
+    form_class = PageForm
+    fields = ['name', 'content']
 
 
 def slug(request, url):
@@ -26,5 +34,10 @@ def slug(request, url):
         except Page.DoesNotExist:
             return TemplateView.as_view(
                 template_name='wafer/index.html')(request)
+
+    if 'edit' in request.GET.keys():# and request.user.has_perm('pages.change_page'):
+        if not request.user.has_perm('pages.change_page'):
+            raise PermissionDenied
+        return EditPage.as_view()(request, pk=page.id)
 
     return ShowPage.as_view()(request, pk=page.id)

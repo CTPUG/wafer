@@ -1,6 +1,7 @@
 {% extends "wafer/base.html" %}
 {% block content %}
 <div>
+    {% if perms.pages.change_page %}<a type="button" class="btn btn-info pull-right" href="{{ page.get_absolute_url }}?edit">Edit</a>{% endif %}
     {{ page.content.rendered|safe }}
 </div>
 {% endblock %}
