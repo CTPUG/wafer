@@ -8,7 +8,7 @@ from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic.list import ListView
 from django.conf import settings
 
-from wafer.talks.models import Talk, ACCEPTED, PENDING
+from wafer.talks.models import Talk, ACCEPTED
 from wafer.talks.forms import TalkForm
 
 
@@ -17,10 +17,7 @@ class EditOwnTalksMixin(object):
        "Under Consideration"'''
     def get_object(self, *args, **kwargs):
         object_ = super(EditOwnTalksMixin, self).get_object(*args, **kwargs)
-        username = self.request.user.username
-        if ((object_.authors.filter(username=username).exists()
-            and object_.status == PENDING)
-                or self.request.user.is_staff):
+        if object_.can_edit(self.request.user):
             return object_
         else:
             raise PermissionDenied
@@ -38,9 +35,9 @@ class UsersTalks(ListView):
     paginate_by = 25
 
     def get_queryset(self):
-        # self.request will be None when we come here via the staticsite
+        # self.request will be None when we come here via the static site
         # renderer
-        if (self.request and self.request.user.is_staff):
+        if (self.request and Talk.can_view_all(self.request.user)):
             return Talk.objects.all()
         return Talk.objects.filter(status=ACCEPTED)
 
@@ -52,21 +49,14 @@ class TalkView(DetailView):
     def get_object(self, *args, **kwargs):
         '''Only talk owners can see talks, unless they've been accepted'''
         object_ = super(TalkView, self).get_object(*args, **kwargs)
-        username = self.request.user.username
-        if (object_.authors.filter(username=username).exists()
-                or self.request.user.is_staff
-                or object_.status == ACCEPTED):
+        if object_.can_view(self.request.user):
             return object_
         else:
             raise PermissionDenied
 
     def get_context_data(self, **kwargs):
         context = super(TalkView, self).get_context_data(**kwargs)
-        username = self.request.user.username
-        context['can_edit'] = (
-            (self.object.authors.filter(username=username).exists()
-             and self.object.status == PENDING)
-            or self.request.user.is_staff)
+        context['can_edit'] = self.object.can_edit(self.request.user)
         return context
 
 
@@ -100,11 +90,7 @@ class TalkUpdate(EditOwnTalksMixin, UpdateView):
 
     def get_context_data(self, **kwargs):
         context = super(TalkUpdate, self).get_context_data(**kwargs)
-        username = self.request.user.username
-        context['can_edit'] = (
-            (self.object.authors.filter(username=username).exists()
-             and self.object.status == PENDING)
-            or self.request.user.is_staff)
+        context['can_edit'] = self.object.can_edit(self.request.user)
         return context
 
 

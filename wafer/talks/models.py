@@ -26,6 +26,11 @@ class TalkType(models.Model):
 @python_2_unicode_compatible
 class Talk(models.Model):
 
+    class Meta:
+        permissions = (
+            ("view_all_talks", "Can see all talks"),
+        )
+
     TALK_STATUS = (
         (ACCEPTED, 'Accepted'),
         (REJECTED, 'Not Accepted'),
@@ -97,6 +102,27 @@ class Talk(models.Model):
     pending = property(fget=lambda x: x.status == PENDING)
     reject = property(fget=lambda x: x.status == REJECTED)
 
+    def can_view(self, user):
+        if user.has_perm('talks.view_all_talks'):
+            return True
+        if self.authors.filter(username=user.username).exists():
+            return True
+        if self.accepted:
+            return True
+        return False
+
+    @classmethod
+    def can_view_all(cls, user):
+        return user.has_perm('talks.view_all_talks')
+
+    def can_edit(self, user):
+        if user.has_perm('talks.change_talk'):
+            return True
+        if self.pending:
+            if self.authors.filter(username=user.username).exists():
+                return True
+        return False
+
 
 class TalkUrl(models.Model):
     """An url to stuff relevant to the talk - videos, slides, etc.
@@ -104,6 +130,22 @@ class TalkUrl(models.Model):
        Note that these are explicitly not intended to be exposed to the
        user, but exist for use by the conference organisers."""
 
-    description =  models.CharField(max_length=256)
+    description = models.CharField(max_length=256)
     url = models.URLField()
     talk = models.ForeignKey(Talk)
+
+
+if settings.WAFER_NEEDS_SOUTH:
+    # Django 1.7 updates permissions automatically when migrate is run,
+    # but South 1.0 still needs this to be explicitly hooked up like we
+    # do here.
+    from south.signals import post_migrate
+
+    def update_permissions_after_migration(app, **kwargs):
+        from django.db.models import get_app, get_models
+        from django.contrib.auth.management import create_permissions
+
+        create_permissions(get_app(app), get_models(),
+                           verbosity=2 if settings.DEBUG else 0)
+
+    post_migrate.connect(update_permissions_after_migration)
