@@ -98,9 +98,16 @@ class ScheduleView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super(ScheduleView, self).get_context_data(**kwargs)
         # Check if the schedule is valid
+        context['active'] = False
         if not check_schedule():
             return context
-        context['schedule_days'] = generate_schedule()
+        context['active'] = True
+        day = self.request.GET.get('day', None)
+        dates = dict([(x.date.strftime('%Y-%m-%d'), x) for x in
+                      Day.objects.all()])
+        # We choose to return the full schedule if given an invalid date
+        day = dates.get(day, None)
+        context['schedule_days'] = generate_schedule(day)
         return context
 
 
