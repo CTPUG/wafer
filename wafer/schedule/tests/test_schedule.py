@@ -304,7 +304,6 @@ class ScheduleTests(TestCase):
         c = Client()
         # Check that a wrong day gives the full schedule
 
-        response = c.get('/schedule/')
         response = c.get('/schedule/?day=2013-09-24')
 
         [day1, day2] = response.context['schedule_days']
