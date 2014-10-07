@@ -263,6 +263,105 @@ class ScheduleTests(TestCase):
         assert day2.rows[0].get_sorted_items()[1]['rowspan'] == 1
         assert day2.rows[0].get_sorted_items()[1]['colspan'] == 1
 
+    def test_per_day_view(self):
+        """Create a multiple day table with 3 slots and 2 venues and
+           check we get the expected results using the per-day views"""
+        # This is the same schedule as test_multiple_days
+        day1 = Day.objects.create(date=D.date(2013, 9, 22))
+        day2 = Day.objects.create(date=D.date(2013, 9, 23))
+        venue1 = Venue.objects.create(order=1, name='Venue 1')
+        venue1.days.add(day1)
+        venue1.days.add(day2)
+        venue2 = Venue.objects.create(order=2, name='Venue 2')
+        venue2.days.add(day1)
+        venue2.days.add(day2)
+
+        start1 = D.time(10, 0, 0)
+        start2 = D.time(11, 0, 0)
+        end1 = D.time(12, 0, 0)
+
+        start3 = D.time(12, 0, 0)
+        end2 = D.time(13, 0, 0)
+
+        pages = self._make_pages(6)
+        venues = [venue1, venue1, venue1, venue2, venue2, venue2]
+        items = self._make_items(venues, pages)
+
+        slot1 = Slot.objects.create(start_time=start1, end_time=start2,
+                                    day=day1)
+        slot2 = Slot.objects.create(start_time=start2, end_time=end1,
+                                    day=day1)
+        slot3 = Slot.objects.create(start_time=start3, end_time=end2,
+                                    day=day2)
+
+        items[0].slots.add(slot1)
+        items[3].slots.add(slot1)
+        items[1].slots.add(slot2)
+        items[4].slots.add(slot2)
+        items[2].slots.add(slot3)
+        items[5].slots.add(slot3)
+
+        c = Client()
+        # Check that a wrong day gives the full schedule
+
+        response = c.get('/schedule/')
+        response = c.get('/schedule/?day=2013-09-24')
+
+        [day1, day2] = response.context['schedule_days']
+
+        self.assertEqual(len(day1.rows), 2)
+        self.assertEqual(day1.venues, [venue1, venue2])
+        self.assertEqual(len(day2.rows), 1)
+        self.assertEqual(day2.venues, [venue1, venue2])
+        self.assertEqual(day1.rows[0].slot.get_start_time(), start1)
+        self.assertEqual(day1.rows[0].slot.end_time, start2)
+        self.assertEqual(day1.rows[1].slot.get_start_time(), start2)
+        self.assertEqual(day1.rows[1].slot.end_time, end1)
+        self.assertEqual(day2.rows[0].slot.get_start_time(), start3)
+        self.assertEqual(day2.rows[0].slot.end_time, end2)
+
+        self.assertEqual(len(day1.rows[0].items), 2)
+        self.assertEqual(len(day1.rows[1].items), 2)
+        self.assertEqual(len(day2.rows[0].items), 2)
+
+        self.assertEqual(day1.rows[0].get_sorted_items()[0]['item'], items[0])
+        self.assertEqual(day1.rows[0].get_sorted_items()[0]['rowspan'], 1)
+        self.assertEqual(day1.rows[0].get_sorted_items()[0]['colspan'], 1)
+
+        self.assertEqual(day2.rows[0].get_sorted_items()[1]['item'], items[5])
+        self.assertEqual(day2.rows[0].get_sorted_items()[1]['rowspan'], 1)
+        self.assertEqual(day2.rows[0].get_sorted_items()[1]['colspan'], 1)
+
+        # Test per-day schedule views
+        response = c.get('/schedule/?day=2013-09-22')
+        [day] = response.context['schedule_days']
+
+        self.assertEqual(day.day, day1.day)
+        self.assertEqual(day.venues, day1.venues)
+        self.assertEqual(len(day.rows), len(day1.rows))
+        # Repeat a bunch of tests from the full schedule
+        self.assertEqual(day.rows[0].slot.get_start_time(), start1)
+        self.assertEqual(day.rows[0].slot.end_time, start2)
+        self.assertEqual(len(day.rows[0].items), 2)
+        self.assertEqual(len(day.rows[1].items), 2)
+        self.assertEqual(day.rows[0].get_sorted_items()[0]['item'], items[0])
+        self.assertEqual(day.rows[0].get_sorted_items()[0]['rowspan'], 1)
+        self.assertEqual(day.rows[0].get_sorted_items()[0]['colspan'], 1)
+
+        response = c.get('/schedule/?day=2013-09-23')
+        [day] = response.context['schedule_days']
+
+        self.assertEqual(day.day, day2.day)
+        self.assertEqual(day.venues, day2.venues)
+        self.assertEqual(len(day.rows), len(day2.rows))
+        # Repeat a bunch of tests from the full schedule
+        self.assertEqual(day.rows[0].slot.get_start_time(), start3)
+        self.assertEqual(day.rows[0].slot.end_time, end2)
+        self.assertEqual(len(day.rows[0].items), 2)
+        self.assertEqual(day.rows[0].get_sorted_items()[1]['item'], items[5])
+        self.assertEqual(day.rows[0].get_sorted_items()[1]['rowspan'], 1)
+        self.assertEqual(day.rows[0].get_sorted_items()[1]['colspan'], 1)
+
     def test_multiple_days_with_disjoint_venues(self):
         """Create a multiple day table with 3 slots and 2 venues and
            check we get the expected results"""
