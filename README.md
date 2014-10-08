@@ -27,6 +27,13 @@ Installation
 
 5. Have a fun conference.
 
+Running with Django 1.6
+-----------------------
+
+If you are running Django 1.6, please also install south for migrations::
+
+    pip install south
+
 Features
 ========
 
