@@ -12,6 +12,10 @@ Contents:
    :maxdepth: 2
 
    install
+   pages
+   talks
+   sponsors
+   schedule
    static
 
 
