@@ -31,26 +31,24 @@ Features
 ========
 
 * Support for adding and editing sponsors via Django admin.
+* Schedule can be created and updated via Django admin.
+* Pages for static content, news and so forthe can be handled via Django admin.
+  * Can be delegated to the 'Page Editors' group.
+  * Pages can be updated via the web interface.
+* Talk submissions and acceptance.
+* Generate a static version of the site for archival.
 
 
 TODO
 ====
 
-* Improve the dashboard for logged in users showing them:
-  * A list of their invoices (and whether they're finalized / paid).
-* Make the code easier to use for other conferences (split out theming, etc)
-* Improve the talk submission management module
-  * Use markdown to allow better formatting of talk abstracts
-  * Better display of accepted talks
-* Finish the conference registration module
-  * Make various messages easier to customise
-* Add support for editing and arranging the schedule via Django admin.
-* Better invoice management
-  * Invoices should be a separate table.
-  * Invoices should be creatable in Django admin.
-  * Allow multiple invoices per person.
-  * Allow multiple people per invoice.
-  * Allow cancelling (but not deletion) of invoices.
+* Make the code easier to use for other conferences (split out theming, etc).
+* Improve the talk submission management module:
+  * Better display of accepted talks.
+* Make various messages easier to customise.
+* Improve admin support for the schedule:
+  * Show table of slots in admin interface.
+  * Improve handling of moving talks around.
 * Support for adding news (and other templated pages) via Django admin.
 * Maybe add some cool visualizations with  d3:
   * Number of people signed up in various categories.
@@ -58,5 +56,5 @@ TODO
   * Sponsorship slots remaining.
   * Days until various deadlines.
 * Other improvements
-* Add tests
+* Add many tests
 
