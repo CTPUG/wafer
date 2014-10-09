@@ -1,9 +1,9 @@
 {% extends "wafer/base.html" %}
 {% block content %}
 <div>
+    {{ page.content.rendered|safe }}
     {% if perms.pages.change_page %}
         <a href="{{ page.get_absolute_url }}?edit" class="pull-right btn btn-default btn-lg">{% trans 'Edit' %}</a>
     {% endif %}
-    {{ page.content.rendered|safe }}
 </div>
 {% endblock %}
