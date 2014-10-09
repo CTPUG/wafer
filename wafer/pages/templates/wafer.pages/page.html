@@ -2,7 +2,7 @@
 {% block content %}
 <div>
     {% if perms.pages.change_page %}
-        <a href="{{ page.get_absolute_url }}?edit" class="pull-right btn btn-default btn-lg">{% trans 'Edit'}</a>
+        <a href="{{ page.get_absolute_url }}?edit" class="pull-right btn btn-default btn-lg">{% trans 'Edit' %}</a>
     {% endif %}
     {{ page.content.rendered|safe }}
 </div>
