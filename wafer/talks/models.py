@@ -95,7 +95,7 @@ class Talk(models.Model):
     get_in_schedule.boolean = True
 
     def has_url(self):
-        """Test in the talk has urls associated with it"""
+        """Test if the talk has urls associated with it"""
         if self.talkurl_set.all():
             return True
         return False
