@@ -20,13 +20,16 @@ class ScheduleListFilter(admin.SimpleListFilter):
             return queryset.filter(scheduleitem__isnull=True)
         return queryset
 
+class TalkUrlAdmin(admin.ModelAdmin):
+    list_display = ('description', 'talk', 'url')
+
 class TalkUrlInline(admin.TabularInline):
     model = TalkUrl
 
 
 class TalkAdmin(admin.ModelAdmin):
     list_display = ('title', 'get_author_name', 'get_author_contact',
-                    'talk_type', 'get_in_schedule', 'status')
+                    'talk_type', 'get_in_schedule', 'has_url', 'status')
     list_editable = ('status',)
     list_filter = ('status', 'talk_type', ScheduleListFilter)
 
@@ -37,4 +40,4 @@ class TalkAdmin(admin.ModelAdmin):
 
 admin.site.register(Talk, TalkAdmin)
 admin.site.register(TalkType)
-admin.site.register(TalkUrl)
+admin.site.register(TalkUrl, TalkUrlAdmin)
