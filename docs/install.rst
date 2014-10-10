@@ -2,26 +2,52 @@
 Installation
 ============
 
+Supported versions
+==================
+
+wafer supports Django 1.6 and 1.7 and python 2.6 and 2.7.
+Note that Django 1.7 only supports python 2.7.
+
+Requirements
+============
+
+In addition to Django, wafer requires:
+
+* django-crispy-forms
+* django-registration-redux
+* pyLibravatar
+* django-medusa
+* django-markitup
+
+and their dependancies.
+
 Basic instructions
 ==================
 
-1. Create the intial database schema
+
+#. Install all the dependancies
+   ``pip install -r requirements.txt``
+ 
+   * If you are using Django 1.6, you will need to explicitly install
+     south - ``pip install south``
+
+#. Create the intial database schema
    ``manage.py migrate``
 
-2. If you don't have one yet, create a superuser with
+#. If you don't have one yet, create a superuser with
    ``manage.py createsuperuser``.
 
-3. Log in and configure the Site:
+#. Log in and configure the Site:
 
    * The domain will be used as the base for e-mails sent during
      registration.
 
    * The name will be the conference's name.
 
-4. Create the default 'Page Editors' and 'Talk Mentors' groups using
+#. Create the default 'Page Editors' and 'Talk Mentors' groups using
    ``manage.py wafer_add_default_groups``.
 
-5. Have a fun conference.
+#. Have a fun conference.
 
 
 Important settings
