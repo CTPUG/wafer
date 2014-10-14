@@ -17,7 +17,7 @@ A wafer-thin web application for running small conferences. Built using Django.
 
 Licensed under the `ISC License`_.
 
-.. _ISC License: LICENSE
+.. _ISC License: https://github.com/CTPUG/wafer/blob/master/LICENSE
 
 
 Documentation
