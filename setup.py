@@ -6,7 +6,7 @@ setup(
     url='http://github.com/CTPUG/wafer',
     license='MIT',
     description="A wafer-thin Django library for running small conferences.",
-    long_description=open('README.md', 'r').read(),
+    long_description=open('README.rst', 'r').read(),
     author='CTPUG',
     author_email='ctpug@googlegroups.com',
     packages=find_packages(),

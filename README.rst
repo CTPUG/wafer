@@ -1,16 +1,32 @@
 wafer
 =====
 
-[![Build Status](https://travis-ci.org/CTPUG/wafer.png?branch=master)](https://travis-ci.org/CTPUG/wafer)
+|wafer-ci-badge| |wafer-docs-badge|
+
+.. |wafer-ci-badge| image:: https://travis-ci.org/CTPUG/wafer.png?branch=master
+    :alt: Travis CI build status
+    :scale: 100%
+    :target: https://travis-ci.org/CTPUG/wafer
+
+.. |wafer-docs-badge| image:: https://readthedocs.org/projects/wafer/badge/?version=latest
+    :alt:  Wafer documentation
+    :scale: 100%
+    :target: http://wafer.readthedocs.org/
 
 A wafer-thin web application for running small conferences. Built using Django.
 
-Licensed under the [ISC License](LICENSE).
+Licensed under the `ISC License`_.
+
+.. _ISC License: LICENSE
+
 
 Documentation
 =============
 
-Available on [readthedocs.org](http://wafer.readthedocs.org/).
+Available on `readthedocs.org`_.
+
+.. _readthedocs.org: http://wafer.readthedocs.org/
+
 
 Installation
 ============
@@ -31,6 +47,7 @@ Installation
    ``manage.py wafer_add_default_groups``.
 
 5. Have a fun conference.
+
 
 Features
 ========
@@ -62,4 +79,3 @@ TODO
   * Days until various deadlines.
 * Other improvements
 * Add many tests
-
