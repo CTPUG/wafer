@@ -78,7 +78,7 @@ TODO
   * Improve handling of moving talks around.
 
 * Support for adding news (and other templated pages) via Django admin.
-* Maybe add some cool visualizations with  d3:
+* Maybe add some cool visualizations with d3:
 
   * Number of people signed up in various categories.
   * Places remaining.
