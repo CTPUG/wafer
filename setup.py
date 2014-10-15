@@ -47,13 +47,16 @@ else:
     REQUIRES += REQUIRES3
     SOURCES += SOURCES3
 
+with open('README.rst', 'r') as f:
+    long_description = f.read()
+
 setup(
     name="wafer",
-    version="0.1.0a",
+    version="0.2.0a",
     url='http://github.com/CTPUG/wafer',
     license='MIT',
     description="A wafer-thin Django library for running small conferences.",
-    long_description=open('README.md', 'r').read(),
+    long_description=long_description,
     author='CTPUG',
     author_email='ctpug@googlegroups.com',
     packages=find_packages(),

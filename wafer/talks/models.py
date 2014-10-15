@@ -97,6 +97,14 @@ class Talk(models.Model):
     get_in_schedule.short_description = 'Added to schedule'
     get_in_schedule.boolean = True
 
+    def has_url(self):
+        """Test if the talk has urls associated with it"""
+        if self.talkurl_set.all():
+            return True
+        return False
+
+    has_url.boolean = True
+
     # Helpful properties for the templates
     accepted = property(fget=lambda x: x.status == ACCEPTED)
     pending = property(fget=lambda x: x.status == PENDING)

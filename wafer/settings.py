@@ -206,10 +206,6 @@ django.template.add_to_builtins('django.templatetags.i18n')
 
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
 
-# Wafer settings
-WAFER_BILLABLE_ME = "http://billable.me/pdf/"
-
-
 # Wafer cache settings
 # We assume that the WAFER_CACHE is cross-process
 WAFER_CACHE = 'wafer_cache'
@@ -245,21 +241,6 @@ WAFER_MENUS = ()
 WAFER_DYNAMIC_MENUS = (
     'wafer.pages.models.page_menus',
 )
-
-# Registration mode
-# This controls what happens when a user attempts to register
-# if both WAITLIST and REGISTRATION_OPEN are false, no registration is possible
-# if REGISTRTION_OPEN is true, and WAITLIST is false, registration proceeds
-# as normal (registration items are created in the admin interface)
-# if WAITLIST is true, registration puts people on the waitlist rather
-# than registering. In this case, REGISTRATION_OPEN determines message sent
-# to the user.
-# Registration will also go to the WAITLIST if REGISTER_LIMIT is > 0 and
-# the number of attendees exceeds that limit
-WAFER_WAITLIST_ON = False
-WAFER_REGISTRATION_OPEN = False
-# Set to 0 for no limit
-WAFER_REGISTRATION_LIMIT = 250
 
 # Log in with GitHub:
 # AUTHENTICATION_BACKENDS = (
