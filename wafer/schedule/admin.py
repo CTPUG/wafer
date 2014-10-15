@@ -198,7 +198,7 @@ class SlotAdminForm(forms.ModelForm):
 class SlotAdmin(admin.ModelAdmin):
     form = SlotAdminForm
 
-    list_display = ('__unicode__', 'end_time')
+    list_display = ('__str__', 'end_time')
     list_editable = ('end_time',)
 
     change_list_template = 'admin/slot_list.html'

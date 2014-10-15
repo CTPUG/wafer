@@ -2,20 +2,23 @@ from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse
 from django.core.validators import MinValueValidator
 from django.db import models
+from django.utils.encoding import python_2_unicode_compatible
 
 from markitup.fields import MarkupField
 
 
+@python_2_unicode_compatible
 class File(models.Model):
     """A file for use in sponsor and sponshorship package descriptions."""
     name = models.CharField(max_length=255)
     description = models.TextField()
     item = models.FileField(upload_to='sponsors_files')
 
-    def __unicode__(self):
+    def __str__(self):
         return u'%s' % (self.name,)
 
 
+@python_2_unicode_compatible
 class SponsorshipPackage(models.Model):
     """A description of a sponsorship package."""
     order = models.IntegerField(default=1)
@@ -40,10 +43,11 @@ class SponsorshipPackage(models.Model):
     class Meta:
         ordering = ['order', '-price', 'name']
 
-    def __unicode__(self):
+    def __str__(self):
         return u'%s (amount: %.0f)' % (self.name, self.price)
 
 
+@python_2_unicode_compatible
 class Sponsor(models.Model):
     """A conference sponsor."""
     name = models.CharField(max_length=255)
@@ -56,7 +60,7 @@ class Sponsor(models.Model):
         help_text=_("Images and other files for use in"
                     " the description markdown field."))
 
-    def __unicode__(self):
+    def __str__(self):
         return u'%s' % (self.name,)
 
     def get_absolute_url(self):

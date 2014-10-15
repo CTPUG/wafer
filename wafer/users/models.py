@@ -1,8 +1,13 @@
 from django.contrib.auth.models import User
 from django.db import models
 from django.db.models.signals import post_save
+from django.utils.encoding import python_2_unicode_compatible
+
 from libravatar import libravatar_url
-from urllib2 import urlparse
+try:
+    from urllib2 import urlparse
+except ImportError:
+    from urllib import parse as urlparse
 from django.utils.http import urlquote
 
 from wafer.talks.models import ACCEPTED, PENDING
@@ -20,6 +25,7 @@ class WaferUser(User):
         return "/users/%s/" % urlquote(self.username)
 
 
+@python_2_unicode_compatible
 class UserProfile(models.Model):
     user = models.OneToOneField(User)
     contact_number = models.CharField(max_length=16, null=True, blank=True)
@@ -31,7 +37,7 @@ class UserProfile(models.Model):
     twitter_handle = models.CharField(max_length=15, null=True, blank=True)
     github_username = models.CharField(max_length=32, null=True, blank=True)
 
-    def __unicode__(self):
+    def __str__(self):
         return unicode(self.user)
 
     def accepted_talks(self):

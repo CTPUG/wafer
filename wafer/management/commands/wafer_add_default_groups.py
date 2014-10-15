@@ -29,18 +29,18 @@ class Command(BaseCommand):
             group, created = Group.objects.all().get_or_create(
                 name=wafer_group)
             if not created:
-                print 'Using existing %s group' % wafer_group
+                print('Using existing %s group' % wafer_group)
             for app, perm_code in permission_list:
                 try:
                     perm = Permission.objects.filter(
                         codename=perm_code, content_type__app_label=app).get()
                 except Permission.DoesNotExist:
-                    print 'Unable to find permission %s' % perm_code
+                    print('Unable to find permission %s' % perm_code)
                     continue
                 except Permission.MultipleObjectsReturned:
-                    print 'Non-unique permission %s' % perm_code
+                    print('Non-unique permission %s' % perm_code)
                 if perm not in group.permissions.all():
-                    print 'Adding %s to %s' % (perm_code, wafer_group)
+                    print('Adding %s to %s' % (perm_code, wafer_group))
                     group.permissions.add(perm)
             group.save()
 

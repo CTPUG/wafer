@@ -3,6 +3,7 @@ from django.core.urlresolvers import reverse
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models.signals import post_save
+from django.utils.encoding import python_2_unicode_compatible
 
 from wafer.snippets.markdown_field import MarkdownTextField
 
@@ -10,17 +11,19 @@ from wafer.talks.models import Talk
 from wafer.pages.models import Page
 
 
+@python_2_unicode_compatible
 class Day(models.Model):
     """Days on which the conference will be held."""
     date = models.DateField(null=True, blank=True)
 
-    def __unicode__(self):
+    def __str__(self):
         return u'%s' % self.date.strftime('%b %d (%a)')
 
     class Meta:
         ordering = ['date']
 
 
+@python_2_unicode_compatible
 class Venue(models.Model):
     """Information about a venue for conference events"""
     order = models.IntegerField(default=1)
@@ -38,13 +41,14 @@ class Venue(models.Model):
     class Meta:
         ordering = ['order', 'name']
 
-    def __unicode__(self):
+    def __str__(self):
         return u'%s' % self.name
 
     def get_absolute_url(self):
         return reverse('wafer_venue', args=(self.pk,))
 
 
+@python_2_unicode_compatible
 class Slot(models.Model):
 
     # XXX: We're trading flexibility for ease of implementation here.
@@ -70,7 +74,7 @@ class Slot(models.Model):
         order_with_respect_to = 'day'
         ordering = ['day', 'end_time', 'start_time']
 
-    def __unicode__(self):
+    def __str__(self):
         if self.name:
             slot = u'Slot %s' % self.name
         else:
@@ -98,6 +102,7 @@ class Slot(models.Model):
             raise ValidationError("Start time must be before end time")
 
 
+@python_2_unicode_compatible
 class ScheduleItem(models.Model):
 
     venue = models.ForeignKey(Venue)
@@ -154,7 +159,7 @@ class ScheduleItem(models.Model):
         start = start_slot.get_start_time().strftime('%H:%M')
         return u'%s, %s' % (start_slot.get_day(), start)
 
-    def __unicode__(self):
+    def __str__(self):
         return u'%s in %s at %s' % (self.get_desc(), self.venue,
                                     self.get_start_time())
 

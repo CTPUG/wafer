@@ -33,7 +33,7 @@ class Migration(migrations.Migration):
                 ('include_in_menu', models.BooleanField(default=False, help_text='Whether to include in menus.')),
                 ('exclude_from_static', models.BooleanField(default=False, help_text='Whether to exclude this page from the static version of the site (Container pages, etc.)')),
                 ('_content_rendered', models.TextField(editable=False, blank=True)),
-                ('files', models.ManyToManyField(help_text='Images and other files for use in the content markdown field.', related_name=b'pages', null=True, to='pages.File', blank=True)),
+                ('files', models.ManyToManyField(help_text='Images and other files for use in the content markdown field.', related_name='pages', null=True, to='pages.File', blank=True)),
                 ('parent', models.ForeignKey(blank=True, to='pages.Page', null=True)),
             ],
             options={

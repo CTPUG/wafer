@@ -14,8 +14,7 @@ class Command(BaseCommand):
             contact_talks__isnull=False).filter(*args, **kwargs).count()
 
     def handle(self, *args, **options):
-        print "Speakers:"
-        print
+        print("Speakers:\n")
 
         # FIXME: more stats - accepted, rejected, pending, etc.
-        print "  Total:", self._speakers()
+        print("  Total: %s" % self._speakers())

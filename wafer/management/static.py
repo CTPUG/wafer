@@ -18,7 +18,7 @@ class WaferDiskStaticSiteRenderer(DiskStaticSiteRenderer):
                 super(WaferDiskStaticSiteRenderer, self).render_path(path,
                                                                      view)
             except IOError as err:
-                print 'Skiping %s - threw IOError %s' % (path, err)
+                print('Skiping %s - threw IOError %s' % (path, err))
             # This is a hack because dajngo_medusa doens't understand 301
             if path == '/':
                 DEPLOY_DIR = settings.MEDUSA_DEPLOY_DIR
