@@ -55,7 +55,7 @@ If you are running Django 1.6, please also install south for migrations::
 
     pip install south
 
-South 1.0 fails with python 3, described `in the issue`_. To properly support
+South 1.0 fails with python 3, described `in this issue`_. To properly support
 python 3 and Django 1.6, you need to install a patched version. The following
 command should work::
 
