@@ -29,6 +29,10 @@ setup(
         # markitup 2.2 breaks on python 2 with module level imports, which we
         # need to use for markdown, so avoid using that
         'django-markitup<=2.1,>2.2',
+    setup_requires = [
+        # Add setuptools-git, so we get correct behaviour for
+        # include_package_data
+        'setuptools_git >= 1.0',
     ],
     classifiers=[
         'Development Status :: 4 - Beta',
