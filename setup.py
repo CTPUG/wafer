@@ -63,6 +63,11 @@ setup(
     include_package_data=True,
     install_requires=REQUIRES,
     dependency_links=SOURCES,
+    setup_requires = [
+        # Add setuptools-git, so we get correct behaviour for
+        # include_package_data
+        'setuptools_git >= 1.0',
+    ],
     classifiers=[
         'Development Status :: 4 - Beta',
         'Intended Audience :: Developers',
