@@ -11,7 +11,7 @@ REQUIRES = [
     'pyLibravatar',
     'pytz',
     'requests',
-    'django-medusa',
+    'django-medusa>=0.3.0',
 ]
 
 SOURCES = []
@@ -35,10 +35,7 @@ REQUIRES3 = [
     'django-markitup>=2.2',
 ]
 
-SOURCES3 = [
-    # Until Pyton3 support is merged to master, use this branch
-    'https://github.com/kezabelle/django-medusa/archive/44d82054d39b794033e5df25fd9e630d05c97f3b.zip#egg=django-medusa-0.2.1',
-]
+SOURCES3 = []
 
 if sys.version_info < (3, 0):
     REQUIRES += REQUIRES2
