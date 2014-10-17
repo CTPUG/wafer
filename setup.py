@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="wafer",
-    version="0.1.0",
+    version="0.1.1",
     url='http://github.com/CTPUG/wafer',
     license='MIT',
     description="A wafer-thin Django library for running small conferences.",
