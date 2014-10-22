@@ -9,14 +9,12 @@ from wafer.talks.models import ACCEPTED
 
 
 class Command(BaseCommand):
-    help = "List author or attendee email addresses."
+    help = "List author or web-site user email addresses."
 
     option_list = BaseCommand.option_list + tuple([
         make_option('--authors', action="store_true", default=False,
                     help='List author email addresses only'
                     ' (for accepted talks)'),
-        make_option('--waiting', action="store_true", default=False,
-                    help='Only list people on the waiting list.'),
         make_option('--allauthors', action="store_true", default=False,
                     help='List author emails only (for all talks)'),
         make_option('--speakers', action="store_true", default=False,
@@ -27,22 +25,15 @@ class Command(BaseCommand):
                     ' (for all talks)'),
     ])
 
-    def _attendee_emails(self, options):
+    def _website_user_emails(self, options):
         query = {}
-        if options['waiting']:
-            query['waitlist'] = True
 
-        people = RegisteredAttendee.objects.filter(**query)
+        people = get_user_model().objects.all()
 
         csv_file = csv.writer(sys.stdout)
         for person in people:
-            if options['waiting']:
-                row = [x.encode("utf-8")
-                       for x in (person.name, person.email,
-                           person.waitlist_date.strftime("%Y-%m-%d %H:%M"))]
-            else:
-                row = [x.encode("utf-8")
-                       for x in (person.name, person.email)]
+            row = [x.encode("utf-8")
+                   for x in (person.username, person.get_full_name(), person.email)]
             csv_file.writerow(row)
 
     def _author_emails(self, options):
@@ -94,4 +85,4 @@ class Command(BaseCommand):
         elif options['speakers'] or options['allspeakers']:
             self._speaker_emails(options)
         else:
-            self._attendee_emails(options)
+            self._website_user_emails(options)
