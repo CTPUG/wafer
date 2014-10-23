@@ -29,7 +29,7 @@ class GitHubBackend(ModelBackend):
         user.email = email
         user.save()
 
-        profile = user.get_profile()
+        profile = user.userprofile
         profile.homepage = blog
         profile.github_username = github_login
         profile.save()
