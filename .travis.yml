@@ -15,7 +15,7 @@ matrix:
 # command to install dependencies,
 install:
    # Install the right version of Django first
-   - pip install 'Django<='"$DJANGO_VERSION"
+   - pip install 'Django<='"$DJANGO_VERSION.99"
    # The south 1.0 release isn't properly python 3 compatible, so we grab the
    # fixed version from upstream - see
    # https://bitbucket.org/andrewgodwin/south/pull-request/162/fixed-a-python-3-incompatibility-by
