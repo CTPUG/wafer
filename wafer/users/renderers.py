@@ -2,14 +2,14 @@ from django_medusa.renderers import StaticSiteRenderer
 from django.core.urlresolvers import reverse
 
 from wafer.users.views import UsersView
-from wafer.users.models import WaferUser
+from django.contrib.auth.models import User
 
 
 class UserRenderer(StaticSiteRenderer):
     def get_paths(self):
         paths = ["/users/", ]
 
-        items = WaferUser.objects.all()
+        items = User.objects.all()
         for item in items:
             paths.append(item.get_absolute_url())
 
