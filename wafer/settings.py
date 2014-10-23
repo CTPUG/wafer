@@ -197,6 +197,16 @@ AUTH_PROFILE_MODULE = 'users.UserProfile'
 
 AUTH_USER_MODEL = 'auth.User'
 
+# Django 1.7 dropped get_absolute_url from AbstractUser, and thus User
+# (see https://code.djangoproject.com/ticket/20881 for the justification)
+# We sometimes need it, so we add a override to get it back for those
+# cases
+# This doesn't work correctly in Django 1.7.0, but works with later
+# versions - see https://code.djangoproject.com/ticket/11775
+ABSOLUTE_URL_OVERRIDES = {
+    'auth.user': lambda o: "/users/%s/" % o.username
+}
+
 # Forms:
 CRISPY_FAIL_SILENTLY = not DEBUG
 
