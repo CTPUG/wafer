@@ -3,7 +3,7 @@ import sys
 from setuptools import find_packages, setup
 
 REQUIRES = [
-    'Django>=1.6',
+    'Django>=1.6,!=1.7.0',
     'django-crispy-forms',
     'django-nose',
     'django-registration-redux',
