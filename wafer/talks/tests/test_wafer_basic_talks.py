@@ -52,3 +52,37 @@ def test_multiple_talks():
         corresponding_author_id=user2.id)
 
     assert len([x.title for x in user2.contact_talks.all()]) == 1
+
+
+def test_corresponding_author_details():
+    """Create a second user and check some filters"""
+    from django.contrib.auth import get_user_model
+    from wafer.talks.models import Talk
+
+    UserModel = get_user_model()
+
+    user = UserModel.objects.create_user('jeff', 'best@wafer.test',
+                                         'johnpassword')
+    profile = user.userprofile
+    profile.contact_number = '77776'
+    profile.save()
+
+    Talk.objects.create(
+        title="This is a another test talk",
+        abstract="This should be a long and interesting abstract, but isn't",
+        corresponding_author_id=user.id)
+
+    talk = user.contact_talks.all()[0]
+
+    assert talk.get_author_contact() == 'best@wafer.test - 77776'
+    assert talk.get_author_display_name() == 'jeff'
+    assert talk.get_author_name() == 'jeff ()'
+
+    user.first_name = 'Jeff'
+    user.last_name = 'Jeffson'
+    user.save()
+
+    talk = user.contact_talks.all()[0]
+
+    assert talk.get_author_display_name() == 'Jeff Jeffson'
+    assert talk.get_author_name() == 'jeff (Jeff Jeffson)'
