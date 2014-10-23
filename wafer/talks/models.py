@@ -67,7 +67,7 @@ class Talk(models.Model):
 
     def get_author_contact(self):
         email = self.corresponding_author.email
-        profile = self.corresponding_author.get_profile()
+        profile = self.corresponding_author.userprofile
         if profile.contact_number:
             contact = profile.contact_number
         else:
