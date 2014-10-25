@@ -12,7 +12,7 @@ class UserRenderer(StaticSiteRenderer):
         items = get_user_model().objects.all()
         for item in items:
             paths.append(reverse('wafer_user_profile',
-                                 kwargs={'username': item.username})), 
+                                 kwargs={'username': item.username}))
 
         view = UsersView()
         queryset = view.get_queryset()
