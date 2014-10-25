@@ -1,17 +1,18 @@
 from django_medusa.renderers import StaticSiteRenderer
 from django.core.urlresolvers import reverse
+from django.contrib.auth import get_user_model
 
 from wafer.users.views import UsersView
-from wafer.users.models import WaferUser
 
 
 class UserRenderer(StaticSiteRenderer):
     def get_paths(self):
         paths = ["/users/", ]
 
-        items = WaferUser.objects.all()
+        items = get_user_model().objects.all()
         for item in items:
-            paths.append(item.get_absolute_url())
+            paths.append(reverse('wafer_user_profile',
+                                 kwargs={'username': item.username}))
 
         view = UsersView()
         queryset = view.get_queryset()
