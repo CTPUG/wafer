@@ -13,18 +13,6 @@ from django.utils.http import urlquote
 from wafer.talks.models import ACCEPTED, PENDING
 
 
-class WaferUser(User):
-    # Django 1.7 see drop get_absolute_url from AbstractUser, and thus User
-    # (see https://code.djangoproject.com/ticket/20881 for the justification)
-    # We sometimes need it, so we add a proxy model to add it back for those
-    # cases
-    class Meta:
-        proxy = True
-
-    def get_absolute_url(self):
-        return "/users/%s/" % urlquote(self.username)
-
-
 @python_2_unicode_compatible
 class UserProfile(models.Model):
     user = models.OneToOneField(User)
