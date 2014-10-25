@@ -48,7 +48,7 @@
               {{ user.username }}<b class="caret"></b>
             </a>
             <ul class="dropdown-menu">
-              <li><a href="{{ user.get_absolute_url }}">
+              <li><a href="{% url 'wafer_user_profile' username=user.username %}">
                   {% blocktrans with name=user.get_full_name|default:user.username %}
                   {{ name }}'s profile
                   {% endblocktrans %}

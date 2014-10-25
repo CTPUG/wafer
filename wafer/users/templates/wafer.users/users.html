@@ -2,7 +2,7 @@
 {% block content %}
 <h1>{% trans 'Users:' %}</h1>
 {% for user in user_list %}
-<a href="{{ user.get_absolute_url }}">
+<a href="{% url 'wafer_user_profile' username=user.username %}">
     <div class="well">
         {{ user.get_full_name|default:user.username }}
     </div>
