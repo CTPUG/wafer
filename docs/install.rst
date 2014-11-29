@@ -44,6 +44,11 @@ Basic instructions
 
    * The name will be the conference's name.
 
+   * By default, wafer assumes that the site will be accessible over ssl,
+     so the regsistration emails will will use an 'https' prefix. If this
+     is not the case, override the wafer/registration/activation_email.txt
+     template.
+
 #. Create the default 'Page Editors' and 'Talk Mentors' groups using
    ``manage.py wafer_add_default_groups``.
 
