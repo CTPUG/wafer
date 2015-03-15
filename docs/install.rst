@@ -49,6 +49,9 @@ Basic instructions
      is not the case, override the wafer/registration/activation_email.txt
      template.
 
+#. wafer uses the Django caching infrastructure in several places, so
+   the cache table needs to be created using ``manage.py createcachetable``.
+
 #. Create the default 'Page Editors' and 'Talk Mentors' groups using
    ``manage.py wafer_add_default_groups``.
 
