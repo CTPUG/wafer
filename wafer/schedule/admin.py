@@ -1,3 +1,5 @@
+import datetime
+
 from django.contrib import admin
 from django import forms
 
@@ -187,6 +189,13 @@ class ScheduleItemAdmin(admin.ModelAdmin):
 
 
 class SlotAdminForm(forms.ModelForm):
+
+    additional = forms.IntegerField(min_value=0, max_value=30, required=False,
+                                    label="Additional slots",
+                                    help_text="Create this number of "
+                                              "additional slots following"
+                                              "this one")
+
     class Meta:
         model = Slot
         fields = ('name', 'previous_slot', 'day', 'start_time', 'end_time')
@@ -198,7 +207,7 @@ class SlotAdminForm(forms.ModelForm):
 class SlotAdmin(admin.ModelAdmin):
     form = SlotAdminForm
 
-    list_display = ('__str__', 'end_time')
+    list_display = ('__str__', 'day', 'end_time')
     list_editable = ('end_time',)
 
     change_list_template = 'admin/slot_list.html'
@@ -213,6 +222,25 @@ class SlotAdmin(admin.ModelAdmin):
         extra_context['errors'] = errors
         return super(SlotAdmin, self).changelist_view(request,
                                                       extra_context)
+
+    def save_model(self, request, obj, form, change):
+        super(SlotAdmin, self).save_model(request, obj, form, change)
+        if not change and form.cleaned_data['additional'] > 0:
+            # We add the requested additional slots
+            # All created slot will have the same length as the slot just
+            # created , and we specify them as a sequence using
+            # "previous_slot" so tweaking start times is simple.
+            prev = obj
+            end = datetime.datetime.combine(prev.day.date, prev.end_time)
+            start = datetime.datetime.combine(prev.day.date,
+                                              prev.get_start_time())
+            slot_len = end - start
+            for loop in range(form.cleaned_data['additional']):
+                end = end + slot_len
+                new_slot = Slot(day=prev.day, previous_slot=prev,
+                                end_time=end.time())
+                new_slot.save()
+                prev = new_slot
 
 
 admin.site.register(Day)
