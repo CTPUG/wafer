@@ -19,7 +19,7 @@
                quickElement("a", quickElement("li", this, ""),
                   time.strftime(time_format), "href",
                   "javascript:DateTimeShortcuts.handleClockQuicklink(" + num +
-                  ", '" + time.strftime(time_format) + "');");
+                  ", " + i + ");");
             }
          });
       }
