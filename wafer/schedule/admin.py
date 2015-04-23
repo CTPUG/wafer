@@ -257,7 +257,10 @@ class SlotAdmin(admin.ModelAdmin):
                 new_slot.save()
                 msgdict = {'obj': force_text(new_slot)}
                 msg = _("Additional slot %(obj)s added sucessfully") % msgdict
-                self.message_user(request, msg, messages.SUCCESS)
+                if hasattr(request, '_messages'):
+                    # Don't add messages unless we have a suitable request
+                    # Needed during testing, and possibly in other cases
+                    self.message_user(request, msg, messages.SUCCESS)
                 prev = new_slot
 
 
