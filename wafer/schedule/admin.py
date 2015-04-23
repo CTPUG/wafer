@@ -190,18 +190,22 @@ class ScheduleItemAdmin(admin.ModelAdmin):
 
 class SlotAdminForm(forms.ModelForm):
 
-    additional = forms.IntegerField(min_value=0, max_value=30, required=False,
-                                    label="Additional slots",
-                                    help_text="Create this number of "
-                                              "additional slots following"
-                                              "this one")
-
     class Meta:
         model = Slot
         fields = ('name', 'previous_slot', 'day', 'start_time', 'end_time')
 
     class Media:
         js = ('js/scheduledatetime.js',)
+
+
+class SlotAdminAddForm(SlotAdminForm):
+
+    # Additional field added for creating multiple slots at once
+    additional = forms.IntegerField(min_value=0, max_value=30, required=False,
+                                    label="Additional slots",
+                                    help_text="Create this number of "
+                                              "additional slots following"
+                                              "this one")
 
 
 class SlotAdmin(admin.ModelAdmin):
@@ -222,6 +226,14 @@ class SlotAdmin(admin.ModelAdmin):
         extra_context['errors'] = errors
         return super(SlotAdmin, self).changelist_view(request,
                                                       extra_context)
+
+    def get_form(self, request, obj=None, **kwargs):
+        """Change the form depending on whether we're adding or
+           editing the slot."""
+        if obj is None:
+            # Adding a new Slot
+            kwargs['form'] = SlotAdminAddForm
+        return super(SlotAdmin, self).get_form(request, obj, **kwargs)
 
     def save_model(self, request, obj, form, change):
         super(SlotAdmin, self).save_model(request, obj, form, change)
