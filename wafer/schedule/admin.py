@@ -1,4 +1,9 @@
+import datetime
+
 from django.contrib import admin
+from django.contrib import messages
+from django.utils.encoding import force_text
+from django.utils.translation import ugettext as _
 from django import forms
 
 from wafer.schedule.models import Day, Venue, Slot, ScheduleItem
@@ -187,6 +192,7 @@ class ScheduleItemAdmin(admin.ModelAdmin):
 
 
 class SlotAdminForm(forms.ModelForm):
+
     class Meta:
         model = Slot
         fields = ('name', 'previous_slot', 'day', 'start_time', 'end_time')
@@ -195,10 +201,20 @@ class SlotAdminForm(forms.ModelForm):
         js = ('js/scheduledatetime.js',)
 
 
+class SlotAdminAddForm(SlotAdminForm):
+
+    # Additional field added for creating multiple slots at once
+    additional = forms.IntegerField(min_value=0, max_value=30, required=False,
+                                    label=_("Additional slots"),
+                                    help_text=_("Create this number of "
+                                                "additional slots following"
+                                                "this one"))
+
+
 class SlotAdmin(admin.ModelAdmin):
     form = SlotAdminForm
 
-    list_display = ('__str__', 'end_time')
+    list_display = ('__str__', 'day', 'end_time')
     list_editable = ('end_time',)
 
     change_list_template = 'admin/slot_list.html'
@@ -213,6 +229,39 @@ class SlotAdmin(admin.ModelAdmin):
         extra_context['errors'] = errors
         return super(SlotAdmin, self).changelist_view(request,
                                                       extra_context)
+
+    def get_form(self, request, obj=None, **kwargs):
+        """Change the form depending on whether we're adding or
+           editing the slot."""
+        if obj is None:
+            # Adding a new Slot
+            kwargs['form'] = SlotAdminAddForm
+        return super(SlotAdmin, self).get_form(request, obj, **kwargs)
+
+    def save_model(self, request, obj, form, change):
+        super(SlotAdmin, self).save_model(request, obj, form, change)
+        if not change and form.cleaned_data['additional'] > 0:
+            # We add the requested additional slots
+            # All created slot will have the same length as the slot just
+            # created , and we specify them as a sequence using
+            # "previous_slot" so tweaking start times is simple.
+            prev = obj
+            end = datetime.datetime.combine(prev.day.date, prev.end_time)
+            start = datetime.datetime.combine(prev.day.date,
+                                              prev.get_start_time())
+            slot_len = end - start
+            for loop in range(form.cleaned_data['additional']):
+                end = end + slot_len
+                new_slot = Slot(day=prev.day, previous_slot=prev,
+                                end_time=end.time())
+                new_slot.save()
+                msgdict = {'obj': force_text(new_slot)}
+                msg = _("Additional slot %(obj)s added sucessfully") % msgdict
+                if hasattr(request, '_messages'):
+                    # Don't add messages unless we have a suitable request
+                    # Needed during testing, and possibly in other cases
+                    self.message_user(request, msg, messages.SUCCESS)
+                prev = new_slot
 
 
 admin.site.register(Day)
