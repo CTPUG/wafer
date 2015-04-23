@@ -205,10 +205,10 @@ class SlotAdminAddForm(SlotAdminForm):
 
     # Additional field added for creating multiple slots at once
     additional = forms.IntegerField(min_value=0, max_value=30, required=False,
-                                    label="Additional slots",
-                                    help_text="Create this number of "
-                                              "additional slots following"
-                                              "this one")
+                                    label=_("Additional slots"),
+                                    help_text=_("Create this number of "
+                                                "additional slots following"
+                                                "this one"))
 
 
 class SlotAdmin(admin.ModelAdmin):
