@@ -1,6 +1,9 @@
 import datetime
 
 from django.contrib import admin
+from django.contrib import messages
+from django.utils.encoding import force_text
+from django.utils.translation import ugettext as _
 from django import forms
 
 from wafer.schedule.models import Day, Venue, Slot, ScheduleItem
@@ -252,6 +255,9 @@ class SlotAdmin(admin.ModelAdmin):
                 new_slot = Slot(day=prev.day, previous_slot=prev,
                                 end_time=end.time())
                 new_slot.save()
+                msgdict = {'obj': force_text(new_slot)}
+                msg = _("Additional slot %(obj)s added sucessfully") % msgdict
+                self.message_user(request, msg, messages.SUCCESS)
                 prev = new_slot
 
 
