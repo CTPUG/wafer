@@ -31,11 +31,12 @@ class SlotAdminTests(TestCase):
         """Test save_model creating a new slot, but no additional slots"""
         slot = Slot(day=self.day, start_time=D.time(11, 0, 0),
                     end_time=D.time(11, 30, 0))
-        # check that it's not saved in the database
+        # check that it's not saved in the database yet
         self.assertEqual(Slot.objects.count(), 0)
         request = HttpRequest()
         dummy = make_dummy_form(0)
         self.admin.save_model(request, slot, dummy, False)
+        # check that it's now been saved in the database
         self.assertEqual(Slot.objects.count(), 1)
         slot2 = Slot.objects.filter(start_time=D.time(11, 0, 0)).get()
         self.assertEqual(slot, slot2)
@@ -47,7 +48,7 @@ class SlotAdminTests(TestCase):
         # end_time is chosen as 12:30 so it stays valid through all the
         # subsequent fiddling
         slot.save()
-        # check that it's not saved in the database
+        # check that it's saved in the database
         self.assertEqual(Slot.objects.count(), 1)
         request = HttpRequest()
         dummy = make_dummy_form(0)
