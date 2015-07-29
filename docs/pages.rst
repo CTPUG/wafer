@@ -20,7 +20,7 @@ Container pages
 ===============
 
 Container pages are created to act as parents for other pages. These should
-have minimal content, as they will typically be displayed on the site, 
+have minimal content, as they will typically not be displayed on the site,
 and should be excluded from the static site generation.
 
 Files
