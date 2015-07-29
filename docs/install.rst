@@ -55,6 +55,10 @@ Basic instructions
 #. Create the default 'Page Editors' and 'Talk Mentors' groups using
    ``manage.py wafer_add_default_groups``.
 
+#. Ensure the permissions on the MEDIA_ROOT directory are correctly set so the
+   webserver can create new files there. This location is used for files uploaded
+   for pages and sponsor information.
+
 #. Have a fun conference.
 
 Using Django 1.6 and Python 3
