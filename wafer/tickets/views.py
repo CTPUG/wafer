@@ -79,6 +79,8 @@ def import_ticket(ticket_barcode, ticket_type, email):
         log.debug('Ticket already registered: %s', ticket_barcode)
         return
 
+    # truncate long ticket type names to length allowed by database
+    ticket_type = ticket_type[:TicketType.MAX_NAME_LENGTH]
     type_, created = TicketType.objects.get_or_create(name=ticket_type)
 
     UserModel = get_user_model()
