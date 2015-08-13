@@ -44,7 +44,7 @@ class QueryTracker(object):
         from django.db import connection
         self._debug = settings.DEBUG
         settings.DEBUG = True
-        connection.queries = []
+        del connection.queries[:]
         return self
 
     def __exit__(self, *args, **kw):

@@ -199,11 +199,6 @@ AUTH_USER_MODEL = 'auth.User'
 
 # Forms:
 CRISPY_FAIL_SILENTLY = not DEBUG
-
-import django.template
-django.template.add_to_builtins('django.templatetags.future')
-django.template.add_to_builtins('django.templatetags.i18n')
-
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
 
 # Wafer cache settings
