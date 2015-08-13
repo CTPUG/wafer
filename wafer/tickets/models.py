@@ -6,7 +6,7 @@ from django.utils.encoding import python_2_unicode_compatible
 @python_2_unicode_compatible
 class TicketType(models.Model):
 
-    MAX_NAME_LENGTH = 32
+    MAX_NAME_LENGTH = 255
 
     name = models.CharField(max_length=MAX_NAME_LENGTH)
 
