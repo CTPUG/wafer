@@ -15,7 +15,6 @@ class EditPage(UpdateView):
     template_name = 'wafer.pages/page_form.html'
     model = Page
     form_class = PageForm
-    fields = ['name', 'content']
 
 
 def slug(request, url):
