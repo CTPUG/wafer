@@ -1,3 +1,4 @@
+{% load i18n %}
 {% blocktrans with WAFER_CONFERENCE_NAME=site.name %}
 Activate your {{ WAFER_CONFERENCE_NAME }} account [{{ expiration_days }} days left]
 {% endblocktrans %}

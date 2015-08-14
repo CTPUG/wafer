@@ -1,3 +1,4 @@
+{% load i18n %}
 {% spaceless %}
 {% url 'registration_activate' activation_key as activation_url %}
 {% url 'index' as index_url %}
