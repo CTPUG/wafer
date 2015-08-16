@@ -1,3 +1,5 @@
+import datetime
+
 from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse
 from django.core.exceptions import ValidationError
@@ -87,6 +89,17 @@ class Slot(models.Model):
         if self.previous_slot:
             return self.previous_slot.end_time
         return self.start_time
+
+    def get_duration(self):
+        start = datetime.datetime.combine(self.get_day().date,
+                                          self.get_start_time())
+        end = datetime.datetime.combine(self.get_day().date,
+                                        self.end_time)
+        duration = (end - start).total_seconds()
+        result = {}
+        result['hours'] = duration // 3600
+        result['minutes'] = (duration - (3600 * result['hours'])) // 60
+        return result
 
     def get_day(self):
         if self.previous_slot:
