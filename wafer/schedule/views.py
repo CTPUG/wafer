@@ -1,5 +1,4 @@
 import datetime
-import itertools
 from django.views.generic import DetailView, TemplateView
 
 from wafer.schedule.models import Venue, Slot, Day
@@ -115,17 +114,6 @@ class ScheduleView(TemplateView):
 class ScheduleXmlView(ScheduleView):
     template_name = 'wafer.schedule/penta_schedule.xml'
     content_type = 'application/xml'
-
-    def get_context_data(self, **kwargs):
-        context = super(ScheduleXmlView, self).get_context_data(**kwargs)
-        if context['active']:
-            # summit seems to create other ids after the day indexes, so
-            # we attempt to do the same
-            iterator = itertools.count(len(context['schedule_days']) + 2)
-        else:
-            iterator = itertools.count(1)
-        context['iterator'] = iterator
-        return context
 
 
 class CurrentView(TemplateView):
