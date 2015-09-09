@@ -91,14 +91,16 @@ class Slot(models.Model):
         return self.start_time
 
     def get_duration(self):
+        """Return the duration of the slot as hours and minutes.
+
+           Used for the pentabarf export, which needs it in this format."""
         start = datetime.datetime.combine(self.get_day().date,
                                           self.get_start_time())
         end = datetime.datetime.combine(self.get_day().date,
                                         self.end_time)
         duration = (end - start).total_seconds()
         result = {}
-        result['hours'] = duration // 3600
-        result['minutes'] = (duration - (3600 * result['hours'])) // 60
+        result['hours'], result['minutes'] = divmod(duration // 60, 60)
         return result
 
     def get_day(self):
