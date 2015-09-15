@@ -111,6 +111,11 @@ class ScheduleView(TemplateView):
         return context
 
 
+class ScheduleXmlView(ScheduleView):
+    template_name = 'wafer.schedule/penta_schedule.xml'
+    content_type = 'application/xml'
+
+
 class CurrentView(TemplateView):
     template_name = 'wafer.schedule/current.html'
 
