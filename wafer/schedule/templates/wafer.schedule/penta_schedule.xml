@@ -34,7 +34,8 @@
                     {% endwith %}
                     <room>{{ venue.name }}</room>
                     {# Confclerk needs this to import the conference. #}
-                    <track/> {# Set this to be the same as room? #}
+                    {# We set this to the same as the room name, since there doesn't seem a better choice #}
+                    <track>{{ venue.name }}</track>
                     {# These fields aren't needed, but it may be useful to include them if we can find sensible data to fill them with #}
                     {# <type/> - Talk type or "event" for non-talk pages? #}
                     {# It's not clear what the difference between abstract and description is meant to be
