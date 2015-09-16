@@ -34,24 +34,41 @@
                     {% endwith %}
                     <room>{{ venue.name }}</room>
                     {# Confclerk needs this to import the conference. #}
-                    <track/> {# Set this to be the same as room? #}
-                    {# These fields aren't needed, but it may be useful to include them if we can find sensible data to fill them with #}
-                    {# <type/> - Talk type or "event" for non-talk pages? #}
-                    {# <description/> - For non-talk items? #}
+                    {# We set this to the same as the room name, since there doesn't seem a better choice #}
+                    <track>{{ venue.name }}</track>
+                    {# It's not clear what the difference between abstract and description is meant to be #}
+                    {# Both confclerk and Giggity just lump them together into the same thing anyway, and #}
+                    {# summit only outputs stuff in description, so we keep abstract blank and follow #}
+                    {# summit's pattern and obly include stuff in the description #}
+                    <abstract/>
                     {% if items.item.talk %}
                        <title>{{ items.item.get_title }}</title>
+                       {# I'm not sure if the raw markdown is the best thing here, but it seems to match what summit does, #}
+                       {# so hopefully the tools can handle the odd corner cases correctly. Giggity at least does some #}
+                       {# santization here. #}
+                       {% if items.item.talk.abstract %}
+                       <description>{{ items.item.talk.abstract.raw }}</description>
+                       {% else %}
+                       <description/>
+                       {% endif %}
+                       <type>{{ items.item.talk.talk_type }}</type>
                        <persons>
                            {% for author in items.item.talk.authors.all %}
-                               {# person id is the author pk, which should be the right thing #}
+                           {# person id is the author pk, which should be the right thing #}
+                               {% if user.is_staff and author == items.item.talk.corresponding_author %}
+                               {# We will want finer grained control off this eventually, but staff will do for now #}
+                               <person contact="{{ author.email }}" id="{{ author.pk }}">{{ author.get_full_name|default:author.username }}</person>
+                               {% else %}
                                <person id="{{ author.pk }}">{{ author.get_full_name|default:author.username }}</person>
+                               {% endif %}
                            {% endfor %}
                        </persons>
-                    {# It looks like abstract needs to be stripped of markup so punt on including that for now #}
                     <abstract/>
                     {% else %}
                         <title>{{ items.item.get_details|escape }}</title>
-                        {# No abstract for non-talk items #}
-                        <abstract/>
+                        {# Need a good idea of what to put here for non-talk items #}
+                        <description/>
+                        <type/>
                     {% endif %}
                     <conf_url>{{ items.item.get_url }}</conf_url>
                 </event>
