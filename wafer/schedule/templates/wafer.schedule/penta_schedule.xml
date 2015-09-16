@@ -36,8 +36,6 @@
                     {# Confclerk needs this to import the conference. #}
                     {# We set this to the same as the room name, since there doesn't seem a better choice #}
                     <track>{{ venue.name }}</track>
-                    {# These fields aren't needed, but it may be useful to include them if we can find sensible data to fill them with #}
-                    {# <type/> - Talk type or "event" for non-talk pages? #}
                     {# It's not clear what the difference between abstract and description is meant to be
                        Both confclerk and Giggity just lump them together into the same thing anyway, and
                        summit only outputs stuff in description, so we keep abstract blank and follow
@@ -53,6 +51,7 @@
                        {% else %}
                        <description/>
                        {% endif %}
+                       <type>{{ items.item.talk.talk_type }}</type>
                        <persons>
                            {% for author in items.item.talk.authors.all %}
                                {# person id is the author pk, which should be the right thing #}
@@ -64,6 +63,7 @@
                         <title>{{ items.item.get_details|escape }}</title>
                         {# Need a good idea of what to put here for non-talk items #}
                         <description/>
+                        <type/>
                     {% endif %}
                     <conf_url>{{ items.item.get_url }}</conf_url>
                 </event>
