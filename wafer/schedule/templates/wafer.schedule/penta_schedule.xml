@@ -54,8 +54,13 @@
                        <type>{{ items.item.talk.talk_type }}</type>
                        <persons>
                            {% for author in items.item.talk.authors.all %}
-                               {# person id is the author pk, which should be the right thing #}
+                           {# person id is the author pk, which should be the right thing #}
+                               {% if user.is_staff and author == items.item.talk.corresponding_author %}
+                               {# We will want finer grained control off this eventually, but staff will do for now #}
+                               <person contact="{{ author.email }}" id="{{ author.pk }}">{{ author.get_full_name|default:author.username }}</person>
+                               {% else %}
                                <person id="{{ author.pk }}">{{ author.get_full_name|default:author.username }}</person>
+                               {% endif %}
                            {% endfor %}
                        </persons>
                     <abstract/>
