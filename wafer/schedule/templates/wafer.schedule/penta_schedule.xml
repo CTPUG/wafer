@@ -36,16 +36,16 @@
                     {# Confclerk needs this to import the conference. #}
                     {# We set this to the same as the room name, since there doesn't seem a better choice #}
                     <track>{{ venue.name }}</track>
-                    {# It's not clear what the difference between abstract and description is meant to be
-                       Both confclerk and Giggity just lump them together into the same thing anyway, and
-                       summit only outputs stuff in description, so we keep abstract blank and follow
-                       summit's pattern and obly include stuff in the description #}
+                    {# It's not clear what the difference between abstract and description is meant to be #}
+                    {# Both confclerk and Giggity just lump them together into the same thing anyway, and #}
+                    {# summit only outputs stuff in description, so we keep abstract blank and follow #}
+                    {# summit's pattern and obly include stuff in the description #}
                     <abstract/>
                     {% if items.item.talk %}
                        <title>{{ items.item.get_title }}</title>
-                       {# I'm not sure if the raw markdown is the best thing here, but it seems to match what summit does,
-                          so hopefully the tools can handle the odd corner cases correctly. Giggity at least does some
-                          santization here. #}
+                       {# I'm not sure if the raw markdown is the best thing here, but it seems to match what summit does, #}
+                       {# so hopefully the tools can handle the odd corner cases correctly. Giggity at least does some #}
+                       {# santization here. #}
                        {% if items.item.talk.abstract %}
                        <description>{{ items.item.talk.abstract.raw }}</description>
                        {% else %}
