@@ -57,9 +57,17 @@
                            {# person id is the author pk, which should be the right thing #}
                                {% if user.is_staff %}
                                {# We will want finer grained control off this eventually, but staff will do for now #}
-                               <person contact="{{ author.email }}" id="{{ author.pk }}">{{ author.get_full_name|default:author.username }}</person>
+                               <person id="{{ author.pk }}"
+                                  {% if author.userprofile.twitter_handle %}
+                                  twitter="https://twitter.com/{{ author.userprofile.twitter_handle }}"
+                                  {% endif %}
+                                  contact="{{ author.email }}">
+                                  {{ author.get_full_name|default:author.username }}
+                               </person>
                                {% else %}
-                               <person id="{{ author.pk }}">{{ author.get_full_name|default:author.username }}</person>
+                               <person id="{{ author.pk }}">
+                                  {{ author.get_full_name|default:author.username }}
+                               </person>
                                {% endif %}
                            {% endfor %}
                        </persons>
