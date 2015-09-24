@@ -70,7 +70,8 @@
                         <description/>
                         <type/>
                     {% endif %}
-                    <conf_url>{{ items.item.get_url }}</conf_url>
+                    {# forcing https here is a bit horrible - make this configurable somewhere? #}
+                    <conf_url>https://{{ WAFER_CONFERENCE_DOMAIN }}{{ items.item.get_url }}</conf_url>
                 </event>
                 {% endif %}
                 {% endfor %}
