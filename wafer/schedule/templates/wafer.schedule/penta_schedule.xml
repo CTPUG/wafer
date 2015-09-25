@@ -55,11 +55,19 @@
                        <persons>
                            {% for author in items.item.talk.authors.all %}
                            {# person id is the author pk, which should be the right thing #}
-                               {% if user.is_staff and author == items.item.talk.corresponding_author %}
+                               {% if user.is_staff %}
                                {# We will want finer grained control off this eventually, but staff will do for now #}
-                               <person contact="{{ author.email }}" id="{{ author.pk }}">{{ author.get_full_name|default:author.username }}</person>
+                               <person id="{{ author.pk }}"
+                                  {% if author.userprofile.twitter_handle %}
+                                  twitter="https://twitter.com/{{ author.userprofile.twitter_handle }}"
+                                  {% endif %}
+                                  contact="{{ author.email }}">
+                                  {{ author.get_full_name|default:author.username }}
+                               </person>
                                {% else %}
-                               <person id="{{ author.pk }}">{{ author.get_full_name|default:author.username }}</person>
+                               <person id="{{ author.pk }}">
+                                  {{ author.get_full_name|default:author.username }}
+                               </person>
                                {% endif %}
                            {% endfor %}
                        </persons>
@@ -71,6 +79,11 @@
                         <type/>
                     {% endif %}
                     <conf_url>{{ items.item.get_url }}</conf_url>
+                    {# It's useful to have the full url available in the xml file. The pentabarf.xml format isn't that well #}
+                    {# standardised, so we add our own full_conf_url tag to accomodate this requirement #}
+
+                    {# forcing https here is a bit horrible - make this configurable somewhere? #}
+                    <full_conf_url>https://{{ WAFER_CONFERENCE_DOMAIN }}{{ items.item.get_url }}</full_conf_url>
                 </event>
                 {% endif %}
                 {% endfor %}

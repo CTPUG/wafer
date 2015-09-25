@@ -4,7 +4,7 @@ from wafer.schedule.models import Venue
 
 class ScheduleRenderer(StaticSiteRenderer):
     def get_paths(self):
-        paths = ["/schedule/", ]
+        paths = ["/schedule/", "/schedule/pentabarf.xml"]
 
         # Add the venues
         items = Venue.objects.all()
