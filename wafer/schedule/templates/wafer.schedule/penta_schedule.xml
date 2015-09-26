@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+{% load i18n %}
+<schedule>
+    <conference>
+        <title>{{ WAFER_CONFERENCE_NAME }}</title>
+        {% if schedule_days %}
+        {% with day=schedule_days|first %}
+            <start>{{ day.day.date|date:"Y-m-d" }}</start>
+        {% endwith %}
+        {% with day=schedule_days|last %}
+            <end>{{ day.day.date|date:"Y-m-d" }}</end>
+        {% endwith %}
+        <days>{{ schedule_days|length }}</days>
+        {% endif %}
+        <day_change>00:00</day_change>
+        <timeslot_duration>00:15</timeslot_duration>
+    </conference>
+    {% for schedule_day in schedule_days %}
+    <day date="{{ schedule_day.day.date|date:'Y-m-d' }}" index="{{ forloop.counter }}">
+        {% for venue in schedule_day.venues %}
+        <room name="{{ venue.name }}">
+            {% for row in schedule_day.rows %}
+            {% if venue in row.items %}
+                {# this is more than a little horrible, but will do for testing #}
+                {% for row_venue, items in row.items.items %}
+                {% if row_venue == venue %}
+                {# The event id is the ScheduleItem pk, which should be unique enough #}
+                <event id="{{ items.item.pk }}">
+                    {# Not sure what to do about timezones here #}
+                    <date>{{ schedule_day.day.date|date:"Y-m-d" }}T{{ row.slot.get_start_time|time:"H:i:s" }}+00:00</date>
+                    <start>{{ row.slot.get_start_time|time:"H:i" }}</start>
+                    {% with dur=row.slot.get_duration %}
+                        <duration>{{ dur.hours|stringformat:"02d" }}:{{ dur.minutes|stringformat:"02d" }}</duration>
+                    {% endwith %}
+                    <room>{{ venue.name }}</room>
+                    {# Confclerk needs this to import the conference. #}
+                    {# We set this to the same as the room name, since there doesn't seem a better choice #}
+                    <track>{{ venue.name }}</track>
+                    {# It's not clear what the difference between abstract and description is meant to be #}
+                    {# Both confclerk and Giggity just lump them together into the same thing anyway, and #}
+                    {# summit only outputs stuff in description, so we keep abstract blank and follow #}
+                    {# summit's pattern and obly include stuff in the description #}
+                    <abstract/>
+                    {% if items.item.talk %}
+                       <title>{{ items.item.get_title }}</title>
+                       {# I'm not sure if the raw markdown is the best thing here, but it seems to match what summit does, #}
+                       {# so hopefully the tools can handle the odd corner cases correctly. Giggity at least does some #}
+                       {# santization here. #}
+                       {% if items.item.talk.abstract %}
+                       <description>{{ items.item.talk.abstract.raw }}</description>
+                       {% else %}
+                       <description/>
+                       {% endif %}
+                       <type>{{ items.item.talk.talk_type }}</type>
+                       <persons>
+                           {% for author in items.item.talk.authors.all %}
+                           {# person id is the author pk, which should be the right thing #}
+                               {% if user.is_staff %}
+                               {# We will want finer grained control off this eventually, but staff will do for now #}
+                               <person id="{{ author.pk }}"
+                                  {% if author.userprofile.twitter_handle %}
+                                  twitter="https://twitter.com/{{ author.userprofile.twitter_handle }}"
+                                  {% endif %}
+                                  contact="{{ author.email }}">
+                                  {{ author.get_full_name|default:author.username }}
+                               </person>
+                               {% else %}
+                               <person id="{{ author.pk }}">
+                                  {{ author.get_full_name|default:author.username }}
+                               </person>
+                               {% endif %}
+                           {% endfor %}
+                       </persons>
+                    <abstract/>
+                    {% else %}
+                        <title>{{ items.item.get_details|escape }}</title>
+                        {# Need a good idea of what to put here for non-talk items #}
+                        <description/>
+                        <type/>
+                    {% endif %}
+                    <conf_url>{{ items.item.get_url }}</conf_url>
+                    {# It's useful to have the full url available in the xml file. The pentabarf.xml format isn't that well #}
+                    {# standardised, so we add our own full_conf_url tag to accomodate this requirement #}
+
+                    {# forcing https here is a bit horrible - make this configurable somewhere? #}
+                    <full_conf_url>https://{{ WAFER_CONFERENCE_DOMAIN }}{{ items.item.get_url }}</full_conf_url>
+                </event>
+                {% endif %}
+                {% endfor %}
+            {% endif %}
+            {% endfor %}
+        </room>
+        {% endfor %}
+    </day>
+    {% endfor %}
+</schedule>

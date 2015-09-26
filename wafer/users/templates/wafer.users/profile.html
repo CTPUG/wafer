@@ -65,7 +65,7 @@
 </div>
 {% if profile.bio %}
 <div class="well">
-{{ profile.bio }}
+{{ profile.bio|linebreaks }}
 </div>
 {% endif %}
 {% if user == object or user.is_staff %}
