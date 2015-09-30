@@ -178,6 +178,25 @@ class ScheduleItem(models.Model):
         return u'%s in %s at %s' % (self.get_desc(), self.venue,
                                     self.get_start_time())
 
+    def get_duration(self):
+        """Return the total duration of the item.
+
+           This is the sum of all the slot durations."""
+        # This is intended for the pentabarf xml file
+        # It will do the wrong thing if the slots aren't
+        # contigious, which we should address sometime.
+        slots = list(self.slots.all())
+        result = {'hours': 0, 'minutes': 0}
+        if slots:
+            for slot in slots:
+                dur = slot.get_duration()
+                result['hours'] += dur['hours']
+                result['minutes'] += dur['minutes']
+            # Normalise again
+            hours, result['minutes'] = divmod(result['minutes'], 60)
+            result['hours'] += hours
+        return result
+
 
 def invalidate_check_schedule(*args, **kw):
     from wafer.schedule.admin import check_schedule
