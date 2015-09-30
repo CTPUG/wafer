@@ -4,7 +4,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse
 from django.core.exceptions import ValidationError
 from django.db import models
-from django.db.models.signals import post_save
+from django.db.models.signals import post_save, post_delete
 from django.utils.encoding import python_2_unicode_compatible
 
 from wafer.snippets.markdown_field import MarkdownTextField
@@ -170,13 +170,36 @@ class ScheduleItem(models.Model):
         return self.get_desc()
 
     def get_start_time(self):
-        start_slot = list(self.slots.all())[0]
-        start = start_slot.get_start_time().strftime('%H:%M')
-        return u'%s, %s' % (start_slot.get_day(), start)
+        slots = list(self.slots.all())
+        if slots:
+            start = slots[0].get_start_time().strftime('%H:%M')
+            day = slots[0].get_day()
+            return u'%s, %s' % (day, start)
+        else:
+            return 'WARNING: No Time and Day Specified'
 
     def __str__(self):
         return u'%s in %s at %s' % (self.get_desc(), self.venue,
                                     self.get_start_time())
+
+    def get_duration(self):
+        """Return the total duration of the item.
+
+           This is the sum of all the slot durations."""
+        # This is intended for the pentabarf xml file
+        # It will do the wrong thing if the slots aren't
+        # contigious, which we should address sometime.
+        slots = list(self.slots.all())
+        result = {'hours': 0, 'minutes': 0}
+        if slots:
+            for slot in slots:
+                dur = slot.get_duration()
+                result['hours'] += dur['hours']
+                result['minutes'] += dur['minutes']
+            # Normalise again
+            hours, result['minutes'] = divmod(result['minutes'], 60)
+            result['hours'] += hours
+        return result
 
 
 def invalidate_check_schedule(*args, **kw):
@@ -188,3 +211,8 @@ post_save.connect(invalidate_check_schedule, sender=Day)
 post_save.connect(invalidate_check_schedule, sender=Venue)
 post_save.connect(invalidate_check_schedule, sender=Slot)
 post_save.connect(invalidate_check_schedule, sender=ScheduleItem)
+
+post_delete.connect(invalidate_check_schedule, sender=Day)
+post_delete.connect(invalidate_check_schedule, sender=Venue)
+post_delete.connect(invalidate_check_schedule, sender=Slot)
+post_delete.connect(invalidate_check_schedule, sender=ScheduleItem)

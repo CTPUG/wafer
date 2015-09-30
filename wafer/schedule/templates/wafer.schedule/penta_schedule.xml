@@ -29,7 +29,7 @@
                     {# Not sure what to do about timezones here #}
                     <date>{{ schedule_day.day.date|date:"Y-m-d" }}T{{ row.slot.get_start_time|time:"H:i:s" }}+00:00</date>
                     <start>{{ row.slot.get_start_time|time:"H:i" }}</start>
-                    {% with dur=row.slot.get_duration %}
+                    {% with dur=items.item.get_duration %}
                         <duration>{{ dur.hours|stringformat:"02d" }}:{{ dur.minutes|stringformat:"02d" }}</duration>
                     {% endwith %}
                     <room>{{ venue.name }}</room>
@@ -84,6 +84,10 @@
 
                     {# forcing https here is a bit horrible - make this configurable somewhere? #}
                     <full_conf_url>https://{{ WAFER_CONFERENCE_DOMAIN }}{{ items.item.get_url }}</full_conf_url>
+                    
+                    {# someday there may be a way to set this to False #}
+                    <released>True</released>
+                    
                 </event>
                 {% endif %}
                 {% endfor %}
