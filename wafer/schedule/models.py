@@ -170,9 +170,13 @@ class ScheduleItem(models.Model):
         return self.get_desc()
 
     def get_start_time(self):
-        start_slot = list(self.slots.all())[0]
-        start = start_slot.get_start_time().strftime('%H:%M')
-        return u'%s, %s' % (start_slot.get_day(), start)
+        slots = list(self.slots.all())
+        if slots:
+            start = slots[0].get_start_time().strftime('%H:%M')
+            day = slots[0].get_day()
+            return u'%s, %s' % (day, start)
+        else:
+            return 'WARNING: No Time and Day Specified'
 
     def __str__(self):
         return u'%s in %s at %s' % (self.get_desc(), self.venue,
