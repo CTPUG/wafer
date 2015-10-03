@@ -68,6 +68,21 @@ class Page(models.Model):
             return True
         return False
 
+    def get_people_display_names(self):
+        names = []
+        for person in self.people.all():
+            full_name = person.get_full_name()
+            if full_name:
+                names.append(full_name)
+            else:
+                names.append(person.username)
+        if len(names) > 2:
+            # At some future point, I'll do something better
+            comma_names = ', '.join(names[:-1])
+            return comma_names + ' and ' + names[-1]
+        else:
+            return ' and '.join(names)
+
     get_in_schedule.short_description = 'Added to schedule'
     get_in_schedule.boolean = True
 
