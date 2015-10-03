@@ -49,7 +49,7 @@ with open('README.rst', 'r') as f:
 
 setup(
     name="wafer",
-    version="0.3.0",
+    version="0.3.1a",
     url='http://github.com/CTPUG/wafer',
     license='MIT',
     description="A wafer-thin Django library for running small conferences.",
