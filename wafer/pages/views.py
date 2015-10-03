@@ -35,7 +35,7 @@ def slug(request, url):
             return TemplateView.as_view(
                 template_name='wafer/index.html')(request)
 
-    if 'edit' in request.GET.keys():
+    if 'edit' in request.GET:
         if not request.user.has_perm('pages.change_page'):
             raise PermissionDenied
         return EditPage.as_view()(request, pk=page.id)
