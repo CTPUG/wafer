@@ -77,6 +77,27 @@
                         {# Need a good idea of what to put here for non-talk items #}
                         <description/>
                         <type/>
+                        {% if items.item.page.people %}
+                        <persons>
+                           {# TODO: This should be refactored, so we don't have all this duplication #}
+                           {% for person in items.item.page.people.all %}
+                               {% if user.is_staff %}
+                               {# We will want finer grained control off this eventually, but staff will do for now #}
+                               <person id="{{ person.pk }}"
+                                  {% if author.userprofile.twitter_handle %}
+                                  twitter="https://twitter.com/{{ person.userprofile.twitter_handle }}"
+                                  {% endif %}
+                                  contact="{{ person.email }}">
+                                  {{ person.get_full_name|default:person.username }}
+                               </person>
+                               {% else %}
+                               <person id="{{ person.pk }}">
+                                  {{ person.get_full_name|default:person.username }}
+                               </person>
+                               {% endif %}
+                           {% endfor %}
+                        </persons>
+                        {% endif %}
                     {% endif %}
                     <conf_url>{{ items.item.get_url }}</conf_url>
                     {# It's useful to have the full url available in the xml file. The pentabarf.xml format isn't that well #}
