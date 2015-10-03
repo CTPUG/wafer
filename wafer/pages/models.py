@@ -77,7 +77,6 @@ class Page(models.Model):
             else:
                 names.append(person.username)
         if len(names) > 2:
-            # At some future point, I'll do something better
             comma_names = ', '.join(names[:-1])
             return comma_names + ' and ' + names[-1]
         else:
