@@ -4,7 +4,7 @@
   by {{ item.talk.get_author_display_name }}
 {% elif item.get_url %}
   <a href="{{ item.get_url }}">{{ item.get_details|escape }}</a>
-  {% if item.page and item.page.people.count %}
+  {% if item.page and item.page.people.exists %}
   by {{ item.page.get_people_display_names }}
   {% endif %}
 {% else %}
