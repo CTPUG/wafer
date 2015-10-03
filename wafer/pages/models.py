@@ -86,6 +86,8 @@ class Page(models.Model):
     get_in_schedule.short_description = 'Added to schedule'
     get_in_schedule.boolean = True
 
+    get_people_display_names.short_description = 'People'
+
     class Model:
         unique_together = (('parent', 'slug'),)
 
