@@ -77,7 +77,7 @@
                         {# Need a good idea of what to put here for non-talk items #}
                         <description/>
                         <type/>
-                        {% if items.item.page.people %}
+                        {% if items.item.page.people.exists %}
                         <persons>
                            {# TODO: This should be refactored, so we don't have all this duplication #}
                            {% for person in items.item.page.people.all %}
