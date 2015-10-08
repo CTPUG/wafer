@@ -5,11 +5,11 @@ Sponsors
 Packages
 ========
 
-Sponsor packages describe the details of the various sponsor pacakges
+Sponsor packages describe the details of the various sponsor packages
 available.
 
 The ``order`` field controls the order in which packages are listed on the
-sponsor pacakges page.
+sponsor packages page.
 
 
 Sponsors
@@ -17,7 +17,7 @@ Sponsors
 
 This is used to add details of the sponsors.
 
-The description is can be formatted using markdown syntax.
+The description can be formatted using markdown syntax.
 
 Images can be uploaded and used in the description using the files field.
 

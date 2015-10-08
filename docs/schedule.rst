@@ -16,7 +16,7 @@ Slots
 =====
 
 The fundamental unit of the schedule is a schedule slot. Each slot is assigned
-to a given day, and has a start and end time. The start time may specified as
+to a given day, and has a start and end time. The start time may be specified as
 the end time of a different slot using the ``previous_slot``.
 
 Each slot has a name to make it easier to distinguish.
@@ -34,13 +34,13 @@ as tea breaks to the schedule.
 
 
 If the schedule item has been assigned to a page, the details field can be
-used to override the the infomation from the page. For talks, details will
+used to override the information from the page. For talks, details will
 be added to the information from the talk.
 
 Schedule views
 ==============
 
-The schedule can be restricted to a single day by specifting the ``day``
+The schedule can be restricted to a single day by specifying the ``day``
 parameter in the url - e.g. ``https://localhost/schedule/?day=2014-10-23``. If
 the specified day is not one of the days in the schedule, the full schedule is
 shown.
