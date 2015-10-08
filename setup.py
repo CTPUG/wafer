@@ -51,7 +51,7 @@ setup(
     name="wafer",
     version="0.3.1a",
     url='http://github.com/CTPUG/wafer',
-    license='MIT',
+    license='ISC',
     description="A wafer-thin Django library for running small conferences.",
     long_description=long_description,
     author='CTPUG',
@@ -68,7 +68,7 @@ setup(
     classifiers=[
         'Development Status :: 4 - Beta',
         'Intended Audience :: Developers',
-        'License :: OSI Approved :: MIT License',
+        'License :: OSI Approved :: ISC License (ISCL)',
         'Operating System :: POSIX',
         'Programming Language :: Python',
         'Programming Language :: Python :: 2.6',
