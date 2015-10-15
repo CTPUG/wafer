@@ -1033,6 +1033,53 @@ class ValidationTests(TestCase):
         invalid = validate_items()
         assert set(invalid) == set([item1, item3])
 
+    def test_non_contigious(self):
+        """Test that we detect items with non contigious slots"""
+        # Create a item with a gap in the slots assigned to it
+        day1 = Day.objects.create(date=D.date(2013, 9, 22))
+        venue1 = Venue.objects.create(order=1, name='Venue 1')
+        venue1.days.add(day1)
+
+        start1 = D.time(10, 0, 0)
+        start2 = D.time(11, 0, 0)
+        start3 = D.time(12, 0, 0)
+        end = D.time(13, 0, 0)
+
+        slot1 = Slot.objects.create(start_time=start1, end_time=start2,
+                                    day=day1)
+        slot2 = Slot.objects.create(start_time=start2, end_time=start3,
+                                    day=day1)
+        slot3 = Slot.objects.create(start_time=start3, end_time=end,
+                                    day=day1)
+
+        user = get_user_model().objects.create_user('john', 'best@wafer.test',
+                                                    'johnpassword')
+        talk = Talk.objects.create(title="Test talk", status=ACCEPTED,
+                                   corresponding_author_id=user.id)
+        page = Page.objects.create(name="test page", slug="test")
+
+        item1 = ScheduleItem.objects.create(venue=venue1,
+                                            talk_id=talk.pk)
+        item1.slots.add(slot1)
+        item1.slots.add(slot3)
+
+        item2 = ScheduleItem.objects.create(venue=venue1,
+                                            page_id=page.pk)
+        item2.slots.add(slot2)
+
+        invalid = validate_items()
+        # Only item1 is invalid
+        assert set(invalid) == set([item1])
+
+        item1.slots.add(slot2)
+        item1.slots.remove(slot1)
+        item2.slots.add(slot1)
+        item2.slots.remove(slot2)
+
+        invalid = validate_items()
+        # Everything is valid now
+        assert set(invalid) == set([])
+
     def test_duplicates(self):
         """Test that we can detect duplicates talks and pages"""
         # Final chedule is
