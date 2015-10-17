@@ -64,19 +64,12 @@
         event.target.setAttribute('data-type', dataType);
         event.preventDefault();
 
-        console.log(
-            `${oldTargetType} ${oldTargetId} replaced by ${dataType}${dataId}`);
-        console.log(
-            `Venue: ${venue}, Slot: ${slot}`);
-
         var postData = {
             venue: venue, slots:[slot]
         };
         postData[dataType] = dataId;
         var otherDataType = dataType === 'talk' ? 'page' : 'talk';
         postData[otherDataType] = '';
-
-        console.log(JSON.stringify(postData));
 
         $.post(
             '/schedule/api/scheduleitems/',
