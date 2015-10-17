@@ -7,6 +7,7 @@ REQUIRES = [
     'django-crispy-forms',
     'django-nose',
     'django-registration-redux',
+    'djangorestframework',
     'pillow',
     'pyLibravatar',
     'pytz',

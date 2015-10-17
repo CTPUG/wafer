@@ -140,6 +140,7 @@ INSTALLED_APPS = (
     'django_nose',
     'registration',
     'markitup',
+    'rest_framework',
     'wafer',
     'wafer.registration',
     'wafer.talks',
@@ -259,3 +260,8 @@ WAFER_TALKS_OPEN = True
 MEDUSA_RENDERER_CLASS = "wafer.management.static.WaferDiskStaticSiteRenderer"
 MEDUSA_DEPLOY_DIR = os.path.join(project_root, 'static_mirror')
 MARKITUP_FILTER = ('markdown.markdown', {'safe_mode': True})
+
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': ('rest_framework.permissions.IsAdminUser',),
+    'PAGE_SIZE': 50
+}

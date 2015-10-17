@@ -1,7 +1,10 @@
 import datetime
+from collections import OrderedDict
 
+from django.conf.urls import url
 from django.contrib import admin
 from django.contrib import messages
+from django.template.response import TemplateResponse
 from django.utils.encoding import force_text
 from django.utils.translation import ugettext as _
 from django import forms
@@ -189,6 +192,63 @@ class ScheduleItemAdmin(admin.ModelAdmin):
         extra_context['errors'] = errors
         return super(ScheduleItemAdmin, self).changelist_view(request,
                                                               extra_context)
+
+    def get_urls(self):
+        urls = super(ScheduleItemAdmin, self).get_urls()
+        my_urls = [
+            url(r'^edit/$', self.edit_schedule),
+        ]
+        return my_urls + urls
+
+    def edit_schedule(self, request):
+        context = dict(
+           self.admin_site.each_context(request),
+        )
+        # TODO(zoidbergwill): fix this crap and actually make the day configurable
+        day = Day.objects.first()
+        accepted_talks = Talk.objects.filter(status=ACCEPTED)
+        venues = Venue.objects.filter(days__in=[day])
+        slots = Slot.objects.filter(day=day).select_related(
+            'day', 'previous_slot').prefetch_related(
+            'scheduleitem_set', 'slot_set')
+        aggregated_slots = []
+        for slot in slots:
+            aggregated_slot = {
+                'name': slot.name,
+                'start_time': slot.get_start_time(),
+                'end_time': slot.end_time,
+                'id': slot.id,
+                'venues': []
+            }
+            for venue in venues:
+                aggregated_venue = {
+                    'name': venue.name,
+                    'id': venue.id,
+                }
+                for schedule_item in slot.scheduleitem_set.all():
+                    if schedule_item.venue.name == venue.name:
+                        if schedule_item.talk:
+                            talk = schedule_item.talk
+                            aggregated_venue['title'] = talk.title
+                            aggregated_venue['talk'] = talk
+                            aggregated_venue['scheduleitem_id'] = talk.talk_id
+                        if schedule_item.page:
+                            page = schedule_item.page
+                            aggregated_venue['title'] = page.name
+                            aggregated_venue['page'] = page
+                            aggregated_venue['scheduleitem_id'] = page.id
+
+                aggregated_slot['venues'].append(aggregated_venue)
+            aggregated_slots.append(aggregated_slot)
+
+        context['day'] = day
+        context['venues'] = venues
+        context['slots'] = aggregated_slots
+        context['talks_all'] = accepted_talks
+        context['talks_unassigned'] = accepted_talks.filter(scheduleitem=None)
+        context['pages'] = Page.objects.all()
+
+        return TemplateResponse(request, "wafer.schedule/edit_schedule.html", context)
 
 
 class SlotAdminForm(forms.ModelForm):

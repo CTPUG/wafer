@@ -1,8 +1,12 @@
 import datetime
-from django.views.generic import DetailView, TemplateView
 
+from django.views.generic import DetailView, TemplateView
+from rest_framework import viewsets
+from rest_framework.response import Response
 from wafer.schedule.models import Venue, Slot, Day
 from wafer.schedule.admin import check_schedule
+from wafer.schedule.models import ScheduleItem
+from wafer.schedule.serializers import ScheduleItemSerializer
 
 
 class ScheduleRow(object):
@@ -203,3 +207,12 @@ class CurrentView(TemplateView):
                     # Must overlap with current slot
                     item['note'] = 'current'
         return context
+
+
+class ScheduleItemViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows groups to be viewed or edited.
+    """
+    queryset = ScheduleItem.objects.all()
+    serializer_class = ScheduleItemSerializer
+

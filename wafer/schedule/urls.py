@@ -1,7 +1,12 @@
-from django.conf.urls import patterns, url
+from django.conf.urls import include, patterns, url
+from rest_framework import routers
 
-from wafer.schedule.views import (VenueView, ScheduleView, CurrentView,
-                                  ScheduleXmlView)
+
+from wafer.schedule.views import (
+    CurrentView, ScheduleView, ScheduleItemViewSet ,ScheduleXmlView, VenueView)
+
+router = routers.DefaultRouter()
+router.register(r'scheduleitems', ScheduleItemViewSet)
 
 urlpatterns = patterns(
     '',
@@ -10,4 +15,5 @@ urlpatterns = patterns(
     url(r'^current/$', CurrentView.as_view(), name='wafer_current'),
     url(r'^pentabarf\.xml$', ScheduleXmlView.as_view(),
         name='wafer_pentabarf_xml'),
+    url(r'^api/', include(router.urls)),
 )
