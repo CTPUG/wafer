@@ -75,7 +75,6 @@
             '/schedule/api/scheduleitems/',
             JSON.stringify(postData), handlePost);
 
-
         return false;
     }
 
