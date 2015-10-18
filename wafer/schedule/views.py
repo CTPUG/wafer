@@ -1,12 +1,15 @@
 import datetime
 
 from django.views.generic import DetailView, TemplateView
+from django.views.generic.dates import DateMixin
 from rest_framework import viewsets
-from rest_framework.response import Response
+from wafer.pages.models import Page
 from wafer.schedule.models import Venue, Slot, Day
 from wafer.schedule.admin import check_schedule
 from wafer.schedule.models import ScheduleItem
 from wafer.schedule.serializers import ScheduleItemSerializer
+from wafer.talks.models import ACCEPTED
+from wafer.talks.models import Talk
 
 
 class ScheduleRow(object):
@@ -216,3 +219,61 @@ class ScheduleItemViewSet(viewsets.ModelViewSet):
     queryset = ScheduleItem.objects.all()
     serializer_class = ScheduleItemSerializer
 
+
+class ScheduleEditView(TemplateView):
+    template_name = 'wafer.schedule/edit_schedule.html'
+    date_field = 'date'
+    allow_future = True
+
+    def get_context_data(self, id=None, **kwargs):
+        context = super(ScheduleEditView, self).get_context_data(**kwargs)
+
+        days = Day.objects.all()
+
+        day = days.first()
+        if id:
+            day = days.get(id=id)
+
+        accepted_talks = Talk.objects.filter(status=ACCEPTED)
+        venues = Venue.objects.filter(days__in=[day])
+        slots = Slot.objects.filter(day=day).select_related(
+            'day', 'previous_slot').prefetch_related(
+            'scheduleitem_set', 'slot_set')
+        aggregated_slots = []
+        for slot in slots:
+            aggregated_slot = {
+                'name': slot.name,
+                'start_time': slot.get_start_time(),
+                'end_time': slot.end_time,
+                'id': slot.id,
+                'venues': []
+            }
+            for venue in venues:
+                aggregated_venue = {
+                    'name': venue.name,
+                    'id': venue.id,
+                }
+                for schedule_item in slot.scheduleitem_set.all():
+                    if schedule_item.venue.name == venue.name:
+                        if schedule_item.talk:
+                            talk = schedule_item.talk
+                            aggregated_venue['title'] = talk.title
+                            aggregated_venue['talk'] = talk
+                            aggregated_venue['scheduleitem_id'] = talk.talk_id
+                        if schedule_item.page:
+                            page = schedule_item.page
+                            aggregated_venue['title'] = page.name
+                            aggregated_venue['page'] = page
+                            aggregated_venue['scheduleitem_id'] = page.id
+
+                aggregated_slot['venues'].append(aggregated_venue)
+            aggregated_slots.append(aggregated_slot)
+
+        context['day'] = day
+        context['venues'] = venues
+        context['slots'] = aggregated_slots
+        context['talks_all'] = accepted_talks
+        context['talks_unassigned'] = accepted_talks.filter(scheduleitem=None)
+        context['pages'] = Page.objects.all()
+        context['days'] = days
+        return context

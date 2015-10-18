@@ -2,7 +2,30 @@
 {% block content %}
     <div class="row">
         <div class="col-md-8">
-            <h1>Schedule: Day {{ day.id }}</h1>
+            <h1>Schedule Editor
+            <div class="pull-right">
+            <ul class="nav nav-pills navbar-nav navbar-right">
+                <li role="presentation" class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown"
+                       href="#" role="button" aria-haspopup="true"
+                       aria-expanded="true">
+                        Day {{ day.id }}
+                        <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu"
+                        aria-labelledby="dLabel">
+                        {% for day in days %}
+                            <li>
+                                <a href="{% url 'admin:schedule_editor' day.id %}">
+                                    Day {{ day.id }} ({{ day.date }})
+                                </a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </li>
+            </ul>
+            </div>
+            </h1>
             <table class="table table-condensed">
                 <thead>
                 <tr>
