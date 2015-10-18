@@ -138,7 +138,6 @@ INSTALLED_APPS = (
     'django_medusa',
     'crispy_forms',
     'django_nose',
-    'registration',
     'markitup',
     'wafer',
     'wafer.registration',
@@ -148,6 +147,8 @@ INSTALLED_APPS = (
     'wafer.sponsors',
     'wafer.pages',
     'wafer.tickets',
+    # Django isn't finding the overridden templates
+    'registration',
 )
 
 # Only add south if we're on a version that doesn't support native migrations
