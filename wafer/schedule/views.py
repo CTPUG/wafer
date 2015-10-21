@@ -258,7 +258,8 @@ class ScheduleEditView(TemplateView):
                             aggregated_venue['title'] = talk.title
                             aggregated_venue['talk'] = talk
                             aggregated_venue['scheduleitem_id'] = talk.talk_id
-                        if schedule_item.page:
+                        if (schedule_item.page and
+                                not schedule_item.page.exclude_from_static):
                             page = schedule_item.page
                             aggregated_venue['title'] = page.name
                             aggregated_venue['page'] = page
