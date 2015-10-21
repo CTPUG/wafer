@@ -195,9 +195,11 @@ class ScheduleItemAdmin(admin.ModelAdmin):
         from wafer.schedule.views import ScheduleEditView
 
         urls = super(ScheduleItemAdmin, self).get_urls()
+        admin_schedule_edit_view = self.admin_site.admin_view(
+            ScheduleEditView.as_view())
         my_urls = [
-            url(r'^edit/$', ScheduleEditView.as_view()),
-            url(r'^edit/(?P<id>[0-9]+)$', ScheduleEditView.as_view(),
+            url(r'^edit/$', admin_schedule_edit_view),
+            url(r'^edit/(?P<id>[0-9]+)$', admin_schedule_edit_view,
                 name='schedule_editor'),
 
         ]
