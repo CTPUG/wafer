@@ -1,7 +1,7 @@
 import datetime
 
 from django.views.generic import DetailView, TemplateView
-from django.views.generic.dates import DateMixin
+
 from rest_framework import viewsets
 from wafer.pages.models import Page
 from wafer.schedule.models import Venue, Slot, Day
@@ -222,8 +222,6 @@ class ScheduleItemViewSet(viewsets.ModelViewSet):
 
 class ScheduleEditView(TemplateView):
     template_name = 'wafer.schedule/edit_schedule.html'
-    date_field = 'date'
-    allow_future = True
 
     def get_context_data(self, id=None, **kwargs):
         context = super(ScheduleEditView, self).get_context_data(**kwargs)
