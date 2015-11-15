@@ -51,41 +51,47 @@ def github_login(request):
 
     r = requests.get('https://api.github.com/user?%s' % token)
     if r.status_code != 200:
-        return HttpResponseForbidden('Unexpected response from github',
-                content_type='text/plain')
+        return HttpResponseForbidden(
+            'Unexpected response from github', content_type='text/plain')
     gh = r.json()
 
     email = gh.get('email', None)
     if not email:  # No public e-mail address
         r = requests.get('https://api.github.com/user/emails?%s' % token)
         if r.status_code != 200:
-            return HttpResponseForbidden('Failed to obtain email address from'
-                    ' github - unexpected response', content_type='text/plain')
+            return HttpResponseForbidden(
+                'Failed to obtain email address from github '
+                '- unexpected response',
+                content_type='text/plain')
         try:
             email = r.json()[0]['email']
         except (KeyError, IndexError) as e:
             log.debug('Error extracting github email address: %s', e)
-            return HttpResponseForbidden('Failed to obtain email address from'
-                    ' github - unexpected response', content_type='text/plain')
-
-    try:
-        user = authenticate(github_login=gh['login'], name=gh['name'], email=email,
-                            blog=gh['blog'])
-    except KeyError as e:
-        log.debug('Error creating account from github information: %s', e)
-        return HttpResponseForbidden('Unexpected response from github.'
-                ' Authentication failed', content_type='text/plain')
-    except UserProfile.MultipleObjectsReturned as e:
-        # FIXME: This is a short term workaround. Find a better fix
-        # later
-        log.debug('Duplicate accounts for github login %s: %s',
-                  gh['login'], e)
-        return HttpResponseForbidden('Multiple accounts associated with'
-                ' these github credentials. Authentication failed',
+            return HttpResponseForbidden(
+                'Failed to obtain email address from github '
+                '- unexpected response',
                 content_type='text/plain')
 
+    try:
+        user = authenticate(github_login=gh['login'], name=gh['name'],
+                            email=email, blog=gh['blog'])
+    except KeyError as e:
+        log.debug('Error creating account from github information: %s', e)
+        return HttpResponseForbidden(
+            'Unexpected response from github. Authentication failed',
+            content_type='text/plain')
+    except UserProfile.MultipleObjectsReturned as e:
+        # FIXME: This is a short term workaround. Find a better fix later
+        log.debug('Duplicate accounts for github login %s: %s',
+                  gh['login'], e)
+        return HttpResponseForbidden(
+            'Multiple accounts associated with these github credentials. '
+            'Authentication failed',
+            content_type='text/plain')
+
     if not user:
-        return HttpResponseForbidden('Authentication with github credentials'
-                ' failed', content_type='text/plain')
+        return HttpResponseForbidden(
+            'Authentication with github credentials failed',
+            content_type='text/plain')
     login(request, user)
     return HttpResponseRedirect(reverse(redirect_profile))
