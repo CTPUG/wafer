@@ -5,9 +5,15 @@ from django.contrib.auth import get_user_model
 from django.core.exceptions import MultipleObjectsReturned, ObjectDoesNotExist
 from django.db import IntegrityError
 
+import requests
+
 MAX_APPEND = 20
 
 log = logging.getLogger(__name__)
+
+
+class SSOError(Exception):
+    pass
 
 
 def sso(identifier, desired_username, name, email, profile_fields):
@@ -19,11 +25,9 @@ def sso(identifier, desired_username, name, email, profile_fields):
         user = get_user_model().objects.get(**identifier)
     except ObjectDoesNotExist:
         user = _create_desired_user(desired_username)
-        if user:
-            _configure_user(user, name, email, profile_fields)
+        _configure_user(user, name, email, profile_fields)
     except MultipleObjectsReturned:
-        log.error('Multiple accounts match %r', identifier)
-        return None
+        raise SSOError('Multiple accounts match %r' % identifier)
 
     # login() expects the logging in backend to be set on the user.
     # We are bypassing login, so fake it.
@@ -40,7 +44,7 @@ def _create_desired_user(desired_username):
             return get_user_model().objects.create(username=username)
         except IntegrityError:
             continue
-    log.error('Ran out of possible usernames for %s', desired_username)
+    raise SSOError('Ran out of possible usernames for %s' % desired_username)
 
 
 def _configure_user(user, name, email, profile_fields):
@@ -53,3 +57,52 @@ def _configure_user(user, name, email, profile_fields):
     for k, v in profile_fields.iteritems():
         setattr(profile, k, v)
     profile.save()
+
+
+def github_sso(code):
+    r = requests.post('https://github.com/login/oauth/access_token', data={
+        'client_id': settings.WAFER_GITHUB_CLIENT_ID,
+        'client_secret': settings.WAFER_GITHUB_CLIENT_SECRET,
+        'code': code,
+    })
+    if r.status_code != 200:
+        raise SSOError('Invalid code')
+    token = r.content
+
+    r = requests.get('https://api.github.com/user?%s' % token)
+    if r.status_code != 200:
+        raise SSOError('Failed response from GitHub')
+    gh = r.json()
+
+    try:
+        login = gh['login']
+        name = gh['name']
+    except KeyError:
+        log.debug('Error creating account from github information: %s', e)
+        raise SSOError('GitHub profile missing required content')
+
+    email = gh.get('email', None)
+    if not email:  # No public e-mail address
+        r = requests.get('https://api.github.com/user/emails?%s' % token)
+        if r.status_code != 200:
+            raise SSOError('Failed response from GitHub')
+        try:
+            email = r.json()[0]['email']
+        except (KeyError, IndexError) as e:
+            log.debug('Error extracting github email address: %s', e)
+            raise SSOError('Failed to obtain email address from GitHub')
+
+    profile_fields = {
+        'github_username': login,
+    }
+    if 'blog' in gh:
+        profile_fields['blog'] = gh['blog']
+
+    user = sso(
+        identifier={'userprofile__github_username': login},
+        desired_username=login, name=name, email=email,
+        profile_fields=profile_fields)
+
+    if not user.is_active:
+        raise SSOError('Account disabled')
+    return user
