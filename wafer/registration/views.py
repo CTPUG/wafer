@@ -1,14 +1,14 @@
 import urllib
 import logging
 
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import login
 from django.core.urlresolvers import reverse
 from django.conf import settings
 from django.http import HttpResponseRedirect, HttpResponseForbidden
 
 import requests
 
-from wafer.users.models import UserProfile
+from wafer.registration.sso import sso
 
 log = logging.getLogger(__name__)
 
@@ -55,6 +55,12 @@ def github_login(request):
             'Unexpected response from github', content_type='text/plain')
     gh = r.json()
 
+    if 'login' not in gh or 'name' not in gh:
+        log.debug('Error creating account from github information: %s', e)
+        return HttpResponseForbidden(
+            'Unexpected response from github. Authentication failed',
+            content_type='text/plain')
+
     email = gh.get('email', None)
     if not email:  # No public e-mail address
         r = requests.get('https://api.github.com/user/emails?%s' % token)
@@ -72,26 +78,26 @@ def github_login(request):
                 '- unexpected response',
                 content_type='text/plain')
 
-    try:
-        user = authenticate(github_login=gh['login'], name=gh['name'],
-                            email=email, blog=gh['blog'])
-    except KeyError as e:
-        log.debug('Error creating account from github information: %s', e)
-        return HttpResponseForbidden(
-            'Unexpected response from github. Authentication failed',
-            content_type='text/plain')
-    except UserProfile.MultipleObjectsReturned as e:
-        # FIXME: This is a short term workaround. Find a better fix later
-        log.debug('Duplicate accounts for github login %s: %s',
-                  gh['login'], e)
-        return HttpResponseForbidden(
-            'Multiple accounts associated with these github credentials. '
-            'Authentication failed',
-            content_type='text/plain')
+    profile_fields = {
+        'github_username': gh['login'],
+    }
+    if 'blog' in gh:
+        profile_fields['blog'] = gh['blog']
+
+    user = sso(
+        identifier={'userprofile__github_username': gh['login']},
+        desired_username=gh['login'], name=gh['name'], email=email,
+        profile_fields=profile_fields)
 
     if not user:
         return HttpResponseForbidden(
-            'Authentication with github credentials failed',
+            'Authentication with GitHub credentials failed',
             content_type='text/plain')
+
+    if not user.is_active:
+        return HttpResponseForbidden(
+            'Account disabled', content_type='text/plain')
+
     login(request, user)
+
     return HttpResponseRedirect(reverse(redirect_profile))

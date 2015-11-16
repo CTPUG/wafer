@@ -238,10 +238,6 @@ WAFER_DYNAMIC_MENUS = (
 )
 
 # Log in with GitHub:
-# AUTHENTICATION_BACKENDS = (
-#     'django.contrib.auth.backends.ModelBackend',
-#     'wafer.registration.backends.GitHubBackend',
-# )
 # WAFER_GITHUB_CLIENT_ID = 'register on github'
 # WAFER_GITHUB_CLIENT_SECRET = 'to get these secrets'
 
