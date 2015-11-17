@@ -29,6 +29,9 @@ def sso(identifier, desired_username, name, email, profile_fields=None):
     except MultipleObjectsReturned:
         raise SSOError('Multiple accounts match %r' % identifier)
 
+    if not user.is_active:
+        raise SSOError('Account disabled')
+
     # login() expects the logging in backend to be set on the user.
     # We are bypassing login, so fake it.
     user.backend = settings.AUTHENTICATION_BACKENDS[0]
@@ -103,9 +106,6 @@ def github_sso(code):
         identifier={'userprofile__github_username': login},
         desired_username=login, name=name, email=email,
         profile_fields=profile_fields)
-
-    if not user.is_active:
-        raise SSOError('Account disabled')
     return user
 
 
@@ -140,7 +140,4 @@ def debian_sso(meta):
 
     user = sso(identifier=identifier, desired_username=username, name=name,
                email=email)
-
-    if not user.is_active:
-        raise SSOError('Account disabled')
     return user
