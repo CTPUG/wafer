@@ -27,6 +27,7 @@ def sso(identifier, desired_username, name, email, profile_fields=None):
         user = _create_desired_user(desired_username)
         _configure_user(user, name, email, profile_fields)
     except MultipleObjectsReturned:
+        log.warning('Multiple accounts match %r', identifier)
         raise SSOError('Multiple accounts match %r' % identifier)
 
     if not user.is_active:
@@ -47,6 +48,7 @@ def _create_desired_user(desired_username):
             return get_user_model().objects.create(username=username)
         except IntegrityError:
             continue
+    log.warning('Ran out of possible usernames for %s', desired_username)
     raise SSOError('Ran out of possible usernames for %s' % desired_username)
 
 
@@ -70,30 +72,33 @@ def github_sso(code):
         'code': code,
     })
     if r.status_code != 200:
+        log.warning('Response %s from api.github.com', r.status_code)
         raise SSOError('Invalid code')
     token = r.content
 
     r = requests.get('https://api.github.com/user?%s' % token)
     if r.status_code != 200:
+        log.warning('Response %s from api.github.com', r.status_code)
         raise SSOError('Failed response from GitHub')
     gh = r.json()
 
     try:
         login = gh['login']
         name = gh['name'].partition(' ')[::2]
-    except KeyError:
-        log.debug('Error creating account from github information: %s', e)
+    except KeyError as e:
+        log.warning('Error creating account from github information: %s', e)
         raise SSOError('GitHub profile missing required content')
 
     email = gh.get('email', None)
     if not email:  # No public e-mail address
         r = requests.get('https://api.github.com/user/emails?%s' % token)
         if r.status_code != 200:
+            log.warning('Response %s from api.github.com', r.status_code)
             raise SSOError('Failed response from GitHub')
         try:
             email = r.json()[0]['email']
         except (KeyError, IndexError) as e:
-            log.debug('Error extracting github email address: %s', e)
+            log.warning('Error extracting github email address: %s', e)
             raise SSOError('Failed to obtain email address from GitHub')
 
     profile_fields = {
@@ -124,8 +129,10 @@ def debian_sso(meta):
                          params={'uid': username},
                          headers={'Api-Key': settings.WAFER_DEBIAN_NM_API_KEY})
         if r.status_code != 200:
+            log.warning('Response %s from nm.debian.org', r.status_code)
             raise SSOError('Failed to query nm.debian.org')
         if 'r' not in r.json():
+            log.warning('Error parsing nm.debian.org response: %r', r.json())
             raise SSOError('Failed to parse nm.debian.org respnose')
         # The API performs substring queries, so we need to find the correct
         # entry in the response.
