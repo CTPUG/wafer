@@ -248,7 +248,10 @@ WAFER_SSO = (
 # WAFER_GITHUB_CLIENT_SECRET = 'to get these secrets'
 
 # Log in with Debian SSO:
-# Requires:
+# Requires some Apache config:
+# SSLCACertificateFile /srv/sso.debian.org/etc/debsso.crt
+# SSLCARevocationCheck chain
+# SSLCARevocationFile /srv/sso.debian.org/etc/debsso.crl
 # <Location /accounts/debian-login/>
 #     SSLOptions +StdEnvVars
 #     SSLVerifyClient optional
