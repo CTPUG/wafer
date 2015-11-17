@@ -4,9 +4,9 @@ from django.contrib.auth import login
 from django.contrib import messages
 from django.core.urlresolvers import reverse
 from django.conf import settings
-from django.http import HttpResponseRedirect
+from django.http import Http404, HttpResponseRedirect
 
-from wafer.registration.sso import SSOError, github_sso
+from wafer.registration.sso import SSOError, debian_sso, github_sso
 
 
 def redirect_profile(request):
@@ -21,6 +21,9 @@ def redirect_profile(request):
 
 
 def github_login(request):
+    if 'github' not in settings.WAFER_SSO:
+        raise Http404()
+
     if 'code' not in request.GET:
         return HttpResponseRedirect(
             'https://github.com/login/oauth/authorize?' + urllib.urlencode({
@@ -36,6 +39,20 @@ def github_login(request):
             raise SSOError('Incorrect state')
 
         user = github_sso(request.GET['code'])
+    except SSOError as e:
+        messages.error(request, unicode(e))
+        return HttpResponseRedirect(reverse('auth_login'))
+
+    login(request, user)
+    return redirect_profile(request)
+
+
+def debian_login(request):
+    if 'debian' not in settings.WAFER_SSO:
+        raise Http404()
+
+    try:
+        user = debian_sso(request.META)
     except SSOError as e:
         messages.error(request, unicode(e))
         return HttpResponseRedirect(reverse('auth_login'))

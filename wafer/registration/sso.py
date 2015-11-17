@@ -16,7 +16,7 @@ class SSOError(Exception):
     pass
 
 
-def sso(identifier, desired_username, name, email, profile_fields):
+def sso(identifier, desired_username, name, email, profile_fields=None):
     """
     Look up a user that has been authenticated against the filter params
     `identifier`. If necessary, create one, using the remaining parameters.
@@ -49,13 +49,14 @@ def _create_desired_user(desired_username):
 
 def _configure_user(user, name, email, profile_fields):
     if name:
-        user.first_name, _,  user.last_name = name.partition(' ')
+        user.first_name, user.last_name = name
     user.email = email
     user.save()
 
     profile = user.userprofile
-    for k, v in profile_fields.iteritems():
-        setattr(profile, k, v)
+    if profile_fields:
+        for k, v in profile_fields.iteritems():
+            setattr(profile, k, v)
     profile.save()
 
 
@@ -76,7 +77,7 @@ def github_sso(code):
 
     try:
         login = gh['login']
-        name = gh['name']
+        name = gh['name'].partition(' ')[::2]
     except KeyError:
         log.debug('Error creating account from github information: %s', e)
         raise SSOError('GitHub profile missing required content')
@@ -102,6 +103,43 @@ def github_sso(code):
         identifier={'userprofile__github_username': login},
         desired_username=login, name=name, email=email,
         profile_fields=profile_fields)
+
+    if not user.is_active:
+        raise SSOError('Account disabled')
+    return user
+
+
+def debian_sso(meta):
+    authentication_status = meta.get('SSL_CLIENT_VERIFY', None)
+    if authentication_status != "SUCCESS":
+        raise SSOError('Requires authentication via Client Certificate')
+
+    email = meta['SSL_CLIENT_S_DN_CN']
+    identifier = {'email': email}
+    username = email.split('@', 1)[0]
+
+    name = ('Unknown User', email)
+    if not get_user_model().objects.filter(**identifier).exists():
+        r = requests.get('https://nm.debian.org/api/people',
+                         params={'uid': username},
+                         headers={'Api-Key': settings.WAFER_DEBIAN_NM_API_KEY})
+        if r.status_code != 200:
+            raise SSOError('Failed to query nm.debian.org')
+        if 'r' not in r.json():
+            raise SSOError('Failed to parse nm.debian.org respnose')
+        # The API performs substring queries, so we need to find the correct
+        # entry in the response.
+        for person in r.json()['r']:
+            if person['uid'] == username:
+                first_name = person['cn']
+                if person['mn']:
+                    first_name += u' ' + person['mn']
+                last_name = person['sn']
+                name = (first_name, last_name)
+                break
+
+    user = sso(identifier=identifier, desired_username=username, name=name,
+               email=email)
 
     if not user.is_active:
         raise SSOError('Account disabled')
