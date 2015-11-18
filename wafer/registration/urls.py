@@ -8,6 +8,7 @@ urlpatterns = patterns(
     url(r'^profile/$', 'redirect_profile'),
 
     url(r'^github-login/$', 'github_login'),
+    url(r'^debian-login/$', 'debian_login'),
 
     # registration.backends.default.urls, but Django 1.5 compatible
     url(r'^activate/complete/$',
