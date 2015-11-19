@@ -4,9 +4,15 @@ python:
    - "2.7"
    - "3.3"
    - "3.4"
+   - "3.5"
 env:
    - DJANGO_VERSION=1.7
    - DJANGO_VERSION=1.8
+matrix:
+   # Django 1.7 doesn't support python 3.5
+   exclude:
+      - python: "3.5"
+        env: DJANGO_VERSION=1.7
 # command to install dependencies,
 install:
    # Install the right version of Django first
