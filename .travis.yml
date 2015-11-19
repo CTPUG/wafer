@@ -17,6 +17,6 @@ matrix:
 install:
    # Install the right version of Django first
    - pip install 'Django<='"$DJANGO_VERSION"
-   - pip install -r requirements.txt -r requirements-dev.txt --use-mirrors
+   - pip install -r requirements.txt -r requirements-dev.txt
 # command to run tests
 script: NOSE_WITH_COVERAGE=1 python manage.py test
