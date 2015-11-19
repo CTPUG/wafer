@@ -2,29 +2,15 @@ language: python
 sudo: false
 python:
    - "2.7"
-   - "2.6"
    - "3.3"
    - "3.4"
 env:
-   - DJANGO_VERSION=1.6
    - DJANGO_VERSION=1.7
    - DJANGO_VERSION=1.8
-# Django 1.7 and 1.8 don't support python 2.6, so explicitly exclude those
-matrix:
-   exclude:
-      - python: "2.6"
-        env: DJANGO_VERSION=1.7
-      - python: "2.6"
-        env: DJANGO_VERSION=1.8
 # command to install dependencies,
 install:
    # Install the right version of Django first
    - pip install 'Django<='"$DJANGO_VERSION"
-   # The south 1.0 release isn't properly python 3 compatible, so we grab the
-   # fixed version from upstream - see
-   # https://bitbucket.org/andrewgodwin/south/pull-request/162/fixed-a-python-3-incompatibility-by
-   # for the details
-   - if [ "$DJANGO_VERSION" = "1.6" ]; then pip install 'https://bitbucket.org/andrewgodwin/south/get/e2c9102ee033.zip#egg=South'; fi
    - pip install -r requirements.txt -r requirements-dev.txt --use-mirrors
 # command to run tests
 script: NOSE_WITH_COVERAGE=1 python manage.py test
