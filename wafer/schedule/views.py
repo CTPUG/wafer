@@ -223,14 +223,14 @@ class ScheduleItemViewSet(viewsets.ModelViewSet):
 class ScheduleEditView(TemplateView):
     template_name = 'wafer.schedule/edit_schedule.html'
 
-    def get_context_data(self, id=None, **kwargs):
+    def get_context_data(self, day_id=None, **kwargs):
         context = super(ScheduleEditView, self).get_context_data(**kwargs)
 
         days = Day.objects.all()
 
         day = days.first()
-        if id:
-            day = days.get(id=id)
+        if day_id:
+            day = days.get(id=day_id)
 
         accepted_talks = Talk.objects.filter(status=ACCEPTED)
         venues = Venue.objects.filter(days__in=[day])

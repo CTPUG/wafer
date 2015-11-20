@@ -199,7 +199,7 @@ class ScheduleItemAdmin(admin.ModelAdmin):
             ScheduleEditView.as_view())
         my_urls = [
             url(r'^edit/$', admin_schedule_edit_view),
-            url(r'^edit/(?P<id>[0-9]+)$', admin_schedule_edit_view,
+            url(r'^edit/(?P<day_id>[0-9]+)$', admin_schedule_edit_view,
                 name='schedule_editor'),
 
         ]
