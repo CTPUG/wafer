@@ -61,23 +61,20 @@
                                   {% if author.userprofile.twitter_handle %}
                                   twitter="https://twitter.com/{{ author.userprofile.twitter_handle }}"
                                   {% endif %}
-                                  contact="{{ author.email }}">
-                                  {{ author.get_full_name|default:author.username }}
-                               </person>
+                                  contact="{{ author.email }}">{{ author.get_full_name|default:author.username }}</person>
                                {% else %}
-                               <person id="{{ author.pk }}">
-                                  {{ author.get_full_name|default:author.username }}
-                               </person>
+                               <person id="{{ author.pk }}">{{ author.get_full_name|default:author.username }}</person>
                                {% endif %}
                            {% endfor %}
                        </persons>
                     <abstract/>
                     {% else %}
                         <title>{{ items.item.get_details|escape }}</title>
-                        {# Need a good idea of what to put here for non-talk items #}
-                        <description/>
                         <type/>
                         {% if items.item.page.people.exists %}
+                        {# If there are people, we care about the description #}
+                        {# For now, we drop the raw markdown content from pages here. We probably want to sanatize this in the future #}
+                        <description>{{ items.item.page.content.raw }}</description>
                         <persons>
                            {# TODO: This should be refactored, so we don't have all this duplication #}
                            {% for person in items.item.page.people.all %}
@@ -87,16 +84,14 @@
                                   {% if author.userprofile.twitter_handle %}
                                   twitter="https://twitter.com/{{ person.userprofile.twitter_handle }}"
                                   {% endif %}
-                                  contact="{{ person.email }}">
-                                  {{ person.get_full_name|default:person.username }}
-                               </person>
+                                  contact="{{ person.email }}">{{ person.get_full_name|default:person.username }}</person>
                                {% else %}
-                               <person id="{{ person.pk }}">
-                                  {{ person.get_full_name|default:person.username }}
-                               </person>
+                               <person id="{{ person.pk }}">{{ person.get_full_name|default:person.username }}</person>
                                {% endif %}
                            {% endfor %}
                         </persons>
+                        {% else %}
+                        <description/>
                         {% endif %}
                     {% endif %}
                     <conf_url>{{ items.item.get_url }}</conf_url>

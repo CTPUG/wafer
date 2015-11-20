@@ -2,7 +2,7 @@
   "name": "wafer",
   "version": "0.0.1",
   "homepage": "https://github.com/CTPUG/wafer",
-  "license": "MIT",
+  "license": "ISC",
   "ignore": [
     "**/.*",
     "node_modules",
