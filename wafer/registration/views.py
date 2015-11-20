@@ -1,16 +1,12 @@
 import urllib
-import logging
 
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import login
+from django.contrib import messages
 from django.core.urlresolvers import reverse
 from django.conf import settings
-from django.http import HttpResponseRedirect, HttpResponseForbidden
+from django.http import Http404, HttpResponseRedirect
 
-import requests
-
-from wafer.users.models import UserProfile
-
-log = logging.getLogger(__name__)
+from wafer.registration.sso import SSOError, debian_sso, github_sso
 
 
 def redirect_profile(request):
@@ -25,6 +21,9 @@ def redirect_profile(request):
 
 
 def github_login(request):
+    if 'github' not in settings.WAFER_SSO:
+        raise Http404()
+
     if 'code' not in request.GET:
         return HttpResponseRedirect(
             'https://github.com/login/oauth/authorize?' + urllib.urlencode({
@@ -35,57 +34,28 @@ def github_login(request):
                 'state': request.META['CSRF_COOKIE'],
             }))
 
-    if request.GET['state'] != request.META['CSRF_COOKIE']:
-        return HttpResponseForbidden('Incorrect state',
-                                     content_type='text/plain')
-    code = request.GET['code']
+    try:
+        if request.GET['state'] != request.META['CSRF_COOKIE']:
+            raise SSOError('Incorrect state')
 
-    r = requests.post('https://github.com/login/oauth/access_token', data={
-        'client_id': settings.WAFER_GITHUB_CLIENT_ID,
-        'client_secret': settings.WAFER_GITHUB_CLIENT_SECRET,
-        'code': code,
-    })
-    if r.status_code != 200:
-        return HttpResponseForbidden('Invalid code', content_type='text/plain')
-    token = r.content
+        user = github_sso(request.GET['code'])
+    except SSOError as e:
+        messages.error(request, unicode(e))
+        return HttpResponseRedirect(reverse('auth_login'))
 
-    r = requests.get('https://api.github.com/user?%s' % token)
-    if r.status_code != 200:
-        return HttpResponseForbidden('Unexpected response from github',
-                content_type='text/plain')
-    gh = r.json()
+    login(request, user)
+    return redirect_profile(request)
 
-    email = gh.get('email', None)
-    if not email:  # No public e-mail address
-        r = requests.get('https://api.github.com/user/emails?%s' % token)
-        if r.status_code != 200:
-            return HttpResponseForbidden('Failed to obtain email address from'
-                    ' github - unexpected response', content_type='text/plain')
-        try:
-            email = r.json()[0]['email']
-        except (KeyError, IndexError) as e:
-            log.debug('Error extracting github email address: %s', e)
-            return HttpResponseForbidden('Failed to obtain email address from'
-                    ' github - unexpected response', content_type='text/plain')
+
+def debian_login(request):
+    if 'debian' not in settings.WAFER_SSO:
+        raise Http404()
 
     try:
-        user = authenticate(github_login=gh['login'], name=gh['name'], email=email,
-                            blog=gh['blog'])
-    except KeyError as e:
-        log.debug('Error creating account from github information: %s', e)
-        return HttpResponseForbidden('Unexpected response from github.'
-                ' Authentication failed', content_type='text/plain')
-    except UserProfile.MultipleObjectsReturned as e:
-        # FIXME: This is a short term workaround. Find a better fix
-        # later
-        log.debug('Duplicate accounts for github login %s: %s',
-                  gh['login'], e)
-        return HttpResponseForbidden('Multiple accounts associated with'
-                ' these github credentials. Authentication failed',
-                content_type='text/plain')
+        user = debian_sso(request.META)
+    except SSOError as e:
+        messages.error(request, unicode(e))
+        return HttpResponseRedirect(reverse('auth_login'))
 
-    if not user:
-        return HttpResponseForbidden('Authentication with github credentials'
-                ' failed', content_type='text/plain')
     login(request, user)
-    return HttpResponseRedirect(reverse(redirect_profile))
+    return redirect_profile(request)

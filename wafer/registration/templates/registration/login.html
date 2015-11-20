@@ -16,11 +16,17 @@
             {% blocktrans %}
             Not registered? Please <a href="{{signup_url}}">sign up</a>.
             {% endblocktrans %}
-            {% if WAFER_GITHUB_CLIENT_ID %}
-            <h2>{% trans 'Social Log in / Sign up' %}</h2>
+            {% if WAFER_SSO %}
+            <h2>{% trans 'Shared/Social Log in and Sign up' %}</h2>
             <ul>
-                {% url 'wafer.registration.views.github_login' as redirect_url %}
-                <li><a href="{{ redirect_url }}">GitHub</a></li>
+                {% if 'github' in WAFER_SSO %}
+                {% url 'wafer.registration.views.github_login' as github_sso_url %}
+                <li><a href="{{ github_sso_url }}">GitHub</a></li>
+                {% endif %}
+                {% if 'debian' in WAFER_SSO %}
+                {% url 'wafer.registration.views.debian_login' as debian_sso_url %}
+                <li><a href="{{ debian_sso_url }}">Debian SSO</a></li>
+                {% endif %}
             </ul>
             {% endif %}
         </div>

@@ -3,6 +3,7 @@ logger = logging.getLogger(__name__)
 
 from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse
+from django.conf import settings
 from django.db import models
 from django.db.models.signals import post_save
 from django.utils.encoding import python_2_unicode_compatible
@@ -43,6 +44,11 @@ class Page(models.Model):
         help_text=_("Images and other files for use in"
                     " the content markdown field."))
 
+    people = models.ManyToManyField(settings.AUTH_USER_MODEL,
+        related_name='pages', null=True, blank=True,
+        help_text=_("People associated with this page for display in the"
+                    " schedule (Session chairs, panelists, etc.)"))
+
     def __str__(self):
         return u'%s' % (self.name,)
 
@@ -62,8 +68,24 @@ class Page(models.Model):
             return True
         return False
 
+    def get_people_display_names(self):
+        names = []
+        for person in self.people.all():
+            full_name = person.get_full_name()
+            if full_name:
+                names.append(full_name)
+            else:
+                names.append(person.username)
+        if len(names) > 2:
+            comma_names = ', '.join(names[:-1])
+            return comma_names + ' and ' + names[-1]
+        else:
+            return ' and '.join(names)
+
     get_in_schedule.short_description = 'Added to schedule'
     get_in_schedule.boolean = True
+
+    get_people_display_names.short_description = 'People'
 
     class Model:
         unique_together = (('parent', 'slug'),)

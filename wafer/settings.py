@@ -239,13 +239,26 @@ WAFER_DYNAMIC_MENUS = (
     'wafer.pages.models.page_menus',
 )
 
+# Enabled SSO mechanims:
+WAFER_SSO = (
+    # 'github',
+    # 'debian',
+)
+
 # Log in with GitHub:
-# AUTHENTICATION_BACKENDS = (
-#     'django.contrib.auth.backends.ModelBackend',
-#     'wafer.registration.backends.GitHubBackend',
-# )
 # WAFER_GITHUB_CLIENT_ID = 'register on github'
 # WAFER_GITHUB_CLIENT_SECRET = 'to get these secrets'
+
+# Log in with Debian SSO:
+# Requires some Apache config:
+# SSLCACertificateFile /srv/sso.debian.org/etc/debsso.crt
+# SSLCARevocationCheck chain
+# SSLCARevocationFile /srv/sso.debian.org/etc/debsso.crl
+# <Location /accounts/debian-login/>
+#     SSLOptions +StdEnvVars
+#     SSLVerifyClient optional
+# </Location>
+# WAFER_DEBIAN_NM_API_KEY = 'obtain one from https://nm.debian.org/apikeys/'
 
 # Set this to true to disable the login button on the navigation toolbar
 WAFER_HIDE_LOGIN = False

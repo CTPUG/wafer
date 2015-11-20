@@ -31,7 +31,7 @@ Basic instructions
    * If you are using Django 1.6, you will need to explicitly install
      south - ``pip install south``
 
-#. Create the intial database schema
+#. Create the initial database schema
    ``manage.py migrate``
 
 #. If you don't have one yet, create a superuser with
@@ -39,13 +39,13 @@ Basic instructions
 
 #. Log in and configure the Site:
 
-   * The domain will be used as the base for e-mails sent during
+   * The domain will be used as the base for emails sent during
      registration.
 
    * The name will be the conference's name.
 
    * By default, wafer assumes that the site will be accessible over ssl,
-     so the regsistration emails will will use an 'https' prefix. If this
+     so the registration emails will use an 'https' prefix. If this
      is not the case, override the wafer/registration/activation_email.txt
      template.
 
@@ -76,7 +76,7 @@ command should work::
 Important settings
 ==================
 
-``TALKS_OPEN`` controls wether talk submissions are accepted. Set to False to close talk submissions.
+``TALKS_OPEN`` controls whether talk submissions are accepted. Set to False to close talk submissions.
 
 ``WAFER_MENUS`` adds the top level menu items for the site. 
 

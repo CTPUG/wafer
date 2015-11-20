@@ -27,6 +27,11 @@ Available on `readthedocs.org`_.
 
 .. _readthedocs.org: http://wafer.readthedocs.org/
 
+Supported Django versions
+=========================
+
+Wafer supports Django 1.7 and Django 1.8.
+
 
 Installation
 ============
@@ -50,22 +55,6 @@ Installation
    ``manage.py wafer_add_default_groups``.
 
 6. Have a fun conference.
-
-Running with Django 1.6
------------------------
-
-If you are running Django 1.6, please also install south for migrations::
-
-    pip install south
-
-South 1.0 fails with python 3, described `in this issue`_. To properly support
-python 3 and Django 1.6, you need to install a patched version. The following
-command should work::
-
-    pip install 'https://bitbucket.org/andrewgodwin/south/get/e2c9102ee033.zip#egg=South
-
-.. _in this issue: https://bitbucket.org/andrewgodwin/south/pull-request/162/fixed-a-python-3-incompatibility-by
-
 
 Features
 ========

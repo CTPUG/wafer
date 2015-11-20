@@ -84,7 +84,7 @@ class ScheduleTests(TestCase):
         c = Client()
         with QueryTracker() as tracker:
             response = c.get('/schedule/')
-            self.assertTrue(len(tracker.queries) < 40)
+            self.assertTrue(len(tracker.queries) < 60)
 
         [day1] = response.context['schedule_days']
 
