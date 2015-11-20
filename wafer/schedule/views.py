@@ -234,11 +234,16 @@ class ScheduleEditView(TemplateView):
 
         accepted_talks = Talk.objects.filter(status=ACCEPTED)
         venues = Venue.objects.filter(days__in=[day])
-        slots = Slot.objects.filter(day=day).select_related(
+        slots = Slot.objects.all().select_related(
             'day', 'previous_slot').prefetch_related(
-            'scheduleitem_set', 'slot_set')
+            'scheduleitem_set', 'slot_set').order_by(
+                'end_time', 'start_time', 'day')
         aggregated_slots = []
+
         for slot in slots:
+            slot_day = slot.get_day()
+            if day != slot_day:
+                continue
             aggregated_slot = {
                 'name': slot.name,
                 'start_time': slot.get_start_time(),
