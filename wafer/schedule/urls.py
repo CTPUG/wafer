@@ -3,7 +3,7 @@ from rest_framework import routers
 
 
 from wafer.schedule.views import (
-    CurrentView, ScheduleView, ScheduleItemViewSet ,ScheduleXmlView, VenueView)
+    CurrentView, ScheduleView, ScheduleItemViewSet, ScheduleXmlView, VenueView)
 
 router = routers.DefaultRouter()
 router.register(r'scheduleitems', ScheduleItemViewSet)

@@ -126,89 +126,93 @@ class ScheduleXmlView(ScheduleView):
 class CurrentView(TemplateView):
     template_name = 'wafer.schedule/current.html'
 
-    def get_context_data(self, **kwargs):
-        context = super(CurrentView, self).get_context_data(**kwargs)
-        # Check if the schedule is valid
-        context['active'] = False
-        if not check_schedule():
-            return context
-        # schedule is valid, so
-        context['active'] = True
-        context['slots'] = []
-        # We allow url parameters to override the default
-        context['refresh'] = self.request.GET.get('refresh', None)
-        day = self.request.GET.get('day', str(datetime.date.today()))
+    def _parse_today(self, day):
+        if day is None:
+            day = str(datetime.date.today())
         dates = dict([(x.date.strftime('%Y-%m-%d'), x) for x in
                       Day.objects.all()])
         if day not in dates:
-            # Nothing happening today
-            return context
-        # get the associated day object
-        today = dates[day]
+            return None
+        return ScheduleDay(dates[day])
+
+    def _parse_time(self, time):
         now = datetime.datetime.now().time()
-        if 'time' in self.request.GET:
-            time = self.request.GET['time']
-            try:
-                time = datetime.datetime.strptime(time, '%H:%M').time()
-            except ValueError:
-                time = now
-        else:
-            time = now
-        # Find the slot that includes now
-        cur_slot = None
-        prev_slot = None
-        next_slot = None
-        schedule_day = None
+        if time is None:
+            return now
+        try:
+            return datetime.datetime.strptime(time, '%H:%M').time()
+        except ValueError:
+            pass
+        return now
+
+    def _add_note(self, row, note, overlap_note):
+        for item in row.items.values():
+            if item['rowspan'] == 1:
+                item['note'] = note
+            else:
+                # Must overlap with current slot
+                item['note'] = overlap_note
+
+    def _current_slots(self, schedule_day, time):
+        today = schedule_day.day
+        cur_slot, prev_slot, next_slot = None, None, None
         for slot in Slot.objects.all():
             if slot.get_day() != today:
                 continue
-            if schedule_day is None:
-                schedule_day = ScheduleDay(slot.get_day())
             if slot.get_start_time() <= time and slot.end_time > time:
                 cur_slot = slot
             elif slot.end_time <= time:
-                if prev_slot:
-                    if prev_slot.end_time < slot.end_time:
-                        prev_slot = slot
-                else:
+                if not prev_slot or prev_slot.end_time < slot.end_time:
                     prev_slot = slot
             elif slot.get_start_time() >= time:
-                if next_slot:
-                    if next_slot.end_time > slot.end_time:
-                        next_slot = slot
-                else:
+                if not next_slot or next_slot.end_time > slot.end_time:
                     next_slot = slot
+        cur_rows = self._current_rows(
+            schedule_day, cur_slot, prev_slot, next_slot)
+        return cur_slot, cur_rows
+
+    def _current_rows(self, schedule_day, cur_slot, prev_slot, next_slot):
         seen_items = {}
-        context['cur_slot'] = None
-        context['schedule_day'] = schedule_day
-        if prev_slot:
-            prev_row = make_schedule_row(schedule_day, prev_slot, seen_items)
-            context['slots'].append(prev_row)
-        if cur_slot:
-            cur_row = make_schedule_row(schedule_day, cur_slot, seen_items)
-            for item in cur_row.items.values():
-                item['note'] = 'current'
-            context['slots'].append(cur_row)
-            context['cur_slot'] = cur_slot
-        if next_slot:
-            next_row = make_schedule_row(schedule_day, next_slot, seen_items)
-            context['slots'].append(next_row)
+        rows = []
+        for slot in (prev_slot, cur_slot, next_slot):
+            if slot:
+                row = make_schedule_row(schedule_day, slot, seen_items)
+            else:
+                row = None
+            rows.append(row)
         # Add styling hints. Needs to be after all the schedule rows are
         # created so the spans are set correctly
         if prev_slot:
-            for item in prev_row.items.values():
-                if item['rowspan'] == 1:
-                    item['note'] = 'complete'
-                else:
-                    # Must overlap with current slot
-                    item['note'] = 'current'
+            self._add_note(rows[0], 'complete', 'current')
+        if cur_slot:
+            self._add_note(rows[1], 'current', 'current')
         if next_slot:
-            for item in next_row.items.values():
-                if item['rowspan'] == 1:
-                    item['note'] = 'forthcoming'
-                else:
-                    # Must overlap with current slot
-                    item['note'] = 'current'
+            self._add_note(rows[2], 'forthcoming', 'current')
+        return [r for r in rows if r]
+
+    def get_context_data(self, **kwargs):
+        context = super(CurrentView, self).get_context_data(**kwargs)
+        # If the schedule is invalid, return a context with active=False
+        context['active'] = False
+        if not check_schedule():
+            return context
+        # The schedule is valid, so add active=True and empty slots
+        context['active'] = True
+        context['slots'] = []
+        # Allow refresh time to be overridden
+        context['refresh'] = self.request.GET.get('refresh', None)
+        # If there are no items scheduled for today, return an empty slots list
+        schedule_day = self._parse_today(self.request.GET.get('day', None))
+        if schedule_day is None:
+            return context
+        context['schedule_day'] = schedule_day
+        # Allow current time to be overridden
+        time = self._parse_time(self.request.GET.get('time', None))
+
+        cur_slot, current_rows = self._current_slots(schedule_day, time)
+        context['cur_slot'] = cur_slot
+        context['slots'].extend(current_rows)
+
         return context
 
 
@@ -223,14 +227,43 @@ class ScheduleItemViewSet(viewsets.ModelViewSet):
 class ScheduleEditView(TemplateView):
     template_name = 'wafer.schedule/edit_schedule.html'
 
+    def _slot_context(self, slot, venues):
+        slot_context = {
+            'name': slot.name,
+            'start_time': slot.get_start_time(),
+            'end_time': slot.end_time,
+            'id': slot.id,
+            'venues': []
+        }
+        for venue in venues:
+            venue_context = {
+                'name': venue.name,
+                'id': venue.id,
+            }
+            for schedule_item in slot.scheduleitem_set.all():
+                if schedule_item.venue.name == venue.name:
+                    if schedule_item.talk:
+                        talk = schedule_item.talk
+                        venue_context['title'] = talk.title
+                        venue_context['talk'] = talk
+                        venue_context['scheduleitem_id'] = talk.talk_id
+                    if (schedule_item.page and
+                            not schedule_item.page.exclude_from_static):
+                        page = schedule_item.page
+                        venue_context['title'] = page.name
+                        venue_context['page'] = page
+                        venue_context['scheduleitem_id'] = page.id
+            slot_context['venues'].append(venue_context)
+        return slot_context
+
     def get_context_data(self, day_id=None, **kwargs):
         context = super(ScheduleEditView, self).get_context_data(**kwargs)
 
         days = Day.objects.all()
-
-        day = days.first()
         if day_id:
             day = days.get(id=day_id)
+        else:
+            day = days.first()
 
         accepted_talks = Talk.objects.filter(status=ACCEPTED)
         venues = Venue.objects.filter(days__in=[day])
@@ -241,37 +274,9 @@ class ScheduleEditView(TemplateView):
         aggregated_slots = []
 
         for slot in slots:
-            slot_day = slot.get_day()
-            if day != slot_day:
+            if day != slot.get_day():
                 continue
-            aggregated_slot = {
-                'name': slot.name,
-                'start_time': slot.get_start_time(),
-                'end_time': slot.end_time,
-                'id': slot.id,
-                'venues': []
-            }
-            for venue in venues:
-                aggregated_venue = {
-                    'name': venue.name,
-                    'id': venue.id,
-                }
-                for schedule_item in slot.scheduleitem_set.all():
-                    if schedule_item.venue.name == venue.name:
-                        if schedule_item.talk:
-                            talk = schedule_item.talk
-                            aggregated_venue['title'] = talk.title
-                            aggregated_venue['talk'] = talk
-                            aggregated_venue['scheduleitem_id'] = talk.talk_id
-                        if (schedule_item.page and
-                                not schedule_item.page.exclude_from_static):
-                            page = schedule_item.page
-                            aggregated_venue['title'] = page.name
-                            aggregated_venue['page'] = page
-                            aggregated_venue['scheduleitem_id'] = page.id
-
-                aggregated_slot['venues'].append(aggregated_venue)
-            aggregated_slots.append(aggregated_slot)
+            aggregated_slots.append(self._slot_context(slot, venues))
 
         context['day'] = day
         context['venues'] = venues
