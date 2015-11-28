@@ -141,19 +141,3 @@ class TalkUrl(models.Model):
     description = models.CharField(max_length=256)
     url = models.URLField()
     talk = models.ForeignKey(Talk)
-
-
-if settings.WAFER_NEEDS_SOUTH:
-    # Django 1.7 updates permissions automatically when migrate is run,
-    # but South 1.0 still needs this to be explicitly hooked up like we
-    # do here.
-    from south.signals import post_migrate
-
-    def update_permissions_after_migration(app, **kwargs):
-        from django.db.models import get_app, get_models
-        from django.contrib.auth.management import create_permissions
-
-        create_permissions(get_app(app), get_models(),
-                           verbosity=2 if settings.DEBUG else 0)
-
-    post_migrate.connect(update_permissions_after_migration)

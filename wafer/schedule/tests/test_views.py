@@ -1,48 +1,67 @@
+import json
+import datetime as D
+
 from django.test import Client, TestCase
 from django.contrib.auth import get_user_model
 
-import datetime as D
-from wafer.talks.models import Talk, ACCEPTED, REJECTED, PENDING
+from wafer.talks.models import Talk, ACCEPTED
 from wafer.pages.models import Page
 from wafer.schedule.models import Day, Venue, Slot, ScheduleItem
-from wafer.schedule.admin import (find_overlapping_slots, validate_items,
-                                  find_duplicate_schedule_items,
-                                  find_clashes, find_invalid_venues,
-                                  find_non_contiguous)
 from wafer.utils import QueryTracker
 
 
-class ScheduleTests(TestCase):
-    def _make_pages(self, n):
-        # Utility function
-        pages = []
-        for x in range(n):
-            page = Page.objects.create(name="test page %s" % x,
-                                       slug="test%s" % x)
-            pages.append(page)
-        return pages
+def make_pages(n):
+    """ Make n pages. """
+    pages = []
+    for x in range(n):
+        page = Page.objects.create(name="test page %s" % x,
+                                   slug="test%s" % x)
+        pages.append(page)
+    return pages
 
-    def _make_items(self, venues, pages):
-        # Utility function
-        items = []
-        for x, (venue, page) in enumerate(zip(venues, pages)):
-            item = ScheduleItem.objects.create(venue=venue,
-                                               details="Item %s" % x,
-                                               page_id=page.pk)
-            items.append(item)
-        return items
 
-    def test_days(self):
-        """Create some days and check the results."""
-        Day.objects.create(date=D.date(2013, 9, 22))
-        Day.objects.create(date=D.date(2013, 9, 23))
+def make_items(venues, pages):
+    """ Make items for pairs of venues and pages. """
+    items = []
+    for x, (venue, page) in enumerate(zip(venues, pages)):
+        item = ScheduleItem.objects.create(venue=venue,
+                                           details="Item %s" % x,
+                                           page_id=page.pk)
+        items.append(item)
+    return items
 
-        assert Day.objects.count() == 2
 
-        output = ["%s" % x for x in Day.objects.all()]
+def make_venue(order=1, name='Venue 1'):
+    """ Make a venue. """
+    venue = Venue.objects.create(order=1, name='Venue 1')
+    return venue
 
-        assert output == ["Sep 22 (Sun)", "Sep 23 (Mon)"]
 
+def make_slot():
+    """ Make a slot. """
+    day = Day.objects.create(date=D.date(2013, 9, 22))
+    start = D.time(10, 0, 0)
+    end = D.time(15, 0, 0)
+    slot = Slot.objects.create(start_time=start, end_time=end,
+                               day=day)
+    return slot
+
+
+def create_client(username=None, superuser=False):
+    client = Client()
+    if username:
+        email = '%s@example.com' % (username,)
+        password = '%s_password' % (username,)
+        if superuser:
+            create = get_user_model().objects.create_superuser
+        else:
+            create = get_user_model().objects.create_user
+        create(username, email, password)
+        client.login(username=username, password=password)
+    return client
+
+
+class ScheduleViewTests(TestCase):
     def test_simple_table(self):
         """Create a simple, single day table with 3 slots and 2 venues and
            check we get the expected results"""
@@ -64,9 +83,9 @@ class ScheduleTests(TestCase):
         start3 = D.time(12, 0, 0)
         end = D.time(13, 0, 0)
 
-        pages = self._make_pages(6)
+        pages = make_pages(6)
         venues = [venue1, venue1, venue1, venue2, venue2, venue2]
-        items = self._make_items(venues, pages)
+        items = make_items(venues, pages)
 
         slot1 = Slot.objects.create(start_time=start1, end_time=start2,
                                     day=day1)
@@ -136,9 +155,9 @@ class ScheduleTests(TestCase):
         start3 = D.time(12, 0, 0)
         end = D.time(13, 0, 0)
 
-        pages = self._make_pages(6)
+        pages = make_pages(6)
         venues = [venue1, venue1, venue1, venue2, venue2, venue2]
-        items = self._make_items(venues, pages)
+        items = make_items(venues, pages)
 
         # Create the slots not in date order either
 
@@ -218,9 +237,9 @@ class ScheduleTests(TestCase):
         start3 = D.time(12, 0, 0)
         end2 = D.time(13, 0, 0)
 
-        pages = self._make_pages(6)
+        pages = make_pages(6)
         venues = [venue1, venue1, venue1, venue2, venue2, venue2]
-        items = self._make_items(venues, pages)
+        items = make_items(venues, pages)
 
         slot1 = Slot.objects.create(start_time=start1, end_time=start2,
                                     day=day1)
@@ -284,9 +303,9 @@ class ScheduleTests(TestCase):
         start3 = D.time(12, 0, 0)
         end2 = D.time(13, 0, 0)
 
-        pages = self._make_pages(6)
+        pages = make_pages(6)
         venues = [venue1, venue1, venue1, venue2, venue2, venue2]
-        items = self._make_items(venues, pages)
+        items = make_items(venues, pages)
 
         slot1 = Slot.objects.create(start_time=start1, end_time=start2,
                                     day=day1)
@@ -387,9 +406,9 @@ class ScheduleTests(TestCase):
         start3 = D.time(12, 0, 0)
         end2 = D.time(13, 0, 0)
 
-        pages = self._make_pages(3)
+        pages = make_pages(3)
         venues = [venue1, venue1, venue2]
-        items = self._make_items(venues, pages)
+        items = make_items(venues, pages)
 
         slot1 = Slot.objects.create(start_time=start1, end_time=start2,
                                     day=day1)
@@ -471,10 +490,10 @@ class ScheduleTests(TestCase):
         slot5 = Slot.objects.create(start_time=start5, end_time=end,
                                     day=day1)
 
-        pages = self._make_pages(10)
+        pages = make_pages(10)
         venues = [venue1, venue1, venue2, venue3, venue3, venue3,
                   venue2, venue1, venue2, venue3]
-        items = self._make_items(venues, pages)
+        items = make_items(venues, pages)
 
         items[0].slots.add(slot1)
         items[4].slots.add(slot1)
@@ -579,9 +598,9 @@ class ScheduleTests(TestCase):
         slot5 = Slot.objects.create(start_time=start5, end_time=end,
                                     day=day1)
 
-        pages = self._make_pages(7)
+        pages = make_pages(7)
         venues = [venue1, venue1, venue1, venue1, venue2, venue2, venue2]
-        items = self._make_items(venues, pages)
+        items = make_items(venues, pages)
 
         items[0].slots.add(slot1)
         items[0].slots.add(slot2)
@@ -639,6 +658,8 @@ class ScheduleTests(TestCase):
         assert day1.rows[4].get_sorted_items()[0]['rowspan'] == 1
         assert day1.rows[4].get_sorted_items()[0]['colspan'] == 1
 
+
+class CurrentViewTests(TestCase):
     def test_current_view_simple(self):
         """Create a schedule and check that the current view looks sane."""
         day1 = Day.objects.create(date=D.date(2013, 9, 22))
@@ -664,7 +685,7 @@ class ScheduleTests(TestCase):
         # After the last slot
         cur5 = D.time(15, 30, 0)
 
-        slots=[]
+        slots = []
 
         slots.append(Slot.objects.create(start_time=start1, end_time=start2,
                                          day=day1))
@@ -675,9 +696,9 @@ class ScheduleTests(TestCase):
         slots.append(Slot.objects.create(start_time=start4, end_time=start5,
                                          day=day1))
 
-        pages = self._make_pages(8)
+        pages = make_pages(8)
         venues = [venue1, venue2] * 4
-        items = self._make_items(venues, pages)
+        items = make_items(venues, pages)
 
         for index, item in enumerate(items):
             item.slots.add(slots[index // 2])
@@ -707,19 +728,17 @@ class ScheduleTests(TestCase):
         assert context['slots'][1].items[venue1]['note'] == 'current'
         assert context['slots'][2].items[venue1]['note'] == 'forthcoming'
 
-
         response = c.get('/schedule/current/',
                          {'day': day1.date.strftime('%Y-%m-%d'),
                           'time': cur3.strftime('%H:%M')})
         context = response.context
         assert context['cur_slot'] == slots[2]
         assert len(context['schedule_day'].venues) == 2
-        # prev and cur 
+        # prev and cur
         assert len(context['slots']) == 3
         assert context['slots'][0].items[venue1]['note'] == 'complete'
         assert context['slots'][1].items[venue1]['note'] == 'current'
         assert context['slots'][2].items[venue1]['note'] == 'forthcoming'
-
 
         response = c.get('/schedule/current/',
                          {'day': day1.date.strftime('%Y-%m-%d'),
@@ -731,7 +750,6 @@ class ScheduleTests(TestCase):
         assert len(context['slots']) == 2
         assert context['slots'][0].items[venue1]['note'] == 'complete'
         assert context['slots'][1].items[venue1]['note'] == 'current'
-
 
         response = c.get('/schedule/current/',
                          {'day': day1.date.strftime('%Y-%m-%d'),
@@ -785,10 +803,10 @@ class ScheduleTests(TestCase):
         slot5 = Slot.objects.create(start_time=start5, end_time=end,
                                     day=day1)
 
-        pages = self._make_pages(10)
+        pages = make_pages(10)
         venues = [venue1, venue1, venue2, venue3, venue3, venue3,
                   venue2, venue1, venue2, venue3]
-        items = self._make_items(venues, pages)
+        items = make_items(venues, pages)
 
         items[0].slots.add(slot1)
         items[4].slots.add(slot1)
@@ -863,328 +881,6 @@ class ScheduleTests(TestCase):
         assert context['slots'][0].items[venue2]['note'] == 'complete'
         assert context['slots'][0].items[venue2]['rowspan'] == 1
 
-
-class ValidationTests(TestCase):
-
-    def test_slot(self):
-        """Test detection of overlapping slots"""
-        day1 = Day.objects.create(date=D.date(2013, 9, 22))
-        start1 = D.time(10, 0, 0)
-        start2 = D.time(11, 0, 0)
-        start3 = D.time(12, 0, 0)
-        start35 = D.time(12, 30, 0)
-        start4 = D.time(13, 0, 0)
-        start45 = D.time(13, 30, 0)
-        start5 = D.time(14, 0, 0)
-        end = D.time(15, 0, 0)
-
-        # Test common start time
-        slot1 = Slot.objects.create(start_time=start1, end_time=start2,
-                                    day=day1)
-        slot2 = Slot.objects.create(start_time=start1, end_time=end, day=day1)
-
-        overlaps = find_overlapping_slots()
-        assert overlaps == set([slot1, slot2])
-
-        slot2.start_time = start5
-        slot2.save()
-
-        # Test interleaved slot
-        slot3 = Slot.objects.create(start_time=start2, end_time=start3,
-                                    day=day1)
-        slot4 = Slot.objects.create(start_time=start4, end_time=start5,
-                                    day=day1)
-        slot5 = Slot.objects.create(start_time=start35, end_time=start45,
-                                    day=day1)
-
-        overlaps = find_overlapping_slots()
-        assert overlaps == set([slot4, slot5])
-
-        # Test no overlap
-        slot5.start_time = start3
-        slot5.end_time = start4
-        slot5.save()
-        overlaps = find_overlapping_slots()
-        assert len(overlaps) == 0
-
-        # Test common end time
-        slot5.end_time = start5
-        slot5.save()
-        overlaps = find_overlapping_slots()
-        assert overlaps == set([slot4, slot5])
-
-        # Test overlap detect with previous slot set
-        slot5.start_time = None
-        slot5.end_time = start5
-        slot5.previous_slot = slot1
-        slot5.save()
-        overlaps = find_overlapping_slots()
-        assert overlaps == set([slot3, slot4, slot5])
-
-    def test_clashes(self):
-        """Test that we can detect clashes correctly"""
-        day1 = Day.objects.create(date=D.date(2013, 9, 22))
-        venue1 = Venue.objects.create(order=1, name='Venue 1')
-        venue2 = Venue.objects.create(order=2, name='Venue 2')
-        venue1.days.add(day1)
-        venue2.days.add(day1)
-
-        start1 = D.time(10, 0, 0)
-        start2 = D.time(11, 0, 0)
-        end = D.time(12, 0, 0)
-
-        slot1 = Slot.objects.create(start_time=start1, end_time=start2,
-                                    day=day1)
-        slot2 = Slot.objects.create(start_time=start2, end_time=end,
-                                    day=day1)
-
-        item1 = ScheduleItem.objects.create(venue=venue1, details="Item 1")
-        item2 = ScheduleItem.objects.create(venue=venue1, details="Item 2")
-        # Create a simple venue/slot clash
-        item1.slots.add(slot1)
-        item2.slots.add(slot1)
-        clashes = find_clashes()
-        assert len(clashes) == 1
-        pos = (venue1, slot1)
-        assert pos in clashes
-        assert item1 in clashes[pos]
-        assert item2 in clashes[pos]
-        # Create a overlapping clashes
-        item2.slots.remove(slot1)
-        item1.slots.add(slot2)
-        item2.slots.add(slot2)
-        clashes = find_clashes()
-        assert len(clashes) == 1
-        pos = (venue1, slot2)
-        assert pos in clashes
-        assert item1 in clashes[pos]
-        assert item2 in clashes[pos]
-        # Add a clash in a second venue
-        item3 = ScheduleItem.objects.create(venue=venue2, details="Item 3")
-        item4 = ScheduleItem.objects.create(venue=venue2, details="Item 4")
-        item3.slots.add(slot2)
-        item4.slots.add(slot2)
-        clashes = find_clashes()
-        assert len(clashes) == 2
-        pos = (venue2, slot2)
-        assert pos in clashes
-        assert item3 in clashes[pos]
-        assert item4 in clashes[pos]
-        # Fix clashes
-        item1.slots.remove(slot2)
-        item3.slots.remove(slot2)
-        item3.slots.add(slot1)
-        clashes = find_clashes()
-        assert len(clashes) == 0
-
-    def test_validation(self):
-        """Test that we detect validation errors correctly"""
-        # Create a item with both a talk and a page assigned
-        day1 = Day.objects.create(date=D.date(2013, 9, 22))
-        venue1 = Venue.objects.create(order=1, name='Venue 1')
-        venue1.days.add(day1)
-
-        start1 = D.time(10, 0, 0)
-        start2 = D.time(11, 0, 0)
-        end = D.time(12, 0, 0)
-
-        slot1 = Slot.objects.create(start_time=start1, end_time=start2,
-                                    day=day1)
-        slot2 = Slot.objects.create(start_time=start1, end_time=end,
-                                    day=day1)
-
-        user = get_user_model().objects.create_user('john', 'best@wafer.test',
-                                                    'johnpassword')
-        talk = Talk.objects.create(title="Test talk", status=ACCEPTED,
-                                   corresponding_author_id=user.id)
-        page = Page.objects.create(name="test page", slug="test")
-
-        item1 = ScheduleItem.objects.create(venue=venue1,
-                                            talk_id=talk.pk,
-                                            page_id=page.pk)
-        item1.slots.add(slot1)
-
-        invalid = validate_items()
-        assert set(invalid) == set([item1])
-
-        item2 = ScheduleItem.objects.create(venue=venue1,
-                                            talk_id=talk.pk)
-        item2.slots.add(slot2)
-
-        # Test talk status
-        talk.status = REJECTED
-        talk.save()
-        invalid = validate_items()
-        assert set(invalid) == set([item1, item2])
-
-        talk.status = PENDING
-        talk.save()
-        invalid = validate_items()
-        assert set(invalid) == set([item1, item2])
-
-        talk.status = ACCEPTED
-        talk.save()
-        invalid = validate_items()
-        assert set(invalid) == set([item1])
-
-        item3 = ScheduleItem.objects.create(venue=venue1,
-                                            talk_id=None, page_id=None)
-        item3.slots.add(slot2)
-
-        invalid = validate_items()
-        assert set(invalid) == set([item1, item3])
-
-    def test_non_contiguous(self):
-        """Test that we detect items with non contiguous slots"""
-        # Create a item with a gap in the slots assigned to it
-        day1 = Day.objects.create(date=D.date(2013, 9, 22))
-        venue1 = Venue.objects.create(order=1, name='Venue 1')
-        venue1.days.add(day1)
-
-        start1 = D.time(10, 0, 0)
-        start2 = D.time(11, 0, 0)
-        start3 = D.time(12, 0, 0)
-        end = D.time(13, 0, 0)
-
-        slot1 = Slot.objects.create(start_time=start1, end_time=start2,
-                                    day=day1)
-        slot2 = Slot.objects.create(start_time=start2, end_time=start3,
-                                    day=day1)
-        slot3 = Slot.objects.create(start_time=start3, end_time=end,
-                                    day=day1)
-
-        user = get_user_model().objects.create_user('john', 'best@wafer.test',
-                                                    'johnpassword')
-        talk = Talk.objects.create(title="Test talk", status=ACCEPTED,
-                                   corresponding_author_id=user.id)
-        page = Page.objects.create(name="test page", slug="test")
-
-        item1 = ScheduleItem.objects.create(venue=venue1,
-                                            talk_id=talk.pk)
-        item1.slots.add(slot1)
-        item1.slots.add(slot3)
-
-        item2 = ScheduleItem.objects.create(venue=venue1,
-                                            page_id=page.pk)
-        item2.slots.add(slot2)
-
-        invalid = find_non_contiguous()
-        # Only item1 is invalid
-        assert set(invalid) == set([item1])
-
-        item1.slots.add(slot2)
-        item1.slots.remove(slot1)
-        item2.slots.add(slot1)
-        item2.slots.remove(slot2)
-
-        invalid = validate_items()
-        # Everything is valid now
-        assert set(invalid) == set([])
-
-    def test_duplicates(self):
-        """Test that we can detect duplicates talks and pages"""
-        # Final chedule is
-        #       Venue 1  Venue 2
-        # 10-11 Talk 1   Page 1
-        # 11-12 Talk 1   Page 1
-        day1 = Day.objects.create(date=D.date(2013, 9, 22))
-        venue1 = Venue.objects.create(order=1, name='Venue 1')
-        venue2 = Venue.objects.create(order=2, name='Venue 2')
-        venue1.days.add(day1)
-        venue2.days.add(day1)
-
-        start1 = D.time(10, 0, 0)
-        start2 = D.time(11, 0, 0)
-        end = D.time(12, 0, 0)
-
-        slot1 = Slot.objects.create(start_time=start1, end_time=start2,
-                                    day=day1)
-        slot2 = Slot.objects.create(start_time=start1, end_time=end,
-                                    day=day1)
-
-        user = get_user_model().objects.create_user('john', 'best@wafer.test',
-                                                    'johnpassword')
-        talk = Talk.objects.create(title="Test talk", status=ACCEPTED,
-                                   corresponding_author_id=user.id)
-        page1 = Page.objects.create(name="test page", slug="test")
-        page2 = Page.objects.create(name="test page 2", slug="test2")
-
-        item1 = ScheduleItem.objects.create(venue=venue1,
-                                            talk_id=talk.pk)
-        item1.slots.add(slot1)
-        item2 = ScheduleItem.objects.create(venue=venue1,
-                                            talk_id=talk.pk)
-        item2.slots.add(slot2)
-
-        duplicates = find_duplicate_schedule_items()
-        assert set(duplicates) == set([item1, item2])
-
-        item3 = ScheduleItem.objects.create(venue=venue2,
-                                            page_id=page1.pk)
-        item3.slots.add(slot1)
-        item4 = ScheduleItem.objects.create(venue=venue2,
-                                            talk_id=talk.pk)
-        item4.slots.add(slot2)
-
-        duplicates = find_duplicate_schedule_items()
-        assert set(duplicates) == set([item1, item2, item4])
-
-        item4.page_id = page2.pk
-        item4.talk_id = None
-        item4.save()
-
-        duplicates = find_duplicate_schedule_items()
-        assert set(duplicates) == set([item1, item2])
-
-    def test_venues(self):
-        """Test that we detect venues violating the day constraints
-           correctly."""
-        day1 = Day.objects.create(date=D.date(2013, 9, 22))
-        day2 = Day.objects.create(date=D.date(2013, 9, 23))
-        venue1 = Venue.objects.create(order=1, name='Venue 1')
-        venue2 = Venue.objects.create(order=2, name='Venue 2')
-        venue1.days.add(day1)
-        venue2.days.add(day2)
-
-        start1 = D.time(10, 0, 0)
-        start2 = D.time(11, 0, 0)
-
-        slot1 = Slot.objects.create(start_time=start1, end_time=start2,
-                                    day=day1)
-
-        page = Page.objects.create(name="test page", slug="test")
-
-        item1 = ScheduleItem.objects.create(venue=venue1,
-                                            page_id=page.pk)
-        item1.slots.add(slot1)
-
-        item2 = ScheduleItem.objects.create(venue=venue2,
-                                            page_id=page.pk)
-        item2.slots.add(slot1)
-
-        venues = find_invalid_venues()
-        assert set(venues) == set([venue2])
-        assert set(venues[venue2]) == set([item2])
-
-        slot2 = Slot.objects.create(start_time=start1, end_time=start2,
-                                    day=day2)
-        item3 = ScheduleItem.objects.create(venue=venue2, page_id=page.pk)
-
-        item3.slots.add(slot2)
-        venues = find_invalid_venues()
-        assert set(venues) == set([venue2])
-        assert set(venues[venue2]) == set([item2])
-
-        item4 = ScheduleItem.objects.create(venue=venue1, page_id=page.pk)
-        item5 = ScheduleItem.objects.create(venue=venue2, page_id=page.pk)
-
-        item4.slots.add(slot2)
-        item5.slots.add(slot1)
-        venues = find_invalid_venues()
-        assert set(venues) == set([venue1, venue2])
-        assert set(venues[venue1]) == set([item4])
-        assert set(venues[venue2]) == set([item2, item5])
-
     def test_current_view_invalid(self):
         """Test that invalid schedules return a inactive current view."""
         day1 = Day.objects.create(date=D.date(2013, 9, 22))
@@ -1217,3 +913,115 @@ class ValidationTests(TestCase):
                          {'day': day1.date.strftime('%Y-%m-%d'),
                           'time': cur1.strftime('%H:%M')})
         assert response.context['active'] is False
+
+
+class ScheduleItemViewSetTests(TestCase):
+    def test_unauthorized_users_are_forbidden(self):
+        c = create_client('ordinary', superuser=False)
+        response = c.get('/schedule/api/scheduleitems/')
+        self.assertEqual(response.status_code, 403)
+        self.assertEqual(response.data, {
+            "detail": "You do not have permission to perform this action.",
+        })
+
+    def test_list_scheduleitems(self):
+        venue = make_venue()
+        [page] = make_pages(1)
+        [item] = make_items([venue], [page])
+        slot = make_slot()
+        item.slots.add(slot)
+        c = create_client('super', superuser=True)
+        response = c.get('/schedule/api/scheduleitems/')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data, {
+            "count": 1,
+            "next": None,
+            "previous": None,
+            "results": [{
+                "id": item.pk,
+                "venue": venue.pk,
+                "slots": [slot.pk],
+                "page": page.pk,
+                "talk": None,
+            }],
+        })
+
+    def test_create_scheduleitem(self):
+        venue = make_venue()
+        slot = make_slot()
+        [page] = make_pages(1)
+        c = create_client('super', superuser=True)
+        response = c.post(
+            '/schedule/api/scheduleitems/',
+            data=json.dumps({
+                "venue": venue.pk,
+                "slots": [slot.pk],
+                "page": page.pk,
+                "talk": '',
+            }),
+            content_type='application/json')
+        self.assertEqual(response.status_code, 201)
+        [item] = ScheduleItem.objects.all()
+        self.assertEqual(response.data, {
+            'id': item.pk,
+            'venue': venue.pk,
+            'slots': [slot.pk],
+            'talk': None,
+            'page': page.pk,
+        })
+
+    def test_put_scheduleitem(self):
+        venue = make_venue()
+        slot = make_slot()
+        [page] = make_pages(1)
+        [item] = make_items([venue], [page])
+        slot = make_slot()
+        c = create_client('super', superuser=True)
+        response = c.put(
+            '/schedule/api/scheduleitems/%s/' % item.pk, data=json.dumps({
+                "venue": venue.pk,
+                "slots": [slot.pk],
+                "page": page.pk,
+                "talk": '',
+            }),
+            content_type='application/json')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data, {
+            'id': item.pk,
+            'venue': venue.pk,
+            'slots': [slot.pk],
+            'talk': None,
+            'page': page.pk,
+        })
+
+    def test_patch_scheduleitem(self):
+        venue = make_venue()
+        slot = make_slot()
+        [page] = make_pages(1)
+        [item] = make_items([venue], [page])
+        slot = make_slot()
+        c = create_client('super', superuser=True)
+        response = c.patch(
+            '/schedule/api/scheduleitems/%s/' % item.pk, data=json.dumps({
+                "slots": [slot.pk],
+            }),
+            content_type='application/json')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data, {
+            'id': item.pk,
+            'venue': venue.pk,
+            'slots': [slot.pk],
+            'talk': None,
+            'page': page.pk,
+        })
+
+    def test_delete_scheduleitem(self):
+        venue = make_venue()
+        [page] = make_pages(1)
+        [item] = make_items([venue], [page])
+        c = create_client('super', superuser=True)
+        response = c.delete(
+            '/schedule/api/scheduleitems/%s/' % item.pk)
+        self.assertEqual(response.status_code, 204)
+        self.assertEqual(response.data, None)
+        self.assertEqual(ScheduleItem.objects.count(), 0)

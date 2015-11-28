@@ -2,7 +2,17 @@
 {% load i18n %}
 {% block content %}
 <section class="wafer wafer-schedule">
-<h1>{% trans "Schedule" %}</h1>
+<h1>
+    {% trans "Schedule" %}
+    {% if user.is_authenticated and user.is_staff %}
+        <div class="pull-right">
+            <a class="btn btn-default"
+               href="{% url 'admin:schedule_editor' %}">
+                Edit schedule
+            </a>
+        </div>
+    {% endif %}
+</h1>
 <div class="wafer_schedule">
    {% if not schedule_days %}
    {# Schedule is incomplete / invalid, so show nothing #}

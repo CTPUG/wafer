@@ -48,7 +48,7 @@ Installation
 
    * The name will be the conference's name.
 
-4. wafer uses the Django caching infrastructure in several places, so
+4. Wafer uses the Django caching infrastructure in several places, so
    the cache table needs to be created using ``manage.py createcachetable``.
 
 5. Create the default 'Page Editors' and 'Talk Mentors' groups using
