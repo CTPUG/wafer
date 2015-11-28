@@ -45,6 +45,30 @@ def find_overlapping_slots():
     return overlaps
 
 
+def find_non_contiguous(all_items=None):
+    """Find any items that have slots that aren't contiguous"""
+    if all_items is None:
+        all_items = prefetch_schedule_items()
+    non_contiguous = []
+    for item in all_items:
+        if item.slots.count() < 2:
+            # No point in checking
+            continue
+        contiguous = True
+        last_slot = None
+        for slot in item.slots.all().order_by('end_time'):
+            if last_slot:
+                if last_slot.end_time != slot.get_start_time():
+                    contiguous = False
+                    break
+                last_slot = slot
+            else:
+                last_slot = slot
+        if not contiguous:
+            non_contiguous.append(item)
+    return non_contiguous
+
+
 def validate_items(all_items=None):
     """Find errors in the schedule. Check for:
          - pending / rejected talks in the schedule
@@ -143,6 +167,8 @@ def check_schedule():
         return False
     if find_overlapping_slots():
         return False
+    if find_non_contiguous(all_items):
+        return False
     if find_invalid_venues(all_items):
         return False
     return True
@@ -174,10 +200,12 @@ class ScheduleItemAdmin(admin.ModelAdmin):
     def changelist_view(self, request, extra_context=None):
         extra_context = extra_context or {}
         # Find issues in the schedule
+        all_items=None
         clashes = find_clashes()
-        validation = validate_items()
+        validation = validate_items(all_items)
         venues = find_invalid_venues()
-        duplicates = find_duplicate_schedule_items()
+        duplicates = find_duplicate_schedule_items(all_items)
+        non_contiguous = find_non_contiguous(all_items)
         errors = {}
         if clashes:
             errors['clashes'] = clashes
@@ -187,6 +215,8 @@ class ScheduleItemAdmin(admin.ModelAdmin):
             errors['validation'] = validation
         if venues:
             errors['venues'] = venues
+        if non_contiguous:
+            errors['non_contiguous'] = non_contiguous
         extra_context['errors'] = errors
         return super(ScheduleItemAdmin, self).changelist_view(request,
                                                               extra_context)
