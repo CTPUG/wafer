@@ -59,14 +59,3 @@ class MarkdownTextField(TextField):
 
     def __str__(self):
         return self.attname
-
-
-if settings.WAFER_NEEDS_SOUTH:
-    from south.modelsinspector import add_introspection_rules
-
-    add_introspection_rules([(
-        [MarkdownTextField], [], {
-            "allow_html": ["_markdown_safe", {"default": True}],
-            "html_field_suffix": ["_html_field_suffix", {"default": "_html"}],
-        },
-    )], ["^wafer\.snippets\.markdown_field\.MarkdownTextField"])
