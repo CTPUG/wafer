@@ -1,5 +1,6 @@
 import datetime
 
+from django.conf.urls import url
 from django.contrib import admin
 from django.contrib import messages
 from django.utils.encoding import force_text
@@ -189,6 +190,20 @@ class ScheduleItemAdmin(admin.ModelAdmin):
         extra_context['errors'] = errors
         return super(ScheduleItemAdmin, self).changelist_view(request,
                                                               extra_context)
+
+    def get_urls(self):
+        from wafer.schedule.views import ScheduleEditView
+
+        urls = super(ScheduleItemAdmin, self).get_urls()
+        admin_schedule_edit_view = self.admin_site.admin_view(
+            ScheduleEditView.as_view())
+        my_urls = [
+            url(r'^edit/$', admin_schedule_edit_view),
+            url(r'^edit/(?P<day_id>[0-9]+)$', admin_schedule_edit_view,
+                name='schedule_editor'),
+
+        ]
+        return my_urls + urls
 
 
 class SlotAdminForm(forms.ModelForm):

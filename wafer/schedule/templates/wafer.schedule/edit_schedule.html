@@ -1,0 +1,134 @@
+{% extends "wafer/base.html" %}
+{% block content %}
+    <div class="row">
+        <div class="col-md-8">
+            <h1>Schedule Editor
+            <div class="pull-right">
+            <ul class="nav nav-pills navbar-nav navbar-right">
+                <li role="presentation" class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown"
+                       href="#" role="button" aria-haspopup="true"
+                       aria-expanded="true">
+                        Day {{ day.id }}
+                        <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu"
+                        aria-labelledby="dLabel">
+                        {% for day in days %}
+                            <li>
+                                <a href="{% url 'admin:schedule_editor' day.id %}">
+                                    Day {{ day.id }} ({{ day.date }})
+                                </a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </li>
+            </ul>
+            </div>
+            </h1>
+            <table class="table table-condensed">
+                <thead>
+                <tr>
+                    <td></td>
+                    {% for venue in venues %}
+                        <th>{{ venue.name }}</th>
+                    {% endfor %}
+                </tr>
+                </thead>
+                <tbody>
+                {% for slot in slots %}
+                    <tr>
+                        <th>
+                            {{ slot.name }}
+                            <br>
+                            <small>{{ slot.start_time }} - {{ slot.end_time }}</small>
+                        </th>
+                        {% for venue in slot.venues %}
+                        <td id="{% if venue.talk %}talk{% elif venue.page %}page{% endif %}{{ venue.scheduleitem_id }}" data-venue="{{ venue.id }}" data-slot="{{ slot.id }}"
+                            class="{% if venue.talk %}success{% elif venue.page %}info{% endif %} droppable"
+                            data-id="{{ venue.scheduleitem_id }}"
+                            data-type="{% if venue.talk %}talk{% elif venue.page %}page{% endif %}">
+                            {% if venue.scheduleitem_id %}
+                                <button type="button" class="close"
+                                        aria-label="Close">
+                                    <span aria-hidden="true">
+                                        &times;
+                                    </span>
+                                </button>
+                            {% endif %}
+                            {{ venue.title }}
+                        </td>
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="col-md-4">
+            <h2>Bucket</h2>
+
+            <div>
+                <ul class="nav nav-tabs" role="tablist">
+                    <li role="presentation" class="">
+                        <a href="#unassignedTalks"
+                           aria-controls="unassignedTalks" role="tab"
+                           data-toggle="tab">
+                            Unassigned Talks
+                        </a>
+                    </li>
+                    <li role="presentation" class="active">
+                        <a href="#allTalks"
+                           aria-controls="allTalks" role="tab"
+                           data-toggle="tab">
+                            All Talks
+                        </a>
+                    </li>
+                    <li role="presentation">
+                        <a href="#pages" aria-controls="pages" role="tab" data-toggle="tab">
+                            Pages
+                        </a>
+                    </li>
+                </ul>
+
+                <div class="tab-content">
+                    <div role="tabpanel" class="tab-pane row"
+                         id="unassignedTalks">
+                        {% for talk in talks_unassigned %}
+                            <span draggable="true" class="col-md-6 label label-success draggable"
+                                    id="talk{{ talk.talk_id }}"
+                                  data-toggle="tooltip" data-placement="left"
+                                  title="{{ talk.title }}" data-type="talk" data-id="{{ talk.talk_id }}">
+                                {{ talk.title|truncatechars:24 }}
+                            </span>
+                        {% endfor %}
+                    </div>
+                    <div role="tabpanel" class="tab-pane active row"
+                         id="allTalks">
+                        {% for talk in talks_all %}
+                            <span draggable="true" class="col-md-6 label label-warning draggable"
+                                    id="talk{{ talk.talk_id }}"
+                                  data-toggle="tooltip" data-placement="left"
+                                  title="{{ talk.title }}" data-type="talk" data-id="{{ talk.talk_id }}">
+                                {{ talk.title|truncatechars:24 }}
+                            </span>
+                        {% endfor %}
+                    </div>
+                    <div role="tabpanel" class="tab-pane row" id="pages">
+                        {% for page in pages %}
+                            <span draggable="true" class="col-md-6 label label-info draggable"
+                                    id="page{{ page.id }}"
+                                  data-toggle="tooltip" data-placement="left"
+                                  title="{{ page.name }}" data-type="page" data-id="{{ page.id }}">>
+                                {{ page.name|truncatechars:24 }}
+                            </span>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block extra_foot %}
+<script src="{{ STATIC_URL }}js/edit_schedule.js"></script>
+{% endblock %}
