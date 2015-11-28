@@ -198,10 +198,9 @@ class ScheduleItemAdmin(admin.ModelAdmin):
         admin_schedule_edit_view = self.admin_site.admin_view(
             ScheduleEditView.as_view())
         my_urls = [
-            url(r'^edit/$', admin_schedule_edit_view),
+            url(r'^edit/$', admin_schedule_edit_view, name='schedule_editor'),
             url(r'^edit/(?P<day_id>[0-9]+)$', admin_schedule_edit_view,
                 name='schedule_editor'),
-
         ]
         return my_urls + urls
 

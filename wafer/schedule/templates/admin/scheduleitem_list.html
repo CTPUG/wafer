@@ -52,3 +52,12 @@
        {% endif %}
     </div>
 {% endblock %}
+
+{% block object-tools-items %}
+    {{ block.super }}
+    <li>
+        <a href="{% url 'admin:schedule_editor' %}">
+            Edit schedule
+        </a>
+    </li>
+{% endblock %}
