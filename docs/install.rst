@@ -5,8 +5,7 @@ Installation
 Supported versions
 ==================
 
-wafer supports Django 1.6 and 1.7 and python 2.6 and 2.7.
-Note that Django 1.7 only supports python 2.7.
+wafer supports Django 1.7 and 1.8 and python 2.7, 3.4 and 3.5
 
 Requirements
 ============
