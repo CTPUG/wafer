@@ -916,6 +916,14 @@ class CurrentViewTests(TestCase):
 
 
 class ScheduleItemViewSetTests(TestCase):
+    def test_unauthorized_users_are_forbidden(self):
+        c = create_client('ordinary', superuser=False)
+        response = c.get('/schedule/api/scheduleitems/')
+        self.assertEqual(response.status_code, 403)
+        self.assertEqual(response.data, {
+            "detail": "You do not have permission to perform this action.",
+        })
+
     def test_list_scheduleitems(self):
         venue = make_venue()
         [page] = make_pages(1)
