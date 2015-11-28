@@ -54,18 +54,13 @@ def find_non_contiguous(all_items=None):
         if item.slots.count() < 2:
             # No point in checking
             continue
-        contiguous = True
         last_slot = None
         for slot in item.slots.all().order_by('end_time'):
             if last_slot:
                 if last_slot.end_time != slot.get_start_time():
-                    contiguous = False
+                    non_contiguous.append(item)
                     break
-                last_slot = slot
-            else:
-                last_slot = slot
-        if not contiguous:
-            non_contiguous.append(item)
+            last_slot = slot
     return non_contiguous
 
 
