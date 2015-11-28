@@ -105,8 +105,12 @@ class Speakers(ListView):
     model = Talk
     template_name = 'wafer.talks/speakers.html'
 
+    def _by_row(self, speakers, n):
+        return [speakers[i:i + n] for i in range(0, len(speakers), n)]
+
     def get_context_data(self, **kwargs):
         context = super(Speakers, self).get_context_data(**kwargs)
-        context['speakers'] = UserProfile.objects.filter(
+        speakers = UserProfile.objects.filter(
             user__talks__status='A').distinct().prefetch_related('user')
+        context["speaker_rows"] = self._by_row(speakers, 4)
         return context
