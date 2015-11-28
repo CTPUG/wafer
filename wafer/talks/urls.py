@@ -1,7 +1,7 @@
 from django.conf.urls import patterns, url
 
 from wafer.talks.views import (
-    TalkCreate, TalkDelete, TalkUpdate, TalkView, UsersTalks)
+    Speakers, TalkCreate, TalkDelete, TalkUpdate, TalkView, UsersTalks)
 
 urlpatterns = patterns(
     '',
@@ -14,4 +14,5 @@ urlpatterns = patterns(
         name='wafer_talk_edit'),
     url(r'^(?P<pk>\d+)/delete/$', TalkDelete.as_view(),
         name='wafer_talk_delete'),
+    url(r'^speakers/$', Speakers.as_view(), name='wafer_talks_speakers'),
 )

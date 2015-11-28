@@ -10,6 +10,7 @@ from django.conf import settings
 
 from wafer.talks.models import Talk, ACCEPTED
 from wafer.talks.forms import TalkForm
+from wafer.users.models import UserProfile
 
 
 class EditOwnTalksMixin(object):
@@ -98,3 +99,14 @@ class TalkDelete(EditOwnTalksMixin, DeleteView):
     model = Talk
     template_name = 'wafer.talks/talk_delete.html'
     success_url = reverse_lazy('wafer_page', args=('index',))
+
+
+class Speakers(ListView):
+    model = Talk
+    template_name = 'wafer.talks/speakers.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(Speakers, self).get_context_data(**kwargs)
+        context['speakers'] = UserProfile.objects.filter(
+            user__talks__status='A').distinct().prefetch_related('user')
+        return context
