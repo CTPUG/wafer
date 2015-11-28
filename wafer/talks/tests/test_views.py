@@ -234,8 +234,8 @@ class SpeakerTests(TestCase):
 
     @mock.patch('wafer.users.models.UserProfile.avatar_url', mock_avatar_url)
     def test_view_five_speakers(self):
-        self.check_n_speakers(5, [(0, 4), (4, 6)])
+        self.check_n_speakers(5, [(0, 4), (4, 5)])
 
     @mock.patch('wafer.users.models.UserProfile.avatar_url', mock_avatar_url)
     def test_view_seven_speakers(self):
-        self.check_n_speakers(7, [(0, 4), (4, 8)])
+        self.check_n_speakers(7, [(0, 4), (4, 7)])
