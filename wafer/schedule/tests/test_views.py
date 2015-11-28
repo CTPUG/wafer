@@ -1,7 +1,9 @@
+import json
+import datetime as D
+
 from django.test import Client, TestCase
 from django.contrib.auth import get_user_model
 
-import datetime as D
 from wafer.talks.models import Talk, ACCEPTED
 from wafer.pages.models import Page
 from wafer.schedule.models import Day, Venue, Slot, ScheduleItem
@@ -27,6 +29,36 @@ def make_items(venues, pages):
                                            page_id=page.pk)
         items.append(item)
     return items
+
+
+def make_venue(order=1, name='Venue 1'):
+    """ Make a venue. """
+    venue = Venue.objects.create(order=1, name='Venue 1')
+    return venue
+
+
+def make_slot():
+    """ Make a slot. """
+    day = Day.objects.create(date=D.date(2013, 9, 22))
+    start = D.time(10, 0, 0)
+    end = D.time(15, 0, 0)
+    slot = Slot.objects.create(start_time=start, end_time=end,
+                               day=day)
+    return slot
+
+
+def create_client(username=None, superuser=False):
+    client = Client()
+    if username:
+        email = '%s@example.com' % (username,)
+        password = '%s_password' % (username,)
+        if superuser:
+            create = get_user_model().objects.create_superuser
+        else:
+            create = get_user_model().objects.create_user
+        create(username, email, password)
+        client.login(username=username, password=password)
+    return client
 
 
 class ScheduleViewTests(TestCase):
@@ -881,3 +913,108 @@ class CurrentViewTests(TestCase):
                          {'day': day1.date.strftime('%Y-%m-%d'),
                           'time': cur1.strftime('%H:%M')})
         assert response.context['active'] is False
+
+
+class ScheduleItemViewSetTests(TestCase):
+    def test_list_scheduleitems(self):
+        venue = make_venue()
+        [page] = make_pages(1)
+        [item] = make_items([venue], [page])
+        slot = make_slot()
+        item.slots.add(slot)
+        c = create_client('super', superuser=True)
+        response = c.get('/schedule/api/scheduleitems/')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data, {
+            "count": 1,
+            "next": None,
+            "previous": None,
+            "results": [{
+                "id": item.pk,
+                "venue": venue.pk,
+                "slots": [slot.pk],
+                "page": page.pk,
+                "talk": None,
+            }],
+        })
+
+    def test_create_scheduleitem(self):
+        venue = make_venue()
+        slot = make_slot()
+        [page] = make_pages(1)
+        c = create_client('super', superuser=True)
+        response = c.post(
+            '/schedule/api/scheduleitems/',
+            data=json.dumps({
+                "venue": venue.pk,
+                "slots": [slot.pk],
+                "page": page.pk,
+                "talk": '',
+            }),
+            content_type='application/json')
+        self.assertEqual(response.status_code, 201)
+        [item] = ScheduleItem.objects.all()
+        self.assertEqual(response.data, {
+            'id': item.pk,
+            'venue': venue.pk,
+            'slots': [slot.pk],
+            'talk': None,
+            'page': page.pk,
+        })
+
+    def test_put_scheduleitem(self):
+        venue = make_venue()
+        slot = make_slot()
+        [page] = make_pages(1)
+        [item] = make_items([venue], [page])
+        slot = make_slot()
+        c = create_client('super', superuser=True)
+        response = c.put(
+            '/schedule/api/scheduleitems/%s/' % item.pk, data=json.dumps({
+                "venue": venue.pk,
+                "slots": [slot.pk],
+                "page": page.pk,
+                "talk": '',
+            }),
+            content_type='application/json')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data, {
+            'id': item.pk,
+            'venue': venue.pk,
+            'slots': [slot.pk],
+            'talk': None,
+            'page': page.pk,
+        })
+
+    def test_patch_scheduleitem(self):
+        venue = make_venue()
+        slot = make_slot()
+        [page] = make_pages(1)
+        [item] = make_items([venue], [page])
+        slot = make_slot()
+        c = create_client('super', superuser=True)
+        response = c.patch(
+            '/schedule/api/scheduleitems/%s/' % item.pk, data=json.dumps({
+                "slots": [slot.pk],
+            }),
+            content_type='application/json')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data, {
+            'id': item.pk,
+            'venue': venue.pk,
+            'slots': [slot.pk],
+            'talk': None,
+            'page': page.pk,
+        })
+
+    def test_delete_scheduleitem(self):
+        venue = make_venue()
+        slot = make_slot()
+        [page] = make_pages(1)
+        [item] = make_items([venue], [page])
+        c = create_client('super', superuser=True)
+        response = c.delete(
+            '/schedule/api/scheduleitems/%s/' % item.pk)
+        self.assertEqual(response.status_code, 204)
+        self.assertEqual(response.data, None)
+        self.assertEqual(ScheduleItem.objects.count(), 0)
