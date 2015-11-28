@@ -195,7 +195,7 @@ class ScheduleItemAdmin(admin.ModelAdmin):
     def changelist_view(self, request, extra_context=None):
         extra_context = extra_context or {}
         # Find issues in the schedule
-        all_items=None
+        all_items = None
         clashes = find_clashes()
         validation = validate_items(all_items)
         venues = find_invalid_venues()
