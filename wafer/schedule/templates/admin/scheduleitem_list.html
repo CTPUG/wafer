@@ -28,6 +28,14 @@
              {% endfor %}
           </ul>
           {% endif %}
+          {% if errors.non_contiguous %}
+          <h3>{% trans "Items in the schedule with non-contiguous slots" %}</h3>
+          <ul>
+             {% for item in errors.non_contiguous %}
+             <li>{{ item }}</li>
+             {% endfor %}
+          </ul>
+          {% endif %}
           {% if errors.duplicates %}
           <h3>{% trans "Duplicates in the schedule" %}</h3>
           <ul>
