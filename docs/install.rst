@@ -28,9 +28,6 @@ Basic instructions
 #. Install all the dependancies
    ``pip install -r requirements.txt``
  
-   * If you are using Django 1.6, you will need to explicitly install
-     south - ``pip install south``
-
 #. Create the initial database schema
    ``manage.py migrate``
 
@@ -60,18 +57,6 @@ Basic instructions
    for pages and sponsor information.
 
 #. Have a fun conference.
-
-Using Django 1.6 and Python 3
------------------------------
-
-South 1.0 fails with python 3, described `in this issue`_. To properly support
-python 3 and Django 1.6, you need to install a patched version. The following
-command should work::
-
-    pip install 'https://bitbucket.org/andrewgodwin/south/get/e2c9102ee033.zip#egg=South
-
-.. _in this issue: https://bitbucket.org/andrewgodwin/south/pull-request/162/fixed-a-python-3-incompatibility-by
-
 
 Important settings
 ==================
