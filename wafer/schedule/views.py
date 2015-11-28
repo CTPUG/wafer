@@ -106,6 +106,7 @@ class ScheduleView(TemplateView):
         context = super(ScheduleView, self).get_context_data(**kwargs)
         # Check if the schedule is valid
         context['active'] = False
+        context['days'] = Day.objects.all()
         if not check_schedule():
             return context
         context['active'] = True
