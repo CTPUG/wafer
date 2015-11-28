@@ -5,8 +5,7 @@ Installation
 Supported versions
 ==================
 
-wafer supports Django 1.6 and 1.7 and python 2.6 and 2.7.
-Note that Django 1.7 only supports python 2.7.
+Wafer supports Django 1.7 and 1.8 and python 2.7, 3.4 and 3.5.
 
 Requirements
 ============
@@ -46,7 +45,7 @@ Basic instructions
      is not the case, override the wafer/registration/activation_email.txt
      template.
 
-#. wafer uses the Django caching infrastructure in several places, so
+#. Wafer uses the Django caching infrastructure in several places, so
    the cache table needs to be created using ``manage.py createcachetable``.
 
 #. Create the default 'Page Editors' and 'Talk Mentors' groups using
