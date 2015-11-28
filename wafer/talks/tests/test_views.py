@@ -202,10 +202,10 @@ class SpeakerTests(TestCase):
         self.assertContains(response, "\n".join([
             '<div class="container">',
             '<div class="row">',
-            '         <div class="col-md-3">',
-            '           <img class="thumbnail center-block" src="%s">' % img,
-            '           <h3 class="text-center">author_a</h3>',
-            '        </div>',
+            '    <div class="col-md-3">',
+            '        <img class="thumbnail center-block" src="%s">' % img,
+            '        <h3 class="text-center">author_a</h3>',
+            '    </div>',
             '</div>',
             '</div>',
         ]), html=True)
