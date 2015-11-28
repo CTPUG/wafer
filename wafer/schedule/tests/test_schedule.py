@@ -7,7 +7,8 @@ from wafer.pages.models import Page
 from wafer.schedule.models import Day, Venue, Slot, ScheduleItem
 from wafer.schedule.admin import (find_overlapping_slots, validate_items,
                                   find_duplicate_schedule_items,
-                                  find_clashes, find_invalid_venues)
+                                  find_clashes, find_invalid_venues,
+                                  find_non_contiguous)
 from wafer.utils import QueryTracker
 
 
@@ -1033,8 +1034,8 @@ class ValidationTests(TestCase):
         invalid = validate_items()
         assert set(invalid) == set([item1, item3])
 
-    def test_non_contigious(self):
-        """Test that we detect items with non contigious slots"""
+    def test_non_contiguous(self):
+        """Test that we detect items with non contiguous slots"""
         # Create a item with a gap in the slots assigned to it
         day1 = Day.objects.create(date=D.date(2013, 9, 22))
         venue1 = Venue.objects.create(order=1, name='Venue 1')
@@ -1067,7 +1068,7 @@ class ValidationTests(TestCase):
                                             page_id=page.pk)
         item2.slots.add(slot2)
 
-        invalid = validate_items()
+        invalid = find_non_contiguous()
         # Only item1 is invalid
         assert set(invalid) == set([item1])
 
