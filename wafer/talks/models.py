@@ -52,6 +52,11 @@ class Talk(models.Model):
         null=True, blank=True,
         help_text=_("Any notes for the conference organisers?"))
 
+    private_notes = models.TextField(
+        null=True, blank=True,
+        help_text=_("Note space for the conference organisers (not visible "
+                    "to submitter)"))
+
     status = models.CharField(max_length=1, choices=TALK_STATUS,
                               default=PENDING)
 
