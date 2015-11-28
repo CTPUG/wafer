@@ -8,26 +8,28 @@ from wafer.schedule.models import Day, Venue, Slot, ScheduleItem
 from wafer.utils import QueryTracker
 
 
-class ScheduleTests(TestCase):
-    def _make_pages(self, n):
-        # Utility function
-        pages = []
-        for x in range(n):
-            page = Page.objects.create(name="test page %s" % x,
-                                       slug="test%s" % x)
-            pages.append(page)
-        return pages
+def make_pages(n):
+    """ Make n pages. """
+    pages = []
+    for x in range(n):
+        page = Page.objects.create(name="test page %s" % x,
+                                   slug="test%s" % x)
+        pages.append(page)
+    return pages
 
-    def _make_items(self, venues, pages):
-        # Utility function
-        items = []
-        for x, (venue, page) in enumerate(zip(venues, pages)):
-            item = ScheduleItem.objects.create(venue=venue,
-                                               details="Item %s" % x,
-                                               page_id=page.pk)
-            items.append(item)
-        return items
 
+def make_items(venues, pages):
+    """ Make items for pairs of venues and pages. """
+    items = []
+    for x, (venue, page) in enumerate(zip(venues, pages)):
+        item = ScheduleItem.objects.create(venue=venue,
+                                           details="Item %s" % x,
+                                           page_id=page.pk)
+        items.append(item)
+    return items
+
+
+class ScheduleViewTests(TestCase):
     def test_simple_table(self):
         """Create a simple, single day table with 3 slots and 2 venues and
            check we get the expected results"""
@@ -49,9 +51,9 @@ class ScheduleTests(TestCase):
         start3 = D.time(12, 0, 0)
         end = D.time(13, 0, 0)
 
-        pages = self._make_pages(6)
+        pages = make_pages(6)
         venues = [venue1, venue1, venue1, venue2, venue2, venue2]
-        items = self._make_items(venues, pages)
+        items = make_items(venues, pages)
 
         slot1 = Slot.objects.create(start_time=start1, end_time=start2,
                                     day=day1)
@@ -121,9 +123,9 @@ class ScheduleTests(TestCase):
         start3 = D.time(12, 0, 0)
         end = D.time(13, 0, 0)
 
-        pages = self._make_pages(6)
+        pages = make_pages(6)
         venues = [venue1, venue1, venue1, venue2, venue2, venue2]
-        items = self._make_items(venues, pages)
+        items = make_items(venues, pages)
 
         # Create the slots not in date order either
 
@@ -203,9 +205,9 @@ class ScheduleTests(TestCase):
         start3 = D.time(12, 0, 0)
         end2 = D.time(13, 0, 0)
 
-        pages = self._make_pages(6)
+        pages = make_pages(6)
         venues = [venue1, venue1, venue1, venue2, venue2, venue2]
-        items = self._make_items(venues, pages)
+        items = make_items(venues, pages)
 
         slot1 = Slot.objects.create(start_time=start1, end_time=start2,
                                     day=day1)
@@ -269,9 +271,9 @@ class ScheduleTests(TestCase):
         start3 = D.time(12, 0, 0)
         end2 = D.time(13, 0, 0)
 
-        pages = self._make_pages(6)
+        pages = make_pages(6)
         venues = [venue1, venue1, venue1, venue2, venue2, venue2]
-        items = self._make_items(venues, pages)
+        items = make_items(venues, pages)
 
         slot1 = Slot.objects.create(start_time=start1, end_time=start2,
                                     day=day1)
@@ -372,9 +374,9 @@ class ScheduleTests(TestCase):
         start3 = D.time(12, 0, 0)
         end2 = D.time(13, 0, 0)
 
-        pages = self._make_pages(3)
+        pages = make_pages(3)
         venues = [venue1, venue1, venue2]
-        items = self._make_items(venues, pages)
+        items = make_items(venues, pages)
 
         slot1 = Slot.objects.create(start_time=start1, end_time=start2,
                                     day=day1)
@@ -456,10 +458,10 @@ class ScheduleTests(TestCase):
         slot5 = Slot.objects.create(start_time=start5, end_time=end,
                                     day=day1)
 
-        pages = self._make_pages(10)
+        pages = make_pages(10)
         venues = [venue1, venue1, venue2, venue3, venue3, venue3,
                   venue2, venue1, venue2, venue3]
-        items = self._make_items(venues, pages)
+        items = make_items(venues, pages)
 
         items[0].slots.add(slot1)
         items[4].slots.add(slot1)
@@ -564,9 +566,9 @@ class ScheduleTests(TestCase):
         slot5 = Slot.objects.create(start_time=start5, end_time=end,
                                     day=day1)
 
-        pages = self._make_pages(7)
+        pages = make_pages(7)
         venues = [venue1, venue1, venue1, venue1, venue2, venue2, venue2]
-        items = self._make_items(venues, pages)
+        items = make_items(venues, pages)
 
         items[0].slots.add(slot1)
         items[0].slots.add(slot2)
@@ -624,6 +626,8 @@ class ScheduleTests(TestCase):
         assert day1.rows[4].get_sorted_items()[0]['rowspan'] == 1
         assert day1.rows[4].get_sorted_items()[0]['colspan'] == 1
 
+
+class CurrentViewTests(TestCase):
     def test_current_view_simple(self):
         """Create a schedule and check that the current view looks sane."""
         day1 = Day.objects.create(date=D.date(2013, 9, 22))
@@ -660,9 +664,9 @@ class ScheduleTests(TestCase):
         slots.append(Slot.objects.create(start_time=start4, end_time=start5,
                                          day=day1))
 
-        pages = self._make_pages(8)
+        pages = make_pages(8)
         venues = [venue1, venue2] * 4
-        items = self._make_items(venues, pages)
+        items = make_items(venues, pages)
 
         for index, item in enumerate(items):
             item.slots.add(slots[index // 2])
@@ -767,10 +771,10 @@ class ScheduleTests(TestCase):
         slot5 = Slot.objects.create(start_time=start5, end_time=end,
                                     day=day1)
 
-        pages = self._make_pages(10)
+        pages = make_pages(10)
         venues = [venue1, venue1, venue2, venue3, venue3, venue3,
                   venue2, venue1, venue2, venue3]
-        items = self._make_items(venues, pages)
+        items = make_items(venues, pages)
 
         items[0].slots.add(slot1)
         items[4].slots.add(slot1)
