@@ -1009,7 +1009,6 @@ class ScheduleItemViewSetTests(TestCase):
 
     def test_delete_scheduleitem(self):
         venue = make_venue()
-        slot = make_slot()
         [page] = make_pages(1)
         [item] = make_items([venue], [page])
         c = create_client('super', superuser=True)
