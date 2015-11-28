@@ -1,5 +1,7 @@
 """Tests for wafer.talk views."""
 
+import mock
+
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Permission
 from django.core.urlresolvers import reverse
@@ -29,6 +31,12 @@ def create_talk(title, status, username):
     talk.authors.add(user)
     talk.save()
     return talk
+
+
+def mock_avatar_url(self):
+    if self.user.email is None:
+        return None
+    return "avatar-%s" % self.user.email
 
 
 class UsersTalksTests(TestCase):
@@ -176,3 +184,58 @@ class TalkUpdateTests(TestCase):
         self.check_talk_update(self.talk_p, 200, auth={
             'username': 'super', 'password': 'super_password',
         })
+
+
+class SpeakerTests(TestCase):
+    def setUp(self):
+        self.talk_a = create_talk("Talk A", ACCEPTED, "author_a")
+        self.talk_r = create_talk("Talk R", REJECTED, "author_r")
+        self.talk_p = create_talk("Talk P", PENDING, "author_p")
+        self.client = Client()
+
+    @mock.patch('wafer.users.models.UserProfile.avatar_url', mock_avatar_url)
+    def test_view_one_speaker(self):
+        img = self.talk_a.corresponding_author.userprofile.avatar_url()
+        response = self.client.get(
+            reverse('wafer_talks_speakers'))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "\n".join([
+            '<div class="container">',
+            '<div class="row">',
+            '         <div class="col-md-3">',
+            '           <img class="thumbnail center-block" src="%s">' % img,
+            '           <h3 class="text-center">author_a</h3>',
+            '        </div>',
+            '</div>',
+            '</div>',
+        ]), html=True)
+
+    def check_n_speakers(self, n, expected_rows):
+        self.talk_a.delete()
+        talks = []
+        for i in range(n):
+            talks.append(create_talk("Talk %d" % i, ACCEPTED, "author_%d" % i))
+        profiles = [t.corresponding_author.userprofile for t in talks]
+
+        response = self.client.get(
+            reverse('wafer_talks_speakers'))
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.context["speaker_rows"], [
+            profiles[start:end] for start, end in expected_rows
+        ])
+
+    @mock.patch('wafer.users.models.UserProfile.avatar_url', mock_avatar_url)
+    def test_view_three_speakers(self):
+        self.check_n_speakers(3, [(0, 3)])
+
+    @mock.patch('wafer.users.models.UserProfile.avatar_url', mock_avatar_url)
+    def test_view_four_speakers(self):
+        self.check_n_speakers(4, [(0, 4)])
+
+    @mock.patch('wafer.users.models.UserProfile.avatar_url', mock_avatar_url)
+    def test_view_five_speakers(self):
+        self.check_n_speakers(5, [(0, 4), (4, 6)])
+
+    @mock.patch('wafer.users.models.UserProfile.avatar_url', mock_avatar_url)
+    def test_view_seven_speakers(self):
+        self.check_n_speakers(7, [(0, 4), (4, 8)])
