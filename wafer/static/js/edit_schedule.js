@@ -35,8 +35,24 @@
         e.target.classList.remove('over');
     }
 
-    function handlePost(data){
+    function handleItemUpdate(data) {
         console.log(data);
+        var scheduleItemId = data.id;
+        var venue = data.venue;
+        var slots = data.slots;
+        var talkId = data.talk;
+        var pageId = data.page;
+        var scheduleItemType;
+
+        if (talkId) {
+            scheduleItemType = 'talk';
+        } else if (pageId) {
+            scheduleItemType = 'page';
+        }
+
+        var newItem = document.querySelectorAll('[id=scheduleItemnull]')[0];
+
+        newItem.id = 'scheduleItem' + scheduleItemId;
     }
 
     function handleDrop(e) {
@@ -54,26 +70,47 @@
         //noinspection JSUnresolvedVariable
         var data = document.getElementById(
             event.dataTransfer.getData('text/plain'));
-        var dataId = data.getAttribute('data-id');
-        var dataType = data.getAttribute('data-type');
-        var oldTargetType = event.target.getAttribute('data-type');
-        var oldTargetId = event.target.getAttribute('data-id');
-        event.target.id = data.id;
+        var scheduleItemId = data.getAttribute('data-scheduleitem-id');
+        var scheduleItemType = data.getAttribute('data-type');
         event.target.innerHTML = data.getAttribute('title');
-        event.target.setAttribute('data-id', dataId);
-        event.target.setAttribute('data-type', dataType);
+        event.target.setAttribute('data-schedule-item-id', scheduleItemId);
+        event.target.setAttribute('data-type', scheduleItemType);
+        event.target.id = 'scheduleItem' + scheduleItemId;
         event.preventDefault();
 
-        var postData = {
-            venue: venue, slots:[slot]
-        };
-        postData[dataType] = dataId;
-        var otherDataType = dataType === 'talk' ? 'page' : 'talk';
-        postData[otherDataType] = '';
+        var talkId = '';
+        var pageId = '';
 
-        $.post(
-            '/schedule/api/scheduleitems/',
-            JSON.stringify(postData), handlePost);
+        if (scheduleItemType === 'talk') {
+            talkId = data.getAttribute('data-talk-id');
+        } else if (scheduleItemType === 'page') {
+            pageId = data.getAttribute('data-page-id');
+        }
+
+        event.target.classList.remove('success');
+        event.target.classList.remove('info');
+        var typeClass = scheduleItemType === 'talk' ? 'success' : 'info';
+        event.target.classList.add(typeClass);
+
+        var ajaxData = {
+            talk: talkId,
+            page: pageId
+        };
+        if (scheduleItemId) {
+            $.ajax({
+                method: 'PATCH',
+                url: '/schedule/api/scheduleitems/' + scheduleItemId + '/',
+                data: JSON.stringify(ajaxData),
+                success: handleItemUpdate
+            });
+        } else {
+            ajaxData.venue = venue;
+            ajaxData.slots = [slot];
+            console.log(ajaxData);
+            $.post(
+                '/schedule/api/scheduleitems/',
+                JSON.stringify(ajaxData), handleItemUpdate);
+        }
 
         return false;
     }
