@@ -244,17 +244,16 @@ class ScheduleEditView(TemplateView):
             }
             for schedule_item in slot.scheduleitem_set.all():
                 if schedule_item.venue.name == venue.name:
+                    venue_context['scheduleitem_id'] = schedule_item.id
                     if schedule_item.talk:
                         talk = schedule_item.talk
                         venue_context['title'] = talk.title
                         venue_context['talk'] = talk
-                        venue_context['scheduleitem_id'] = talk.talk_id
                     if (schedule_item.page and
                             not schedule_item.page.exclude_from_static):
                         page = schedule_item.page
                         venue_context['title'] = page.name
                         venue_context['page'] = page
-                        venue_context['scheduleitem_id'] = page.id
             slot_context['venues'].append(venue_context)
         return slot_context
 
@@ -279,33 +278,6 @@ class ScheduleEditView(TemplateView):
             if day != slot.get_day():
                 continue
             aggregated_slots.append(self._slot_context(slot, venues))
-            # aggregated_slot = {
-            #     'name': slot.name,
-            #     'start_time': slot.get_start_time(),
-            #     'end_time': slot.end_time,
-            #     'id': slot.id,
-            #     'venues': []
-            # }
-            # for venue in venues:
-            #     aggregated_venue = {
-            #         'name': venue.name,
-            #         'id': venue.id,
-            #     }
-            #     for schedule_item in slot.scheduleitem_set.filter(
-            #             venue__name=venue.name):
-            #         aggregated_venue['scheduleitem_id'] = schedule_item.id
-            #         if schedule_item.talk:
-            #             talk = schedule_item.talk
-            #             aggregated_venue['title'] = talk.title
-            #             aggregated_venue['talk'] = talk
-            #         elif (schedule_item.page and
-            #                 not schedule_item.page.exclude_from_static):
-            #             page = schedule_item.page
-            #             aggregated_venue['title'] = page.name
-            #             aggregated_venue['page'] = page
-            #
-            #     aggregated_slot['venues'].append(aggregated_venue)
-            # aggregated_slots.append(aggregated_slot)
 
         context['day'] = day
         context['venues'] = venues

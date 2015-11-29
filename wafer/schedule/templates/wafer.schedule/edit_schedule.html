@@ -50,7 +50,9 @@
                             data-page-id="{{ venue.page.id }}"
                             data-type="{% if venue.talk %}talk{% elif venue.page %}page{% endif %}">
                             {% if venue.scheduleitem_id %}
-                                <button type="button" class="close"
+                                <button id="delete{{venue.scheduleitem_id}}"
+                                            data-id="{{ venue.scheduleitem_id }}"
+                                        type="button" class="close"
                                         aria-label="Close">
                                     <span aria-hidden="true">
                                         &times;

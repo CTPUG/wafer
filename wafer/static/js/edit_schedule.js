@@ -55,6 +55,11 @@
         newItem.id = 'scheduleItem' + scheduleItemId;
     }
 
+
+    function handleItemDelete() {
+        console.log(this);
+    }
+
     function handleDrop(e) {
         // this / e.target is current target element.
 
@@ -115,6 +120,34 @@
         return false;
     }
 
+    function handleClickDelete(mouseEvent) {
+        var closeButton = mouseEvent.path[1];
+        var scheduleItemCell = mouseEvent.path[2];
+
+        var scheduleItemId = closeButton.getAttribute('data-id');
+
+        scheduleItemCell.removeAttribute('id');
+        scheduleItemCell.classList.remove('draggable');
+        scheduleItemCell.classList.remove('info');
+        scheduleItemCell.classList.remove('success');
+        scheduleItemCell.removeAttribute('data-scheduleitem-id');
+        scheduleItemCell.removeAttribute('data-talk-id');
+        scheduleItemCell.removeAttribute('data-page-id');
+        scheduleItemCell.removeAttribute('data-type');
+
+        closeButton.removeAttribute('data-id');
+        closeButton.classList.add('hide');
+        scheduleItemCell.innerHTML = '';
+
+        $.ajax(
+            {
+                type: 'DELETE',
+                url: '/schedule/api/scheduleitems/' + scheduleItemId + '/',
+                success: handleItemDelete
+            }
+        );
+    }
+
     function getCookie(name) {
         var cookieValue = null;
         if (document.cookie && document.cookie !== '') {
@@ -161,5 +194,10 @@
         droppableItem.addEventListener('dragenter', handleDragEnter, false);
         droppableItem.addEventListener('dragleave', handleDragLeave, false);
         droppableItem.addEventListener('drop', handleDrop, false);
+    });
+
+    var deletableItems = document.querySelectorAll('[id^=delete]');
+    [].forEach.call(deletableItems, function (deletableItem) {
+        deletableItem.addEventListener('click', handleClickDelete, false);
     });
 })();
