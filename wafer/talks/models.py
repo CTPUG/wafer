@@ -29,6 +29,7 @@ class Talk(models.Model):
     class Meta:
         permissions = (
             ("view_all_talks", "Can see all talks"),
+            ("change_talk", "Can update talks"),
         )
 
     TALK_STATUS = (
