@@ -110,10 +110,16 @@ class Talk(models.Model):
     pending = property(fget=lambda x: x.status == PENDING)
     reject = property(fget=lambda x: x.status == REJECTED)
 
+    def _is_among_authors(self, user):
+        if self.corresponding_author.username == user.username:
+            return True
+        # not chaining with logical-or to avoid evaluation of the queryset
+        return self.authors.filter(username=user.username).exists()
+
     def can_view(self, user):
         if user.has_perm('talks.view_all_talks'):
             return True
-        if self.authors.filter(username=user.username).exists():
+        if self._is_among_authors(user):
             return True
         if self.accepted:
             return True
@@ -127,7 +133,7 @@ class Talk(models.Model):
         if user.has_perm('talks.change_talk'):
             return True
         if self.pending:
-            if self.authors.filter(username=user.username).exists():
+            if self._is_among_authors(user):
                 return True
         return False
 
