@@ -41,6 +41,13 @@
 <div class="well">
     {{ object.abstract.rendered|safe }}
 </div>
+{% if perms.edit_private_notes and object.private_notes %}
+<h2>Private notes</h2>
+<p>(The following is not visible to submitters or attendees.)</p>
+<div class="well">
+  {{ object.private_notes|urlize|linebreaks }}
+</div>
+{% endif %}
 {% if talk.talkurl_set.all %}
 <div class="well" id="urls">
    <div>{% trans "URLS" %}</div>
