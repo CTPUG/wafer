@@ -66,6 +66,11 @@ class TalkCreate(LoginRequiredMixin, CreateView):
     form_class = TalkForm
     template_name = 'wafer.talks/talk_form.html'
 
+    def get_form_kwargs(self):
+        kwargs = super(TalkCreate, self).get_form_kwargs()
+        kwargs['user'] = self.request.user
+        return kwargs
+
     def get_context_data(self, **kwargs):
         context = super(TalkCreate, self).get_context_data(**kwargs)
         context['can_submit'] = getattr(settings, 'WAFER_TALKS_OPEN', True)
@@ -88,6 +93,11 @@ class TalkUpdate(EditOwnTalksMixin, UpdateView):
     model = Talk
     form_class = TalkForm
     template_name = 'wafer.talks/talk_form.html'
+
+    def get_form_kwargs(self):
+        kwargs = super(TalkUpdate, self).get_form_kwargs()
+        kwargs['user'] = self.request.user
+        return kwargs
 
     def get_context_data(self, **kwargs):
         context = super(TalkUpdate, self).get_context_data(**kwargs)

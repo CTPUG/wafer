@@ -12,7 +12,12 @@ from wafer.talks.models import Talk
 
 class TalkForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
+        self.user = kwargs.pop('user')
         super(TalkForm, self).__init__(*args, **kwargs)
+
+        if not self.user.has_perm('talks.edit_private_notes'):
+            self.fields.pop('private_notes')
+
         self.helper = FormHelper(self)
         submit_button = Submit('submit', _('Submit'))
         instance = kwargs['instance']
@@ -28,7 +33,8 @@ class TalkForm(forms.ModelForm):
 
     class Meta:
         model = Talk
-        fields = ('title', 'talk_type', 'abstract', 'authors', 'notes')
+        fields = ('title', 'talk_type', 'abstract', 'authors', 'notes',
+                  'private_notes')
         widgets = {
             'abstract': MarkItUpWidget(),
             'notes': forms.Textarea(attrs={'class': 'input-xxlarge'}),
