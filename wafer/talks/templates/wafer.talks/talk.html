@@ -9,6 +9,14 @@
     {% endif %}
 </h1>
 <div>
+    {% if can_edit %}
+    <p>
+    {% with submitter=object.corresponding_author %}
+    Submitter:
+    <a href="{% url 'wafer_user_profile' username=submitter.username %}">{{ submitter.get_full_name|default:submitter.username }}</a>
+    {% endwith %}
+    </p>
+    {% endif %}
     <p>
     {% blocktrans count counter=object.authors.count %}
     Speaker:
