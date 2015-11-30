@@ -29,6 +29,7 @@ class Talk(models.Model):
     class Meta:
         permissions = (
             ("view_all_talks", "Can see all talks"),
+            ("edit_private_notes", "Can edit the private notes fields"),
         )
 
     TALK_STATUS = (
