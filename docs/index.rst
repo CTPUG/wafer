@@ -17,6 +17,7 @@ Contents:
    sponsors
    schedule
    static
+   kvpairs
 
 
 

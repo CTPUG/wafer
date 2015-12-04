@@ -141,6 +141,7 @@ INSTALLED_APPS = (
     'markitup',
     'rest_framework',
     'wafer',
+    'wafer.kvpairs',
     'wafer.registration',
     'wafer.talks',
     'wafer.schedule',
@@ -260,6 +261,11 @@ WAFER_TALKS_OPEN = True
 
 # Ticket registration with Quicket
 # WAFER_TICKET_SECRET = "i'm a shared secret"
+
+# KeyValue pairs
+WAFER_KVPAIRS_KEYNAME_MAXLEN = 255
+WAFER_KVPAIRS_VALUE_MAXLEN = 65535
+WAFER_KVPAIRS_AUTOCREATE_KEYS = False
 
 # django_medusa -- disk-based renderer
 MEDUSA_RENDERER_CLASS = "wafer.management.static.WaferDiskStaticSiteRenderer"
