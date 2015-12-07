@@ -11,7 +11,7 @@ from django.utils.encoding import python_2_unicode_compatible
 
 from markitup.fields import MarkupField
 from wafer.menu import MenuError, refresh_menu_cache
-
+from wafer.kvpairs.mixins import KVPairsMixin
 
 @python_2_unicode_compatible
 class File(models.Model):
@@ -25,7 +25,7 @@ class File(models.Model):
 
 
 @python_2_unicode_compatible
-class Page(models.Model):
+class Page(models.Model, KVPairsMixin):
     """An extra page for the site."""
     name = models.CharField(max_length=255)
     slug = models.SlugField(help_text=_("Last component of the page URL"))

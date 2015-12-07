@@ -4,6 +4,8 @@ from django.conf import settings
 from django.db import models
 from django.utils.encoding import python_2_unicode_compatible
 
+from wafer.kvpairs.mixins import KVPairsMixin
+
 from markitup.fields import MarkupField
 
 
@@ -24,7 +26,7 @@ class TalkType(models.Model):
 
 
 @python_2_unicode_compatible
-class Talk(models.Model):
+class Talk(models.Model, KVPairsMixin):
 
     class Meta:
         permissions = (

@@ -11,7 +11,7 @@ from wafer.snippets.markdown_field import MarkdownTextField
 
 from wafer.talks.models import Talk
 from wafer.pages.models import Page
-
+from wafer.kvpairs.mixins import KVPairsMixin
 
 @python_2_unicode_compatible
 class Day(models.Model):
@@ -26,7 +26,7 @@ class Day(models.Model):
 
 
 @python_2_unicode_compatible
-class Venue(models.Model):
+class Venue(models.Model, KVPairsMixin):
     """Information about a venue for conference events"""
     order = models.IntegerField(default=1)
 
@@ -119,7 +119,7 @@ class Slot(models.Model):
 
 
 @python_2_unicode_compatible
-class ScheduleItem(models.Model):
+class ScheduleItem(models.Model, KVPairsMixin):
 
     venue = models.ForeignKey(Venue,
                               on_delete=models.PROTECT)
