@@ -46,11 +46,20 @@ hide all the implementation from the user::
                                     create_key=True, owner=owner, group=group)
   […]
   if kvpairs.has_keyvalue_for_instance(talkinstance, 'status'):
+    # just showing off has_keyvalue; don't use this (race condition), but
+    # instead try and catch the KeyValue.DoesNotExist and Key.DoesNotExist
+    # exceptions
     status = kvpairs.get_keyvalue_for_instance(talkinstance, 'status')
     print status     # → 'transcoded'
 
   […]
   kvpairs.del_keyvalue_for_instance(talkinstance, 'status')
+
+Finally, thanks to a Mixin class, the following can be done on wafer's own
+models (is there a way to add the Mixin to e.g. auth.user?)::
+
+  talkinstance.set_keyvalue('status', 'transcoded')
+  […]
 
 Here are a few things to note:
 
@@ -105,9 +114,7 @@ Can I create ``Key`` instances for models with a non-integer primary key?
 To-do
 =====
 
-* ``admin.py`` integration
 * Think about a generic ``views.py``/``forms.py`` implementation
-* Provide a mixin class for use by the other models.
 * Implement REST framework access
 * Validate that the referenced object exists, and possibly even include in
   validation code that complains about orphan ``KeyValuePair`` instances, i.e.
@@ -119,6 +126,10 @@ To-do
   done somewhere else though (``admin.py``, ``views.py``, and the REST
   adapter) the model has no concept of an accessing user.
 * Cascade-deleting of keys
+* Can the mixin be added to non-wafer models, e.g. auth.User?
+* More dynamic way to manage which models are supported, or decide that this
+  limitation isn't actually needed.
+* Admin-class mixins to provide inline forms.
 
 .. _namespacing:
 
