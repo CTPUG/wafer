@@ -98,6 +98,8 @@ why did you implement your own?
     the instance) into the ``KeyValuePair``, which is not where it belongs.
     I certainly spent a lot of time in the ``GenereicForeignKey`` code and
     learnt quite a bit about Django, which was part of my motivation anyway.
+    And I've `started a discussion upstream about this
+    <https://groups.google.com/forum/#!topic/django-developers/jx-14OddSqA>`__.
 
 Why are you exposing the referenced instance's primary key, rather than the
 object?
