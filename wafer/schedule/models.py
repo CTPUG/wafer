@@ -61,6 +61,7 @@ class Slot(models.Model):
                                       help_text=_("Previous slot"))
 
     day = models.ForeignKey(Day, null=True, blank=True,
+                            on_delete=models.PROTECT,
                             help_text=_("Day for this slot"))
 
     start_time = models.TimeField(null=True, blank=True,
@@ -120,7 +121,8 @@ class Slot(models.Model):
 @python_2_unicode_compatible
 class ScheduleItem(models.Model):
 
-    venue = models.ForeignKey(Venue)
+    venue = models.ForeignKey(Venue,
+                              on_delete=models.PROTECT)
 
     # Items can span multiple slots (tutorials, etc).
     slots = models.ManyToManyField(Slot)
