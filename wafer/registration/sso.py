@@ -1,3 +1,5 @@
+# coding: utf-8
+
 import logging
 
 from django.conf import settings
@@ -55,6 +57,12 @@ def _create_desired_user(desired_username):
 def _configure_user(user, name, email, profile_fields):
     if name:
         user.first_name, user.last_name = name
+
+    for attr in ('first_name', 'last_name'):
+        max_length = get_user_model()._meta.get_field(attr).max_length
+        if len(getattr(user, attr)) > max_length:
+            setattr(user, attr, getattr(user, attr)[:max_length - 1] + u'…')
+
     user.email = email
     user.save()
 
