@@ -125,7 +125,8 @@ def github_sso(code):
 def debian_sso(meta):
     authentication_status = meta.get('SSL_CLIENT_VERIFY', None)
     if authentication_status != "SUCCESS":
-        raise SSOError('Requires authentication via Client Certificate')
+        raise SSOError('Requires authentication via Client Certificate. '
+                       'Obtain one from https://sso.debian.org/spkac/')
 
     email = meta['SSL_CLIENT_S_DN_CN']
     identifier = {'email': email}
