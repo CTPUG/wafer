@@ -131,7 +131,7 @@ def debian_sso(meta):
     identifier = {'email': email}
     username = email.split('@', 1)[0]
 
-    name = ('Unknown User', email)
+    name = ('Unknown User', username)
     if not get_user_model().objects.filter(**identifier).exists():
         r = requests.get('https://nm.debian.org/api/people',
                          params={'uid': username},
