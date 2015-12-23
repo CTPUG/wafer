@@ -1,3 +1,5 @@
+# coding: utf-8
+
 import logging
 
 from django.conf import settings
@@ -55,6 +57,12 @@ def _create_desired_user(desired_username):
 def _configure_user(user, name, email, profile_fields):
     if name:
         user.first_name, user.last_name = name
+
+    for attr in ('first_name', 'last_name'):
+        max_length = get_user_model()._meta.get_field(attr).max_length
+        if len(getattr(user, attr)) > max_length:
+            setattr(user, attr, getattr(user, attr)[:max_length - 1] + u'…')
+
     user.email = email
     user.save()
 
@@ -117,13 +125,14 @@ def github_sso(code):
 def debian_sso(meta):
     authentication_status = meta.get('SSL_CLIENT_VERIFY', None)
     if authentication_status != "SUCCESS":
-        raise SSOError('Requires authentication via Client Certificate')
+        raise SSOError('Requires authentication via Client Certificate. '
+                       'Obtain one from https://sso.debian.org/spkac/')
 
     email = meta['SSL_CLIENT_S_DN_CN']
     identifier = {'email': email}
     username = email.split('@', 1)[0]
 
-    name = ('Unknown User', email)
+    name = ('Unknown User', username)
     if not get_user_model().objects.filter(**identifier).exists():
         r = requests.get('https://nm.debian.org/api/people',
                          params={'uid': username},
