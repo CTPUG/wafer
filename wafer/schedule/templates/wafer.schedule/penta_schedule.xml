@@ -61,9 +61,9 @@
                                   {% if author.userprofile.twitter_handle %}
                                   twitter="https://twitter.com/{{ author.userprofile.twitter_handle }}"
                                   {% endif %}
-                                  contact="{{ author.email }}">{{ author.get_full_name|default:author.username }}</person>
+                                  contact="{{ author.email }}">{{ author.userprofile.display_name }}</person>
                                {% else %}
-                               <person id="{{ author.pk }}">{{ author.get_full_name|default:author.username }}</person>
+                               <person id="{{ author.pk }}">{{ author.userprofile.display_name }}</person>
                                {% endif %}
                            {% endfor %}
                        </persons>
@@ -83,10 +83,10 @@
                                <person id="{{ person.pk }}"
                                   {% if author.userprofile.twitter_handle %}
                                   twitter="https://twitter.com/{{ person.userprofile.twitter_handle }}"
-                                  {% endif %}
-                                  contact="{{ person.email }}">{{ person.get_full_name|default:person.username }}</person>
+                                  { endif %}
+                                  contact="{{ person.email }}">{{ person.userprofile.display_name }}</person>
                                {% else %}
-                               <person id="{{ person.pk }}">{{ person.get_full_name|default:person.username }}</person>
+                               <person id="{{ person.pk }}">{{ person.userprofile.display_name }}</person>
                                {% endif %}
                            {% endfor %}
                         </persons>

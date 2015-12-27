@@ -41,7 +41,7 @@
             {% if profile.homepage %}
                 <a href="{{ profile.homepage_url }}">
             {% endif %}
-            {{ object.get_full_name|default:object.username }}
+            {{ profile.display_name }}
             {% if profile.homepage %}
                 </a>
             {% endif %}
