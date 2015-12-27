@@ -58,8 +58,8 @@ class Talk(models.Model):
     corresponding_author = models.ForeignKey(
         settings.AUTH_USER_MODEL, related_name='contact_talks',
         help_text=_(
-            "The person submitting the talk and who questions regarding the "
-            "talk should be addressed to."))
+            "The person submitting the talk (and who questions regarding the "
+            "talk should be addressed to)."))
 
     authors = models.ManyToManyField(
         settings.AUTH_USER_MODEL, related_name='talks',
