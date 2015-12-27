@@ -143,6 +143,7 @@ INSTALLED_APPS = (
     'rest_framework',
     'easy_select2',
     'wafer',
+    'wafer.kv',
     'wafer.registration',
     'wafer.talks',
     'wafer.schedule',

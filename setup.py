@@ -8,6 +8,7 @@ REQUIRES = [
     'django-nose',
     'django-registration-redux',
     'djangorestframework',
+    'jsonfield',
     'pillow',
     'pyLibravatar',
     'pytz',
