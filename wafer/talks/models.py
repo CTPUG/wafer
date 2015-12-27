@@ -47,6 +47,7 @@ class Talk(models.Model):
                     "Who is your audience? What will they get out of it? "
                     "What will you cover?<br />"
                     "You can use Markdown syntax."))
+
     notes = models.TextField(
         null=True, blank=True,
         help_text=_("Any notes for the conference organisers?"))
@@ -55,9 +56,15 @@ class Talk(models.Model):
                               default=PENDING)
 
     corresponding_author = models.ForeignKey(
-        settings.AUTH_USER_MODEL, related_name='contact_talks')
-    authors = models.ManyToManyField(settings.AUTH_USER_MODEL,
-                                     related_name='talks')
+        settings.AUTH_USER_MODEL, related_name='contact_talks',
+        help_text=_(
+            "The person submitting the talk and who questions regarding the "
+            "talk should be addressed to."))
+
+    authors = models.ManyToManyField(
+        settings.AUTH_USER_MODEL, related_name='talks',
+        help_text=_(
+            "The speakers presenting the talk."))
 
     def __str__(self):
         return u'%s: %s' % (self.corresponding_author, self.title)
