@@ -69,13 +69,8 @@ class Page(models.Model):
         return False
 
     def get_people_display_names(self):
-        names = []
-        for person in self.people.all():
-            full_name = person.get_full_name()
-            if full_name:
-                names.append(full_name)
-            else:
-                names.append(person.username)
+        names = [person.userprofile.display_name()
+                 for person in self.people.all()]
         if len(names) > 2:
             comma_names = ', '.join(names[:-1])
             return comma_names + ' and ' + names[-1]

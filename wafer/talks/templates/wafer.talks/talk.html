@@ -16,7 +16,7 @@
     Speakers:
     {% endblocktrans %}
     {% for author in object.authors.all %}
-    <a href="{% url 'wafer_user_profile' username=author.username %}">{{ author.get_full_name|default:author.username }}</a>
+    <a href="{% url 'wafer_user_profile' username=author.username %}">{{ author.userprofile.display_name }}</a>
     {% endfor %}
     </p>
     <p>

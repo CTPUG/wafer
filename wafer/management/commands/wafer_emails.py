@@ -50,11 +50,8 @@ class Command(BaseCommand):
                           person.contact_talks.filter(status=ACCEPTED)]
                 if not titles:
                     continue
-            # get_full_name may be blank, since we don't require that
-            # the user specify it, but we will have the email as an
-            # identifier
             row = [x.encode("utf-8")
-                   for x in (person.get_full_name(), person.email,
+                   for x in (person.userprofile.display_name(), person.email,
                              ';'.join(titles))]
             csv_file.writerow(row)
 
@@ -70,11 +67,8 @@ class Command(BaseCommand):
                           person.talks.filter(status=ACCEPTED)]
                 if not titles:
                     continue
-            # get_full_name may be blank, since we don't require that
-            # the user specify it, but we will have the email as an
-            # identifier
             row = [x.encode("utf-8")
-                   for x in (person.get_full_name(), person.email,
+                   for x in (person.userprofile.display_name(), person.email,
                              ';'.join(titles))]
             csv_file.writerow(row)
 

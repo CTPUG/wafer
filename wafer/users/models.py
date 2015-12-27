@@ -56,6 +56,9 @@ class UserProfile(models.Model):
             return abs_url
         return self.homepage
 
+    def display_name(self):
+        return self.user.get_full_name() or self.user.username
+
 
 def create_user_profile(sender, instance, created, raw=False, **kwargs):
     if raw:

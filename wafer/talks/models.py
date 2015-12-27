@@ -72,7 +72,7 @@ class Talk(models.Model):
     def get_absolute_url(self):
         return reverse('wafer_talk', args=(self.talk_id,))
 
-    def get_author_contact(self):
+    def get_corresponding_author_contact(self):
         email = self.corresponding_author.email
         profile = self.corresponding_author.userprofile
         if profile.contact_number:
@@ -81,20 +81,25 @@ class Talk(models.Model):
             # Should we wrap this in a span for styling?
             contact = 'NO CONTACT INFO'
         return '%s - %s' % (email, contact)
-    get_author_contact.short_description = 'Contact Details'
+    get_corresponding_author_contact.short_description = 'Contact Details'
 
-    def get_author_name(self):
+    def get_corresponding_author_name(self):
         return '%s (%s)' % (self.corresponding_author,
                             self.corresponding_author.get_full_name())
 
-    get_author_name.admin_order_field = 'corresponding_author'
-    get_author_name.short_description = 'Corresponding Author'
+    get_corresponding_author_name.admin_order_field = 'corresponding_author'
+    get_corresponding_author_name.short_description = 'Corresponding Author'
 
-    def get_author_display_name(self):
-        full_name = self.corresponding_author.get_full_name()
-        if full_name:
-            return full_name
-        return self.corresponding_author.username
+    def get_authors_display_name(self):
+        authors = list(self.authors.all())
+        # Corresponding authors first
+        authors.sort(
+            key=lambda author: u'' if author == self.corresponding_author
+                               else author.userprofile.display_name())
+        names = [author.userprofile.display_name() for author in authors]
+        if len(names) <= 2:
+            return u' & '.join(names)
+        return u'%s, et al.' % names[0]
 
     def get_in_schedule(self):
         if self.scheduleitem_set.all():

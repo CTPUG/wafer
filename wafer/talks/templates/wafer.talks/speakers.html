@@ -8,7 +8,7 @@
                     <div class="col-md-3">
                         <img class="thumbnail center-block" src="{{ user_profile.avatar_url }}">
                         <h3 class="text-center">
-                            {{ user_profile.user.get_full_name|default:user_profile.user.username }}
+                            {{ user_profile.display_name }}
                         </h3>
                     </div>
                 {% endfor %}
