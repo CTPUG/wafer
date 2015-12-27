@@ -1,7 +1,7 @@
 {% if item.talk %}
   <a href="{{ item.get_url }}">{{ item.get_details|escape }}</a>
   <br>
-  by {{ item.talk.get_author_display_name }}
+  by {{ item.talk.get_authors_display_name }}
 {% elif item.get_url %}
   <a href="{{ item.get_url }}">{{ item.get_details|escape }}</a>
   {% if item.page and item.page.people.exists %}
