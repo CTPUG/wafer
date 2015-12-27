@@ -190,8 +190,9 @@ class TalkUpdateTests(TestCase):
         response = self.check_talk_update(self.talk_p, 200, auth={
             'username': 'author_p', 'password': 'author_p_password',
         })
-        self.assertContains(
-            response, "<p>Submitted by author_p.</p>", html=True)
+        self.assertContains(response, (
+            '<p>Submitted by <a href="/users/author_p/">author_p</a>.</p>'),
+            html=True)
 
 
 class SpeakerTests(TestCase):
