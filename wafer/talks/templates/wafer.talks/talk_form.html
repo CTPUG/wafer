@@ -5,6 +5,9 @@
 <section class="wafer wafer-talk-edit">
 {% if can_edit %}
 <h1>{% trans "Edit Talk" %}</h1>
+{% blocktrans with corresponding_author=object.corresponding_author %}
+<p>Submitted by {{corresponding_author}}.</p>
+{% endblocktrans %}
 {% else %}
 <h1>{% trans "Talk Submission" %}</h1>
 {% endif %}

@@ -142,6 +142,7 @@ class TalkUpdateTests(TestCase):
         response = self.client.get(
             reverse('wafer_talk_edit', kwargs={'pk': talk.pk}))
         self.assertEqual(response.status_code, status_code)
+        return response
 
     def test_update_accepted_not_logged_in(self):
         self.check_talk_update(self.talk_a, 403)
@@ -184,6 +185,13 @@ class TalkUpdateTests(TestCase):
         self.check_talk_update(self.talk_p, 200, auth={
             'username': 'super', 'password': 'super_password',
         })
+
+    def test_corresponding_author_displayed(self):
+        response = self.check_talk_update(self.talk_p, 200, auth={
+            'username': 'author_p', 'password': 'author_p_password',
+        })
+        self.assertContains(
+            response, "<p>Submitted by author_p.</p>", html=True)
 
 
 class SpeakerTests(TestCase):
