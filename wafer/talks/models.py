@@ -87,7 +87,7 @@ class Talk(models.Model):
         authors = list(self.authors.all())
         # Corresponding authors first
         authors.sort(
-            key=lambda author: 0 if author == self.corresponding_author
+            key=lambda author: u'' if author == self.corresponding_author
                                else author.userprofile.display_name())
         names = [author.userprofile.display_name() for author in authors]
         if len(names) <= 2:
