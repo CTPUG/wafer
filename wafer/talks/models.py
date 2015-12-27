@@ -84,10 +84,15 @@ class Talk(models.Model):
     get_author_name.short_description = 'Corresponding Author'
 
     def get_author_display_name(self):
-        full_name = self.corresponding_author.get_full_name()
-        if full_name:
-            return full_name
-        return self.corresponding_author.username
+        authors = list(self.authors.all())
+        # Corresponding authors first
+        authors.sort(
+            key=lambda author: 0 if author == self.corresponding_author
+                               else author.userprofile.display_name())
+        names = [author.userprofile.display_name() for author in authors]
+        if len(names) <= 2:
+            return u' & '.join(names)
+        return u'%s, et al.' % names[0]
 
     def get_in_schedule(self):
         if self.scheduleitem_set.all():

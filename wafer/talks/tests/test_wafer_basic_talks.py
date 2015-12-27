@@ -73,6 +73,8 @@ def test_corresponding_author_details():
         corresponding_author_id=user.id)
 
     talk = user.contact_talks.all()[0]
+    talk.authors.add(user)
+    talk.save()
 
     assert talk.get_author_contact() == 'best@wafer.test - 77776'
     assert talk.get_author_display_name() == 'jeff'
