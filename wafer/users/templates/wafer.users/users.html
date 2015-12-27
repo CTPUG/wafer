@@ -5,7 +5,7 @@
 {% for user in user_list %}
 <a href="{% url 'wafer_user_profile' username=user.username %}">
     <div class="well">
-        {{ user.get_full_name|default:user.username }}
+        {{ user.userprofile.display_name }}
     </div>
 </a>
 {% endfor %}
