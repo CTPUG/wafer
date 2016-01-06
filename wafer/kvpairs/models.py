@@ -13,6 +13,9 @@ KEYNAME_MAXLEN = settings.WAFER_KVPAIRS_KEYNAME_MAXLEN
 VALUE_MAXLEN = settings.WAFER_KVPAIRS_VALUE_MAXLEN
 AUTOCREATE_KEYS = settings.WAFER_KVPAIRS_AUTOCREATE_KEYS
 
+from .fields import IndirectGenericForeignKey
+
+
 # the list of models to which keys can be "attached", not sure why we limit
 # it, but it feels right. This feeds the choices parameter of the Key.model_ct
 # field, and can be disabled right here…
@@ -156,6 +159,12 @@ class KeyValuePair(models.Model):
     ref_id = models.PositiveIntegerField(
             verbose_name='ID of referenced model instance')
 
+    # The logic for the indirect generic foreign key happens in the
+    # IndirectGenericForeignKey field, which we need to instantiate, but it
+    # doesn't actually hold any data.
+    ref_obj = IndirectGenericForeignKey(ct_field_path='key.model_ct',
+            fk_field='ref_id')
+
     # finally the value to store
     value = models.CharField(max_length=VALUE_MAXLEN,
             verbose_name='Value for key associated with model instance')
@@ -207,8 +216,7 @@ class KeyValuePair(models.Model):
         """
         key = cls._get_or_create_key_for_instance(instance=instance,
                 name=name, owner=owner, group=group, create_key=create_key)
-        instance_id = getattr(instance, 'pk')
-        p = KeyValuePair.objects.get_or_create(key=key, ref_id=instance_id)[0]
+        p = KeyValuePair.objects.get_or_create(key=key, ref_obj=instance)[0]
         p.value = value
         p.save()
         return p
@@ -217,8 +225,7 @@ class KeyValuePair(models.Model):
     def _get_kvpair_for_instance(cls, instance, name, owner=None, group=None):
         key = cls._get_or_create_key_for_instance(instance=instance, name=name,
                 owner=owner, group=group, create_key=False)
-        instance_id = getattr(instance, 'pk')
-        return KeyValuePair.objects.get(key=key, ref_id=instance_id)
+        return KeyValuePair.objects.get(key=key, ref_obj=instance)
 
     @classmethod
     def get_keyvalue_for_instance(cls, instance, name, owner=None, group=None):

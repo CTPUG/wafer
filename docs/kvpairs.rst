@@ -101,14 +101,6 @@ why did you implement your own?
     And I've `started a discussion upstream about this
     <https://groups.google.com/forum/#!topic/django-developers/jx-14OddSqA>`__.
 
-Why are you exposing the referenced instance's primary key, rather than the
-object?
-
-    First of all, the module-level accessor functions hide all that from you.
-    But the answer to the question is: because I could not find a reliable way
-    to hook into Django model and/or field code to ensure that the conversion
-    from instance to ID and vice versa could be consistently handled.
-
 Can I create ``Key`` instances for models with a non-integer primary key?
 
     No.

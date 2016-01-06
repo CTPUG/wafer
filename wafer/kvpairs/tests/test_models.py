@@ -183,30 +183,36 @@ class KeyValuePairModelTests(_KVPairsTestCase):
         '''Test construction of the key-value pair'''
         u = self._make_test_instance(User)
         value = 'yes'
-        p = KeyValuePair(key=self.ukey, ref_id=u.pk, value=value)
-        self.assertEqual(p.ref_id, u.pk)
+        p = KeyValuePair(key=self.ukey, ref_obj=u, value=value)
+        self.assertEqual(p.ref_obj, u)
         self.assertEqual(p.key, self.ukey)
         self.assertEqual(p.value, value)
+
+    def test_key_field_access(self):
+        u = self._make_test_instance(User)
+        value = 'yes'
+        p = KeyValuePair(key=self.ukey, ref_obj=u, value=value)
+        self.assertEqual(p.ref_obj, u)
 
     def test_saving(self):
         '''Test saving to database'''
         u = self._make_test_instance(User)
-        p = KeyValuePair(key=self.ukey, ref_id=u.pk, value="yes")
+        p = KeyValuePair(key=self.ukey, ref_obj=u, value="yes")
         p.save()
 
     def test_repr(self):
         '''just verify the representation of the KeyValuePair to stdout'''
         u = self._make_test_instance(User)
-        p = KeyValuePair(key=self.ukey, ref_id=u.pk, value="yes")
+        p = KeyValuePair(key=self.ukey, ref_obj=u, value="yes")
         # don't verify output, just that it works
         '%r' % p
 
     def test_only_one_value_per_key_object_combination(self):
         '''Ensure uniqueness of (key, ref_id)'''
         u = self._make_test_instance(User)
-        p1 = KeyValuePair(key=self.ukey, ref_id=u.pk, value="yes")
+        p1 = KeyValuePair(key=self.ukey, ref_obj=u, value="yes")
         p1.save()
-        p2 = KeyValuePair(key=self.ukey, ref_id=u.pk, value="no")
+        p2 = KeyValuePair(key=self.ukey, ref_obj=u, value="no")
         with self.assertRaises(IntegrityError):
             p2.save()
 
@@ -214,11 +220,11 @@ class KeyValuePairModelTests(_KVPairsTestCase):
         '''Test retrieving the value stored'''
         u = self._make_test_instance(User)
         value='yes'
-        p = KeyValuePair(key=self.ukey, ref_id=u.pk, value=value)
+        p = KeyValuePair(key=self.ukey, ref_obj=u, value=value)
         p.save()
 
-        pr = KeyValuePair.objects.get(key=self.ukey, ref_id=u.pk)
-        self.assertEqual(pr.ref_id, u.pk)
+        pr = KeyValuePair.objects.get(key=self.ukey, ref_obj=u)
+        self.assertEqual(pr.ref_obj, u)
         self.assertEqual(pr.value, value)
 
     def test_value_retrieval_multiple(self):
@@ -226,27 +232,27 @@ class KeyValuePairModelTests(_KVPairsTestCase):
         u1 = self._make_test_instance(User)
         u2 = self._make_test_instance(User)
         v1, v2 = 'one', 'two'
-        p1 = KeyValuePair(key=self.ukey, ref_id=u1.pk, value=v1)
-        p1.save()
-        p2 = KeyValuePair(key=self.ukey, ref_id=u2.pk, value=v2)
-        p2.save()
 
         for u,v in ((u1,v1),(u2,v2)):
-            pr = KeyValuePair.objects.get(key=self.ukey, ref_id=u.pk)
-            self.assertEqual(pr.ref_id, u.pk)
+            p = KeyValuePair(key=self.ukey, ref_obj=u, value=v)
+            p.save()
+
+        for u,v in ((u1,v1),(u2,v2)):
+            pr = KeyValuePair.objects.get(key=self.ukey, ref_obj=u)
+            self.assertEqual(pr.ref_obj, u)
             self.assertEqual(pr.value, v)
 
     def test_value_cannot_be_null(self):
         '''test failure when null value is given'''
         u = self._make_test_instance(User)
-        p = KeyValuePair(key=self.ukey, ref_id=u.pk, value=None)
+        p = KeyValuePair(key=self.ukey, ref_obj=u, value=None)
         with self.assertRaises(ValidationError):
             p.full_clean()
 
     def test_value_cannot_be_empty(self):
         '''test failure when empty value is given'''
         u = self._make_test_instance(User)
-        p = KeyValuePair(key=self.ukey, ref_id=u.pk, value='')
+        p = KeyValuePair(key=self.ukey, ref_obj=u, value='')
         with self.assertRaises(ValidationError):
             p.full_clean()
 
@@ -258,7 +264,7 @@ class KeyValuePairModelTests(_KVPairsTestCase):
         v = 'A123'
         p = KeyValuePair.set_keyvalue_for_instance(u, k, v, owner=o,
                 create_key=True)
-        self.assertEqual(p.ref_id, u.pk)
+        self.assertEqual(p.ref_obj, u)
         self.assertEqual(p.value, v)
         k2 = Key.objects.get(name=k)
         self.assertEqual(k2.model_ct,
@@ -286,7 +292,7 @@ class KeyValuePairModelTests(_KVPairsTestCase):
         '''test obtaining the value for a keyname/instance tuple'''
         u = self._make_test_instance(User)
         value = 'foobar'
-        p = KeyValuePair(key=self.ukey, ref_id=u.pk, value=value)
+        p = KeyValuePair(key=self.ukey, ref_obj=u, value=value)
         p.save()
         self.assertEqual(value,
                 KeyValuePair.get_keyvalue_for_instance(u, self.ukey.name))
