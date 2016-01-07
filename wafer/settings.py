@@ -187,7 +187,6 @@ LOGGING = {
 
 # Django registration:
 ACCOUNT_ACTIVATION_DAYS = 7
-AUTH_PROFILE_MODULE = 'users.UserProfile'
 
 AUTH_USER_MODEL = 'auth.User'
 
