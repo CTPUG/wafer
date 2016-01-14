@@ -1,6 +1,6 @@
 import functools
 import unicodedata
-from django.core.cache import get_cache
+from django.core.cache import caches
 from django.conf import settings
 
 
@@ -20,7 +20,7 @@ def cache_result(cache_key, timeout):
         def wrapper(*args, **kw):
             # replace this with cache.caches when we drop Django 1.6
             # compatibility
-            cache = get_cache(cache_name)
+            cache = caches[cache_name]
             result = cache.get(cache_key)
             if result is None:
                 result = f(*args, **kw)
@@ -28,7 +28,7 @@ def cache_result(cache_key, timeout):
             return result
 
         def invalidate():
-            cache = get_cache(cache_name)
+            cache = caches[cache_name]
             cache.delete(cache_key)
 
         wrapper.invalidate = invalidate
