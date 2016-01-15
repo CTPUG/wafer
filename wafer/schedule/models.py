@@ -75,7 +75,6 @@ class Slot(models.Model):
 
     class Meta:
         order_with_respect_to = 'day'
-        ordering = ['day', 'end_time', 'start_time']
 
     def __str__(self):
         if self.name:
