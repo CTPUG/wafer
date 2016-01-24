@@ -12,6 +12,9 @@ from django.utils.http import urlquote
 
 from wafer.talks.models import ACCEPTED, PENDING
 
+import sys
+PY2 = sys.version_info[0] == 2
+
 
 @python_2_unicode_compatible
 class UserProfile(models.Model):
@@ -26,7 +29,9 @@ class UserProfile(models.Model):
     github_username = models.CharField(max_length=32, null=True, blank=True)
 
     def __str__(self):
-        return unicode(self.user)
+        if PY2:
+            return unicode(self.user)
+        return str(self.user)
 
     def accepted_talks(self):
         return self.user.talks.filter(status=ACCEPTED)
