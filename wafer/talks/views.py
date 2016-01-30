@@ -84,7 +84,6 @@ class TalkCreate(LoginRequiredMixin, CreateView):
         # Eaaargh we have to do the work of CreateView if we want to set values
         # before saving
         with revisions.create_revision():
-            print 'Here'
             self.object = form.save(commit=False)
             self.object.corresponding_author = self.request.user
             self.object.save()
@@ -92,7 +91,6 @@ class TalkCreate(LoginRequiredMixin, CreateView):
             revisions.set_comment("Talk Created")
             # Save the author information as well (many-to-many fun)
             form.save_m2m()
-            print 'There'
         return HttpResponseRedirect(self.get_success_url())
 
 
