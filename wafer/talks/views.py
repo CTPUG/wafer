@@ -8,6 +8,8 @@ from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic.list import ListView
 from django.conf import settings
 
+from reversion import revisions
+
 from wafer.talks.models import Talk, ACCEPTED
 from wafer.talks.forms import TalkForm
 from wafer.users.models import UserProfile
@@ -81,11 +83,16 @@ class TalkCreate(LoginRequiredMixin, CreateView):
             raise ValidationError  # Should this be SuspiciousOperation?
         # Eaaargh we have to do the work of CreateView if we want to set values
         # before saving
-        self.object = form.save(commit=False)
-        self.object.corresponding_author = self.request.user
-        self.object.save()
-        # Save the author information as well (many-to-many fun)
-        form.save_m2m()
+        with revisions.create_revision():
+            print 'Here'
+            self.object = form.save(commit=False)
+            self.object.corresponding_author = self.request.user
+            self.object.save()
+            revisions.set_user(self.request.user)
+            revisions.set_comment("Talk Created")
+            # Save the author information as well (many-to-many fun)
+            form.save_m2m()
+            print 'There'
         return HttpResponseRedirect(self.get_success_url())
 
 
@@ -104,11 +111,29 @@ class TalkUpdate(EditOwnTalksMixin, UpdateView):
         context['can_edit'] = self.object.can_edit(self.request.user)
         return context
 
+    def form_valid(self, form):
+        # Is there a better way to do this?
+        # I don't want to use RevisionMiddleware, because I think we
+        # want more control over things than that provides, but
+        # this feels clunky
+        with revisions.create_revision():
+            result = super(TalkUpdate, self).form_valid(form)
+            revisions.set_user(self.request.user)
+            revisions.set_comment("Talk Modified")
+        return result
+
 
 class TalkDelete(EditOwnTalksMixin, DeleteView):
     model = Talk
     template_name = 'wafer.talks/talk_delete.html'
     success_url = reverse_lazy('wafer_page', args=('index',))
+
+    def form_valid(self, form):
+        with reversion.create_revision():
+            result = super(TalkDelete, self).form_valid(form)
+            # We don't add any metadata, as the admin site
+            # doesn't show it for deleted talks.
+        return result
 
 
 class Speakers(ListView):
