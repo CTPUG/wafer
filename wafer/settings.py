@@ -135,6 +135,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.admin',
+    'reversion',
     'django_medusa',
     'crispy_forms',
     'django_nose',
