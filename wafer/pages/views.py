@@ -18,12 +18,11 @@ class EditPage(UpdateView):
     model = Page
     form_class = PageForm
 
+    @revisions.create_revision()
     def form_valid(self, form):
-        with revisions.create_revision():
-            result = super(EditPage, self).form_valid(form)
-            revisions.set_user(self.request.user)
-            revisions.set_comment("Page Modified")
-        return result
+        revisions.set_user(self.request.user)
+        revisions.set_comment("Page Modified")
+        return super(EditPage, self).form_valid(form)
 
 
 def slug(request, url):
