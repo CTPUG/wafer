@@ -20,7 +20,7 @@ matrix:
 # command to install dependencies,
 install:
    # Install the right version of Django first
-   - pip install 'Django<='"$DJANGO_VERSION"
+   - pip install 'Django~='"$DJANGO_VERSION".0
    - pip install -r requirements.txt -r requirements-dev.txt
 # command to run tests
 script: NOSE_WITH_COVERAGE=1 python manage.py test
