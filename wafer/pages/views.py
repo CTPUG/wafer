@@ -2,6 +2,8 @@ from django.http import Http404
 from django.core.exceptions import PermissionDenied
 from django.views.generic import DetailView, TemplateView, UpdateView
 
+from reversion import revisions
+
 from wafer.pages.models import Page
 from wafer.pages.forms import PageForm
 
@@ -15,6 +17,12 @@ class EditPage(UpdateView):
     template_name = 'wafer.pages/page_form.html'
     model = Page
     form_class = PageForm
+
+    @revisions.create_revision()
+    def form_valid(self, form):
+        revisions.set_user(self.request.user)
+        revisions.set_comment("Page Modified")
+        return super(EditPage, self).form_valid(form)
 
 
 def slug(request, url):

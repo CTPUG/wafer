@@ -1,6 +1,8 @@
 from django.contrib import admin
 from django.utils.translation import ugettext_lazy as _
 
+from reversion.admin import VersionAdmin
+
 from wafer.talks.models import TalkType, Talk, TalkUrl
 
 class ScheduleListFilter(admin.SimpleListFilter):
@@ -20,14 +22,14 @@ class ScheduleListFilter(admin.SimpleListFilter):
             return queryset.filter(scheduleitem__isnull=True)
         return queryset
 
-class TalkUrlAdmin(admin.ModelAdmin):
+class TalkUrlAdmin(VersionAdmin, admin.ModelAdmin):
     list_display = ('description', 'talk', 'url')
 
 class TalkUrlInline(admin.TabularInline):
     model = TalkUrl
 
 
-class TalkAdmin(admin.ModelAdmin):
+class TalkAdmin(VersionAdmin, admin.ModelAdmin):
     list_display = ('title', 'get_corresponding_author_name',
                     'get_corresponding_author_contact', 'talk_type',
                     'get_in_schedule', 'has_url', 'status')
