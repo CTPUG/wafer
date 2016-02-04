@@ -36,7 +36,7 @@ class SponsorshipPackage(models.Model):
     description = MarkupField(
         help_text=_("Describe what the package gives the sponsor."))
     files = models.ManyToManyField(
-        File, related_name="packages", null=True, blank=True,
+        File, related_name="packages", blank=True,
         help_text=_("Images and other files for use in"
                     " the description markdown field."))
 
@@ -56,7 +56,7 @@ class Sponsor(models.Model):
     description = MarkupField(
         help_text=_("Write some nice things about the sponsor."))
     files = models.ManyToManyField(
-        File, related_name="sponsors", null=True, blank=True,
+        File, related_name="sponsors", blank=True,
         help_text=_("Images and other files for use in"
                     " the description markdown field."))
 

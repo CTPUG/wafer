@@ -40,12 +40,12 @@ class Page(models.Model):
                     " the site (Container pages, etc.)"),
         default=False)
     files = models.ManyToManyField(
-        File, related_name="pages", null=True, blank=True,
+        File, related_name="pages", blank=True,
         help_text=_("Images and other files for use in"
                     " the content markdown field."))
 
     people = models.ManyToManyField(settings.AUTH_USER_MODEL,
-        related_name='pages', null=True, blank=True,
+        related_name='pages', blank=True,
         help_text=_("People associated with this page for display in the"
                     " schedule (Session chairs, panelists, etc.)"))
 
