@@ -82,7 +82,7 @@ def test_corresponding_author_details():
 
     assert talk.get_authors_display_name() == 'jeff & bob'
     assert talk.get_corresponding_author_contact() == 'best@wafer.test - 77776'
-    assert talk.get_corresponding_author_name() == 'jeff ()'
+    assert talk.get_corresponding_author_name() == 'jeff (jeff)'
 
     speaker.first_name = 'Bob'
     speaker.last_name = 'Robert'
