@@ -1,6 +1,4 @@
 import urllib
-import sys
-PY2 = sys.version_info[0] == 2
 
 from django.contrib.auth import login
 from django.contrib import messages
@@ -42,10 +40,7 @@ def github_login(request):
 
         user = github_sso(request.GET['code'])
     except SSOError as e:
-        if PY2:
-            messages.error(request, unicode(e))
-        else:
-            messages.error(request, str(e))
+        messages.error(request, u'%s' % e)
         return HttpResponseRedirect(reverse('auth_login'))
 
     login(request, user)
@@ -59,10 +54,7 @@ def debian_login(request):
     try:
         user = debian_sso(request.META)
     except SSOError as e:
-        if PY2:
-            messages.error(request, unicode(e))
-        else:
-            messages.error(request, str(e))
+        messages.error(request, u'%s' % e)
         return HttpResponseRedirect(reverse('auth_login'))
 
     login(request, user)
