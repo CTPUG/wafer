@@ -6,8 +6,9 @@ from crispy_forms.bootstrap import FormActions
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit, HTML
 from markitup.widgets import MarkItUpWidget
+from easy_select2.widgets import Select2Multiple
 
-from wafer.talks.models import Talk
+from wafer.talks.models import Talk, render_author
 
 
 class TalkForm(forms.ModelForm):
@@ -17,6 +18,9 @@ class TalkForm(forms.ModelForm):
 
         if not self.user.has_perm('talks.edit_private_notes'):
             self.fields.pop('private_notes')
+
+        # We add the name, if known, to the authors list
+        self.fields['authors'].label_from_instance = render_author
 
         self.helper = FormHelper(self)
         submit_button = Submit('submit', _('Submit'))
@@ -38,6 +42,7 @@ class TalkForm(forms.ModelForm):
         widgets = {
             'abstract': MarkItUpWidget(),
             'notes': forms.Textarea(attrs={'class': 'input-xxlarge'}),
+            'authors': Select2Multiple(),
         }
 
 # TODO: authors widget is ugly

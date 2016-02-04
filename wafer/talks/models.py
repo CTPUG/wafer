@@ -12,6 +12,10 @@ ACCEPTED = 'A'
 PENDING = 'P'
 REJECTED = 'R'
 
+# Utility functions used in the forms
+def render_author(author):
+    return '%s (%s)' % (author.userprofile.display_name(), author)
+
 
 @python_2_unicode_compatible
 class TalkType(models.Model):
@@ -90,8 +94,7 @@ class Talk(models.Model):
     get_corresponding_author_contact.short_description = 'Contact Details'
 
     def get_corresponding_author_name(self):
-        return '%s (%s)' % (self.corresponding_author,
-                            self.corresponding_author.get_full_name())
+        return render_author(self.corresponding_author)
 
     get_corresponding_author_name.admin_order_field = 'corresponding_author'
     get_corresponding_author_name.short_description = 'Corresponding Author'
