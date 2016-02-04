@@ -14,6 +14,7 @@ REQUIRES = [
     'requests',
     'django-medusa>=0.3.0',
     'django-reversion>=1.10',
+    'django-easy-select2',
 ]
 
 SOURCES = []

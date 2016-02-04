@@ -141,6 +141,7 @@ INSTALLED_APPS = (
     'django_nose',
     'markitup',
     'rest_framework',
+    'easy_select2',
     'wafer',
     'wafer.registration',
     'wafer.talks',
