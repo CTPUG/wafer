@@ -81,7 +81,8 @@ class TalkCreate(LoginRequiredMixin, CreateView):
     @revisions.create_revision()
     def form_valid(self, form):
         if not getattr(settings, 'WAFER_TALKS_OPEN', True):
-            raise ValidationError  # Should this be SuspiciousOperation?
+            # Should this be SuspiciousOperation?
+            raise ValidationError("Talk submission isn't open")
         # Eaaargh we have to do the work of CreateView if we want to set values
         # before saving
         self.object = form.save(commit=False)
