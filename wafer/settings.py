@@ -259,6 +259,9 @@ WAFER_HIDE_LOGIN = False
 # Set this to False to disable talk submissions
 WAFER_TALKS_OPEN = True
 
+# Set this to False to disable registration
+WAFER_REGISTRATION_OPEN = True
+
 # Ticket registration with Quicket
 # WAFER_TICKET_SECRET = "i'm a shared secret"
 

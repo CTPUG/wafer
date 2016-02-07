@@ -25,6 +25,10 @@ def menu_info(request):
 def registration_settings(request):
     '''Expose selected settings to templates'''
     context = {}
-    for setting in ('WAFER_SSO', 'WAFER_HIDE_LOGIN'):
+    for setting in (
+            'WAFER_SSO',
+            'WAFER_HIDE_LOGIN',
+            'WAFER_REGISTRATION_OPEN',
+    ):
         context[setting] = getattr(settings, setting, None)
     return context
