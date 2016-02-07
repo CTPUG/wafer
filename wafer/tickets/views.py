@@ -5,11 +5,10 @@ from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.core.exceptions import PermissionDenied
 from django.core.urlresolvers import reverse
-from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import render_to_response
-from django.template import RequestContext
+from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
+from django.views.generic.edit import FormView
 
 from wafer.tickets.models import Ticket, TicketType
 from wafer.tickets.forms import TicketForm
@@ -17,23 +16,19 @@ from wafer.tickets.forms import TicketForm
 log = logging.getLogger(__name__)
 
 
-def claim(request):
-    if request.method == 'POST':
-        form = TicketForm(request.POST)
-        if form.is_valid():
-            ticket = Ticket.objects.get(barcode=form.cleaned_data['barcode'])
-            ticket.user = request.user
-            ticket.save()
-            return HttpResponseRedirect(reverse('wafer_user_profile',
-                                                args=(request.user.username,)))
-    else:
-        form = TicketForm()
+class ClaimView(FormView):
+    template_name = 'wafer.tickets/claim.html'
+    form_class = TicketForm
 
-    context = {
-        'form': form,
-    }
-    return render_to_response('wafer.tickets/claim.html', context,
-                              context_instance=RequestContext(request))
+    def form_valid(self, form):
+        ticket = Ticket.objects.get(barcode=form.cleaned_data['barcode'])
+        ticket.user = self.request.user
+        ticket.save()
+        return super(ClaimView, self).form_valid(form)
+
+    def get_success_url(self):
+        return reverse(
+            'wafer_user_profile', args=(self.request.user.username,))
 
 
 @csrf_exempt
