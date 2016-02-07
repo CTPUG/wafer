@@ -3,7 +3,7 @@ import logging
 
 from django.conf import settings
 from django.contrib.auth import get_user_model
-from django.core.exceptions import PermissionDenied
+from django.core.exceptions import PermissionDenied, ValidationError
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
@@ -20,7 +20,19 @@ class ClaimView(FormView):
     template_name = 'wafer.tickets/claim.html'
     form_class = TicketForm
 
+    def get_context_data(self, **kwargs):
+        context = super(ClaimView, self).get_context_data(**kwargs)
+        context['can_register'] = self.can_register()
+        return context
+
+    def can_register(self):
+        has_ticket = self.request.user.ticket.exists()
+        registration_open = settings.WAFER_REGISTRATION_OPEN
+        return registration_open and not has_ticket
+
     def form_valid(self, form):
+        if not self.can_register():
+            raise ValidationError('User may not register')
         ticket = Ticket.objects.get(barcode=form.cleaned_data['barcode'])
         ticket.user = self.request.user
         ticket.save()
