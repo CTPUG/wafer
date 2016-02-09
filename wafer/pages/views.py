@@ -3,8 +3,10 @@ from django.core.exceptions import PermissionDenied
 from django.views.generic import DetailView, TemplateView, UpdateView
 
 from reversion import revisions
+from rest_framework import viewsets
 
 from wafer.pages.models import Page
+from wafer.pages.serializers import PageSerializer
 from wafer.pages.forms import PageForm
 
 
@@ -49,3 +51,9 @@ def slug(request, url):
         return EditPage.as_view()(request, pk=page.id)
 
     return ShowPage.as_view()(request, pk=page.id)
+
+
+class PageViewSet(viewsets.ModelViewSet):
+    """API endpoint for users."""
+    queryset = Page.objects.all()
+    serializer_class = PageSerializer

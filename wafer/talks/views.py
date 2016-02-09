@@ -9,9 +9,11 @@ from django.views.generic.list import ListView
 from django.conf import settings
 
 from reversion import revisions
+from rest_framework import viewsets
 
 from wafer.talks.models import Talk, ACCEPTED
 from wafer.talks.forms import TalkForm
+from wafer.talks.serializers import TalkSerializer
 from wafer.users.models import UserProfile
 
 
@@ -141,3 +143,9 @@ class Speakers(ListView):
             user__talks__status='A').distinct().prefetch_related('user')
         context["speaker_rows"] = self._by_row(speakers, 4)
         return context
+
+
+class TalksViewSet(viewsets.ModelViewSet):
+    """API endpoint that allows talks to be viewed or edited."""
+    queryset = Talk.objects.all()
+    serializer_class = TalkSerializer
