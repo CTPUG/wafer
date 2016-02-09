@@ -6,6 +6,7 @@ from django.utils.encoding import python_2_unicode_compatible
 
 from markitup.fields import MarkupField
 
+from wafer.kvpairs.mixins import KVPairsMixin
 
 @python_2_unicode_compatible
 class File(models.Model):
@@ -19,7 +20,7 @@ class File(models.Model):
 
 
 @python_2_unicode_compatible
-class SponsorshipPackage(models.Model):
+class SponsorshipPackage(models.Model, KVPairsMixin):
     """A description of a sponsorship package."""
     order = models.IntegerField(default=1)
     name = models.CharField(max_length=255)
@@ -48,7 +49,7 @@ class SponsorshipPackage(models.Model):
 
 
 @python_2_unicode_compatible
-class Sponsor(models.Model):
+class Sponsor(models.Model, KVPairsMixin):
     """A conference sponsor."""
     name = models.CharField(max_length=255)
     packages = models.ManyToManyField(SponsorshipPackage,

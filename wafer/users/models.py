@@ -11,10 +11,10 @@ except ImportError:
 from django.utils.http import urlquote
 
 from wafer.talks.models import ACCEPTED, PENDING
-
+from wafer.kvpairs.mixins import KVPairsMixin
 
 @python_2_unicode_compatible
-class UserProfile(models.Model):
+class UserProfile(models.Model, KVPairsMixin):
     user = models.OneToOneField(User)
     contact_number = models.CharField(max_length=16, null=True, blank=True)
     bio = models.TextField(null=True, blank=True)

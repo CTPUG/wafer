@@ -2,9 +2,10 @@ from django.db import models
 from django.conf import settings
 from django.utils.encoding import python_2_unicode_compatible
 
+from wafer.kvpairs.mixins import KVPairsMixin
 
 @python_2_unicode_compatible
-class TicketType(models.Model):
+class TicketType(models.Model, KVPairsMixin):
 
     MAX_NAME_LENGTH = 255
 
@@ -15,7 +16,7 @@ class TicketType(models.Model):
 
 
 @python_2_unicode_compatible
-class Ticket(models.Model):
+class Ticket(models.Model, KVPairsMixin):
     barcode = models.IntegerField(primary_key=True)
     email = models.EmailField(blank=True)
     type = models.ForeignKey(TicketType)
