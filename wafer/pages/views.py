@@ -4,6 +4,7 @@ from django.views.generic import DetailView, TemplateView, UpdateView
 
 from reversion import revisions
 from rest_framework import viewsets
+from rest_framework.permissions import DjangoModelPermissions
 
 from wafer.pages.models import Page
 from wafer.pages.serializers import PageSerializer
@@ -57,3 +58,4 @@ class PageViewSet(viewsets.ModelViewSet):
     """API endpoint for users."""
     queryset = Page.objects.all()
     serializer_class = PageSerializer
+    permission_classes = (DjangoModelPermissions, )
