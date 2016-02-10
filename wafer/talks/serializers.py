@@ -8,7 +8,12 @@ class TalkSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Talk
-        exclude = ('_abstract_rendered', )
+        # private_notes should possibly be accessible to
+        # talk reviewers by the API, but certainly
+        # not to the other users.
+        # Similar considerations apply to notes, which should
+        # not be generally accessible
+        exclude = ('_abstract_rendered', 'private_notes', 'notes')
 
 
     @revisions.create_revision()
