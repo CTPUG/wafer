@@ -62,3 +62,5 @@ class UserViewSet(viewsets.ModelViewSet):
     """API endpoint for users."""
     queryset = get_user_model().objects.all()
     serializer_class = UserSerializer
+    # We want some better permissions than the default here, but
+    # IsAdminUser will do for now.
