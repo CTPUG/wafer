@@ -7,9 +7,10 @@ from django.views.generic import DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic.list import ListView
 from django.conf import settings
+from django.shortcuts import get_object_or_404
 
 from reversion import revisions
-from rest_framework import viewsets
+from rest_framework import viewsets, status
 from rest_framework.permissions import DjangoModelPermissions
 from rest_framework.response import Response
 
@@ -160,6 +161,20 @@ class TalksViewSet(viewsets.ModelViewSet):
         if Talk.can_view_all(request.user):
             queryset = Talk.objects.all()
         else:
+            # XXX: Should we also include talks owned by the user?
             queryset = Talk.objects.filter(status=ACCEPTED)
         serializer = TalkSerializer(queryset, many=True)
         return Response(serializer.data)
+
+    def retrieve(self, request, pk=None):
+        # As above, but we allow people to see their own talks
+        # as well
+        queryset = Talk.objects.all()
+        talk = get_object_or_404(queryset, pk=pk)
+        if talk.can_view(request.user):
+            serializer = TalkSerializer(talk)
+            return Response(serializer.data)
+        else:
+            # Return denied
+            data = {'detail': u'Permission denied'}
+            return Response(data, status=status.HTTP_403_FORBIDDEN)
