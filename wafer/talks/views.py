@@ -10,6 +10,8 @@ from django.conf import settings
 
 from reversion import revisions
 from rest_framework import viewsets
+from rest_framework.permissions import DjangoModelPermissions
+from rest_framework.response import Response
 
 from wafer.talks.models import Talk, ACCEPTED
 from wafer.talks.forms import TalkForm
@@ -149,3 +151,15 @@ class TalksViewSet(viewsets.ModelViewSet):
     """API endpoint that allows talks to be viewed or edited."""
     queryset = Talk.objects.all()
     serializer_class = TalkSerializer
+    permission_classes = (DjangoModelPermissions, )
+
+
+    def list(self, request):
+        # We override the default implementation to only show accepted talks
+        # to people who aren't part of the management group
+        if Talk.can_view_all(request.user):
+            queryset = Talk.objects.all()
+        else:
+            queryset = Talk.objects.filter(status=ACCEPTED)
+        serializer = TalkSerializer(queryset, many=True)
+        return Response(serializer.data)
