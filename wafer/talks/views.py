@@ -11,7 +11,7 @@ from django.shortcuts import get_object_or_404
 
 from reversion import revisions
 from rest_framework import viewsets, status
-from rest_framework.permissions import DjangoModelPermissions
+from rest_framework.permissions import DjangoModelPermissionsOrAnonReadOnly
 from rest_framework.response import Response
 
 from wafer.talks.models import Talk, ACCEPTED
@@ -152,7 +152,7 @@ class TalksViewSet(viewsets.ModelViewSet):
     """API endpoint that allows talks to be viewed or edited."""
     queryset = Talk.objects.all()
     serializer_class = TalkSerializer
-    permission_classes = (DjangoModelPermissions, )
+    permission_classes = (DjangoModelPermissionsOrAnonReadOnly, )
 
 
     def list(self, request):
