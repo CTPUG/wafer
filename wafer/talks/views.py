@@ -8,6 +8,7 @@ from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic.list import ListView
 from django.conf import settings
 from django.shortcuts import get_object_or_404
+from django.db.models import Q
 
 from reversion import revisions
 from rest_framework import viewsets, status
@@ -150,31 +151,23 @@ class Speakers(ListView):
 
 class TalksViewSet(viewsets.ModelViewSet):
     """API endpoint that allows talks to be viewed or edited."""
-    queryset = Talk.objects.all()
+    queryset = Talk.objects.none()  # Needed for the REST Permissions
     serializer_class = TalkSerializer
+    # XXX: Do we want to allow authors to edit talks via the API?
     permission_classes = (DjangoModelPermissionsOrAnonReadOnly, )
 
-
-    def list(self, request):
+    def get_queryset(self):
         # We override the default implementation to only show accepted talks
         # to people who aren't part of the management group
-        if Talk.can_view_all(request.user):
-            queryset = Talk.objects.all()
+        if self.request.user.id is None:
+            # Anonymous user, so just accepted talks
+            return Talk.objects.filter(status=ACCEPTED)
+        elif Talk.can_view_all(self.request.user):
+            return Talk.objects.all()
         else:
-            # XXX: Should we also include talks owned by the user?
-            queryset = Talk.objects.filter(status=ACCEPTED)
-        serializer = TalkSerializer(queryset, many=True)
-        return Response(serializer.data)
-
-    def retrieve(self, request, pk=None):
-        # As above, but we allow people to see their own talks
-        # as well
-        queryset = Talk.objects.all()
-        talk = get_object_or_404(queryset, pk=pk)
-        if talk.can_view(request.user):
-            serializer = TalkSerializer(talk)
-            return Response(serializer.data)
-        else:
-            # Return denied
-            data = {'detail': u'Permission denied'}
-            return Response(data, status=status.HTTP_403_FORBIDDEN)
+            # Also include talks owned by the user
+            # XXX: Should this be all authors rather than just
+            # the corresponding author?
+            return Talk.objects.filter(
+                Q(status=ACCEPTED)|
+                Q(corresponding_author=self.request.user))
