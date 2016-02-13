@@ -1,3 +1,5 @@
+from django.contrib.auth import get_user_model
+
 from rest_framework import serializers
 from reversion import revisions
 
@@ -5,6 +7,10 @@ from wafer.talks.models import Talk
 
 
 class TalkSerializer(serializers.ModelSerializer):
+
+    authors = serializers.PrimaryKeyRelatedField(
+        many=True, allow_null=True,
+        queryset=get_user_model().objects.all())
 
     class Meta:
         model = Talk
@@ -26,9 +32,11 @@ class TalkSerializer(serializers.ModelSerializer):
         revisions.set_comment("Changed via REST api")
         talk.abstract = validated_data['abstract']
         talk.title = validated_data['title']
-        talk.status = validated_data['status']
         talk.talk_type = validated_data['talk_type']
-        talk.notes = validated_data['notes']
-        talk.private_notes = validated_data['private_notes']
+        talk.authors = validated_data['authors']
+        talk.status = validated_data['status']
+        # These need more thought
+        #talk.notes = validated_data['notes']
+        #talk.private_notes = validated_data['private_notes']
         talk.save()
         return talk
