@@ -8,4 +8,5 @@ class UserSerializer(serializers.ModelSerializer):
         model = get_user_model()
         # Arguably not useful to expose via the REST api without
         # more thought.
-        exclude = ('password',)
+        # is_superuser seems dangerous to allow through the REST api
+        exclude = ('password', 'is_superuser')
