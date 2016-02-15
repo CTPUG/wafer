@@ -4,6 +4,11 @@ from django.utils.translation import ugettext_lazy as _
 
 # Django settings for wafer project.
 
+ADMINS = (
+    # The logging config below mails admins
+    # ('Your Name', 'your_email@example.com'),
+)
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
