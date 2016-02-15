@@ -26,7 +26,7 @@ class UserProfile(models.Model):
     github_username = models.CharField(max_length=32, null=True, blank=True)
 
     def __str__(self):
-        return unicode(self.user)
+        return u'%s' % self.user
 
     def accepted_talks(self):
         return self.user.talks.filter(status=ACCEPTED)

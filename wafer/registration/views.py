@@ -40,7 +40,7 @@ def github_login(request):
 
         user = github_sso(request.GET['code'])
     except SSOError as e:
-        messages.error(request, unicode(e))
+        messages.error(request, u'%s' % e)
         return HttpResponseRedirect(reverse('auth_login'))
 
     login(request, user)
@@ -54,7 +54,7 @@ def debian_login(request):
     try:
         user = debian_sso(request.META)
     except SSOError as e:
-        messages.error(request, unicode(e))
+        messages.error(request, u'%s' % e)
         return HttpResponseRedirect(reverse('auth_login'))
 
     login(request, user)
