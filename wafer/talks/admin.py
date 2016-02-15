@@ -45,14 +45,23 @@ class TalkUrlInline(admin.TabularInline):
     model = TalkUrl
 
 
+class KVPairsInline(admin.StackedInline):
+    model = Talk.kv.through
+    verbose_name_plural = 'Key Value pairs'
+    list_display = ('key', 'value')
+    extra = 1
+
+
 class TalkAdmin(VersionAdmin, admin.ModelAdmin):
     list_display = ('title', 'get_corresponding_author_name',
                     'get_corresponding_author_contact', 'talk_type',
                     'get_in_schedule', 'has_url', 'status')
     list_editable = ('status',)
     list_filter = ('status', 'talk_type', ScheduleListFilter)
+    exclude = ('kv',)
 
     inlines = [
+        KVPairsInline,
         TalkUrlInline,
     ]
     form = AdminTalkForm
