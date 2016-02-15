@@ -6,6 +6,8 @@ from django.utils.encoding import python_2_unicode_compatible
 
 from markitup.fields import MarkupField
 
+from wafer.kv.models import KeyValue
+
 
 # constants to make things clearer elsewhere
 ACCEPTED = 'A'
@@ -75,6 +77,8 @@ class Talk(models.Model):
         settings.AUTH_USER_MODEL, related_name='talks',
         help_text=_(
             "The speakers presenting the talk."))
+
+    kv = models.ManyToManyField(KeyValue)
 
     def __str__(self):
         return u'%s: %s' % (self.corresponding_author, self.title)

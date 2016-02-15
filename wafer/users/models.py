@@ -8,14 +8,15 @@ try:
     from urllib2 import urlparse
 except ImportError:
     from urllib import parse as urlparse
-from django.utils.http import urlquote
 
+from wafer.kv.models import KeyValue
 from wafer.talks.models import ACCEPTED, PENDING
 
 
 @python_2_unicode_compatible
 class UserProfile(models.Model):
     user = models.OneToOneField(User)
+    kv = models.ManyToManyField(KeyValue)
     contact_number = models.CharField(max_length=16, null=True, blank=True)
     bio = models.TextField(null=True, blank=True)
 

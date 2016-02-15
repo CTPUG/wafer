@@ -18,6 +18,7 @@ class AdminTalkForm(forms.ModelForm):
         self.fields['corresponding_author'].label_from_instance = render_author
 
 
+
 class ScheduleListFilter(admin.SimpleListFilter):
     title = _('in schedule')
     parameter_name = 'schedule'
@@ -35,11 +36,20 @@ class ScheduleListFilter(admin.SimpleListFilter):
             return queryset.filter(scheduleitem__isnull=True)
         return queryset
 
+
 class TalkUrlAdmin(VersionAdmin, admin.ModelAdmin):
     list_display = ('description', 'talk', 'url')
 
+
 class TalkUrlInline(admin.TabularInline):
     model = TalkUrl
+
+
+class KVPairsInline(admin.StackedInline):
+    model = Talk.kv.through
+    verbose_name_plural = 'Key Value pairs'
+    list_display = ('key', 'value')
+    extra = 1
 
 
 class TalkAdmin(VersionAdmin, admin.ModelAdmin):
@@ -48,10 +58,12 @@ class TalkAdmin(VersionAdmin, admin.ModelAdmin):
                     'get_in_schedule', 'has_url', 'status')
     list_editable = ('status',)
     list_filter = ('status', 'talk_type', ScheduleListFilter)
+    exclude = ('kv',)
 
     inlines = [
-              TalkUrlInline,
-              ]
+        KVPairsInline,
+        TalkUrlInline,
+    ]
     form = AdminTalkForm
 
 
