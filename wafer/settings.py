@@ -4,14 +4,10 @@ from django.utils.translation import ugettext_lazy as _
 
 # Django settings for wafer project.
 
-DEBUG = True
-TEMPLATE_DEBUG = DEBUG
-
 ADMINS = (
+    # The logging config below mails admins
     # ('Your Name', 'your_email@example.com'),
 )
-
-MANAGERS = ADMINS
 
 DATABASES = {
     'default': {
@@ -28,7 +24,7 @@ ALLOWED_HOSTS = []
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
 # although not all choices may be available on all operating systems.
 # In a Windows environment this must be set to your system time zone.
-TIME_ZONE = 'Africa/Johannesburg'
+TIME_ZONE = 'UTC'
 
 # Language code for this installation. All choices can be found here:
 # http://www.i18nguy.com/unicode/language-identifiers.html
@@ -193,7 +189,6 @@ ACCOUNT_ACTIVATION_DAYS = 7
 AUTH_USER_MODEL = 'auth.User'
 
 # Forms:
-CRISPY_FAIL_SILENTLY = not DEBUG
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
 
 # Wafer cache settings
