@@ -8,7 +8,6 @@ try:
     from urllib2 import urlparse
 except ImportError:
     from urllib import parse as urlparse
-from django.utils.http import urlquote
 
 from wafer.kv.models import KeyValue
 from wafer.talks.models import ACCEPTED, PENDING
