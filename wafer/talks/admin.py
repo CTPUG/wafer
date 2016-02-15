@@ -1,9 +1,22 @@
 from django.contrib import admin
+from django import forms
 from django.utils.translation import ugettext_lazy as _
 
 from reversion.admin import VersionAdmin
+from easy_select2 import select2_modelform_meta
 
-from wafer.talks.models import TalkType, Talk, TalkUrl
+from wafer.talks.models import TalkType, Talk, TalkUrl, render_author
+
+
+class AdminTalkForm(forms.ModelForm):
+
+    Meta = select2_modelform_meta(Talk)
+
+    def __init__(self, *args, **kwargs):
+        super(AdminTalkForm, self).__init__(*args, **kwargs)
+        self.fields['authors'].label_from_instance = render_author
+        self.fields['corresponding_author'].label_from_instance = render_author
+
 
 class ScheduleListFilter(admin.SimpleListFilter):
     title = _('in schedule')
@@ -39,6 +52,7 @@ class TalkAdmin(VersionAdmin, admin.ModelAdmin):
     inlines = [
               TalkUrlInline,
               ]
+    form = AdminTalkForm
 
 
 admin.site.register(Talk, TalkAdmin)
