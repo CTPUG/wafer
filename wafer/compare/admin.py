@@ -1,12 +1,17 @@
 # hack'ish support for comparing a django reversion
 # hisoty object with the current state
 
+from diff_match_patch import diff_match_patch
+
 from reversion.admin import VersionAdmin
 from django.conf.urls import url
 from django.shortcuts import get_object_or_404, render
 from django.contrib.admin.utils import unquote, quote
 from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext as _
+from reversion.helpers import generate_patch_html
+
+from markitup.fields import Markup
 
 
 class CompareVersionAdmin(VersionAdmin):
@@ -32,13 +37,43 @@ class CompareVersionAdmin(VersionAdmin):
         """Actually compare two versions."""
         opts = self.model._meta
         object_id = unquote(object_id)
-        current = get_object_or_404(self.model, pk=object_id)
+        # get_for_object's ordering means this is always the latest revision.
+        current = self.revision_manager.get_for_object_reference(self.model, object_id)[0]
+        # The reversion we want to compare to
+        revision = self.revision_manager.get_for_object_reference(self.model, object_id).filter(id=version_id)[0]
+        the_diff = []
+        dmp = diff_match_patch()
+
+        for field in current.field_dict:
+            # These exclusions really should be configurable
+            if field == 'id' or field.endswith('_rendered'):
+                continue
+            cur_val = current.field_dict[field] or ""
+            old_val = revision.field_dict[field] or ""
+            if isinstance(cur_val, Markup):
+                # we roll our own diff here, so we can compare of the raw
+                # markdown, rather than the rendered result.
+                if cur_val.raw == old_val.raw:
+                    continue
+                diffs = dmp.diff_main(old_val.raw, cur_val.raw)
+                patch =  dmp.diff_prettyHtml(diffs)
+            elif cur_val == old_val:
+                continue
+            else:
+                patch = generate_patch_html(revision, current, field)
+            the_diff.append('<h2>%s</h2>\n%s' % (field, patch))
+
+        if not the_diff:
+            the_diff = ['<p>No differences found</p>']
 
         context = {
-            "title": _("Comparing curent %s with revision from ") % (opts.verbose_name,'xxx'),
-            "app_label": opts.app_label,
-            "compare_list_url": reverse("%s:%s_comparelist" % (self.admin_site.name, opts.app_label, opts.model_name),
-                                                                  args=(quote(obj.pk),)),
+            "title": _("Comparing current %s with revision created %s") % (
+                current,
+                revision.revision.date_created.strftime("%Y-%m-%d %H:%m:%S")),
+            "opts": opts,
+            "compare_list_url": reverse("%s:%s_%s_comparelist" % (self.admin_site.name, opts.app_label, opts.model_name),
+                                                                  args=(quote(object_id),)),
+            "diff": '\n<p>\n'.join(the_diff),
         }
 
         extra_context = extra_context or {}

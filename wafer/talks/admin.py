@@ -5,6 +5,7 @@ from django.utils.translation import ugettext_lazy as _
 from reversion.admin import VersionAdmin
 from easy_select2 import select2_modelform_meta
 
+from wafer.compare.admin import CompareVersionAdmin
 from wafer.talks.models import TalkType, Talk, TalkUrl, render_author
 
 
@@ -52,7 +53,7 @@ class KVPairsInline(admin.StackedInline):
     extra = 1
 
 
-class TalkAdmin(VersionAdmin, admin.ModelAdmin):
+class TalkAdmin(CompareVersionAdmin, admin.ModelAdmin):
     list_display = ('title', 'get_corresponding_author_name',
                     'get_corresponding_author_contact', 'talk_type',
                     'get_in_schedule', 'has_url', 'status')
