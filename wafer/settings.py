@@ -149,6 +149,7 @@ INSTALLED_APPS = (
     'wafer.tickets',
     # Django isn't finding the overridden templates
     'registration',
+    'wafer.compare',
 )
 
 from django.db import migrations
