@@ -2,16 +2,49 @@
 # hisoty object with the current state
 
 from diff_match_patch import diff_match_patch
+import datetime
 
 from reversion.admin import VersionAdmin
+from reversion.models import Version
 from django.conf.urls import url
 from django.shortcuts import get_object_or_404, render
 from django.contrib.admin.utils import unquote, quote
 from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext as _
 from reversion.helpers import generate_patch_html
+from django.contrib.admin import SimpleListFilter
+from django.contrib.contenttypes.models import ContentType
 
 from markitup.fields import Markup
+
+
+class DateModifiedFilter(SimpleListFilter):
+    title = _('Last Modified')
+    parameter_name = 'moddate'
+
+    def lookups(self, request, model_admin):
+        return (
+            ('today', _('Today')),
+            ('yesterday', _('Since yesterday')),
+            ('7 days', _('In the last 7 days')),
+            ('30 days', _('In the last 30 days')),
+            )
+
+    def queryset(self, request, queryset):
+        date = None
+        if self.value() == 'today':
+            date = datetime.date.today()
+        elif self.value() == 'yesterday':
+            date = datetime.date.today() - datetime.timedelta(days=1)
+        elif self.value() == '7 days':
+            date = datetime.date.today() - datetime.timedelta(days=7)
+        elif self.value() == '30 days':
+            date = datetime.date.today() - datetime.timedelta(days=30)
+        if not date:
+            return queryset
+        content_type = ContentType.objects.get_for_model(queryset.model)
+        revisions = Version.objects.filter(content_type=content_type, revision__date_created__gte=date)
+        return queryset.filter(pk__in=[x.object_id for x in revisions])
 
 
 class CompareVersionAdmin(VersionAdmin):
