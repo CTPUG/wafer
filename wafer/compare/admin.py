@@ -81,8 +81,18 @@ class CompareVersionAdmin(VersionAdmin):
             # These exclusions really should be configurable
             if field == 'id' or field.endswith('_rendered'):
                 continue
-            cur_val = current.field_dict[field] or ""
-            old_val = revision.field_dict[field] or ""
+            # KeyError's may happen if the database structure changes
+            # between the creation of revisions. This isn't ideal,
+            # but should not be a fatal error.
+            # Log this?
+            try:
+                cur_val = current.field_dict[field] or ""
+            except KeyError:
+                cur_val = ""
+            try:
+                old_val = revision.field_dict[field] or ""
+            except KeyError:
+                old_val = ""
             if isinstance(cur_val, Markup):
                 # we roll our own diff here, so we can compare of the raw
                 # markdown, rather than the rendered result.
