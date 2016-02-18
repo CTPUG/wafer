@@ -104,10 +104,9 @@ class CompareVersionAdmin(VersionAdmin):
                 continue
             else:
                 patch = generate_patch_html(revision, current, field)
-            the_diff.append('<h2>%s</h2>\n%s' % (field, patch))
+            the_diff.append((field, patch))
 
-        if not the_diff:
-            the_diff = ['<p>No differences found</p>']
+        the_diff.sort()
 
         context = {
             "title": _("Comparing current %s with revision created %s") % (
@@ -116,7 +115,7 @@ class CompareVersionAdmin(VersionAdmin):
             "opts": opts,
             "compare_list_url": reverse("%s:%s_%s_comparelist" % (self.admin_site.name, opts.app_label, opts.model_name),
                                                                   args=(quote(object_id),)),
-            "diff": '\n<p>\n'.join(the_diff),
+            "diff_list": the_diff,
         }
 
         extra_context = extra_context or {}

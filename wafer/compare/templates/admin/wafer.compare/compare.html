@@ -11,7 +11,16 @@
 
 {% block content %}
 
-  {{ diff | safe }}
+{% for field, diff in diff_list %}
+<h2 id="fieldname">{{ field }}</h2>
+<div id="diff">
+   {{ diff | safe }}
+</div>
+{% empty %}
+<div id="diff">
+   <p>{% trans 'No differences found' %}</p>
+</div>
+{% endfor %}
 
 {% endblock %}
 
