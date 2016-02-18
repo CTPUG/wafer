@@ -5,7 +5,7 @@
         <a href="{% url opts|admin_urlname:'history' original.pk|admin_urlquote %}" class="historylink">{% trans "History" %}</a>
     </li>
     <li>
-       <a href="{% url opts|admin_urlname:'comparelist' original.pk|admin_urlquote %}" class="historylink">Compare Versions</a>
+       <a href="{% url opts|admin_urlname:'comparelist' original.pk|admin_urlquote %}" class="historylink">{% trans "Compare Versions" %}</a>
     </li>
     {% if has_absolute_url %}
         <li>
