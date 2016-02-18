@@ -85,15 +85,21 @@ class CompareVersionAdmin(VersionAdmin):
             # between the creation of revisions. This isn't ideal,
             # but should not be a fatal error.
             # Log this?
+            missing_field = False
             try:
                 cur_val = current.field_dict[field] or ""
             except KeyError:
-                cur_val = ""
+                cur_val = "No such field in latest version"
+                missing_field = True
             try:
                 old_val = revision.field_dict[field] or ""
             except KeyError:
-                old_val = ""
-            if isinstance(cur_val, Markup):
+                old_val = "No such field in old version"
+                missing_field = True
+            if missing_field:
+                diffs = dmp.diff_main(old_val, cur_val)
+                patch =  dmp.diff_prettyHtml(diffs)
+            elif isinstance(cur_val, Markup):
                 # we roll our own diff here, so we can compare of the raw
                 # markdown, rather than the rendered result.
                 if cur_val.raw == old_val.raw:
