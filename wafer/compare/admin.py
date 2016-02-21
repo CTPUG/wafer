@@ -77,7 +77,7 @@ class CompareVersionAdmin(VersionAdmin):
         the_diff = []
         dmp = diff_match_patch()
 
-        for field in current.field_dict:
+        for field in (set(current.field_dict.keys()) | set(revision.field_dict.keys())):
             # These exclusions really should be configurable
             if field == 'id' or field.endswith('_rendered'):
                 continue
