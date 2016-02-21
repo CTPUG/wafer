@@ -10,6 +10,7 @@ REQUIRES = [
     'djangorestframework',
     'jsonfield',
     'pillow',
+    'diff-match-patch',
     'pyLibravatar',
     'pytz',
     'requests',
