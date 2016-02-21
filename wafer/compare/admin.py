@@ -1,5 +1,5 @@
 # hack'ish support for comparing a django reversion
-# hisoty object with the current state
+# history object with the current state
 
 from diff_match_patch import diff_match_patch
 import datetime
