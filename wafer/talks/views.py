@@ -7,11 +7,17 @@ from django.views.generic import DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic.list import ListView
 from django.conf import settings
+from django.shortcuts import get_object_or_404
+from django.db.models import Q
 
 from reversion import revisions
+from rest_framework import viewsets, status
+from rest_framework.permissions import DjangoModelPermissionsOrAnonReadOnly
+from rest_framework.response import Response
 
 from wafer.talks.models import Talk, ACCEPTED
 from wafer.talks.forms import TalkForm
+from wafer.talks.serializers import TalkSerializer
 from wafer.users.models import UserProfile
 
 
@@ -142,3 +148,27 @@ class Speakers(ListView):
             user__talks__status='A').distinct().prefetch_related('user')
         context["speaker_rows"] = self._by_row(speakers, 4)
         return context
+
+
+class TalksViewSet(viewsets.ModelViewSet):
+    """API endpoint that allows talks to be viewed or edited."""
+    queryset = Talk.objects.none()  # Needed for the REST Permissions
+    serializer_class = TalkSerializer
+    # XXX: Do we want to allow authors to edit talks via the API?
+    permission_classes = (DjangoModelPermissionsOrAnonReadOnly, )
+
+    def get_queryset(self):
+        # We override the default implementation to only show accepted talks
+        # to people who aren't part of the management group
+        if self.request.user.id is None:
+            # Anonymous user, so just accepted talks
+            return Talk.objects.filter(status=ACCEPTED)
+        elif Talk.can_view_all(self.request.user):
+            return Talk.objects.all()
+        else:
+            # Also include talks owned by the user
+            # XXX: Should this be all authors rather than just
+            # the corresponding author?
+            return Talk.objects.filter(
+                Q(status=ACCEPTED)|
+                Q(corresponding_author=self.request.user))

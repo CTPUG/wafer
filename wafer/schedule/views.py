@@ -3,6 +3,7 @@ import datetime
 from django.views.generic import DetailView, TemplateView
 
 from rest_framework import viewsets
+from rest_framework.permissions import IsAdminUser
 from wafer.pages.models import Page
 from wafer.schedule.models import Venue, Slot, Day
 from wafer.schedule.admin import check_schedule
@@ -222,6 +223,7 @@ class ScheduleItemViewSet(viewsets.ModelViewSet):
     """
     queryset = ScheduleItem.objects.all()
     serializer_class = ScheduleItemSerializer
+    permission_classes = (IsAdminUser, )
 
 
 class ScheduleEditView(TemplateView):

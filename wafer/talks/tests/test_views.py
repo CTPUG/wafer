@@ -248,3 +248,79 @@ class SpeakerTests(TestCase):
     @mock.patch('wafer.users.models.UserProfile.avatar_url', mock_avatar_url)
     def test_view_seven_speakers(self):
         self.check_n_speakers(7, [(0, 4), (4, 7)])
+
+
+class TalkViewSetTests(TestCase):
+
+
+    def setUp(self):
+        self.talk_a = create_talk("Talk A", ACCEPTED, "author_a")
+        self.talk_r = create_talk("Talk R", REJECTED, "author_r")
+        self.talk_p = create_talk("Talk P", PENDING, "author_p")
+        self.client = Client()
+
+    def test_unauthorized_users(self):
+        response = self.client.get('/talks/api/talks/')
+        self.assertEqual(response.data['count'], 1)
+        self.assertEqual(response.data['results'][0]['title'], "Talk A")
+        response = self.client.get('/talks/api/talks/1/')
+        self.assertEqual(response.data['title'], 'Talk A')
+        response = self.client.get('/talks/api/talks/2/')
+        self.assertEqual(response.status_code, 404)
+
+    def test_ordinary_users_get_accepted_talks(self):
+        create_user('norm')
+        self.client.login(username='norm', password='norm_password')
+        response = self.client.get('/talks/api/talks/')
+        self.assertEqual(response.data['count'], 1)
+        self.assertEqual(response.data['results'][0]['title'], "Talk A")
+        response = self.client.get('/talks/api/talks/1/')
+        self.assertEqual(response.data['title'], 'Talk A')
+        response = self.client.get('/talks/api/talks/2/')
+        self.assertEqual(response.status_code, 404)
+
+    def test_super_user_gets_everything(self):
+        create_user('super', True)
+        self.client.login(username='super', password='super_password')
+        response = self.client.get('/talks/api/talks/')
+        self.assertEqual(response.data['count'], 3)
+        self.assertEqual(response.data['results'][0]['title'], "Talk A")
+        self.assertEqual(response.data['results'][1]['title'], "Talk R")
+        self.assertEqual(response.data['results'][2]['title'], "Talk P")
+        response = self.client.get('/talks/api/talks/1/')
+        self.assertEqual(response.data['title'], 'Talk A')
+        response = self.client.get('/talks/api/talks/2/')
+        self.assertEqual(response.data['title'], 'Talk R')
+
+    def test_reviewer_all_talks(self):
+        create_user('reviewer', perms=['view_all_talks'])
+        self.client.login(username='reviewer', password='reviewer_password')
+        response = self.client.get('/talks/api/talks/')
+        self.assertEqual(response.data['count'], 3)
+        self.assertEqual(response.data['results'][0]['title'], "Talk A")
+        self.assertEqual(response.data['results'][1]['title'], "Talk R")
+        self.assertEqual(response.data['results'][2]['title'], "Talk P")
+        response = self.client.get('/talks/api/talks/1/')
+        self.assertEqual(response.data['title'], 'Talk A')
+        response = self.client.get('/talks/api/talks/2/')
+        self.assertEqual(response.data['title'], 'Talk R')
+
+    def test_author_a_sees_own_talks_only(self):
+        self.client.login(username='author_a', password='author_a_password')
+        response = self.client.get('/talks/api/talks/')
+        self.assertEqual(response.data['count'], 1)
+        self.assertEqual(response.data['results'][0]['title'], "Talk A")
+
+    def test_author_r_sees_own_talk(self):
+        self.client.login(username='author_r', password='author_r_password')
+        response = self.client.get('/talks/api/talks/')
+        self.assertEqual(response.data['count'], 2)
+        self.assertEqual(response.data['results'][0]['title'], "Talk A")
+        self.assertEqual(response.data['results'][1]['title'], "Talk R")
+
+    def test_author_p_sees_own_talk(self):
+        self.client.login(username='author_p', password='author_p_password')
+        response = self.client.get('/talks/api/talks/')
+        self.assertEqual(response.data['count'], 2)
+        self.assertEqual(response.data['results'][0]['title'], "Talk A")
+        self.assertEqual(response.data['results'][1]['title'], "Talk P")

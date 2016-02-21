@@ -1,12 +1,18 @@
-from django.conf.urls import patterns, url
+from django.conf.urls import patterns, url, include
+from rest_framework import routers
 
 from wafer.users.views import (UsersView, ProfileView, EditProfileView,
-                               EditUserView)
+                               EditUserView, UserViewSet)
+
+
+router = routers.DefaultRouter()
+router.register(r'users', UserViewSet)
 
 urlpatterns = patterns(
     '',
     url(r'^$', UsersView.as_view(),
         name='wafer_users'),
+    url(r'^api/', include(router.urls)),
     url(r'^page/(?P<page>\d+)$', UsersView.as_view(),
         name='wafer_users_page'),
     url(r'^(?P<username>[\w.@+-]+)/$', ProfileView.as_view(),

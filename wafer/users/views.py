@@ -4,7 +4,11 @@ from django.views.generic import DetailView, UpdateView
 from django.views.generic.list import ListView
 from django.contrib.auth import get_user_model
 
+from rest_framework import viewsets
+from rest_framework.permissions import IsAdminUser
+
 from wafer.users.forms import UserForm, UserProfileForm
+from wafer.users.serializers import UserSerializer
 from wafer.users.models import UserProfile
 
 
@@ -53,3 +57,12 @@ class EditProfileView(EditOneselfMixin, UpdateView):
 
     def get_success_url(self):
         return reverse('wafer_user_profile', args=(self.object.user.username,))
+
+
+class UserViewSet(viewsets.ModelViewSet):
+    """API endpoint for users."""
+    queryset = get_user_model().objects.all()
+    serializer_class = UserSerializer
+    # We want some better permissions than the default here, but
+    # IsAdminUser will do for now.
+    permission_classes = (IsAdminUser, )
