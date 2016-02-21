@@ -89,15 +89,18 @@ class CompareVersionAdmin(VersionAdmin):
             try:
                 cur_val = current.field_dict[field] or ""
             except KeyError:
-                cur_val = "No such field in latest version"
+                cur_val = "No such field in latest version\n"
                 missing_field = True
             try:
                 old_val = revision.field_dict[field] or ""
             except KeyError:
-                old_val = "No such field in old version"
+                old_val = "No such field in old version\n"
                 missing_field = True
             if missing_field:
-                diffs = dmp.diff_main(old_val, cur_val)
+                # Ensure that the complete texts are marked as changed
+                # so new entires containing any of the marker words
+                # don't show up as differences
+                diffs = [(dmp.DIFF_DELETE, old_val), (dmp.DIFF_INSERT, cur_val)]
                 patch =  dmp.diff_prettyHtml(diffs)
             elif isinstance(cur_val, Markup):
                 # we roll our own diff here, so we can compare of the raw
