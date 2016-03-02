@@ -2,9 +2,9 @@
 {% load i18n %}
 {% load crispy_forms_tags %}
 {% block content %}
-{% if not WAFER_REGISTRATION_OPEN %}
-  {% trans "Registration is not currently open" %}
-{% elif not can_register %}
+{% if WAFER_REGISTRATION_OPEN != True %}
+  {% trans "Ticket sales are not currently open" %}
+{% elif not can_claim %}
   {% trans "Unable to claim tickets. Maybe you already have one?" %}
 {% else %}
   <section class="section1">

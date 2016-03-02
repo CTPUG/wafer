@@ -22,17 +22,17 @@ class ClaimView(FormView):
 
     def get_context_data(self, **kwargs):
         context = super(ClaimView, self).get_context_data(**kwargs)
-        context['can_register'] = self.can_register()
+        context['can_claim'] = self.can_claim()
         return context
 
-    def can_register(self):
+    def can_claim(self):
         has_ticket = self.request.user.ticket.exists()
-        registration_open = settings.WAFER_REGISTRATION_OPEN
+        registration_open = settings.WAFER_REGISTRATION_OPEN is True
         return registration_open and not has_ticket
 
     def form_valid(self, form):
-        if not self.can_register():
-            raise ValidationError('User may not register')
+        if not self.can_claim():
+            raise ValidationError('User may not claim a ticket')
         ticket = Ticket.objects.get(barcode=form.cleaned_data['barcode'])
         ticket.user = self.request.user
         ticket.save()
