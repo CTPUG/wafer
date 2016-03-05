@@ -1,12 +1,12 @@
-from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
-from django.core.urlresolvers import reverse
-from django.views.generic import DetailView, UpdateView
-from django.views.generic.list import ListView
-from django.views.generic.edit import FormView
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group
+from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
+from django.core.urlresolvers import reverse
 from django.utils.module_loading import import_string
+from django.views.generic import DetailView, UpdateView
+from django.views.generic.edit import FormView
+from django.views.generic.list import ListView
 
 from rest_framework import viewsets
 from rest_framework.permissions import IsAdminUser
