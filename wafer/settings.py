@@ -263,6 +263,7 @@ WAFER_REGISTRATION_OPEN = True
 
 # pre-registration requires a form
 WAFER_REGISTRATION_FORM = 'wafer.users.forms.ExampleRegistrationForm'
+WAFER_REGISTRATION_GROUP = 'Registration'
 
 # Ticket registration with Quicket
 # WAFER_TICKET_SECRET = "i'm a shared secret"
