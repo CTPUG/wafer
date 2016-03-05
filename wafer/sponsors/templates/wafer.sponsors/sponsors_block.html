@@ -1,0 +1,20 @@
+<div id="wafer-sponsors">
+    {% for package in packages %}
+    {% if package.sponsors.exists %}
+        <div>
+            <div class="package">{{ package.name }}</div>
+            <ul>
+                {% for sponsor in package.sponsors.all %}
+                    <li>
+                        {% if sponsor.logo %}
+                            <img src="{{ sponsor.logo.url }}" alt="{{ sponsor.name }}">
+                        {% else %}
+                            <span class="nologo">{{ sponsor.name }}</span>
+                        {% endif %}
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+    {% endfor %}
+</div>
