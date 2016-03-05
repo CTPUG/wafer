@@ -258,6 +258,7 @@ WAFER_HIDE_LOGIN = False
 WAFER_TALKS_OPEN = True
 
 # Set this to False to disable registration
+# or 'pre' to enable pre-registration only
 WAFER_REGISTRATION_OPEN = True
 
 # pre-registration requires a form

@@ -29,7 +29,9 @@
             <li><a href="{% url 'wafer_user_edit_profile' object.username %}" class="btn btn-default">{% trans 'Edit Profile' %}</a></li>
             {# These are only relevant to the user, not staff #}
             {% if user == object %}
-                {% if WAFER_REGISTRATION_OPEN and not user.ticket.exists %}
+                {% if WAFER_REGISTRATION_OPEN == 'pre' %}
+                    <li><a href="{% url 'wafer_register_view' object.username %}" class="btn btn-default">{% trans 'Pre-Register' %}</a></li>
+                {% elif WAFER_REGISTRATION_OPEN and not user.ticket.exists %}
                     <li><a href="{% url 'wafer_ticket_claim' %}" class="btn btn-default">{% trans 'Register' %}</a></li>
                 {% endif %}
                     <li><a href="{% url 'wafer_talk_submit' %}" class="btn btn-default">{% trans 'Submit Talk Proposal' %}</a></li>
@@ -80,9 +82,11 @@
             <div class="alert alert-danger">
                 {% blocktrans %}
                     <strong>WARNING:</strong>
-                    Talk proposal submitted, but no ticket purchased.
-                    Register now!
+                    Talk proposal submitted, but not registered.
                 {% endblocktrans %}
+                {% if WAFER_REGISTRATION_OPEN == True %}
+                    {% trans "Register now!" %}
+                {% endif %}
             </div>
         {% endif %}
     {% endif %}
