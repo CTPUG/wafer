@@ -1,11 +1,12 @@
 from django import forms
+from django.forms import fields
 from django.contrib.auth import get_user_model
 from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext as _
 
 from crispy_forms.bootstrap import PrependedText
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Submit
+from crispy_forms.layout import Fieldset, Layout, Submit
 
 from wafer.users.models import UserProfile
 
@@ -43,3 +44,22 @@ class UserProfileForm(forms.ModelForm):
     class Meta:
         model = UserProfile
         exclude = ('user', 'kv')
+
+
+class ExampleRegistrationForm(forms.Form):
+    debcamp = fields.BooleanField(
+        label='Plan to attend DebCamp', required=False)
+    debconf = fields.BooleanField(
+        label='Plan to attend DebConf', required=False)
+    require_sponsorship = fields.BooleanField(
+        label='Will require sponsorship', required=False)
+
+    def __init__(self, *args, **kwargs):
+        super(ExampleRegistrationForm, self).__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.layout = Layout(
+            Fieldset('Pre-Registration',
+                     'debcamp',
+                     'debconf',
+                     'require_sponsorship'))
+        self.helper.add_input(Submit('submit', _('Save')))

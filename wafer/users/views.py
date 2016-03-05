@@ -1,8 +1,12 @@
-from django.core.exceptions import PermissionDenied
+from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
 from django.core.urlresolvers import reverse
 from django.views.generic import DetailView, UpdateView
 from django.views.generic.list import ListView
+from django.views.generic.edit import FormView
+from django.conf import settings
 from django.contrib.auth import get_user_model
+from django.contrib.auth.models import Group
+from django.utils.module_loading import import_string
 
 from rest_framework import viewsets
 from rest_framework.permissions import IsAdminUser
@@ -61,6 +65,55 @@ class EditProfileView(EditOneselfMixin, UpdateView):
 
     def get_success_url(self):
         return reverse('wafer_user_profile', args=(self.object.user.username,))
+
+
+class RegistrationView(EditOneselfMixin, FormView):
+    template_name = 'wafer.users/registration.html'
+
+    def get_user(self):
+        return UserProfile.objects.get(user__username=self.kwargs['username'])
+
+    def get_form_class(self):
+        return import_string(settings.WAFER_REGISTRATION_FORM)
+
+    def get_kv_group(self):
+        return Group.objects.get_by_natural_key('Registration')
+
+    def get_queryset(self):
+        user = self.get_user()
+        self.verify_edit_permission(user)
+
+        return user.kv.filter(group=self.get_kv_group())
+
+    def get_initial(self):
+        saved = self.get_queryset()
+
+        initial = {}
+        form = self.get_form_class()()
+        for field in form.fields:
+            try:
+                initial[field] = saved.get(key=field).value
+            except ObjectDoesNotExist:
+                continue
+        return initial
+
+    def form_valid(self, form):
+        saved = self.get_queryset()
+        user = self.get_user()
+        group = self.get_kv_group()
+
+        for key, value in form.cleaned_data.iteritems():
+            try:
+                pair = saved.get(key=key)
+                pair.value = value
+                pair.save()
+            except ObjectDoesNotExist:
+                user.kv.create(group=group, key=key, value=value)
+
+        return super(RegistrationView, self).form_valid(form)
+
+    def get_success_url(self):
+        return reverse('wafer_user_profile', args=(self.kwargs['username'],))
 
 
 class UserViewSet(viewsets.ModelViewSet):

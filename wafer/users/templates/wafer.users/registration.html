@@ -1,0 +1,7 @@
+{% extends "wafer/base.html" %}
+{% load i18n %}
+{% load crispy_forms_tags %}
+{% block content %}
+<h1>{% trans 'Registration:' %}</h1>
+{% crispy form %}
+{% endblock %}
