@@ -65,3 +65,7 @@ class Sponsor(models.Model):
 
     def get_absolute_url(self):
         return reverse('wafer_sponsor', args=(self.pk,))
+
+    @property
+    def logo(self):
+        return self.files.get(name='logo').item
