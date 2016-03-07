@@ -3,7 +3,6 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group
 from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
 from django.core.urlresolvers import reverse
-from django.utils.module_loading import import_string
 from django.views.generic import DetailView, UpdateView
 from django.views.generic.edit import FormView
 from django.views.generic.list import ListView
@@ -11,7 +10,9 @@ from django.views.generic.list import ListView
 from rest_framework import viewsets
 from rest_framework.permissions import IsAdminUser
 
-from wafer.users.forms import UserForm, UserProfileForm
+from wafer.users.forms import (
+    UserForm, UserProfileForm, get_registration_form_class,
+)
 from wafer.users.serializers import UserSerializer
 from wafer.users.models import UserProfile
 
@@ -74,7 +75,7 @@ class RegistrationView(EditOneselfMixin, FormView):
         return UserProfile.objects.get(user__username=self.kwargs['username'])
 
     def get_form_class(self):
-        return import_string(settings.WAFER_REGISTRATION_FORM)
+        return get_registration_form_class()
 
     def get_kv_group(self):
         return Group.objects.get_by_natural_key(

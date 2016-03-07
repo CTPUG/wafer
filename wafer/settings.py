@@ -258,10 +258,12 @@ WAFER_HIDE_LOGIN = False
 WAFER_TALKS_OPEN = True
 
 # Set this to False to disable registration
-# or 'pre' to enable pre-registration only
 WAFER_REGISTRATION_OPEN = True
+# Can be 'ticket' for Quicket tickets or 'form' for a classic form
+WAFER_REGISTRATION_MODE = 'ticket'
 
-# pre-registration requires a form
+# For REGISTRATION_MODE == 'form': The form to present, and the Group to
+# associate the responses with in the KV store
 WAFER_REGISTRATION_FORM = 'wafer.users.forms.ExampleRegistrationForm'
 WAFER_REGISTRATION_GROUP = 'Registration'
 

@@ -1,7 +1,9 @@
 from django import forms
+from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.core.urlresolvers import reverse
 from django.forms import fields
+from django.utils.module_loading import import_string
 from django.utils.translation import ugettext as _
 
 from crispy_forms.bootstrap import PrependedText
@@ -46,6 +48,10 @@ class UserProfileForm(forms.ModelForm):
         exclude = ('user', 'kv')
 
 
+def get_registration_form_class():
+    return import_string(settings.WAFER_REGISTRATION_FORM)
+
+
 class ExampleRegistrationForm(forms.Form):
     debcamp = fields.BooleanField(
         label='Plan to attend DebCamp', required=False)
@@ -63,3 +69,14 @@ class ExampleRegistrationForm(forms.Form):
                      'debconf',
                      'require_sponsorship'))
         self.helper.add_input(Submit('submit', _('Save')))
+
+    @classmethod
+    def is_registered(cls, kv_data):
+        """
+        Given a user's kv_data query, determine if they have registered to
+        attend.
+        """
+        for item in kv_data.filter(key__in=('debcamp', 'debconf')):
+            if item.value is True:
+                return True
+        return False

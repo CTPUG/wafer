@@ -26,9 +26,11 @@ class ClaimView(FormView):
         return context
 
     def can_claim(self):
-        has_ticket = self.request.user.ticket.exists()
-        registration_open = settings.WAFER_REGISTRATION_OPEN is True
-        return registration_open and not has_ticket
+        if not settings.WAFER_REGISTRATION_OPEN:
+            return False
+        if settings.WAFER_REGISTRATION_MODE != 'ticket':
+            return False
+        return not self.request.user.userprofile.is_registered()
 
     def form_valid(self, form):
         if not self.can_claim():

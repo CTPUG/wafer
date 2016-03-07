@@ -29,12 +29,17 @@
             <li><a href="{% url 'wafer_user_edit_profile' object.username %}" class="btn btn-default">{% trans 'Edit Profile' %}</a></li>
             {# These are only relevant to the user, not staff #}
             {% if user == object %}
-                {% if WAFER_REGISTRATION_OPEN == 'pre' %}
-                    <li><a href="{% url 'wafer_register_view' object.username %}" class="btn btn-default">{% trans 'Pre-Register' %}</a></li>
-                {% elif WAFER_REGISTRATION_OPEN and not user.ticket.exists %}
-                    <li><a href="{% url 'wafer_ticket_claim' %}" class="btn btn-default">{% trans 'Register' %}</a></li>
+                {% if WAFER_REGISTRATION_OPEN %}
+                    {% if WAFER_REGISTRATION_MODE == 'form' %}
+                        {% url 'wafer_register_view' object.username as register_url %}
+                    {% elif WAFER_REGISTRATION_MODE == 'ticket' and not profile.is_registered %}
+                        {% url 'wafer_ticket_claim' as register_url %}
+                    {% endif %}
+                    {% if register_url %}
+                        <li><a href="{{ register_url }}" class="btn btn-default">{% trans 'Register' %}</a></li>
+                    {% endif %}
                 {% endif %}
-                    <li><a href="{% url 'wafer_talk_submit' %}" class="btn btn-default">{% trans 'Submit Talk Proposal' %}</a></li>
+                <li><a href="{% url 'wafer_talk_submit' %}" class="btn btn-default">{% trans 'Submit Talk Proposal' %}</a></li>
             {% endif %}
         </ul>
         {% endif %}
@@ -72,19 +77,19 @@
 {% endif %}
 {% if user == object or user.is_staff %}
     {% if profile.pending_talks.exists or profile.accepted_talks.exists %}
-        {% if object.ticket.exists %}
+        {% if profile.is_registered %}
             <div class="label label-success">
                 {% blocktrans %}
-                    Ticket purchased
+                    Registered
                 {% endblocktrans %}
             </div>
-        {% elif WAFER_REGISTRATION_OPEN %}
+        {% else %}
             <div class="alert alert-danger">
                 {% blocktrans %}
                     <strong>WARNING:</strong>
                     Talk proposal submitted, but not registered.
                 {% endblocktrans %}
-                {% if WAFER_REGISTRATION_OPEN == True %}
+                {% if WAFER_REGISTRATION_OPEN %}
                     {% trans "Register now!" %}
                 {% endif %}
             </div>
