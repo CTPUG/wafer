@@ -46,8 +46,7 @@ class TicketRegisteredUserList(RegisteredUserList):
 
 class FormRegisteredUserList(RegisteredUserList):
     def __init__(self):
-        self.group = Group.objects.get_by_natural_key(
-            settings.WAFER_REGISTRATION_GROUP)
+        self.group = Group.objects.get_by_natural_key('Registration')
         form_class = import_string(settings.WAFER_REGISTRATION_FORM)
         self.form = form_class()
 

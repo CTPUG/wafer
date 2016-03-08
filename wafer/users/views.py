@@ -78,8 +78,7 @@ class RegistrationView(EditOneselfMixin, FormView):
         return get_registration_form_class()
 
     def get_kv_group(self):
-        return Group.objects.get_by_natural_key(
-            settings.WAFER_REGISTRATION_GROUP)
+        return Group.objects.get_by_natural_key('Registration')
 
     def get_queryset(self):
         user = self.get_user()
