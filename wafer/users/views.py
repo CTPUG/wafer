@@ -1,9 +1,12 @@
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group
-from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
+from django.core.exceptions import (
+    ObjectDoesNotExist, PermissionDenied, ValidationError,
+)
 from django.core.urlresolvers import reverse
 from django.http import Http404
+from django.utils.translation import ugettext as _
 from django.views.generic import DetailView, UpdateView
 from django.views.generic.edit import FormView
 from django.views.generic.list import ListView
@@ -102,6 +105,8 @@ class RegistrationView(EditOneselfMixin, FormView):
         return initial
 
     def form_valid(self, form):
+        if not settings.WAFER_REGISTRATION_OPEN:
+            raise ValidationError(_('Registration is not open'))
         saved = self.get_queryset()
         user = self.get_user()
         group = self.get_kv_group()

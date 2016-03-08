@@ -3,5 +3,9 @@
 {% load crispy_forms_tags %}
 {% block content %}
 <h1>{% trans 'Registration:' %}</h1>
-{% crispy form %}
+{% if not WAFER_REGISTRATION_OPEN %}
+  {% trans "Registration is not currently open" %}
+{% else %}
+  {% crispy form %}
+{% endif %}
 {% endblock %}
