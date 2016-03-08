@@ -3,6 +3,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group
 from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
 from django.core.urlresolvers import reverse
+from django.http import Http404
 from django.views.generic import DetailView, UpdateView
 from django.views.generic.edit import FormView
 from django.views.generic.list import ListView
@@ -81,6 +82,8 @@ class RegistrationView(EditOneselfMixin, FormView):
         return Group.objects.get_by_natural_key('Registration')
 
     def get_queryset(self):
+        if settings.WAFER_REGISTRATION_MODE != 'form':
+            raise Http404('Form-based registration is not in use')
         user = self.get_user()
         self.verify_edit_permission(user)
 

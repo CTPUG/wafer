@@ -5,7 +5,7 @@ from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.core.exceptions import PermissionDenied, ValidationError
 from django.core.urlresolvers import reverse
-from django.http import HttpResponse
+from django.http import HttpResponse, Http404
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 from django.views.generic.edit import FormView
@@ -26,9 +26,9 @@ class ClaimView(FormView):
         return context
 
     def can_claim(self):
-        if not settings.WAFER_REGISTRATION_OPEN:
-            return False
         if settings.WAFER_REGISTRATION_MODE != 'ticket':
+            raise Http404('Ticket-based registration is not in use')
+        if not settings.WAFER_REGISTRATION_OPEN:
             return False
         return not self.request.user.userprofile.is_registered()
 
