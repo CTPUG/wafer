@@ -54,11 +54,11 @@ def get_registration_form_class():
 
 class ExampleRegistrationForm(forms.Form):
     debcamp = fields.BooleanField(
-        label='Plan to attend DebCamp', required=False)
+        label=_('Plan to attend DebCamp'), required=False)
     debconf = fields.BooleanField(
-        label='Plan to attend DebConf', required=False)
+        label=_('Plan to attend DebConf'), required=False)
     require_sponsorship = fields.BooleanField(
-        label='Will require sponsorship', required=False)
+        label=_('Will require sponsorship'), required=False)
 
     def __init__(self, *args, **kwargs):
         super(ExampleRegistrationForm, self).__init__(*args, **kwargs)
