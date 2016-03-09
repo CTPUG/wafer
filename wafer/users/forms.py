@@ -64,7 +64,7 @@ class ExampleRegistrationForm(forms.Form):
         super(ExampleRegistrationForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.layout = Layout(
-            Fieldset('Pre-Registration',
+            Fieldset(_('Pre-Registration'),
                      'debcamp',
                      'debconf',
                      'require_sponsorship'))
