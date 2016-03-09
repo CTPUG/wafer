@@ -118,9 +118,9 @@ class CompareVersionAdmin(VersionAdmin):
         the_diff.sort()
 
         context = {
-            "title": _("Comparing current %s with revision created %s") % (
-                current,
-                revision.revision.date_created.strftime("%Y-%m-%d %H:%m:%S")),
+            "title": _("Comparing current %(model)s with revision created %(date)s") % {
+                'model': current,
+                'date' : revision.revision.date_created.strftime("%Y-%m-%d %H:%m:%S")},
             "opts": opts,
             "compare_list_url": reverse("%s:%s_%s_comparelist" % (self.admin_site.name, opts.app_label, opts.model_name),
                                                                   args=(quote(object_id),)),
