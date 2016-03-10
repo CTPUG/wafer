@@ -29,6 +29,7 @@ def registration_settings(request):
             'WAFER_SSO',
             'WAFER_HIDE_LOGIN',
             'WAFER_REGISTRATION_OPEN',
+            'WAFER_REGISTRATION_MODE',
     ):
         context[setting] = getattr(settings, setting, None)
     return context

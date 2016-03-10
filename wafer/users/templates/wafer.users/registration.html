@@ -1,0 +1,11 @@
+{% extends "wafer/base.html" %}
+{% load i18n %}
+{% load crispy_forms_tags %}
+{% block content %}
+<h1>{% trans 'Registration:' %}</h1>
+{% if not WAFER_REGISTRATION_OPEN %}
+  {% trans "Registration is not currently open" %}
+{% else %}
+  {% crispy form %}
+{% endif %}
+{% endblock %}

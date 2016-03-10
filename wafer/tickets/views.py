@@ -5,7 +5,7 @@ from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.core.exceptions import PermissionDenied, ValidationError
 from django.core.urlresolvers import reverse
-from django.http import HttpResponse
+from django.http import HttpResponse, Http404
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 from django.views.generic.edit import FormView
@@ -22,17 +22,19 @@ class ClaimView(FormView):
 
     def get_context_data(self, **kwargs):
         context = super(ClaimView, self).get_context_data(**kwargs)
-        context['can_register'] = self.can_register()
+        context['can_claim'] = self.can_claim()
         return context
 
-    def can_register(self):
-        has_ticket = self.request.user.ticket.exists()
-        registration_open = settings.WAFER_REGISTRATION_OPEN
-        return registration_open and not has_ticket
+    def can_claim(self):
+        if settings.WAFER_REGISTRATION_MODE != 'ticket':
+            raise Http404('Ticket-based registration is not in use')
+        if not settings.WAFER_REGISTRATION_OPEN:
+            return False
+        return not self.request.user.userprofile.is_registered()
 
     def form_valid(self, form):
-        if not self.can_register():
-            raise ValidationError('User may not register')
+        if not self.can_claim():
+            raise ValidationError('User may not claim a ticket')
         ticket = Ticket.objects.get(barcode=form.cleaned_data['barcode'])
         ticket.user = self.request.user
         ticket.save()

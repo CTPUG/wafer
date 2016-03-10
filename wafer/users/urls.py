@@ -2,7 +2,7 @@ from django.conf.urls import patterns, url, include
 from rest_framework import routers
 
 from wafer.users.views import (UsersView, ProfileView, EditProfileView,
-                               EditUserView, UserViewSet)
+                               EditUserView, RegistrationView, UserViewSet)
 
 
 router = routers.DefaultRouter()
@@ -22,4 +22,7 @@ urlpatterns = patterns(
     url(r'^(?P<username>[\w.@+-]+)/edit_profile/$',
         EditProfileView.as_view(),
         name='wafer_user_edit_profile'),
+    url(r'^(?P<username>[\w.@+-]+)/register/$',
+        RegistrationView.as_view(),
+        name='wafer_register_view'),
 )

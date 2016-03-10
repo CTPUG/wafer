@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.contrib.auth.models import User
 from django.db import models
 from django.db.models.signals import post_save
@@ -59,6 +60,17 @@ class UserProfile(models.Model):
 
     def display_name(self):
         return self.user.get_full_name() or self.user.username
+
+    def is_registered(self):
+        from wafer.users.forms import get_registration_form_class
+
+        if settings.WAFER_REGISTRATION_MODE == 'ticket':
+            return self.user.ticket.exists()
+        elif settings.WAFER_REGISTRATION_MODE == 'form':
+            form = get_registration_form_class()
+            return form.is_registered(self.kv)
+        raise NotImplemented('Invalid WAFER_REGISTRATION_MODE: %s'
+                             % settings.WAFER_REGISTRATION_MODE)
 
 
 def create_user_profile(sender, instance, created, raw=False, **kwargs):
