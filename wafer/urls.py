@@ -17,12 +17,12 @@ urlpatterns = patterns(
     (r'^markitup/', include('markitup.urls')),
     (r'^schedule/', include('wafer.schedule.urls')),
     (r'^tickets/', include('wafer.tickets.urls')),
-
-    # Pages occupy the entire URL space, and must come last
-    url(r'', include('wafer.pages.urls')),
 )
 
 # Serve media
 if settings.DEBUG:
     urlpatterns += static(
         settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+# Pages occupy the entire URL space, and must come last
+urlpatterns.append(url(r'', include('wafer.pages.urls')))
