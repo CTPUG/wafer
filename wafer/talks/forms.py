@@ -1,5 +1,7 @@
 from django import forms
+from django.conf import settings
 from django.core.urlresolvers import reverse
+from django.utils.module_loading import import_string
 from django.utils.translation import ugettext as _
 
 from crispy_forms.bootstrap import FormActions
@@ -9,6 +11,10 @@ from markitup.widgets import MarkItUpWidget
 from easy_select2.widgets import Select2Multiple
 
 from wafer.talks.models import Talk, render_author
+
+
+def get_talk_form_class():
+    return import_string(settings.WAFER_TALK_FORM)
 
 
 class TalkForm(forms.ModelForm):
