@@ -7,13 +7,11 @@ from django.views.generic import DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic.list import ListView
 from django.conf import settings
-from django.shortcuts import get_object_or_404
 from django.db.models import Q
 
 from reversion import revisions
-from rest_framework import viewsets, status
+from rest_framework import viewsets
 from rest_framework.permissions import DjangoModelPermissionsOrAnonReadOnly
-from rest_framework.response import Response
 
 from wafer.talks.models import Talk, ACCEPTED
 from wafer.talks.forms import TalkForm

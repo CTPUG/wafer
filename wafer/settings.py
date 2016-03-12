@@ -152,8 +152,6 @@ INSTALLED_APPS = (
     'registration',
 )
 
-from django.db import migrations
-
 TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
 
 # A sample logging configuration. The only tangible logging
