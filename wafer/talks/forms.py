@@ -1,4 +1,5 @@
 from django import forms
+from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext as _
 
@@ -14,7 +15,14 @@ from wafer.talks.models import Talk, render_author
 class TalkForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         self.user = kwargs.pop('user')
-        kwargs.setdefault('initial', {}).setdefault('authors', [self.user])
+        initial = kwargs.setdefault('initial', {})
+        authors = initial.setdefault('authors', [self.user])
+
+        if not (settings.WAFER_PUBLIC_ATTENDEE_LIST
+                or self.user.has_perm('talks.change_talk')):
+            self.base_fields['authors'].limit_choices_to = {
+                'id__in': [author.id for author in authors]}
+
         super(TalkForm, self).__init__(*args, **kwargs)
 
         if not self.user.has_perm('talks.edit_private_notes'):

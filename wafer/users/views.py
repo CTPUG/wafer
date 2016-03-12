@@ -26,6 +26,11 @@ class UsersView(ListView):
     model = get_user_model()
     paginate_by = 25
 
+    def get_queryset(self, *args, **kwargs):
+        if not settings.WAFER_PUBLIC_ATTENDEE_LIST:
+            raise Http404()
+        return super(UsersView, self).get_queryset(*args, **kwargs)
+
 
 class ProfileView(DetailView):
     template_name = 'wafer.users/profile.html'
