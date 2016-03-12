@@ -44,5 +44,3 @@ class TalkForm(forms.ModelForm):
             'notes': forms.Textarea(attrs={'class': 'input-xxlarge'}),
             'authors': Select2Multiple(),
         }
-
-# TODO: authors widget is ugly
