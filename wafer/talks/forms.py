@@ -14,6 +14,7 @@ from wafer.talks.models import Talk, render_author
 class TalkForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         self.user = kwargs.pop('user')
+        kwargs.setdefault('initial', {}).setdefault('authors', [self.user])
         super(TalkForm, self).__init__(*args, **kwargs)
 
         if not self.user.has_perm('talks.edit_private_notes'):
