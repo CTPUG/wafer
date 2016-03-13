@@ -80,3 +80,7 @@ class ExampleRegistrationForm(forms.Form):
             if item.value is True:
                 return True
         return False
+
+    def initial_values(self, user):
+        """Set default values, based on the user"""
+        return {'debconf': True}
