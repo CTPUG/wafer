@@ -14,7 +14,7 @@ from rest_framework import viewsets
 from rest_framework.permissions import DjangoModelPermissionsOrAnonReadOnly
 
 from wafer.talks.models import Talk, ACCEPTED
-from wafer.talks.forms import TalkForm
+from wafer.talks.forms import get_talk_form_class
 from wafer.talks.serializers import TalkSerializer
 from wafer.users.models import UserProfile
 
@@ -69,8 +69,10 @@ class TalkView(DetailView):
 
 class TalkCreate(LoginRequiredMixin, CreateView):
     model = Talk
-    form_class = TalkForm
     template_name = 'wafer.talks/talk_form.html'
+
+    def get_form_class(self):
+        return get_talk_form_class()
 
     def get_form_kwargs(self):
         kwargs = super(TalkCreate, self).get_form_kwargs()
@@ -101,8 +103,10 @@ class TalkCreate(LoginRequiredMixin, CreateView):
 
 class TalkUpdate(EditOwnTalksMixin, UpdateView):
     model = Talk
-    form_class = TalkForm
     template_name = 'wafer.talks/talk_form.html'
+
+    def get_form_class(self):
+        return get_talk_form_class()
 
     def get_form_kwargs(self):
         kwargs = super(TalkUpdate, self).get_form_kwargs()
