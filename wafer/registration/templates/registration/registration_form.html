@@ -3,7 +3,7 @@
 {% load crispy_forms_tags %}
 {% load wafer_crispy %}
 {% block content %}
-<h1>{% trans 'Registration' %}</h1>
+<h1>{% trans 'Sign up' %}</h1>
 {% wafer_form_helper 'wafer.registration.forms.RegistrationFormHelper' as form_helper %}
 {% crispy form form_helper %}
 {% endblock %}
