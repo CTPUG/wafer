@@ -95,8 +95,9 @@ class RegistrationView(EditOneselfMixin, FormView):
     def get_initial(self):
         saved = self.get_queryset()
 
-        initial = {}
         form = self.get_form_class()()
+        initial = form.initial_values(self.get_user())
+
         for field in form.fields:
             try:
                 initial[field] = saved.get(key=field).value
