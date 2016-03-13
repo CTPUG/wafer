@@ -60,6 +60,9 @@ class Sponsor(models.Model):
         help_text=_("Images and other files for use in"
                     " the description markdown field."))
 
+    class Meta:
+        ordering = ['id']
+
     def __str__(self):
         return u'%s' % (self.name,)
 
