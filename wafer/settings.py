@@ -265,6 +265,9 @@ WAFER_REGISTRATION_MODE = 'ticket'
 # For REGISTRATION_MODE == 'form', the form to present
 WAFER_REGISTRATION_FORM = 'wafer.users.forms.ExampleRegistrationForm'
 
+# The form used for talk submission
+WAFER_TALK_FORM = 'wafer.talks.forms.TalkForm'
+
 # Ticket registration with Quicket
 # WAFER_TICKET_SECRET = "i'm a shared secret"
 
