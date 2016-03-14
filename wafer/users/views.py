@@ -14,6 +14,7 @@ from django.views.generic.list import ListView
 from rest_framework import viewsets
 from rest_framework.permissions import IsAdminUser
 
+from wafer.kv.utils import deserialize_by_field
 from wafer.users.forms import (
     UserForm, UserProfileForm, get_registration_form_class,
 )
@@ -98,9 +99,11 @@ class RegistrationView(EditOneselfMixin, FormView):
         form = self.get_form_class()()
         initial = form.initial_values(self.get_user())
 
-        for field in form.fields:
+        for fieldname in form.fields:
             try:
-                initial[field] = saved.get(key=field).value
+                value = saved.get(key=fieldname).value
+                field = form.fields[fieldname]
+                initial[fieldname] = deserialize_by_field(value, field)
             except ObjectDoesNotExist:
                 continue
         return initial
