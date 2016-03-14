@@ -28,6 +28,9 @@ class TalkType(models.Model):
     def __str__(self):
         return u'%s' % (self.name,)
 
+    class Meta:
+        ordering = ['id']
+
 
 @python_2_unicode_compatible
 class Talk(models.Model):
