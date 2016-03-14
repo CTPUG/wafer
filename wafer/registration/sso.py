@@ -4,10 +4,13 @@ import logging
 
 from django.conf import settings
 from django.contrib.auth import get_user_model
+from django.contrib.auth.models import Group
 from django.core.exceptions import MultipleObjectsReturned, ObjectDoesNotExist
 from django.db import IntegrityError
 
 import requests
+
+from wafer.kv.models import KeyValue
 
 MAX_APPEND = 20
 
@@ -130,13 +133,18 @@ def debian_sso(meta):
                        'Obtain one from https://sso.debian.org/spkac/')
 
     email = meta['SSL_CLIENT_S_DN_CN']
-    try:
-        user = get_user_model().objects.get(email=email)
-    except MultipleObjectsReturned:
-        log.warning('Multiple accounts have email address %s', email)
-        raise SSOError('Multiple accounts have email address %s' % email)
-    except ObjectDoesNotExist:
-        user = None
+    group = Group.objects.get_by_natural_key('Registration')
+
+    user = None
+    for kv in KeyValue.objects.filter(
+            group=group, key='debian_sso_email', value=email,
+            userprofile__isnull=False):
+        if kv.userprofile_set.count() > 1:
+            message = 'Multiple accounts have Debian SSOed with address %s'
+            log.warning(message, email)
+            raise SSOError(message % email)
+        user = kv.userprofile_set.first().user
+        break
 
     username = email.split('@', 1)[0]
     name = ('Unknown User', username)
@@ -162,4 +170,6 @@ def debian_sso(meta):
                 break
 
     user = sso(user=user, desired_username=username, name=name, email=email)
+    user.userprofile.kv.get_or_create(group=group, key='debian_sso_email',
+                                      defaults={'value': email})
     return user
