@@ -1,4 +1,3 @@
-from django import forms
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group
@@ -7,7 +6,6 @@ from django.core.exceptions import (
 )
 from django.core.urlresolvers import reverse
 from django.http import Http404
-from django.utils.dateparse import parse_date, parse_datetime, parse_time
 from django.utils.translation import ugettext as _
 from django.views.generic import DetailView, UpdateView
 from django.views.generic.edit import FormView
@@ -16,6 +14,7 @@ from django.views.generic.list import ListView
 from rest_framework import viewsets
 from rest_framework.permissions import IsAdminUser
 
+from wafer.kv.utils import deserialize_by_field
 from wafer.users.forms import (
     UserForm, UserProfileForm, get_registration_form_class,
 )
@@ -104,13 +103,7 @@ class RegistrationView(EditOneselfMixin, FormView):
             try:
                 value = saved.get(key=fieldname).value
                 field = form.fields[fieldname]
-                if isinstance(field, forms.DateTimeField):
-                    value = parse_datetime(value)
-                elif isinstance(field, forms.DateField):
-                    value = parse_date(value)
-                elif isinstance(field, forms.TimeField):
-                    value = parse_time(value)
-                initial[fieldname] = value
+                initial[fieldname] = deserialize_by_field(value, field)
             except ObjectDoesNotExist:
                 continue
         return initial
