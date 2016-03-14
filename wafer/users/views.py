@@ -1,3 +1,4 @@
+from django import forms
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group
@@ -6,6 +7,7 @@ from django.core.exceptions import (
 )
 from django.core.urlresolvers import reverse
 from django.http import Http404
+from django.utils.dateparse import parse_date, parse_datetime, parse_time
 from django.utils.translation import ugettext as _
 from django.views.generic import DetailView, UpdateView
 from django.views.generic.edit import FormView
@@ -98,9 +100,17 @@ class RegistrationView(EditOneselfMixin, FormView):
         form = self.get_form_class()()
         initial = form.initial_values(self.get_user())
 
-        for field in form.fields:
+        for fieldname in form.fields:
             try:
-                initial[field] = saved.get(key=field).value
+                value = saved.get(key=fieldname).value
+                field = form.fields[fieldname]
+                if isinstance(field, forms.DateTimeField):
+                    value = parse_datetime(value)
+                elif isinstance(field, forms.DateField):
+                    value = parse_date(value)
+                elif isinstance(field, forms.TimeField):
+                    value = parse_time(value)
+                initial[fieldname] = value
             except ObjectDoesNotExist:
                 continue
         return initial
