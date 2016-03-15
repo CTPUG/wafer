@@ -20,6 +20,14 @@ def get_talk_form_class():
 class TalkForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         self.user = kwargs.pop('user')
+        initial = kwargs.setdefault('initial', {})
+        authors = initial.setdefault('authors', [self.user])
+
+        if not (settings.WAFER_PUBLIC_ATTENDEE_LIST
+                or self.user.has_perm('talks.change_talk')):
+            self.base_fields['authors'].limit_choices_to = {
+                'id__in': [author.id for author in authors]}
+
         super(TalkForm, self).__init__(*args, **kwargs)
 
         if not self.user.has_perm('talks.edit_private_notes'):
@@ -50,5 +58,3 @@ class TalkForm(forms.ModelForm):
             'notes': forms.Textarea(attrs={'class': 'input-xxlarge'}),
             'authors': Select2Multiple(),
         }
-
-# TODO: authors widget is ugly

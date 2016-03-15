@@ -9,7 +9,7 @@
             <img src="{{ profile.avatar_url }}">
             {% endif %}
         {% endwith %}
-        {% if user == object or user.is_staff %}
+        {% if can_edit %}
             <a class="btn btn-default btn-sm" href="#" rel="popover" data-toggle="popover"
                 data-title="{% trans 'Changing your mugshot' %}" data-html="true"
                 data-placement="bottom">{% trans 'Edit Mugshot' %}</a>
@@ -23,24 +23,21 @@
         {% endif %}
     </div>
     <div class="col-md-10">
-        {% if user == object or user.is_staff %}
+        {% if can_edit %}
         <ul class="pull-right btn-group btn-group-vertical profile-links">
             <li><a href="{% url 'wafer_user_edit' object.username %}" class="btn btn-default">{% trans 'Edit User' %}</a></li>
             <li><a href="{% url 'wafer_user_edit_profile' object.username %}" class="btn btn-default">{% trans 'Edit Profile' %}</a></li>
-            {# These are only relevant to the user, not staff #}
-            {% if user == object %}
-                {% if WAFER_REGISTRATION_OPEN %}
-                    {% if WAFER_REGISTRATION_MODE == 'form' %}
-                        {% url 'wafer_register_view' object.username as register_url %}
-                    {% elif WAFER_REGISTRATION_MODE == 'ticket' and not profile.is_registered %}
-                        {% url 'wafer_ticket_claim' as register_url %}
-                    {% endif %}
-                    {% if register_url %}
-                        <li><a href="{{ register_url }}" class="btn btn-default">{% trans 'Register' %}</a></li>
-                    {% endif %}
+            {% if WAFER_REGISTRATION_OPEN %}
+                {% if WAFER_REGISTRATION_MODE == 'form' %}
+                    {% url 'wafer_register_view' object.username as register_url %}
+                {% elif WAFER_REGISTRATION_MODE == 'ticket' and not profile.is_registered %}
+                    {% url 'wafer_ticket_claim' as register_url %}
                 {% endif %}
-                <li><a href="{% url 'wafer_talk_submit' %}" class="btn btn-default">{% trans 'Submit Talk Proposal' %}</a></li>
+                {% if register_url %}
+                    <li><a href="{{ register_url }}" class="btn btn-default">{% trans 'Register' %}</a></li>
+                {% endif %}
             {% endif %}
+            <li><a href="{% url 'wafer_talk_submit' %}" class="btn btn-default">{% trans 'Submit Talk Proposal' %}</a></li>
         </ul>
         {% endif %}
         {% spaceless %}
@@ -75,7 +72,7 @@
 {{ profile.bio|linebreaks }}
 </div>
 {% endif %}
-{% if user == object or user.is_staff %}
+{% if can_edit %}
     {% if profile.pending_talks.exists or profile.accepted_talks.exists %}
         {% if profile.is_registered %}
             <div class="label label-success">
@@ -107,7 +104,7 @@
 {% endfor %}
 {% endif %}
 {# Submitted talk proposals are only visible to the owner #}
-{% if user == object or user.is_staff %}
+{% if can_edit %}
 {% if profile.pending_talks.exists %}
 <h2>{% trans 'Submitted Talks (under consideration):' %}</h2>
 {% for talk in profile.pending_talks %}

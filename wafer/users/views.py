@@ -27,12 +27,34 @@ class UsersView(ListView):
     model = get_user_model()
     paginate_by = 25
 
+    def get_queryset(self, *args, **kwargs):
+        if not settings.WAFER_PUBLIC_ATTENDEE_LIST:
+            raise Http404()
+        return super(UsersView, self).get_queryset(*args, **kwargs)
+
 
 class ProfileView(DetailView):
     template_name = 'wafer.users/profile.html'
     model = get_user_model()
     slug_field = 'username'
     slug_url_kwarg = 'username'
+
+    def get_object(self, *args, **kwargs):
+        object_ = super(ProfileView, self).get_object(*args, **kwargs)
+        if not settings.WAFER_PUBLIC_ATTENDEE_LIST:
+            if (not self.can_edit(object_) and
+                    not object_.userprofile.accepted_talks().exists()):
+                raise Http404()
+        return object_
+
+    def get_context_data(self, **kwargs):
+        context = super(ProfileView, self).get_context_data(**kwargs)
+        context['can_edit'] = self.can_edit(context['object'])
+        return context
+
+    def can_edit(self, user):
+        is_self = user == self.request.user
+        return is_self or self.request.user.is_staff
 
 
 # TODO: Combine these
@@ -47,8 +69,10 @@ class EditOneselfMixin(object):
             object_ = object_.user
         if object_ == self.request.user or self.request.user.is_staff:
             return
+        if settings.WAFER_PUBLIC_ATTENDEE_LIST:
+            raise Http404()
         else:
-            raise PermissionDenied
+            raise PermissionDenied()
 
 
 class EditUserView(EditOneselfMixin, UpdateView):
@@ -77,7 +101,11 @@ class RegistrationView(EditOneselfMixin, FormView):
     template_name = 'wafer.users/registration.html'
 
     def get_user(self):
-        return UserProfile.objects.get(user__username=self.kwargs['username'])
+        try:
+            return UserProfile.objects.get(
+                user__username=self.kwargs['username'])
+        except UserProfile.DoesNotExist:
+            raise Http404()
 
     def get_form_class(self):
         return get_registration_form_class()

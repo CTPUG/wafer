@@ -152,8 +152,6 @@ INSTALLED_APPS = (
     'registration',
 )
 
-from django.db import migrations
-
 TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
 
 # A sample logging configuration. The only tangible logging
@@ -257,6 +255,9 @@ WAFER_HIDE_LOGIN = False
 # Set this to False to disable talk submissions
 WAFER_TALKS_OPEN = True
 
+# The form used for talk submission
+WAFER_TALK_FORM = 'wafer.talks.forms.TalkForm'
+
 # Set this to False to disable registration
 WAFER_REGISTRATION_OPEN = True
 # Can be 'ticket' for Quicket tickets or 'form' for a classic form
@@ -265,8 +266,8 @@ WAFER_REGISTRATION_MODE = 'ticket'
 # For REGISTRATION_MODE == 'form', the form to present
 WAFER_REGISTRATION_FORM = 'wafer.users.forms.ExampleRegistrationForm'
 
-# The form used for talk submission
-WAFER_TALK_FORM = 'wafer.talks.forms.TalkForm'
+# Allow registered and anonymous users to see registered users
+WAFER_PUBLIC_ATTENDEE_LIST = True
 
 # Ticket registration with Quicket
 # WAFER_TICKET_SECRET = "i'm a shared secret"

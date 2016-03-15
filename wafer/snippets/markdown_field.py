@@ -1,7 +1,6 @@
 # From http://djangosnippets.org/snippets/882/
 # Copyright carljm (http://djangosnippets.org/users/carljm/)
 
-from django.conf import settings
 from django.db.models import TextField
 from markdown import markdown
 
