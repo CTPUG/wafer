@@ -38,6 +38,13 @@ class ProfileView(DetailView):
     slug_field = 'username'
     slug_url_kwarg = 'username'
 
+    def get_object(self, *args, **kwargs):
+        object_ = super(ProfileView, self).get_object(*args, **kwargs)
+        if not settings.WAFER_PUBLIC_ATTENDEE_LIST:
+            if not object_.userprofile.accepted_talks().exists():
+                raise Http404()
+        return object_
+
     def get_context_data(self, **kwargs):
         context = super(ProfileView, self).get_context_data(**kwargs)
         is_self = context['object'] == self.request.user
@@ -57,6 +64,8 @@ class EditOneselfMixin(object):
             object_ = object_.user
         if object_ == self.request.user or self.request.user.is_staff:
             return
+        if settings.WAFER_PUBLIC_ATTENDEE_LIST:
+            raise Http404
         else:
             raise PermissionDenied
 
@@ -87,7 +96,10 @@ class RegistrationView(EditOneselfMixin, FormView):
     template_name = 'wafer.users/registration.html'
 
     def get_user(self):
-        return UserProfile.objects.get(user__username=self.kwargs['username'])
+        try:
+            return UserProfile.objects.get(user__username=self.kwargs['username'])
+        except UserProfile.DoesNotExist:
+            raise Http404
 
     def get_form_class(self):
         return get_registration_form_class()
