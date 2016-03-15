@@ -38,6 +38,12 @@ class ProfileView(DetailView):
     slug_field = 'username'
     slug_url_kwarg = 'username'
 
+    def get_context_data(self, **kwargs):
+        context = super(ProfileView, self).get_context_data(**kwargs)
+        is_self = context['object'] == self.request.user
+        context['can_edit'] = is_self or self.request.user.is_staff
+        return context
+
 
 # TODO: Combine these
 class EditOneselfMixin(object):
