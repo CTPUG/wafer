@@ -267,7 +267,7 @@ WAFER_REGISTRATION_MODE = 'ticket'
 WAFER_REGISTRATION_FORM = 'wafer.users.forms.ExampleRegistrationForm'
 
 # Allow registered and anonymous users to see registered users
-WAFER_PUBLIC_ATTENDEE_LIST = False
+WAFER_PUBLIC_ATTENDEE_LIST = True
 
 # Ticket registration with Quicket
 # WAFER_TICKET_SECRET = "i'm a shared secret"
