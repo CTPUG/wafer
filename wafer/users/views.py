@@ -65,9 +65,9 @@ class EditOneselfMixin(object):
         if object_ == self.request.user or self.request.user.is_staff:
             return
         if settings.WAFER_PUBLIC_ATTENDEE_LIST:
-            raise Http404
+            raise Http404()
         else:
-            raise PermissionDenied
+            raise PermissionDenied()
 
 
 class EditUserView(EditOneselfMixin, UpdateView):
@@ -100,7 +100,7 @@ class RegistrationView(EditOneselfMixin, FormView):
             return UserProfile.objects.get(
                 user__username=self.kwargs['username'])
         except UserProfile.DoesNotExist:
-            raise Http404
+            raise Http404()
 
     def get_form_class(self):
         return get_registration_form_class()
