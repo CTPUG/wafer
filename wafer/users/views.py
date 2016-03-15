@@ -97,7 +97,8 @@ class RegistrationView(EditOneselfMixin, FormView):
 
     def get_user(self):
         try:
-            return UserProfile.objects.get(user__username=self.kwargs['username'])
+            return UserProfile.objects.get(
+                user__username=self.kwargs['username'])
         except UserProfile.DoesNotExist:
             raise Http404
 
