@@ -41,15 +41,19 @@ class ProfileView(DetailView):
     def get_object(self, *args, **kwargs):
         object_ = super(ProfileView, self).get_object(*args, **kwargs)
         if not settings.WAFER_PUBLIC_ATTENDEE_LIST:
-            if not object_.userprofile.accepted_talks().exists():
+            if (not self.can_edit(object_) and
+                    not object_.userprofile.accepted_talks().exists()):
                 raise Http404()
         return object_
 
     def get_context_data(self, **kwargs):
         context = super(ProfileView, self).get_context_data(**kwargs)
-        is_self = context['object'] == self.request.user
-        context['can_edit'] = is_self or self.request.user.is_staff
+        context['can_edit'] = self.can_edit(context['object'])
         return context
+
+    def can_edit(self, user):
+        is_self = user == self.request.user
+        return is_self or self.request.user.is_staff
 
 
 # TODO: Combine these
