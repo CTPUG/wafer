@@ -130,7 +130,6 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'django.contrib.admin',
     'reversion',
     'django_medusa',
     'crispy_forms',
@@ -150,6 +149,7 @@ INSTALLED_APPS = (
     'wafer.compare',
     # Django isn't finding the overridden templates
     'registration',
+    'django.contrib.admin',
 )
 
 TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
