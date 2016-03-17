@@ -1,0 +1,12 @@
+{% load i18n %}
+{% blocktrans %}
+Thank you for registering for {{ conference_name }}.
+
+This e-mail confirms that we have your registration.
+You can come back and edit your registration, at any time (until
+registration closes).
+
+Regards,
+
+The {{ conference_name }} conference organisers.
+{% endblocktrans %}
