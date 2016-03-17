@@ -3,6 +3,7 @@ logger = logging.getLogger(__name__)
 
 from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse
+from django.core.exceptions import ValidationError, NON_FIELD_ERRORS
 from django.conf import settings
 from django.db import models
 from django.db.models.signals import post_save
@@ -84,6 +85,20 @@ class Page(models.Model):
 
     class Model:
         unique_together = (('parent', 'slug'),)
+
+    def validate_unique(self, exclude=None):
+        existing = Page.objects.filter(slug=self.slug, parent=self.parent)
+        # We could be updating the page, so don't fail if the existing
+        # entry is this page.
+        if existing.count() > 1 or (existing.count() == 1 and
+                                    existing.first().pk != self.pk):
+            raise ValidationError(
+                {
+                    NON_FIELD_ERRORS: [
+                        _("Duplicate parent/slug combination"),
+                    ],
+                })
+        return super(Page, self).validate_unique(exclude)
 
 
 def page_menus(root_menu):
