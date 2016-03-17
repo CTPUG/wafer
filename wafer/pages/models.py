@@ -88,6 +88,21 @@ class Page(models.Model):
     class Model:
         unique_together = (('parent', 'slug'),)
 
+    def clean(self):
+        keys = [self.pk]
+        parent = self.parent
+        while parent is not None:
+            if parent.pk in keys:
+                raise ValidationError(
+                    {
+                        NON_FIELD_ERRORS: [
+                            _("Circular reference in parent."),
+                        ],
+                    })
+            keys.append(parent.pk)
+            parent = parent.parent
+        return super(Page, self).clean()
+
     def validate_unique(self, exclude=None):
         existing = Page.objects.filter(slug=self.slug, parent=self.parent)
         # We could be updating the page, so don't fail if the existing
@@ -97,7 +112,7 @@ class Page(models.Model):
             raise ValidationError(
                 {
                     NON_FIELD_ERRORS: [
-                        _("Duplicate parent/slug combination"),
+                        _("Duplicate parent/slug combination."),
                     ],
                 })
         return super(Page, self).validate_unique(exclude)
