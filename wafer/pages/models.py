@@ -64,6 +64,8 @@ class Page(models.Model):
         url = "/".join(self.get_path())
         return reverse('wafer_page', args=(url,))
 
+    get_absolute_url.short_description = 'page url'
+
     def get_in_schedule(self):
         if self.scheduleitem_set.all():
             return True
