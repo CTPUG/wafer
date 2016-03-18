@@ -1,3 +1,5 @@
+import logging
+
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group
@@ -20,6 +22,8 @@ from wafer.users.forms import (
 )
 from wafer.users.serializers import UserSerializer
 from wafer.users.models import UserProfile
+
+log = logging.getLogger(__name__)
 
 
 class UsersView(ListView):
@@ -151,7 +155,14 @@ class RegistrationView(EditOneselfMixin, FormView):
             except ObjectDoesNotExist:
                 user.kv.create(group=group, key=key, value=value)
 
+        log.info('User %s successfully registered (%r)',
+                 user.user.username, form.cleaned_data)
         return super(RegistrationView, self).form_valid(form)
+
+    def form_invalid(self, form):
+        log.info('User %s posted an incomplete registration form',
+                 self.get_user().user.username)
+        return super(RegistrationView, self).form_invalid(form)
 
     def get_success_url(self):
         return reverse('wafer_user_profile', args=(self.kwargs['username'],))
