@@ -1,0 +1,12 @@
+{% load i18n %}
+{% blocktrans %}
+Thank you for registering for {{ WAFER_CONFERENCE_NAME }}.
+
+This e-mail confirms that we have your registration.
+You can come back and edit your registration, at any time (until
+registration closes).
+
+Regards,
+
+The {{ WAFER_CONFERENCE_NAME }} conference organisers.
+{% endblocktrans %}
