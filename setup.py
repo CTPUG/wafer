@@ -25,6 +25,7 @@ SOURCES = []
 
 REQUIRES2 = [
     'pydns',
+    'backports.csv',
 ]
 
 SOURCES2 = []

@@ -1,5 +1,4 @@
 import codecs
-import csv
 import sys
 
 from django.conf import settings
@@ -8,6 +7,11 @@ from django.core.management.base import BaseCommand
 from django.utils.module_loading import import_string
 
 from wafer.users.models import UserProfile
+
+if sys.version_info >= (3,):
+    import csv
+else:
+    from backports import csv
 
 
 class RegisteredUserList(object):
@@ -55,7 +59,7 @@ class FormRegisteredUserList(RegisteredUserList):
             self.form.fields.keys())
 
     def _iter_details(self, registration_data):
-        for field in self.form.fields.iterkeys():
+        for field in self.form.fields.keys():
             item = registration_data.filter(key=field).first()
             if item:
                 yield item.value
@@ -73,7 +77,8 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         stream_writer = codecs.getwriter('utf-8')
-        csv_file = csv.writer(stream_writer(sys.stdout))
+        bytestream = getattr(sys.stdout, 'buffer', sys.stdout)
+        csv_file = csv.writer(stream_writer(bytestream))
 
         if settings.WAFER_REGISTRATION_MODE == 'ticket':
             user_list = TicketRegisteredUserList()
