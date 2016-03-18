@@ -9,7 +9,7 @@ from django.core.mail import EmailMultiAlternatives
 from django.core.urlresolvers import reverse
 from django.http import Http404
 from django.shortcuts import render
-from django.template import RequestContext, TemplateDoesNotExist
+from django.template import TemplateDoesNotExist
 from django.template.loader import render_to_string
 from django.utils.translation import ugettext as _
 from django.views.generic import DetailView, UpdateView
@@ -103,12 +103,12 @@ class EditProfileView(EditOneselfMixin, UpdateView):
 
 
 class RegistrationView(EditOneselfMixin, FormView):
-    template_name = 'wafer.users/registration.html'
-    success_template_name = 'wafer.users/registration_success.html'
+    template_name = 'wafer.users/registration/form.html'
+    success_template_name = 'wafer.users/registration/success.html'
     confirm_mail_txt_template_name = (
-        'wafer.users/registration_confirm_mail.txt')
+        'wafer.users/registration/confirm_mail.txt')
     confirm_mail_html_template_name = (
-        'wafer.users/registration_confirm_mail.html')
+        'wafer.users/registration/confirm_mail.html')
 
     def get_user(self):
         try:
