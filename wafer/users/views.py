@@ -9,7 +9,7 @@ from django.core.mail import EmailMultiAlternatives
 from django.core.urlresolvers import reverse
 from django.http import Http404
 from django.shortcuts import render
-from django.template import TemplateDoesNotExist
+from django.template import RequestContext, TemplateDoesNotExist
 from django.template.loader import render_to_string
 from django.utils.translation import ugettext as _
 from django.views.generic import DetailView, UpdateView
@@ -166,9 +166,10 @@ class RegistrationView(EditOneselfMixin, FormView):
                       is_registered)
         confirmation_context = self.get_confirmation_context_data(
             form, send_email, is_registered)
+        context_instance = RequestContext(self.request, confirmation_context)
         if send_email:
-            self.email_confirmation(confirmation_context)
-        return self.confirmation_response(confirmation_context)
+            self.email_confirmation(context_instance)
+        return self.confirmation_response(context_instance)
 
     def get_confirmation_context_data(self, form, will_send_email,
                                       is_registered):
@@ -188,14 +189,14 @@ class RegistrationView(EditOneselfMixin, FormView):
         context['talks_open'] = settings.WAFER_TALKS_OPEN
         return context
 
-    def email_confirmation(self, context):
+    def email_confirmation(self, context_instance):
         conference_name = get_current_site(self.request).name
-        context['conference_name'] = conference_name
         subject = _('%s Registration Confirmation') % conference_name
-        txt = render_to_string(self.confirm_mail_txt_template_name, context)
+        txt = render_to_string(self.confirm_mail_txt_template_name,
+                               context_instance=context_instance)
         try:
             html = render_to_string(self.confirm_mail_html_template_name,
-                                    context, self.request)
+                                    context_instance=context_instance)
         except TemplateDoesNotExist:
             html = None
 
@@ -205,9 +206,9 @@ class RegistrationView(EditOneselfMixin, FormView):
             email_message.attach_alternative(html, "text/html")
         email_message.send()
 
-    def confirmation_response(self, context):
+    def confirmation_response(self, context_instance):
         return render(self.request, self.success_template_name,
-                      context=context)
+                      context_instance=context_instance)
 
 
 class UserViewSet(viewsets.ModelViewSet):
