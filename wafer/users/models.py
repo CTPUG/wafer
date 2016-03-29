@@ -16,6 +16,10 @@ from wafer.talks.models import ACCEPTED, PENDING
 
 @python_2_unicode_compatible
 class UserProfile(models.Model):
+
+    class Meta:
+         ordering = ['id']
+
     user = models.OneToOneField(User)
     kv = models.ManyToManyField(KeyValue)
     contact_number = models.CharField(max_length=16, null=True, blank=True)
