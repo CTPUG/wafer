@@ -16,6 +16,13 @@ DATABASES = {
     }
 }
 
+if os.environ.get('TESTDB', None) == 'postgres':
+    DATABASES['default'].update({
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'USER': 'postgres',
+        'NAME': 'wafer',
+        })
+
 # Hosts/domain names that are valid for this site; required if DEBUG is False
 # See https://docs.djangoproject.com/en/1.5/ref/settings/#allowed-hosts
 ALLOWED_HOSTS = []
