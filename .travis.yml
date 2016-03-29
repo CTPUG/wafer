@@ -16,10 +16,14 @@ matrix:
    exclude:
       # Django 1.7 doesn't support python 3.5
       - python: "3.5"
-        env: DJANGO_VERSION=1.7
+        env: DJANGO_VERSION=1.7 TESTDB=sqlite
+      - python: "3.5"
+        env: DJANGO_VERSION=1.7 TESTDB=postgres
       # Django 1.9 doesn't support 3.3
       - python: "3.3"
-        env: DJANGO_VERSION=1.9
+        env: DJANGO_VERSION=1.9 TESTDB=sqlite
+      - python: "3.3"
+        env: DJANGO_VERSION=1.9 TESTDB=postgres
 services:
    - postgresql
 before_install:
