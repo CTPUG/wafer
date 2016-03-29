@@ -3,7 +3,7 @@ import sys
 from setuptools import find_packages, setup
 
 REQUIRES = [
-    'Django>=1.6',
+    'Django>=1.7',
     'django-crispy-forms',
     'django-nose',
     'django-registration-redux',
@@ -17,27 +17,20 @@ REQUIRES = [
     'django-medusa>=0.3.0',
     'django-reversion>=1.10',
     'django-easy-select2',
+    'django-markitup>=2.2.2',
+    'markdown>=2.5',
 ]
 
 SOURCES = []
 
 REQUIRES2 = [
     'pydns',
-    # markdown 2.5 drops support for Python 2.6. Django 1.7 doesn't
-    # support 2.6 either, so we can drop this restriction
-    # when we move to Django 1.7
-    'markdown<2.5',
-    # We need django-markitup >= 2.2.2 to support django 1.7 properly
-    # on python 2
-    'django-markitup>=2.2.1',
 ]
 
 SOURCES2 = []
 
 REQUIRES3 = [
     'py3dns',
-    'markdown>=2.5',
-    'django-markitup>=2.2',
 ]
 
 SOURCES3 = []
