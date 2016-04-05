@@ -83,7 +83,7 @@
                                <person id="{{ person.pk }}"
                                   {% if author.userprofile.twitter_handle %}
                                   twitter="https://twitter.com/{{ person.userprofile.twitter_handle }}"
-                                  { endif %}
+                                  {% endif %}
                                   contact="{{ person.email }}">{{ person.userprofile.display_name }}</person>
                                {% else %}
                                <person id="{{ person.pk }}">{{ person.userprofile.display_name }}</person>
