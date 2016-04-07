@@ -56,6 +56,23 @@ Installation
 
 6. Have a fun conference.
 
+Installing Bootstrap
+====================
+
+The default templates and css files require jquery and bootstrap to work.
+
+wafer provides a bower.json file to simplify the installation process. This
+requires a working nodejs installation.
+
+1. Install bower
+   ``npm install bower``
+
+2. Use bower to install appropriate versions of bootstrap and jquery
+   ``$(npm bin)/bower install``
+
+3. Move files to the correct location
+   ``manage.py collectstatic``
+
 Features
 ========
 
