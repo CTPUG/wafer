@@ -56,6 +56,24 @@ Installation
 
 6. Have a fun conference.
 
+Installing Bootstrap
+====================
+
+The default wafer.css provided requires bootstrap to work. Installing bootstrap
+is not required if you intend to replace wafer.css with something else.
+
+wafer provides a bower.json file to simplify the installation process. This
+requires a working nodejs installation.
+
+1. Install bower
+   ``npm install bower``
+
+2. Use bower to install bootstrap
+   ``$(npm bin)/bower install``
+
+3. Move files to the correct location
+   ``manage.py collectstatic``
+
 Features
 ========
 
