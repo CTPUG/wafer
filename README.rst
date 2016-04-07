@@ -59,8 +59,7 @@ Installation
 Installing Bootstrap
 ====================
 
-The default wafer.css provided requires bootstrap to work. Installing bootstrap
-is not required if you intend to replace wafer.css with something else.
+The default templates and css files require jquery and bootstrap to work.
 
 wafer provides a bower.json file to simplify the installation process. This
 requires a working nodejs installation.
@@ -68,7 +67,7 @@ requires a working nodejs installation.
 1. Install bower
    ``npm install bower``
 
-2. Use bower to install bootstrap
+2. Use bower to install appropriate versions of bootstrap and jquery
    ``$(npm bin)/bower install``
 
 3. Move files to the correct location
