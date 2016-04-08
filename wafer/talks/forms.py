@@ -1,3 +1,5 @@
+import copy
+
 from django import forms
 from django.conf import settings
 from django.core.urlresolvers import reverse
@@ -25,6 +27,7 @@ class TalkForm(forms.ModelForm):
 
         if not (settings.WAFER_PUBLIC_ATTENDEE_LIST
                 or self.user.has_perm('talks.change_talk')):
+            self.base_fields = copy.deepcopy(self.base_fields)
             self.base_fields['authors'].limit_choices_to = {
                 'id__in': [author.id for author in authors]}
 
