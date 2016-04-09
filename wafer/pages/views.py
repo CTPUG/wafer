@@ -31,15 +31,16 @@ class EditPage(UpdateView):
 def slug(request, url):
     """Look up a page by url (which is a tree of slugs)"""
     page = None
-    for slug in url.split('/'):
-        if not slug:
-            continue
-        try:
-            page = Page.objects.get(slug=slug, parent=page)
-        except Page.DoesNotExist:
-            raise Http404
 
-    if page is None:
+    if url:
+        for slug in url.split('/'):
+            if not slug:
+                continue
+            try:
+                page = Page.objects.get(slug=slug, parent=page)
+            except Page.DoesNotExist:
+                raise Http404
+    else:
         try:
             page = Page.objects.get(slug='index')
         except Page.DoesNotExist:

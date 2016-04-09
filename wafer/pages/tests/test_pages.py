@@ -48,18 +48,18 @@ class PageEditTests(TestCase):
         c = Client()
         # Test without edit permission
         c.login(username=no_edit_user.username, password='aaaa')
-        response = c.get('/test_edit')
+        response = c.get('/test_edit/')
         templates = [x.name for x in response.templates]
         self.assertTrue('wafer.pages/page.html' in templates)
-        response = c.get('/test_edit', {'edit': ''})
+        response = c.get('/test_edit/', {'edit': ''})
         self.assertEqual(response.status_code, 403)
         c.logout()
         # Test with edit permission
         c.login(username=edit_user.username, password='aaaa')
-        response = c.get('/test_edit')
+        response = c.get('/test_edit/')
         templates = [x.name for x in response.templates]
         self.assertTrue('wafer.pages/page.html' in templates)
-        response = c.get('/test_edit', {'edit': ''})
+        response = c.get('/test_edit/', {'edit': ''})
         templates = [x.name for x in response.templates]
         self.assertTrue('wafer.pages/page_form.html' in templates)
         self.assertEqual(response.status_code, 200)
