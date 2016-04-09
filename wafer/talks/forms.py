@@ -27,6 +27,7 @@ class TalkForm(forms.ModelForm):
 
         if not (settings.WAFER_PUBLIC_ATTENDEE_LIST
                 or self.user.has_perm('talks.change_talk')):
+            # copy base_fields because it's a shared class attribute
             self.base_fields = copy.deepcopy(self.base_fields)
             self.base_fields['authors'].limit_choices_to = {
                 'id__in': [author.id for author in authors]}
