@@ -17,6 +17,7 @@ urlpatterns = patterns(
     (r'^markitup/', include('markitup.urls')),
     (r'^schedule/', include('wafer.schedule.urls')),
     (r'^tickets/', include('wafer.tickets.urls')),
+    (r'^kv/', include('wafer.kv.urls')),
 )
 
 # Serve media
