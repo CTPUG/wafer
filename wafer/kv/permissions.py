@@ -13,6 +13,6 @@ class KeyValueGroupPermission(BasePermission):
         # the appropriate group
         group = obj.group
         user = request.user
-        if group in user.groups.all():
+        if user.groups.filter(name=group.name).exists():
             return True
         return False
