@@ -16,9 +16,8 @@ class KeyValueSerializer(serializers.ModelSerializer):
         # without a request
         user = kwargs['context']['request'].user
 
-        if not user.is_superuser:
-            # Limit to groups shown to those we're a member of
-            groups = self.fields['group']
-            groups.queryset = user.groups
+        # Limit to groups shown to those we're a member of
+        groups = self.fields['group']
+        groups.queryset = user.groups
 
         super(KeyValueSerializer, self).__init__(*args, **kwargs)
