@@ -16,7 +16,7 @@ class KeyValueGroupPermission(BasePermission):
         if user.groups.filter(name=group.name).exists():
             if request.method in ['PUT', 'PATCH']:
                 # XXX: Better ideas here?
-                if obj.group.pk != int(request.data['group']):
+                if 'group' in request.data and obj.group.pk != int(request.data['group']):
                     self.message = "Cannot change the group owning this KeyValue pair"
                     return False
             return True
