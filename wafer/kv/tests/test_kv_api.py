@@ -176,7 +176,6 @@ class KeyValueAPITests(TestCase):
                 'value': "{'mykey': 'Value'}",
                 'group': get_group("group_1").pk}
         response = self.client.post('/kv/api/kv/', data, format='json')
-        print response
         self.assertEqual(response.status_code, 400)
 
 
