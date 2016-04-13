@@ -47,6 +47,8 @@ class ProfileView(DetailView):
     model = get_user_model()
     slug_field = 'username'
     slug_url_kwarg = 'username'
+    # avoid a clash with the user object used by the menus
+    context_object_name = 'profile_user'
 
     def get_object(self, *args, **kwargs):
         object_ = super(ProfileView, self).get_object(*args, **kwargs)
@@ -90,6 +92,8 @@ class EditUserView(EditOneselfMixin, UpdateView):
     slug_url_kwarg = 'username'
     model = get_user_model()
     form_class = UserForm
+    # avoid a clash with the user object used by the menus
+    context_object_name = 'profile_user'
 
     def get_success_url(self):
         return reverse('wafer_user_profile', args=(self.object.username,))
@@ -101,6 +105,8 @@ class EditProfileView(EditOneselfMixin, UpdateView):
     slug_url_kwarg = 'username'
     model = UserProfile
     form_class = UserProfileForm
+    # avoid a clash with the user object used by the menus
+    context_object_name = 'profile_user'
 
     def get_success_url(self):
         return reverse('wafer_user_profile', args=(self.object.user.username,))
