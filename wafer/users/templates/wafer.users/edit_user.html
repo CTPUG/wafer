@@ -3,7 +3,7 @@
 {% load crispy_forms_tags %}
 {% block content %}
 <h1>{% trans 'Edit User:' %}</h1>
-{% if user.has_usable_password %}
+{% if profile_user == user and profile_user.has_usable_password %}
   <ul>
     <li>
       <a href="{% url 'auth_password_change' %}" class="btn btn-default">
