@@ -13,9 +13,7 @@ def get_group(group):
 
 
 def create_group(group):
-    grp = Group(name=group)
-    grp.save()
-    return grp
+    return Group.objects.create(name=group)
 
 
 def create_user(username, groups):
@@ -31,9 +29,7 @@ def create_user(username, groups):
 
 def create_kv_pair(name, value, group):
     group = get_group(group)
-    kv = KeyValue(key=name, value=value, group=group)
-    kv.save()
-    return kv
+    return KeyValue.objects.create(key=name, value=value, group=group)
 
 
 class KeyValueViewSetTests(TestCase):
