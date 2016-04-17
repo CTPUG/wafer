@@ -57,7 +57,7 @@ class KeyValueViewSetTests(TestCase):
     def test_unauthorized_users(self):
         response = self.client.get('/kv/api/kv/')
         self.assertEqual(response.data['count'], 0)
-        response = self.client.get('/talks/api/kv/%d/' % self.kv_1_grp1.pk)
+        response = self.client.get('/kv/api/kv/%d/' % self.kv_1_grp1.pk)
         self.assertEqual(response.status_code, 404)
 
     def test_group_1_member(self):
