@@ -63,7 +63,8 @@ class ProfileView(DetailView):
 
     def can_edit(self, user):
         is_self = user == self.request.user
-        return is_self or self.request.user.is_staff
+        return is_self or self.request.user.has_perm(
+            'users.change_userprofile')
 
 
 # TODO: Combine these
@@ -76,7 +77,8 @@ class EditOneselfMixin(object):
     def verify_edit_permission(self, object_):
         if hasattr(object_, 'user'):  # Accept User or UserProfile
             object_ = object_.user
-        if object_ == self.request.user or self.request.user.is_staff:
+        if object_ == self.request.user or self.request.user.has_perm(
+                'users.change_userprofile'):
             return
         if settings.WAFER_PUBLIC_ATTENDEE_LIST:
             raise Http404()
