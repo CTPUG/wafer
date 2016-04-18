@@ -23,7 +23,10 @@ class TalkForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         self.user = kwargs.pop('user')
         initial = kwargs.setdefault('initial', {})
-        authors = initial.setdefault('authors', [self.user])
+        if kwargs['instance']:
+            authors = kwargs['instance'].authors.all()
+        else:
+            authors = initial['authors'] = [self.user]
 
         if not (settings.WAFER_PUBLIC_ATTENDEE_LIST
                 or self.user.has_perm('talks.change_talk')):
