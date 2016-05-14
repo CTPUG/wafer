@@ -152,7 +152,7 @@ def prefetch_schedule_items():
 
 @cache_result('wafer_schedule_check_schedule', 60*60)
 def check_schedule():
-    """Helper routine to eaily test if the schedule is valid"""
+    """Helper routine to easily test if the schedule is valid"""
     all_items = prefetch_schedule_items()
     if find_clashes(all_items):
         return False
