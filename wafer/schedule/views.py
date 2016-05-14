@@ -6,7 +6,7 @@ from rest_framework import viewsets
 from rest_framework.permissions import IsAdminUser
 from wafer.pages.models import Page
 from wafer.schedule.models import Venue, Slot, Day
-from wafer.schedule.admin import check_schedule
+from wafer.schedule.admin import check_schedule, validate_schedule
 from wafer.schedule.models import ScheduleItem
 from wafer.schedule.serializers import ScheduleItemSerializer
 from wafer.talks.models import ACCEPTED
@@ -286,4 +286,5 @@ class ScheduleEditView(TemplateView):
         context['talks_unassigned'] = accepted_talks.filter(scheduleitem=None)
         context['pages'] = Page.objects.all()
         context['days'] = days
+        context['validation_errors'] = validate_schedule()
         return context
