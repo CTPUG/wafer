@@ -75,7 +75,7 @@ def quicket_hook(request):
     if request.GET.get('secret') != settings.WAFER_TICKETS_SECRET:
         raise PermissionDenied('Incorrect secret')
 
-    # This is required for python 3, and in thweory fine on python 2
+    # This is required for python 3, and in theory fine on python 2
     payload = json.loads(request.body.decode('utf8'))
     for ticket in payload['tickets']:
         import_ticket(ticket['barcode'], ticket['ticket_type'],
