@@ -76,7 +76,7 @@ def quicket_hook(request):
         raise PermissionDenied('Incorrect secret')
 
     # This is required for python 3, and in thweory fine on python 2
-    payload = json.load(request.decode('utf8'))
+    payload = json.loads(request.body.decode('utf8'))
     for ticket in payload['tickets']:
         import_ticket(ticket['barcode'], ticket['ticket_type'],
                       ticket['attendee_email'])
