@@ -17,7 +17,7 @@
         <div class="messages">
             {% for message in messages %}
             <div class="alert
-                {% if message.tags = 'error' %}
+                {% if message.tags == 'error' %}
                     alert-danger
                 {% elif message.tags %}
                     alert-{{ message.tags }}
