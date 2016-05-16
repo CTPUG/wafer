@@ -1,4 +1,6 @@
-from django.test import TestCase
+import json
+
+from django.test import TestCase, Client
 from django.contrib.auth import get_user_model
 
 from wafer.tickets.views import import_ticket
@@ -50,3 +52,66 @@ class ImportTicketTests(TestCase):
         import_ticket(12345, "Test Type", self.user_email)
         [ticket] = Ticket.objects.all()
         self.assertEqual(ticket, initial_ticket)
+
+
+class PostTicketTests(TestCase):
+    """Test posting data to the web hook"""
+
+    def test_posts(self):
+        UserModel = get_user_model()
+        email = "post@example.com"
+        user = UserModel.objects.create_user('Joe', email=email)
+        client = Client()
+        post_data = {
+            "reference": "REF00123456",
+            "event_id": 123,
+            "event_name": "My Big Event",
+            "amount": 0.00,
+            "email": "post@example.com",
+            "action": "checkout_started",
+            "tickets": [
+                {"id": 122,
+                 "attendee_name": "Test",
+                 "attendee_email": "post@example.com",
+                 "barcode": 54321,
+                 "ticket_type": "Test Ticket",
+                 "price": 0.00,
+                 }
+                ],
+            }
+        with self.settings(WAFER_TICKETS_SECRET='testsecret'):
+            # Check that the secret matters
+            response = client.post('/tickets/quicket_hook/?secret=wrongsecret',
+                                   json.dumps(post_data),
+                                   content_type="application/json")
+            self.assertEqual(response.status_code, 403)
+            # Check that the ticket gets processed correctly with an
+            # existing user
+            response = client.post('/tickets/quicket_hook/?secret=testsecret',
+                                   json.dumps(post_data),
+                                   content_type="application/json")
+            self.assertEqual(response.status_code, 200)
+            ticket = Ticket.objects.get(barcode=54321)
+            self.assertEqual(ticket.barcode, 54321)
+            self.assertEqual(ticket.email, email)
+            self.assertEqual(ticket.user, user)
+            # Check duplicate post doesn't change anything
+            response = client.post('/tickets/quicket_hook/?secret=testsecret',
+                                   json.dumps(post_data),
+                                   content_type="application/json")
+            self.assertEqual(response.status_code, 200)
+            ticket = Ticket.objects.get(barcode=54321)
+            self.assertEqual(ticket.barcode, 54321)
+            self.assertEqual(ticket.email, email)
+            self.assertEqual(ticket.user, user)
+            # Change email to one that doesn't exist
+            post_data['tickets'][0]['attendee_email'] = 'none@example.com'
+            post_data['tickets'][0]['barcode'] = 65432
+            response = client.post('/tickets/quicket_hook/?secret=testsecret',
+                                   json.dumps(post_data),
+                                   content_type="application/json")
+            self.assertEqual(response.status_code, 200)
+            ticket = Ticket.objects.get(barcode=65432)
+            self.assertEqual(ticket.barcode, 65432)
+            self.assertEqual(ticket.email, 'none@example.com')
+            self.assertEqual(ticket.user, None)
