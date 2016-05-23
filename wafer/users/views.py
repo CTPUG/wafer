@@ -170,7 +170,7 @@ class RegistrationView(EditOneselfMixin, FormView):
         user = self.get_user()
         group = self.get_kv_group()
 
-        for key, value in form.cleaned_data.iteritems():
+        for key, value in form.cleaned_data.items():
             try:
                 pair = saved.get(key=key)
                 pair.value = value

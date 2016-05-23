@@ -66,7 +66,7 @@ def _configure_user(user, name, email, profile_fields):
 
     profile = user.userprofile
     if profile_fields:
-        for k, v in profile_fields.iteritems():
+        for k, v in profile_fields.items():
             setattr(profile, k, v)
     profile.save()
 
