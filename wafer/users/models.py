@@ -76,6 +76,8 @@ class UserProfile(models.Model):
         raise NotImplemented('Invalid WAFER_REGISTRATION_MODE: %s'
                              % settings.WAFER_REGISTRATION_MODE)
 
+    is_registered.boolean = True
+
 
 def create_user_profile(sender, instance, created, raw=False, **kwargs):
     if raw:
