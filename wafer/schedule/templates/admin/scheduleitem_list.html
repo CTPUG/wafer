@@ -11,7 +11,7 @@
           {% if errors.clashes %}
           <h3>{% trans "Clashes" %}</h3>
           <ul>
-             {% for pos, items in errors.clashes.iteritems %}
+             {% for pos, items in errors.clashes.items %}
              <li>{{ pos.0 }} at {{ pos.1.get_start_time|time:"H:i" }} --
                  {% for item in items %}
                      {{ item }},
@@ -47,7 +47,7 @@
           {% if errors.venues %}
           <h3>{% trans "Venues assigned on days they are not available" %}</h3>
           <ul>
-             {% for venue, items in errors.venues.iteritems %}
+             {% for venue, items in errors.venues.items %}
              <li>{{ venue }} --
                  {% for item in items %}
                     {{ item }},
