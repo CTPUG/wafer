@@ -5,6 +5,7 @@ from reversion import revisions
 
 from wafer.talks.models import Talk
 from wafer.kv.serializers import CustomKeyValueSerializer
+from wafer.kv.utils import update_kv
 
 
 class TalkSerializer(serializers.ModelSerializer):
@@ -38,6 +39,7 @@ class TalkSerializer(serializers.ModelSerializer):
         talk.talk_type = validated_data['talk_type']
         talk.authors = validated_data['authors']
         talk.status = validated_data['status']
+        update_kv(talk.kv, validated_data['kv'], self.context)
         # These need more thought
         #talk.notes = validated_data['notes']
         #talk.private_notes = validated_data['private_notes']
