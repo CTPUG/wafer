@@ -1,6 +1,20 @@
 from django.core.exceptions import PermissionDenied
+from django.core.urlresolvers import NoReverseMatch
 from rest_framework import serializers
 from wafer.kv.models import KeyValue
+
+
+class MaybeHyperlinkField(serializers.HyperlinkedRelatedField):
+    """Overrider HyperlinkRelatedFiled to return just the object name
+       for when a model has not been hooked up to the api, so we don't
+       need to add special cases everytime a new model grows KV support
+       without growing a API view."""
+
+    def get_url(self, obj, view_name, request, format):
+        try:
+            return super(MaybeHyperlinkField, self).get_url(obj, view_name, request, format)
+        except NoReverseMatch:
+            return super(MaybeHyperlinkField, self).get_name(obj)
 
 
 class KeyValueSerializer(serializers.ModelSerializer):
@@ -25,5 +39,14 @@ class KeyValueSerializer(serializers.ModelSerializer):
         # Limit to groups shown to those we're a member of
         groups = self.fields['group']
         groups.queryset = user.groups
+
+        # Add fields for the models we have ManyToMany relationships defined for
+        for field in self.Meta.model._meta.get_fields():
+            if field.name not in self.fields and field.many_to_many:
+                # XXX: Is there a better way to get the correct view_name out of the url config?
+                view_name = '%s-detail' % field.related_model._meta.model_name
+                self.fields[field.name] = MaybeHyperlinkField(source=field.get_accessor_name(),
+                                                              view_name=view_name, read_only=True,
+                                                              many=True)
 
         super(KeyValueSerializer, self).__init__(*args, **kwargs)
