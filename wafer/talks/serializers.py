@@ -4,6 +4,7 @@ from rest_framework import serializers
 from reversion import revisions
 
 from wafer.talks.models import Talk
+from wafer.kv.serializers import CustomKeyValueSerializer
 
 
 class TalkSerializer(serializers.ModelSerializer):
@@ -11,6 +12,8 @@ class TalkSerializer(serializers.ModelSerializer):
     authors = serializers.PrimaryKeyRelatedField(
         many=True, allow_null=True,
         queryset=get_user_model().objects.all())
+
+    kv = CustomKeyValueSerializer()
 
     class Meta:
         model = Talk

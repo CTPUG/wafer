@@ -17,6 +17,45 @@ class MaybeHyperlinkField(serializers.HyperlinkedRelatedField):
             return super(MaybeHyperlinkField, self).get_name(obj)
 
 
+class CustomKeyValueSerializer(serializers.HyperlinkedRelatedField):
+
+    # Because of how Django rest framework handles the dance between
+    # ManyRelatedField and RelatedField, we must override __new__
+    # to have this always behave as if 'many=True' was set
+    def __new__(cls, *args, **kwargs):
+        if 'view_name' not in kwargs:
+            # queryset here is just to statisfy older versions of
+            # rest-framework which don't check for overridding get_queryset.
+            return cls.many_init(*args, view_name='keyvalue-detail',
+                                 queryset=KeyValue.objects.none(), **kwargs)
+        return super(CustomKeyValueSerializer, cls).__new__(cls, *args,
+                                                            **kwargs)
+
+    def get_queryset(self):
+        """Custom queryset to limit key-value pairs returned to the
+           requesting user's group for choices"""
+        request = self.context.get('request', None)
+        if request.user.id is not None:
+            grp_ids = [x.id for x in request.user.groups.all()]
+            return KeyValue.objects.filter(group_id__in=grp_ids).all()
+        return KeyValue.objects.none()
+
+    def get_url(self, obj, view_name, request, format):
+        # Because of how rest-framework creates the list for the existing values
+        # without evaluating get_queryset, we redact the non-group elements here
+        # This does leak information about the number of KeyValue pairs set by other
+        # groups, but is simpler than removing the entries entirely.
+        if request.user.id is not None:
+            grp_ids = [x.id for x in request.user.groups.all()]
+            if obj.group.id not in grp_ids:
+                return u"hidden"
+        return super(CustomKeyValueSerializer, self).get_url(obj, view_name, request, format)
+
+    def run_validation(self, data):
+        print 'validating', data
+        return super(CustomKeyValueSerializer, self).run_validation(data)
+
+
 class KeyValueSerializer(serializers.ModelSerializer):
 
     class Meta:
