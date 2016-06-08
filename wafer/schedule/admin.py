@@ -169,7 +169,6 @@ def check_schedule():
     return True
 
 
-@cache_result('wafer_schedule_validate_schedule', 30)
 def validate_schedule():
     """Helper routine to easily test if the schedule is valid"""
     all_items = prefetch_schedule_items()
