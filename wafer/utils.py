@@ -3,6 +3,9 @@ import unicodedata
 from django.core.cache import caches
 from django.conf import settings
 
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
+
 
 def normalize_unicode(u):
     """Replace non-ASCII characters with closest ASCII equivalents
@@ -55,3 +58,13 @@ class QueryTracker(object):
     def queries(self):
         from django.db import connection
         return connection.queries[:]
+
+
+# XXX: Should we use Django's version for Django > 1.9 ?
+# This should certainly go away when we drop support for
+# Django 1.8
+class LoginRequiredMixin(object):
+    '''Must be logged in'''
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(LoginRequiredMixin, self).dispatch(*args, **kwargs)

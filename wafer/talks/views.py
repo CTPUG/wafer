@@ -1,8 +1,6 @@
-from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied, ValidationError
 from django.core.urlresolvers import reverse_lazy
 from django.http import HttpResponseRedirect
-from django.utils.decorators import method_decorator
 from django.views.generic import DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic.list import ListView
@@ -13,6 +11,7 @@ from reversion import revisions
 from rest_framework import viewsets
 from rest_framework.permissions import DjangoModelPermissionsOrAnonReadOnly
 
+from wafer.utils import LoginRequiredMixin
 from wafer.talks.models import Talk, ACCEPTED
 from wafer.talks.forms import get_talk_form_class
 from wafer.talks.serializers import TalkSerializer
@@ -28,13 +27,6 @@ class EditOwnTalksMixin(object):
             return object_
         else:
             raise PermissionDenied
-
-
-class LoginRequiredMixin(object):
-    '''Must be logged in'''
-    @method_decorator(login_required)
-    def dispatch(self, *args, **kwargs):
-        return super(LoginRequiredMixin, self).dispatch(*args, **kwargs)
 
 
 class UsersTalks(ListView):
