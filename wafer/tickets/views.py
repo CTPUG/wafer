@@ -10,13 +10,15 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 from django.views.generic.edit import FormView
 
+from wafer.utils import LoginRequiredMixin
+
 from wafer.tickets.models import Ticket, TicketType
 from wafer.tickets.forms import TicketForm
 
 log = logging.getLogger(__name__)
 
 
-class ClaimView(FormView):
+class ClaimView(LoginRequiredMixin, FormView):
     template_name = 'wafer.tickets/claim.html'
     form_class = TicketForm
 
