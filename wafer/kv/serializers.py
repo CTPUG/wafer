@@ -51,10 +51,6 @@ class CustomKeyValueSerializer(serializers.HyperlinkedRelatedField):
                 return u"hidden"
         return super(CustomKeyValueSerializer, self).get_url(obj, view_name, request, format)
 
-    def run_validation(self, data):
-        print 'validating', data
-        return super(CustomKeyValueSerializer, self).run_validation(data)
-
 
 class KeyValueSerializer(serializers.ModelSerializer):
 
