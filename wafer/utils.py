@@ -60,7 +60,7 @@ class QueryTracker(object):
         return connection.queries[:]
 
 
-# XXX: Should we use Django's version for Django > 1.9 ?
+# XXX: Should we use Django's version for Django >= 1.9 ?
 # This should certainly go away when we drop support for
 # Django 1.8
 class LoginRequiredMixin(object):
