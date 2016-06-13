@@ -34,12 +34,18 @@ class TalkSerializer(serializers.ModelSerializer):
     @revisions.create_revision()
     def update(self, talk, validated_data):
         revisions.set_comment("Changed via REST api")
-        talk.abstract = validated_data['abstract']
-        talk.title = validated_data['title']
-        talk.talk_type = validated_data['talk_type']
-        talk.authors = validated_data['authors']
-        talk.status = validated_data['status']
-        update_kv(talk.kv, validated_data['kv'], self.context)
+        if 'abstract' in validated_data:
+            talk.abstract = validated_data['abstract']
+        if 'title' in validated_data:
+            talk.title = validated_data['title']
+        if 'talk_type' in validated_data:
+            talk.talk_type = validated_data['talk_type']
+        if 'authors' in validated_data:
+            talk.authors = validated_data['authors']
+        if 'status' in validated_data:
+            talk.status = validated_data['status']
+        if 'kv' in validated_data:
+            update_kv(talk.kv, validated_data['kv'], self.context)
         # These need more thought
         #talk.notes = validated_data['notes']
         #talk.private_notes = validated_data['private_notes']
