@@ -21,12 +21,14 @@ def update_kv(kv, new_values, context):
        pairs set that aren't accessible by the user are retained."""
     request = context.get('request', None)
     values = new_values
-    if request.user.id is not None:
+    if request and request.user.id is not None:
         grp_ids = [x.id for x in request.user.groups.all()]
         for existing in kv.all():
             if existing.group.id not in grp_ids:
                 values.append(existing)
-    # This is tedious, but we don't want to rebind kv
-    kv.clear()
-    for pair in values:
-        kv.add(pair)
+        # This is tedious, but we don't want to rebind kv
+        kv.clear()
+        for pair in values:
+            kv.add(pair)
+    # XXX: If there's no request or user, we skip the update
+    # Is this ever the wrong thing to do?

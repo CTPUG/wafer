@@ -35,7 +35,7 @@ class CustomKeyValueSerializer(serializers.HyperlinkedRelatedField):
         """Custom queryset to limit key-value pairs returned to the
            requesting user's group for choices"""
         request = self.context.get('request', None)
-        if request.user.id is not None:
+        if request and request.user.id is not None:
             grp_ids = [x.id for x in request.user.groups.all()]
             return KeyValue.objects.filter(group_id__in=grp_ids).all()
         return KeyValue.objects.none()
@@ -49,7 +49,12 @@ class CustomKeyValueSerializer(serializers.HyperlinkedRelatedField):
             grp_ids = [x.id for x in request.user.groups.all()]
             if obj.group.id not in grp_ids:
                 return u"hidden"
-        return super(CustomKeyValueSerializer, self).get_url(obj, view_name, request, format)
+            else:
+                # Construct the url as usual.
+                return super(CustomKeyValueSerializer, self).get_url(
+                    obj, view_name, request, format)
+        else:
+            return u"hidden"
 
 
 class KeyValueSerializer(serializers.ModelSerializer):
