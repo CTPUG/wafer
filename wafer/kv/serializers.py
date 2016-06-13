@@ -6,7 +6,7 @@ from wafer.kv.models import KeyValue
 
 
 class MaybeHyperlinkField(serializers.HyperlinkedRelatedField):
-    """Overrider HyperlinkRelatedFiled to return just the object name
+    """Override HyperlinkRelatedFiled to return just the object name
        for when a model has not been hooked up to the api, so we don't
        need to add special cases everytime a new model grows KV support
        without growing a API view."""
