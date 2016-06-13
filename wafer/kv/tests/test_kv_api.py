@@ -2,9 +2,10 @@
 
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group
-from django.test import Client, TestCase
+from django.test import TestCase
 from rest_framework.test import APIClient
 from wafer.kv.models import KeyValue
+from wafer.talks.models import Talk
 import json
 
 
@@ -16,8 +17,11 @@ def create_group(group):
     return Group.objects.create(name=group)
 
 
-def create_user(username, groups):
-    create = get_user_model().objects.create_user
+def create_user(username, groups, superuser=False):
+    if superuser:
+        create = get_user_model().objects.create_superuser
+    else:
+        create = get_user_model().objects.create_user
     user = create(
         username, '%s@example.com' % username, 'password')
     for the_group in groups:
@@ -25,6 +29,17 @@ def create_user(username, groups):
         user.groups.add(grp)
     user.save()
     return user
+
+
+def create_talk(title, user, kv_pairs):
+    talk = Talk.objects.create(
+        title=title, corresponding_author_id=user.id)
+    talk.authors.add(user)
+    for pair in kv_pairs:
+        talk.kv.add(pair)
+    talk.abstract = 'An abstract'
+    talk.save()
+    return talk
 
 
 def create_kv_pair(name, value, group):
@@ -39,16 +54,17 @@ class KeyValueViewSetTests(TestCase):
         for grp in ['group_1', 'group_2', 'group_3', 'group_4']:
             create_group(grp)
         self.user1 = create_user("user1", ["group_1", "group_2"])
-        self.user2 = create_user("user2", ["group_1"]),
-        self.user3 = create_user("user3", ["group_4"]),
-        self.user4 = create_user("user4", ["group_3"]),
+        self.superuser = create_user("super", ["group_1", "group_2"], True)
+        self.user2 = create_user("user2", ["group_1"])
+        self.user3 = create_user("user3", ["group_4"])
+        self.user4 = create_user("user4", ["group_3"])
         self.kv_1_grp1 = create_kv_pair("Val 1.1", '{"key": "Data"}', "group_1")
         self.kv_2_grp2 = create_kv_pair("Val 2.1", '{"key2": "False"}', "group_2")
         self.kv_2_grp1 = create_kv_pair("Val 1.2", '{"key3": "True"}', "group_1")
         self.kv_3_grp1 = create_kv_pair("Val 1.3", '{"key1": "Data"}', "group_1")
         self.kv_3_grp3 = create_kv_pair("Val 3.1", '{"key1": "Data"}', "group_3")
         self.duplicate_name = create_kv_pair("Val 1.1", '{"key1": "Data"}', "group_3")
-        self.client = Client()
+        self.client = APIClient()
 
     def test_unauthorized_users(self):
         response = self.client.get('/kv/api/kv/')
@@ -113,6 +129,70 @@ class KeyValueViewSetTests(TestCase):
         self.assertEqual(response.data['key'], 'Val 1.1')
         response = self.client.get('/kv/api/kv/%d/' % self.kv_1_grp1.pk)
         self.assertEqual(response.status_code, 404)
+
+    def test_kv_talks(self):
+        """Check that talks are shown added to the corresponding API
+           view."""
+        self.client.login(username='user1', password='password')
+        talk1 = create_talk('A talk', self.user1,
+                            [self.kv_1_grp1, self.kv_2_grp2])
+        talk2 = create_talk('Another talk', self.user1,
+                            [self.kv_2_grp1, self.kv_2_grp2, self.kv_3_grp3])
+        # Check we have the correct number of talks when we query on the keys
+        response = self.client.get('/kv/api/kv/%d/' % self.kv_1_grp1.pk)
+        self.assertEqual(len(response.data['talk']), 1)
+        response = self.client.get('/kv/api/kv/%d/' % self.kv_2_grp2.pk)
+        self.assertEqual(len(response.data['talk']), 2)
+        # Check we can follow the url in the response
+        talk_response = self.client.get(response.data['talk'][0])
+        self.assertEqual(talk_response.data['title'], 'A talk')
+        self.assertEqual(len(talk_response.data['kv']), 2)
+        # We use substring tests to avoiding needing to construct the full url.
+        kv_pairs = '\n'.join(talk_response.data['kv'])
+        self.assertTrue('/kv/api/kv/%d/' % self.kv_1_grp1.pk in kv_pairs)
+        self.assertTrue('/kv/api/kv/%d/' % self.kv_2_grp2.pk in kv_pairs)
+        # Check that kv pairs we can't access are hidden in the talk request
+        talk_url = response.data['talk'][1]
+        talk_response = self.client.get(talk_url)
+        self.assertEqual(talk_response.data['title'], 'Another talk')
+        self.assertEqual(len(talk_response.data['kv']), 3)
+        kv_pairs = '\n'.join(talk_response.data['kv'])
+        self.assertTrue('/kv/api/kv/%d/' % self.kv_2_grp1.pk in kv_pairs)
+        self.assertTrue('/kv/api/kv/%d/' % self.kv_2_grp2.pk in kv_pairs)
+        self.assertTrue('hidden' in kv_pairs)
+        # Check changing kv's via the talk request
+        # Need to be a super user due to the talk view permissions
+        self.client.login(username='super', password='password')
+        kv_urls = [x for x in talk_response.data['kv'] if 'hidden' not in x]
+        data = talk_response.data.copy()
+        data['kv'] = [x for x in kv_urls
+                      if '/kv/api/kv/%d/' % self.kv_2_grp1.pk in x]
+        talk_response = self.client.put(talk_url, data, format='json')
+        self.assertEqual(talk_response.status_code, 200)
+        talk_response = self.client.get(talk_url)
+        self.assertEqual(talk_response.data['title'], 'Another talk')
+        self.assertEqual(len(talk_response.data['kv']), 2)
+        kv_pairs = '\n'.join(talk_response.data['kv'])
+        self.assertTrue('/kv/api/kv/%d/' % self.kv_2_grp1.pk in kv_pairs)
+        data = {'kv': []}
+        talk_response = self.client.patch(talk_url, data, format='json')
+        self.assertEqual(talk_response.status_code, 200)
+        talk_response = self.client.get(talk_url)
+        self.assertEqual(talk_response.data['title'], 'Another talk')
+        self.assertEqual(len(talk_response.data['kv']), 1)
+        kv_pairs = '\n'.join(talk_response.data['kv'])
+        self.assertTrue('hidden' in kv_pairs)
+        # Check adding kv values back
+        data = {'kv': kv_urls}
+        talk_response = self.client.patch(talk_url, data, format='json')
+        self.assertEqual(talk_response.status_code, 200)
+        talk_response = self.client.get(talk_url)
+        self.assertEqual(talk_response.data['title'], 'Another talk')
+        self.assertEqual(len(talk_response.data['kv']), 3)
+        kv_pairs = '\n'.join(talk_response.data['kv'])
+        self.assertTrue('hidden' in kv_pairs)
+        self.assertTrue(kv_urls[0] in kv_pairs)
+        self.assertTrue(kv_urls[1] in kv_pairs)
 
 
 class KeyValueAPITests(TestCase):
