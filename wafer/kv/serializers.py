@@ -1,6 +1,7 @@
 from django.core.exceptions import PermissionDenied
 from django.core.urlresolvers import NoReverseMatch
 from rest_framework import serializers
+from rest_framework.utils.field_mapping import get_detail_view_name
 from wafer.kv.models import KeyValue
 
 
@@ -26,7 +27,8 @@ class CustomKeyValueSerializer(serializers.HyperlinkedRelatedField):
         if 'view_name' not in kwargs:
             # queryset here is just to statisfy older versions of
             # rest-framework which don't check for overridding get_queryset.
-            return cls.many_init(*args, view_name='keyvalue-detail',
+            return cls.many_init(*args,
+                                 view_name=get_detail_view_name(KeyValue),
                                  queryset=KeyValue.objects.none(), **kwargs)
         return super(CustomKeyValueSerializer, cls).__new__(cls, *args,
                                                             **kwargs)
@@ -83,10 +85,11 @@ class KeyValueSerializer(serializers.ModelSerializer):
         # Add fields for the models we have ManyToMany relationships defined for
         for field in self.Meta.model._meta.get_fields():
             if field.name not in self.fields and field.many_to_many:
-                # XXX: Is there a better way to get the correct view_name out of the url config?
-                view_name = '%s-detail' % field.related_model._meta.model_name
-                self.fields[field.name] = MaybeHyperlinkField(source=field.get_accessor_name(),
-                                                              view_name=view_name, read_only=True,
-                                                              many=True)
+                # Use django_rest_framework to construct the correct detail
+                # view name.
+                self.fields[field.name] = MaybeHyperlinkField(
+                    source=field.get_accessor_name(),
+                    view_name=get_detail_view_name(field.related_model),
+                    read_only=True, many=True)
 
         super(KeyValueSerializer, self).__init__(*args, **kwargs)
