@@ -9,7 +9,7 @@
                     <a class="dropdown-toggle" data-toggle="dropdown"
                        href="#" role="button" aria-haspopup="true"
                        aria-expanded="true">
-                        Day {{ day.id }}
+                        {{ day.date }}
                         <span class="caret"></span>
                     </a>
                     <ul class="dropdown-menu"
@@ -17,7 +17,7 @@
                         {% for day in days %}
                             <li>
                                 <a href="{% url 'admin:schedule_editor' day.id %}">
-                                    Day {{ day.id }} ({{ day.date }})
+                                    {{ day.date }} (Day {{ day.id }})
                                 </a>
                             </li>
                         {% endfor %}
