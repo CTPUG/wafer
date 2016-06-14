@@ -63,22 +63,22 @@ def make_schedule_row(schedule_day, slot, seen_items):
         scheditem = {'item': item, 'rowspan': 1, 'colspan': 1}
         row.items[item.venue] = scheditem
         seen_items[item] = scheditem
-    cur_item = None
-    colspan = 1
-    # Fixup colspans
-    for venue in schedule_day.venues:
-        if venue in skip:
-            # Nothing to see here
-            continue
-        elif venue not in row.items:
-            if cur_item:
-                cur_item['colspan'] += 1
-            else:
-                colspan += 1
-        else:
-            cur_item = row.items[venue]
-            cur_item['colspan'] = colspan
-            colspan = 1
+
+    expand = False
+    if len(row.items) == 1:
+        only_item = row.items.values()[0]
+        expand = 'expand' in only_item['item'].css_class.split()
+        if expand:
+            only_item['colspan'] = len(schedule_day.venues)
+
+    if not expand:
+        for venue in schedule_day.venues:
+            if venue in skip:
+                # Nothing to see here
+                continue
+            if venue not in row.items:
+                row.items[venue] = {'item': None, 'rowspan': 1, 'colspan': 1}
+
     return row
 
 
