@@ -26,17 +26,5 @@ def email(obj):
     return obj.user.email
 
 
-class UserProfileAdmin(admin.ModelAdmin):
-    model = UserProfile
-    readonly_fields = ('user',)
-    exclude = ('kv',)
-    list_select_related = ('user',)
-    list_display = (username, 'display_name', email)
-    search_fields = ('user__username', 'user__first_name', 'user__last_name',
-                     'user__email')
-
-
 admin.site.unregister(get_user_model())
 admin.site.register(get_user_model(), UserAdmin)
-
-admin.site.register(UserProfile, UserProfileAdmin)
