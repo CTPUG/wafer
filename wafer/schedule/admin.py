@@ -173,7 +173,7 @@ class ScheduleItemAdminForm(forms.ModelForm):
     class Meta:
         model = ScheduleItem
         fields = ('slots', 'venue', 'talk', 'page', 'details', 'notes',
-                  'css_class')
+                  'css_class', 'expand')
 
     def __init__(self, *args, **kwargs):
         super(ScheduleItemAdminForm, self).__init__(*args, **kwargs)
@@ -186,7 +186,8 @@ class ScheduleItemAdmin(admin.ModelAdmin):
     form = ScheduleItemAdminForm
 
     change_list_template = 'admin/scheduleitem_list.html'
-    list_display = ['get_start_time', 'venue', 'get_title']
+    list_display = ('get_start_time', 'venue', 'get_title', 'expand')
+    list_editable = ('expand',)
 
     # We stuff these validation results into the view, rather than
     # enforcing conditions on the actual model, since it can be hard

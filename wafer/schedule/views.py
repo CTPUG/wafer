@@ -49,6 +49,7 @@ def make_schedule_row(schedule_day, slot, seen_items):
     """Create a row for the schedule table."""
     row = ScheduleRow(schedule_day, slot)
     skip = []
+    expanding = {}
     all_items = list(slot.scheduleitem_set
                      .select_related('talk', 'page', 'venue')
                      .all())
@@ -63,22 +64,32 @@ def make_schedule_row(schedule_day, slot, seen_items):
         scheditem = {'item': item, 'rowspan': 1, 'colspan': 1}
         row.items[item.venue] = scheditem
         seen_items[item] = scheditem
-    cur_item = None
-    colspan = 1
-    # Fixup colspans
+        if item.expand:
+            expanding[item.venue] = []
+
+    empty = []
+    expanding_right = None
     for venue in schedule_day.venues:
         if venue in skip:
             # Nothing to see here
             continue
-        elif venue not in row.items:
-            if cur_item:
-                cur_item['colspan'] += 1
-            else:
-                colspan += 1
+
+        if venue in expanding:
+            item = row.items[venue]
+            for empty_venue in empty:
+                row.items.pop(empty_venue)
+                item['colspan'] += 1
+            empty = []
+            expanding_right = item
+        elif venue in row.items:
+            empty = []
+            expanding_right = None
+        elif expanding_right:
+            expanding_right['colspan'] += 1
         else:
-            cur_item = row.items[venue]
-            cur_item['colspan'] = colspan
-            colspan = 1
+            empty.append(venue)
+            row.items[venue] = {'item': None, 'rowspan': 1, 'colspan': 1}
+
     return row
 
 
