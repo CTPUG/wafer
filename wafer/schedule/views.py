@@ -64,7 +64,7 @@ def make_schedule_row(schedule_day, slot, seen_items):
         scheditem = {'item': item, 'rowspan': 1, 'colspan': 1}
         row.items[item.venue] = scheditem
         seen_items[item] = scheditem
-        if 'expand' in item.css_class.split():
+        if item.expand:
             expanding[item.venue] = []
 
     empty = []

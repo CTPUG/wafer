@@ -140,6 +140,10 @@ class ScheduleItem(models.Model):
         max_length=128, null=False, blank=True,
         help_text=_("Custom css class for this schedule item"))
 
+    expand = models.BooleanField(
+        null=False, default=False,
+        help_text=_("Expand to neighbouring venues"))
+
     def get_title(self):
         if self.talk:
             return self.talk.title
