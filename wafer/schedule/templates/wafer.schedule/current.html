@@ -1,11 +1,5 @@
 {% extends "wafer/base.html" %}
 {% load i18n %}
-{% block extra_head %}
-{# Add a refresh header for the specified interval #}
-{% if refresh %}
-<meta http-equiv="refresh" content="{{ refresh }}">
-{% endif %}
-{% endblock %}
 {% block content %}
 <section class="wafer wafer-schedule">
 <h1>{% trans "Current" %}</h1>
@@ -56,6 +50,44 @@
       {% endfor %}
    </table>
    {% endif %}
+   <div class="timestamp">
+     Last updated: {% now "H:m:s" %}
+     <div class="errors"></div>
+   </div>
 </div>
 </section>
+{% endblock %}
+{% block extra_foot %}
+{% if refresh %}
+<script type="text/javascript">
+"use strict";
+function registerRefresh(delay) {
+  setTimeout(attemptRefresh, delay*1000, delay);
+}
+function attemptRefresh(delay) {
+  registerRefresh(delay);
+
+  $.ajax({
+    'dataType': 'html',
+    'timeout': 10000,
+    'success': function(data, textStatus, jqXHR) {
+      var html = $.parseHTML(data, null);
+      var schedule = $('div.wafer_schedule', html).children();
+      $('div.wafer_schedule').empty();
+      $('div.wafer_schedule').append(schedule);
+    },
+    'error': function(jqXHR, textStatus, errorThrown) {
+      var errors = $('div.wafer_schedule .timestamp .errors');
+      var count = errors.attr('data-count') || 0;
+      count++;
+      errors.text('Failed updates: ' + count);
+      errors.attr('data-count', count);
+    },
+  });
+}
+$(function() {
+    registerRefresh({{ refresh }});
+});
+</script>
+{% endif %}
 {% endblock %}
