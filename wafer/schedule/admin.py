@@ -169,6 +169,25 @@ def check_schedule():
     return True
 
 
+def validate_schedule():
+    """Helper routine to easily test if the schedule is valid"""
+    all_items = prefetch_schedule_items()
+    errors = []
+    if find_clashes(all_items):
+        errors.append('Clashes found in schedule.')
+    if find_duplicate_schedule_items(all_items):
+        errors.append('Duplicate schedule items found in schedule.')
+    if validate_items(all_items):
+        errors.append('Invalid schedule items found in schedule.')
+    if find_overlapping_slots():
+        errors.append('Overlapping slots found in schedule.')
+    if find_non_contiguous(all_items):
+        errors.append('Non contiguous slots found in schedule.')
+    if find_invalid_venues(all_items):
+        errors.append('Invalid venues found in schedule.')
+    return errors
+
+
 class ScheduleItemAdminForm(forms.ModelForm):
     class Meta:
         model = ScheduleItem

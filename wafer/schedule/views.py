@@ -6,7 +6,7 @@ from rest_framework import viewsets
 from rest_framework.permissions import IsAdminUser
 from wafer.pages.models import Page
 from wafer.schedule.models import Venue, Slot, Day
-from wafer.schedule.admin import check_schedule
+from wafer.schedule.admin import check_schedule, validate_schedule
 from wafer.schedule.models import ScheduleItem
 from wafer.schedule.serializers import ScheduleItemSerializer
 from wafer.talks.models import ACCEPTED
@@ -255,17 +255,16 @@ class ScheduleEditView(TemplateView):
             }
             for schedule_item in slot.scheduleitem_set.all():
                 if schedule_item.venue.name == venue.name:
+                    venue_context['scheduleitem_id'] = schedule_item.id
                     if schedule_item.talk:
                         talk = schedule_item.talk
                         venue_context['title'] = talk.title
                         venue_context['talk'] = talk
-                        venue_context['scheduleitem_id'] = talk.talk_id
                     if (schedule_item.page and
                             not schedule_item.page.exclude_from_static):
                         page = schedule_item.page
                         venue_context['title'] = page.name
                         venue_context['page'] = page
-                        venue_context['scheduleitem_id'] = page.id
             slot_context['venues'].append(venue_context)
         return slot_context
 
@@ -298,4 +297,5 @@ class ScheduleEditView(TemplateView):
         context['talks_unassigned'] = accepted_talks.filter(scheduleitem=None)
         context['pages'] = Page.objects.all()
         context['days'] = days
+        context['validation_errors'] = validate_schedule()
         return context

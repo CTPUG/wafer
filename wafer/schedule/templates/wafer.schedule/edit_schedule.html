@@ -1,6 +1,15 @@
 {% extends "wafer/base.html" %}
 {% block content %}
     <div class="row">
+        <div class="col-md-12">
+            {% if validation_errors %}
+                <div class="messages">
+                    {% for validation_error in validation_errors %}
+                        <div class="alert alert-danger">{{ validation_error }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
         <div class="col-md-8">
             <h1>Schedule Editor
             <div class="pull-right">
@@ -44,12 +53,15 @@
                             <small>{{ slot.start_time }} - {{ slot.end_time }}</small>
                         </th>
                         {% for venue in slot.venues %}
-                        <td id="{% if venue.talk %}talk{% elif venue.page %}page{% endif %}{{ venue.scheduleitem_id }}" data-venue="{{ venue.id }}" data-slot="{{ slot.id }}"
-                            class="{% if venue.talk %}success{% elif venue.page %}info{% endif %} droppable"
-                            data-id="{{ venue.scheduleitem_id }}"
+                        <td id="scheduleItem{{ venue.scheduleitem_id }}" data-venue="{{ venue.id }}" data-slot="{{ slot.id }}"
+                            class="{% if venue.talk %}success{% elif venue.page %}info{% endif %} droppable {% if venue.talk or venue.page %}draggable{% endif %}"
+                            data-scheduleitem-id="{{ venue.scheduleitem_id }}" data-talk-id="{{ venue.talk.id }}"
+                            data-page-id="{{ venue.page.id }}"
                             data-type="{% if venue.talk %}talk{% elif venue.page %}page{% endif %}">
                             {% if venue.scheduleitem_id %}
-                                <button type="button" class="close"
+                                <button id="delete{{venue.scheduleitem_id}}"
+                                            data-id="{{ venue.scheduleitem_id }}"
+                                        type="button" class="close"
                                         aria-label="Close">
                                     <span aria-hidden="true">
                                         &times;
@@ -97,7 +109,7 @@
                             <span draggable="true" class="col-md-6 label label-success draggable"
                                     id="talk{{ talk.talk_id }}"
                                   data-toggle="tooltip" data-placement="left"
-                                  title="{{ talk.title }}" data-type="talk" data-id="{{ talk.talk_id }}">
+                                  title="{{ talk.title }}" data-type="talk" data-talk-id="{{ talk.talk_id }}">
                                 {{ talk.title|truncatechars:24 }}
                             </span>
                         {% endfor %}
@@ -108,7 +120,7 @@
                             <span draggable="true" class="col-md-6 label label-warning draggable"
                                     id="talk{{ talk.talk_id }}"
                                   data-toggle="tooltip" data-placement="left"
-                                  title="{{ talk.title }}" data-type="talk" data-id="{{ talk.talk_id }}">
+                                  title="{{ talk.title }}" data-type="talk" data-talk-id="{{ talk.talk_id }}">
                                 {{ talk.title|truncatechars:24 }}
                             </span>
                         {% endfor %}
@@ -118,7 +130,7 @@
                             <span draggable="true" class="col-md-6 label label-info draggable"
                                     id="page{{ page.id }}"
                                   data-toggle="tooltip" data-placement="left"
-                                  title="{{ page.name }}" data-type="page" data-id="{{ page.id }}">>
+                                  title="{{ page.name }}" data-type="page" data-page-id="{{ page.id }}">>
                                 {{ page.name|truncatechars:24 }}
                             </span>
                         {% endfor %}
