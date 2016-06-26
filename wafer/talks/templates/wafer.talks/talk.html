@@ -35,7 +35,7 @@
     </p>
     <p>
     {% trans 'Duration:' %}
-    {{ schedule.get_duration.hours|floatformat }}h{{ schedule.get_duration.minutes|floatformat }}
+    {{ schedule.get_duration_minutes }} {% trans 'mins' %}
     </p>
     {% endfor %}
     {% endif %}

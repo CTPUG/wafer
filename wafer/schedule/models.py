@@ -206,6 +206,11 @@ class ScheduleItem(models.Model):
             result['hours'] += hours
         return result
 
+    def get_duration_minutes(self):
+        """Return the duration in total number of minutes."""
+        duration = self.get_duration()
+        return int(duration['hours']*60 + duration['minutes'])
+
 
 def invalidate_check_schedule(*args, **kw):
     from wafer.schedule.admin import check_schedule
