@@ -23,6 +23,22 @@
     Type:
     {{ object.talk_type.name|default:'Talk' }}
     </p>
+    {% if object.get_in_schedule %}
+    {% for schedule in object.scheduleitem_set.all %}
+    <p>
+    Room:
+    {{ schedule.venue }}
+    </p>
+    <p>
+    Time:
+    {{ schedule.get_start_time }}
+    </p>
+    <p>
+    Duration:
+    {{ schedule.get_duration.hours }} hour(s)
+    </p>
+    {% endfor %}
+    {% endif %}
 </div>
 {% if user.is_staff %}
 <div>
