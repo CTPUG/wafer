@@ -26,15 +26,15 @@
     {% if object.get_in_schedule %}
     {% for schedule in object.scheduleitem_set.all %}
     <p>
-    Room:
+    {% trans 'Room:' %}
     {{ schedule.venue }}
     </p>
     <p>
-    Time:
+    {% trans 'Time:' %}
     {{ schedule.get_start_time }}
     </p>
     <p>
-    Duration:
+    {% trans 'Duration:' %}
     {{ schedule.get_duration.hours|floatformat }}h{{ schedule.get_duration.minutes|floatformat }}
     </p>
     {% endfor %}
