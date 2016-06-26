@@ -35,7 +35,7 @@
     </p>
     <p>
     Duration:
-    {{ schedule.get_duration.hours }} hour(s)
+    {{ schedule.get_duration.hours|floatformat }}h{{ schedule.get_duration.minutes|floatformat }}
     </p>
     {% endfor %}
     {% endif %}
