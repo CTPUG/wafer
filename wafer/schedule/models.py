@@ -209,7 +209,7 @@ class ScheduleItem(models.Model):
     def get_duration_minutes(self):
         """Return the duration in total number of minutes."""
         duration = self.get_duration()
-        return int(duration['hours']*60 + duration['minutes'])
+        return int(duration['hours'] * 60 + duration['minutes'])
 
 
 def invalidate_check_schedule(*args, **kw):
