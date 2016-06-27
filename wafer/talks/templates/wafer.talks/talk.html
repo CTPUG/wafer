@@ -20,9 +20,33 @@
     {% endfor %}
     </p>
     <p>
+    {% blocktrans with talk_type=object.talk_type.name|default:'Talk' %}
     Type:
-    {{ object.talk_type.name|default:'Talk' }}
+    {{ talk_type }}
+    {% endblocktrans %}
     </p>
+    {% if object.get_in_schedule %}
+    {% for schedule in object.scheduleitem_set.all %}
+    <p>
+    {% blocktrans with venue=schedule.venue %}
+    Room:
+    {{ venue }}
+    {% endblocktrans %}
+    </p>
+    <p>
+    {% blocktrans with start_time=schedule.get_start_time %}
+    Time:
+    {{ start_time }}
+    {% endblocktrans %}
+    </p>
+    <p>
+    {% blocktrans with minutes=schedule.get_duration_minutes %}
+    Duration:
+    {{ minutes }} mins
+    {% endblocktrans %}
+    </p>
+    {% endfor %}
+    {% endif %}
 </div>
 {% if user.is_staff %}
 <div>
