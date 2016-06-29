@@ -13,6 +13,7 @@ from wafer.kv.models import KeyValue
 ACCEPTED = 'A'
 PENDING = 'P'
 REJECTED = 'R'
+CANCELLED = 'C'
 
 # Utility functions used in the forms
 def render_author(author):
@@ -44,6 +45,7 @@ class Talk(models.Model):
     TALK_STATUS = (
         (ACCEPTED, 'Accepted'),
         (REJECTED, 'Not Accepted'),
+        (CANCELLED, 'Talk Cancelled'),
         (PENDING, 'Under Consideration'),
     )
 
@@ -137,6 +139,7 @@ class Talk(models.Model):
     accepted = property(fget=lambda x: x.status == ACCEPTED)
     pending = property(fget=lambda x: x.status == PENDING)
     reject = property(fget=lambda x: x.status == REJECTED)
+    cancelled = property(fget=lambda x: x.status == CANCELLED)
 
     def _is_among_authors(self, user):
         if self.corresponding_author.username == user.username:

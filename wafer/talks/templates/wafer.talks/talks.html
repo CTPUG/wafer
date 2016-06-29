@@ -10,6 +10,8 @@
         <span class="label label-warning" title="{% trans 'Under consideration' %}">{{ talk.status }}</span>
         {% elif talk.reject %}
         <span class="label label-danger" title="{% trans 'Not accepted' %}">{{ talk.status }}</span>
+        {% elif talk.cancelled %}
+        <span class="label label-danger" title="{% trans 'Talk Cancelled' %}">{{ talk.status }}</span>
         {% endif %}
         <a href="{{ talk.get_absolute_url }}">{{ talk.title }}</a>
         by

@@ -32,6 +32,8 @@
     <span class="label label-warning">{% trans 'Under consideration' %}</span>
     {% elif object.accepted %}
     <span class="label label-success">{% trans 'Accepted' %}</span>
+    {% elif object.cancelled %}
+    <span class="label label-danger">{% trans 'Cancelled' %}</span>
     {% else %}
     <span class="label label-danger">{% trans 'Not accepted' %}</span>
     {% endif %}
