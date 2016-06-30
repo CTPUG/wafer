@@ -155,13 +155,20 @@ class TalkNoteViewTests(TestCase):
         response = self.client.get(
             reverse('wafer_talk', kwargs={'pk': talk.pk}))
         if notes_visible:
-            self.assertTrue('Some notes for talk' in str(response))
+            self.assertTrue('Some notes for talk' in response.rendered_content)
         else:
-            self.assertFalse('Some notes for talk' in str(response))
+            # If the response doesn't have a rendered_content
+            # (HttpResponseForbidden, etc), this is trivially true,
+            # so we don't bother to test it.
+            if hasattr(response, 'rendered_content'):
+                self.assertFalse('Some notes for talk' in
+                                 response.rendered_content)
         if private_notes_visible:
-            self.assertTrue('Some private notes for talk' in str(response))
+            self.assertTrue('Some private notes for talk' in response.rendered_content)
         else:
-            self.assertFalse('Some private notes for talk' in str(response))
+            if hasattr(response, 'rendered_content'):
+                self.assertFalse('Some private notes for talk' in
+                                 response.rendered_content)
 
     def test_view_notes_accepted_not_logged_in(self):
         self.check_talk_view(self.talk_a, False, False)
