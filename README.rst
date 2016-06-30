@@ -41,7 +41,7 @@ Installation
 
 2. Wafer uses bower to manage javascript dependencies
 
-   * install bower in the static files base directory: ``npm install bower``
+   * Install bower in the static files base directory: ``npm install bower``
 
    * Grab the ``bower.json`` file to install the required javascript files
        ``./node_modules/bower/bin/bower install bower.json``
