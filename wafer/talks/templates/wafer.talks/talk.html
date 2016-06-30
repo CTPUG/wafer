@@ -68,6 +68,7 @@
     {{ object.abstract.rendered|safe }}
 </div>
 {% if perms.talks.view_all_talks or user.is_superuser %}
+{% if talk.notes %}
 {% blocktrans %}
 <h2>Talk Notes</h2>
 <p>(The following is not visible to attendees.)</p>
@@ -75,6 +76,7 @@
 <div class="well">
   {{ object.notes|urlize|linebreaks }}
 </div>
+{% endif %}
 {% endif %}
 {% if perms.talks.edit_private_notes and object.private_notes %}
 {% blocktrans %}
