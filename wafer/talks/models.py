@@ -36,7 +36,7 @@ class TalkType(models.Model):
         """Return a string for use as a css class name"""
         # While css can represent complicated strings
         # using escaping, we want simplicity and obvious predictablity
-        return u'talk-type-%s' % slugify(self.name.lower())
+        return u'talk-type-%s' % slugify(self.name)
 
     css_class.admin_order_field = 'name'
     css_class.short_description = 'CSS class name'
