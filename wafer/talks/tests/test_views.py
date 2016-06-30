@@ -129,7 +129,7 @@ class TalkViewTests(TestCase):
             'username': 'reviewer', 'password': 'reviewer_password',
         })
 
-    def test_view_rejected_has_view_all_perm(self):
+    def test_view_cancelled_has_view_all_perm(self):
         create_user('reviewer', perms=['view_all_talks'])
         self.check_talk_view(self.talk_c, 200, auth={
             'username': 'reviewer', 'password': 'reviewer_password',
