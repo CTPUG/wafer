@@ -48,7 +48,7 @@
     {% endfor %}
     {% endif %}
 </div>
-{% if user.is_staff or perms.view_all_talks %}
+{% if user.is_staff or perms.talks.view_all_talks %}
 <div>
     <p>
     {% trans 'Status:' %}
@@ -67,14 +67,14 @@
 <div class="well">
     {{ object.abstract.rendered|safe }}
 </div>
-{% if perms.view_all_talks or user.is_superuser %}
+{% if perms.talks.view_all_talks or user.is_superuser %}
 <h2>Talk Notes</h2>
 <p>(The following is not visible to attendees.)</p>
 <div class="well">
   {{ object.notes|urlize|linebreaks }}
 </div>
 {% endif %}
-{% if perms.edit_private_notes and object.private_notes %}
+{% if perms.talks.edit_private_notes and object.private_notes %}
 <h2>Private notes</h2>
 <p>(The following is not visible to submitters or attendees.)</p>
 <div class="well">
