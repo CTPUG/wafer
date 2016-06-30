@@ -214,7 +214,6 @@ class TalkNoteViewTests(TestCase):
             'username': 'editor', 'password': 'editor_password',
         })
 
-
     def test_view_notes_accepted_superuser(self):
         create_user('super', superuser=True)
         self.check_talk_view(self.talk_a, True, True, auth={
