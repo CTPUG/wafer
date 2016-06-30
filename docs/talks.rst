@@ -26,13 +26,14 @@ Talk Mentors
 ============
 
 The ``Talk Mentors`` group has permission to view all talk submissions and
-to edit talks.
+to edit talks. They also have permission to view the notes submitted along
+with a talk.
 
 Managing talks from the admin interface
 =======================================
 
-From the admin interface talks can be modified, and marked as accepted or
-not accepted as required.
+From the admin interface talks can be modified, and marked as accepted,
+cancelled or not accepted as required.
 
 
 Talk urls

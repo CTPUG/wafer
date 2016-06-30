@@ -30,6 +30,8 @@ def create_talk(title, status, username):
     talk = Talk.objects.create(
         title=title, status=status, corresponding_author_id=user.id)
     talk.authors.add(user)
+    talk.notes = "Some notes for talk %s" % title
+    talk.private_notes = "Some private notes for talk %s" % title
     talk.save()
     return talk
 
@@ -127,7 +129,7 @@ class TalkViewTests(TestCase):
             'username': 'reviewer', 'password': 'reviewer_password',
         })
 
-    def test_view_rejected_has_view_all_perm(self):
+    def test_view_cancelled_has_view_all_perm(self):
         create_user('reviewer', perms=['view_all_talks'])
         self.check_talk_view(self.talk_c, 200, auth={
             'username': 'reviewer', 'password': 'reviewer_password',
@@ -137,6 +139,91 @@ class TalkViewTests(TestCase):
         create_user('reviewer', perms=['view_all_talks'])
         self.check_talk_view(self.talk_p, 200, auth={
             'username': 'reviewer', 'password': 'reviewer_password',
+        })
+
+
+class TalkNoteViewTests(TestCase):
+    def setUp(self):
+        self.talk_a = create_talk("Talk A", ACCEPTED, "author_a")
+        self.talk_r = create_talk("Talk R", REJECTED, "author_r")
+        self.client = Client()
+
+    def check_talk_view(self, talk, notes_visible, private_notes_visible,
+                        auth=None):
+        if auth is not None:
+            self.client.login(**auth)
+        response = self.client.get(
+            reverse('wafer_talk', kwargs={'pk': talk.pk}))
+        if notes_visible:
+            self.assertTrue('Some notes for talk' in response.rendered_content)
+        else:
+            # If the response doesn't have a rendered_content
+            # (HttpResponseForbidden, etc), this is trivially true,
+            # so we don't bother to test it.
+            if hasattr(response, 'rendered_content'):
+                self.assertFalse('Some notes for talk' in
+                                 response.rendered_content)
+        if private_notes_visible:
+            self.assertTrue('Some private notes for talk' in response.rendered_content)
+        else:
+            if hasattr(response, 'rendered_content'):
+                self.assertFalse('Some private notes for talk' in
+                                 response.rendered_content)
+
+    def test_view_notes_accepted_not_logged_in(self):
+        self.check_talk_view(self.talk_a, False, False)
+
+    def test_view_notes_accepted_author(self):
+        self.check_talk_view(self.talk_a, False, False, auth={
+            'username': 'author_a', 'password': 'author_a_password',
+        })
+
+    def test_view_notes_rejected_author(self):
+        self.check_talk_view(self.talk_r, False, False, auth={
+            'username': 'author_r', 'password': 'author_r_password',
+        })
+
+    def test_view_notes_accepted_has_view_all_perm(self):
+        create_user('reviewer', perms=['view_all_talks'])
+        self.check_talk_view(self.talk_a, True, False, auth={
+            'username': 'reviewer', 'password': 'reviewer_password',
+        })
+
+    def test_view_notes_rejected_has_view_all_perm(self):
+        create_user('reviewer', perms=['view_all_talks'])
+        self.check_talk_view(self.talk_r, True, False, auth={
+            'username': 'reviewer', 'password': 'reviewer_password',
+        })
+
+    def test_view_notes_accepted_has_edit_private_notes(self):
+        create_user('editor', perms=['edit_private_notes'])
+        self.check_talk_view(self.talk_a, False, True, auth={
+            'username': 'editor', 'password': 'editor_password',
+        })
+
+    def test_view_notes_rejected_has_edit_private_notes(self):
+        # edit_private_notes doesn't imply view_all_talks
+        create_user('editor', perms=['edit_private_notes'])
+        self.check_talk_view(self.talk_r, False, False, auth={
+            'username': 'editor', 'password': 'editor_password',
+        })
+
+    def test_view_notes_rejected_both_perms(self):
+        create_user('editor', perms=['edit_private_notes', 'view_all_talks'])
+        self.check_talk_view(self.talk_r, True, True, auth={
+            'username': 'editor', 'password': 'editor_password',
+        })
+
+    def test_view_notes_accepted_superuser(self):
+        create_user('super', superuser=True)
+        self.check_talk_view(self.talk_a, True, True, auth={
+            'username': 'super', 'password': 'super_password',
+        })
+
+    def test_view_notes_rejected_superuser(self):
+        create_user('super', superuser=True)
+        self.check_talk_view(self.talk_r, True, True, auth={
+            'username': 'super', 'password': 'super_password',
         })
 
 
