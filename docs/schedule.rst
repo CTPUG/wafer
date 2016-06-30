@@ -48,3 +48,14 @@ shown.
 The ``schedule/current`` view can be used to show events around the current time.
 The ``refresh`` parameter can be used to add a refresh header to the view - e.g
 ``https://localhost/schedule/current/?refresh=60`` will refresh every 60 seconds.
+
+Styling notes
+=============
+
+The entry for each talk gets a custom CSS class derived from the talk type.
+This constructed CSS class is shown in the Talk Type admin view.
+
+Schedule items which are not talks have ``talk-type-none`` as the CSS class.
+
+A per item CSS class can also be set using the ``css_class`` attribute on the
+schedule item.
