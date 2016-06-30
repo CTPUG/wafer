@@ -48,7 +48,7 @@
     {% endfor %}
     {% endif %}
 </div>
-{% if user.is_staff %}
+{% if user.is_staff or perms.view_all_talks %}
 <div>
     <p>
     {% trans 'Status:' %}
