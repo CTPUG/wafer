@@ -153,6 +153,15 @@ class ScheduleItem(models.Model):
             return self.details
         return 'No title'
 
+    def get_talk_css_class(self):
+        """Talk type css class if it's available"""
+        if self.talk:
+            return self.talk.talk_type.css_class()
+        # Fallback for pages
+        return ''
+
+    get_talk_css_class.short_description = 'Talk Type CSS class'
+
     def get_desc(self):
         if self.details:
             if self.talk:

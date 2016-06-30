@@ -41,7 +41,7 @@
             <td colspan="{{ item.colspan }}" rowspan="{{ item.rowspan }}" class="unavailable"></td>
          {% else %}
             {# Add item details #}
-            <td colspan="{{ item.colspan }}" rowspan="{{ item.rowspan }}" class="{{ item.item.css_class|default:'schedule' }}">
+            <td colspan="{{ item.colspan }}" rowspan="{{ item.rowspan }}" class="{{ item.item.css_class|default:'schedule' }}" class="{{ item.item.get_talk_css_class|default:'talk-type-none' }}">
               {% include "wafer.schedule/schedule_item.html" with item=item.item %}
             </td>
          {% endif %}

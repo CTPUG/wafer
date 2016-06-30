@@ -59,6 +59,11 @@ class TalkAdmin(CompareVersionAdmin, admin.ModelAdmin):
     form = AdminTalkForm
 
 
+class TalkTypeAdmin(VersionAdmin, admin.ModelAdmin):
+    list_display = ('name', 'css_class')
+    readonly_fields = ('css_class',)
+
+
 admin.site.register(Talk, TalkAdmin)
-admin.site.register(TalkType)
+admin.site.register(TalkType, TalkTypeAdmin)
 admin.site.register(TalkUrl, TalkUrlAdmin)

@@ -3,6 +3,7 @@ from django.core.urlresolvers import reverse
 from django.conf import settings
 from django.db import models
 from django.utils.encoding import python_2_unicode_compatible
+from django.template.defaultfilters import slugify
 
 from markitup.fields import MarkupField
 
@@ -31,6 +32,15 @@ class TalkType(models.Model):
 
     class Meta:
         ordering = ['id']
+
+    def css_class(self):
+        """Return a string for use as a css class name"""
+        # While css can represent complicated strings
+        # using escaping, we want simplicity and obvious predictablity
+        return u'talk-type-%s' % slugify(self.name)
+
+    css_class.admin_order_field = 'name'
+    css_class.short_description = 'CSS class name'
 
 
 @python_2_unicode_compatible
