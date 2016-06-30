@@ -2,6 +2,11 @@ import os
 
 from django.utils.translation import ugettext_lazy as _
 
+try:
+    from localsettings import *
+except ImportError:
+    pass
+
 # Django settings for wafer project.
 
 ADMINS = (
