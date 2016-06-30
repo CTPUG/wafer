@@ -6,7 +6,8 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Permission
 from django.core.urlresolvers import reverse
 from django.test import Client, TestCase
-from wafer.talks.models import Talk, ACCEPTED, REJECTED, PENDING
+from wafer.talks.models import (Talk, ACCEPTED, REJECTED, PENDING,
+                                CANCELLED)
 
 
 def create_user(username, superuser=False, perms=()):
@@ -77,6 +78,7 @@ class TalkViewTests(TestCase):
         self.talk_a = create_talk("Talk A", ACCEPTED, "author_a")
         self.talk_r = create_talk("Talk R", REJECTED, "author_r")
         self.talk_p = create_talk("Talk P", PENDING, "author_p")
+        self.talk_c = create_talk("Talk C", CANCELLED, "author_c")
         self.client = Client()
 
     def check_talk_view(self, talk, status_code, auth=None):
@@ -91,6 +93,9 @@ class TalkViewTests(TestCase):
 
     def test_view_rejected_not_logged_in(self):
         self.check_talk_view(self.talk_r, 403)
+
+    def test_view_cancelled_not_logged_in(self):
+        self.check_talk_view(self.talk_c, 403)
 
     def test_view_pending_not_logged_in(self):
         self.check_talk_view(self.talk_p, 403)
@@ -119,6 +124,12 @@ class TalkViewTests(TestCase):
     def test_view_rejected_has_view_all_perm(self):
         create_user('reviewer', perms=['view_all_talks'])
         self.check_talk_view(self.talk_r, 200, auth={
+            'username': 'reviewer', 'password': 'reviewer_password',
+        })
+
+    def test_view_rejected_has_view_all_perm(self):
+        create_user('reviewer', perms=['view_all_talks'])
+        self.check_talk_view(self.talk_c, 200, auth={
             'username': 'reviewer', 'password': 'reviewer_password',
         })
 
