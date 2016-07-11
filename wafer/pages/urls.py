@@ -1,13 +1,16 @@
-from django.conf.urls import patterns, url, include
+from django.conf.urls import include, url
+from django.core.urlresolvers import get_script_prefix
+from django.views.generic import RedirectView
 from rest_framework import routers
 
-from wafer.pages.views import PageViewSet
+from wafer.pages.views import PageViewSet, slug
 
 router = routers.DefaultRouter()
 router.register(r'pages', PageViewSet)
 
-urlpatterns = patterns(
-    'wafer.pages.views',
+urlpatterns = [
     url(r'^api/', include(router.urls)),
-    url(r'^(?:(.+)/)?$', 'slug', name='wafer_page'),
-)
+    url('^index(?:\.html)?/?$', RedirectView.as_view(
+        url=get_script_prefix(), permanent=True, query_string=True)),
+    url(r'^(?:(.+)/)?$', slug, name='wafer_page'),
+]

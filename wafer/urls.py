@@ -1,13 +1,11 @@
-from django.conf.urls import include, patterns, url
+from django.conf.urls import include, url
 from django.conf.urls.static import static
 from django.conf import settings
 from django.contrib import admin
 
 admin.autodiscover()
 
-urlpatterns = patterns(
-    '',
-
+urlpatterns = [
     (r'^accounts/', include('wafer.registration.urls')),
     (r'^users/', include('wafer.users.urls')),
     (r'^talks/', include('wafer.talks.urls')),
@@ -18,7 +16,7 @@ urlpatterns = patterns(
     (r'^schedule/', include('wafer.schedule.urls')),
     (r'^tickets/', include('wafer.tickets.urls')),
     (r'^kv/', include('wafer.kv.urls')),
-)
+]
 
 # Serve media
 if settings.DEBUG:

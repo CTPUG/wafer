@@ -1,4 +1,4 @@
-from django.conf.urls import patterns, url, include
+from django.conf.urls import include, url
 from rest_framework import routers
 
 from wafer.users.views import (UsersView, ProfileView, EditProfileView,
@@ -8,8 +8,7 @@ from wafer.users.views import (UsersView, ProfileView, EditProfileView,
 router = routers.DefaultRouter()
 router.register(r'users', UserViewSet)
 
-urlpatterns = patterns(
-    '',
+urlpatterns = [
     url(r'^$', UsersView.as_view(),
         name='wafer_users'),
     url(r'^api/', include(router.urls)),
@@ -25,4 +24,4 @@ urlpatterns = patterns(
     url(r'^(?P<username>[\w.@+-]+)/register/$',
         RegistrationView.as_view(),
         name='wafer_register_view'),
-)
+]

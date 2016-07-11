@@ -1,5 +1,5 @@
-from django.conf.urls import patterns, url, include
-from rest_framework_extensions import routers
+from django.conf.urls import url, include
+from rest_framework import routers
 
 from wafer.talks.views import (
     Speakers, TalkCreate, TalkDelete, TalkUpdate, TalkView, UsersTalks,
@@ -12,8 +12,7 @@ talks_router.register(
     r'urls', TalkUrlsViewSet, base_name='talks-urls',
     parents_query_lookups=['talk'])
 
-urlpatterns = patterns(
-    '',
+urlpatterns = [
     url(r'^$', UsersTalks.as_view(), name='wafer_users_talks'),
     url(r'^page/(?P<page>\d+)/$', UsersTalks.as_view(),
         name='wafer_users_talks_page'),
@@ -25,4 +24,4 @@ urlpatterns = patterns(
         name='wafer_talk_delete'),
     url(r'^speakers/$', Speakers.as_view(), name='wafer_talks_speakers'),
     url(r'^api/', include(router.urls)),
-)
+]
