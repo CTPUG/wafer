@@ -40,9 +40,9 @@
     {% endblocktrans %}
     </p>
     <p>
-    {% blocktrans with minutes=schedule.get_duration_minutes %}
+    {% blocktrans with hours=schedule.get_duration.hours|stringformat:"d" minutes=schedule.get_duration.minutes|stringformat:"02d" %}
     Duration:
-    {{ minutes }} mins
+    {{ hours }}:{{ minutes }}
     {% endblocktrans %}
     </p>
     {% endfor %}
