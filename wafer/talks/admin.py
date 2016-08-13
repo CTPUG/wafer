@@ -60,7 +60,7 @@ class TalkAdmin(CompareVersionAdmin, admin.ModelAdmin):
 
 
 class TalkTypeAdmin(VersionAdmin, admin.ModelAdmin):
-    list_display = ('name', 'css_class')
+    list_display = ('name', 'order', 'disable_submission', 'css_class')
     readonly_fields = ('css_class',)
 
 
