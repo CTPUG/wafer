@@ -57,7 +57,7 @@ class TalkForm(forms.ModelForm):
         else:
             self.helper.add_input(submit_button)
         # Exclude disabled talk types from the choice widget
-        if kwargs['instance']:
+        if kwargs['instance'] and kwargs['instance'].talk_type:
             # Ensure the current talk type is in the query_set, regardless of whether it's been disabled since then
             self.fields['talk_type'].queryset = TalkType.objects.filter(Q(disable_submission=False) | Q(pk=kwargs['instance'].talk_type.pk))
         else:
