@@ -11,7 +11,7 @@ from django.shortcuts import get_object_or_404, render
 from django.contrib.admin.utils import unquote, quote
 from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext as _
-from reversion.helpers import generate_patch_html
+from django.utils.encoding import force_text
 from django.contrib.admin import SimpleListFilter
 from django.contrib.contenttypes.models import ContentType
 
@@ -71,9 +71,9 @@ class CompareVersionAdmin(VersionAdmin):
         opts = self.model._meta
         object_id = unquote(object_id)
         # get_for_object's ordering means this is always the latest revision.
-        current = self.revision_manager.get_for_object_reference(self.model, object_id)[0]
         # The reversion we want to compare to
-        revision = self.revision_manager.get_for_object_reference(self.model, object_id).filter(id=version_id)[0]
+        current = Version.objects.get_for_object_reference(self.model, object_id)[0]
+        revision = Version.objects.get_for_object_reference(self.model, object_id).filter(id=version_id)[0]
         the_diff = []
         dmp = diff_match_patch()
 
@@ -98,7 +98,7 @@ class CompareVersionAdmin(VersionAdmin):
                 missing_field = True
             if missing_field:
                 # Ensure that the complete texts are marked as changed
-                # so new entires containing any of the marker words
+                # so new entries containing any of the marker words
                 # don't show up as differences
                 diffs = [(dmp.DIFF_DELETE, old_val), (dmp.DIFF_INSERT, cur_val)]
                 patch =  dmp.diff_prettyHtml(diffs)
@@ -112,7 +112,9 @@ class CompareVersionAdmin(VersionAdmin):
             elif cur_val == old_val:
                 continue
             else:
-                patch = generate_patch_html(revision, current, field)
+                # Compare the actual field values
+                diffs = dmp.diff_main(force_text(old_val), force_text(cur_val))
+                patch = dmp.diff_prettyHtml(diffs)
             the_diff.append((field, patch))
 
         the_diff.sort()
@@ -142,11 +144,9 @@ class CompareVersionAdmin(VersionAdmin):
             {
                 "revision": version.revision,
                 "url": reverse("%s:%s_%s_compare" % (self.admin_site.name, opts.app_label, opts.model_name), args=(quote(version.object_id), version.id)),
-            } for version
-              in self._order_version_queryset(self.revision_manager.get_for_object_reference(
-                  self.model,
-                  object_id,).select_related("revision__user"))
-        ]
+            } for version in self._reversion_order_version_queryset(Version.objects.get_for_object_reference(
+                self.model,
+                object_id).select_related("revision__user"))]
         context = {"action_list": action_list,
                    "opts": opts,
                    "object_id": quote(object_id),
