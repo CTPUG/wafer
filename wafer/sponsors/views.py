@@ -13,7 +13,7 @@ class ShowSponsors(ListView):
     model = Sponsor
 
     def get_queryset(self):
-        return Sponsor.objects.all().order_by('packages', 'id')
+        return Sponsor.objects.all().order_by('packages', 'order', 'id')
 
 
 class SponsorView(DetailView):
