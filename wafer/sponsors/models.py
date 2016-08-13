@@ -46,6 +46,9 @@ class SponsorshipPackage(models.Model):
     def __str__(self):
         return u'%s (amount: %.0f)' % (self.name, self.price)
 
+    def number_claimed(self):
+        return self.sponsors.count()
+
 
 @python_2_unicode_compatible
 class Sponsor(models.Model):
