@@ -2,7 +2,13 @@
 {% load i18n %}
 {% block content %}
 <section class="wafer wafer-sponsor">
-<h1>{{ object.name }}</h1>
+<h1>
+   {% if object.url %}
+   <a href="{{ object.url }}">{{ object.name }}</a>
+   {% else %}
+   {{ object.name }}
+   {% endif %}
+</h1>
 <div class="sponsor-detail">
 {{ object.description.rendered|safe }}
 </div>

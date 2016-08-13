@@ -53,6 +53,7 @@ class SponsorshipPackage(models.Model):
 @python_2_unicode_compatible
 class Sponsor(models.Model):
     """A conference sponsor."""
+    order = models.IntegerField(default=1)
     name = models.CharField(max_length=255)
     packages = models.ManyToManyField(SponsorshipPackage,
                                       related_name="sponsors")
@@ -62,9 +63,12 @@ class Sponsor(models.Model):
         File, related_name="sponsors", blank=True,
         help_text=_("Images and other files for use in"
                     " the description markdown field."))
+    url = models.URLField(default="",
+            blank=True,
+            help_text=_("Url to link back to the sponsor if required"))
 
     class Meta:
-        ordering = ['id']
+        ordering = ['order', 'name', 'id']
 
     def __str__(self):
         return u'%s' % (self.name,)
