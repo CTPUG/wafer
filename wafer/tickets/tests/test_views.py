@@ -63,55 +63,57 @@ class PostTicketTests(TestCase):
         user = UserModel.objects.create_user('Joe', email=email)
         client = Client()
         post_data = {
-            "reference": "REF00123456",
-            "event_id": 123,
-            "event_name": "My Big Event",
-            "amount": 0.00,
-            "email": "post@example.com",
-            "action": "checkout_started",
-            "tickets": [
-                {"id": 122,
-                 "attendee_name": "Test",
-                 "attendee_email": "post@example.com",
-                 "barcode": 54321,
-                 "ticket_type": "Test Ticket",
-                 "price": 0.00,
-                 }
-                ],
+                "ticket_type": "Test Type",
+                "barcode": "54321",
+                "email": "post@example.com"
             }
         with self.settings(WAFER_TICKETS_SECRET='testsecret'):
             # Check that the secret matters
-            response = client.post('/tickets/quicket_hook/?secret=wrongsecret',
+            response = client.post('/tickets/zapier_guest_hook/',
                                    json.dumps(post_data),
-                                   content_type="application/json")
+                                   content_type="application/json",
+                                   HTTP_X_ZAPIER_SECRET='wrongsecret')
             self.assertEqual(response.status_code, 403)
             # Check that the ticket gets processed correctly with an
             # existing user
-            response = client.post('/tickets/quicket_hook/?secret=testsecret',
+            response = client.post('/tickets/zapier_guest_hook/',
                                    json.dumps(post_data),
-                                   content_type="application/json")
+                                   content_type="application/json",
+                                   HTTP_X_ZAPIER_SECRET='testsecret')
             self.assertEqual(response.status_code, 200)
             ticket = Ticket.objects.get(barcode=54321)
             self.assertEqual(ticket.barcode, 54321)
             self.assertEqual(ticket.email, email)
             self.assertEqual(ticket.user, user)
             # Check duplicate post doesn't change anything
-            response = client.post('/tickets/quicket_hook/?secret=testsecret',
+            response = client.post('/tickets/zapier_guest_hook/',
                                    json.dumps(post_data),
-                                   content_type="application/json")
+                                   content_type="application/json",
+                                   HTTP_X_ZAPIER_SECRET='testsecret')
             self.assertEqual(response.status_code, 200)
             ticket = Ticket.objects.get(barcode=54321)
             self.assertEqual(ticket.barcode, 54321)
             self.assertEqual(ticket.email, email)
             self.assertEqual(ticket.user, user)
             # Change email to one that doesn't exist
-            post_data['tickets'][0]['attendee_email'] = 'none@example.com'
-            post_data['tickets'][0]['barcode'] = 65432
-            response = client.post('/tickets/quicket_hook/?secret=testsecret',
+            post_data['email'] = 'none@example.com'
+            post_data['barcode'] = 65432
+            response = client.post('/tickets/zapier_guest_hook/',
                                    json.dumps(post_data),
-                                   content_type="application/json")
+                                   content_type="application/json",
+                                   HTTP_X_ZAPIER_SECRET='testsecret')
             self.assertEqual(response.status_code, 200)
             ticket = Ticket.objects.get(barcode=65432)
             self.assertEqual(ticket.barcode, 65432)
             self.assertEqual(ticket.email, 'none@example.com')
             self.assertEqual(ticket.user, None)
+            # Test cancelation
+            response = client.post('/tickets/zapier_cancel_hook/',
+                                   json.dumps(post_data),
+                                   content_type="application/json",
+                                   HTTP_X_ZAPIER_SECRET='testsecret')
+            self.assertEqual(response.status_code, 200)
+            # Check ticket has been deleted
+            self.assertFalse(Ticket.objects.filter(barcode=65432).exists())
+            # Check earlier ticket still exists
+            self.assertEqual(Ticket.objects.filter(barcode=54321).count(), 1)
