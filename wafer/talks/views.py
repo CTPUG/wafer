@@ -12,7 +12,7 @@ from rest_framework import viewsets
 from rest_framework.permissions import DjangoModelPermissionsOrAnonReadOnly
 
 from wafer.utils import LoginRequiredMixin
-from wafer.talks.models import Talk, ACCEPTED
+from wafer.talks.models import Talk, TalkType, ACCEPTED
 from wafer.talks.forms import get_talk_form_class
 from wafer.talks.serializers import TalkSerializer
 from wafer.users.models import UserProfile
@@ -73,7 +73,11 @@ class TalkCreate(LoginRequiredMixin, CreateView):
 
     def get_context_data(self, **kwargs):
         context = super(TalkCreate, self).get_context_data(**kwargs)
-        context['can_submit'] = getattr(settings, 'WAFER_TALKS_OPEN', True)
+        can_submit = getattr(settings, 'WAFER_TALKS_OPEN', True)
+        if can_submit:
+            # Check for all talk types being disabled
+            can_submit = TalkType.objects.filter(disable_submission=False).count() > 0
+        context['can_submit'] = can_submit
         return context
 
     @revisions.create_revision()
