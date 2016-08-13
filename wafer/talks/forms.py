@@ -2,6 +2,7 @@ import copy
 
 from django import forms
 from django.conf import settings
+from django.db.models import Q
 from django.core.urlresolvers import reverse
 from django.utils.module_loading import import_string
 from django.utils.translation import ugettext as _
@@ -12,7 +13,7 @@ from crispy_forms.layout import Submit, HTML
 from markitup.widgets import MarkItUpWidget
 from easy_select2.widgets import Select2Multiple
 
-from wafer.talks.models import Talk, render_author
+from wafer.talks.models import Talk, TalkType, render_author
 
 
 def get_talk_form_class():
@@ -55,6 +56,13 @@ class TalkForm(forms.ModelForm):
                             _('Delete')))))
         else:
             self.helper.add_input(submit_button)
+        # Exclude disabled talk types from the choice widget
+        if kwargs['instance']:
+            # Ensure the current talk type is in the query_set, regardless of whether it's been disabled since then
+            self.fields['talk_type'].queryset = TalkType.objects.filter(Q(disable_submission=False) | Q(pk=kwargs['instance'].talk_type.pk))
+        else:
+            self.fields['talk_type'].queryset = TalkType.objects.filter(disable_submission=False)
+
 
     class Meta:
         model = Talk
