@@ -47,41 +47,55 @@ class ClaimView(LoginRequiredMixin, FormView):
             'wafer_user_profile', args=(self.request.user.username,))
 
 
+# We assume that the system is using quicket's Zapier integration, turning
+# Quicket events into web posts via the Zapier webhook endpoint.
+# For Zapier, we assume a shared secret has been set in the X-Zapier-Secret
+# header
 @csrf_exempt
 @require_POST
-def quicket_hook(request):
+def zapier_cancel_hook(request):
     '''
-    Quicket.co.za can POST something like this when tickets are bought:
+    Zapier can post something like this when tickets are cancelled
     {
-      "reference": "REF00123456",
-      "event_id": 123,
-      "event_name": "My Big Event",
-      "amount": 0.00,
-      "email": "demo@example.com",
-      "action": "checkout_started",
-      // Options are "checkout_started","checkout_cancelled","eft_pending",
-      //             "checkout_completed"
-      "tickets": [
-        {
-          "id": 122,
-          "attendee_name": "",
-          "attendee_email": "",
-          "ticket_type": "Free Ticket",
-          "price": 0.00,
-          "barcode": 12345,
-        },
-        ...
-      ],
+        "ticket_type": "Individual (Regular)",
+        "barcode": "12345678",
+        "email": "demo@example.com"
     }
     '''
-    if request.GET.get('secret') != settings.WAFER_TICKETS_SECRET:
+    if request.META.get('HTTP_X_ZAPIER_SECRET', None) != settings.WAFER_TICKETS_SECRET:
         raise PermissionDenied('Incorrect secret')
 
     # This is required for python 3, and in theory fine on python 2
     payload = json.loads(request.body.decode('utf8'))
-    for ticket in payload['tickets']:
-        import_ticket(ticket['barcode'], ticket['ticket_type'],
-                      ticket['attendee_email'])
+    ticket = Ticket.objects.filter(barcode=payload['barcode'])
+    if ticket.exists():
+        # delete the ticket
+        ticket.delete()
+    return HttpResponse("Cancelled\n", content_type='text/plain')
+
+
+# We assume this is connected to the Quicket's 'guest added' Zapier
+# event.
+# Same considerations about the secret apply
+@csrf_exempt
+@require_POST
+def zapier_guest_hook(request):
+    '''
+    Zapier can POST something like this when tickets are bought:
+    {
+
+        "ticket_type": "Individual (Regular)",
+        "barcode": "12345678",
+        "email": "demo@example.com"
+    }
+    '''
+    if request.META.get('HTTP_X_ZAPIER_SECRET', None) != settings.WAFER_TICKETS_SECRET:
+        raise PermissionDenied('Incorrect secret')
+
+    # This is required for python 3, and in theory fine on python 2
+    payload = json.loads(request.body.decode('utf8'))
+    import_ticket(payload['barcode'], payload['ticket_type'],
+                  payload['email'])
 
     return HttpResponse("Noted\n", content_type='text/plain')
 
