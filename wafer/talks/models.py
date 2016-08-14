@@ -26,12 +26,15 @@ class TalkType(models.Model):
     """A type of talk."""
     name = models.CharField(max_length=255)
     description = models.TextField(max_length=1024)
+    order = models.IntegerField(default=1)
+    disable_submission = models.BooleanField(default=False,
+            help_text="Don't allow users to submit talks of this type.")
 
     def __str__(self):
         return u'%s' % (self.name,)
 
     class Meta:
-        ordering = ['id']
+        ordering = ['order', 'id']
 
     def css_class(self):
         """Return a string for use as a css class name"""
