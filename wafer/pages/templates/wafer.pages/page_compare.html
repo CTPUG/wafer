@@ -5,8 +5,6 @@
 
 <h1>Comparing Page</h1>
 
-{% if perms.pages.change_page %}
-
    <p>Last Saved: {{ cur_date }} by {{ cur_author }}</p>
 
    {% if prev_date %}
@@ -41,9 +39,6 @@
    {% else %}
       <p>No previous versions to compare to</p>
    {% endif %}
-{% else %}
-   <p>Nothing to see here.</p>
-{% endif %}
 
 {% endblock %}
 
