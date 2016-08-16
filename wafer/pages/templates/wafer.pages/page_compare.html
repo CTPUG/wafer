@@ -1,0 +1,42 @@
+{% extends "wafer/base.html" %}
+
+{% load i18n %}
+{% block content %}
+
+<h1>Comparing Page</h1>
+
+<p>Last Saved: {{ cur_date }} by {{ cur_author }}</p>
+
+{% if prev_date %}
+   <p>Comparing to version saved: {{ prev_date }} by {{ prev_author }}</p>
+
+   <div>
+      {% for field, diff in diff_list %}
+      <section>
+         <h2 id="fieldname">{{ field }}</h2>
+         <div id="diff">
+            {{ diff | safe }}
+         </div>
+         {% empty %}
+         <div id="diff">
+            <p>{% trans 'No differences found' %}</p>
+         </div>
+      </section>
+      {% endfor %}
+   </div>
+   {# Add navigation buttons #}
+   <div>
+      {% if prev %}
+      <a href="{{ page.get_absolute_url }}?compare&version={{ prev }}" class="btn btn-default btn-lg">{% trans 'Compare to next older version' %}</a>
+      {% endif %}
+      <a href="{{ page.get_absolute_url }}" class="btn btn-success btn-lg">Return to Page</a>
+      {% if next %}
+      <a href="{{ page.get_absolute_url }}?compare&version={{ next }}" class="btn btn-default btn-lg">{% trans 'Compare to next newer version' %}</a>
+      {% endif %}
+   </div>
+{% else %}
+   <p>No previous versions to compare to</p>
+{% endif %}
+
+{% endblock %}
+
