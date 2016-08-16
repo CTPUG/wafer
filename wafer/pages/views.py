@@ -3,8 +3,11 @@ from django.core.exceptions import PermissionDenied
 from django.views.generic import DetailView, TemplateView, UpdateView
 
 from reversion import revisions
+from reversion.models import Version
 from rest_framework import viewsets
 from rest_framework.permissions import DjangoModelPermissionsOrAnonReadOnly
+
+from wafer.compare.admin import make_diff, get_author, get_date
 
 from wafer.pages.models import Page
 from wafer.pages.serializers import PageSerializer
@@ -26,6 +29,51 @@ class EditPage(UpdateView):
         revisions.set_user(self.request.user)
         revisions.set_comment("Page Modified")
         return super(EditPage, self).form_valid(form)
+
+
+class ComparePage(DetailView):
+    template_name = 'wafer.pages/page_compare.html'
+    model = Page
+
+    def get_context_data(self, **kwargs):
+        context = super(ComparePage, self).get_context_data(**kwargs)
+
+        versions = Version.objects.get_for_object(self.object)
+        # By revisions api definition, this is the most recent version
+        current = versions[0]
+        context['cur_author'] = get_author(versions[0])
+        context['cur_date'] = get_date(versions[0])
+        context['prev_author'] = None
+        context['prev_date'] = None
+        context['prev'] = None
+        context['next'] = None
+        context['diff_list'] = None
+
+        if len(versions) == 1:
+            # only 1 version, so short circuit everything
+            return context
+        requested_version = int(self.request.GET.get('version', 1))
+        if requested_version > len(versions):
+            # Incorrect data, so fail to sane state
+            return context
+        if requested_version == 1:
+            # No next revision in this case
+            context['next'] = None
+        else:
+            context['next'] = requested_version - 1
+        if requested_version >= len(versions) - 1:
+            # No previous revision
+            context['prev'] = None
+        else:
+            context['prev'] = requested_version + 1
+
+        previous = versions[requested_version]
+        context['prev_author'] = get_author(previous)
+        context['prev_date'] = get_date(previous)
+
+        context['diff_list'] = make_diff(current, previous)
+
+        return context
 
 
 def slug(request, url):
@@ -51,6 +99,11 @@ def slug(request, url):
         if not request.user.has_perm('pages.change_page'):
             raise PermissionDenied
         return EditPage.as_view()(request, pk=page.id)
+
+    if 'compare' in request.GET:
+        if not request.user.has_perm('pages.change_page'):
+            raise PermissionDenied
+        return ComparePage.as_view()(request, pk=page.id)
 
     return ShowPage.as_view()(request, pk=page.id)
 
