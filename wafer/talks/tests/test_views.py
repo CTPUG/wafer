@@ -303,6 +303,7 @@ class SpeakerTests(TestCase):
     @mock.patch('wafer.users.models.UserProfile.avatar_url', mock_avatar_url)
     def test_view_one_speaker(self):
         img = self.talk_a.corresponding_author.userprofile.avatar_url()
+        username = self.talk_a.corresponding_author.username
         response = self.client.get(
             reverse('wafer_talks_speakers'))
         self.assertEqual(response.status_code, 200)
@@ -310,8 +311,12 @@ class SpeakerTests(TestCase):
             '<div class="container">',
             '<div class="row">',
             '    <div class="col-md-3">',
+            '      <a href="/users/%s/">' % username,
             '        <img class="thumbnail center-block" src="%s">' % img,
+            '      </a>',
+            '      <a href="/users/%s/">' % username,
             '        <h3 class="text-center">author_a</h3>',
+            '      </a>',
             '    </div>',
             '</div>',
             '</div>',
