@@ -1,7 +1,10 @@
 import functools
 import unicodedata
-from django.core.cache import get_cache
+from django.core.cache import caches
 from django.conf import settings
+
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
 
 
 def normalize_unicode(u):
@@ -20,7 +23,7 @@ def cache_result(cache_key, timeout):
         def wrapper(*args, **kw):
             # replace this with cache.caches when we drop Django 1.6
             # compatibility
-            cache = get_cache(cache_name)
+            cache = caches[cache_name]
             result = cache.get(cache_key)
             if result is None:
                 result = f(*args, **kw)
@@ -28,7 +31,7 @@ def cache_result(cache_key, timeout):
             return result
 
         def invalidate():
-            cache = get_cache(cache_name)
+            cache = caches[cache_name]
             cache.delete(cache_key)
 
         wrapper.invalidate = invalidate
@@ -55,3 +58,13 @@ class QueryTracker(object):
     def queries(self):
         from django.db import connection
         return connection.queries[:]
+
+
+# XXX: Should we use Django's version for Django >= 1.9 ?
+# This should certainly go away when we drop support for
+# Django 1.8
+class LoginRequiredMixin(object):
+    '''Must be logged in'''
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(LoginRequiredMixin, self).dispatch(*args, **kwargs)

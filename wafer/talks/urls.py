@@ -1,7 +1,12 @@
-from django.conf.urls import patterns, url
+from django.conf.urls import patterns, url, include
+from rest_framework import routers
 
 from wafer.talks.views import (
-    TalkCreate, TalkDelete, TalkUpdate, TalkView, UsersTalks)
+    Speakers, TalkCreate, TalkDelete, TalkUpdate, TalkView, UsersTalks,
+    TalksViewSet)
+
+router = routers.DefaultRouter()
+router.register(r'talks', TalksViewSet)
 
 urlpatterns = patterns(
     '',
@@ -14,4 +19,6 @@ urlpatterns = patterns(
         name='wafer_talk_edit'),
     url(r'^(?P<pk>\d+)/delete/$', TalkDelete.as_view(),
         name='wafer_talk_delete'),
+    url(r'^speakers/$', Speakers.as_view(), name='wafer_talks_speakers'),
+    url(r'^api/', include(router.urls)),
 )

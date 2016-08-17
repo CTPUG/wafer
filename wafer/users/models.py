@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.contrib.auth.models import User
 from django.db import models
 from django.db.models.signals import post_save
@@ -8,14 +9,19 @@ try:
     from urllib2 import urlparse
 except ImportError:
     from urllib import parse as urlparse
-from django.utils.http import urlquote
 
+from wafer.kv.models import KeyValue
 from wafer.talks.models import ACCEPTED, PENDING
 
 
 @python_2_unicode_compatible
 class UserProfile(models.Model):
+
+    class Meta:
+         ordering = ['id']
+
     user = models.OneToOneField(User)
+    kv = models.ManyToManyField(KeyValue)
     contact_number = models.CharField(max_length=16, null=True, blank=True)
     bio = models.TextField(null=True, blank=True)
 
@@ -26,7 +32,7 @@ class UserProfile(models.Model):
     github_username = models.CharField(max_length=32, null=True, blank=True)
 
     def __str__(self):
-        return unicode(self.user)
+        return u'%s' % self.user
 
     def accepted_talks(self):
         return self.user.talks.filter(status=ACCEPTED)
@@ -55,6 +61,22 @@ class UserProfile(models.Model):
         if urlparse.urlparse(abs_url).scheme == 'http':
             return abs_url
         return self.homepage
+
+    def display_name(self):
+        return self.user.get_full_name() or self.user.username
+
+    def is_registered(self):
+        from wafer.users.forms import get_registration_form_class
+
+        if settings.WAFER_REGISTRATION_MODE == 'ticket':
+            return self.user.ticket.exists()
+        elif settings.WAFER_REGISTRATION_MODE == 'form':
+            form = get_registration_form_class()
+            return form.is_registered(self.kv)
+        raise NotImplemented('Invalid WAFER_REGISTRATION_MODE: %s'
+                             % settings.WAFER_REGISTRATION_MODE)
+
+    is_registered.boolean = True
 
 
 def create_user_profile(sender, instance, created, raw=False, **kwargs):

@@ -3,6 +3,7 @@ logger = logging.getLogger(__name__)
 
 from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse
+from django.core.exceptions import ValidationError, NON_FIELD_ERRORS
 from django.conf import settings
 from django.db import models
 from django.db.models.signals import post_save
@@ -40,12 +41,12 @@ class Page(models.Model):
                     " the site (Container pages, etc.)"),
         default=False)
     files = models.ManyToManyField(
-        File, related_name="pages", null=True, blank=True,
+        File, related_name="pages", blank=True,
         help_text=_("Images and other files for use in"
                     " the content markdown field."))
 
     people = models.ManyToManyField(settings.AUTH_USER_MODEL,
-        related_name='pages', null=True, blank=True,
+        related_name='pages', blank=True,
         help_text=_("People associated with this page for display in the"
                     " schedule (Session chairs, panelists, etc.)"))
 
@@ -63,19 +64,16 @@ class Page(models.Model):
         url = "/".join(self.get_path())
         return reverse('wafer_page', args=(url,))
 
+    get_absolute_url.short_description = 'page url'
+
     def get_in_schedule(self):
         if self.scheduleitem_set.all():
             return True
         return False
 
     def get_people_display_names(self):
-        names = []
-        for person in self.people.all():
-            full_name = person.get_full_name()
-            if full_name:
-                names.append(full_name)
-            else:
-                names.append(person.username)
+        names = [person.userprofile.display_name()
+                 for person in self.people.all()]
         if len(names) > 2:
             comma_names = ', '.join(names[:-1])
             return comma_names + ' and ' + names[-1]
@@ -89,6 +87,35 @@ class Page(models.Model):
 
     class Model:
         unique_together = (('parent', 'slug'),)
+
+    def clean(self):
+        keys = [self.pk]
+        parent = self.parent
+        while parent is not None:
+            if parent.pk in keys:
+                raise ValidationError(
+                    {
+                        NON_FIELD_ERRORS: [
+                            _("Circular reference in parent."),
+                        ],
+                    })
+            keys.append(parent.pk)
+            parent = parent.parent
+        return super(Page, self).clean()
+
+    def validate_unique(self, exclude=None):
+        existing = Page.objects.filter(slug=self.slug, parent=self.parent)
+        # We could be updating the page, so don't fail if the existing
+        # entry is this page.
+        if existing.count() > 1 or (existing.count() == 1 and
+                                    existing.first().pk != self.pk):
+            raise ValidationError(
+                {
+                    NON_FIELD_ERRORS: [
+                        _("Duplicate parent/slug combination."),
+                    ],
+                })
+        return super(Page, self).validate_unique(exclude)
 
 
 def page_menus(root_menu):

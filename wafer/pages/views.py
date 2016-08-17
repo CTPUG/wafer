@@ -2,7 +2,12 @@ from django.http import Http404
 from django.core.exceptions import PermissionDenied
 from django.views.generic import DetailView, TemplateView, UpdateView
 
+from reversion import revisions
+from rest_framework import viewsets
+from rest_framework.permissions import DjangoModelPermissionsOrAnonReadOnly
+
 from wafer.pages.models import Page
+from wafer.pages.serializers import PageSerializer
 from wafer.pages.forms import PageForm
 
 
@@ -16,19 +21,26 @@ class EditPage(UpdateView):
     model = Page
     form_class = PageForm
 
+    @revisions.create_revision()
+    def form_valid(self, form):
+        revisions.set_user(self.request.user)
+        revisions.set_comment("Page Modified")
+        return super(EditPage, self).form_valid(form)
+
 
 def slug(request, url):
     """Look up a page by url (which is a tree of slugs)"""
     page = None
-    for slug in url.split('/'):
-        if not slug:
-            continue
-        try:
-            page = Page.objects.get(slug=slug, parent=page)
-        except Page.DoesNotExist:
-            raise Http404
 
-    if page is None:
+    if url:
+        for slug in url.split('/'):
+            if not slug:
+                continue
+            try:
+                page = Page.objects.get(slug=slug, parent=page)
+            except Page.DoesNotExist:
+                raise Http404
+    else:
         try:
             page = Page.objects.get(slug='index')
         except Page.DoesNotExist:
@@ -41,3 +53,10 @@ def slug(request, url):
         return EditPage.as_view()(request, pk=page.id)
 
     return ShowPage.as_view()(request, pk=page.id)
+
+
+class PageViewSet(viewsets.ModelViewSet):
+    """API endpoint for users."""
+    queryset = Page.objects.all()
+    serializer_class = PageSerializer
+    permission_classes = (DjangoModelPermissionsOrAnonReadOnly, )

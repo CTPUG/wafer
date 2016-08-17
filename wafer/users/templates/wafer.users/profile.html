@@ -9,7 +9,7 @@
             <img src="{{ profile.avatar_url }}">
             {% endif %}
         {% endwith %}
-        {% if user == object or user.is_staff %}
+        {% if can_edit %}
             <a class="btn btn-default btn-sm" href="#" rel="popover" data-toggle="popover"
                 data-title="{% trans 'Changing your mugshot' %}" data-html="true"
                 data-placement="bottom">{% trans 'Edit Mugshot' %}</a>
@@ -23,17 +23,21 @@
         {% endif %}
     </div>
     <div class="col-md-10">
-        {% if user == object or user.is_staff %}
+        {% if can_edit %}
         <ul class="pull-right btn-group btn-group-vertical profile-links">
             <li><a href="{% url 'wafer_user_edit' object.username %}" class="btn btn-default">{% trans 'Edit User' %}</a></li>
             <li><a href="{% url 'wafer_user_edit_profile' object.username %}" class="btn btn-default">{% trans 'Edit Profile' %}</a></li>
-            {# These are only relevant to the user, not staff #}
-            {% if user == object %}
-                {% if not user.ticket.exists %}
-                    <li><a href="{% url 'wafer_ticket_claim' %}" class="btn btn-default">{% trans 'Register' %}</a></li>
+            {% if WAFER_REGISTRATION_OPEN %}
+                {% if WAFER_REGISTRATION_MODE == 'form' %}
+                    {% url 'wafer_register_view' object.username as register_url %}
+                {% elif WAFER_REGISTRATION_MODE == 'ticket' and not profile.is_registered %}
+                    {% url 'wafer_ticket_claim' as register_url %}
                 {% endif %}
-                    <li><a href="{% url 'wafer_talk_submit' %}" class="btn btn-default">{% trans 'Submit Talk Proposal' %}</a></li>
+                {% if register_url %}
+                    <li><a href="{{ register_url }}" class="btn btn-default">{% trans 'Register' %}</a></li>
+                {% endif %}
             {% endif %}
+            <li><a href="{% url 'wafer_talk_submit' %}" class="btn btn-default">{% trans 'Submit Talk Proposal' %}</a></li>
         </ul>
         {% endif %}
         {% spaceless %}
@@ -41,7 +45,7 @@
             {% if profile.homepage %}
                 <a href="{{ profile.homepage_url }}">
             {% endif %}
-            {{ object.get_full_name|default:object.username }}
+            {{ profile.display_name }}
             {% if profile.homepage %}
                 </a>
             {% endif %}
@@ -68,21 +72,23 @@
 {{ profile.bio|linebreaks }}
 </div>
 {% endif %}
-{% if user == object or user.is_staff %}
+{% if can_edit %}
     {% if profile.pending_talks.exists or profile.accepted_talks.exists %}
-        {% if object.ticket.exists %}
+        {% if profile.is_registered %}
             <div class="label label-success">
                 {% blocktrans %}
-                    Ticket purchased
+                    Registered
                 {% endblocktrans %}
             </div>
         {% else %}
             <div class="alert alert-danger">
                 {% blocktrans %}
                     <strong>WARNING:</strong>
-                    Talk proposal submitted, but no ticket purchased.
-                    Register now!
+                    Talk proposal submitted, but not registered.
                 {% endblocktrans %}
+                {% if WAFER_REGISTRATION_OPEN %}
+                    {% trans "Register now!" %}
+                {% endif %}
             </div>
         {% endif %}
     {% endif %}
@@ -98,7 +104,7 @@
 {% endfor %}
 {% endif %}
 {# Submitted talk proposals are only visible to the owner #}
-{% if user == object or user.is_staff %}
+{% if can_edit %}
 {% if profile.pending_talks.exists %}
 <h2>{% trans 'Submitted Talks (under consideration):' %}</h2>
 {% for talk in profile.pending_talks %}
@@ -113,6 +119,7 @@
 {% endblock %}
 {% block extra_foot %}
     <script type="text/javascript">
+        {% if profile.twitter_handle %}
         // Twitter boilerplate
         !function(d, s, id) {
             var js, fjs = d.getElementsByTagName(s)[0];
@@ -123,6 +130,7 @@
                 fjs.parentNode.insertBefore(js, fjs);
             }
         }(document, "script", "twitter-wjs");
+        {% endif %}
 
         $("#profile-avatar [rel=popover]").attr("data-content", $("#profile-avatar .popover-contents").html());
         $("a[rel=popover]").popover();

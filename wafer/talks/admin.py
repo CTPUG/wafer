@@ -1,7 +1,23 @@
 from django.contrib import admin
+from django import forms
 from django.utils.translation import ugettext_lazy as _
 
-from wafer.talks.models import TalkType, Talk, TalkUrl
+from reversion.admin import VersionAdmin
+from easy_select2 import select2_modelform_meta
+
+from wafer.compare.admin import CompareVersionAdmin, DateModifiedFilter
+from wafer.talks.models import TalkType, Talk, TalkUrl, render_author
+
+
+class AdminTalkForm(forms.ModelForm):
+
+    Meta = select2_modelform_meta(Talk)
+
+    def __init__(self, *args, **kwargs):
+        super(AdminTalkForm, self).__init__(*args, **kwargs)
+        self.fields['authors'].label_from_instance = render_author
+        self.fields['corresponding_author'].label_from_instance = render_author
+
 
 class ScheduleListFilter(admin.SimpleListFilter):
     title = _('in schedule')
@@ -20,22 +36,27 @@ class ScheduleListFilter(admin.SimpleListFilter):
             return queryset.filter(scheduleitem__isnull=True)
         return queryset
 
-class TalkUrlAdmin(admin.ModelAdmin):
+
+class TalkUrlAdmin(VersionAdmin, admin.ModelAdmin):
     list_display = ('description', 'talk', 'url')
+
 
 class TalkUrlInline(admin.TabularInline):
     model = TalkUrl
 
 
-class TalkAdmin(admin.ModelAdmin):
-    list_display = ('title', 'get_author_name', 'get_author_contact',
-                    'talk_type', 'get_in_schedule', 'has_url', 'status')
+class TalkAdmin(CompareVersionAdmin, admin.ModelAdmin):
+    list_display = ('title', 'get_corresponding_author_name',
+                    'get_corresponding_author_contact', 'talk_type',
+                    'get_in_schedule', 'has_url', 'status')
     list_editable = ('status',)
-    list_filter = ('status', 'talk_type', ScheduleListFilter)
+    list_filter = ('status', 'talk_type', ScheduleListFilter, DateModifiedFilter)
+    exclude = ('kv',)
 
     inlines = [
-              TalkUrlInline,
-              ]
+        TalkUrlInline,
+    ]
+    form = AdminTalkForm
 
 
 admin.site.register(Talk, TalkAdmin)

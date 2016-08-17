@@ -50,7 +50,7 @@
             </a>
             <ul class="dropdown-menu">
               <li><a href="{% url 'wafer_user_profile' username=user.username %}">
-                  {% blocktrans with name=user.get_full_name|default:user.username %}
+                  {% blocktrans with name=user.userprofile.display_name %}
                   {{ name }}'s profile
                   {% endblocktrans %}
               </a></li>
@@ -66,7 +66,7 @@
           </li>
           {% elif not WAFER_HIDE_LOGIN %}
           <li><a href="{% url 'auth_login' %}">
-              {% trans 'Register / Log In' %}
+              {% trans 'Sign up / Log In' %}
           </a></li>
           {% endif %}
         </ul>

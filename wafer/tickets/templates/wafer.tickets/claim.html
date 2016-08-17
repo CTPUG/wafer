@@ -2,19 +2,25 @@
 {% load i18n %}
 {% load crispy_forms_tags %}
 {% block content %}
-<section class="section1">
-<h1>{% trans "Registration" %}</h1>
-<p>{% trans "Registration is via Quicket." %}</p>
-{#TODO INSERT Quicket widget HERE #}
-</section>
-<section class="section1">
-<h2>{% trans "Ticket claim" %}</h2>
-<p>
-{% blocktrans %}
-  Once you have registered, claim your ticket here, to confirm your
-  registration.
-{% endblocktrans %}
-</p>
-{% crispy form %}
-</section>
+{% if not WAFER_REGISTRATION_OPEN %}
+  {% trans "Ticket sales are not currently open" %}
+{% elif not can_claim %}
+  {% trans "Unable to claim tickets. Maybe you already have one?" %}
+{% else %}
+  <section class="section1">
+    <h1>{% trans "Registration" %}</h1>
+    <p>{% trans "Registration is via Quicket." %}</p>
+    {#TODO INSERT Quicket widget HERE #}
+  </section>
+  <section class="section1">
+    <h2>{% trans "Ticket claim" %}</h2>
+    <p>
+    {% blocktrans %}
+      Once you have registered, claim your ticket here, to confirm your
+      registration.
+    {% endblocktrans %}
+    </p>
+    {% crispy form %}
+  </section>
+{% endif %}
 {% endblock %}

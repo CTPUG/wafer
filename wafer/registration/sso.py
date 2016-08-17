@@ -1,11 +1,16 @@
+# coding: utf-8
+
 import logging
 
 from django.conf import settings
 from django.contrib.auth import get_user_model
+from django.contrib.auth.models import Group
 from django.core.exceptions import MultipleObjectsReturned, ObjectDoesNotExist
 from django.db import IntegrityError
 
 import requests
+
+from wafer.kv.models import KeyValue
 
 MAX_APPEND = 20
 
@@ -16,19 +21,14 @@ class SSOError(Exception):
     pass
 
 
-def sso(identifier, desired_username, name, email, profile_fields=None):
+def sso(user, desired_username, name, email, profile_fields=None):
     """
-    Look up a user that has been authenticated against the filter params
-    `identifier`. If necessary, create one, using the remaining parameters.
+    Create a user, if the provided `user` is None, from the parameters.
+    Then log the user in, and return it.
     """
-    try:
-        user = get_user_model().objects.get(**identifier)
-    except ObjectDoesNotExist:
+    if not user:
         user = _create_desired_user(desired_username)
         _configure_user(user, name, email, profile_fields)
-    except MultipleObjectsReturned:
-        log.warning('Multiple accounts match %r', identifier)
-        raise SSOError('Multiple accounts match %r' % identifier)
 
     if not user.is_active:
         raise SSOError('Account disabled')
@@ -55,12 +55,18 @@ def _create_desired_user(desired_username):
 def _configure_user(user, name, email, profile_fields):
     if name:
         user.first_name, user.last_name = name
+
+    for attr in ('first_name', 'last_name'):
+        max_length = get_user_model()._meta.get_field(attr).max_length
+        if len(getattr(user, attr)) > max_length:
+            setattr(user, attr, getattr(user, attr)[:max_length - 1] + u'…')
+
     user.email = email
     user.save()
 
     profile = user.userprofile
     if profile_fields:
-        for k, v in profile_fields.iteritems():
+        for k, v in profile_fields.items():
             setattr(profile, k, v)
     profile.save()
 
@@ -107,24 +113,42 @@ def github_sso(code):
     if 'blog' in gh:
         profile_fields['blog'] = gh['blog']
 
-    user = sso(
-        identifier={'userprofile__github_username': login},
-        desired_username=login, name=name, email=email,
-        profile_fields=profile_fields)
+    try:
+        user = get_user_model().objects.get(userprofile__github_username=login)
+    except MultipleObjectsReturned:
+        log.warning('Multiple accounts have GitHub username %s', login)
+        raise SSOError('Multiple accounts have GitHub username %s' % login)
+    except ObjectDoesNotExist:
+        user = None
+
+    user = sso(user=user, desired_username=login, name=name, email=email,
+               profile_fields=profile_fields)
     return user
 
 
 def debian_sso(meta):
     authentication_status = meta.get('SSL_CLIENT_VERIFY', None)
     if authentication_status != "SUCCESS":
-        raise SSOError('Requires authentication via Client Certificate')
+        raise SSOError('Requires authentication via Client Certificate. '
+                       'Obtain one from https://sso.debian.org/spkac/')
 
     email = meta['SSL_CLIENT_S_DN_CN']
-    identifier = {'email': email}
-    username = email.split('@', 1)[0]
+    group = Group.objects.get_by_natural_key('Registration')
 
-    name = ('Unknown User', email)
-    if not get_user_model().objects.filter(**identifier).exists():
+    user = None
+    for kv in KeyValue.objects.filter(
+            group=group, key='debian_sso_email', value=email,
+            userprofile__isnull=False):
+        if kv.userprofile_set.count() > 1:
+            message = 'Multiple accounts have Debian SSOed with address %s'
+            log.warning(message, email)
+            raise SSOError(message % email)
+        user = kv.userprofile_set.first().user
+        break
+
+    username = email.split('@', 1)[0]
+    name = ('Unknown User', username)
+    if not user:
         r = requests.get('https://nm.debian.org/api/people',
                          params={'uid': username},
                          headers={'Api-Key': settings.WAFER_DEBIAN_NM_API_KEY})
@@ -145,6 +169,7 @@ def debian_sso(meta):
                 name = (first_name, last_name)
                 break
 
-    user = sso(identifier=identifier, desired_username=username, name=name,
-               email=email)
+    user = sso(user=user, desired_username=username, name=name, email=email)
+    user.userprofile.kv.get_or_create(group=group, key='debian_sso_email',
+                                      defaults={'value': email})
     return user

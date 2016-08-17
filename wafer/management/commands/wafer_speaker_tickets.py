@@ -38,9 +38,11 @@ class Command(BaseCommand):
                 ticket = u'%d' % tickets[0].barcode
             else:
                 ticket = u'NO TICKET PURCHASED'
-            row = [x.encode("utf-8") for x in (person.get_full_name(),
-                   person.email,
-                   ticket)]
+            row = [x.encode("utf-8") for x in (
+                    person.userprofile.display_name(),
+                    person.email,
+                    ticket,
+                  )]
             csv_file.writerow(row)
 
     def handle(self, *args, **options):

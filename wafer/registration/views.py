@@ -1,6 +1,7 @@
 import urllib
 
 from django.contrib.auth import login
+from django.contrib.auth.views import redirect_to_login
 from django.contrib import messages
 from django.core.urlresolvers import reverse
 from django.conf import settings
@@ -17,7 +18,7 @@ def redirect_profile(request):
         return HttpResponseRedirect(reverse('wafer_user_profile',
                                             args=(request.user.username,)))
     else:
-        return HttpResponseRedirect(reverse('wafer_page', args=('index',)))
+        return redirect_to_login(next=reverse(redirect_profile))
 
 
 def github_login(request):
@@ -40,7 +41,7 @@ def github_login(request):
 
         user = github_sso(request.GET['code'])
     except SSOError as e:
-        messages.error(request, unicode(e))
+        messages.error(request, u'%s' % e)
         return HttpResponseRedirect(reverse('auth_login'))
 
     login(request, user)
@@ -54,7 +55,7 @@ def debian_login(request):
     try:
         user = debian_sso(request.META)
     except SSOError as e:
-        messages.error(request, unicode(e))
+        messages.error(request, u'%s' % e)
         return HttpResponseRedirect(reverse('auth_login'))
 
     login(request, user)

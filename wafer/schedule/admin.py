@@ -1,5 +1,6 @@
 import datetime
 
+from django.conf.urls import url
 from django.contrib import admin
 from django.contrib import messages
 from django.utils.encoding import force_text
@@ -42,6 +43,25 @@ def find_overlapping_slots():
                 overlaps.add(slot)
                 overlaps.add(other_slot)
     return overlaps
+
+
+def find_non_contiguous(all_items=None):
+    """Find any items that have slots that aren't contiguous"""
+    if all_items is None:
+        all_items = prefetch_schedule_items()
+    non_contiguous = []
+    for item in all_items:
+        if item.slots.count() < 2:
+            # No point in checking
+            continue
+        last_slot = None
+        for slot in item.slots.all().order_by('end_time'):
+            if last_slot:
+                if last_slot.end_time != slot.get_start_time():
+                    non_contiguous.append(item)
+                    break
+            last_slot = slot
+    return non_contiguous
 
 
 def validate_items(all_items=None):
@@ -132,7 +152,7 @@ def prefetch_schedule_items():
 
 @cache_result('wafer_schedule_check_schedule', 60*60)
 def check_schedule():
-    """Helper routine to eaily test if the schedule is valid"""
+    """Helper routine to easily test if the schedule is valid"""
     all_items = prefetch_schedule_items()
     if find_clashes(all_items):
         return False
@@ -142,16 +162,37 @@ def check_schedule():
         return False
     if find_overlapping_slots():
         return False
+    if find_non_contiguous(all_items):
+        return False
     if find_invalid_venues(all_items):
         return False
     return True
+
+
+def validate_schedule():
+    """Helper routine to easily test if the schedule is valid"""
+    all_items = prefetch_schedule_items()
+    errors = []
+    if find_clashes(all_items):
+        errors.append('Clashes found in schedule.')
+    if find_duplicate_schedule_items(all_items):
+        errors.append('Duplicate schedule items found in schedule.')
+    if validate_items(all_items):
+        errors.append('Invalid schedule items found in schedule.')
+    if find_overlapping_slots():
+        errors.append('Overlapping slots found in schedule.')
+    if find_non_contiguous(all_items):
+        errors.append('Non contiguous slots found in schedule.')
+    if find_invalid_venues(all_items):
+        errors.append('Invalid venues found in schedule.')
+    return errors
 
 
 class ScheduleItemAdminForm(forms.ModelForm):
     class Meta:
         model = ScheduleItem
         fields = ('slots', 'venue', 'talk', 'page', 'details', 'notes',
-                  'css_class')
+                  'css_class', 'expand')
 
     def __init__(self, *args, **kwargs):
         super(ScheduleItemAdminForm, self).__init__(*args, **kwargs)
@@ -164,7 +205,8 @@ class ScheduleItemAdmin(admin.ModelAdmin):
     form = ScheduleItemAdminForm
 
     change_list_template = 'admin/scheduleitem_list.html'
-    list_display = ['get_start_time', 'venue', 'get_title']
+    list_display = ('get_start_time', 'venue', 'get_title', 'expand')
+    list_editable = ('expand',)
 
     # We stuff these validation results into the view, rather than
     # enforcing conditions on the actual model, since it can be hard
@@ -173,10 +215,12 @@ class ScheduleItemAdmin(admin.ModelAdmin):
     def changelist_view(self, request, extra_context=None):
         extra_context = extra_context or {}
         # Find issues in the schedule
+        all_items = None
         clashes = find_clashes()
-        validation = validate_items()
+        validation = validate_items(all_items)
         venues = find_invalid_venues()
-        duplicates = find_duplicate_schedule_items()
+        duplicates = find_duplicate_schedule_items(all_items)
+        non_contiguous = find_non_contiguous(all_items)
         errors = {}
         if clashes:
             errors['clashes'] = clashes
@@ -186,9 +230,24 @@ class ScheduleItemAdmin(admin.ModelAdmin):
             errors['validation'] = validation
         if venues:
             errors['venues'] = venues
+        if non_contiguous:
+            errors['non_contiguous'] = non_contiguous
         extra_context['errors'] = errors
         return super(ScheduleItemAdmin, self).changelist_view(request,
                                                               extra_context)
+
+    def get_urls(self):
+        from wafer.schedule.views import ScheduleEditView
+
+        urls = super(ScheduleItemAdmin, self).get_urls()
+        admin_schedule_edit_view = self.admin_site.admin_view(
+            ScheduleEditView.as_view())
+        my_urls = [
+            url(r'^edit/$', admin_schedule_edit_view, name='schedule_editor'),
+            url(r'^edit/(?P<day_id>[0-9]+)$', admin_schedule_edit_view,
+                name='schedule_editor'),
+        ]
+        return my_urls + urls
 
 
 class SlotAdminForm(forms.ModelForm):

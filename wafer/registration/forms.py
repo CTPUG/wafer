@@ -10,7 +10,7 @@ class RegistrationFormHelper(FormHelper):
 
     def __init__(self, *args, **kwargs):
         super(RegistrationFormHelper, self).__init__(*args, **kwargs)
-        self.add_input(Submit('submit', _('Register')))
+        self.add_input(Submit('submit', _('Sign up')))
 
 
 class LoginFormHelper(FormHelper):

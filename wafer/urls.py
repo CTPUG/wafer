@@ -1,4 +1,5 @@
 from django.conf.urls import include, patterns, url
+from django.conf.urls.static import static
 from django.conf import settings
 from django.contrib import admin
 
@@ -16,15 +17,13 @@ urlpatterns = patterns(
     (r'^markitup/', include('markitup.urls')),
     (r'^schedule/', include('wafer.schedule.urls')),
     (r'^tickets/', include('wafer.tickets.urls')),
-
-    # Pages occupy the entire URL space, and must come last
-    url(r'', include('wafer.pages.urls')),
+    (r'^kv/', include('wafer.kv.urls')),
 )
 
 # Serve media
 if settings.DEBUG:
-    urlpatterns += patterns(
-        '',
-        url(r'^media/(?P<path>.*)$', 'django.views.static.serve',
-            {'document_root': settings.MEDIA_ROOT}),
-    )
+    urlpatterns += static(
+        settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+# Pages occupy the entire URL space, and must come last
+urlpatterns.append(url(r'', include('wafer.pages.urls')))

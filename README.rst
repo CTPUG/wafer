@@ -48,13 +48,30 @@ Installation
 
    * The name will be the conference's name.
 
-4. wafer uses the Django caching infrastructure in several places, so
+4. Wafer uses the Django caching infrastructure in several places, so
    the cache table needs to be created using ``manage.py createcachetable``.
 
 5. Create the default 'Page Editors' and 'Talk Mentors' groups using
    ``manage.py wafer_add_default_groups``.
 
 6. Have a fun conference.
+
+Installing Bootstrap
+====================
+
+The default templates and css files require jquery and bootstrap to work.
+
+wafer provides a bower.json file to simplify the installation process. This
+requires a working nodejs installation.
+
+1. Install bower
+   ``npm install bower``
+
+2. Use bower to install appropriate versions of bootstrap and jquery
+   ``$(npm bin)/bower install``
+
+3. Move files to the correct location
+   ``manage.py collectstatic``
 
 Features
 ========

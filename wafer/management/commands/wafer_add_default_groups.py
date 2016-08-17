@@ -20,6 +20,7 @@ class Command(BaseCommand):
         'Talk Mentors': (
             ('talks', 'change_talk'), ('talks', 'view_all_talks'),
         ),
+        'Registration': (),
     }
 
     def add_wafer_groups(self):

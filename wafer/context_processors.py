@@ -1,5 +1,5 @@
 from django.conf import settings
-from django.contrib.sites.models import get_current_site
+from django.contrib.sites.shortcuts import get_current_site
 from wafer.menu import get_cached_menus
 
 
@@ -25,6 +25,11 @@ def menu_info(request):
 def registration_settings(request):
     '''Expose selected settings to templates'''
     context = {}
-    for setting in ('WAFER_SSO', 'WAFER_HIDE_LOGIN'):
+    for setting in (
+            'WAFER_SSO',
+            'WAFER_HIDE_LOGIN',
+            'WAFER_REGISTRATION_OPEN',
+            'WAFER_REGISTRATION_MODE',
+    ):
         context[setting] = getattr(settings, setting, None)
     return context

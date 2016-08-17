@@ -3,13 +3,14 @@ import logging
 
 from django.conf import settings
 from django.contrib.auth import get_user_model
-from django.core.exceptions import PermissionDenied
+from django.core.exceptions import PermissionDenied, ValidationError
 from django.core.urlresolvers import reverse
-from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import render_to_response
-from django.template import RequestContext
+from django.http import HttpResponse, Http404
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
+from django.views.generic.edit import FormView
+
+from wafer.utils import LoginRequiredMixin
 
 from wafer.tickets.models import Ticket, TicketType
 from wafer.tickets.forms import TicketForm
@@ -17,23 +18,33 @@ from wafer.tickets.forms import TicketForm
 log = logging.getLogger(__name__)
 
 
-def claim(request):
-    if request.method == 'POST':
-        form = TicketForm(request.POST)
-        if form.is_valid():
-            ticket = Ticket.objects.get(barcode=form.cleaned_data['barcode'])
-            ticket.user = request.user
-            ticket.save()
-            return HttpResponseRedirect(reverse('wafer_user_profile',
-                                                args=(request.user.username,)))
-    else:
-        form = TicketForm()
+class ClaimView(LoginRequiredMixin, FormView):
+    template_name = 'wafer.tickets/claim.html'
+    form_class = TicketForm
 
-    context = {
-        'form': form,
-    }
-    return render_to_response('wafer.tickets/claim.html', context,
-                              context_instance=RequestContext(request))
+    def get_context_data(self, **kwargs):
+        context = super(ClaimView, self).get_context_data(**kwargs)
+        context['can_claim'] = self.can_claim()
+        return context
+
+    def can_claim(self):
+        if settings.WAFER_REGISTRATION_MODE != 'ticket':
+            raise Http404('Ticket-based registration is not in use')
+        if not settings.WAFER_REGISTRATION_OPEN:
+            return False
+        return not self.request.user.userprofile.is_registered()
+
+    def form_valid(self, form):
+        if not self.can_claim():
+            raise ValidationError('User may not claim a ticket')
+        ticket = Ticket.objects.get(barcode=form.cleaned_data['barcode'])
+        ticket.user = self.request.user
+        ticket.save()
+        return super(ClaimView, self).form_valid(form)
+
+    def get_success_url(self):
+        return reverse(
+            'wafer_user_profile', args=(self.request.user.username,))
 
 
 @csrf_exempt
@@ -66,7 +77,8 @@ def quicket_hook(request):
     if request.GET.get('secret') != settings.WAFER_TICKETS_SECRET:
         raise PermissionDenied('Incorrect secret')
 
-    payload = json.load(request)
+    # This is required for python 3, and in theory fine on python 2
+    payload = json.loads(request.body.decode('utf8'))
     for ticket in payload['tickets']:
         import_ticket(ticket['barcode'], ticket['ticket_type'],
                       ticket['attendee_email'])

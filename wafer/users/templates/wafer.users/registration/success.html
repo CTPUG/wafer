@@ -1,0 +1,45 @@
+{% extends "wafer/base.html" %}
+{% load i18n %}
+{% load crispy_forms_tags %}
+{% block content %}
+{% if not registered %}
+  <h1>
+    {% blocktrans %}
+      You are not registered for {{ WAFER_CONFERENCE_NAME }}
+    {% endblocktrans %}
+  </h1>
+  <p>
+    {% blocktrans %}
+      You can come back and register, at any time (until registration closes).
+    {% endblocktrans %}
+  </p>
+{% else %}
+  <h1>{% trans 'You have been registered' %}</h1>
+  <p>
+    {% blocktrans %}
+      Thank you for registering for {{ WAFER_CONFERENCE_NAME }}.
+    {% endblocktrans %}
+    {% if will_send_email %}
+      {% trans 'You should receive a confirmation e-mail, shortly.' %}
+    {% endif %}
+    {% blocktrans %}
+      You can come back and edit your registration, at any time (until
+      registration closes).
+    {% endblocktrans %}
+  </p>
+  {% if talks_open %}
+    <p>
+      {% url 'wafer_talk_submit' as submit_url %}
+      {% blocktrans %}
+        Now would be a great time to
+        <a href="{{ submit_url }}">Submit a Talk Proposal</a>.
+      {% endblocktrans %}
+    </p>
+  {% endif %}
+{% endif %}
+<p>
+  <a href="{% url 'wafer_user_profile' username=user.username %}">
+    {% trans 'Back to my profile' %}
+  </a>
+</p>
+{% endblock %}

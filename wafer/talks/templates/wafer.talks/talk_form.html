@@ -5,6 +5,12 @@
 <section class="wafer wafer-talk-edit">
 {% if can_edit %}
 <h1>{% trans "Edit Talk" %}</h1>
+{% with corresponding_author_name=object.corresponding_author.userprofile.display_name %}
+{% url 'wafer_user_profile' username=object.corresponding_author.username as corresponding_author_url %}
+{% blocktrans %}
+<p>Submitted by <a href="{{ corresponding_author_url }}">{{ corresponding_author_name }}</a>.</p>
+{% endblocktrans %}
+{% endwith %}
 {% else %}
 <h1>{% trans "Talk Submission" %}</h1>
 {% endif %}

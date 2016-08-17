@@ -67,22 +67,25 @@ def test_corresponding_author_details():
     profile.contact_number = '77776'
     profile.save()
 
+    speaker = UserModel.objects.create_user('bob', 'bob@wafer.test',
+                                            'bobpassword')
+
     Talk.objects.create(
         title="This is a another test talk",
         abstract="This should be a long and interesting abstract, but isn't",
         corresponding_author_id=user.id)
 
     talk = user.contact_talks.all()[0]
+    talk.authors.add(user)
+    talk.authors.add(speaker)
+    talk.save()
 
-    assert talk.get_author_contact() == 'best@wafer.test - 77776'
-    assert talk.get_author_display_name() == 'jeff'
-    assert talk.get_author_name() == 'jeff ()'
+    assert talk.get_authors_display_name() == 'jeff & bob'
+    assert talk.get_corresponding_author_contact() == 'best@wafer.test - 77776'
+    assert talk.get_corresponding_author_name() == 'jeff (jeff)'
 
-    user.first_name = 'Jeff'
-    user.last_name = 'Jeffson'
-    user.save()
+    speaker.first_name = 'Bob'
+    speaker.last_name = 'Robert'
+    speaker.save()
 
-    talk = user.contact_talks.all()[0]
-
-    assert talk.get_author_display_name() == 'Jeff Jeffson'
-    assert talk.get_author_name() == 'jeff (Jeff Jeffson)'
+    assert talk.get_authors_display_name() == 'jeff & Bob Robert'

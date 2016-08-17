@@ -1,3 +1,4 @@
+{% load sponsors %}
 <!DOCTYPE html>
 <html>
 <head>
@@ -16,7 +17,7 @@
         <div class="messages">
             {% for message in messages %}
             <div class="alert
-                {% if message.tags = 'error' %}
+                {% if message.tags == 'error' %}
                     alert-danger
                 {% elif message.tags %}
                     alert-{{ message.tags }}
@@ -28,6 +29,7 @@
     <h1>{{ WAFER_CONFERENCE_NAME }}</h1>
 {% endblock %}
     </div>
+    {% sponsors %}
     <script src="{{ STATIC_URL }}jquery/dist/jquery.min.js"></script>
     <script src="{{ STATIC_URL }}bootstrap/dist/js/bootstrap.min.js"></script>
     {% block extra_foot %}{% endblock %}

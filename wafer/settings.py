@@ -4,14 +4,10 @@ from django.utils.translation import ugettext_lazy as _
 
 # Django settings for wafer project.
 
-DEBUG = True
-TEMPLATE_DEBUG = DEBUG
-
 ADMINS = (
+    # The logging config below mails admins
     # ('Your Name', 'your_email@example.com'),
 )
-
-MANAGERS = ADMINS
 
 DATABASES = {
     'default': {
@@ -19,6 +15,13 @@ DATABASES = {
         'NAME': 'wafer.db',
     }
 }
+
+if os.environ.get('TESTDB', None) == 'postgres':
+    DATABASES['default'].update({
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'USER': 'postgres',
+        'NAME': 'wafer',
+        })
 
 # Hosts/domain names that are valid for this site; required if DEBUG is False
 # See https://docs.djangoproject.com/en/1.5/ref/settings/#allowed-hosts
@@ -28,7 +31,7 @@ ALLOWED_HOSTS = []
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
 # although not all choices may be available on all operating systems.
 # In a Windows environment this must be set to your system time zone.
-TIME_ZONE = 'Africa/Johannesburg'
+TIME_ZONE = 'UTC'
 
 # Language code for this installation. All choices can be found here:
 # http://www.i18nguy.com/unicode/language-identifiers.html
@@ -134,12 +137,15 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'django.contrib.admin',
+    'reversion',
     'django_medusa',
     'crispy_forms',
     'django_nose',
     'markitup',
+    'rest_framework',
+    'easy_select2',
     'wafer',
+    'wafer.kv',
     'wafer.registration',
     'wafer.talks',
     'wafer.schedule',
@@ -147,19 +153,11 @@ INSTALLED_APPS = (
     'wafer.sponsors',
     'wafer.pages',
     'wafer.tickets',
+    'wafer.compare',
     # Django isn't finding the overridden templates
     'registration',
+    'django.contrib.admin',
 )
-
-# Only add south if we're on a version that doesn't support native migrations
-# (native migrations were added in Django 1.7)
-try:
-    from django.db import migrations
-    WAFER_NEEDS_SOUTH = False
-except ImportError:
-    INSTALLED_APPS += ('south', )
-    WAFER_NEEDS_SOUTH = True
-
 
 TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
 
@@ -194,12 +192,10 @@ LOGGING = {
 
 # Django registration:
 ACCOUNT_ACTIVATION_DAYS = 7
-AUTH_PROFILE_MODULE = 'users.UserProfile'
 
 AUTH_USER_MODEL = 'auth.User'
 
 # Forms:
-CRISPY_FAIL_SILENTLY = not DEBUG
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
 
 # Wafer cache settings
@@ -266,6 +262,20 @@ WAFER_HIDE_LOGIN = False
 # Set this to False to disable talk submissions
 WAFER_TALKS_OPEN = True
 
+# The form used for talk submission
+WAFER_TALK_FORM = 'wafer.talks.forms.TalkForm'
+
+# Set this to False to disable registration
+WAFER_REGISTRATION_OPEN = True
+# Can be 'ticket' for Quicket tickets or 'form' for a classic form
+WAFER_REGISTRATION_MODE = 'ticket'
+
+# For REGISTRATION_MODE == 'form', the form to present
+WAFER_REGISTRATION_FORM = 'wafer.users.forms.ExampleRegistrationForm'
+
+# Allow registered and anonymous users to see registered users
+WAFER_PUBLIC_ATTENDEE_LIST = True
+
 # Ticket registration with Quicket
 # WAFER_TICKET_SECRET = "i'm a shared secret"
 
@@ -273,3 +283,8 @@ WAFER_TALKS_OPEN = True
 MEDUSA_RENDERER_CLASS = "wafer.management.static.WaferDiskStaticSiteRenderer"
 MEDUSA_DEPLOY_DIR = os.path.join(project_root, 'static_mirror')
 MARKITUP_FILTER = ('markdown.markdown', {'safe_mode': True})
+
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': ('rest_framework.permissions.IsAdminUser',),
+    'PAGE_SIZE': 50
+}
