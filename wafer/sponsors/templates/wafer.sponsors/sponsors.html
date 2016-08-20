@@ -8,6 +8,9 @@
     <section class="wafer wafer-sponsor">
     <div class="well">
       <h2 class="bs-callout bs-callout-default bs-callout-{{ sponsor.packages.first.name.lower }}">
+         {% if sponsor.packages.first.name.lower == 'platinum' %}
+            ★
+         {% endif %}
          {% if sponsor.url %}
          <a href="{{ sponsor.url }}">{{ sponsor.name }}</a>
          {% else %}
