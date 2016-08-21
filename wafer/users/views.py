@@ -41,6 +41,7 @@ class UsersView(ListView):
         qs = super(UsersView, self).get_queryset(*args, **kwargs)
         if not settings.WAFER_PUBLIC_ATTENDEE_LIST:
             qs = qs.filter(talks__status=ACCEPTED).distinct()
+        qs = qs.order_by('first_name', 'last_name', 'username')
         return qs
 
 
