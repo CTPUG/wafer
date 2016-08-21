@@ -6,12 +6,9 @@ from django.conf import settings
 from wafer.users.views import UsersView
 
 
-
 class UserRenderer(StaticSiteRenderer):
     def get_paths(self):
-        paths = []
-        if settings.WAFER_PUBLIC_ATTENDEE_LIST:
-            paths.append("/users/")
+        paths = ['/users/']
 
         items = get_user_model().objects.all()
         for item in items:

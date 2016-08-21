@@ -22,6 +22,7 @@ from rest_framework import viewsets
 from rest_framework.permissions import IsAdminUser
 
 from wafer.kv.utils import deserialize_by_field
+from wafer.talks.models import ACCEPTED
 from wafer.users.forms import (
     UserForm, UserProfileForm, get_registration_form_class,
 )
@@ -37,9 +38,11 @@ class UsersView(ListView):
     paginate_by = 25
 
     def get_queryset(self, *args, **kwargs):
+        qs = super(UsersView, self).get_queryset(*args, **kwargs)
         if not settings.WAFER_PUBLIC_ATTENDEE_LIST:
-            raise Http404()
-        return super(UsersView, self).get_queryset(*args, **kwargs)
+            qs = qs.filter(talks__status=ACCEPTED).distinct()
+        qs = qs.order_by('first_name', 'last_name', 'username')
+        return qs
 
 
 class ProfileView(DetailView):
