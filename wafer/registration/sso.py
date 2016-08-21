@@ -40,7 +40,7 @@ def sso(user, desired_username, name, email, profile_fields=None):
 
 
 def _create_desired_user(desired_username):
-    for append in xrange(MAX_APPEND):
+    for append in range(MAX_APPEND):
         username = desired_username
         if append:
             username += str(append)
