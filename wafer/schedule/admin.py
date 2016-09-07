@@ -300,7 +300,7 @@ class SlotAdmin(admin.ModelAdmin):
 
     def save_model(self, request, obj, form, change):
         super(SlotAdmin, self).save_model(request, obj, form, change)
-        if not change and form.cleaned_data['additional'] > 0:
+        if not change and form.cleaned_data['additional']:
             # We add the requested additional slots
             # All created slot will have the same length as the slot just
             # created , and we specify them as a sequence using
