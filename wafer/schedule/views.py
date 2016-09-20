@@ -48,7 +48,7 @@ class VenueView(DetailView):
 def make_schedule_row(schedule_day, slot, seen_items):
     """Create a row for the schedule table."""
     row = ScheduleRow(schedule_day, slot)
-    skip = []
+    skip = {}
     expanding = {}
     all_items = list(slot.scheduleitem_set
                      .select_related('talk', 'page', 'venue')
@@ -59,7 +59,7 @@ def make_schedule_row(schedule_day, slot, seen_items):
             # Inc rowspan
             seen_items[item]['rowspan'] += 1
             # Note that we need to skip this during colspan checks
-            skip.append(item.venue)
+            skip[item.venue] = seen_items[item]
             continue
         scheditem = {'item': item, 'rowspan': 1, 'colspan': 1}
         row.items[item.venue] = scheditem
@@ -69,11 +69,14 @@ def make_schedule_row(schedule_day, slot, seen_items):
 
     empty = []
     expanding_right = None
+    skipping = 0
+    skip_item = None
     for venue in schedule_day.venues:
         if venue in skip:
-            # Nothing to see here
+            # We need to skip all the venues this item spans over
+            skipping = 1
+            skip_item = skip[venue]
             continue
-
         if venue in expanding:
             item = row.items[venue]
             for empty_venue in empty:
@@ -86,7 +89,10 @@ def make_schedule_row(schedule_day, slot, seen_items):
             expanding_right = None
         elif expanding_right:
             expanding_right['colspan'] += 1
+        elif skipping > 0 and skipping < skip_item['colspan']:
+            skipping += 1
         else:
+            skipping = 0
             empty.append(venue)
             row.items[venue] = {'item': None, 'rowspan': 1, 'colspan': 1}
 
