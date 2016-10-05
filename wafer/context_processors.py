@@ -14,7 +14,7 @@ def site_info(request):
 
 
 def navigation_info(request):
-    '''Expose whether to display the navigation hear and footer'''
+    '''Expose whether to display the navigation header and footer'''
     if request.GET.get('wafer_hide_navigation') == "1":
         nav_class = "wafer-invisible"
     else:
