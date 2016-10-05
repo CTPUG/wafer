@@ -15,6 +15,13 @@
 	display: none;
 }
 
+#wafer-visible {
+}
+
+#wafer-invisible {
+	display: none;
+}
+
 .profile-links li{
 	list-style: none;
 	display: inline-block;
