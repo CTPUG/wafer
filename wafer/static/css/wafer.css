@@ -15,10 +15,10 @@
 	display: none;
 }
 
-#wafer-visible {
+.wafer-visible {
 }
 
-#wafer-invisible {
+.wafer-invisible {
 	display: none;
 }
 
