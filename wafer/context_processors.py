@@ -13,6 +13,18 @@ def site_info(request):
     return context
 
 
+def navigation_info(request):
+    '''Expose whether to display the navigation hear and footer'''
+    if request.GET.get('wafer_hide_navigation') == "1":
+        nav_class = "wafer-invisible"
+    else:
+        nav_class = "wafer-visible"
+    context = {
+        'WAFER_NAVIGATION_VISIBILITY': nav_class,
+    }
+    return context
+
+
 def menu_info(request):
     '''Expose the menus to templates'''
     menus = get_cached_menus()
