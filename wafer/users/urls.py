@@ -13,7 +13,7 @@ urlpatterns = patterns(
     url(r'^$', UsersView.as_view(),
         name='wafer_users'),
     url(r'^api/', include(router.urls)),
-    url(r'^page/(?P<page>\d+)$', UsersView.as_view(),
+    url(r'^page/(?P<page>\d+)/$', UsersView.as_view(),
         name='wafer_users_page'),
     url(r'^(?P<username>[\w.@+-]+)/$', ProfileView.as_view(),
         name='wafer_user_profile'),

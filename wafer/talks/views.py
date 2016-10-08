@@ -124,7 +124,7 @@ class TalkUpdate(EditOwnTalksMixin, UpdateView):
 class TalkDelete(EditOwnTalksMixin, DeleteView):
     model = Talk
     template_name = 'wafer.talks/talk_delete.html'
-    success_url = reverse_lazy('wafer_page', args=('index',))
+    success_url = reverse_lazy('wafer_page')
 
     @revisions.create_revision()
     def form_valid(self, form):

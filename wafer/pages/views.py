@@ -90,7 +90,7 @@ def slug(request, url):
                 raise Http404
     else:
         try:
-            page = Page.objects.get(slug='index')
+            page = Page.objects.get(slug='index', parent=None)
         except Page.DoesNotExist:
             return TemplateView.as_view(
                 template_name='wafer/index.html')(request)

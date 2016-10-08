@@ -5,7 +5,7 @@ from django.core.urlresolvers import reverse
 
 class SponsorRenderer(StaticSiteRenderer):
     def get_paths(self):
-        paths = ["/sponsors/", ]
+        paths = []
 
         items = Sponsor.objects.all()
         for item in items:

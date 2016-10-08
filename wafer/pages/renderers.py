@@ -12,9 +12,6 @@ class PagesRenderer(StaticSiteRenderer):
                 # Container page
                 continue
             url = item.get_absolute_url()
-            # FIXME: Can we introspect this easily from urls?
-            if url == '/index' or url == '/index.html':
-                url = '/'
             paths.append(url)
         return paths
 
