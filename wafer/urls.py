@@ -6,16 +6,16 @@ from django.contrib import admin
 admin.autodiscover()
 
 urlpatterns = [
-    (r'^accounts/', include('wafer.registration.urls')),
-    (r'^users/', include('wafer.users.urls')),
-    (r'^talks/', include('wafer.talks.urls')),
-    (r'^sponsors/', include('wafer.sponsors.urls')),
-    (r'^pages/', include('wafer.pages.urls')),
-    (r'^admin/', include(admin.site.urls)),
-    (r'^markitup/', include('markitup.urls')),
-    (r'^schedule/', include('wafer.schedule.urls')),
-    (r'^tickets/', include('wafer.tickets.urls')),
-    (r'^kv/', include('wafer.kv.urls')),
+    url(r'^accounts/', include('wafer.registration.urls')),
+    url(r'^users/', include('wafer.users.urls')),
+    url(r'^talks/', include('wafer.talks.urls')),
+    url(r'^sponsors/', include('wafer.sponsors.urls')),
+    url(r'^pages/', include('wafer.pages.urls')),
+    url(r'^admin/', include(admin.site.urls)),
+    url(r'^markitup/', include('markitup.urls')),
+    url(r'^schedule/', include('wafer.schedule.urls')),
+    url(r'^tickets/', include('wafer.tickets.urls')),
+    url(r'^kv/', include('wafer.kv.urls')),
 ]
 
 # Serve media
