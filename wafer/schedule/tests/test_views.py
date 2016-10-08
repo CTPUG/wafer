@@ -667,6 +667,119 @@ class ScheduleViewTests(TestCase):
         assert day1.rows[4].get_sorted_items()[0]['rowspan'] == 1
         assert day1.rows[4].get_sorted_items()[0]['colspan'] == 1
 
+    def test_row_col_span(self):
+        """Create table with 3 venues and both row & col
+           venue spanning items"""
+        # Schedule is
+        #         Venue 1     Venue 2   Venue3
+        # 10-11   Item0       --        Item5 +
+        # 11-12   Item1 +     --        Item6 +
+        # 12-13     |         --        Item7
+        # 13-14   Item2 +     --          |
+        # 14-15   Item3 +     Item4+     --
+        day1 = Day.objects.create(date=D.date(2013, 9, 22))
+        venue1 = Venue.objects.create(order=1, name='Venue 1')
+        venue2 = Venue.objects.create(order=2, name='Venue 2')
+        venue3 = Venue.objects.create(order=3, name='Venue 3')
+        venue1.days.add(day1)
+        venue2.days.add(day1)
+        venue3.days.add(day1)
+
+        start1 = D.time(10, 0, 0)
+        start2 = D.time(11, 0, 0)
+        start3 = D.time(12, 0, 0)
+        start4 = D.time(13, 0, 0)
+        start5 = D.time(14, 0, 0)
+        end = D.time(15, 0, 0)
+
+        # We create the slots out of order to tt
+        slot1 = Slot.objects.create(start_time=start1, end_time=start2,
+                                    day=day1)
+
+        slot4 = Slot.objects.create(start_time=start4, end_time=start5,
+                                    day=day1)
+
+        slot2 = Slot.objects.create(start_time=start2, end_time=start3,
+                                    day=day1)
+
+        slot3 = Slot.objects.create(start_time=start3, end_time=start4,
+                                    day=day1)
+
+        slot5 = Slot.objects.create(start_time=start5, end_time=end,
+                                    day=day1)
+
+        pages = make_pages(10)
+        venues = [venue1, venue1, venue1, venue1, venue2,
+                  venue3, venue3, venue3]
+        expand = [1, 2, 3, 4, 5, 6]
+        items = make_items(venues, pages, expand)
+
+        items[0].slots.add(slot1)
+        items[5].slots.add(slot1)
+        items[1].slots.add(slot2)
+        items[1].slots.add(slot3)
+        items[6].slots.add(slot2)
+        items[7].slots.add(slot3)
+        items[7].slots.add(slot4)
+        items[2].slots.add(slot4)
+        items[3].slots.add(slot5)
+        items[4].slots.add(slot5)
+
+        c = Client()
+        response = c.get('/schedule/')
+
+        [day1] = response.context['schedule_days']
+
+        assert len(day1.rows) == 5
+        assert day1.venues == [venue1, venue2, venue3]
+        assert day1.rows[0].slot.get_start_time() == start1
+        assert day1.rows[1].slot.get_start_time() == start2
+        assert day1.rows[2].slot.get_start_time() == start3
+        assert day1.rows[3].slot.get_start_time() == start4
+        assert day1.rows[4].slot.get_start_time() == start5
+
+        assert len(day1.rows[0].items) == 2
+
+        assert day1.rows[0].get_sorted_items()[0]['item'] == items[0]
+        assert day1.rows[0].get_sorted_items()[0]['rowspan'] == 1
+        assert day1.rows[0].get_sorted_items()[0]['colspan'] == 1
+
+        assert day1.rows[0].get_sorted_items()[1]['item'] == items[5]
+        assert day1.rows[0].get_sorted_items()[1]['rowspan'] == 1
+        assert day1.rows[0].get_sorted_items()[1]['colspan'] == 2
+
+        assert len(day1.rows[1].items) == 2
+
+        assert day1.rows[1].get_sorted_items()[0]['item'] == items[1]
+        assert day1.rows[1].get_sorted_items()[0]['rowspan'] == 2
+        assert day1.rows[1].get_sorted_items()[0]['colspan'] == 2
+
+        assert day1.rows[1].get_sorted_items()[1]['item'] == items[6]
+        assert day1.rows[1].get_sorted_items()[1]['rowspan'] == 1
+        assert day1.rows[1].get_sorted_items()[1]['colspan'] == 1
+
+        assert len(day1.rows[2].items) == 1
+
+        assert day1.rows[2].get_sorted_items()[0]['item'] == items[7]
+        assert day1.rows[2].get_sorted_items()[0]['rowspan'] == 2
+        assert day1.rows[2].get_sorted_items()[0]['colspan'] == 1
+
+        assert len(day1.rows[3].items) == 1
+
+        assert day1.rows[3].get_sorted_items()[0]['item'] == items[2]
+        assert day1.rows[3].get_sorted_items()[0]['rowspan'] == 1
+        assert day1.rows[3].get_sorted_items()[0]['colspan'] == 2
+
+        assert len(day1.rows[4].items) == 2
+
+        assert day1.rows[4].get_sorted_items()[0]['item'] == items[3]
+        assert day1.rows[4].get_sorted_items()[0]['rowspan'] == 1
+        assert day1.rows[4].get_sorted_items()[0]['colspan'] == 1
+
+        assert day1.rows[4].get_sorted_items()[1]['item'] == items[4]
+        assert day1.rows[4].get_sorted_items()[1]['rowspan'] == 1
+        assert day1.rows[4].get_sorted_items()[1]['colspan'] == 2
+
 
 class CurrentViewTests(TestCase):
     def test_current_view_simple(self):
