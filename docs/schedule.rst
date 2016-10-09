@@ -11,7 +11,6 @@ the venues available.
 Each venue is associated with a number of days of the conference. On days when
 a venue is not available, it will not appear in the schedule.
 
-
 Slots
 =====
 
@@ -23,6 +22,9 @@ Each slot has a name to make it easier to distinguish.
 
 Slots cannot overlap, but items can use multiple slots, so this can be
 emulated by breaking the slots down into small enough time intervals.
+
+The times are specified as absolute times, and are assumed to be
+in the correct timezone for the conference.
 
 Assigning items to slots
 ========================
@@ -48,6 +50,14 @@ shown.
 The ``schedule/current`` view can be used to show events around the current time.
 The ``refresh`` parameter can be used to add a refresh header to the view - e.g
 ``https://localhost/schedule/current/?refresh=60`` will refresh every 60 seconds.
+
+Note that the current time is the time of the webserver. If this is in a different
+timezone from the conference, the correct ``TIME_ZONE`` value should be set
+in the settings.py file.
+
+A specific time can be passed via the ``time`` parameter to the current view,
+specified as ``HH:mm`` e.g. ``https://localhost/schedule/current/?time=08:30``
+will generate the current view for 8:30 am.
 
 Styling notes
 =============
