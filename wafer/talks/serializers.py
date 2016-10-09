@@ -21,7 +21,6 @@ class TalkSerializer(serializers.ModelSerializer):
         # not be generally accessible
         exclude = ('_abstract_rendered', 'private_notes', 'notes')
 
-
     @revisions.create_revision()
     def create(self, validated_data):
         revisions.set_comment("Created via REST api")
@@ -36,7 +35,7 @@ class TalkSerializer(serializers.ModelSerializer):
         talk.authors = validated_data['authors']
         talk.status = validated_data['status']
         # These need more thought
-        #talk.notes = validated_data['notes']
-        #talk.private_notes = validated_data['private_notes']
+        # talk.notes = validated_data['notes']
+        # talk.private_notes = validated_data['private_notes']
         talk.save()
         return talk
