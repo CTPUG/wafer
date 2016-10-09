@@ -78,7 +78,7 @@
         var scheduleItemId = data.getAttribute('data-scheduleitem-id');
         var scheduleItemType = data.getAttribute('data-type');
         event.target.innerHTML = data.getAttribute('title');
-        event.target.setAttribute('data-schedule-item-id', scheduleItemId);
+        event.target.setAttribute('data-scheduleitem-id', scheduleItemId);
         event.target.setAttribute('data-type', scheduleItemType);
         event.target.id = 'scheduleItem' + scheduleItemId;
         event.preventDefault();
