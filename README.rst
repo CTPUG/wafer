@@ -39,12 +39,13 @@ Installation
 1. ``pip install -r requirements.txt`` should install all the required
    python and django dependencies.
 
-2. Wafer uses bower to manage javascript dependencies
+2. Wafer uses npm to manage front-end dependencies
 
-   * Install bower in the static files base directory: ``npm install bower``
+   * Make sure you have a recent version of Node.js installed that
+     includes ``npm``.
 
-   * Grab the ``bower.json`` file to install the required javascript files
-       ``./node_modules/bower/bin/bower install bower.json``
+   * Run ``npm install`` to install all dependencies, which also copies
+     them to ``wafer/static/vendor``.
 
 3. Install the wafer applications
    ``manage.py migrate``
