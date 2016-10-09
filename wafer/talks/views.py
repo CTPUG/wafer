@@ -76,7 +76,8 @@ class TalkCreate(LoginRequiredMixin, CreateView):
         can_submit = getattr(settings, 'WAFER_TALKS_OPEN', True)
         if can_submit:
             # Check for all talk types being disabled
-            can_submit = TalkType.objects.filter(disable_submission=False).count() > 0
+            can_submit = TalkType.objects.filter(
+                disable_submission=False).count() > 0
         context['can_submit'] = can_submit
         return context
 
@@ -143,7 +144,8 @@ class Speakers(ListView):
     def get_context_data(self, **kwargs):
         context = super(Speakers, self).get_context_data(**kwargs)
         speakers = UserProfile.objects.filter(
-            user__talks__status='A').distinct().prefetch_related('user').order_by('user__first_name', 'user__last_name')
+            user__talks__status='A').distinct().prefetch_related(
+                'user').order_by('user__first_name', 'user__last_name')
         context["speaker_rows"] = self._by_row(speakers, 4)
         return context
 
@@ -168,5 +170,5 @@ class TalksViewSet(viewsets.ModelViewSet):
             # XXX: Should this be all authors rather than just
             # the corresponding author?
             return Talk.objects.filter(
-                Q(status=ACCEPTED)|
+                Q(status=ACCEPTED) |
                 Q(corresponding_author=self.request.user))
