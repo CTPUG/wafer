@@ -164,7 +164,8 @@ class TalkNoteViewTests(TestCase):
                 self.assertFalse('Some notes for talk' in
                                  response.rendered_content)
         if private_notes_visible:
-            self.assertTrue('Some private notes for talk' in response.rendered_content)
+            self.assertTrue(
+                'Some private notes for talk' in response.rendered_content)
         else:
             if hasattr(response, 'rendered_content'):
                 self.assertFalse('Some private notes for talk' in
@@ -355,7 +356,6 @@ class SpeakerTests(TestCase):
 
 class TalkViewSetTests(TestCase):
 
-
     def setUp(self):
         self.talk_a = create_talk("Talk A", ACCEPTED, "author_a")
         self.talk_r = create_talk("Talk R", REJECTED, "author_r")
@@ -366,9 +366,11 @@ class TalkViewSetTests(TestCase):
         response = self.client.get('/talks/api/talks/')
         self.assertEqual(response.data['count'], 1)
         self.assertEqual(response.data['results'][0]['title'], "Talk A")
-        response = self.client.get('/talks/api/talks/%d/' % self.talk_a.talk_id)
+        response = self.client.get(
+            '/talks/api/talks/%d/' % self.talk_a.talk_id)
         self.assertEqual(response.data['title'], 'Talk A')
-        response = self.client.get('/talks/api/talks/%d/' % self.talk_r.talk_id)
+        response = self.client.get(
+            '/talks/api/talks/%d/' % self.talk_r.talk_id)
         self.assertEqual(response.status_code, 404)
 
     def test_ordinary_users_get_accepted_talks(self):
@@ -377,9 +379,11 @@ class TalkViewSetTests(TestCase):
         response = self.client.get('/talks/api/talks/')
         self.assertEqual(response.data['count'], 1)
         self.assertEqual(response.data['results'][0]['title'], "Talk A")
-        response = self.client.get('/talks/api/talks/%d/' % self.talk_a.talk_id)
+        response = self.client.get(
+            '/talks/api/talks/%d/' % self.talk_a.talk_id)
         self.assertEqual(response.data['title'], 'Talk A')
-        response = self.client.get('/talks/api/talks/%d/' % self.talk_r.talk_id)
+        response = self.client.get(
+            '/talks/api/talks/%d/' % self.talk_r.talk_id)
         self.assertEqual(response.status_code, 404)
 
     def test_super_user_gets_everything(self):
@@ -390,9 +394,11 @@ class TalkViewSetTests(TestCase):
         self.assertEqual(response.data['results'][0]['title'], "Talk A")
         self.assertEqual(response.data['results'][1]['title'], "Talk R")
         self.assertEqual(response.data['results'][2]['title'], "Talk P")
-        response = self.client.get('/talks/api/talks/%d/' % self.talk_a.talk_id)
+        response = self.client.get(
+            '/talks/api/talks/%d/' % self.talk_a.talk_id)
         self.assertEqual(response.data['title'], 'Talk A')
-        response = self.client.get('/talks/api/talks/%d/' % self.talk_r.talk_id)
+        response = self.client.get(
+            '/talks/api/talks/%d/' % self.talk_r.talk_id)
         self.assertEqual(response.data['title'], 'Talk R')
 
     def test_reviewer_all_talks(self):
@@ -403,9 +409,11 @@ class TalkViewSetTests(TestCase):
         self.assertEqual(response.data['results'][0]['title'], "Talk A")
         self.assertEqual(response.data['results'][1]['title'], "Talk R")
         self.assertEqual(response.data['results'][2]['title'], "Talk P")
-        response = self.client.get('/talks/api/talks/%d/' % self.talk_a.talk_id)
+        response = self.client.get(
+            '/talks/api/talks/%d/' % self.talk_a.talk_id)
         self.assertEqual(response.data['title'], 'Talk A')
-        response = self.client.get('/talks/api/talks/%d/' % self.talk_r.talk_id)
+        response = self.client.get(
+            '/talks/api/talks/%d/' % self.talk_r.talk_id)
         self.assertEqual(response.data['title'], 'Talk R')
 
     def test_author_a_sees_own_talks_only(self):
