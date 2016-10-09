@@ -461,26 +461,40 @@ class TalkViewSetTests(TestCase):
         self.client = SortedResultsClient(sort_key="title")
         self.client.login(username='super', password='super_password')
 
+    def mk_result(self, talk):
+        def mk_url(talk_url):
+            return {
+                'id': talk_url.id, 'description': talk_url.description,
+                'url': talk_url.url,
+            }
+        return {
+            'talk_id': talk.talk_id, 'talk_type': talk.talk_type,
+            'status': talk.status, 'title': talk.title,
+            'abstract': talk.abstract.raw,
+            'corresponding_author': talk.corresponding_author.id,
+            'authors': [talk.corresponding_author.id],
+            'kv': [],
+            'urls': [mk_url(url) for url in talk.talkurl_set.all()]
+        }
+
+    def test_list_talks(self):
+        talk_a = create_talk("Talk A", ACCEPTED, "author_a")
+        talk_b = create_talk("Talk B", REJECTED, "author_b")
+        response = self.client.get('/talks/api/talks/')
+        result_0, result_1 = response.data['results']
+        self.assertEqual(response.data['results'], [
+            self.mk_result(talk_a), self.mk_result(talk_b),
+        ])
+
     def test_retrieve_talk(self):
         talk = create_talk("Talk A", ACCEPTED, "author_a")
         talk.abstract = "Abstract Talk A"
         talk.save()
-        talk_url = TalkUrl.objects.create(
+        TalkUrl.objects.create(
             talk=talk, url="http://example.com/", description="video")
         response = self.client.get(
             '/talks/api/talks/%d/' % talk.talk_id)
-        self.assertEqual(response.data, {
-            'talk_id': talk.talk_id, 'talk_type': None, 'status': 'A',
-            'title': u'Talk A',
-            'abstract': u'Abstract Talk A',
-            'corresponding_author': talk.corresponding_author.id,
-            'authors': [talk.corresponding_author.id],
-            'kv': [],
-            'urls': [{
-                'id': talk_url.id, 'description': u'video',
-                'url': u'http://example.com/',
-            }]
-        })
+        self.assertEqual(response.data, self.mk_result(talk))
 
 
 class TalkUrlsViewSetPermissionTests(TestCase):
