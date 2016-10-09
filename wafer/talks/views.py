@@ -180,3 +180,11 @@ class TalkUrlsViewSet(viewsets.ModelViewSet, NestedViewSetMixin):
     queryset = TalkUrl.objects.all()
     serializer_class = TalkUrlSerializer
     permission_classes = (DjangoModelPermissionsOrAnonReadOnly, )
+
+    def create(self, request, *args, **kw):
+        request.data['talk'] = self.get_parents_query_dict()['talk']
+        return super(TalkUrlsViewSet, self).create(request, *args, **kw)
+
+    def update(self, request, *args, **kw):
+        request.data['talk'] = self.get_parents_query_dict()['talk']
+        return super(TalkUrlsViewSet, self).update(request, *args, **kw)
