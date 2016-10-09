@@ -3,7 +3,14 @@ from django.contrib.auth import get_user_model
 from rest_framework import serializers
 from reversion import revisions
 
-from wafer.talks.models import Talk
+from wafer.talks.models import Talk, TalkUrl
+
+
+class TalkUrlSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TalkUrl
+        fields = ('id', 'description', 'url')
+        read_only_fields = ('id',)
 
 
 class TalkSerializer(serializers.ModelSerializer):
@@ -12,6 +19,10 @@ class TalkSerializer(serializers.ModelSerializer):
         many=True, allow_null=True,
         queryset=get_user_model().objects.all())
 
+    abstract = serializers.CharField(source='abstract.raw')
+
+    urls = TalkUrlSerializer(source='talkurl_set', many=True)
+
     class Meta:
         model = Talk
         # private_notes should possibly be accessible to
@@ -19,7 +30,11 @@ class TalkSerializer(serializers.ModelSerializer):
         # not to the other users.
         # Similar considerations apply to notes, which should
         # not be generally accessible
-        exclude = ('_abstract_rendered', 'private_notes', 'notes')
+        fields = (
+            'talk_id', 'talk_type', 'title', 'abstract', 'status', 'authors',
+            'corresponding_author', 'urls', 'kv')
+        read_only_fields = (
+            'talk_id', 'urls', 'kv')
 
     @revisions.create_revision()
     def create(self, validated_data):
