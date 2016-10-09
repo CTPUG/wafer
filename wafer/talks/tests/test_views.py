@@ -496,6 +496,24 @@ class TalkViewSetTests(TestCase):
             '/talks/api/talks/%d/' % talk.talk_id)
         self.assertEqual(response.data, self.mk_result(talk))
 
+    def test_create_talk(self):
+        author = create_user("author")
+        import json
+        response = self.client.post('/talks/api/talks/', data=json.dumps({
+            'talk_type': None, 'status': 'A', 'title': 'Talk Foo',
+            'abstract': 'Concrete',
+            'corresponding_author': author.id,
+            'authors': [author.id],
+        }), content_type="application/json")
+        talk = Talk.objects.get()
+        self.assertEqual(response.data, self.mk_result(talk))
+
+    def test_update_talk(self):
+        pass
+
+    def test_patch_talk(self):
+        pass
+
 
 class TalkUrlsViewSetPermissionTests(TestCase):
 

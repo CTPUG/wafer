@@ -17,13 +17,19 @@ class TalkUrlSerializer(serializers.ModelSerializer):
         read_only_fields = ('id',)
 
 
+class MarkdownSerializer(serializers.CharField):
+    def get_attribute(self, instance):
+        value = super(MarkdownSerializer, self).get_attribute(instance)
+        return value.raw
+
+
 class TalkSerializer(serializers.ModelSerializer):
 
     authors = serializers.PrimaryKeyRelatedField(
         many=True, allow_null=True,
         queryset=get_user_model().objects.all())
 
-    abstract = serializers.CharField(source='abstract.raw')
+    abstract = MarkdownSerializer()
 
     urls = TalkUrlSerializer(source='talkurl_set', many=True, read_only=True)
 
@@ -48,7 +54,4 @@ class TalkSerializer(serializers.ModelSerializer):
     @revisions.create_revision()
     def update(self, talk, validated_data):
         revisions.set_comment("Changed via REST api")
-        if 'abstract' in validated_data:
-            abstract = validated_data.pop('abstract')
-            talk.abstract = abstract['raw']
         return super(TalkSerializer, self).update(talk, validated_data)
