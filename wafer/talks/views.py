@@ -6,10 +6,13 @@ from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic.list import ListView
 from django.conf import settings
 from django.db.models import Q
+from django.http import Http404
 
 from reversion import revisions
 from rest_framework import viewsets
-from rest_framework.permissions import DjangoModelPermissionsOrAnonReadOnly
+from rest_framework.permissions import (
+    DjangoModelPermissions, DjangoModelPermissionsOrAnonReadOnly,
+    BasePermission)
 from rest_framework_extensions.mixins import NestedViewSetMixin
 
 from wafer.utils import LoginRequiredMixin
@@ -175,11 +178,19 @@ class TalksViewSet(viewsets.ModelViewSet, NestedViewSetMixin):
                 Q(corresponding_author=self.request.user))
 
 
+class TalkExistsPermission(BasePermission):
+    def has_permission(self, request, view):
+        talk_id = view.get_parents_query_dict()['talk']
+        if not Talk.objects.filter(pk=talk_id).exists():
+            raise Http404
+        return True
+
+
 class TalkUrlsViewSet(viewsets.ModelViewSet, NestedViewSetMixin):
     """API endpoint that allows talks to be viewed or edited."""
     queryset = TalkUrl.objects.all()
     serializer_class = TalkUrlSerializer
-    permission_classes = (DjangoModelPermissionsOrAnonReadOnly, )
+    permission_classes = (DjangoModelPermissions, TalkExistsPermission)
 
     def create(self, request, *args, **kw):
         request.data['talk'] = self.get_parents_query_dict()['talk']
