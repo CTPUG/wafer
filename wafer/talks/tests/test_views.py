@@ -364,7 +364,7 @@ class SortedResultsClient(Client):
     def _sorted_response(self, response):
         def get_key(item):
             return item[self._sort_key]
-        if 'results' in response.data:
+        if response.data and 'results' in response.data:
             response.data['results'].sort(key=get_key)
         return response
 
@@ -532,6 +532,15 @@ class TalkViewSetTests(TestCase):
         self.assertEqual(response.data, self.mk_result(talk))
         self.assertEqual(talk.abstract.raw, u"Concrete")
 
+    def test_delete_talk(self):
+        talk_a = create_talk("Talk A", ACCEPTED, "author_a")
+        talk_b = create_talk("Talk B", ACCEPTED, "author_b")
+        response = self.client.delete('/talks/api/talks/%d/' % talk_a.talk_id)
+        talk_remaining = Talk.objects.get()
+        self.assertEqual(response.data, None)
+        self.assertEqual(response.status_code, 204)
+        self.assertEqual(talk_remaining, talk_b)
+
 
 class TalkUrlsViewSetPermissionTests(TestCase):
 
@@ -625,7 +634,7 @@ class TalkUrlsViewSetTests(TestCase):
         self.assertEqual(talk_url.url, u'http://www.example.com/video')
         self.assertEqual(talk_url.description, u'slides')
 
-    def test_update_talk(self):
+    def test_update_talk_url(self):
         talk = create_talk("Talk A", ACCEPTED, "author_a")
         url = TalkUrl.objects.create(
             talk=talk, url="http://a.example.com/", description="video")
@@ -640,7 +649,7 @@ class TalkUrlsViewSetTests(TestCase):
         self.assertEqual(talk_url.url, u'http://www.example.com/video')
         self.assertEqual(talk_url.description, u'slides')
 
-    def test_patch_talk(self):
+    def test_patch_talk_url(self):
         talk = create_talk("Talk A", ACCEPTED, "author_a")
         url = TalkUrl.objects.create(
             talk=talk, url="http://a.example.com/", description="video")
@@ -653,3 +662,16 @@ class TalkUrlsViewSetTests(TestCase):
         self.assertEqual(response.data, self.mk_result(talk_url))
         self.assertEqual(talk_url.url, u'http://new.example.com/')
         self.assertEqual(talk_url.description, u'video')
+
+    def test_delete_talk_url(self):
+        talk = create_talk("Talk A", ACCEPTED, "author_a")
+        url_a = TalkUrl.objects.create(
+            talk=talk, url="http://a.example.com/", description="video")
+        url_b = TalkUrl.objects.create(
+            talk=talk, url="http://a.example.com/", description="video")
+        response = self.client.delete(
+            '/talks/api/talks/%d/urls/%d/' % (talk.talk_id, url_a.id))
+        [talk_url_b] = talk.talkurl_set.all()
+        self.assertEqual(response.data, None)
+        self.assertEqual(response.status_code, 204)
+        self.assertEqual(talk_url_b, url_b)
