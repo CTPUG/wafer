@@ -34,6 +34,12 @@ class ScheduleItemSerializer(serializers.HyperlinkedModelSerializer):
             existing_schedule_item.talk = talk
             existing_schedule_item.page = page
             existing_schedule_item.slots = slots
+            # Clear any existing details that aren't editable by the
+            # schedule edit view
+            existing_schedule_item.details = ''
+            existing_schedule_item.notes = ''
+            existing_schedule_item.css_class = ''
+            existing_schedule_item.expand = False
             existing_schedule_item.save()
             return existing_schedule_item
         return super(ScheduleItemSerializer, self).create(validated_data)
