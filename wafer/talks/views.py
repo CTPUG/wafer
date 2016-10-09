@@ -10,11 +10,12 @@ from django.db.models import Q
 from reversion import revisions
 from rest_framework import viewsets
 from rest_framework.permissions import DjangoModelPermissionsOrAnonReadOnly
+from rest_framework_extensions.mixins import NestedViewSetMixin
 
 from wafer.utils import LoginRequiredMixin
-from wafer.talks.models import Talk, TalkType, ACCEPTED
+from wafer.talks.models import Talk, TalkType, TalkUrl, ACCEPTED
 from wafer.talks.forms import get_talk_form_class
-from wafer.talks.serializers import TalkSerializer
+from wafer.talks.serializers import TalkSerializer, TalkUrlSerializer
 from wafer.users.models import UserProfile
 
 
@@ -150,7 +151,7 @@ class Speakers(ListView):
         return context
 
 
-class TalksViewSet(viewsets.ModelViewSet):
+class TalksViewSet(viewsets.ModelViewSet, NestedViewSetMixin):
     """API endpoint that allows talks to be viewed or edited."""
     queryset = Talk.objects.none()  # Needed for the REST Permissions
     serializer_class = TalkSerializer
@@ -172,3 +173,10 @@ class TalksViewSet(viewsets.ModelViewSet):
             return Talk.objects.filter(
                 Q(status=ACCEPTED) |
                 Q(corresponding_author=self.request.user))
+
+
+class TalkUrlsViewSet(viewsets.ModelViewSet, NestedViewSetMixin):
+    """API endpoint that allows talks to be viewed or edited."""
+    queryset = TalkUrl.objects.all()
+    serializer_class = TalkUrlSerializer
+    permission_classes = (DjangoModelPermissionsOrAnonReadOnly, )
