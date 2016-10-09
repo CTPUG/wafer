@@ -577,3 +577,79 @@ class TalkUrlsViewSetPermissionTests(TestCase):
         self.assert_urls_accessible(self.talk_p)
         self.assert_urls_accessible(self.talk_r)
         self.assert_missing_talk_urls_code(404)
+
+
+class TalkUrlsViewSetTests(TestCase):
+
+    def setUp(self):
+        create_user('super', True)
+        self.client = SortedResultsClient(sort_key="url")
+        self.client.login(username='super', password='super_password')
+
+    def mk_result(self, talk_url):
+        return {
+            'id': talk_url.id, 'description': talk_url.description,
+            'url': talk_url.url,
+        }
+
+    def test_list_talk_urls(self):
+        talk = create_talk("Talk", ACCEPTED, "author")
+        url_a = TalkUrl.objects.create(
+            talk=talk, url="http://a.example.com/", description="video")
+        url_b = TalkUrl.objects.create(
+            talk=talk, url="http://b.example.com/", description="slides")
+        response = self.client.get('/talks/api/talks/%d/urls/' % talk.talk_id)
+        result_0, result_1 = response.data['results']
+        self.assertEqual(response.data['results'], [
+            self.mk_result(url_a), self.mk_result(url_b),
+        ])
+
+    def test_retrieve_talk_url(self):
+        talk = create_talk("Talk A", ACCEPTED, "author_a")
+        url = TalkUrl.objects.create(
+            talk=talk, url="http://a.example.com/", description="video")
+        response = self.client.get(
+            '/talks/api/talks/%d/urls/%d/' % (talk.talk_id, url.id))
+        self.assertEqual(response.data, self.mk_result(url))
+
+    def test_create_talk_url(self):
+        talk = create_talk("Talk A", ACCEPTED, "author_a")
+        response = self.client.post(
+            '/talks/api/talks/%d/urls/' % talk.talk_id,
+            data=json.dumps({
+                'description': u'slides',
+                'url': u'http://www.example.com/video',
+            }), content_type="application/json")
+        [talk_url] = talk.talkurl_set.all()
+        self.assertEqual(response.data, self.mk_result(talk_url))
+        self.assertEqual(talk_url.url, u'http://www.example.com/video')
+        self.assertEqual(talk_url.description, u'slides')
+
+    def test_update_talk(self):
+        talk = create_talk("Talk A", ACCEPTED, "author_a")
+        url = TalkUrl.objects.create(
+            talk=talk, url="http://a.example.com/", description="video")
+        response = self.client.put(
+            '/talks/api/talks/%d/urls/%d/' % (talk.talk_id, url.id),
+            data=json.dumps({
+                'description': u'slides',
+                'url': u'http://www.example.com/video',
+            }), content_type="application/json")
+        [talk_url] = talk.talkurl_set.all()
+        self.assertEqual(response.data, self.mk_result(talk_url))
+        self.assertEqual(talk_url.url, u'http://www.example.com/video')
+        self.assertEqual(talk_url.description, u'slides')
+
+    def test_patch_talk(self):
+        talk = create_talk("Talk A", ACCEPTED, "author_a")
+        url = TalkUrl.objects.create(
+            talk=talk, url="http://a.example.com/", description="video")
+        response = self.client.patch(
+            '/talks/api/talks/%d/urls/%d/' % (talk.talk_id, url.id),
+            data=json.dumps({
+                'url': 'http://new.example.com/',
+            }), content_type="application/json")
+        [talk_url] = talk.talkurl_set.all()
+        self.assertEqual(response.data, self.mk_result(talk_url))
+        self.assertEqual(talk_url.url, u'http://new.example.com/')
+        self.assertEqual(talk_url.description, u'video')
