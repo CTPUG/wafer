@@ -1,0 +1,12 @@
+{
+  "name": "wafer",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "font-awesome": "^4.6.3",
+    "bootstrap": "^4.0.0-alpha.4"
+  },
+  "scripts": {
+    "postinstall" : "rm -rf wafer/static/vendor/ && mkdir wafer/static/vendor/ && rsync -a node_modules/* wafer/static/vendor/"
+  }
+}
