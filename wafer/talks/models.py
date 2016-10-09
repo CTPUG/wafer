@@ -16,6 +16,7 @@ PENDING = 'P'
 REJECTED = 'R'
 CANCELLED = 'C'
 
+
 # Utility functions used in the forms
 def render_author(author):
     return '%s (%s)' % (author.userprofile.display_name(), author)
@@ -27,8 +28,9 @@ class TalkType(models.Model):
     name = models.CharField(max_length=255)
     description = models.TextField(max_length=1024)
     order = models.IntegerField(default=1)
-    disable_submission = models.BooleanField(default=False,
-            help_text="Don't allow users to submit talks of this type.")
+    disable_submission = models.BooleanField(
+        default=False,
+        help_text="Don't allow users to submit talks of this type.")
 
     def __str__(self):
         return u'%s' % (self.name,)
