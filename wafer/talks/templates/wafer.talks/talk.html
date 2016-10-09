@@ -20,18 +20,44 @@
     {% endfor %}
     </p>
     <p>
+    {% blocktrans with talk_type=object.talk_type.name|default:'Talk' %}
     Type:
-    {{ object.talk_type.name|default:'Talk' }}
+    {{ talk_type }}
+    {% endblocktrans %}
     </p>
+    {% if object.get_in_schedule %}
+    {% for schedule in object.scheduleitem_set.all %}
+    <p>
+    {% blocktrans with venue=schedule.venue %}
+    Room:
+    {{ venue }}
+    {% endblocktrans %}
+    </p>
+    <p>
+    {% blocktrans with start_time=schedule.get_start_time %}
+    Time:
+    {{ start_time }}
+    {% endblocktrans %}
+    </p>
+    <p>
+    {% blocktrans with hours=schedule.get_duration.hours|stringformat:"d" minutes=schedule.get_duration.minutes|stringformat:"02d" %}
+    Duration:
+    {{ hours }}:{{ minutes }}
+    {% endblocktrans %}
+    </p>
+    {% endfor %}
+    {% endif %}
 </div>
-{% if user.is_staff %}
+{% if user.is_staff or perms.talks.view_all_talks %}
 <div>
     <p>
     {% trans 'Status:' %}
     {% if object.pending %}
-    <span class="label label-warning">{% trans 'Under consideration' %}</span>
+    <span class="label label-info">{% trans 'Under consideration' %}</span>
     {% elif object.accepted %}
     <span class="label label-success">{% trans 'Accepted' %}</span>
+    {% elif object.cancelled %}
+    <span class="label label-warning">{% trans 'Cancelled' %}</span>
     {% else %}
     <span class="label label-danger">{% trans 'Not accepted' %}</span>
     {% endif %}
@@ -41,9 +67,22 @@
 <div class="well">
     {{ object.abstract.rendered|safe }}
 </div>
-{% if perms.edit_private_notes and object.private_notes %}
+{% if perms.talks.view_all_talks or user.is_superuser %}
+{% if talk.notes %}
+{% blocktrans %}
+<h2>Talk Notes</h2>
+<p>(The following is not visible to attendees.)</p>
+{% endblocktrans %}
+<div class="well">
+  {{ object.notes|urlize|linebreaks }}
+</div>
+{% endif %}
+{% endif %}
+{% if perms.talks.edit_private_notes and object.private_notes %}
+{% blocktrans %}
 <h2>Private notes</h2>
 <p>(The following is not visible to submitters or attendees.)</p>
+{% endblocktrans %}
 <div class="well">
   {{ object.private_notes|urlize|linebreaks }}
 </div>

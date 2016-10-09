@@ -1,7 +1,8 @@
 {% load i18n %}
-<div class="navbar navbar-inverse navbar-static-top">
+<div class="navbar navbar-inverse navbar-static-top {{ WAFER_NAVIGATION_VISIBILITY }}">
   <div class="container">
     <div class="navbar-header">
+      {% block navtogglebutton %}
       <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#wafer-navbar-collapse">
         <span class="sr-only">
            Toggle navigation
@@ -11,9 +12,13 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="{% url 'wafer_page' 'index' %}">{{ WAFER_CONFERENCE_NAME }}</a>
+      {% endblock navtogglebutton %}
+      {% block navtitle %}
+      <a class="navbar-brand" href="{% url 'wafer_page' %}">{{ WAFER_CONFERENCE_NAME }}</a>
+      {% endblock navtitle %}
     </div>
       <div class="navbar-collapse collapse" id="wafer-navbar-collapse">
+        {% block navmenulist %}
         <ul class="nav navbar-nav">
         {% for item in WAFER_MENUS.items %}
           {% if item.image and item.url %}
@@ -42,8 +47,11 @@
           {% endif %}
         {% endfor %}
         </ul>
+        {% endblock navmenulist %}
+        {% block navauthmenu %}
         <ul class="nav navbar-nav navbar-right">
           {% if user.is_authenticated %}
+          {% block navauthenticated %}
           <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
               {{ user.username }}<b class="caret"></b>
@@ -64,12 +72,16 @@
               {% endif %}
             </ul>
           </li>
+          {% endblock navauthenticated %}
           {% elif not WAFER_HIDE_LOGIN %}
+          {% block navnotauth %}
           <li><a href="{% url 'auth_login' %}">
               {% trans 'Sign up / Log In' %}
           </a></li>
+          {% endblock navnotauth %}
           {% endif %}
         </ul>
+        {% endblock navauthmenu %}
       </div>
   </div>
 </div>

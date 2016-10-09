@@ -3,7 +3,7 @@ import sys
 from setuptools import find_packages, setup
 
 REQUIRES = [
-    'Django>=1.7',
+    'Django>=1.8',
     'django-crispy-forms',
     'django-nose',
     'django-registration-redux',
@@ -15,7 +15,7 @@ REQUIRES = [
     'pytz',
     'requests',
     'django-medusa>=0.3.0',
-    'django-reversion>=1.10',
+    'django-reversion>=2.0',
     'django-easy-select2',
     'django-markitup>=2.2.2',
     'markdown>=2.5',
@@ -48,7 +48,7 @@ with open('README.rst', 'r') as f:
 
 setup(
     name="wafer",
-    version="0.3.7a",
+    version="0.4.8a",
     url='http://github.com/CTPUG/wafer',
     license='ISC',
     description="A wafer-thin Django library for running small conferences.",

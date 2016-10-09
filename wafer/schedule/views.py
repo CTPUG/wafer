@@ -6,7 +6,7 @@ from rest_framework import viewsets
 from rest_framework.permissions import IsAdminUser
 from wafer.pages.models import Page
 from wafer.schedule.models import Venue, Slot, Day
-from wafer.schedule.admin import check_schedule
+from wafer.schedule.admin import check_schedule, validate_schedule
 from wafer.schedule.models import ScheduleItem
 from wafer.schedule.serializers import ScheduleItemSerializer
 from wafer.talks.models import ACCEPTED
@@ -48,7 +48,8 @@ class VenueView(DetailView):
 def make_schedule_row(schedule_day, slot, seen_items):
     """Create a row for the schedule table."""
     row = ScheduleRow(schedule_day, slot)
-    skip = []
+    skip = {}
+    expanding = {}
     all_items = list(slot.scheduleitem_set
                      .select_related('talk', 'page', 'venue')
                      .all())
@@ -58,27 +59,43 @@ def make_schedule_row(schedule_day, slot, seen_items):
             # Inc rowspan
             seen_items[item]['rowspan'] += 1
             # Note that we need to skip this during colspan checks
-            skip.append(item.venue)
+            skip[item.venue] = seen_items[item]
             continue
         scheditem = {'item': item, 'rowspan': 1, 'colspan': 1}
         row.items[item.venue] = scheditem
         seen_items[item] = scheditem
-    cur_item = None
-    colspan = 1
-    # Fixup colspans
+        if item.expand:
+            expanding[item.venue] = []
+
+    empty = []
+    expanding_right = None
+    skipping = 0
+    skip_item = None
     for venue in schedule_day.venues:
         if venue in skip:
-            # Nothing to see here
+            # We need to skip all the venues this item spans over
+            skipping = 1
+            skip_item = skip[venue]
             continue
-        elif venue not in row.items:
-            if cur_item:
-                cur_item['colspan'] += 1
-            else:
-                colspan += 1
+        if venue in expanding:
+            item = row.items[venue]
+            for empty_venue in empty:
+                row.items.pop(empty_venue)
+                item['colspan'] += 1
+            empty = []
+            expanding_right = item
+        elif venue in row.items:
+            empty = []
+            expanding_right = None
+        elif expanding_right:
+            expanding_right['colspan'] += 1
+        elif skipping > 0 and skipping < skip_item['colspan']:
+            skipping += 1
         else:
-            cur_item = row.items[venue]
-            cur_item['colspan'] = colspan
-            colspan = 1
+            skipping = 0
+            empty.append(venue)
+            row.items[venue] = {'item': None, 'rowspan': 1, 'colspan': 1}
+
     return row
 
 
@@ -122,6 +139,15 @@ class ScheduleView(TemplateView):
 class ScheduleXmlView(ScheduleView):
     template_name = 'wafer.schedule/penta_schedule.xml'
     content_type = 'application/xml'
+
+    def get_context_data(self, **kwargs):
+        """Allow adding a 'render_description' parameter"""
+        context = super(ScheduleXmlView, self).get_context_data(**kwargs)
+        if self.request.GET.get('render_description', None) == '1':
+            context['render_description'] = True
+        else:
+            context['render_description'] = False
+        return context
 
 
 class CurrentView(TemplateView):
@@ -244,17 +270,16 @@ class ScheduleEditView(TemplateView):
             }
             for schedule_item in slot.scheduleitem_set.all():
                 if schedule_item.venue.name == venue.name:
+                    venue_context['scheduleitem_id'] = schedule_item.id
                     if schedule_item.talk:
                         talk = schedule_item.talk
                         venue_context['title'] = talk.title
                         venue_context['talk'] = talk
-                        venue_context['scheduleitem_id'] = talk.talk_id
                     if (schedule_item.page and
                             not schedule_item.page.exclude_from_static):
                         page = schedule_item.page
                         venue_context['title'] = page.name
                         venue_context['page'] = page
-                        venue_context['scheduleitem_id'] = page.id
             slot_context['venues'].append(venue_context)
         return slot_context
 
@@ -287,4 +312,5 @@ class ScheduleEditView(TemplateView):
         context['talks_unassigned'] = accepted_talks.filter(scheduleitem=None)
         context['pages'] = Page.objects.all()
         context['days'] = days
+        context['validation_errors'] = validate_schedule()
         return context

@@ -19,7 +19,6 @@ class AdminTalkForm(forms.ModelForm):
         self.fields['corresponding_author'].label_from_instance = render_author
 
 
-
 class ScheduleListFilter(admin.SimpleListFilter):
     title = _('in schedule')
     parameter_name = 'schedule'
@@ -46,13 +45,6 @@ class TalkUrlInline(admin.TabularInline):
     model = TalkUrl
 
 
-class KVPairsInline(admin.StackedInline):
-    model = Talk.kv.through
-    verbose_name_plural = 'Key Value pairs'
-    list_display = ('key', 'value')
-    extra = 1
-
-
 class TalkAdmin(CompareVersionAdmin, admin.ModelAdmin):
     list_display = ('title', 'get_corresponding_author_name',
                     'get_corresponding_author_contact', 'talk_type',
@@ -62,12 +54,16 @@ class TalkAdmin(CompareVersionAdmin, admin.ModelAdmin):
     exclude = ('kv',)
 
     inlines = [
-        KVPairsInline,
         TalkUrlInline,
     ]
     form = AdminTalkForm
 
 
+class TalkTypeAdmin(VersionAdmin, admin.ModelAdmin):
+    list_display = ('name', 'order', 'disable_submission', 'css_class')
+    readonly_fields = ('css_class',)
+
+
 admin.site.register(Talk, TalkAdmin)
-admin.site.register(TalkType)
+admin.site.register(TalkType, TalkTypeAdmin)
 admin.site.register(TalkUrl, TalkUrlAdmin)

@@ -1,8 +1,6 @@
-from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied, ValidationError
 from django.core.urlresolvers import reverse_lazy
 from django.http import HttpResponseRedirect
-from django.utils.decorators import method_decorator
 from django.views.generic import DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic.list import ListView
@@ -13,7 +11,8 @@ from reversion import revisions
 from rest_framework import viewsets
 from rest_framework.permissions import DjangoModelPermissionsOrAnonReadOnly
 
-from wafer.talks.models import Talk, ACCEPTED
+from wafer.utils import LoginRequiredMixin
+from wafer.talks.models import Talk, TalkType, ACCEPTED
 from wafer.talks.forms import get_talk_form_class
 from wafer.talks.serializers import TalkSerializer
 from wafer.users.models import UserProfile
@@ -28,13 +27,6 @@ class EditOwnTalksMixin(object):
             return object_
         else:
             raise PermissionDenied
-
-
-class LoginRequiredMixin(object):
-    '''Must be logged in'''
-    @method_decorator(login_required)
-    def dispatch(self, *args, **kwargs):
-        return super(LoginRequiredMixin, self).dispatch(*args, **kwargs)
 
 
 class UsersTalks(ListView):
@@ -81,7 +73,11 @@ class TalkCreate(LoginRequiredMixin, CreateView):
 
     def get_context_data(self, **kwargs):
         context = super(TalkCreate, self).get_context_data(**kwargs)
-        context['can_submit'] = getattr(settings, 'WAFER_TALKS_OPEN', True)
+        can_submit = getattr(settings, 'WAFER_TALKS_OPEN', True)
+        if can_submit:
+            # Check for all talk types being disabled
+            can_submit = TalkType.objects.filter(disable_submission=False).count() > 0
+        context['can_submit'] = can_submit
         return context
 
     @revisions.create_revision()
@@ -128,7 +124,7 @@ class TalkUpdate(EditOwnTalksMixin, UpdateView):
 class TalkDelete(EditOwnTalksMixin, DeleteView):
     model = Talk
     template_name = 'wafer.talks/talk_delete.html'
-    success_url = reverse_lazy('wafer_page', args=('index',))
+    success_url = reverse_lazy('wafer_page')
 
     @revisions.create_revision()
     def form_valid(self, form):
@@ -147,7 +143,7 @@ class Speakers(ListView):
     def get_context_data(self, **kwargs):
         context = super(Speakers, self).get_context_data(**kwargs)
         speakers = UserProfile.objects.filter(
-            user__talks__status='A').distinct().prefetch_related('user')
+            user__talks__status='A').distinct().prefetch_related('user').order_by('user__first_name', 'user__last_name')
         context["speaker_rows"] = self._by_row(speakers, 4)
         return context
 

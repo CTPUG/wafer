@@ -39,14 +39,18 @@
                     {# It's not clear what the difference between abstract and description is meant to be #}
                     {# Both confclerk and Giggity just lump them together into the same thing anyway, and #}
                     {# summit only outputs stuff in description, so we keep abstract blank and follow #}
-                    {# summit's pattern and obly include stuff in the description #}
+                    {# summit's pattern and only include stuff in the description #}
                     <abstract/>
                     {% if items.item.talk %}
                        <title>{{ items.item.get_title }}</title>
                        {# I'm not sure if the raw markdown is the best thing here, but it seems to match what summit does, #}
                        {# so hopefully the tools can handle the odd corner cases correctly. Giggity at least does some #}
                        {# santization here. #}
-                       {% if items.item.talk.abstract %}
+                       {# We do allow people to request html if they want it, which may also be a bad idea, but is useful for #}
+                       {# the video team #}
+                       {% if items.item.talk.abstract and render_description %}
+                       <description>{{ items.item.talk.abstract.rendered }}</description>
+                       {% elif items.item.talk.abstract %}
                        <description>{{ items.item.talk.abstract.raw }}</description>
                        {% else %}
                        <description/>
@@ -74,7 +78,12 @@
                         {% if items.item.page.people.exists %}
                         {# If there are people, we care about the description #}
                         {# For now, we drop the raw markdown content from pages here. We probably want to sanatize this in the future #}
+                        {# Also honour render_description #}
+                        {% if render_description %}
+                        <description>{{ items.item.page.content.rendered }}</description>
+                        {% else %}
                         <description>{{ items.item.page.content.raw }}</description>
+                        {% endif %}
                         <persons>
                            {# TODO: This should be refactored, so we don't have all this duplication #}
                            {% for person in items.item.page.people.all %}

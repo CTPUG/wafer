@@ -61,6 +61,9 @@ class Page(models.Model):
         return path
 
     def get_absolute_url(self):
+        if self.slug == 'index' and not self.parent:
+            return reverse('wafer_page')
+
         url = "/".join(self.get_path())
         return reverse('wafer_page', args=(url,))
 

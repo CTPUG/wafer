@@ -2,6 +2,11 @@ import os
 
 from django.utils.translation import ugettext_lazy as _
 
+try:
+    from localsettings import *
+except ImportError:
+    pass
+
 # Django settings for wafer project.
 
 ADMINS = (
@@ -64,7 +69,7 @@ MEDIA_URL = '/media/'
 # Don't put anything in this directory yourself; store your static files
 # in apps' "static/" subdirectories and in STATICFILES_DIRS.
 # Example: "/var/www/example.com/static/"
-STATIC_ROOT = ''
+STATIC_ROOT = os.path.join(project_root, 'static')
 
 # URL prefix for static files.
 # Example: "http://example.com/static/", "http://static.example.com/"
@@ -102,6 +107,7 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
+    'django.contrib.redirects.middleware.RedirectFallbackMiddleware',
     # Uncomment the next line for simple clickjacking protection:
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
@@ -126,6 +132,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.tz',
     'django.contrib.messages.context_processors.messages',
     'wafer.context_processors.site_info',
+    'wafer.context_processors.navigation_info',
     'wafer.context_processors.menu_info',
     'wafer.context_processors.registration_settings',
 )
@@ -137,6 +144,7 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.redirects',
     'reversion',
     'django_medusa',
     'crispy_forms',

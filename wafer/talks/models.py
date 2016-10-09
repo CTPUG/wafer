@@ -3,6 +3,7 @@ from django.core.urlresolvers import reverse
 from django.conf import settings
 from django.db import models
 from django.utils.encoding import python_2_unicode_compatible
+from django.template.defaultfilters import slugify
 
 from markitup.fields import MarkupField
 
@@ -13,6 +14,7 @@ from wafer.kv.models import KeyValue
 ACCEPTED = 'A'
 PENDING = 'P'
 REJECTED = 'R'
+CANCELLED = 'C'
 
 # Utility functions used in the forms
 def render_author(author):
@@ -24,12 +26,24 @@ class TalkType(models.Model):
     """A type of talk."""
     name = models.CharField(max_length=255)
     description = models.TextField(max_length=1024)
+    order = models.IntegerField(default=1)
+    disable_submission = models.BooleanField(default=False,
+            help_text="Don't allow users to submit talks of this type.")
 
     def __str__(self):
         return u'%s' % (self.name,)
 
     class Meta:
-        ordering = ['id']
+        ordering = ['order', 'id']
+
+    def css_class(self):
+        """Return a string for use as a css class name"""
+        # While css can represent complicated strings
+        # using escaping, we want simplicity and obvious predictablity
+        return u'talk-type-%s' % slugify(self.name)
+
+    css_class.admin_order_field = 'name'
+    css_class.short_description = 'CSS class name'
 
 
 @python_2_unicode_compatible
@@ -44,6 +58,7 @@ class Talk(models.Model):
     TALK_STATUS = (
         (ACCEPTED, 'Accepted'),
         (REJECTED, 'Not Accepted'),
+        (CANCELLED, 'Talk Cancelled'),
         (PENDING, 'Under Consideration'),
     )
 
@@ -137,6 +152,7 @@ class Talk(models.Model):
     accepted = property(fget=lambda x: x.status == ACCEPTED)
     pending = property(fget=lambda x: x.status == PENDING)
     reject = property(fget=lambda x: x.status == REJECTED)
+    cancelled = property(fget=lambda x: x.status == CANCELLED)
 
     def _is_among_authors(self, user):
         if self.corresponding_author.username == user.username:

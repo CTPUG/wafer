@@ -11,7 +11,7 @@ router.register(r'talks', TalksViewSet)
 urlpatterns = patterns(
     '',
     url(r'^$', UsersTalks.as_view(), name='wafer_users_talks'),
-    url(r'^page/(?P<page>\d+)$', UsersTalks.as_view(),
+    url(r'^page/(?P<page>\d+)/$', UsersTalks.as_view(),
         name='wafer_users_talks_page'),
     url(r'^new/$', TalkCreate.as_view(), name='wafer_talk_submit'),
     url(r'^(?P<pk>\d+)/$', TalkView.as_view(), name='wafer_talk'),

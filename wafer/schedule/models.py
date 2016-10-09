@@ -140,6 +140,10 @@ class ScheduleItem(models.Model):
         max_length=128, null=False, blank=True,
         help_text=_("Custom css class for this schedule item"))
 
+    expand = models.BooleanField(
+        null=False, default=False,
+        help_text=_("Expand to neighbouring venues"))
+
     def get_title(self):
         if self.talk:
             return self.talk.title
@@ -148,6 +152,15 @@ class ScheduleItem(models.Model):
         elif self.details:
             return self.details
         return 'No title'
+
+    def get_talk_css_class(self):
+        """Talk type css class if it's available"""
+        if self.talk:
+            return self.talk.talk_type.css_class()
+        # Fallback for pages
+        return ''
+
+    get_talk_css_class.short_description = 'Talk Type CSS class'
 
     def get_desc(self):
         if self.details:
@@ -201,6 +214,11 @@ class ScheduleItem(models.Model):
             hours, result['minutes'] = divmod(result['minutes'], 60)
             result['hours'] += hours
         return result
+
+    def get_duration_minutes(self):
+        """Return the duration in total number of minutes."""
+        duration = self.get_duration()
+        return int(duration['hours'] * 60 + duration['minutes'])
 
 
 def invalidate_check_schedule(*args, **kw):

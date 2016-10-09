@@ -110,6 +110,13 @@
 {% for talk in profile.pending_talks %}
 <div class="well">
     <a href="{{ talk.get_absolute_url }}">{{ talk.title }}</a>
+    {% comment %}
+    Because this is one of the author's pending talks, we don't need to
+    check for edit permission's on the talk explictly. This doesn't show
+    the edit button for people with 'change-talk' permissions, but we
+    accept that tradeoff for simplicity here.
+    {% endcomment %}
+    <a href="{% url 'wafer_talk_edit' talk.pk %}" class="pull-right btn btn-default btn-lg">{% trans 'Edit' %}</a>
     <p>{{ talk.abstract.rendered|safe }}</p>
 </div>
 {% endfor %}

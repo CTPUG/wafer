@@ -30,31 +30,54 @@ Available on `readthedocs.org`_.
 Supported Django versions
 =========================
 
-Wafer supports Django 1.7 and Django 1.8.
+Wafer supports Django 1.8 and Django 1.9.
 
 
 Installation
 ============
 
-1. TODO: Explain it all
+1. ``pip install -r requirements.txt`` should install all the required
+   python and django dependencies.
 
-2. If you don't have one yet, create a superuser with
+2. Wafer uses bower to manage javascript dependencies
+
+   * Install bower in the static files base directory: ``npm install bower``
+
+   * Grab the ``bower.json`` file to install the required javascript files
+       ``./node_modules/bower/bin/bower install bower.json``
+
+3. Install the wafer applications
+   ``manage.py migrate``
+
+4. If you don't have one yet, create a superuser with
    ``manage.py createsuperuser``.
 
-3. Log in and configure the Site:
+5. Examine the ``settings.py`` file and create a
+   ``localsettings.py`` file overriding the defaults
+   as required.
+
+   ``STATIC_FILES``, ``WAFER_MENUS``, ``MARKITUP_FILTER``,
+   ``WAFER_TALKS_OPEN``, ``WAFER_REGISTRATION_OPEN`` and
+   ``WAFER_PUBLIC_ATTENDEE_LIST`` will probably need to be
+   overridden.
+
+   If you add extensions to ``MARKITUP_FILTER``, be
+   sure to install the appropriate python packages as well.
+
+6. Log in and configure the Site:
 
    * The domain will be used as the base for e-mails sent during
      registration.
 
    * The name will be the conference's name.
 
-4. Wafer uses the Django caching infrastructure in several places, so
+7. Wafer uses the Django caching infrastructure in several places, so
    the cache table needs to be created using ``manage.py createcachetable``.
 
-5. Create the default 'Page Editors' and 'Talk Mentors' groups using
+8. Create the default 'Page Editors' and 'Talk Mentors' groups using
    ``manage.py wafer_add_default_groups``.
 
-6. Have a fun conference.
+9. Have a fun conference.
 
 Installing Bootstrap
 ====================

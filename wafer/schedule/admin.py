@@ -169,11 +169,30 @@ def check_schedule():
     return True
 
 
+def validate_schedule():
+    """Helper routine to easily test if the schedule is valid"""
+    all_items = prefetch_schedule_items()
+    errors = []
+    if find_clashes(all_items):
+        errors.append('Clashes found in schedule.')
+    if find_duplicate_schedule_items(all_items):
+        errors.append('Duplicate schedule items found in schedule.')
+    if validate_items(all_items):
+        errors.append('Invalid schedule items found in schedule.')
+    if find_overlapping_slots():
+        errors.append('Overlapping slots found in schedule.')
+    if find_non_contiguous(all_items):
+        errors.append('Non contiguous slots found in schedule.')
+    if find_invalid_venues(all_items):
+        errors.append('Invalid venues found in schedule.')
+    return errors
+
+
 class ScheduleItemAdminForm(forms.ModelForm):
     class Meta:
         model = ScheduleItem
         fields = ('slots', 'venue', 'talk', 'page', 'details', 'notes',
-                  'css_class')
+                  'css_class', 'expand')
 
     def __init__(self, *args, **kwargs):
         super(ScheduleItemAdminForm, self).__init__(*args, **kwargs)
@@ -186,7 +205,9 @@ class ScheduleItemAdmin(admin.ModelAdmin):
     form = ScheduleItemAdminForm
 
     change_list_template = 'admin/scheduleitem_list.html'
-    list_display = ['get_start_time', 'venue', 'get_title']
+    readonly_fields = ('get_talk_css_class',)
+    list_display = ('get_start_time', 'venue', 'get_title', 'expand')
+    list_editable = ('expand',)
 
     # We stuff these validation results into the view, rather than
     # enforcing conditions on the actual model, since it can be hard
@@ -279,7 +300,7 @@ class SlotAdmin(admin.ModelAdmin):
 
     def save_model(self, request, obj, form, change):
         super(SlotAdmin, self).save_model(request, obj, form, change)
-        if not change and form.cleaned_data['additional'] > 0:
+        if not change and form.cleaned_data['additional']:
             # We add the requested additional slots
             # All created slot will have the same length as the slot just
             # created , and we specify them as a sequence using
