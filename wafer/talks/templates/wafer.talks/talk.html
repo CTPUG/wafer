@@ -5,7 +5,7 @@
 <h1>
     {{ object.title }}
     {% if can_edit %}
-        <a href="{% url 'wafer_talk_edit' object.pk %}" class="pull-right btn btn-default btn-lg">{% trans 'Edit' %}</a>
+        <a href="{% url 'wafer_talk_edit' object.pk %}" class="pull-xs-right btn btn-secondary btn-lg">{% trans 'Edit' %}</a>
     {% endif %}
 </h1>
 <div>
@@ -53,13 +53,13 @@
     <p>
     {% trans 'Status:' %}
     {% if object.pending %}
-    <span class="label label-info">{% trans 'Under consideration' %}</span>
+    <span class="tag tag-info">{% trans 'Under consideration' %}</span>
     {% elif object.accepted %}
-    <span class="label label-success">{% trans 'Accepted' %}</span>
+    <span class="tag tag-success">{% trans 'Accepted' %}</span>
     {% elif object.cancelled %}
-    <span class="label label-warning">{% trans 'Cancelled' %}</span>
+    <span class="tag tag-warning">{% trans 'Cancelled' %}</span>
     {% else %}
-    <span class="label label-danger">{% trans 'Not accepted' %}</span>
+    <span class="tag tag-danger">{% trans 'Not accepted' %}</span>
     {% endif %}
     </p>
 </div>

@@ -203,7 +203,7 @@ ACCOUNT_ACTIVATION_DAYS = 7
 AUTH_USER_MODEL = 'auth.User'
 
 # Forms:
-CRISPY_TEMPLATE_PACK = 'bootstrap3'
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 # Wafer cache settings
 # We assume that the WAFER_CACHE is cross-process

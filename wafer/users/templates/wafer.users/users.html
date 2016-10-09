@@ -13,17 +13,17 @@
 <section class="wafer wafer-pagination">
     <ul class="pagination">
         {% if page_obj.has_previous %}
-        <li><a href="{% url 'wafer_users_page' page=page_obj.previous_page_number %}">&laquo;</a></li>
+        <li class="page-item"><a class="page-link" href="{% url 'wafer_users_page' page=page_obj.previous_page_number %}">&laquo;</a></li>
         {% else %}
-        <li class="disabled"><a href="#">&laquo;</a></li>
+        <li class="disabled"><a class="page-link" href="#">&laquo;</a></li>
         {% endif %}
         {% for page in paginator.page_range %}
-        <li><a href="{% url 'wafer_users_page' page=page %}">{{ page }}</a></li>
+        <li class="page-item"><a class="page-link" href="{% url 'wafer_users_page' page=page %}">{{ page }}</a></li>
         {% endfor %}
         {% if page_obj.has_next %}
-        <li><a href="{% url 'wafer_users_page' page=page_obj.next_page_number %}">&raquo;</a></li>
+        <li class="page-item"><a class="page-link" href="{% url 'wafer_users_page' page=page_obj.next_page_number %}">&raquo;</a></li>
         {% else %}
-        <li class="disabled"><a href="#">&raquo;</a></li>
+        <li class="disabled"><a class="page-link" href="#">&raquo;</a></li>
         {% endif %}
     </ul>
 </section>

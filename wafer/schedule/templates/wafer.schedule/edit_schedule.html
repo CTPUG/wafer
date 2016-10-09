@@ -12,7 +12,7 @@
         </div>
         <div class="col-md-8">
             <h1>Schedule Editor
-            <div class="pull-right">
+            <div class="pull-xs-right">
             <ul class="nav nav-pills navbar-nav navbar-right">
                 <li role="presentation" class="dropdown">
                     <a class="dropdown-toggle" data-toggle="dropdown"
@@ -35,7 +35,7 @@
             </ul>
             </div>
             </h1>
-            <table class="table table-condensed">
+            <table class="table table-sm">
                 <thead>
                 <tr>
                     <td></td>
@@ -54,7 +54,7 @@
                         </th>
                         {% for venue in slot.venues %}
                         <td id="scheduleItem{{ venue.scheduleitem_id }}" data-venue="{{ venue.id }}" data-slot="{{ slot.id }}"
-                            class="{% if venue.talk %}success{% elif venue.page %}info{% endif %} droppable {% if venue.talk or venue.page %}draggable{% endif %}"
+                            class="table-{% if venue.talk %}success{% elif venue.page %}info{% endif %} droppable {% if venue.talk or venue.page %}draggable{% endif %}"
                             data-scheduleitem-id="{{ venue.scheduleitem_id }}" data-talk-id="{{ venue.talk.id }}"
                             data-page-id="{{ venue.page.id }}"
                             data-type="{% if venue.talk %}talk{% elif venue.page %}page{% endif %}">
@@ -106,7 +106,7 @@
                     <div role="tabpanel" class="tab-pane row"
                          id="unassignedTalks">
                         {% for talk in talks_unassigned %}
-                            <span draggable="true" class="col-md-6 label label-success draggable"
+                            <span draggable="true" class="col-md-6 tag tag-success draggable"
                                     id="talk{{ talk.talk_id }}"
                                   data-toggle="tooltip" data-placement="left"
                                   title="{{ talk.title }}" data-type="talk" data-talk-id="{{ talk.talk_id }}">
@@ -117,7 +117,7 @@
                     <div role="tabpanel" class="tab-pane active row"
                          id="allTalks">
                         {% for talk in talks_all %}
-                            <span draggable="true" class="col-md-6 label label-warning draggable"
+                            <span draggable="true" class="col-md-6 tag tag-warning draggable"
                                     id="talk{{ talk.talk_id }}"
                                   data-toggle="tooltip" data-placement="left"
                                   title="{{ talk.title }}" data-type="talk" data-talk-id="{{ talk.talk_id }}">
@@ -127,7 +127,7 @@
                     </div>
                     <div role="tabpanel" class="tab-pane row" id="pages">
                         {% for page in pages %}
-                            <span draggable="true" class="col-md-6 label label-info draggable"
+                            <span draggable="true" class="col-md-6 tag tag-info draggable"
                                     id="page{{ page.id }}"
                                   data-toggle="tooltip" data-placement="left"
                                   title="{{ page.name }}" data-type="page" data-page-id="{{ page.id }}">>

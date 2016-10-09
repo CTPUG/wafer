@@ -3,7 +3,7 @@
 
 {% block breadcrumbs %}
     <div class="breadcrumbs">
-       <a href="{{ compare_list_url }}">Compare</a> &rsaquo;
+       <a class="breadcrumb-item" href="{{ compare_list_url }}">Compare</a> &rsaquo;
         {% blocktrans with opts.verbose_name_plural|escape as name %}{{name}}{% endblocktrans %}
     </div>
 {% endblock %}

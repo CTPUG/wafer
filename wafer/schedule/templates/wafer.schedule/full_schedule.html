@@ -5,8 +5,8 @@
 <h1>
     {% trans "Schedule" %}
     {% if user.is_authenticated and user.is_staff %}
-        <div class="pull-right">
-            <a class="btn btn-default"
+        <div class="pull-xs-right">
+            <a class="btn btn-secondary"
                href="{% url 'admin:schedule_editor' %}">
                 Edit schedule
             </a>
