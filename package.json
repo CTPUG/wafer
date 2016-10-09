@@ -7,6 +7,6 @@
     "bootstrap": "^4.0.0-alpha.4"
   },
   "scripts": {
-    "postinstall" : "rm -rf wafer/static/vendor/ && mkdir wafer/static/vendor/ && rsync -a node_modules/* wafer/static/vendor/"
+    "postinstall" : "rsync -d --del node_modules/* wafer/static/vendor/"
   }
 }
