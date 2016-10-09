@@ -7,9 +7,13 @@ from wafer.talks.models import Talk, TalkUrl
 
 
 class TalkUrlSerializer(serializers.ModelSerializer):
+
+    talk = serializers.PrimaryKeyRelatedField(
+        queryset=Talk.objects.all(), write_only=True)
+
     class Meta:
         model = TalkUrl
-        fields = ('id', 'description', 'url')
+        fields = ('id', 'description', 'url', 'talk')
         read_only_fields = ('id',)
 
 
@@ -21,7 +25,7 @@ class TalkSerializer(serializers.ModelSerializer):
 
     abstract = serializers.CharField(source='abstract.raw')
 
-    urls = TalkUrlSerializer(source='talkurl_set', many=True)
+    urls = TalkUrlSerializer(source='talkurl_set', many=True, read_only=True)
 
     class Meta:
         model = Talk
@@ -44,13 +48,7 @@ class TalkSerializer(serializers.ModelSerializer):
     @revisions.create_revision()
     def update(self, talk, validated_data):
         revisions.set_comment("Changed via REST api")
-        talk.abstract = validated_data['abstract']
-        talk.title = validated_data['title']
-        talk.talk_type = validated_data['talk_type']
-        talk.authors = validated_data['authors']
-        talk.status = validated_data['status']
-        # These need more thought
-        # talk.notes = validated_data['notes']
-        # talk.private_notes = validated_data['private_notes']
-        talk.save()
-        return talk
+        if 'abstract' in validated_data:
+            abstract = validated_data.pop('abstract')
+            talk.abstract = abstract['raw']
+        return super(TalkSerializer, self).update(talk, validated_data)
