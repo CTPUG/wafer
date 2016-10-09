@@ -1,5 +1,7 @@
 """Tests for wafer.talk views."""
 
+import json
+
 import mock
 
 from django.contrib.auth import get_user_model
@@ -498,7 +500,6 @@ class TalkViewSetTests(TestCase):
 
     def test_create_talk(self):
         author = create_user("author")
-        import json
         response = self.client.post('/talks/api/talks/', data=json.dumps({
             'talk_type': None, 'status': 'A', 'title': 'Talk Foo',
             'abstract': 'Concrete',
@@ -509,10 +510,27 @@ class TalkViewSetTests(TestCase):
         self.assertEqual(response.data, self.mk_result(talk))
 
     def test_update_talk(self):
-        pass
+        talk = create_talk("Talk A", ACCEPTED, "author_a")
+        response = self.client.put(
+            '/talks/api/talks/%d/' % talk.talk_id, data=json.dumps({
+                'talk_type': None, 'status': 'R', 'title': 'Talk Zoom',
+                'abstract': 'Concreter',
+                'corresponding_author': talk.corresponding_author.id,
+                'authors': [talk.corresponding_author.id],
+            }), content_type="application/json")
+        talk = Talk.objects.get()
+        self.assertEqual(response.data, self.mk_result(talk))
+        self.assertEqual(talk.abstract.raw, u"Concreter")
 
     def test_patch_talk(self):
-        pass
+        talk = create_talk("Talk A", ACCEPTED, "author_a")
+        response = self.client.patch(
+            '/talks/api/talks/%d/' % talk.talk_id, data=json.dumps({
+                'abstract': 'Concrete',
+            }), content_type="application/json")
+        talk = Talk.objects.get()
+        self.assertEqual(response.data, self.mk_result(talk))
+        self.assertEqual(talk.abstract.raw, u"Concrete")
 
 
 class TalkUrlsViewSetPermissionTests(TestCase):
