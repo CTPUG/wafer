@@ -6,8 +6,8 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Permission
 from django.core.urlresolvers import reverse
 from django.test import Client, TestCase
-from wafer.talks.models import (Talk, ACCEPTED, REJECTED, PENDING,
-                                CANCELLED)
+from wafer.talks.models import (
+    Talk, TalkUrl, ACCEPTED, REJECTED, PENDING, CANCELLED)
 
 
 def create_user(username, superuser=False, perms=()):
@@ -452,6 +452,26 @@ class TalkViewSetTests(TestCase):
         self.assertEqual(response.data['count'], 2)
         self.assertEqual(response.data['results'][0]['title'], "Talk A")
         self.assertEqual(response.data['results'][1]['title'], "Talk P")
+
+    def test_get_talk(self):
+        self.talk_a.abstract = "Abstract Talk A"
+        self.talk_a.save()
+        talk_url = TalkUrl.objects.create(
+            talk=self.talk_a, url="http://example.com/", description="video")
+        response = self.client.get(
+            '/talks/api/talks/%d/' % self.talk_a.talk_id)
+        self.assertEqual(response.data, {
+            'talk_id': 1, 'talk_type': None, 'status': 'A',
+            'title': u'Talk A',
+            'abstract': u'Abstract Talk A',
+            'corresponding_author': self.talk_a.corresponding_author.id,
+            'authors': [self.talk_a.corresponding_author.id],
+            'kv': [],
+            'urls': [{
+                'id': talk_url.id, 'description': u'video',
+                'url': u'http://example.com/',
+            }]
+        })
 
 
 class TalkUrlsViewSetTests(TestCase):
