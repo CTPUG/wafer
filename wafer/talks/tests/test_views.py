@@ -482,7 +482,6 @@ class TalkViewSetTests(TestCase):
         talk_a = create_talk("Talk A", ACCEPTED, "author_a")
         talk_b = create_talk("Talk B", REJECTED, "author_b")
         response = self.client.get('/talks/api/talks/')
-        result_0, result_1 = response.data['results']
         self.assertEqual(response.data['results'], [
             self.mk_result(talk_a), self.mk_result(talk_b),
         ])
@@ -607,7 +606,6 @@ class TalkUrlsViewSetTests(TestCase):
         url_b = TalkUrl.objects.create(
             talk=talk, url="http://b.example.com/", description="slides")
         response = self.client.get('/talks/api/talks/%d/urls/' % talk.talk_id)
-        result_0, result_1 = response.data['results']
         self.assertEqual(response.data['results'], [
             self.mk_result(url_a), self.mk_result(url_b),
         ])
