@@ -6,7 +6,8 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Permission
 from django.core.urlresolvers import reverse
 from django.test import Client, TestCase
-from rest_framework.test import APIClient
+
+from wafer.tests.api_utils import SortedResultsClient
 from wafer.talks.models import (
     Talk, TalkUrl, ACCEPTED, REJECTED, PENDING, CANCELLED)
 
@@ -353,23 +354,6 @@ class SpeakerTests(TestCase):
     @mock.patch('wafer.users.models.UserProfile.avatar_url', mock_avatar_url)
     def test_view_seven_speakers(self):
         self.check_n_speakers(7, [(0, 4), (4, 7)])
-
-
-class SortedResultsClient(APIClient):
-    def __init__(self, *args, **kw):
-        self._sort_key = kw.pop('sort_key')
-        super(SortedResultsClient, self).__init__(*args, **kw)
-
-    def _sorted_response(self, response):
-        def get_key(item):
-            return item[self._sort_key]
-        if response.data and 'results' in response.data:
-            response.data['results'].sort(key=get_key)
-        return response
-
-    def generic(self, *args, **kw):
-        response = super(SortedResultsClient, self).generic(*args, **kw)
-        return self._sorted_response(response)
 
 
 class TalkViewSetPermissionTests(TestCase):
