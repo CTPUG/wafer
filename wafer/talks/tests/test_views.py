@@ -354,13 +354,27 @@ class SpeakerTests(TestCase):
         self.check_n_speakers(7, [(0, 4), (4, 7)])
 
 
+class SortedResultsClient(Client):
+    def _sorted_response(self, response):
+        def get_title(item):
+            print item
+            return item['title']
+        if 'results' in response.data:
+            response.data['results'].sort(key=get_title)
+        return response
+
+    def generic(self, *args, **kw):
+        response = super(SortedResultsClient, self).generic(*args, **kw)
+        return self._sorted_response(response)
+
+
 class TalkViewSetTests(TestCase):
 
     def setUp(self):
         self.talk_a = create_talk("Talk A", ACCEPTED, "author_a")
         self.talk_r = create_talk("Talk R", REJECTED, "author_r")
         self.talk_p = create_talk("Talk P", PENDING, "author_p")
-        self.client = Client()
+        self.client = SortedResultsClient()
 
     def test_unauthorized_users(self):
         response = self.client.get('/talks/api/talks/')
@@ -392,8 +406,8 @@ class TalkViewSetTests(TestCase):
         response = self.client.get('/talks/api/talks/')
         self.assertEqual(response.data['count'], 3)
         self.assertEqual(response.data['results'][0]['title'], "Talk A")
-        self.assertEqual(response.data['results'][1]['title'], "Talk R")
-        self.assertEqual(response.data['results'][2]['title'], "Talk P")
+        self.assertEqual(response.data['results'][1]['title'], "Talk P")
+        self.assertEqual(response.data['results'][2]['title'], "Talk R")
         response = self.client.get(
             '/talks/api/talks/%d/' % self.talk_a.talk_id)
         self.assertEqual(response.data['title'], 'Talk A')
@@ -407,8 +421,8 @@ class TalkViewSetTests(TestCase):
         response = self.client.get('/talks/api/talks/')
         self.assertEqual(response.data['count'], 3)
         self.assertEqual(response.data['results'][0]['title'], "Talk A")
-        self.assertEqual(response.data['results'][1]['title'], "Talk R")
-        self.assertEqual(response.data['results'][2]['title'], "Talk P")
+        self.assertEqual(response.data['results'][1]['title'], "Talk P")
+        self.assertEqual(response.data['results'][2]['title'], "Talk R")
         response = self.client.get(
             '/talks/api/talks/%d/' % self.talk_a.talk_id)
         self.assertEqual(response.data['title'], 'Talk A')
@@ -435,3 +449,7 @@ class TalkViewSetTests(TestCase):
         self.assertEqual(response.data['count'], 2)
         self.assertEqual(response.data['results'][0]['title'], "Talk A")
         self.assertEqual(response.data['results'][1]['title'], "Talk P")
+
+
+class TalkUrlsViewSetTests(TestCase):
+    pass
