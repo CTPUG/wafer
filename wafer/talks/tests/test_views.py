@@ -355,12 +355,15 @@ class SpeakerTests(TestCase):
 
 
 class SortedResultsClient(Client):
+    def __init__(self, *args, **kw):
+        self._sort_key = kw.pop('sort_key')
+        super(SortedResultsClient, self).__init__(*args, **kw)
+
     def _sorted_response(self, response):
-        def get_title(item):
-            print item
-            return item['title']
+        def get_key(item):
+            return item[self._sort_key]
         if 'results' in response.data:
-            response.data['results'].sort(key=get_title)
+            response.data['results'].sort(key=get_key)
         return response
 
     def generic(self, *args, **kw):
@@ -374,7 +377,7 @@ class TalkViewSetTests(TestCase):
         self.talk_a = create_talk("Talk A", ACCEPTED, "author_a")
         self.talk_r = create_talk("Talk R", REJECTED, "author_r")
         self.talk_p = create_talk("Talk P", PENDING, "author_p")
-        self.client = SortedResultsClient()
+        self.client = SortedResultsClient(sort_key="title")
 
     def test_unauthorized_users(self):
         response = self.client.get('/talks/api/talks/')
@@ -452,4 +455,58 @@ class TalkViewSetTests(TestCase):
 
 
 class TalkUrlsViewSetTests(TestCase):
-    pass
+
+    def setUp(self):
+        self.talk_a = create_talk("Talk A", ACCEPTED, "author_a")
+        self.talk_r = create_talk("Talk R", REJECTED, "author_r")
+        self.talk_p = create_talk("Talk P", PENDING, "author_p")
+        self.client = SortedResultsClient(sort_key="url")
+
+    def assert_urls_accessible(self, talk):
+        response = self.client.get(
+            '/talks/api/talks/%d/urls/' % talk.talk_id)
+        self.assertEqual(response.data['results'], [])
+
+    def assert_urls_forbidden(self, talk):
+        response = self.client.get(
+            '/talks/api/talks/%d/urls/' % talk.talk_id)
+        self.assertEqual(response.status_code, 404)
+
+    def test_unauthorized_users_get_accepted_talk_urls(self):
+        self.assert_urls_accessible(self.talk_a)
+        self.assert_urls_forbidden(self.talk_r)
+
+    def test_ordinary_users_get_accepted_talk_urls(self):
+        create_user('norm')
+        self.assert_urls_accessible(self.talk_a)
+        self.assert_urls_forbidden(self.talk_r)
+
+    def test_super_user_gets_all_talk_urls(self):
+        create_user('super', True)
+        self.client.login(username='super', password='super_password')
+        self.assert_urls_accessible(self.talk_a)
+        self.assert_urls_accessible(self.talk_r)
+
+    def test_reviewer_gets_all_talk_urls(self):
+        create_user('reviewer', perms=['view_all_talks'])
+        self.client.login(username='reviewer', password='reviewer_password')
+        self.assert_urls_accessible(self.talk_a)
+        self.assert_urls_accessible(self.talk_r)
+
+    def test_author_a_sees_own_talk_urls_only(self):
+        self.client.login(username='author_a', password='author_a_password')
+        self.assert_urls_accessible(self.talk_a)
+        self.assert_urls_forbidden(self.talk_p)
+        self.assert_urls_forbidden(self.talk_r)
+
+    def test_author_r_sees_own_talk_urls_only(self):
+        self.client.login(username='author_r', password='author_r_password')
+        self.assert_urls_accessible(self.talk_r)
+        self.assert_urls_forbidden(self.talk_a)
+        self.assert_urls_forbidden(self.talk_p)
+
+    def test_author_p_sees_own_talk_urls_only(self):
+        self.client.login(username='author_p', password='author_p_password')
+        self.assert_urls_accessible(self.talk_p)
+        self.assert_urls_forbidden(self.talk_a)
+        self.assert_urls_forbidden(self.talk_r)
