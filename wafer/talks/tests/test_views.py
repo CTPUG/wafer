@@ -371,7 +371,7 @@ class SortedResultsClient(Client):
         return self._sorted_response(response)
 
 
-class TalkViewSetTests(TestCase):
+class TalkViewSetPermissionTests(TestCase):
 
     def setUp(self):
         self.talk_a = create_talk("Talk A", ACCEPTED, "author_a")
@@ -453,19 +453,28 @@ class TalkViewSetTests(TestCase):
         self.assertEqual(response.data['results'][0]['title'], "Talk A")
         self.assertEqual(response.data['results'][1]['title'], "Talk P")
 
-    def test_get_talk(self):
-        self.talk_a.abstract = "Abstract Talk A"
-        self.talk_a.save()
+
+class TalkViewSetTests(TestCase):
+
+    def setUp(self):
+        create_user('super', True)
+        self.client = SortedResultsClient(sort_key="title")
+        self.client.login(username='super', password='super_password')
+
+    def test_retrieve_talk(self):
+        talk = create_talk("Talk A", ACCEPTED, "author_a")
+        talk.abstract = "Abstract Talk A"
+        talk.save()
         talk_url = TalkUrl.objects.create(
-            talk=self.talk_a, url="http://example.com/", description="video")
+            talk=talk, url="http://example.com/", description="video")
         response = self.client.get(
-            '/talks/api/talks/%d/' % self.talk_a.talk_id)
+            '/talks/api/talks/%d/' % talk.talk_id)
         self.assertEqual(response.data, {
-            'talk_id': 1, 'talk_type': None, 'status': 'A',
+            'talk_id': talk.talk_id, 'talk_type': None, 'status': 'A',
             'title': u'Talk A',
             'abstract': u'Abstract Talk A',
-            'corresponding_author': self.talk_a.corresponding_author.id,
-            'authors': [self.talk_a.corresponding_author.id],
+            'corresponding_author': talk.corresponding_author.id,
+            'authors': [talk.corresponding_author.id],
             'kv': [],
             'urls': [{
                 'id': talk_url.id, 'description': u'video',
@@ -474,7 +483,7 @@ class TalkViewSetTests(TestCase):
         })
 
 
-class TalkUrlsViewSetTests(TestCase):
+class TalkUrlsViewSetPermissionTests(TestCase):
 
     def setUp(self):
         self.talk_a = create_talk("Talk A", ACCEPTED, "author_a")
