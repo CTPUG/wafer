@@ -1,13 +1,12 @@
 """Tests for wafer.talk views."""
 
-import json
-
 import mock
 
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Permission
 from django.core.urlresolvers import reverse
 from django.test import Client, TestCase
+from rest_framework.test import APIClient
 from wafer.talks.models import (
     Talk, TalkUrl, ACCEPTED, REJECTED, PENDING, CANCELLED)
 
@@ -356,7 +355,7 @@ class SpeakerTests(TestCase):
         self.check_n_speakers(7, [(0, 4), (4, 7)])
 
 
-class SortedResultsClient(Client):
+class SortedResultsClient(APIClient):
     def __init__(self, *args, **kw):
         self._sort_key = kw.pop('sort_key')
         super(SortedResultsClient, self).__init__(*args, **kw)
@@ -500,24 +499,24 @@ class TalkViewSetTests(TestCase):
 
     def test_create_talk(self):
         author = create_user("author")
-        response = self.client.post('/talks/api/talks/', data=json.dumps({
+        response = self.client.post('/talks/api/talks/', data={
             'talk_type': None, 'status': 'A', 'title': 'Talk Foo',
             'abstract': 'Concrete',
             'corresponding_author': author.id,
             'authors': [author.id],
-        }), content_type="application/json")
+        }, format='json')
         talk = Talk.objects.get()
         self.assertEqual(response.data, self.mk_result(talk))
 
     def test_update_talk(self):
         talk = create_talk("Talk A", ACCEPTED, "author_a")
         response = self.client.put(
-            '/talks/api/talks/%d/' % talk.talk_id, data=json.dumps({
+            '/talks/api/talks/%d/' % talk.talk_id, data={
                 'talk_type': None, 'status': 'R', 'title': 'Talk Zoom',
                 'abstract': 'Concreter',
                 'corresponding_author': talk.corresponding_author.id,
                 'authors': [talk.corresponding_author.id],
-            }), content_type="application/json")
+            }, format="json")
         talk = Talk.objects.get()
         self.assertEqual(response.data, self.mk_result(talk))
         self.assertEqual(talk.abstract.raw, u"Concreter")
@@ -525,9 +524,9 @@ class TalkViewSetTests(TestCase):
     def test_patch_talk(self):
         talk = create_talk("Talk A", ACCEPTED, "author_a")
         response = self.client.patch(
-            '/talks/api/talks/%d/' % talk.talk_id, data=json.dumps({
+            '/talks/api/talks/%d/' % talk.talk_id, data={
                 'abstract': 'Concrete',
-            }), content_type="application/json")
+            }, format="json")
         talk = Talk.objects.get()
         self.assertEqual(response.data, self.mk_result(talk))
         self.assertEqual(talk.abstract.raw, u"Concrete")
@@ -624,11 +623,10 @@ class TalkUrlsViewSetTests(TestCase):
     def test_create_talk_url(self):
         talk = create_talk("Talk A", ACCEPTED, "author_a")
         response = self.client.post(
-            '/talks/api/talks/%d/urls/' % talk.talk_id,
-            data=json.dumps({
+            '/talks/api/talks/%d/urls/' % talk.talk_id, data={
                 'description': u'slides',
                 'url': u'http://www.example.com/video',
-            }), content_type="application/json")
+            }, format="json")
         [talk_url] = talk.talkurl_set.all()
         self.assertEqual(response.data, self.mk_result(talk_url))
         self.assertEqual(talk_url.url, u'http://www.example.com/video')
@@ -639,11 +637,10 @@ class TalkUrlsViewSetTests(TestCase):
         url = TalkUrl.objects.create(
             talk=talk, url="http://a.example.com/", description="video")
         response = self.client.put(
-            '/talks/api/talks/%d/urls/%d/' % (talk.talk_id, url.id),
-            data=json.dumps({
+            '/talks/api/talks/%d/urls/%d/' % (talk.talk_id, url.id), data={
                 'description': u'slides',
                 'url': u'http://www.example.com/video',
-            }), content_type="application/json")
+            }, format="json")
         [talk_url] = talk.talkurl_set.all()
         self.assertEqual(response.data, self.mk_result(talk_url))
         self.assertEqual(talk_url.url, u'http://www.example.com/video')
@@ -654,10 +651,9 @@ class TalkUrlsViewSetTests(TestCase):
         url = TalkUrl.objects.create(
             talk=talk, url="http://a.example.com/", description="video")
         response = self.client.patch(
-            '/talks/api/talks/%d/urls/%d/' % (talk.talk_id, url.id),
-            data=json.dumps({
+            '/talks/api/talks/%d/urls/%d/' % (talk.talk_id, url.id), data={
                 'url': 'http://new.example.com/',
-            }), content_type="application/json")
+            }, format="json")
         [talk_url] = talk.talkurl_set.all()
         self.assertEqual(response.data, self.mk_result(talk_url))
         self.assertEqual(talk_url.url, u'http://new.example.com/')
