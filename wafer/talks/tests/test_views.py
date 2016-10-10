@@ -6,8 +6,10 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Permission
 from django.core.urlresolvers import reverse
 from django.test import Client, TestCase
-from wafer.talks.models import (Talk, ACCEPTED, REJECTED, PENDING,
-                                CANCELLED)
+
+from wafer.tests.api_utils import SortedResultsClient
+from wafer.talks.models import (
+    Talk, TalkUrl, ACCEPTED, REJECTED, PENDING, CANCELLED)
 
 
 def create_user(username, superuser=False, perms=()):
@@ -164,7 +166,8 @@ class TalkNoteViewTests(TestCase):
                 self.assertFalse('Some notes for talk' in
                                  response.rendered_content)
         if private_notes_visible:
-            self.assertTrue('Some private notes for talk' in response.rendered_content)
+            self.assertTrue(
+                'Some private notes for talk' in response.rendered_content)
         else:
             if hasattr(response, 'rendered_content'):
                 self.assertFalse('Some private notes for talk' in
@@ -353,22 +356,23 @@ class SpeakerTests(TestCase):
         self.check_n_speakers(7, [(0, 4), (4, 7)])
 
 
-class TalkViewSetTests(TestCase):
-
+class TalkViewSetPermissionTests(TestCase):
 
     def setUp(self):
         self.talk_a = create_talk("Talk A", ACCEPTED, "author_a")
         self.talk_r = create_talk("Talk R", REJECTED, "author_r")
         self.talk_p = create_talk("Talk P", PENDING, "author_p")
-        self.client = Client()
+        self.client = SortedResultsClient(sort_key="title")
 
     def test_unauthorized_users(self):
         response = self.client.get('/talks/api/talks/')
         self.assertEqual(response.data['count'], 1)
         self.assertEqual(response.data['results'][0]['title'], "Talk A")
-        response = self.client.get('/talks/api/talks/%d/' % self.talk_a.talk_id)
+        response = self.client.get(
+            '/talks/api/talks/%d/' % self.talk_a.talk_id)
         self.assertEqual(response.data['title'], 'Talk A')
-        response = self.client.get('/talks/api/talks/%d/' % self.talk_r.talk_id)
+        response = self.client.get(
+            '/talks/api/talks/%d/' % self.talk_r.talk_id)
         self.assertEqual(response.status_code, 404)
 
     def test_ordinary_users_get_accepted_talks(self):
@@ -377,9 +381,11 @@ class TalkViewSetTests(TestCase):
         response = self.client.get('/talks/api/talks/')
         self.assertEqual(response.data['count'], 1)
         self.assertEqual(response.data['results'][0]['title'], "Talk A")
-        response = self.client.get('/talks/api/talks/%d/' % self.talk_a.talk_id)
+        response = self.client.get(
+            '/talks/api/talks/%d/' % self.talk_a.talk_id)
         self.assertEqual(response.data['title'], 'Talk A')
-        response = self.client.get('/talks/api/talks/%d/' % self.talk_r.talk_id)
+        response = self.client.get(
+            '/talks/api/talks/%d/' % self.talk_r.talk_id)
         self.assertEqual(response.status_code, 404)
 
     def test_super_user_gets_everything(self):
@@ -388,11 +394,13 @@ class TalkViewSetTests(TestCase):
         response = self.client.get('/talks/api/talks/')
         self.assertEqual(response.data['count'], 3)
         self.assertEqual(response.data['results'][0]['title'], "Talk A")
-        self.assertEqual(response.data['results'][1]['title'], "Talk R")
-        self.assertEqual(response.data['results'][2]['title'], "Talk P")
-        response = self.client.get('/talks/api/talks/%d/' % self.talk_a.talk_id)
+        self.assertEqual(response.data['results'][1]['title'], "Talk P")
+        self.assertEqual(response.data['results'][2]['title'], "Talk R")
+        response = self.client.get(
+            '/talks/api/talks/%d/' % self.talk_a.talk_id)
         self.assertEqual(response.data['title'], 'Talk A')
-        response = self.client.get('/talks/api/talks/%d/' % self.talk_r.talk_id)
+        response = self.client.get(
+            '/talks/api/talks/%d/' % self.talk_r.talk_id)
         self.assertEqual(response.data['title'], 'Talk R')
 
     def test_reviewer_all_talks(self):
@@ -401,11 +409,13 @@ class TalkViewSetTests(TestCase):
         response = self.client.get('/talks/api/talks/')
         self.assertEqual(response.data['count'], 3)
         self.assertEqual(response.data['results'][0]['title'], "Talk A")
-        self.assertEqual(response.data['results'][1]['title'], "Talk R")
-        self.assertEqual(response.data['results'][2]['title'], "Talk P")
-        response = self.client.get('/talks/api/talks/%d/' % self.talk_a.talk_id)
+        self.assertEqual(response.data['results'][1]['title'], "Talk P")
+        self.assertEqual(response.data['results'][2]['title'], "Talk R")
+        response = self.client.get(
+            '/talks/api/talks/%d/' % self.talk_a.talk_id)
         self.assertEqual(response.data['title'], 'Talk A')
-        response = self.client.get('/talks/api/talks/%d/' % self.talk_r.talk_id)
+        response = self.client.get(
+            '/talks/api/talks/%d/' % self.talk_r.talk_id)
         self.assertEqual(response.data['title'], 'Talk R')
 
     def test_author_a_sees_own_talks_only(self):
@@ -427,3 +437,219 @@ class TalkViewSetTests(TestCase):
         self.assertEqual(response.data['count'], 2)
         self.assertEqual(response.data['results'][0]['title'], "Talk A")
         self.assertEqual(response.data['results'][1]['title'], "Talk P")
+
+
+class TalkViewSetTests(TestCase):
+
+    def setUp(self):
+        create_user('super', True)
+        self.client = SortedResultsClient(sort_key="title")
+        self.client.login(username='super', password='super_password')
+
+    def mk_result(self, talk):
+        def mk_url(talk_url):
+            return {
+                'id': talk_url.id, 'description': talk_url.description,
+                'url': talk_url.url,
+            }
+        return {
+            'talk_id': talk.talk_id, 'talk_type': talk.talk_type,
+            'status': talk.status, 'title': talk.title,
+            'abstract': talk.abstract.raw,
+            'corresponding_author': talk.corresponding_author.id,
+            'authors': [talk.corresponding_author.id],
+            'kv': [],
+            'urls': [mk_url(url) for url in talk.talkurl_set.all()]
+        }
+
+    def test_list_talks(self):
+        talk_a = create_talk("Talk A", ACCEPTED, "author_a")
+        talk_b = create_talk("Talk B", REJECTED, "author_b")
+        response = self.client.get('/talks/api/talks/')
+        self.assertEqual(response.data['results'], [
+            self.mk_result(talk_a), self.mk_result(talk_b),
+        ])
+
+    def test_retrieve_talk(self):
+        talk = create_talk("Talk A", ACCEPTED, "author_a")
+        talk.abstract = "Abstract Talk A"
+        talk.save()
+        TalkUrl.objects.create(
+            talk=talk, url="http://example.com/", description="video")
+        response = self.client.get(
+            '/talks/api/talks/%d/' % talk.talk_id)
+        self.assertEqual(response.data, self.mk_result(talk))
+
+    def test_create_talk(self):
+        author = create_user("author")
+        response = self.client.post('/talks/api/talks/', data={
+            'talk_type': None, 'status': 'A', 'title': 'Talk Foo',
+            'abstract': 'Concrete',
+            'corresponding_author': author.id,
+            'authors': [author.id],
+        }, format='json')
+        talk = Talk.objects.get()
+        self.assertEqual(response.data, self.mk_result(talk))
+
+    def test_update_talk(self):
+        talk = create_talk("Talk A", ACCEPTED, "author_a")
+        response = self.client.put(
+            '/talks/api/talks/%d/' % talk.talk_id, data={
+                'talk_type': None, 'status': 'R', 'title': 'Talk Zoom',
+                'abstract': 'Concreter',
+                'corresponding_author': talk.corresponding_author.id,
+                'authors': [talk.corresponding_author.id],
+            }, format="json")
+        talk = Talk.objects.get()
+        self.assertEqual(response.data, self.mk_result(talk))
+        self.assertEqual(talk.abstract.raw, u"Concreter")
+
+    def test_patch_talk(self):
+        talk = create_talk("Talk A", ACCEPTED, "author_a")
+        response = self.client.patch(
+            '/talks/api/talks/%d/' % talk.talk_id, data={
+                'abstract': 'Concrete',
+            }, format="json")
+        talk = Talk.objects.get()
+        self.assertEqual(response.data, self.mk_result(talk))
+        self.assertEqual(talk.abstract.raw, u"Concrete")
+
+    def test_delete_talk(self):
+        talk_a = create_talk("Talk A", ACCEPTED, "author_a")
+        talk_b = create_talk("Talk B", ACCEPTED, "author_b")
+        response = self.client.delete('/talks/api/talks/%d/' % talk_a.talk_id)
+        talk_remaining = Talk.objects.get()
+        self.assertEqual(response.data, None)
+        self.assertEqual(response.status_code, 204)
+        self.assertEqual(talk_remaining, talk_b)
+
+
+class TalkUrlsViewSetPermissionTests(TestCase):
+
+    def setUp(self):
+        self.talk_a = create_talk("Talk A", ACCEPTED, "author_a")
+        self.talk_r = create_talk("Talk R", REJECTED, "author_r")
+        self.talk_p = create_talk("Talk P", PENDING, "author_p")
+        self.client = SortedResultsClient(sort_key="url")
+
+    def assert_urls_accessible(self, talk):
+        response = self.client.get(
+            '/talks/api/talks/%d/urls/' % talk.talk_id)
+        self.assertEqual(response.data['results'], [])
+
+    def assert_urls_forbidden(self, talk):
+        response = self.client.get(
+            '/talks/api/talks/%d/urls/' % talk.talk_id)
+        self.assertEqual(response.status_code, 403)
+
+    def assert_missing_talk_urls_code(self, code):
+        missing_talk_id = 4242  # implausibly large id
+        response = self.client.get(
+            '/talks/api/talks/%d/urls/' % missing_talk_id)
+        self.assertEqual(response.status_code, code)
+
+    def test_unauthorized_users_get_no_talk_urls(self):
+        self.assert_urls_forbidden(self.talk_a)
+        self.assert_urls_forbidden(self.talk_p)
+        self.assert_urls_forbidden(self.talk_r)
+        self.assert_missing_talk_urls_code(403)
+
+    def test_ordinary_users_get_no_talk_urls(self):
+        create_user('norm')
+        self.assert_urls_forbidden(self.talk_a)
+        self.assert_urls_forbidden(self.talk_p)
+        self.assert_urls_forbidden(self.talk_r)
+        self.assert_missing_talk_urls_code(403)
+
+    def test_super_user_gets_all_talk_urls(self):
+        create_user('super', True)
+        self.client.login(username='super', password='super_password')
+        self.assert_urls_accessible(self.talk_a)
+        self.assert_urls_accessible(self.talk_p)
+        self.assert_urls_accessible(self.talk_r)
+        self.assert_missing_talk_urls_code(404)
+
+
+class TalkUrlsViewSetTests(TestCase):
+
+    def setUp(self):
+        create_user('super', True)
+        self.client = SortedResultsClient(sort_key="url")
+        self.client.login(username='super', password='super_password')
+
+    def mk_result(self, talk_url):
+        return {
+            'id': talk_url.id, 'description': talk_url.description,
+            'url': talk_url.url,
+        }
+
+    def test_list_talk_urls(self):
+        talk = create_talk("Talk", ACCEPTED, "author")
+        url_a = TalkUrl.objects.create(
+            talk=talk, url="http://a.example.com/", description="video")
+        url_b = TalkUrl.objects.create(
+            talk=talk, url="http://b.example.com/", description="slides")
+        response = self.client.get('/talks/api/talks/%d/urls/' % talk.talk_id)
+        self.assertEqual(response.data['results'], [
+            self.mk_result(url_a), self.mk_result(url_b),
+        ])
+
+    def test_retrieve_talk_url(self):
+        talk = create_talk("Talk A", ACCEPTED, "author_a")
+        url = TalkUrl.objects.create(
+            talk=talk, url="http://a.example.com/", description="video")
+        response = self.client.get(
+            '/talks/api/talks/%d/urls/%d/' % (talk.talk_id, url.id))
+        self.assertEqual(response.data, self.mk_result(url))
+
+    def test_create_talk_url(self):
+        talk = create_talk("Talk A", ACCEPTED, "author_a")
+        response = self.client.post(
+            '/talks/api/talks/%d/urls/' % talk.talk_id, data={
+                'description': u'slides',
+                'url': u'http://www.example.com/video',
+            }, format="json")
+        [talk_url] = talk.talkurl_set.all()
+        self.assertEqual(response.data, self.mk_result(talk_url))
+        self.assertEqual(talk_url.url, u'http://www.example.com/video')
+        self.assertEqual(talk_url.description, u'slides')
+
+    def test_update_talk_url(self):
+        talk = create_talk("Talk A", ACCEPTED, "author_a")
+        url = TalkUrl.objects.create(
+            talk=talk, url="http://a.example.com/", description="video")
+        response = self.client.put(
+            '/talks/api/talks/%d/urls/%d/' % (talk.talk_id, url.id), data={
+                'description': u'slides',
+                'url': u'http://www.example.com/video',
+            }, format="json")
+        [talk_url] = talk.talkurl_set.all()
+        self.assertEqual(response.data, self.mk_result(talk_url))
+        self.assertEqual(talk_url.url, u'http://www.example.com/video')
+        self.assertEqual(talk_url.description, u'slides')
+
+    def test_patch_talk_url(self):
+        talk = create_talk("Talk A", ACCEPTED, "author_a")
+        url = TalkUrl.objects.create(
+            talk=talk, url="http://a.example.com/", description="video")
+        response = self.client.patch(
+            '/talks/api/talks/%d/urls/%d/' % (talk.talk_id, url.id), data={
+                'url': 'http://new.example.com/',
+            }, format="json")
+        [talk_url] = talk.talkurl_set.all()
+        self.assertEqual(response.data, self.mk_result(talk_url))
+        self.assertEqual(talk_url.url, u'http://new.example.com/')
+        self.assertEqual(talk_url.description, u'video')
+
+    def test_delete_talk_url(self):
+        talk = create_talk("Talk A", ACCEPTED, "author_a")
+        url_a = TalkUrl.objects.create(
+            talk=talk, url="http://a.example.com/", description="video")
+        url_b = TalkUrl.objects.create(
+            talk=talk, url="http://a.example.com/", description="video")
+        response = self.client.delete(
+            '/talks/api/talks/%d/urls/%d/' % (talk.talk_id, url_a.id))
+        [talk_url_b] = talk.talkurl_set.all()
+        self.assertEqual(response.data, None)
+        self.assertEqual(response.status_code, 204)
+        self.assertEqual(talk_url_b, url_b)

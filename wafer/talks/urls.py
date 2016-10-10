@@ -1,12 +1,16 @@
 from django.conf.urls import patterns, url, include
-from rest_framework import routers
+from rest_framework_extensions import routers
 
 from wafer.talks.views import (
     Speakers, TalkCreate, TalkDelete, TalkUpdate, TalkView, UsersTalks,
-    TalksViewSet)
+    TalksViewSet, TalkUrlsViewSet)
 
-router = routers.DefaultRouter()
-router.register(r'talks', TalksViewSet)
+router = routers.ExtendedSimpleRouter()
+
+talks_router = router.register(r'talks', TalksViewSet)
+talks_router.register(
+    r'urls', TalkUrlsViewSet, base_name='talks-urls',
+    parents_query_lookups=['talk'])
 
 urlpatterns = patterns(
     '',

@@ -6,15 +6,19 @@ from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic.list import ListView
 from django.conf import settings
 from django.db.models import Q
+from django.http import Http404
 
 from reversion import revisions
 from rest_framework import viewsets
-from rest_framework.permissions import DjangoModelPermissionsOrAnonReadOnly
+from rest_framework.permissions import (
+    DjangoModelPermissions, DjangoModelPermissionsOrAnonReadOnly,
+    BasePermission)
+from rest_framework_extensions.mixins import NestedViewSetMixin
 
 from wafer.utils import LoginRequiredMixin
-from wafer.talks.models import Talk, TalkType, ACCEPTED
+from wafer.talks.models import Talk, TalkType, TalkUrl, ACCEPTED
 from wafer.talks.forms import get_talk_form_class
-from wafer.talks.serializers import TalkSerializer
+from wafer.talks.serializers import TalkSerializer, TalkUrlSerializer
 from wafer.users.models import UserProfile
 
 
@@ -76,7 +80,8 @@ class TalkCreate(LoginRequiredMixin, CreateView):
         can_submit = getattr(settings, 'WAFER_TALKS_OPEN', True)
         if can_submit:
             # Check for all talk types being disabled
-            can_submit = TalkType.objects.filter(disable_submission=False).count() > 0
+            can_submit = TalkType.objects.filter(
+                disable_submission=False).count() > 0
         context['can_submit'] = can_submit
         return context
 
@@ -143,12 +148,13 @@ class Speakers(ListView):
     def get_context_data(self, **kwargs):
         context = super(Speakers, self).get_context_data(**kwargs)
         speakers = UserProfile.objects.filter(
-            user__talks__status='A').distinct().prefetch_related('user').order_by('user__first_name', 'user__last_name')
+            user__talks__status='A').distinct().prefetch_related(
+                'user').order_by('user__first_name', 'user__last_name')
         context["speaker_rows"] = self._by_row(speakers, 4)
         return context
 
 
-class TalksViewSet(viewsets.ModelViewSet):
+class TalksViewSet(viewsets.ModelViewSet, NestedViewSetMixin):
     """API endpoint that allows talks to be viewed or edited."""
     queryset = Talk.objects.none()  # Needed for the REST Permissions
     serializer_class = TalkSerializer
@@ -168,5 +174,28 @@ class TalksViewSet(viewsets.ModelViewSet):
             # XXX: Should this be all authors rather than just
             # the corresponding author?
             return Talk.objects.filter(
-                Q(status=ACCEPTED)|
+                Q(status=ACCEPTED) |
                 Q(corresponding_author=self.request.user))
+
+
+class TalkExistsPermission(BasePermission):
+    def has_permission(self, request, view):
+        talk_id = view.get_parents_query_dict()['talk']
+        if not Talk.objects.filter(pk=talk_id).exists():
+            raise Http404
+        return True
+
+
+class TalkUrlsViewSet(viewsets.ModelViewSet, NestedViewSetMixin):
+    """API endpoint that allows talks to be viewed or edited."""
+    queryset = TalkUrl.objects.all()
+    serializer_class = TalkUrlSerializer
+    permission_classes = (DjangoModelPermissions, TalkExistsPermission)
+
+    def create(self, request, *args, **kw):
+        request.data['talk'] = self.get_parents_query_dict()['talk']
+        return super(TalkUrlsViewSet, self).create(request, *args, **kw)
+
+    def update(self, request, *args, **kw):
+        request.data['talk'] = self.get_parents_query_dict()['talk']
+        return super(TalkUrlsViewSet, self).update(request, *args, **kw)

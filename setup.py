@@ -8,6 +8,7 @@ REQUIRES = [
     'django-nose',
     'django-registration-redux',
     'djangorestframework',
+    'drf-extensions',
     'jsonfield',
     'pillow',
     'diff-match-patch',
