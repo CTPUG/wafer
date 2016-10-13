@@ -44,3 +44,4 @@ nosetests.xml
 # Wafer
 /wafer.db
 /media/
+/wafer/static/vendor/
