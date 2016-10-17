@@ -1,4 +1,4 @@
-from django.conf.urls import patterns, url, include
+from django.conf.urls import url, include
 from rest_framework import routers
 
 from wafer.sponsors.views import (
@@ -9,12 +9,11 @@ router = routers.DefaultRouter()
 router.register(r'sponsors', SponsorViewSet)
 router.register(r'packages', PackageViewSet)
 
-urlpatterns = patterns(
-    '',
+urlpatterns = [
     url(r'^$', ShowSponsors.as_view(),
         name='wafer_sponsors'),
     url(r'^(?P<pk>\d+)/$', SponsorView.as_view(), name='wafer_sponsor'),
     url(r'^packages/$', ShowPackages.as_view(),
         name='wafer_sponsorship_packages'),
     url(r'^api/', include(router.urls)),
-)
+]

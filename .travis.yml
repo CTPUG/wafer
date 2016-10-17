@@ -6,25 +6,45 @@ python:
    - "3.4"
    - "3.5"
 env:
-   - DJANGO_VERSION=1.8 TESTDB=sqlite
-   - DJANGO_VERSION=1.8 TESTDB=postgres
-   - DJANGO_VERSION=1.9 TESTDB=sqlite
-   - DJANGO_VERSION=1.9 TESTDB=postgres
+   - DJANGO='django>=1.8.0,<1.9.0' TESTDB=sqlite
+   - DJANGO='django>=1.8.0,<1.9.0' TESTDB=postgres
+   - DJANGO='django>=1.9.0,<1.10.0' TESTDB=sqlite
+   - DJANGO='django>=1.9.0,<1.10.0' TESTDB=postgres
+   - DJANGO='django>=1.10.0,<1.11.0' TESTDB=sqlite
+   - DJANGO='django>=1.10.0,<1.11.0' TESTDB=postgres
+   - DJANGO='https://github.com/django/django/archive/master.tar.gz' TESTDB=sqlite
+   - DJANGO='https://github.com/django/django/archive/master.tar.gz' TESTDB=postgres
+
 matrix:
    exclude:
-      # Django 1.9 doesn't support 3.3
+      # Django no longer supports 3.3
       - python: "3.3"
-        env: DJANGO_VERSION=1.9 TESTDB=sqlite
+        env: DJANGO='django>=1.9.0,<1.10.0' TESTDB=sqlite
       - python: "3.3"
-        env: DJANGO_VERSION=1.9 TESTDB=postgres
+        env: DJANGO='django>=1.9.0,<1.10.0' TESTDB=postgres
+      - python: "3.3"
+        env: DJANGO='django>=1.10.0,<1.11.0' TESTDB=sqlite
+      - python: "3.3"
+        env: DJANGO='django>=1.10.0,<1.11.0' TESTDB=postgres
+      - python: "3.3"
+
+allow_failures:
+  - env: DJANGO='https://github.com/django/django/archive/master.tar.gz' TESTDB=postgres
+  - env: DJANGO='https://github.com/django/django/archive/master.tar.gz' TESTDB=sqlite
+
 services:
    - postgresql
+
+cache:
+  directories:
+    - $HOME/.cache/pip
+
 before_install:
    - if [ "$TESTDB" = "postgres" ]; then pip install -q psycopg2 ; fi
 # command to install dependencies,
 install:
    # Install the right version of Django first
-   - pip install 'Django~='"$DJANGO_VERSION".0
+   - pip install "$DJANGO"
    - pip install -r requirements.txt -r requirements-dev.txt
 # command to run tests
 script: NOSE_WITH_COVERAGE=1 python manage.py test

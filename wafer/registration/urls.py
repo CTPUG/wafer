@@ -1,14 +1,16 @@
-from django.conf.urls import include, patterns, url
+from django.conf.urls import include, url
 from django.views.generic import TemplateView
+
 from registration.backends.default.views import ActivationView, RegistrationView
 
+from wafer.registration.views import debian_login, github_login, redirect_profile
 
-urlpatterns = patterns(
-    'wafer.registration.views',
-    url(r'^profile/$', 'redirect_profile'),
 
-    url(r'^github-login/$', 'github_login'),
-    url(r'^debian-login/$', 'debian_login'),
+urlpatterns = [
+    url(r'^profile/$', redirect_profile),
+
+    url(r'^github-login/$', github_login),
+    url(r'^debian-login/$', debian_login),
 
     # registration.backends.default.urls, but Django 1.5 compatible
     url(r'^activate/complete/$',
@@ -33,4 +35,4 @@ urlpatterns = patterns(
             template_name='registration/registration_closed.html'
         ), name='registration_disallowed'),
     url(r'', include('registration.auth_urls')),
-)
+]

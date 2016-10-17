@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext as _
 
@@ -14,7 +15,7 @@ class RegistrationFormHelper(FormHelper):
 
 
 class LoginFormHelper(FormHelper):
-    form_action = reverse('django.contrib.auth.views.login')
+    form_action = settings.LOGIN_URL
 
     def __init__(self, *args, **kwargs):
         super(LoginFormHelper, self).__init__(*args, **kwargs)
