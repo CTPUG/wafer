@@ -7,6 +7,7 @@ class KeyValueSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = KeyValue
+        fields = ('group', 'key', 'value')
 
     # There doesn't seem to be a better way of handling the problem
     # of filtering the groups.
