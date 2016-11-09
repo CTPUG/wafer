@@ -16,9 +16,7 @@
     };
 
     function handleDragOver(e) {
-        if (e.preventDefault) {
-            e.preventDefault(); // Necessary. Allows us to drop.
-        }
+        e.preventDefault(); // Necessary. Allows us to drop.
 
         //noinspection JSUnresolvedVariable
         e.dataTransfer.dropEffect = 'move';
@@ -63,9 +61,7 @@
 
         e.target.classList.remove('over');
 
-        if (e.stopPropagation) {
-            e.stopPropagation(); // stops the browser from redirecting.
-        }
+        e.preventDefault(); // stops the browser from redirecting
 
         var slot = e.target.getAttribute('data-slot');
         var venue = e.target.getAttribute('data-venue');
@@ -79,7 +75,6 @@
         e.target.setAttribute('data-scheduleitem-id', scheduleItemId);
         e.target.setAttribute('data-type', scheduleItemType);
         e.target.id = 'scheduleItem' + scheduleItemId;
-        e.preventDefault();
 
         var talkId = '';
         var pageId = '';
