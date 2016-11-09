@@ -1,8 +1,6 @@
 (function () {
     'use strict';
 
-    jQuery.event.props.push('dataTransfer');
-
     var handleDragStart = function (e) {
         e.target.style.opacity = '0.4';  // this / e.target is the source node.
         e.target.classList.add('label-danger');
