@@ -1,13 +1,12 @@
 (function () {
     'use strict';
+    /*global document, this, $ */
 
     var handleDragStart = function (e) {
         e.target.style.opacity = '0.4';  // this / e.target is the source node.
         e.target.classList.add('label-danger');
 
-        //noinspection JSUnresolvedVariable
         e.dataTransfer.effectAllowed = 'move';
-        //noinspection JSUnresolvedVariable
         e.dataTransfer.setData('text/plain', this.id);
     };
     var handleDragEnd = function (e) {
@@ -18,7 +17,6 @@
     function handleDragOver(e) {
         e.preventDefault(); // Necessary. Allows us to drop.
 
-        //noinspection JSUnresolvedVariable
         e.dataTransfer.dropEffect = 'move';
         return false;
     }
@@ -66,7 +64,6 @@
         var slot = e.target.getAttribute('data-slot');
         var venue = e.target.getAttribute('data-venue');
 
-        //noinspection JSUnresolvedVariable
         var data = document.getElementById(
             e.dataTransfer.getData('text/plain'));
         var scheduleItemId = data.getAttribute('data-scheduleitem-id');
