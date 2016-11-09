@@ -72,14 +72,14 @@
 
         //noinspection JSUnresolvedVariable
         var data = document.getElementById(
-            event.dataTransfer.getData('text/plain'));
+            e.dataTransfer.getData('text/plain'));
         var scheduleItemId = data.getAttribute('data-scheduleitem-id');
         var scheduleItemType = data.getAttribute('data-type');
-        event.target.innerHTML = data.getAttribute('title');
-        event.target.setAttribute('data-scheduleitem-id', scheduleItemId);
-        event.target.setAttribute('data-type', scheduleItemType);
-        event.target.id = 'scheduleItem' + scheduleItemId;
-        event.preventDefault();
+        e.target.innerHTML = data.getAttribute('title');
+        e.target.setAttribute('data-scheduleitem-id', scheduleItemId);
+        e.target.setAttribute('data-type', scheduleItemType);
+        e.target.id = 'scheduleItem' + scheduleItemId;
+        e.preventDefault();
 
         var talkId = '';
         var pageId = '';
@@ -90,10 +90,10 @@
             pageId = data.getAttribute('data-page-id');
         }
 
-        event.target.classList.remove('success');
-        event.target.classList.remove('info');
+        e.target.classList.remove('success');
+        e.target.classList.remove('info');
         var typeClass = scheduleItemType === 'talk' ? 'success' : 'info';
-        event.target.classList.add(typeClass);
+        e.target.classList.add(typeClass);
 
         var ajaxData = {
             talk: talkId,
