@@ -1,15 +1,12 @@
 (function () {
     'use strict';
-
-    jQuery.event.props.push('dataTransfer');
+    /*global document, this, $ */
 
     var handleDragStart = function (e) {
         e.target.style.opacity = '0.4';  // this / e.target is the source node.
         e.target.classList.add('label-danger');
 
-        //noinspection JSUnresolvedVariable
         e.dataTransfer.effectAllowed = 'move';
-        //noinspection JSUnresolvedVariable
         e.dataTransfer.setData('text/plain', this.id);
     };
     var handleDragEnd = function (e) {
@@ -18,11 +15,8 @@
     };
 
     function handleDragOver(e) {
-        if (e.preventDefault) {
-            e.preventDefault(); // Necessary. Allows us to drop.
-        }
+        e.preventDefault(); // Necessary. Allows us to drop.
 
-        //noinspection JSUnresolvedVariable
         e.dataTransfer.dropEffect = 'move';
         return false;
     }
@@ -65,23 +59,19 @@
 
         e.target.classList.remove('over');
 
-        if (e.stopPropagation) {
-            e.stopPropagation(); // stops the browser from redirecting.
-        }
+        e.preventDefault(); // stops the browser from redirecting
 
         var slot = e.target.getAttribute('data-slot');
         var venue = e.target.getAttribute('data-venue');
 
-        //noinspection JSUnresolvedVariable
         var data = document.getElementById(
-            event.dataTransfer.getData('text/plain'));
+            e.dataTransfer.getData('text/plain'));
         var scheduleItemId = data.getAttribute('data-scheduleitem-id');
         var scheduleItemType = data.getAttribute('data-type');
-        event.target.innerHTML = data.getAttribute('title');
-        event.target.setAttribute('data-scheduleitem-id', scheduleItemId);
-        event.target.setAttribute('data-type', scheduleItemType);
-        event.target.id = 'scheduleItem' + scheduleItemId;
-        event.preventDefault();
+        e.target.innerHTML = data.getAttribute('title');
+        e.target.setAttribute('data-scheduleitem-id', scheduleItemId);
+        e.target.setAttribute('data-type', scheduleItemType);
+        e.target.id = 'scheduleItem' + scheduleItemId;
 
         var talkId = '';
         var pageId = '';
@@ -92,10 +82,10 @@
             pageId = data.getAttribute('data-page-id');
         }
 
-        event.target.classList.remove('success');
-        event.target.classList.remove('info');
+        e.target.classList.remove('success');
+        e.target.classList.remove('info');
         var typeClass = scheduleItemType === 'talk' ? 'success' : 'info';
-        event.target.classList.add(typeClass);
+        e.target.classList.add(typeClass);
 
         var ajaxData = {
             talk: talkId,
