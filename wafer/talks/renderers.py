@@ -19,6 +19,7 @@ class TalksRenderer(StaticSiteRenderer):
         for page in paginator.page_range:
             paths.append(reverse('wafer_users_talks_page',
                                  kwargs={'page': page}))
+        paths.append(reverse('wafer_talks_speakers'))
         return paths
 
 renderers = [TalksRenderer, ]
