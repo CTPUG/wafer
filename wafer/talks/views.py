@@ -16,7 +16,7 @@ from rest_framework.permissions import (
 from rest_framework_extensions.mixins import NestedViewSetMixin
 
 from wafer.utils import LoginRequiredMixin
-from wafer.talks.models import Talk, TalkType, TalkUrl, ACCEPTED
+from wafer.talks.models import Talk, TalkType, TalkUrl, ACCEPTED, CANCELLED
 from wafer.talks.forms import get_talk_form_class
 from wafer.talks.serializers import TalkSerializer, TalkUrlSerializer
 from wafer.users.models import UserProfile
@@ -42,7 +42,8 @@ class UsersTalks(ListView):
         # renderer
         if (self.request and Talk.can_view_all(self.request.user)):
             return Talk.objects.all()
-        return Talk.objects.filter(status=ACCEPTED)
+        return Talk.objects.filter( Q(status=ACCEPTED) |
+                                    Q(status=CANCELLED))
 
 
 class TalkView(DetailView):
@@ -165,8 +166,9 @@ class TalksViewSet(viewsets.ModelViewSet, NestedViewSetMixin):
         # We override the default implementation to only show accepted talks
         # to people who aren't part of the management group
         if self.request.user.id is None:
-            # Anonymous user, so just accepted talks
-            return Talk.objects.filter(status=ACCEPTED)
+            # Anonymous user, so just accepted or cancelled talks
+            return Talk.objects.filter(Q(status=ACCEPTED) |
+                                       Q(status=CANCELLED))
         elif Talk.can_view_all(self.request.user):
             return Talk.objects.all()
         else:
@@ -175,6 +177,7 @@ class TalksViewSet(viewsets.ModelViewSet, NestedViewSetMixin):
             # the corresponding author?
             return Talk.objects.filter(
                 Q(status=ACCEPTED) |
+                Q(status=CANCELLED) |
                 Q(corresponding_author=self.request.user))
 
 
