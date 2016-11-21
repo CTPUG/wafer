@@ -52,8 +52,12 @@
 <div>
     <p>
     {% trans 'Status:' %}
-    {% if object.pending %}
+    {% if object.submitted %}
+    <span class="tag tag-info">{% trans 'Submitted' %}</span>
+    {% elif object.under_consideration %}
     <span class="tag tag-info">{% trans 'Under consideration' %}</span>
+    {% elif object.provisional %}
+    <span class="tag tag-success">{% trans 'Provisionally Accepted' %}</span>
     {% elif object.accepted %}
     <span class="tag tag-success">{% trans 'Accepted' %}</span>
     {% elif object.cancelled %}
