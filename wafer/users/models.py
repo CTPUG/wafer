@@ -20,7 +20,7 @@ from wafer.talks.models import (ACCEPTED, SUBMITTED, UNDER_CONSIDERATION,
 class UserProfile(models.Model):
 
     class Meta:
-         ordering = ['id']
+        ordering = ['id']
 
     user = models.OneToOneField(User)
     kv = models.ManyToManyField(KeyValue)
