@@ -11,8 +11,10 @@ from wafer.kv.models import KeyValue
 
 
 # constants to make things clearer elsewhere
+SUBMITTED = 'S'
+UNDER_CONSIDERATION = 'U'
+PROVISIONAL = 'P'
 ACCEPTED = 'A'
-PENDING = 'P'
 REJECTED = 'R'
 CANCELLED = 'C'
 
@@ -61,7 +63,9 @@ class Talk(models.Model):
         (ACCEPTED, 'Accepted'),
         (REJECTED, 'Not Accepted'),
         (CANCELLED, 'Talk Cancelled'),
-        (PENDING, 'Under Consideration'),
+        (UNDER_CONSIDERATION, 'Under Consideration'),
+        (SUBMITTED, 'Submitted'),
+        (PROVISIONAL, 'Provisionally Accepted'),
     )
 
     talk_id = models.AutoField(primary_key=True)
@@ -85,7 +89,7 @@ class Talk(models.Model):
                     "to submitter)"))
 
     status = models.CharField(max_length=1, choices=TALK_STATUS,
-                              default=PENDING)
+                              default=SUBMITTED)
 
     corresponding_author = models.ForeignKey(
         settings.AUTH_USER_MODEL, related_name='contact_talks',
@@ -152,7 +156,10 @@ class Talk(models.Model):
 
     # Helpful properties for the templates
     accepted = property(fget=lambda x: x.status == ACCEPTED)
-    pending = property(fget=lambda x: x.status == PENDING)
+    provisional = property(fget=lambda x: x.status == PROVISIONAL)
+    submitted = property(fget=lambda x: x.status == SUBMITTED)
+    under_consideration = property(
+        fget=lambda x: x.status == UNDER_CONSIDERATION)
     reject = property(fget=lambda x: x.status == REJECTED)
     cancelled = property(fget=lambda x: x.status == CANCELLED)
 
@@ -167,7 +174,7 @@ class Talk(models.Model):
             return True
         if self._is_among_authors(user):
             return True
-        if self.accepted:
+        if self.accepted or self.cancelled:
             return True
         return False
 
@@ -178,7 +185,7 @@ class Talk(models.Model):
     def can_edit(self, user):
         if user.has_perm('talks.change_talk'):
             return True
-        if self.pending:
+        if self.under_consideration or self.submitted:
             if self._is_among_authors(user):
                 return True
         return False

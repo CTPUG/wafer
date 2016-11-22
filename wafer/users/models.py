@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.db import models
+from django.db.models import Q
 from django.db.models.signals import post_save
 from django.utils.encoding import python_2_unicode_compatible
 
@@ -11,14 +12,15 @@ except ImportError:
     from urllib import parse as urlparse
 
 from wafer.kv.models import KeyValue
-from wafer.talks.models import ACCEPTED, PENDING
+from wafer.talks.models import (ACCEPTED, SUBMITTED, UNDER_CONSIDERATION,
+                                PROVISIONAL, CANCELLED)
 
 
 @python_2_unicode_compatible
 class UserProfile(models.Model):
 
     class Meta:
-         ordering = ['id']
+        ordering = ['id']
 
     user = models.OneToOneField(User)
     kv = models.ManyToManyField(KeyValue)
@@ -37,8 +39,15 @@ class UserProfile(models.Model):
     def accepted_talks(self):
         return self.user.talks.filter(status=ACCEPTED)
 
+    def provisional_talks(self):
+        return self.user.talks.filter(status=PROVISIONAL)
+
     def pending_talks(self):
-        return self.user.talks.filter(status=PENDING)
+        return self.user.talks.filter(Q(status=SUBMITTED) |
+                                      Q(status=UNDER_CONSIDERATION))
+
+    def cancelled_talks(self):
+        return self.user.talks.filter(status=CANCELLED)
 
     def avatar_url(self, size=96, https=True, default='mm'):
         if not self.user.email:

@@ -9,7 +9,8 @@ from django.test import Client, TestCase
 
 from wafer.tests.api_utils import SortedResultsClient
 from wafer.talks.models import (
-    Talk, TalkUrl, ACCEPTED, REJECTED, PENDING, CANCELLED)
+    Talk, TalkUrl, ACCEPTED, REJECTED, SUBMITTED, UNDER_CONSIDERATION,
+    CANCELLED, PROVISIONAL)
 
 
 def create_user(username, superuser=False, perms=()):
@@ -48,15 +49,19 @@ class UsersTalksTests(TestCase):
     def setUp(self):
         self.talk_a = create_talk("Talk A", ACCEPTED, "author_a")
         self.talk_r = create_talk("Talk R", REJECTED, "author_r")
-        self.talk_p = create_talk("Talk P", PENDING, "author_p")
+        self.talk_s = create_talk("Talk S", SUBMITTED, "author_s")
+        self.talk_u = create_talk("Talk U", UNDER_CONSIDERATION, "author_u")
+        self.talk_p = create_talk("Talk P", PROVISIONAL, "author_p")
+        self.talk_c = create_talk("Talk c", CANCELLED, "author_c")
         self.client = Client()
 
     def test_not_logged_in(self):
-        """Test that unauthenticated users only see accepted talks."""
+        """Test that unauthenticated users only see accepted and
+           cancelled talks."""
         response = self.client.get('/talks/')
         self.assertEqual(response.status_code, 200)
         self.assertEqual(set(response.context['talk_list']),
-                         set([self.talk_a]))
+                         set([self.talk_a, self.talk_c]))
 
     def test_admin_user(self):
         """Test that admin users see all talks."""
@@ -65,7 +70,8 @@ class UsersTalksTests(TestCase):
         response = self.client.get('/talks/')
         self.assertEqual(response.status_code, 200)
         self.assertEqual(set(response.context['talk_list']),
-                         set([self.talk_a, self.talk_r, self.talk_p]))
+                         set([self.talk_a, self.talk_r, self.talk_p,
+                              self.talk_s, self.talk_u, self.talk_c]))
 
     def test_user_with_view_all(self):
         """Test that users with the view_all permission see all talks."""
@@ -74,14 +80,17 @@ class UsersTalksTests(TestCase):
         response = self.client.get('/talks/')
         self.assertEqual(response.status_code, 200)
         self.assertEqual(set(response.context['talk_list']),
-                         set([self.talk_a, self.talk_r, self.talk_p]))
+                         set([self.talk_a, self.talk_r, self.talk_p,
+                              self.talk_s, self.talk_u, self.talk_c]))
 
 
 class TalkViewTests(TestCase):
     def setUp(self):
         self.talk_a = create_talk("Talk A", ACCEPTED, "author_a")
         self.talk_r = create_talk("Talk R", REJECTED, "author_r")
-        self.talk_p = create_talk("Talk P", PENDING, "author_p")
+        self.talk_s = create_talk("Talk S", SUBMITTED, "author_s")
+        self.talk_u = create_talk("Talk U", UNDER_CONSIDERATION, "author_u")
+        self.talk_p = create_talk("Talk P", PROVISIONAL, "author_p")
         self.talk_c = create_talk("Talk C", CANCELLED, "author_c")
         self.client = Client()
 
@@ -99,9 +108,15 @@ class TalkViewTests(TestCase):
         self.check_talk_view(self.talk_r, 403)
 
     def test_view_cancelled_not_logged_in(self):
-        self.check_talk_view(self.talk_c, 403)
+        self.check_talk_view(self.talk_c, 200)
 
-    def test_view_pending_not_logged_in(self):
+    def test_view_submitted_not_logged_in(self):
+        self.check_talk_view(self.talk_s, 403)
+
+    def test_view_consideration_not_logged_in(self):
+        self.check_talk_view(self.talk_u, 403)
+
+    def test_view_provisional_not_logged_in(self):
         self.check_talk_view(self.talk_p, 403)
 
     def test_view_accepted_author(self):
@@ -114,7 +129,17 @@ class TalkViewTests(TestCase):
             'username': 'author_r', 'password': 'author_r_password',
         })
 
-    def test_view_pending_author(self):
+    def test_view_submitted_author(self):
+        self.check_talk_view(self.talk_s, 200, auth={
+            'username': 'author_s', 'password': 'author_s_password',
+        })
+
+    def test_view_consideration_author(self):
+        self.check_talk_view(self.talk_u, 200, auth={
+            'username': 'author_u', 'password': 'author_u_password',
+        })
+
+    def test_view_provisional_author(self):
         self.check_talk_view(self.talk_p, 200, auth={
             'username': 'author_p', 'password': 'author_p_password',
         })
@@ -137,9 +162,21 @@ class TalkViewTests(TestCase):
             'username': 'reviewer', 'password': 'reviewer_password',
         })
 
-    def test_view_pending_has_view_all_perm(self):
+    def test_view_submitted_has_view_all_perm(self):
+        create_user('reviewer', perms=['view_all_talks'])
+        self.check_talk_view(self.talk_s, 200, auth={
+            'username': 'reviewer', 'password': 'reviewer_password',
+        })
+
+    def test_view_provisional_has_view_all_perm(self):
         create_user('reviewer', perms=['view_all_talks'])
         self.check_talk_view(self.talk_p, 200, auth={
+            'username': 'reviewer', 'password': 'reviewer_password',
+        })
+
+    def test_view_consideration_has_view_all_perm(self):
+        create_user('reviewer', perms=['view_all_talks'])
+        self.check_talk_view(self.talk_u, 200, auth={
             'username': 'reviewer', 'password': 'reviewer_password',
         })
 
@@ -234,7 +271,10 @@ class TalkUpdateTests(TestCase):
     def setUp(self):
         self.talk_a = create_talk("Talk A", ACCEPTED, "author_a")
         self.talk_r = create_talk("Talk R", REJECTED, "author_r")
-        self.talk_p = create_talk("Talk P", PENDING, "author_p")
+        self.talk_p = create_talk("Talk P", PROVISIONAL, "author_p")
+        self.talk_s = create_talk("Talk S", SUBMITTED, "author_s")
+        self.talk_u = create_talk("Talk U", UNDER_CONSIDERATION, "author_u")
+        self.talk_c = create_talk("Talk C", CANCELLED, "author_c")
         self.client = Client()
 
     def check_talk_update(self, talk, status_code, auth=None):
@@ -251,8 +291,17 @@ class TalkUpdateTests(TestCase):
     def test_update_rejected_not_logged_in(self):
         self.check_talk_update(self.talk_r, 403)
 
-    def test_update_pending_not_logged_in(self):
+    def test_update_submitted_not_logged_in(self):
+        self.check_talk_update(self.talk_s, 403)
+
+    def test_update_cancelled_not_logged_in(self):
+        self.check_talk_update(self.talk_c, 403)
+
+    def test_update_provisional_not_logged_in(self):
         self.check_talk_update(self.talk_p, 403)
+
+    def test_update_consideration_not_logged_in(self):
+        self.check_talk_update(self.talk_u, 403)
 
     def test_update_accepted_author(self):
         self.check_talk_update(self.talk_a, 403, auth={
@@ -264,9 +313,24 @@ class TalkUpdateTests(TestCase):
             'username': 'author_r', 'password': 'author_r_password',
         })
 
-    def test_update_pending_author(self):
-        self.check_talk_update(self.talk_p, 200, auth={
+    def test_update_cancelled_author(self):
+        self.check_talk_update(self.talk_c, 403, auth={
+            'username': 'author_c', 'password': 'author_c_password',
+        })
+
+    def test_update_provisional_author(self):
+        self.check_talk_update(self.talk_p, 403, auth={
             'username': 'author_p', 'password': 'author_p_password',
+        })
+
+    def test_update_submitted_author(self):
+        self.check_talk_update(self.talk_s, 200, auth={
+            'username': 'author_s', 'password': 'author_s_password',
+        })
+
+    def test_update_consideration_author(self):
+        self.check_talk_update(self.talk_u, 200, auth={
+            'username': 'author_u', 'password': 'author_u_password',
         })
 
     def test_update_accepted_superuser(self):
@@ -281,18 +345,18 @@ class TalkUpdateTests(TestCase):
             'username': 'super', 'password': 'super_password',
         })
 
-    def test_update_pending_superuser(self):
+    def test_update_submitted_superuser(self):
         create_user('super', superuser=True)
-        self.check_talk_update(self.talk_p, 200, auth={
+        self.check_talk_update(self.talk_s, 200, auth={
             'username': 'super', 'password': 'super_password',
         })
 
     def test_corresponding_author_displayed(self):
-        response = self.check_talk_update(self.talk_p, 200, auth={
-            'username': 'author_p', 'password': 'author_p_password',
+        response = self.check_talk_update(self.talk_s, 200, auth={
+            'username': 'author_s', 'password': 'author_s_password',
         })
         self.assertContains(response, (
-            '<p>Submitted by <a href="/users/author_p/">author_p</a>.</p>'),
+            '<p>Submitted by <a href="/users/author_s/">author_s</a>.</p>'),
             html=True)
 
 
@@ -300,7 +364,7 @@ class SpeakerTests(TestCase):
     def setUp(self):
         self.talk_a = create_talk("Talk A", ACCEPTED, "author_a")
         self.talk_r = create_talk("Talk R", REJECTED, "author_r")
-        self.talk_p = create_talk("Talk P", PENDING, "author_p")
+        self.talk_s = create_talk("Talk S", SUBMITTED, "author_s")
         self.client = Client()
 
     @mock.patch('wafer.users.models.UserProfile.avatar_url', mock_avatar_url)
@@ -361,7 +425,7 @@ class TalkViewSetPermissionTests(TestCase):
     def setUp(self):
         self.talk_a = create_talk("Talk A", ACCEPTED, "author_a")
         self.talk_r = create_talk("Talk R", REJECTED, "author_r")
-        self.talk_p = create_talk("Talk P", PENDING, "author_p")
+        self.talk_s = create_talk("Talk S", SUBMITTED, "author_s")
         self.client = SortedResultsClient(sort_key="title")
 
     def test_unauthorized_users(self):
@@ -394,8 +458,8 @@ class TalkViewSetPermissionTests(TestCase):
         response = self.client.get('/talks/api/talks/')
         self.assertEqual(response.data['count'], 3)
         self.assertEqual(response.data['results'][0]['title'], "Talk A")
-        self.assertEqual(response.data['results'][1]['title'], "Talk P")
-        self.assertEqual(response.data['results'][2]['title'], "Talk R")
+        self.assertEqual(response.data['results'][1]['title'], "Talk R")
+        self.assertEqual(response.data['results'][2]['title'], "Talk S")
         response = self.client.get(
             '/talks/api/talks/%d/' % self.talk_a.talk_id)
         self.assertEqual(response.data['title'], 'Talk A')
@@ -409,8 +473,8 @@ class TalkViewSetPermissionTests(TestCase):
         response = self.client.get('/talks/api/talks/')
         self.assertEqual(response.data['count'], 3)
         self.assertEqual(response.data['results'][0]['title'], "Talk A")
-        self.assertEqual(response.data['results'][1]['title'], "Talk P")
-        self.assertEqual(response.data['results'][2]['title'], "Talk R")
+        self.assertEqual(response.data['results'][1]['title'], "Talk R")
+        self.assertEqual(response.data['results'][2]['title'], "Talk S")
         response = self.client.get(
             '/talks/api/talks/%d/' % self.talk_a.talk_id)
         self.assertEqual(response.data['title'], 'Talk A')
@@ -431,12 +495,12 @@ class TalkViewSetPermissionTests(TestCase):
         self.assertEqual(response.data['results'][0]['title'], "Talk A")
         self.assertEqual(response.data['results'][1]['title'], "Talk R")
 
-    def test_author_p_sees_own_talk(self):
-        self.client.login(username='author_p', password='author_p_password')
+    def test_author_s_sees_own_talk(self):
+        self.client.login(username='author_s', password='author_s_password')
         response = self.client.get('/talks/api/talks/')
         self.assertEqual(response.data['count'], 2)
         self.assertEqual(response.data['results'][0]['title'], "Talk A")
-        self.assertEqual(response.data['results'][1]['title'], "Talk P")
+        self.assertEqual(response.data['results'][1]['title'], "Talk S")
 
 
 class TalkViewSetTests(TestCase):
@@ -529,7 +593,7 @@ class TalkUrlsViewSetPermissionTests(TestCase):
     def setUp(self):
         self.talk_a = create_talk("Talk A", ACCEPTED, "author_a")
         self.talk_r = create_talk("Talk R", REJECTED, "author_r")
-        self.talk_p = create_talk("Talk P", PENDING, "author_p")
+        self.talk_s = create_talk("Talk S", SUBMITTED, "author_s")
         self.client = SortedResultsClient(sort_key="url")
 
     def assert_urls_accessible(self, talk):
@@ -550,14 +614,14 @@ class TalkUrlsViewSetPermissionTests(TestCase):
 
     def test_unauthorized_users_get_no_talk_urls(self):
         self.assert_urls_forbidden(self.talk_a)
-        self.assert_urls_forbidden(self.talk_p)
+        self.assert_urls_forbidden(self.talk_s)
         self.assert_urls_forbidden(self.talk_r)
         self.assert_missing_talk_urls_code(403)
 
     def test_ordinary_users_get_no_talk_urls(self):
         create_user('norm')
         self.assert_urls_forbidden(self.talk_a)
-        self.assert_urls_forbidden(self.talk_p)
+        self.assert_urls_forbidden(self.talk_s)
         self.assert_urls_forbidden(self.talk_r)
         self.assert_missing_talk_urls_code(403)
 
@@ -565,7 +629,7 @@ class TalkUrlsViewSetPermissionTests(TestCase):
         create_user('super', True)
         self.client.login(username='super', password='super_password')
         self.assert_urls_accessible(self.talk_a)
-        self.assert_urls_accessible(self.talk_p)
+        self.assert_urls_accessible(self.talk_s)
         self.assert_urls_accessible(self.talk_r)
         self.assert_missing_talk_urls_code(404)
 

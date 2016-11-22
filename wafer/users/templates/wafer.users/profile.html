@@ -73,7 +73,7 @@
 </div>
 {% endif %}
 {% if can_edit %}
-    {% if profile.pending_talks.exists or profile.accepted_talks.exists %}
+    {% if profile.pending_talks.exists or profile.accepted_talks.exists or profile.provisional_talks.exists%}
         {% if profile.is_registered %}
             <div class="tag tag-success">
                 {% blocktrans %}
@@ -103,10 +103,29 @@
 </div>
 {% endfor %}
 {% endif %}
+{% if profile.cancelled_talks.exists %}
+<h2>{% trans 'Cancelled Talks:' %}</h2>
+{% for talk in profile.cancelled_talks %}
+<div class="well">
+    <a href="{{ talk.get_absolute_url }}">{{ talk.title }}</a>
+    <p>{{ talk.abstract.rendered|safe }}</p>
+</div>
+{% endfor %}
+{% endif %}
+{% if profile.provisional_talks.exists %}
+<h2>{% trans 'Provisionally Accepted Talks:' %}</h2>
+{% for talk in profile.provisional_talks %}
+<div class="well">
+    <a href="{{ talk.get_absolute_url }}">{{ talk.title }}</a>
+    <p>{{ talk.abstract.rendered|safe }}</p>
+</div>
+{% endfor %}
+{% endif %}
+
 {# Submitted talk proposals are only visible to the owner #}
 {% if can_edit %}
 {% if profile.pending_talks.exists %}
-<h2>{% trans 'Submitted Talks (under consideration):' %}</h2>
+<h2>{% trans 'Submitted or Under Consideration Talks:' %}</h2>
 {% for talk in profile.pending_talks %}
 <div class="well">
     <a href="{{ talk.get_absolute_url }}">{{ talk.title }}</a>

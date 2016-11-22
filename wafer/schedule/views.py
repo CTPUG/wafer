@@ -1,5 +1,6 @@
 import datetime
 
+from django.db.models import Q
 from django.views.generic import DetailView, TemplateView
 
 from rest_framework import viewsets
@@ -9,7 +10,7 @@ from wafer.schedule.models import Venue, Slot, Day
 from wafer.schedule.admin import check_schedule, validate_schedule
 from wafer.schedule.models import ScheduleItem
 from wafer.schedule.serializers import ScheduleItemSerializer
-from wafer.talks.models import ACCEPTED
+from wafer.talks.models import ACCEPTED, CANCELLED
 from wafer.talks.models import Talk
 
 
@@ -292,7 +293,8 @@ class ScheduleEditView(TemplateView):
         else:
             day = days.first()
 
-        accepted_talks = Talk.objects.filter(status=ACCEPTED)
+        public_talks = Talk.objects.filter(Q(status=ACCEPTED) |
+                                           Q(status=CANCELLED))
         venues = Venue.objects.filter(days__in=[day])
         slots = Slot.objects.all().select_related(
             'day', 'previous_slot').prefetch_related(
@@ -308,8 +310,8 @@ class ScheduleEditView(TemplateView):
         context['day'] = day
         context['venues'] = venues
         context['slots'] = aggregated_slots
-        context['talks_all'] = accepted_talks
-        context['talks_unassigned'] = accepted_talks.filter(scheduleitem=None)
+        context['talks_all'] = public_talks
+        context['talks_unassigned'] = public_talks.filter(scheduleitem=None)
         context['pages'] = Page.objects.all()
         context['days'] = days
         context['validation_errors'] = validate_schedule()

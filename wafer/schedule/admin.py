@@ -1,5 +1,6 @@
 import datetime
 
+from django.db.models import Q
 from django.conf.urls import url
 from django.contrib import admin
 from django.contrib import messages
@@ -8,7 +9,7 @@ from django.utils.translation import ugettext as _
 from django import forms
 
 from wafer.schedule.models import Day, Venue, Slot, ScheduleItem
-from wafer.talks.models import Talk, ACCEPTED
+from wafer.talks.models import Talk, ACCEPTED, CANCELLED
 from wafer.pages.models import Page
 from wafer.utils import cache_result
 
@@ -78,7 +79,7 @@ def validate_items(all_items=None):
             validation.append(item)
         elif item.talk is None and item.page is None:
             validation.append(item)
-        elif item.talk and item.talk.status != ACCEPTED:
+        elif item.talk and item.talk.status not in [ACCEPTED, CANCELLED]:
             validation.append(item)
     return validation
 
@@ -196,7 +197,8 @@ class ScheduleItemAdminForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(ScheduleItemAdminForm, self).__init__(*args, **kwargs)
-        self.fields['talk'].queryset = Talk.objects.filter(status=ACCEPTED)
+        self.fields['talk'].queryset = Talk.objects.filter(
+                Q(status=ACCEPTED) | Q(status=CANCELLED))
         # Present all pages as possible entries in the schedule
         self.fields['page'].queryset = Page.objects.all()
 

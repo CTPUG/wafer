@@ -10,7 +10,8 @@ from wafer.schedule.admin import (
     find_duplicate_schedule_items, find_clashes, find_invalid_venues,
     find_non_contiguous)
 from wafer.schedule.models import Day, Venue, Slot, ScheduleItem
-from wafer.talks.models import Talk, ACCEPTED, REJECTED, PENDING
+from wafer.talks.models import (Talk, ACCEPTED, REJECTED, CANCELLED,
+                                SUBMITTED, UNDER_CONSIDERATION)
 
 
 class DummyForm(object):
@@ -283,7 +284,17 @@ class ValidationTests(TestCase):
         invalid = validate_items()
         assert set(invalid) == set([item1, item2])
 
-        talk.status = PENDING
+        talk.status = SUBMITTED
+        talk.save()
+        invalid = validate_items()
+        assert set(invalid) == set([item1, item2])
+
+        talk.status = CANCELLED
+        talk.save()
+        invalid = validate_items()
+        assert set(invalid) == set([item1])
+
+        talk.status = UNDER_CONSIDERATION
         talk.save()
         invalid = validate_items()
         assert set(invalid) == set([item1, item2])
