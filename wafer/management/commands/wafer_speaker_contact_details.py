@@ -1,6 +1,5 @@
 import sys
 import csv
-from optparse import make_option
 
 from django.core.management.base import BaseCommand
 
@@ -11,14 +10,13 @@ from wafer.talks.models import ACCEPTED
 class Command(BaseCommand):
     help = "List contact details for the speakers."
 
-    option_list = BaseCommand.option_list + tuple([
-        make_option('--speakers', action="store_true", default=False,
-                    help='List speaker email addresses'
-                    ' (for accepted talks)'),
-        make_option('--allspeakers', action="store_true", default=False,
-                    help='List speaker email addresses'
-                    ' (for all talks)'),
-    ])
+    def add_arguments(self, parser):
+        parser.add_argument('--speakers', action="store_true",
+                            help='List speaker email addresses'
+                                 ' (for accepted talks)')
+        parser.add_argument('--allspeakers', action="store_true",
+                            help='List speaker email addresses'
+                                 ' (for all talks)')
 
     def _speaker_emails(self, options):
         people = get_user_model().objects.filter(

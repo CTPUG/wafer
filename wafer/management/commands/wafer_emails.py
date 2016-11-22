@@ -1,6 +1,5 @@
 import sys
 import csv
-from optparse import make_option
 
 from django.core.management.base import BaseCommand
 
@@ -11,19 +10,18 @@ from wafer.talks.models import ACCEPTED
 class Command(BaseCommand):
     help = "List author or web-site user email addresses."
 
-    option_list = BaseCommand.option_list + tuple([
-        make_option('--authors', action="store_true", default=False,
-                    help='List author email addresses only'
-                    ' (for accepted talks)'),
-        make_option('--allauthors', action="store_true", default=False,
-                    help='List author emails only (for all talks)'),
-        make_option('--speakers', action="store_true", default=False,
-                    help='List speaker email addresses'
-                    ' (for accepted talks)'),
-        make_option('--allspeakers', action="store_true", default=False,
-                    help='List speaker email addresses'
-                    ' (for all talks)'),
-    ])
+    def add_arguments(self, parser):
+        parser.add_argument('--authors', action="store_true",
+                            help='List author email addresses only'
+                                 ' (for accepted talks)')
+        parser.add_argument('--allauthors', action="store_true",
+                            help='List author emails only (for all talks)')
+        parser.add_argument('--speakers', action="store_true",
+                            help='List speaker email addresses'
+                                 ' (for accepted talks)')
+        parser.add_argument('--allspeakers', action="store_true",
+                            help='List speaker email addresses'
+                                 ' (for all talks)')
 
     def _website_user_emails(self, options):
         query = {}
