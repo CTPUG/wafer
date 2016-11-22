@@ -7,9 +7,6 @@ from django.contrib.auth.models import Group, Permission
 class Command(BaseCommand):
     help = "Add some useful default groups"
 
-    option_list = BaseCommand.option_list + tuple([
-    ])
-
     GROUPS = {
         # Permissions are specified as (app, code_name) pairs
         'Page Editors': (
