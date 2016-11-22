@@ -7,15 +7,15 @@
     {% for talk in talk_list %}
     <div>
         {% if talk.submitted %}
-        <span class="label label-info" title="{% trans 'Submitted' %}">{{ talk.status }}</span>
+        <span class="tag tag-info" title="{% trans 'Submitted' %}">{{ talk.status }}</span>
         {% elif talk.under_consideration %}
-        <span class="label label-info" title="{% trans 'Under consideration' %}">{{ talk.status }}</span>
+        <span class="tag tag-info" title="{% trans 'Under consideration' %}">{{ talk.status }}</span>
         {% elif talk.reject %}
-        <span class="label label-danger" title="{% trans 'Not accepted' %}">{{ talk.status }}</span>
+        <span class="tag tag-danger" title="{% trans 'Not accepted' %}">{{ talk.status }}</span>
         {% elif talk.cancelled %}
-        <span class="label label-warning" title="{% trans 'Talk Cancelled' %}">{{ talk.status }}</span>
+        <span class="tag tag-warning" title="{% trans 'Talk Cancelled' %}">{{ talk.status }}</span>
         {% elif talk.provisional %}
-        <span class="label label-success" title="{% trans 'Provisionally Accepted' %}">{{ talk.status }}</span>
+        <span class="tag tag-success" title="{% trans 'Provisionally Accepted' %}">{{ talk.status }}</span>
         {% endif %}
         <a class="page-link" href="{{ talk.get_absolute_url }}">{{ talk.title }}</a>
         by
