@@ -6,9 +6,6 @@ from django.contrib.auth import get_user_model
 class Command(BaseCommand):
     help = "Misc stats."
 
-    option_list = BaseCommand.option_list + tuple([
-    ])
-
     def _speakers(self, *args, **kwargs):
         return get_user_model().objects.filter(
             contact_talks__isnull=False).filter(*args, **kwargs).count()

@@ -1,6 +1,5 @@
 import sys
 import csv
-from optparse import make_option
 
 from django.core.management.base import BaseCommand
 
@@ -13,10 +12,9 @@ class Command(BaseCommand):
             " speakers for accepted talk, but this can be overriden by"
             " the --all option")
 
-    option_list = BaseCommand.option_list + tuple([
-        make_option('--all', action="store_true", default=False,
-                    help='List speakers and tickets (for all talks)'),
-    ])
+    def add_arguments(self, parser):
+        parser.add_argument('--all', action="store_true",
+                            help='List speakers and tickets (for all talks)')
 
     def _speaker_tickets(self, options):
         people = get_user_model().objects.filter(
