@@ -1,5 +1,5 @@
 {% load i18n %}
-<nav class="navbar navbar-dark bg-inverse navbar-fixed-top {{ WAFER_NAVIGATION_VISIBILITY }}">
+<nav class="navbar navbar-dark bg-inverse navbar-static-top {{ WAFER_NAVIGATION_VISIBILITY }}">
   <div class="container">
     {% block navtogglebutton %}
     <button type="button" class="navbar-toggler pull-xs-right hidden-sm-up" data-toggle="collapse" data-target="#wafer-navbar-collapse">
@@ -30,12 +30,12 @@
         </a></li>
         {% else %}
         <li class="nav-item dropdown">
-          <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-            {{ item.label }}<b class="caret"></b>
+          <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">
+            {{ item.label }}
           </a>
           <ul class="dropdown-menu">
             {% for subitem in item.items %}
-            <li><a href="{{ subitem.url }}">
+            <li><a class="dropdown-item" href="{{ subitem.url }}">
                 {{ subitem.label }}
             </a></li>
             {% endfor %}
@@ -51,19 +51,19 @@
         {% block navauthenticated %}
         <li class="nav-item dropdown">
           <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">
-            {{ user.username }}<b class="caret"></b>
+            {{ user.username }}
           </a>
           <ul class="dropdown-menu">
-            <li><a href="{% url 'wafer_user_profile' username=user.username %}">
+            <li><a class="dropdown-item" href="{% url 'wafer_user_profile' username=user.username %}">
                 {% blocktrans with name=user.userprofile.display_name %}
                 {{ name }}'s profile
                 {% endblocktrans %}
             </a></li>
-            <li><a href="{% url 'auth_logout' %}">
+            <li><a class="dropdown-item" href="{% url 'auth_logout' %}">
                 {% trans 'Log out' %}
             </a></li>
             {% if user.is_staff %}
-            <li><a href="{% url 'admin:index' %}">
+            <li><a class="dropdown-item" href="{% url 'admin:index' %}">
                 {% trans 'Site admin' %}
             </a></li>
             {% endif %}
