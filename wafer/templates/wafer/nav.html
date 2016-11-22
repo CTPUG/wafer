@@ -51,19 +51,19 @@
         {% block navauthenticated %}
         <li class="nav-item dropdown">
           <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">
-            {{ user.username }}<b class="caret"></b>
+            {{ user.username }}
           </a>
           <ul class="dropdown-menu">
-            <li><a href="{% url 'wafer_user_profile' username=user.username %}">
+            <li><a class="dropdown-item" href="{% url 'wafer_user_profile' username=user.username %}">
                 {% blocktrans with name=user.userprofile.display_name %}
                 {{ name }}'s profile
                 {% endblocktrans %}
             </a></li>
-            <li><a href="{% url 'auth_logout' %}">
+            <li><a class="dropdown-item" href="{% url 'auth_logout' %}">
                 {% trans 'Log out' %}
             </a></li>
             {% if user.is_staff %}
-            <li><a href="{% url 'admin:index' %}">
+            <li><a class="dropdown-item" href="{% url 'admin:index' %}">
                 {% trans 'Site admin' %}
             </a></li>
             {% endif %}
