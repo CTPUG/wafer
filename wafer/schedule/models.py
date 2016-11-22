@@ -222,6 +222,13 @@ class ScheduleItem(models.Model):
 
 
 def invalidate_check_schedule(*args, **kw):
+    sender = kw.pop('sender', None)
+    if sender is Talk or sender is Page:
+        # For talks and pages, we only invalidate the schedule cache
+        # if they in the schedule
+        instance = kw.pop('instance')
+        if not instance.get_in_schedule():
+            return
     from wafer.schedule.admin import check_schedule
     check_schedule.invalidate()
 
@@ -235,3 +242,11 @@ post_delete.connect(invalidate_check_schedule, sender=Day)
 post_delete.connect(invalidate_check_schedule, sender=Venue)
 post_delete.connect(invalidate_check_schedule, sender=Slot)
 post_delete.connect(invalidate_check_schedule, sender=ScheduleItem)
+
+# We also hook up calls from Page and Talk, so
+# changes to those reflect in the schedule immediately
+# We don't hook up the delete signals, because the deletion
+# of the related ScheduleItem will do the right thing
+# if they are in the schedule
+post_save.connect(invalidate_check_schedule, sender=Talk)
+post_save.connect(invalidate_check_schedule, sender=Page)
