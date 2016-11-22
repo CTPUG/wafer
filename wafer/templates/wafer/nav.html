@@ -30,12 +30,12 @@
         </a></li>
         {% else %}
         <li class="nav-item dropdown">
-          <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-            {{ item.label }}<b class="caret"></b>
+          <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">
+            {{ item.label }}
           </a>
           <ul class="dropdown-menu">
             {% for subitem in item.items %}
-            <li><a href="{{ subitem.url }}">
+            <li><a class="dropdown-item" href="{{ subitem.url }}">
                 {{ subitem.label }}
             </a></li>
             {% endfor %}
