@@ -306,7 +306,7 @@ class SlotDayFilter(admin.SimpleListFilter):
 class SlotAdmin(admin.ModelAdmin):
     form = SlotAdminForm
 
-    list_display = ('__str__', 'get_day', 'get_start_time', 'end_time')
+    list_display = ('__str__', 'get_day', 'get_formatted_start_time', 'end_time')
     list_editable = ('end_time',)
 
     change_list_template = 'admin/slot_list.html'
