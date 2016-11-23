@@ -89,6 +89,7 @@ class Slot(models.Model):
         if self.previous_slot:
             return self.previous_slot.end_time
         return self.start_time
+    get_start_time.short_description = 'Start Time'
 
     def get_duration(self):
         """Return the duration of the slot as hours and minutes.
@@ -107,6 +108,7 @@ class Slot(models.Model):
         if self.previous_slot:
             return self.previous_slot.get_day()
         return self.day
+    get_day.short_description = 'Day'
 
     def clean(self):
         """Ensure we have start_time < end_time"""
