@@ -198,7 +198,7 @@ class ScheduleItemAdminForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(ScheduleItemAdminForm, self).__init__(*args, **kwargs)
         self.fields['talk'].queryset = Talk.objects.filter(
-                Q(status=ACCEPTED) | Q(status=CANCELLED))
+            Q(status=ACCEPTED) | Q(status=CANCELLED))
         # Present all pages as possible entries in the schedule
         self.fields['page'].queryset = Page.objects.all()
 
@@ -294,7 +294,8 @@ class SlotDayFilter(admin.SimpleListFilter):
             all_slots = slots[:]
             # Recursively find slots with a previous_slot set to one of these
             while Slot.objects.filter(previous_slot__in=slots).exists():
-                slots = list(Slot.objects.filter(previous_slot__in=slots).all())
+                slots = list(Slot.objects.filter(
+                    previous_slot__in=slots).all())
                 all_slots.extend(slots)
             # Return the filtered list
             return queryset.filter(Q(previous_slot__in=all_slots) |
@@ -306,7 +307,8 @@ class SlotDayFilter(admin.SimpleListFilter):
 class SlotAdmin(admin.ModelAdmin):
     form = SlotAdminForm
 
-    list_display = ('__str__', 'get_day', 'get_formatted_start_time', 'end_time')
+    list_display = ('__str__', 'get_day', 'get_formatted_start_time',
+                    'end_time')
     list_editable = ('end_time',)
 
     change_list_template = 'admin/slot_list.html'
