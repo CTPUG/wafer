@@ -58,15 +58,20 @@ class Slot(models.Model):
     #      requirements.
 
     previous_slot = models.ForeignKey('self', null=True, blank=True,
-                                      help_text=_("Previous slot"))
+                                      help_text=_("Previous slot if "
+                                                  "applicable (slots should "
+                                                  "have either a previous "
+                                                  "slot OR a day and start "
+                                                  "time set)"))
 
     day = models.ForeignKey(Day, null=True, blank=True,
                             on_delete=models.PROTECT,
-                            help_text=_("Day for this slot"))
+                            help_text=_("Day for this slot (if no "
+                                        "previous slot selected)"))
 
     start_time = models.TimeField(null=True, blank=True,
                                   help_text=_("Start time (if no"
-                                              " previous slot)"))
+                                              " previous slot selected)"))
     end_time = models.TimeField(null=True, help_text=_("Slot end time"))
 
     name = models.CharField(max_length=1024, null=True, blank=True,
@@ -115,6 +120,11 @@ class Slot(models.Model):
                                   " or previous slot set")
         if self.get_start_time() >= self.end_time:
             raise ValidationError("Start time must be before end time")
+        # Slots should either have day + start_time, or a previous_slot, but
+        # not both (since previous_slot overrides the others)
+        if (self.day or self.start_time) and self.previous_slot:
+            raise ValidationError("Slots with a previous slot should not "
+                                  "have a day or start_time set")
 
 
 @python_2_unicode_compatible
