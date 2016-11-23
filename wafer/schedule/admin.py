@@ -308,8 +308,8 @@ class SlotAdmin(admin.ModelAdmin):
             # created , and we specify them as a sequence using
             # "previous_slot" so tweaking start times is simple.
             prev = obj
-            end = datetime.datetime.combine(prev.day.date, prev.end_time)
-            start = datetime.datetime.combine(prev.day.date,
+            end = datetime.datetime.combine(prev.get_day().date, prev.end_time)
+            start = datetime.datetime.combine(prev.get_day().date,
                                               prev.get_start_time())
             slot_len = end - start
             for loop in range(form.cleaned_data['additional']):
