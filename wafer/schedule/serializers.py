@@ -43,5 +43,3 @@ class ScheduleItemSerializer(serializers.HyperlinkedModelSerializer):
             existing_schedule_item.save()
             return existing_schedule_item
         return super(ScheduleItemSerializer, self).create(validated_data)
-
-
