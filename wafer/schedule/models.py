@@ -199,6 +199,7 @@ class ScheduleItem(models.Model):
             return u'%s, %s' % (day, start)
         else:
             return 'WARNING: No Time and Day Specified'
+    get_start_time.short_description = 'Start Time'
 
     def __str__(self):
         return u'%s in %s at %s' % (self.get_desc(), self.venue,
