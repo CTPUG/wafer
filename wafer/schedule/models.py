@@ -86,14 +86,21 @@ class Slot(models.Model):
             slot = u'Slot %s' % self.name
         else:
             slot = u'Slot'
-        start = self.get_start_time().strftime('%H:%M')
-        end = self.end_time.strftime('%H:%M')
+        start = self.get_formatted_start_time()
+        end = self.get_formatted_end_time()
         return u'%s: %s: %s - %s' % (slot, self.get_day(), start, end)
 
     def get_start_time(self):
         if self.previous_slot:
             return self.previous_slot.end_time
         return self.start_time
+
+    def get_formatted_start_time(self):
+        return self.get_start_time().strftime('%H:%M')
+    get_formatted_start_time.short_description = 'Start Time'
+
+    def get_formatted_end_time(self):
+        return self.end_time.strftime('%H:%M')
 
     def get_duration(self):
         """Return the duration of the slot as hours and minutes.
@@ -112,6 +119,7 @@ class Slot(models.Model):
         if self.previous_slot:
             return self.previous_slot.get_day()
         return self.day
+    get_day.short_description = 'Day'
 
     def clean(self):
         """Ensure we have start_time < end_time"""
@@ -196,11 +204,12 @@ class ScheduleItem(models.Model):
     def get_start_time(self):
         slots = list(self.slots.all())
         if slots:
-            start = slots[0].get_start_time().strftime('%H:%M')
+            start = slots[0].get_formatted_start_time()
             day = slots[0].get_day()
             return u'%s, %s' % (day, start)
         else:
             return 'WARNING: No Time and Day Specified'
+    get_start_time.short_description = 'Start Time'
 
     def __str__(self):
         return u'%s in %s at %s' % (self.get_desc(), self.venue,

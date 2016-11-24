@@ -198,7 +198,7 @@ class ScheduleItemAdminForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(ScheduleItemAdminForm, self).__init__(*args, **kwargs)
         self.fields['talk'].queryset = Talk.objects.filter(
-                Q(status=ACCEPTED) | Q(status=CANCELLED))
+            Q(status=ACCEPTED) | Q(status=CANCELLED))
         # Present all pages as possible entries in the schedule
         self.fields['page'].queryset = Page.objects.all()
 
@@ -273,13 +273,47 @@ class SlotAdminAddForm(SlotAdminForm):
                                                 "this one"))
 
 
+class SlotDayFilter(admin.SimpleListFilter):
+    # Allow filtering slots by the day, to make editing slots easier
+    # We need to do this as a filter, since we can't use sorting since
+    # day is dynamic (either the model field or the previous_slot)
+    title = _('Day')
+    parameter_name = 'day'
+
+    def lookups(self, request, model_admin):
+        # List filter wants the value to be a string, so we use
+        # pk to avoid bouncing through strptime.
+        return [('%d' % day.pk, str(day)) for day in Day.objects.all()]
+
+    def queryset(self, request, queryset):
+        if self.value():
+            day_pk = int(self.value())
+            day = Day.objects.get(pk=day_pk)
+            # Find all slots that have the day explicitly set
+            slots = list(Slot.objects.filter(day=day))
+            all_slots = slots[:]
+            # Recursively find slots with a previous_slot set to one of these
+            while Slot.objects.filter(previous_slot__in=slots).exists():
+                slots = list(Slot.objects.filter(
+                    previous_slot__in=slots).all())
+                all_slots.extend(slots)
+            # Return the filtered list
+            return queryset.filter(Q(previous_slot__in=all_slots) |
+                                   Q(day=day))
+        # No value, so no filtering
+        return queryset
+
+
 class SlotAdmin(admin.ModelAdmin):
     form = SlotAdminForm
 
-    list_display = ('__str__', 'day', 'end_time')
+    list_display = ('__str__', 'get_day', 'get_formatted_start_time',
+                    'end_time')
     list_editable = ('end_time',)
 
     change_list_template = 'admin/slot_list.html'
+
+    list_filter = (SlotDayFilter, )
 
     def changelist_view(self, request, extra_context=None):
         extra_context = extra_context or {}
@@ -308,8 +342,8 @@ class SlotAdmin(admin.ModelAdmin):
             # created , and we specify them as a sequence using
             # "previous_slot" so tweaking start times is simple.
             prev = obj
-            end = datetime.datetime.combine(prev.day.date, prev.end_time)
-            start = datetime.datetime.combine(prev.day.date,
+            end = datetime.datetime.combine(prev.get_day().date, prev.end_time)
+            start = datetime.datetime.combine(prev.get_day().date,
                                               prev.get_start_time())
             slot_len = end - start
             for loop in range(form.cleaned_data['additional']):
