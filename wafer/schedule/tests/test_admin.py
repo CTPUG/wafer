@@ -6,7 +6,8 @@ from django.http import HttpRequest
 
 from wafer.pages.models import Page
 from wafer.schedule.admin import (
-    SlotAdmin, find_overlapping_slots, validate_items,
+    SlotAdmin, SlotDayFilter,
+    find_overlapping_slots, validate_items,
     find_duplicate_schedule_items, find_clashes, find_invalid_venues,
     find_non_contiguous)
 from wafer.schedule.models import Day, Venue, Slot, ScheduleItem
@@ -152,6 +153,171 @@ class SlotAdminTests(TestCase):
         slot2 = Slot.objects.filter(previous_slot=slot1).get()
         self.assertEqual(slot2.get_start_time(), slot1.end_time)
         self.assertEqual(slot2.end_time, D.time(13, 00, 0))
+
+
+class ListFilterTest(TestCase):
+    """Test the list filter"""
+    # Because of how we implement the filter, the order of results
+    # won't match order of creation or time order. This isn't
+    # serious, because the admin interface will sort things
+    # anyway by the user's chosen key, but it does mean we use sets
+    # in several test case to avoid issues with this.
+
+    def setUp(self):
+        """Create some data for use in the actual tests."""
+        self.day1 = Day.objects.create(date=D.date(2013, 9, 22))
+        self.day2 = Day.objects.create(date=D.date(2013, 9, 23))
+        self.day3 = Day.objects.create(date=D.date(2013, 9, 24))
+        self.admin = SlotAdmin(Slot, None)
+
+    def _make_filter(self, day):
+        """create a list filter for testing."""
+        # We can get away with request None, since SimpleListFilter
+        # doesn't use request in the bits we want to test
+        if day:
+            return SlotDayFilter(None, {'day': str(day.pk)}, Slot, self.admin)
+        else:
+            return SlotDayFilter(None, {'day': None}, Slot, self.admin)
+
+    def test_filter_lookups(self):
+        """Test that filter lookups are sane."""
+        TestFilter = self._make_filter(self.day1)
+        # Check lookup details
+        lookups = TestFilter.lookups(None, self.admin)
+        self.assertEqual(len(lookups), 3)
+        self.assertEqual(lookups[0], ('%d' % self.day1.pk, str(self.day1)))
+        TestFilter = self._make_filter(self.day3)
+        lookups2 = TestFilter.lookups(None, self.admin)
+        self.assertEqual(lookups, lookups2)
+
+    def test_queryset_day_time(self):
+        """Test queries with slots created purely by day + start_time"""
+        slots = {}
+        slots[self.day1] = [Slot(day=self.day1, start_time=D.time(11, 0, 0),
+                                 end_time=D.time(12, 00, 0))]
+        slots[self.day2] = [Slot(day=self.day2, start_time=D.time(11, 0, 0),
+                                 end_time=D.time(12, 00, 0))]
+        # Day1 slots
+        for x in range(12, 17):
+            slots[self.day1].append(Slot(day=self.day1,
+                                         start_time=D.time(x, 0, 0),
+                                         end_time=D.time(x+1, 0, 0)))
+            if x < 15:
+                # Fewer slots for day 2
+                slots[self.day2].append(Slot(day=self.day2,
+                                             start_time=D.time(x, 0, 0),
+                                             end_time=D.time(x+1, 0, 0)))
+        for d in slots:
+            for s in slots[d]:
+                s.save()
+        # Check Null filter
+        TestFilter = self._make_filter(None)
+        self.assertEqual(list(TestFilter.queryset(None, Slot.objects.all())),
+                         list(Slot.objects.all()))
+        # Test Day1
+        TestFilter = self._make_filter(self.day1)
+        queries = set(TestFilter.queryset(None, Slot.objects.all()))
+        self.assertEqual(queries, set(slots[self.day1]))
+        # Test Day2
+        TestFilter = self._make_filter(self.day2)
+        queries = set(TestFilter.queryset(None, Slot.objects.all()))
+        self.assertEqual(queries, set(slots[self.day2]))
+
+        # Check no match case
+        TestFilter = self._make_filter(self.day3)
+        queries = list(TestFilter.queryset(None, Slot.objects.all()))
+        self.assertEqual(queries, [])
+
+    def test_queryset_prev_slot(self):
+        """Test lookup with a chain of previous slots."""
+        slots = {}
+        prev = Slot(day=self.day1, start_time=D.time(11, 0, 0),
+                    end_time=D.time(12, 00, 0))
+        prev.save()
+        slots[self.day1] = [prev]
+        prev = Slot(day=self.day2, start_time=D.time(11, 0, 0),
+                    end_time=D.time(12, 00, 0))
+        prev.save()
+        slots[self.day2] = [prev]
+        # Day1 slots
+        for x in range(12, 17):
+            prev1 = slots[self.day1][-1]
+            slots[self.day1].append(Slot(previous_slot=prev1,
+                                         end_time=D.time(x+1, 0, 0)))
+            slots[self.day1][-1].save()
+            if x < 15:
+                prev2 = slots[self.day2][-1]
+                # Fewer slots for day 2
+                slots[self.day2].append(Slot(previous_slot=prev2,
+                                             end_time=D.time(x+1, 0, 0)))
+                slots[self.day2][-1].save()
+        # Check Null filter
+        TestFilter = self._make_filter(None)
+        self.assertEqual(list(TestFilter.queryset(None, Slot.objects.all())),
+                         list(Slot.objects.all()))
+        # Test Day1
+        TestFilter = self._make_filter(self.day1)
+        queries = set(TestFilter.queryset(None, Slot.objects.all()))
+        self.assertEqual(queries, set(slots[self.day1]))
+        # Test Day2
+        TestFilter = self._make_filter(self.day2)
+        queries = set(TestFilter.queryset(None, Slot.objects.all()))
+        self.assertEqual(queries, set(slots[self.day2]))
+
+        # Check no match case
+        TestFilter = self._make_filter(self.day3)
+        queries = list(TestFilter.queryset(None, Slot.objects.all()))
+        self.assertEqual(queries, [])
+
+    def test_queryset_mixed(self):
+        """Test with a mix of day+time and previous slot cases."""
+        slots = {}
+        prev = Slot(day=self.day1, start_time=D.time(11, 0, 0),
+                    end_time=D.time(12, 00, 0))
+        prev.save()
+        slots[self.day1] = [prev]
+        prev = Slot(day=self.day2, start_time=D.time(11, 0, 0),
+                    end_time=D.time(12, 00, 0))
+        prev.save()
+        slots[self.day2] = [prev]
+        # Day1 slots
+        for x in range(12, 20):
+            prev1 = slots[self.day1][-1]
+            if x % 2:
+                slots[self.day1].append(Slot(previous_slot=prev1,
+                                             end_time=D.time(x+1, 0, 0)))
+            else:
+                slots[self.day1].append(Slot(day=self.day1,
+                                             start_time=D.time(x, 0, 0),
+                                             end_time=D.time(x+1, 0, 0)))
+
+            slots[self.day1][-1].save()
+            prev2 = slots[self.day2][-1]
+            if x % 5:
+                slots[self.day2].append(Slot(previous_slot=prev2,
+                                             end_time=D.time(x+1, 0, 0)))
+            else:
+                slots[self.day2].append(Slot(day=self.day2,
+                                             start_time=D.time(x, 0, 0),
+                                             end_time=D.time(x+1, 0, 0)))
+            slots[self.day2][-1].save()
+        # Check Null filter
+        TestFilter = self._make_filter(None)
+        self.assertEqual(list(TestFilter.queryset(None, Slot.objects.all())),
+                         list(Slot.objects.all()))
+        # Test Day1
+        TestFilter = self._make_filter(self.day1)
+        queries = set(TestFilter.queryset(None, Slot.objects.all()))
+        self.assertEqual(queries, set(slots[self.day1]))
+        # Test Day2
+        TestFilter = self._make_filter(self.day2)
+        queries = set(TestFilter.queryset(None, Slot.objects.all()))
+        self.assertEqual(queries, set(slots[self.day2]))
+
+        # Check no match case
+        TestFilter = self._make_filter(self.day3)
+        queries = list(TestFilter.queryset(None, Slot.objects.all()))
+        self.assertEqual(queries, [])
 
 
 class ValidationTests(TestCase):
