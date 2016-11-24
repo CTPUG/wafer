@@ -130,6 +130,29 @@ class SlotAdminTests(TestCase):
         self.assertEqual(slot4.end_time, D.time(20, 30, 0))
         self.assertEqual(slot4.day, slot.day)
 
+    def test_save_model_prev_slot_additional(self):
+        """Test save_model changing a new slot with some additional slots,
+           starting from a slot specified via previous slot"""
+        prev_slot = Slot(day=self.day, start_time=D.time(11, 0, 0),
+                         end_time=D.time(11, 30, 0))
+        prev_slot.save()
+        self.assertEqual(Slot.objects.count(), 1)
+        slot = Slot(previous_slot=prev_slot, end_time=D.time(12, 00, 0))
+        # Check that newly added slot isn't in the database
+        self.assertEqual(Slot.objects.count(), 1)
+        request = HttpRequest()
+        dummy = make_dummy_form(2)
+        self.admin.save_model(request, slot, dummy, False)
+        self.assertEqual(Slot.objects.count(), 4)
+
+        # check the hierachy is created correctly
+        slot1 = Slot.objects.filter(previous_slot=slot).get()
+        self.assertEqual(slot1.get_start_time(), slot.end_time)
+        self.assertEqual(slot1.end_time, D.time(12, 30, 0))
+        slot2 = Slot.objects.filter(previous_slot=slot1).get()
+        self.assertEqual(slot2.get_start_time(), slot1.end_time)
+        self.assertEqual(slot2.end_time, D.time(13, 00, 0))
+
 
 class ValidationTests(TestCase):
 
