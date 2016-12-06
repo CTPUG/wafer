@@ -14,6 +14,6 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='sponsorshippackage',
             name='symbol',
-            field=models.CharField(help_text='Optional symbol to display next to sponsors backing at this level sponsors list', max_length=1, blank=True),
+            field=models.CharField(blank=True, help_text='Optional symbol to display in the sponsors list next to sponsors who have sponsored at this list, (for example *).', max_length=1),
         ),
     ]
