@@ -39,6 +39,10 @@ class SponsorshipPackage(models.Model):
         File, related_name="packages", blank=True,
         help_text=_("Images and other files for use in"
                     " the description markdown field."))
+    symbol = models.CharField(
+        max_length=1, blank=True,
+        help_text=_("Optional symbol to display next to sponsors "
+                    "backing at this level sponsors list"))
 
     class Meta:
         ordering = ['order', '-price', 'name']
