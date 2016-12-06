@@ -13,6 +13,10 @@
         {% endif %}
         <p>{% trans 'Packages claimed:' %} {{ package.number_claimed }}</p>
 
+        {% if package.symbol %}
+            <p>Symbol shown in the sponsor list: {{ package.symbol }}</p>
+        {% endif %}
+
         <p>{{ package.short_description }}</p>
         {{ package.description.rendered|safe }}
     </div>
