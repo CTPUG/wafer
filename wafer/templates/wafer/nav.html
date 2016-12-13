@@ -2,7 +2,7 @@
 <nav class="navbar navbar-dark bg-inverse navbar-static-top {{ WAFER_NAVIGATION_VISIBILITY }}">
   <div class="container">
     {% block navtogglebutton %}
-    <button type="button" class="navbar-toggler pull-xs-right hidden-sm-up" data-toggle="collapse" data-target="#wafer-navbar-collapse">
+    <button type="button" class="navbar-toggler float-xs-right hidden-sm-up" data-toggle="collapse" data-target="#wafer-navbar-collapse">
       <span class="sr-only">
          Toggle navigation
       </span>
@@ -14,7 +14,7 @@
     <a class="navbar-brand" href="{% url 'wafer_page' %}">{{ WAFER_CONFERENCE_NAME }}</a>
     {% endblock navtitle %}
 
-    <div class="collapse navbar-toggleable-xs pull-xs-right" id="wafer-navbar-collapse">
+    <div class="collapse navbar-toggleable-xs" id="wafer-navbar-collapse">
       {% block navmenulist %}
       <ul class="nav navbar-nav">
       {% for item in WAFER_MENUS.items %}
@@ -46,7 +46,7 @@
       </ul>
       {% endblock navmenulist %}
       {% block navauthmenu %}
-      <ul class="nav navbar-nav navbar-right">
+      <ul class="nav navbar-nav float-xs-right">
         {% if user.is_authenticated %}
         {% block navauthenticated %}
         <li class="nav-item dropdown">
