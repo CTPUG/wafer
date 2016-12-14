@@ -1,4 +1,6 @@
 {% extends "wafer/base.html" %}
+{% load i18n %}
+{% block title %}{{ object.name }} - {{ WAFER_CONFERENCE_NAME }}{% endblock %}
 {% block content %}
 <section class="wafer wafer-schedule">
 <h1>{{ object.name }}</h1>

@@ -1,8 +1,9 @@
 {% extends "wafer/base.html" %}
 {% load i18n %}
+{% block title %}{% trans "Happening now" %} - {{ WAFER_CONFERENCE_NAME }}{% endblock %}
 {% block content %}
 <section class="wafer wafer-schedule">
-<h1>{% trans "Current" %}</h1>
+<h1>{% trans "Happening now" %}</h1>
 <div class="wafer_schedule">
    {% if not active %}
    {# Schedule is incomplete / invalid, so show nothing #}
