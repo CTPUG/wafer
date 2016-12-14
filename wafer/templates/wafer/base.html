@@ -1,4 +1,5 @@
 {% load sponsors %}
+{% load static from staticfiles %}
 <!DOCTYPE html>
 <html>
 <head>
@@ -6,9 +7,9 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="{{ STATIC_URL }}vendor/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" media="screen">
-    <link href="{{ STATIC_URL }}vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" media="screen">
-    <link href="{{ STATIC_URL }}css/wafer.css" rel="stylesheet" media="screen">
+    <link href="{% static 'vendor/bootstrap/dist/css/bootstrap.min.css' %}" rel="stylesheet" media="screen">
+    <link href="{% static 'vendor/font-awesome/css/font-awesome.min.css' %}" rel="stylesheet" media="screen">
+    <link href="{% static 'css/wafer.css' %}" rel="stylesheet" media="screen">
     {% block extra_head %}{% endblock %}
 </head>
 <body>
@@ -31,8 +32,8 @@
 {% endblock %}
     </div>
     {% sponsors %}
-    <script src="{{ STATIC_URL }}vendor/jquery/dist/jquery.min.js"></script>
-    <script src="{{ STATIC_URL }}vendor/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="{% static 'vendor/jquery/dist/jquery.min.js' %}"></script>
+    <script src="{% static 'vendor/bootstrap/dist/js/bootstrap.min.js' %}"></script>
     {% block extra_foot %}{% endblock %}
 </body>
 </html>

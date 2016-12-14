@@ -1,4 +1,5 @@
 {% extends "wafer/base.html" %}
+{% load static from staticfiles %}
 {% block content %}
     <div class="row">
         <div class="col-md-12">
@@ -142,5 +143,5 @@
 {% endblock %}
 
 {% block extra_foot %}
-<script src="{{ STATIC_URL }}js/edit_schedule.js"></script>
+<script src="{% static 'js/edit_schedule.js' %}"></script>
 {% endblock %}
