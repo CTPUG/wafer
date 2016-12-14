@@ -1,5 +1,6 @@
 {% extends "wafer/base.html" %}
 {% load i18n %}
+{% block title %}{{ page.name }} - {{ WAFER_CONFERENCE_NAME }}{% endblock %}
 {% block content %}
 <div>
     {{ page.content.rendered|safe }}

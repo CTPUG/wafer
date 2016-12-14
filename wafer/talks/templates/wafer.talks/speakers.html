@@ -1,5 +1,6 @@
 {% extends "wafer/base.html" %}
 {% load i18n %}
+{% block title %}{% trans "Speakers" %} - {{ WAFER_CONFERENCE_NAME }}{% endblock %}
 {% block content %}
     <div class="container">
         {% for row in speaker_rows %}

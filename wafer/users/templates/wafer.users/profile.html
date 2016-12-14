@@ -1,5 +1,6 @@
 {% extends "wafer/base.html" %}
 {% load i18n %}
+{% block title %}{{ object.userprofile.display_name }} - {{ WAFER_CONFERENCE_NAME }}{% endblock %}
 {% block content %}
 {% with profile=object.userprofile %}
 <div class="row">
