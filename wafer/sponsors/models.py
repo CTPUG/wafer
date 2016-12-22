@@ -15,7 +15,11 @@ class File(models.Model):
     item = models.FileField(upload_to='sponsors_files')
 
     def __str__(self):
-        return u'%s' % (self.name,)
+        if self.sponsors.exists():
+            sponsors = ' & '.join([x.name for x in self.sponsors.all()])
+            return u'<%s>: %s (%s)' % (sponsors, self.name, self.item.url)
+        else:
+            return u'<No Sponsor>: %s (%s)' % (self.name, self.item.url)
 
 
 @python_2_unicode_compatible
