@@ -1,3 +1,4 @@
+{% load sponsors %}
 <div id="wafer-sponsors">
     {% for package in packages %}
     {% if package.sponsors.exists %}
@@ -6,8 +7,9 @@
             <ul>
                 {% for sponsor in package.sponsors.all %}
                     <li>
-                        {% if sponsor.logo %}
-                            <img src="{{ sponsor.logo.url }}" alt="{{ sponsor.name }}">
+                        {% sponsor_image_url "logo.png" as logo_url %}
+                        {% if logo_url != '' %}
+                            <img src="{{ logo_url }}" alt="{{ sponsor.name }}">
                         {% else %}
                             <span class="nologo">{{ sponsor.name }}</span>
                         {% endif %}
