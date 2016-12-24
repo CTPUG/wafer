@@ -74,9 +74,9 @@ class Sponsor(models.Model):
         File, related_name="sponsors", blank=True,
         help_text=_("Images and other files for use in"
                     " the description markdown field."))
-    url = models.URLField(default="",
-            blank=True,
-            help_text=_("Url to link back to the sponsor if required"))
+    url = models.URLField(
+        default="", blank=True,
+        help_text=_("Url to link back to the sponsor if required"))
 
     class Meta:
         ordering = ['order', 'name', 'id']
