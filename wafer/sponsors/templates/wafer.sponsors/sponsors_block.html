@@ -7,7 +7,7 @@
             <ul>
                 {% for sponsor in package.sponsors.all %}
                     <li>
-                        {% sponsor_image_url "logo.png" as logo_url %}
+                        {% sponsor_image_url sponsor "logo.png" as logo_url %}
                         {% if logo_url != '' %}
                             <img src="{{ logo_url }}" alt="{{ sponsor.name }}">
                         {% else %}
