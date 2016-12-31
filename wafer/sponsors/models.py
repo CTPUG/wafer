@@ -11,7 +11,7 @@ from markitup.fields import MarkupField
 class File(models.Model):
     """A file for use in sponsor and sponshorship package descriptions."""
     name = models.CharField(max_length=255)
-    description = models.TextField()
+    description = models.TextField(blank=True)
     item = models.FileField(upload_to='sponsors_files')
 
     def __str__(self):

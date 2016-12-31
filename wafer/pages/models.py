@@ -18,7 +18,7 @@ from wafer.menu import MenuError, refresh_menu_cache
 class File(models.Model):
     """A file for use in page markup."""
     name = models.CharField(max_length=255)
-    description = models.TextField()
+    description = models.TextField(blank=True)
     item = models.FileField(upload_to='pages_files')
 
     def __str__(self):
