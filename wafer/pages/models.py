@@ -22,11 +22,7 @@ class File(models.Model):
     item = models.FileField(upload_to='pages_files')
 
     def __str__(self):
-        if self.pages.exists():
-            pages = ' & '.join([x.name for x in self.pages.all()])
-            return u'<%s>: %s (%s)' % (pages, self.name, self.item.url)
-        else:
-            return u'<No Page>: %s (%s)' % (self.name, self.item.url)
+        return u'%s (%s)' % (self.name, self.item.url)
 
 
 @python_2_unicode_compatible
