@@ -18,11 +18,11 @@ from wafer.menu import MenuError, refresh_menu_cache
 class File(models.Model):
     """A file for use in page markup."""
     name = models.CharField(max_length=255)
-    description = models.TextField()
+    description = models.TextField(blank=True)
     item = models.FileField(upload_to='pages_files')
 
     def __str__(self):
-        return u'%s' % (self.name,)
+        return u'%s (%s)' % (self.name, self.item.url)
 
 
 @python_2_unicode_compatible
@@ -45,7 +45,8 @@ class Page(models.Model):
         help_text=_("Images and other files for use in"
                     " the content markdown field."))
 
-    people = models.ManyToManyField(settings.AUTH_USER_MODEL,
+    people = models.ManyToManyField(
+        settings.AUTH_USER_MODEL,
         related_name='pages', blank=True,
         help_text=_("People associated with this page for display in the"
                     " schedule (Session chairs, panelists, etc.)"))

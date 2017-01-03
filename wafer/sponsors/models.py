@@ -11,11 +11,11 @@ from markitup.fields import MarkupField
 class File(models.Model):
     """A file for use in sponsor and sponshorship package descriptions."""
     name = models.CharField(max_length=255)
-    description = models.TextField()
+    description = models.TextField(blank=True)
     item = models.FileField(upload_to='sponsors_files')
 
     def __str__(self):
-        return u'%s' % (self.name,)
+        return u'%s (%s)' % (self.name, self.item.url)
 
 
 @python_2_unicode_compatible
@@ -70,9 +70,9 @@ class Sponsor(models.Model):
         File, related_name="sponsors", blank=True,
         help_text=_("Images and other files for use in"
                     " the description markdown field."))
-    url = models.URLField(default="",
-            blank=True,
-            help_text=_("Url to link back to the sponsor if required"))
+    url = models.URLField(
+        default="", blank=True,
+        help_text=_("Url to link back to the sponsor if required"))
 
     class Meta:
         ordering = ['order', 'name', 'id']
