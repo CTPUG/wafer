@@ -4,6 +4,7 @@ from django.db import models
 from django.db.models import Q
 from django.db.models.signals import post_save
 from django.utils.encoding import python_2_unicode_compatible
+from django.core.validators import RegexValidator
 
 from libravatar import libravatar_url
 try:
@@ -14,6 +15,13 @@ except ImportError:
 from wafer.kv.models import KeyValue
 from wafer.talks.models import (ACCEPTED, SUBMITTED, UNDER_CONSIDERATION,
                                 PROVISIONAL, CANCELLED)
+
+
+# validate format of twitter handle
+# Max 15 characters, alphanumeric and _ only
+# Specification taken from https://support.twitter.com/articles/101299
+TwitterValidator = RegexValidator('^[A-Za-z0-9_]{1,15}$',
+                                  'Incorrectly formatted twitter handle')
 
 
 @python_2_unicode_compatible
@@ -30,7 +38,8 @@ class UserProfile(models.Model):
     homepage = models.CharField(max_length=256, null=True, blank=True)
     # We should probably do social auth instead
     # And care about other code hosting sites...
-    twitter_handle = models.CharField(max_length=15, null=True, blank=True)
+    twitter_handle = models.CharField(max_length=15, null=True, blank=True,
+                                      validators=[TwitterValidator])
     github_username = models.CharField(max_length=32, null=True, blank=True)
 
     def __str__(self):
