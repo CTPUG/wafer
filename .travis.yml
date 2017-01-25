@@ -27,6 +27,11 @@ matrix:
       - python: "3.3"
         env: DJANGO='django>=1.10.0,<1.11.0' TESTDB=postgres
       - python: "3.3"
+      # Django 2.0 will drop python 2 support - https://www.djangoproject.com/weblog/2015/jun/25/roadmap/
+      - python: "2.7"
+        env: DJANGO='https://github.com/django/django/archive/master.tar.gz' TESTDB=sqlite
+      - python: "2.7"
+        env: DJANGO='https://github.com/django/django/archive/master.tar.gz' TESTDB=postgres
 
 allow_failures:
   - env: DJANGO='https://github.com/django/django/archive/master.tar.gz' TESTDB=postgres
