@@ -41,7 +41,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'wafer'
-copyright = u'2014, Neil Muller'
+copyright = u'2014-2017, The wafer development team'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -184,7 +184,7 @@ latex_elements = {
 # (source start file, target name, title, author, documentclass [howto/manual]).
 latex_documents = [
   ('index', 'wafer.tex', u'wafer Documentation',
-   u'Neil Muller', 'manual'),
+   u'The wafer development team', 'manual'),
 ]
 
 # The name of an image file (relative to this directory) to place at the top of
@@ -214,7 +214,7 @@ latex_documents = [
 # (source start file, name, description, authors, manual section).
 man_pages = [
     ('index', 'wafer', u'wafer Documentation',
-     [u'Neil Muller'], 1)
+     [u'The wafer development team'], 1)
 ]
 
 # If true, show URL addresses after external links.
@@ -228,7 +228,7 @@ man_pages = [
 #  dir menu entry, description, category)
 texinfo_documents = [
   ('index', 'wafer', u'wafer Documentation',
-   u'Neil Muller', 'wafer', 'One line description of project.',
+   u'The wafer development team', 'wafer', 'One line description of project.',
    'Miscellaneous'),
 ]
 
