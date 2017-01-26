@@ -25,8 +25,6 @@ matrix:
         env: DJANGO='https://github.com/django/django/archive/master.tar.gz' TESTDB=postgres
 
    allow_failures:
-      - env: DJANGO='https://github.com/django/django/archive/stable/1.11.x.tar.gz' TESTDB=postgres
-      - env: DJANGO='https://github.com/django/django/archive/stable/1.11.x.tar.gz' TESTDB=sqlite
       - env: DJANGO='https://github.com/django/django/archive/master.tar.gz' TESTDB=postgres
       - env: DJANGO='https://github.com/django/django/archive/master.tar.gz' TESTDB=sqlite
 
