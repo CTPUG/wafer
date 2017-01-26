@@ -9,7 +9,9 @@
                     <li>
                         {% sponsor_image_url sponsor "logo" as logo_url %}
                         {% if logo_url != '' %}
-                            <img src="{{ logo_url }}" alt="{{ sponsor.name }}">
+                            <img src="{{ logo_url }}"
+                                 alt="{{ sponsor.name }}"
+                                 title="{{ sponsor.name }}">
                         {% else %}
                             <span class="nologo">{{ sponsor.name }}</span>
                         {% endif %}
