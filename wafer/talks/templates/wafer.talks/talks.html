@@ -3,47 +3,47 @@
 {% block title %}{% trans "Talks" %} - {{ WAFER_CONFERENCE_NAME }}{% endblock %}
 {% block content %}
 <section class="wafer wafer-talks">
-<h1>{% trans 'Talks' %}</h1>
-<div class="wafer list">
+  <h1>{% trans 'Talks' %}</h1>
+  <div class="wafer list">
     {% for talk in talk_list %}
-    <div>
+      <div>
         {% if talk.submitted %}
-        <span class="tag tag-info" title="{% trans 'Submitted' %}">{{ talk.status }}</span>
+          <span class="tag tag-info" title="{% trans 'Submitted' %}">{{ talk.status }}</span>
         {% elif talk.under_consideration %}
-        <span class="tag tag-info" title="{% trans 'Under consideration' %}">{{ talk.status }}</span>
+          <span class="tag tag-info" title="{% trans 'Under consideration' %}">{{ talk.status }}</span>
         {% elif talk.reject %}
-        <span class="tag tag-danger" title="{% trans 'Not accepted' %}">{{ talk.status }}</span>
+          <span class="tag tag-danger" title="{% trans 'Not accepted' %}">{{ talk.status }}</span>
         {% elif talk.cancelled %}
-        <span class="tag tag-warning" title="{% trans 'Talk Cancelled' %}">{{ talk.status }}</span>
+          <span class="tag tag-warning" title="{% trans 'Talk Cancelled' %}">{{ talk.status }}</span>
         {% elif talk.provisional %}
-        <span class="tag tag-success" title="{% trans 'Provisionally Accepted' %}">{{ talk.status }}</span>
+          <span class="tag tag-success" title="{% trans 'Provisionally Accepted' %}">{{ talk.status }}</span>
         {% endif %}
         <a href="{{ talk.get_absolute_url }}">{{ talk.title }}</a>
         by
         <span class="author">{{ talk.get_authors_display_name }}</span>
-    </div>
+      </div>
     {% empty %}
-    <p>No talks accepted yet.</p>
+      <p>No talks accepted yet.</p>
     {% endfor %}
-</div>
+  </div>
 </section>
 {% if is_paginated %}
-<section class="wafer wafer-pagination">
+  <section class="wafer wafer-pagination">
     <ul class="pagination">
-        {% if page_obj.has_previous %}
+      {% if page_obj.has_previous %}
         <li class="page-item"><a class="page-link" href="{% url 'wafer_users_talks_page' page=page_obj.previous_page_number %}">&laquo;</a></li>
-        {% else %}
+      {% else %}
         <li class="page-item" class="disabled"><a class="page-link" href="#">&laquo;</a></li>
-        {% endif %}
-        {% for page in paginator.page_range %}
+      {% endif %}
+      {% for page in paginator.page_range %}
         <li class="page-item"><a class="page-link" href="{% url 'wafer_users_talks_page' page=page %}">{{ page }}</a></li>
-        {% endfor %}
-        {% if page_obj.has_next %}
+      {% endfor %}
+      {% if page_obj.has_next %}
         <li class="page-item"><a class="page-link" href="{% url 'wafer_users_talks_page' page=page_obj.next_page_number %}">&raquo;</a></li>
-        {% else %}
+      {% else %}
         <li class="page-item" class="disabled"><a class="page-link" href="#">&raquo;</a></li>
-        {% endif %}
+      {% endif %}
     </ul>
-</section>
+  </section>
 {% endif %}
 {% endblock %}

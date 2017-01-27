@@ -1,36 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
 {% load i18n %}
 <schedule>
-    <conference>
-        <title>{{ WAFER_CONFERENCE_NAME }}</title>
-        {% if schedule_days %}
+  <conference>
+    <title>{{ WAFER_CONFERENCE_NAME }}</title>
+      {% if schedule_days %}
         {% with day=schedule_days|first %}
-            <start>{{ day.day.date|date:"Y-m-d" }}</start>
+          <start>{{ day.day.date|date:"Y-m-d" }}</start>
         {% endwith %}
         {% with day=schedule_days|last %}
-            <end>{{ day.day.date|date:"Y-m-d" }}</end>
+          <end>{{ day.day.date|date:"Y-m-d" }}</end>
         {% endwith %}
         <days>{{ schedule_days|length }}</days>
-        {% endif %}
-        <day_change>00:00</day_change>
-        <timeslot_duration>00:15</timeslot_duration>
-    </conference>
-    {% for schedule_day in schedule_days %}
+      {% endif %}
+    <day_change>00:00</day_change>
+    <timeslot_duration>00:15</timeslot_duration>
+  </conference>
+  {% for schedule_day in schedule_days %}
     <day date="{{ schedule_day.day.date|date:'Y-m-d' }}" index="{{ forloop.counter }}">
-        {% for venue in schedule_day.venues %}
+      {% for venue in schedule_day.venues %}
         <room name="{{ venue.name }}">
-            {% for row in schedule_day.rows %}
+          {% for row in schedule_day.rows %}
             {% if venue in row.items %}
-                {# this is more than a little horrible, but will do for testing #}
-                {% for row_venue, items in row.items.items %}
+              {# this is more than a little horrible, but will do for testing #}
+              {% for row_venue, items in row.items.items %}
                 {% if row_venue == venue %}
-                {# The event id is the ScheduleItem pk, which should be unique enough #}
-                <event id="{{ items.item.pk }}">
+                  {# The event id is the ScheduleItem pk, which should be unique enough #}
+                  <event id="{{ items.item.pk }}">
                     {# Not sure what to do about timezones here #}
                     <date>{{ schedule_day.day.date|date:"Y-m-d" }}T{{ row.slot.get_start_time|time:"H:i:s" }}+00:00</date>
                     <start>{{ row.slot.get_start_time|time:"H:i" }}</start>
                     {% with dur=items.item.get_duration %}
-                        <duration>{{ dur.hours|stringformat:"02d" }}:{{ dur.minutes|stringformat:"02d" }}</duration>
+                      <duration>{{ dur.hours|stringformat:"02d" }}:{{ dur.minutes|stringformat:"02d" }}</duration>
                     {% endwith %}
                     <room>{{ venue.name }}</room>
                     {# Confclerk needs this to import the conference. #}
@@ -42,66 +42,66 @@
                     {# summit's pattern and only include stuff in the description #}
                     <abstract/>
                     {% if items.item.talk %}
-                       <title>{{ items.item.get_title }}</title>
-                       {# I'm not sure if the raw markdown is the best thing here, but it seems to match what summit does, #}
-                       {# so hopefully the tools can handle the odd corner cases correctly. Giggity at least does some #}
-                       {# santization here. #}
-                       {# We do allow people to request html if they want it, which may also be a bad idea, but is useful for #}
-                       {# the video team #}
-                       {% if items.item.talk.abstract and render_description %}
-                       <description>{{ items.item.talk.abstract.rendered }}</description>
-                       {% elif items.item.talk.abstract %}
-                       <description>{{ items.item.talk.abstract.raw }}</description>
-                       {% else %}
-                       <description/>
-                       {% endif %}
-                       <type>{{ items.item.talk.talk_type }}</type>
-                       <persons>
-                           {% for author in items.item.talk.authors.all %}
-                           {# person id is the author pk, which should be the right thing #}
-                               {% if user.is_staff %}
-                               {# We will want finer grained control off this eventually, but staff will do for now #}
-                               <person id="{{ author.pk }}"
-                                  {% if author.userprofile.twitter_handle %}
-                                  twitter="https://twitter.com/{{ author.userprofile.twitter_handle }}"
-                                  {% endif %}
-                                  contact="{{ author.email }}">{{ author.userprofile.display_name }}</person>
-                               {% else %}
-                               <person id="{{ author.pk }}">{{ author.userprofile.display_name }}</person>
-                               {% endif %}
-                           {% endfor %}
-                       </persons>
-                    <abstract/>
+                      <title>{{ items.item.get_title }}</title>
+                      {# I'm not sure if the raw markdown is the best thing here, but it seems to match what summit does, #}
+                      {# so hopefully the tools can handle the odd corner cases correctly. Giggity at least does some #}
+                      {# santization here. #}
+                      {# We do allow people to request html if they want it, which may also be a bad idea, but is useful for #}
+                      {# the video team #}
+                      {% if items.item.talk.abstract and render_description %}
+                        <description>{{ items.item.talk.abstract.rendered }}</description>
+                      {% elif items.item.talk.abstract %}
+                        <description>{{ items.item.talk.abstract.raw }}</description>
+                      {% else %}
+                        <description/>
+                      {% endif %}
+                      <type>{{ items.item.talk.talk_type }}</type>
+                      <persons>
+                        {% for author in items.item.talk.authors.all %}
+                          {# person id is the author pk, which should be the right thing #}
+                          {% if user.is_staff %}
+                            {# We will want finer grained control off this eventually, but staff will do for now #}
+                            <person id="{{ author.pk }}"
+                              {% if author.userprofile.twitter_handle %}
+                                    twitter="https://twitter.com/{{ author.userprofile.twitter_handle }}"
+                              {% endif %}
+                                    contact="{{ author.email }}">{{ author.userprofile.display_name }}</person>
+                          {% else %}
+                            <person id="{{ author.pk }}">{{ author.userprofile.display_name }}</person>
+                          {% endif %}
+                        {% endfor %}
+                      </persons>
+                      <abstract/>
                     {% else %}
-                        <title>{{ items.item.get_details|escape }}</title>
-                        <type/>
-                        {% if items.item.page.people.exists %}
+                      <title>{{ items.item.get_details|escape }}</title>
+                      <type/>
+                      {% if items.item.page.people.exists %}
                         {# If there are people, we care about the description #}
                         {# For now, we drop the raw markdown content from pages here. We probably want to sanatize this in the future #}
                         {# Also honour render_description #}
                         {% if render_description %}
-                        <description>{{ items.item.page.content.rendered }}</description>
+                          <description>{{ items.item.page.content.rendered }}</description>
                         {% else %}
-                        <description>{{ items.item.page.content.raw }}</description>
+                          <description>{{ items.item.page.content.raw }}</description>
                         {% endif %}
                         <persons>
-                           {# TODO: This should be refactored, so we don't have all this duplication #}
-                           {% for person in items.item.page.people.all %}
-                               {% if user.is_staff %}
-                               {# We will want finer grained control off this eventually, but staff will do for now #}
-                               <person id="{{ person.pk }}"
-                                  {% if author.userprofile.twitter_handle %}
-                                  twitter="https://twitter.com/{{ person.userprofile.twitter_handle }}"
-                                  {% endif %}
-                                  contact="{{ person.email }}">{{ person.userprofile.display_name }}</person>
-                               {% else %}
-                               <person id="{{ person.pk }}">{{ person.userprofile.display_name }}</person>
-                               {% endif %}
-                           {% endfor %}
+                          {# TODO: This should be refactored, so we don't have all this duplication #}
+                          {% for person in items.item.page.people.all %}
+                            {% if user.is_staff %}
+                              {# We will want finer grained control off this eventually, but staff will do for now #}
+                              <person id="{{ person.pk }}"
+                                {% if author.userprofile.twitter_handle %}
+                                      twitter="https://twitter.com/{{ person.userprofile.twitter_handle }}"
+                                {% endif %}
+                                      contact="{{ person.email }}">{{ person.userprofile.display_name }}</person>
+                            {% else %}
+                              <person id="{{ person.pk }}">{{ person.userprofile.display_name }}</person>
+                            {% endif %}
+                          {% endfor %}
                         </persons>
-                        {% else %}
+                      {% else %}
                         <description/>
-                        {% endif %}
+                      {% endif %}
                     {% endif %}
                     <conf_url>{{ items.item.get_url }}</conf_url>
                     {# It's useful to have the full url available in the xml file. The pentabarf.xml format isn't that well #}
@@ -109,17 +109,16 @@
 
                     {# forcing https here is a bit horrible - make this configurable somewhere? #}
                     <full_conf_url>https://{{ WAFER_CONFERENCE_DOMAIN }}{{ items.item.get_url }}</full_conf_url>
-                    
+
                     {# someday there may be a way to set this to False #}
                     <released>True</released>
-                    
-                </event>
+                  </event>
                 {% endif %}
-                {% endfor %}
+              {% endfor %}
             {% endif %}
-            {% endfor %}
+          {% endfor %}
         </room>
-        {% endfor %}
+      {% endfor %}
     </day>
-    {% endfor %}
+  {% endfor %}
 </schedule>

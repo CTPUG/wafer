@@ -3,104 +3,104 @@
 {% block title %}{{ object.title }} - {{ WAFER_CONFERENCE_NAME }}{% endblock %}
 {% block content %}
 <section class="wafer wafer-talk">
-<h1>
+  <h1>
     {{ object.title }}
     {% if can_edit %}
-        <a href="{% url 'wafer_talk_edit' object.pk %}" class="float-xs-right btn btn-secondary btn-lg">{% trans 'Edit' %}</a>
+      <a href="{% url 'wafer_talk_edit' object.pk %}" class="float-xs-right btn btn-secondary btn-lg">{% trans 'Edit' %}</a>
     {% endif %}
-</h1>
-<div>
+  </h1>
+  <div>
     <p>
-    {% blocktrans count counter=object.authors.count %}
-    Speaker:
-    {% plural %}
-    Speakers:
-    {% endblocktrans %}
-    {% for author in object.authors.all %}
-    <a href="{% url 'wafer_user_profile' username=author.username %}">{{ author.userprofile.display_name }}</a>
-    {% endfor %}
+      {% blocktrans count counter=object.authors.count %}
+        Speaker:
+      {% plural %}
+        Speakers:
+      {% endblocktrans %}
+      {% for author in object.authors.all %}
+        <a href="{% url 'wafer_user_profile' username=author.username %}">{{ author.userprofile.display_name }}</a>
+      {% endfor %}
     </p>
     <p>
-    {% blocktrans with talk_type=object.talk_type.name|default:'Talk' %}
-    Type:
-    {{ talk_type }}
-    {% endblocktrans %}
+      {% blocktrans with talk_type=object.talk_type.name|default:'Talk' %}
+        Type:
+        {{ talk_type }}
+      {% endblocktrans %}
     </p>
     {% if object.get_in_schedule %}
-    {% for schedule in object.scheduleitem_set.all %}
-    <p>
-    {% blocktrans with venue=schedule.venue %}
-    Room:
-    {{ venue }}
-    {% endblocktrans %}
-    </p>
-    <p>
-    {% blocktrans with start_time=schedule.get_start_time %}
-    Time:
-    {{ start_time }}
-    {% endblocktrans %}
-    </p>
-    <p>
-    {% blocktrans with hours=schedule.get_duration.hours|stringformat:"d" minutes=schedule.get_duration.minutes|stringformat:"02d" %}
-    Duration:
-    {{ hours }}:{{ minutes }}
-    {% endblocktrans %}
-    </p>
-    {% endfor %}
-    {% endif %}
-</div>
-{% if user.is_staff or perms.talks.view_all_talks %}
-<div>
-    <p>
-    {% trans 'Status:' %}
-    {% if object.submitted %}
-    <span class="tag tag-info">{% trans 'Submitted' %}</span>
-    {% elif object.under_consideration %}
-    <span class="tag tag-info">{% trans 'Under consideration' %}</span>
-    {% elif object.provisional %}
-    <span class="tag tag-success">{% trans 'Provisionally Accepted' %}</span>
-    {% elif object.accepted %}
-    <span class="tag tag-success">{% trans 'Accepted' %}</span>
-    {% elif object.cancelled %}
-    <span class="tag tag-warning">{% trans 'Cancelled' %}</span>
-    {% else %}
-    <span class="tag tag-danger">{% trans 'Not accepted' %}</span>
-    {% endif %}
-    </p>
-</div>
-{% endif %}
-<div class="well">
-    {{ object.abstract.rendered|safe }}
-</div>
-{% if perms.talks.view_all_talks or user.is_superuser %}
-{% if talk.notes %}
-{% blocktrans %}
-<h2>Talk Notes</h2>
-<p>(The following is not visible to attendees.)</p>
-{% endblocktrans %}
-<div class="well">
-  {{ object.notes|urlize|linebreaks }}
-</div>
-{% endif %}
-{% endif %}
-{% if perms.talks.edit_private_notes and object.private_notes %}
-{% blocktrans %}
-<h2>Private notes</h2>
-<p>(The following is not visible to submitters or attendees.)</p>
-{% endblocktrans %}
-<div class="well">
-  {{ object.private_notes|urlize|linebreaks }}
-</div>
-{% endif %}
-{% if talk.talkurl_set.all %}
-<div class="well" id="urls">
-   <div>{% trans "URLS" %}</div>
-   <ul>
-      {% for talkurl in talk.talkurl_set.all %}
-      <li><a href="{{ talkurl.url }}">{{ talkurl.description }}</a></li>
+      {% for schedule in object.scheduleitem_set.all %}
+        <p>
+          {% blocktrans with venue=schedule.venue %}
+            Room:
+            {{ venue }}
+          {% endblocktrans %}
+        </p>
+        <p>
+          {% blocktrans with start_time=schedule.get_start_time %}
+            Time:
+            {{ start_time }}
+          {% endblocktrans %}
+        </p>
+        <p>
+          {% blocktrans with hours=schedule.get_duration.hours|stringformat:"d" minutes=schedule.get_duration.minutes|stringformat:"02d" %}
+            Duration:
+            {{ hours }}:{{ minutes }}
+          {% endblocktrans %}
+        </p>
       {% endfor %}
-   </ul>
-</div>
-{% endif %}
+    {% endif %}
+  </div>
+  {% if user.is_staff or perms.talks.view_all_talks %}
+    <div>
+      <p>
+        {% trans 'Status:' %}
+        {% if object.submitted %}
+          <span class="tag tag-info">{% trans 'Submitted' %}</span>
+        {% elif object.under_consideration %}
+          <span class="tag tag-info">{% trans 'Under consideration' %}</span>
+        {% elif object.provisional %}
+          <span class="tag tag-success">{% trans 'Provisionally Accepted' %}</span>
+        {% elif object.accepted %}
+          <span class="tag tag-success">{% trans 'Accepted' %}</span>
+        {% elif object.cancelled %}
+          <span class="tag tag-warning">{% trans 'Cancelled' %}</span>
+        {% else %}
+          <span class="tag tag-danger">{% trans 'Not accepted' %}</span>
+        {% endif %}
+      </p>
+    </div>
+  {% endif %}
+  <div class="well">
+    {{ object.abstract.rendered|safe }}
+  </div>
+  {% if perms.talks.view_all_talks or user.is_superuser %}
+    {% if talk.notes %}
+      {% blocktrans %}
+        <h2>Talk Notes</h2>
+        <p>(The following is not visible to attendees.)</p>
+      {% endblocktrans %}
+      <div class="well">
+        {{ object.notes|urlize|linebreaks }}
+      </div>
+    {% endif %}
+  {% endif %}
+  {% if perms.talks.edit_private_notes and object.private_notes %}
+    {% blocktrans %}
+      <h2>Private notes</h2>
+      <p>(The following is not visible to submitters or attendees.)</p>
+    {% endblocktrans %}
+    <div class="well">
+      {{ object.private_notes|urlize|linebreaks }}
+    </div>
+  {% endif %}
+  {% if talk.talkurl_set.all %}
+    <div class="well" id="urls">
+    <div>{% trans "URLS" %}</div>
+    <ul>
+      {% for talkurl in talk.talkurl_set.all %}
+        <li><a href="{{ talkurl.url }}">{{ talkurl.description }}</a></li>
+      {% endfor %}
+    </ul>
+  </div>
+  {% endif %}
 </section>
 {% endblock %}

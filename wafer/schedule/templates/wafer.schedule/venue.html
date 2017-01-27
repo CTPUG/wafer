@@ -3,9 +3,9 @@
 {% block title %}{{ object.name }} - {{ WAFER_CONFERENCE_NAME }}{% endblock %}
 {% block content %}
 <section class="wafer wafer-schedule">
-<h1>{{ object.name }}</h1>
-<div>
-{{ object.notes_html|safe }}
-</div>
+  <h1>{{ object.name }}</h1>
+  <div>
+    {{ object.notes_html|safe }}
+  </div>
 </section>
 {% endblock %}
