@@ -20,6 +20,14 @@
         <a href="{% url 'wafer_user_profile' username=author.username %}">{{ author.userprofile.display_name }}</a>
       {% endfor %}
     </p>
+    {% if object.track %}
+      <p>
+        {% blocktrans with track=object.track.name %}
+          Track:
+          {{ track }}
+        {% endblocktrans %}
+      </p>
+    {% endif %}
     <p>
       {% blocktrans with talk_type=object.talk_type.name|default:'Talk' %}
         Type:

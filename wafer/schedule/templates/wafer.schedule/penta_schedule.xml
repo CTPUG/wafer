@@ -33,9 +33,7 @@
                       <duration>{{ dur.hours|stringformat:"02d" }}:{{ dur.minutes|stringformat:"02d" }}</duration>
                     {% endwith %}
                     <room>{{ venue.name }}</room>
-                    {# Confclerk needs this to import the conference. #}
-                    {# We set this to the same as the room name, since there doesn't seem a better choice #}
-                    <track>{{ venue.name }}</track>
+                    <track>{{ items.item.talk.track.name|default:"General" }}</track>
                     {# It's not clear what the difference between abstract and description is meant to be #}
                     {# Both confclerk and Giggity just lump them together into the same thing anyway, and #}
                     {# summit only outputs stuff in description, so we keep abstract blank and follow #}
