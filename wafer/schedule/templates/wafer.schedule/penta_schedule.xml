@@ -40,36 +40,38 @@
                     {# summit's pattern and only include stuff in the description #}
                     <abstract/>
                     {% if items.item.talk %}
-                      <title>{{ items.item.get_title }}</title>
-                      {# I'm not sure if the raw markdown is the best thing here, but it seems to match what summit does, #}
-                      {# so hopefully the tools can handle the odd corner cases correctly. Giggity at least does some #}
-                      {# santization here. #}
-                      {# We do allow people to request html if they want it, which may also be a bad idea, but is useful for #}
-                      {# the video team #}
-                      {% if items.item.talk.abstract and render_description %}
-                        <description>{{ items.item.talk.abstract.rendered }}</description>
-                      {% elif items.item.talk.abstract %}
-                        <description>{{ items.item.talk.abstract.raw }}</description>
-                      {% else %}
-                        <description/>
-                      {% endif %}
-                      <type>{{ items.item.talk.talk_type }}</type>
-                      <persons>
-                        {% for author in items.item.talk.authors.all %}
-                          {# person id is the author pk, which should be the right thing #}
-                          {% if user.is_staff %}
-                            {# We will want finer grained control off this eventually, but staff will do for now #}
-                            <person id="{{ author.pk }}"
-                              {% if author.userprofile.twitter_handle %}
-                                    twitter="https://twitter.com/{{ author.userprofile.twitter_handle }}"
-                              {% endif %}
-                                    contact="{{ author.email }}">{{ author.userprofile.display_name }}</person>
-                          {% else %}
-                            <person id="{{ author.pk }}">{{ author.userprofile.display_name }}</person>
-                          {% endif %}
-                        {% endfor %}
-                      </persons>
-                      <abstract/>
+                      {% with talk=items.item.talk %}
+                        <title>{{ items.item.get_title }}</title>
+                        {# I'm not sure if the raw markdown is the best thing here, but it seems to match what summit does, #}
+                        {# so hopefully the tools can handle the odd corner cases correctly. Giggity at least does some #}
+                        {# santization here. #}
+                        {# We do allow people to request html if they want it, which may also be a bad idea, but is useful for #}
+                        {# the video team #}
+                        {% if talk.abstract and render_description %}
+                          <description>{{ talk.abstract.rendered }}</description>
+                        {% elif talk.abstract %}
+                          <description>{{ talk.abstract.raw }}</description>
+                        {% else %}
+                          <description/>
+                        {% endif %}
+                        <type>{{ talk.talk_type }}</type>
+                        <persons>
+                          {% for author in talk.authors.all %}
+                            {# person id is the author pk, which should be the right thing #}
+                            {% if user.is_staff %}
+                              {# We will want finer grained control off this eventually, but staff will do for now #}
+                              <person id="{{ author.pk }}"
+                                {% if author.userprofile.twitter_handle %}
+                                      twitter="https://twitter.com/{{ author.userprofile.twitter_handle }}"
+                                {% endif %}
+                                      contact="{{ author.email }}">{{ author.userprofile.display_name }}</person>
+                            {% else %}
+                              <person id="{{ author.pk }}">{{ author.userprofile.display_name }}</person>
+                            {% endif %}
+                          {% endfor %}
+                        </persons>
+                        <abstract/>
+                      {% endwith %}
                     {% else %}
                       <title>{{ items.item.get_details|escape }}</title>
                       <type/>
