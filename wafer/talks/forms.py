@@ -13,7 +13,7 @@ from crispy_forms.layout import Submit, HTML
 from markitup.widgets import MarkItUpWidget
 from easy_select2.widgets import Select2Multiple
 
-from wafer.talks.models import Talk, TalkType, render_author
+from wafer.talks.models import Talk, TalkType, Track, render_author
 
 
 def get_talk_form_class():
@@ -41,6 +41,9 @@ class TalkForm(forms.ModelForm):
         if not self.user.has_perm('talks.edit_private_notes'):
             self.fields.pop('private_notes')
 
+        if not Track.objects.exists():
+            self.fields.pop('track')
+
         # We add the name, if known, to the authors list
         self.fields['authors'].label_from_instance = render_author
 
@@ -56,6 +59,7 @@ class TalkForm(forms.ModelForm):
                             _('Delete')))))
         else:
             self.helper.add_input(submit_button)
+
         # Exclude disabled talk types from the choice widget
         if kwargs['instance'] and kwargs['instance'].talk_type:
             # Ensure the current talk type is in the query_set, regardless of whether it's been disabled since then
