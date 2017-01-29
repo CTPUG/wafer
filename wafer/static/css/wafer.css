@@ -139,3 +139,13 @@
 .bs-callout-patron {
     border-left-color: #A4C639;
 }
+
+/* Temporary workaronud for Bootstrap4 alpha 6
+ * Fixed upstream in https://github.com/twbs/bootstrap/pull/21722
+ */
+@media (max-width: 767px) {
+    nav .container {
+        margin-left: 0;
+        margin-right: 0;
+    }
+}
