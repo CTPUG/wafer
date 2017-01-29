@@ -62,7 +62,7 @@ class TalkForm(forms.ModelForm):
         else:
             self.helper.add_input(submit_button)
 
-        if TalkType.objects.exists():
+        if 'talk_type' in self.fields:
             # Exclude disabled talk types from the choice widget
             if kwargs['instance'] and kwargs['instance'].talk_type:
                 # Ensure the current talk type is in the query_set, regardless
@@ -73,6 +73,20 @@ class TalkForm(forms.ModelForm):
             else:
                 self.fields['talk_type'].queryset = TalkType.objects.filter(
                     disable_submission=False)
+
+    # These are only called when the field wasn't removed from the form, above
+    # so they can assume that the field is always required.
+    def clean_talk_type(self):
+        data = self.cleaned_data['talk_type']
+        if not data:
+            raise forms.ValidationError(_('A Talk Type is required'))
+        return data
+
+    def clean_track(self):
+        data = self.cleaned_data['track']
+        if not data:
+            raise forms.ValidationError(_('A Track is required'))
+        return data
 
     class Meta:
         model = Talk
