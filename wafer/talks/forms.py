@@ -88,7 +88,7 @@ class TalkForm(forms.ModelForm):
         else:
             self.fields['talk_type'] = TalkCategorisationField(
                 model=TalkType,
-                initial=self.initial['talk_type']
+                initial=self.initial.get('talk_type')
             )
 
         # We add the name, if known, to the authors list
