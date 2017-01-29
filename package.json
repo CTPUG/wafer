@@ -3,10 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "bootstrap": "^4.0.0-alpha.6",
     "font-awesome": "^4.6.3",
-    "bootstrap": "^4.0.0-alpha.4"
+    "jquery": ">=1.9.1",
+    "tether": "^1.4.0"
   },
   "scripts": {
-    "postinstall" : "rsync -d --del node_modules/* wafer/static/vendor/"
+    "postinstall" : "rsync -a --delete node_modules/ wafer/static/vendor/"
   }
 }

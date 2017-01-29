@@ -1,17 +1,22 @@
 {% load i18n %}
-<nav class="navbar navbar-dark bg-inverse {{ WAFER_NAVIGATION_VISIBILITY }}">
+<nav class="navbar navbar-toggleable-sm navbar-inverse bg-inverse {{ WAFER_NAVIGATION_VISIBILITY }}">
   <div class="container">
     {% block navtogglebutton %}
-    <button type="button" class="navbar-toggler hidden-sm-up" data-toggle="collapse" data-target="#wafer-navbar-collapse" aria-controls="#wafer-navbar-collapse" aria-expanded="false" aria-label="Toggle navigation"></button>
+    <button type="button" class="navbar-toggler navbar-toggler-right"
+            data-toggle="collapse" data-target="#wafer-navbar-collapse"
+            aria-controls="wafer-navbar-collapse" aria-expanded="false"
+            aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
     {% endblock navtogglebutton %}
 
     {% block navtitle %}
     <a class="navbar-brand" href="{% url 'wafer_page' %}">{{ WAFER_CONFERENCE_NAME }}</a>
     {% endblock navtitle %}
 
-    <div class="collapse navbar-toggleable-xs" id="wafer-navbar-collapse">
+    <div class="collapse navbar-collapse" id="wafer-navbar-collapse">
       {% block navmenulist %}
-      <ul class="nav navbar-nav">
+      <ul class="navbar-nav mr-auto">
       {% for item in WAFER_MENUS.items %}
         {% if item.image and item.url %}
         <li class="nav-item icon">
@@ -41,7 +46,7 @@
       </ul>
       {% endblock navmenulist %}
       {% block navauthmenu %}
-      <ul class="nav navbar-nav float-sm-right">
+      <ul class="navbar-nav float-md-right">
         {% if user.is_authenticated %}
         {% block navauthenticated %}
         <li class="nav-item dropdown">
@@ -77,4 +82,3 @@
     </div>
   </div>
 </nav>
-
