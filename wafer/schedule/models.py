@@ -174,7 +174,8 @@ class ScheduleItem(models.Model):
     def get_talk_css_classes(self):
         """CSS classes based on type and track, if available"""
         if self.talk:
-            yield self.talk.talk_type.css_class()
+            if self.talk.talk_type:
+                yield self.talk.talk_type.css_class()
             if self.talk.track:
                 yield self.talk.track.css_class()
 

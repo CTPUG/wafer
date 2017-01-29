@@ -92,7 +92,7 @@ class Talk(models.Model):
     )
 
     talk_id = models.AutoField(primary_key=True)
-    talk_type = models.ForeignKey(TalkType, null=True)
+    talk_type = models.ForeignKey(TalkType, null=True, blank=True)
     track = models.ForeignKey(Track, null=True, blank=True)
 
     title = models.CharField(max_length=1024)

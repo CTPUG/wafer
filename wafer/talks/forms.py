@@ -43,6 +43,8 @@ class TalkForm(forms.ModelForm):
 
         if not Track.objects.exists():
             self.fields.pop('track')
+        if not TalkType.objects.exists():
+            self.fields.pop('talk_type')
 
         # We add the name, if known, to the authors list
         self.fields['authors'].label_from_instance = render_author
@@ -60,13 +62,17 @@ class TalkForm(forms.ModelForm):
         else:
             self.helper.add_input(submit_button)
 
-        # Exclude disabled talk types from the choice widget
-        if kwargs['instance'] and kwargs['instance'].talk_type:
-            # Ensure the current talk type is in the query_set, regardless of whether it's been disabled since then
-            self.fields['talk_type'].queryset = TalkType.objects.filter(Q(disable_submission=False) | Q(pk=kwargs['instance'].talk_type.pk))
-        else:
-            self.fields['talk_type'].queryset = TalkType.objects.filter(disable_submission=False)
-
+        if TalkType.objects.exists():
+            # Exclude disabled talk types from the choice widget
+            if kwargs['instance'] and kwargs['instance'].talk_type:
+                # Ensure the current talk type is in the query_set, regardless
+                # of whether it's been disabled since then
+                self.fields['talk_type'].queryset = TalkType.objects.filter(
+                    Q(disable_submission=False) |
+                    Q(pk=kwargs['instance'].talk_type.pk))
+            else:
+                self.fields['talk_type'].queryset = TalkType.objects.filter(
+                    disable_submission=False)
 
     class Meta:
         model = Talk
