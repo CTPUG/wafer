@@ -5,8 +5,8 @@
 <div>
     {{ page.content.rendered|safe }}
     {% if perms.pages.change_page %}
-        <a href="{{ page.get_absolute_url }}?compare" class="float-xs-right btn btn-secondary btn-lg">{% trans 'Compare to Previous version' %}</a>
-        <a href="{{ page.get_absolute_url }}?edit" class="float-xs-right btn btn-secondary btn-lg">{% trans 'Edit' %}</a>
+        <a href="{{ page.get_absolute_url }}?compare" class="float-right btn btn-secondary btn-lg">{% trans 'Compare to Previous version' %}</a>
+        <a href="{{ page.get_absolute_url }}?edit" class="float-right btn btn-secondary btn-lg">{% trans 'Edit' %}</a>
     {% endif %}
 </div>
 {% endblock %}

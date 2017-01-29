@@ -382,7 +382,7 @@ class SpeakerTests(TestCase):
             '        <img class="thumbnail m-x-auto" src="%s">' % img,
             '      </a>',
             '      <a href="/users/%s/">' % username,
-            '        <h3 class="text-xs-center">author_a</h3>',
+            '        <h3 class="text-center">author_a</h3>',
             '      </a>',
             '    </div>',
             '</div>',

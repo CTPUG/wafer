@@ -9,7 +9,7 @@
     <a class="navbar-brand" href="{% url 'wafer_page' %}">{{ WAFER_CONFERENCE_NAME }}</a>
     {% endblock navtitle %}
 
-    <div class="collapse navbar-toggleable-xs" id="wafer-navbar-collapse">
+    <div class="collapse navbar-toggleable" id="wafer-navbar-collapse">
       {% block navmenulist %}
       <ul class="nav navbar-nav">
       {% for item in WAFER_MENUS.items %}
