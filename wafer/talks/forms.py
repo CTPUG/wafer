@@ -3,6 +3,7 @@ import copy
 from django import forms
 from django.conf import settings
 from django.db.models import Q
+from django.core.exceptions import FieldDoesNotExist
 from django.core.urlresolvers import reverse
 from django.utils.module_loading import import_string
 from django.utils.translation import ugettext as _
@@ -20,7 +21,45 @@ def get_talk_form_class():
     return import_string(settings.WAFER_TALK_FORM)
 
 
+def has_field(model, field_name):
+    try:
+        model._meta.get_field(field_name)
+        return True
+    except FieldDoesNotExist:
+        return False
+
+
+class TalkCategorisationField(forms.ModelChoiceField):
+    """The categories that talks can be placed into.
+    These are always required, if there are any registered.
+    """
+    def __init__(self, model, initial=None, empty_label=None, *args, **kwargs):
+        super(TalkCategorisationField, self).__init__(
+            initial=initial,
+            queryset=model.objects.all(),
+            empty_label=None,
+            required=True,
+            *args, **kwargs)
+
+        if has_field(model, 'disable_submission'):
+            if initial:
+                # Ensure the current selection is in the query_set, regardless
+                # of whether it's been disabled since then
+                self.queryset = self.queryset.filter(
+                    Q(disable_submission=False) |
+                    Q(pk=initial))
+            else:
+                self.queryset = self.queryset.filter(
+                    disable_submission=False)
+
+    def label_from_instance(self, obj):
+        return u'%s: %s' % (obj.name, obj.description)
+
+
 class TalkForm(forms.ModelForm):
+    talk_type = TalkCategorisationField(model=TalkType)
+    track = TalkCategorisationField(model=Track)
+
     def __init__(self, *args, **kwargs):
         self.user = kwargs.pop('user')
         initial = kwargs.setdefault('initial', {})
@@ -43,8 +82,14 @@ class TalkForm(forms.ModelForm):
 
         if not Track.objects.exists():
             self.fields.pop('track')
+
         if not TalkType.objects.exists():
             self.fields.pop('talk_type')
+        else:
+            self.fields['talk_type'] = TalkCategorisationField(
+                model=TalkType,
+                initial=self.initial['talk_type']
+            )
 
         # We add the name, if known, to the authors list
         self.fields['authors'].label_from_instance = render_author
@@ -61,32 +106,6 @@ class TalkForm(forms.ModelForm):
                             _('Delete')))))
         else:
             self.helper.add_input(submit_button)
-
-        if 'talk_type' in self.fields:
-            # Exclude disabled talk types from the choice widget
-            if kwargs['instance'] and kwargs['instance'].talk_type:
-                # Ensure the current talk type is in the query_set, regardless
-                # of whether it's been disabled since then
-                self.fields['talk_type'].queryset = TalkType.objects.filter(
-                    Q(disable_submission=False) |
-                    Q(pk=kwargs['instance'].talk_type.pk))
-            else:
-                self.fields['talk_type'].queryset = TalkType.objects.filter(
-                    disable_submission=False)
-
-    # These are only called when the field wasn't removed from the form, above
-    # so they can assume that the field is always required.
-    def clean_talk_type(self):
-        data = self.cleaned_data['talk_type']
-        if not data:
-            raise forms.ValidationError(_('A Talk Type is required'))
-        return data
-
-    def clean_track(self):
-        data = self.cleaned_data['track']
-        if not data:
-            raise forms.ValidationError(_('A Track is required'))
-        return data
 
     class Meta:
         model = Talk
