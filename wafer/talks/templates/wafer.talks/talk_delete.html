@@ -3,16 +3,16 @@
 {% load crispy_forms_tags %}
 {% block content %}
 <section class="wafer wafer-talk-delete">
-<h1>{% trans "Confirm Talk Deletion" %}</h1>
-<div class="alert alert-danger">
-    {% blocktrans with talk_title=object.title talk_url=object.get_absolute_url %}
+  <h1>{% trans "Confirm Talk Deletion" %}</h1>
+  <div class="alert alert-danger">
+   {% blocktrans with talk_title=object.title talk_url=object.get_absolute_url %}
     You are about to delete the talk <a href="{{ talk_url }}">"{{ talk_title }}"</a>.<br>
     This cannot be undone.
     {% endblocktrans %}
-</div>
-<form action="" method="post">
+  </div>
+  <form action="" method="post">
     {% csrf_token %}
     <input type="submit" class="btn btn-danger" value="{% trans 'Confirm Deletion' %}">
-</form>
+  </form>
 </section>
 {% endblock %}

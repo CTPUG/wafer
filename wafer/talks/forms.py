@@ -3,6 +3,7 @@ import copy
 from django import forms
 from django.conf import settings
 from django.db.models import Q
+from django.core.exceptions import FieldDoesNotExist
 from django.core.urlresolvers import reverse
 from django.utils.module_loading import import_string
 from django.utils.translation import ugettext as _
@@ -13,14 +14,52 @@ from crispy_forms.layout import Submit, HTML
 from markitup.widgets import MarkItUpWidget
 from easy_select2.widgets import Select2Multiple
 
-from wafer.talks.models import Talk, TalkType, render_author
+from wafer.talks.models import Talk, TalkType, Track, render_author
 
 
 def get_talk_form_class():
     return import_string(settings.WAFER_TALK_FORM)
 
 
+def has_field(model, field_name):
+    try:
+        model._meta.get_field(field_name)
+        return True
+    except FieldDoesNotExist:
+        return False
+
+
+class TalkCategorisationField(forms.ModelChoiceField):
+    """The categories that talks can be placed into.
+    These are always required, if there are any registered.
+    """
+    def __init__(self, model, initial=None, empty_label=None, *args, **kwargs):
+        super(TalkCategorisationField, self).__init__(
+            initial=initial,
+            queryset=model.objects.all(),
+            empty_label=None,
+            required=True,
+            *args, **kwargs)
+
+        if has_field(model, 'disable_submission'):
+            if initial:
+                # Ensure the current selection is in the query_set, regardless
+                # of whether it's been disabled since then
+                self.queryset = self.queryset.filter(
+                    Q(disable_submission=False) |
+                    Q(pk=initial))
+            else:
+                self.queryset = self.queryset.filter(
+                    disable_submission=False)
+
+    def label_from_instance(self, obj):
+        return u'%s: %s' % (obj.name, obj.description)
+
+
 class TalkForm(forms.ModelForm):
+    talk_type = TalkCategorisationField(model=TalkType)
+    track = TalkCategorisationField(model=Track)
+
     def __init__(self, *args, **kwargs):
         self.user = kwargs.pop('user')
         initial = kwargs.setdefault('initial', {})
@@ -41,6 +80,17 @@ class TalkForm(forms.ModelForm):
         if not self.user.has_perm('talks.edit_private_notes'):
             self.fields.pop('private_notes')
 
+        if not Track.objects.exists():
+            self.fields.pop('track')
+
+        if not TalkType.objects.exists():
+            self.fields.pop('talk_type')
+        else:
+            self.fields['talk_type'] = TalkCategorisationField(
+                model=TalkType,
+                initial=self.initial['talk_type']
+            )
+
         # We add the name, if known, to the authors list
         self.fields['authors'].label_from_instance = render_author
 
@@ -56,18 +106,11 @@ class TalkForm(forms.ModelForm):
                             _('Delete')))))
         else:
             self.helper.add_input(submit_button)
-        # Exclude disabled talk types from the choice widget
-        if kwargs['instance'] and kwargs['instance'].talk_type:
-            # Ensure the current talk type is in the query_set, regardless of whether it's been disabled since then
-            self.fields['talk_type'].queryset = TalkType.objects.filter(Q(disable_submission=False) | Q(pk=kwargs['instance'].talk_type.pk))
-        else:
-            self.fields['talk_type'].queryset = TalkType.objects.filter(disable_submission=False)
-
 
     class Meta:
         model = Talk
-        fields = ('title', 'talk_type', 'abstract', 'authors', 'notes',
-                  'private_notes')
+        fields = ('title', 'talk_type', 'track', 'abstract', 'authors',
+                  'notes', 'private_notes')
         widgets = {
             'abstract': MarkItUpWidget(),
             'notes': forms.Textarea(attrs={'class': 'input-xxlarge'}),

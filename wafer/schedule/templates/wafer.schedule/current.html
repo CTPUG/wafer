@@ -3,59 +3,59 @@
 {% block title %}{% trans "Happening now" %} - {{ WAFER_CONFERENCE_NAME }}{% endblock %}
 {% block content %}
 <section class="wafer wafer-schedule">
-<h1>{% trans "Happening now" %}</h1>
-<div class="wafer_schedule">
-   {% if not active %}
-   {# Schedule is incomplete / invalid, so show nothing #}
-   {% blocktrans %}
-   <p>The final schedule has not been published yet.</p>
-   {% endblocktrans %}
-   {% elif not slots %}
-   {% blocktrans %}
-   <p>Nothing happening right now.</p>
-   {% endblocktrans %}
-   {% else %}
-   <table cellspacing=1 cellpadding=0>
-      <tr>
-         <td colspan="{{ schedule_day.venues|length|add:1 }}" class="title">{{ schedule_day.day.date|date:"l (d b)" }}</td>
-      </tr>
-      <tr>
-         <th>{% trans "Time" %}</th>
-         {% for venue in schedule_day.venues %}
-         <th><a href="{{ venue.get_absolute_url }}">{{ venue.name }}</a></th>
+  <h1>{% trans "Happening now" %}</h1>
+  <div class="wafer_schedule">
+    {% if not active %}
+      {# Schedule is incomplete / invalid, so show nothing #}
+      {% blocktrans %}
+        <p>The final schedule has not been published yet.</p>
+      {% endblocktrans %}
+    {% elif not slots %}
+      {% blocktrans %}
+        <p>Nothing happening right now.</p>
+      {% endblocktrans %}
+    {% else %}
+      <table cellspacing=1 cellpadding=0>
+        <tr>
+          <td colspan="{{ schedule_day.venues|length|add:1 }}" class="title">{{ schedule_day.day.date|date:"l (d b)" }}</td>
+        </tr>
+        <tr>
+          <th>{% trans "Time" %}</th>
+          {% for venue in schedule_day.venues %}
+            <th><a href="{{ venue.get_absolute_url }}">{{ venue.name }}</a></th>
+          {% endfor %}
+        </tr>
+        {% for row in slots %}
+          <tr>
+            {% if row.slot == cur_slot %}
+              <td>{{ row.slot.get_start_time|time:"H:i" }} - {{ row.slot.end_time|time:"H:i" }} (Now On)</td>
+            {% else %}
+              <td>{{ row.slot.get_start_time|time:"H:i" }} - {{ row.slot.end_time|time:"H:i" }}</td>
+            {% endif %}
+            {% for item in row.get_sorted_items %}
+              {% if item.item == "unavailable" %}
+                <td colspan="{{ item.colspan }}" rowspan="{{ item.rowspan }}" class="unavailable"></td>
+              {% else %}
+                {% if item.note == "complete" %}
+                  <td colspan="{{ item.colspan }}" rowspan="{{ item.rowspan }}" class="completed">
+                {% elif item.note == "current" %}
+                  <td colspan="{{ item.colspan }}" rowspan="{{ item.rowspan }}" class="current_active">
+                {% else %}
+                  <td colspan="{{ item.colspan }}" rowspan="{{ item.rowspan }}" class="future">
+                {% endif %}
+                  {% include "wafer.schedule/schedule_item.html" with item=item.item %}
+                </td>
+              {% endif %}
+            {% endfor %}
+          </tr>
         {% endfor %}
-      </tr>
-      {% for row in slots %}
-      <tr>
-        {% if row.slot == cur_slot %}
-           <td>{{ row.slot.get_start_time|time:"H:i" }} - {{ row.slot.end_time|time:"H:i" }} (Now On)</td>
-        {% else %}
-           <td>{{ row.slot.get_start_time|time:"H:i" }} - {{ row.slot.end_time|time:"H:i" }}</td>
-        {% endif %}
-        {% for item in row.get_sorted_items %}
-        {% if item.item == "unavailable" %}
-           <td colspan="{{ item.colspan }}" rowspan="{{ item.rowspan }}" class="unavailable"></td>
-        {% else %}
-           {% if item.note == "complete" %}
-              <td colspan="{{ item.colspan }}" rowspan="{{ item.rowspan }}" class="completed">
-           {% elif item.note == "current" %}
-              <td colspan="{{ item.colspan }}" rowspan="{{ item.rowspan }}" class="current_active">
-           {% else %}
-              <td colspan="{{ item.colspan }}" rowspan="{{ item.rowspan }}" class="future">
-           {% endif %}
-              {% include "wafer.schedule/schedule_item.html" with item=item.item %}
-           </td>
-        {% endif %}
-        {% endfor %}
-      </tr>
-      {% endfor %}
-   </table>
-   {% endif %}
-   <div class="timestamp">
-     Last updated: {% now "H:i:s" %}
-     <div class="errors"></div>
-   </div>
-</div>
+      </table>
+    {% endif %}
+    <div class="timestamp">
+      Last updated: {% now "H:i:s" %}
+      <div class="errors"></div>
+    </div>
+  </div>
 </section>
 {% endblock %}
 {% block extra_foot %}
@@ -87,7 +87,7 @@ function attemptRefresh(delay) {
   });
 }
 $(function() {
-    registerRefresh({{ refresh }});
+  registerRefresh({{ refresh }});
 });
 </script>
 {% endif %}

@@ -51,6 +51,29 @@ class TalkType(models.Model):
 
 
 @python_2_unicode_compatible
+class Track(models.Model):
+    """A conference track."""
+    name = models.CharField(max_length=255)
+    description = models.TextField(max_length=1024)
+    order = models.IntegerField(default=1)
+
+    def __str__(self):
+        return u'%s' % (self.name,)
+
+    class Meta:
+        ordering = ['order', 'id']
+
+    def css_class(self):
+        """Return a string for use as a css class name"""
+        # While css can represent complicated strings
+        # using escaping, we want simplicity and obvious predictablity
+        return u'track-%s' % slugify(self.name)
+
+    css_class.admin_order_field = 'name'
+    css_class.short_description = 'CSS class name'
+
+
+@python_2_unicode_compatible
 class Talk(models.Model):
 
     class Meta:
@@ -69,7 +92,8 @@ class Talk(models.Model):
     )
 
     talk_id = models.AutoField(primary_key=True)
-    talk_type = models.ForeignKey(TalkType, null=True)
+    talk_type = models.ForeignKey(TalkType, null=True, blank=True)
+    track = models.ForeignKey(Track, null=True, blank=True)
 
     title = models.CharField(max_length=1024)
 

@@ -6,7 +6,7 @@ from reversion.admin import VersionAdmin
 from easy_select2 import select2_modelform_meta
 
 from wafer.compare.admin import CompareVersionAdmin, DateModifiedFilter
-from wafer.talks.models import TalkType, Talk, TalkUrl, render_author
+from wafer.talks.models import TalkType, Talk, TalkUrl, Track, render_author
 
 
 class AdminTalkForm(forms.ModelForm):
@@ -64,6 +64,12 @@ class TalkTypeAdmin(VersionAdmin, admin.ModelAdmin):
     readonly_fields = ('css_class',)
 
 
+class TrackAdmin(VersionAdmin, admin.ModelAdmin):
+    list_display = ('name', 'order', 'css_class')
+    readonly_fields = ('css_class',)
+
+
 admin.site.register(Talk, TalkAdmin)
 admin.site.register(TalkType, TalkTypeAdmin)
+admin.site.register(Track, TrackAdmin)
 admin.site.register(TalkUrl, TalkUrlAdmin)
