@@ -171,15 +171,20 @@ class ScheduleItem(models.Model):
             return self.details
         return 'No title'
 
-    def get_talk_css_classes(self):
-        """CSS classes based on type and track, if available"""
+    def get_css_classes(self):
+        """Get all applied CSS classes, based on this item, type, and track"""
+        if self.css_class:
+            yield self.css_class
+        else:
+            yield 'schedule'
+
         if self.talk:
             if self.talk.talk_type:
                 yield self.talk.talk_type.css_class()
             if self.talk.track:
                 yield self.talk.track.css_class()
 
-    get_talk_css_classes.short_description = 'Talk Type & Track CSS classes'
+    get_css_classes.short_description = 'Talk Type & Track CSS classes'
 
     def get_desc(self):
         if self.details:

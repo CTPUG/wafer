@@ -207,7 +207,7 @@ class ScheduleItemAdmin(admin.ModelAdmin):
     form = ScheduleItemAdminForm
 
     change_list_template = 'admin/scheduleitem_list.html'
-    readonly_fields = ('get_talk_css_classes',)
+    readonly_fields = ('get_css_classes',)
     list_display = ('get_start_time', 'venue', 'get_title', 'expand')
     list_editable = ('expand',)
 
