@@ -38,7 +38,8 @@ def authors_help():
             "field, so the organisers can add them to your talk."
         ))
     text.append(_(
-        "You, as the talk submitter, will be the talk's corresponding author."
+        "<strong>You, as the talk submitter, will be the talk's corresponding "
+        "author.</strong>"
     ))
     return ' '.join(text)
 
