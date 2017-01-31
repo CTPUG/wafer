@@ -37,6 +37,7 @@ class Command(BaseCommand):
                     continue
                 except Permission.MultipleObjectsReturned:
                     print('Non-unique permission %s' % perm_code)
+                    continue
                 if perm not in group.permissions.all():
                     print('Adding %s to %s' % (perm_code, wafer_group))
                     group.permissions.add(perm)
