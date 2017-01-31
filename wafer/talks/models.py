@@ -31,8 +31,9 @@ def authors_help():
     text.append(_("The speakers presenting the talk."))
     if not settings.WAFER_PUBLIC_ATTENDEE_LIST:
         text.append(_(
-            "To ensure privacy, you will only be able to see yourself and "
-            "authors that have been added by the conference organisers. "
+            "To ensure attendee privacy, you will only be able to see "
+            "yourself and authors that have been added to the talk by the "
+            "conference organisers. "
             "If you will have other co-authors, add a note in the notes "
             "field, so the organisers can add them to your talk."
         ))
