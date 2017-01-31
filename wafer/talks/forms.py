@@ -91,6 +91,10 @@ class TalkForm(forms.ModelForm):
                 initial=self.initial.get('talk_type')
             )
 
+        if not settings.WAFER_VIDEO:
+            self.fields.pop('video')
+            self.fields.pop('video_reviewer')
+
         # We add the name, if known, to the authors list
         self.fields['authors'].label_from_instance = render_author
 
@@ -107,10 +111,18 @@ class TalkForm(forms.ModelForm):
         else:
             self.helper.add_input(submit_button)
 
+    def clean_video_reviewer(self):
+        video = self.cleaned_data['video']
+        reviewer = self.cleaned_data['video_reviewer']
+        if video and not reviewer:
+            raise forms.ValidationError(
+                _('A reviewer is required, if video is permitted.'))
+        return reviewer
+
     class Meta:
         model = Talk
         fields = ('title', 'talk_type', 'track', 'abstract', 'authors',
-                  'notes', 'private_notes')
+                  'video', 'video_reviewer', 'notes', 'private_notes')
         widgets = {
             'abstract': MarkItUpWidget(),
             'notes': forms.Textarea(attrs={'class': 'input-xxlarge'}),

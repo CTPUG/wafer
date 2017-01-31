@@ -126,6 +126,24 @@ class Talk(models.Model):
         help_text=_(
             "The speakers presenting the talk."))
 
+    video = models.BooleanField(
+        default=True,
+        help_text=_(
+            "By checking this, you are giving permission for the talk to be "
+            "videoed, and distributed by the conference, under a license of "
+            "their choice."
+        ))
+    video_reviewer = models.EmailField(
+        null=True, blank=True,
+        help_text=_(
+            "Email address of a person who will be allowed to review "
+            "and approve your video details. "
+            "Ideally, a second set of eyes who is not a busy conference "
+            "presenter. "
+            "But you can specify yourself, if you can't think of anyone else "
+            "who would care."
+        ))
+
     kv = models.ManyToManyField(KeyValue)
 
     def __str__(self):
