@@ -1,8 +1,9 @@
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import ugettext, ugettext_lazy as _
 from django.core.urlresolvers import reverse
 from django.conf import settings
 from django.db import models
 from django.utils.encoding import python_2_unicode_compatible
+from django.utils.functional import lazy
 from django.template.defaultfilters import slugify
 
 from markitup.fields import MarkupField
@@ -22,6 +23,23 @@ CANCELLED = 'C'
 # Utility functions used in the forms
 def render_author(author):
     return '%s (%s)' % (author.userprofile.display_name(), author)
+
+
+def authors_help():
+    _ = ugettext  # This function will be wrapped for lazy evaluation
+    text = []
+    text.append(_("The speakers presenting the talk."))
+    if not settings.WAFER_PUBLIC_ATTENDEE_LIST:
+        text.append(_(
+            "To ensure privacy, you will only be able to see yourself and "
+            "authors that have been added by the conference organisers. "
+            "If you will have other co-authors, add a note in the notes "
+            "field, so the organisers can add them to your talk."
+        ))
+    text.append(_(
+        "You, as the talk submitter, will be the talk's corresponding author."
+    ))
+    return ' '.join(text)
 
 
 @python_2_unicode_compatible
@@ -123,8 +141,7 @@ class Talk(models.Model):
 
     authors = models.ManyToManyField(
         settings.AUTH_USER_MODEL, related_name='talks',
-        help_text=_(
-            "The speakers presenting the talk."))
+        help_text=lazy(authors_help, str))
 
     kv = models.ManyToManyField(KeyValue)
 
