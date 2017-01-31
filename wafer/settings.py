@@ -276,6 +276,7 @@ WAFER_TALK_FORM = 'wafer.talks.forms.TalkForm'
 
 # Ask speakers for video release, and an email address of a reviewer
 WAFER_VIDEO = True
+WAFER_VIDEO_REVIEWER = True
 
 # Set this to False to disable registration
 WAFER_REGISTRATION_OPEN = True

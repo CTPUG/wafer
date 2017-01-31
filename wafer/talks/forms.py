@@ -93,6 +93,7 @@ class TalkForm(forms.ModelForm):
 
         if not settings.WAFER_VIDEO:
             self.fields.pop('video')
+        if not settings.WAFER_VIDEO_REVIEWER:
             self.fields.pop('video_reviewer')
 
         # We add the name, if known, to the authors list
