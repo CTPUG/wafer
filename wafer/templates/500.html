@@ -1,0 +1,8 @@
+{% extends "wafer/base.html" %}
+{% load i18n %}
+{% block content %}
+<h1>{% trans "Internal server error" %}</h1>
+{% blocktrans %}
+Something went wrong while preparing the page that was requested.
+{% endblocktrans %}
+{% endblock %}
