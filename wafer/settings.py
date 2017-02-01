@@ -274,6 +274,10 @@ WAFER_TALKS_OPEN = True
 # The form used for talk submission
 WAFER_TALK_FORM = 'wafer.talks.forms.TalkForm'
 
+# Ask speakers for video release, and an email address of a reviewer
+WAFER_VIDEO = True
+WAFER_VIDEO_REVIEWER = True
+
 # Set this to False to disable registration
 WAFER_REGISTRATION_OPEN = True
 # Can be 'ticket' for Quicket tickets or 'form' for a classic form
