@@ -1,4 +1,5 @@
 {% extends "wafer/base.html" %}
+{% load i18n %}
 {% load static from staticfiles %}
 {% block content %}
 <div class="row">
@@ -12,30 +13,20 @@
     {% endif %}
   </div>
   <div class="col-md-8">
-    <h1>Schedule Editor
-      <div class="float-right">
-        <ul class="nav nav-pills navbar-nav navbar-right">
-          <li role="presentation" class="dropdown">
-            <a class="dropdown-toggle" data-toggle="dropdown"
-               href="#" role="button" aria-haspopup="true"
-               aria-expanded="true">
-              {{ day.date }}
-              <span class="caret"></span>
-            </a>
-            <ul class="dropdown-menu"
-                aria-labelledby="dLabel">
-              {% for day in days %}
-                <li>
-                  <a href="{% url 'admin:schedule_editor' day.id %}">
-                    {{ day.date }} (Day {{ day.id }})
-                  </a>
-                </li>
-              {% endfor %}
-            </ul>
-          </li>
-        </ul>
+    <div class="dropdown float-right">
+      <button class="btn btn-secondary dropdown-toggle" type="button"
+              data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+        {{ day.date }} (Day {{ day.id }})
+      </button>
+      <div class="dropdown-menu">
+        {% for day in days %}
+          <a class="dropdown-item" href="{% url 'admin:schedule_editor' day.id %}">
+            {{ day.date }} (Day {{ day.id }})
+          </a>
+        {% endfor %}
       </div>
-    </h1>
+    </div>
+    <h1>{% trans "Schedule Editor" %}</h1>
     <table class="table table-sm">
       <thead>
         <tr>
