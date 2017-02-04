@@ -1,6 +1,7 @@
 {% extends "wafer/base.html" %}
 {% load i18n %}
 {% block title %}{{ object.userprofile.display_name }} - {{ WAFER_CONFERENCE_NAME }}{% endblock %}
+{% block container_class %}userprofile{% endblock %}
 {% block content %}
 <section class="wafer wafer-profile">
   {% with profile=object.userprofile %}
