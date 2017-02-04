@@ -3,38 +3,39 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>{% block title %}{{ WAFER_CONFERENCE_NAME }}{% endblock %}</title>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="{% static 'vendor/bootstrap/dist/css/bootstrap.min.css' %}" rel="stylesheet" media="screen">
-    <link href="{% static 'vendor/font-awesome/css/font-awesome.min.css' %}" rel="stylesheet" media="screen">
-    <link href="{% static 'css/wafer.css' %}" rel="stylesheet" media="screen">
-    {% block extra_head %}{% endblock %}
+  <title>{% block title %}{{ WAFER_CONFERENCE_NAME }}{% endblock %}</title>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="{% static 'vendor/bootstrap/dist/css/bootstrap.min.css' %}" rel="stylesheet" media="screen">
+  <link href="{% static 'vendor/font-awesome/css/font-awesome.min.css' %}" rel="stylesheet" media="screen">
+  <link href="{% static 'css/wafer.css' %}" rel="stylesheet" media="screen">
+  {% block extra_head %}{% endblock %}
 </head>
 <body>
-    {% include "wafer/nav.html" %}
-    <div id="main" class="container">
-        {% if messages %}
-        <div class="messages">
-            {% for message in messages %}
-            <div class="alert
-                {% if message.tags == 'error' %}
-                    alert-danger
-                {% elif message.tags %}
-                    alert-{{ message.tags }}
-                {% endif %}">{{ message }}</div>
-            {% endfor %}
-        </div>
-        {% endif %}
-{% block content %}
-    <h1>{{ WAFER_CONFERENCE_NAME }}</h1>
-{% endblock %}
-    </div>
-    {% sponsors %}
-    <script src="{% static 'vendor/jquery/dist/jquery.min.js' %}"></script>
-    <script src="{% static 'vendor/popper.js/dist/umd/popper.min.js' %}"></script>
-    <script src="{% static 'vendor/bootstrap/dist/js/bootstrap.min.js' %}"></script>
-    {% block extra_foot %}{% endblock %}
+  {% include "wafer/nav.html" %}
+  <div id="main" class="container {% block container_class %}{% endblock %}">
+    {% if messages %}
+      <div class="messages">
+        {% for message in messages %}
+          <div class="alert
+            {% if message.tags == 'error' %}
+                      alert-danger
+            {% elif message.tags %}
+                      alert-{{ message.tags }}
+            {% endif %}">{{ message }}
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+    {% block content %}
+      <h1>{{ WAFER_CONFERENCE_NAME }}</h1>
+    {% endblock %}
+  </div>
+  {% sponsors %}
+  <script src="{% static 'vendor/jquery/dist/jquery.min.js' %}"></script>
+  <script src="{% static 'vendor/popper.js/dist/umd/popper.min.js' %}"></script>
+  <script src="{% static 'vendor/bootstrap/dist/js/bootstrap.min.js' %}"></script>
+  {% block extra_foot %}{% endblock %}
 </body>
 </html>
