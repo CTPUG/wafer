@@ -22,12 +22,6 @@
 	display: none;
 }
 
-.profile-links li{
-	list-style: none;
-	display: inline-block;
-	margin-left: 5px;
-}
-
 [draggable] {
 	-moz-user-select: none;
 	-khtml-user-select: none;
@@ -45,99 +39,6 @@
 
 .droppable.over{
     border: 5px dashed #000;
-}
-
-.bs-callout {
-    padding: 5px;
-    margin: 20px 0;
-    border: 1px solid #eee;
-    border-left-width: 10px;
-    border-radius: 6px;
-}
-
-.bs-callout h4 {
-    margin-top: 0;
-    margin-bottom: 5px;
-}
-
-.bs-callout p:last-child {
-    margin-bottom: 0;
-}
-
-.bs-callout code {
-    border-radius: 3px;
-}
-
-.bs-callout+.bs-callout {
-    margin-top: -5px;
-}
-
-.bs-callout-default {
-    border-left-color: #777;
-}
-
-.bs-callout-default h4 {
-    color: #777;
-}
-
-.bs-callout-primary {
-    border-left-color: #428bca;
-}
-
-.bs-callout-primary h4 {
-    color: #428bca;
-}
-
-.bs-callout-success {
-    border-left-color: #5cb85c;
-}
-
-.bs-callout-success h4 {
-    color: #5cb85c;
-}
-
-.bs-callout-danger {
-    border-left-color: #d9534f;
-}
-
-.bs-callout-danger h4 {
-    color: #d9534f;
-}
-
-.bs-callout-warning {
-    border-left-color: #f0ad4e;
-}
-
-.bs-callout-warning h4 {
-    color: #f0ad4e;
-}
-
-.bs-callout-info {
-    border-left-color: #5bc0de;
-}
-
-.bs-callout-info h4 {
-    color: #5bc0de;
-}
-
-.bs-callout-platinum {
-    border-left-color: #E5E4E2;
-}
-
-.bs-callout-gold {
-    border-left-color: #DAA520;
-}
-
-.bs-callout-silver {
-    border-left-color: #C0C0C0;
-}
-
-.bs-callout-bronze {
-    border-left-color: #CD7F32;
-}
-
-.bs-callout-patron {
-    border-left-color: #A4C639;
 }
 
 /* Temporary workaronud for Bootstrap4 alpha 6

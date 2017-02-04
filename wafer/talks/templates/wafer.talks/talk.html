@@ -77,7 +77,7 @@
       </p>
     </div>
   {% endif %}
-  <div class="well">
+  <div id="abstract">
     {{ object.abstract.rendered|safe }}
   </div>
   {% if perms.talks.view_all_talks or user.is_superuser %}
@@ -86,7 +86,7 @@
         <h2>Talk Notes</h2>
         <p>(The following is not visible to attendees.)</p>
       {% endblocktrans %}
-      <div class="well">
+      <div id="notes">
         {{ object.notes|urlize|linebreaks }}
       </div>
     {% endif %}
@@ -96,19 +96,17 @@
       <h2>Private notes</h2>
       <p>(The following is not visible to submitters or attendees.)</p>
     {% endblocktrans %}
-    <div class="well">
+    <div id="private_notes">
       {{ object.private_notes|urlize|linebreaks }}
     </div>
   {% endif %}
   {% if talk.talkurl_set.all %}
-    <div class="well" id="urls">
-    <div>{% trans "URLS" %}</div>
-    <ul>
+    <h3 id="urls_title">{% trans "URLs" %}</h3>
+    <ul class="list-group" id="urls">
       {% for talkurl in talk.talkurl_set.all %}
-        <li><a href="{{ talkurl.url }}">{{ talkurl.description }}</a></li>
+        <li class="list-group-item"><a href="{{ talkurl.url }}">{{ talkurl.description }}</a></li>
       {% endfor %}
     </ul>
-  </div>
   {% endif %}
 </section>
 {% endblock %}
