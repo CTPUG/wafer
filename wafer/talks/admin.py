@@ -50,7 +50,8 @@ class TalkAdmin(CompareVersionAdmin, admin.ModelAdmin):
                     'get_corresponding_author_contact', 'talk_type',
                     'get_in_schedule', 'has_url', 'status')
     list_editable = ('status',)
-    list_filter = ('status', 'talk_type', ScheduleListFilter, DateModifiedFilter)
+    list_filter = ('status', 'talk_type', 'track', ScheduleListFilter,
+                   DateModifiedFilter)
     exclude = ('kv',)
 
     inlines = [
