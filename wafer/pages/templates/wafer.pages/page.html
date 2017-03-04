@@ -3,10 +3,13 @@
 {% block title %}{{ page.name }} - {{ WAFER_CONFERENCE_NAME }}{% endblock %}
 {% block content %}
 <div>
-    {{ page.content.rendered|safe }}
-    {% if perms.pages.change_page %}
-        <a href="{{ page.get_absolute_url }}?compare" class="float-right btn btn-secondary btn-lg">{% trans 'Compare to Previous version' %}</a>
-        <a href="{{ page.get_absolute_url }}?edit" class="float-right btn btn-secondary btn-lg">{% trans 'Edit' %}</a>
-    {% endif %}
+  {{ page.content.rendered|safe }}
+  {% if perms.pages.change_page %}
+    <a href="{{ page.get_absolute_url }}?compare"
+       class="float-right btn btn-secondary btn-lg"
+       >{% trans 'Compare to Previous version' %}</a>
+    <a href="{{ page.get_absolute_url }}?edit"
+       class="float-right btn btn-secondary btn-lg">{% trans 'Edit' %}</a>
+  {% endif %}
 </div>
 {% endblock %}
