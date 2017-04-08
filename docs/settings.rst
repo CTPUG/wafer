@@ -76,10 +76,6 @@ Wafer's settings
     Otherwise, only users with associated public talks have public
     profiles.
 
-``WAFER_REGISTRATION_FORM``
-    A Django Form used for KV registration.
-    Used when ``WAFER_REGISTRATION_MODE`` is set set to ``'form'``.
-
 ``WAFER_REGISTRATION_MODE``
     The mechanism wafer will use to decide if an attendee is registered.
     The default is ``'ticket'`` for Quicket integration.

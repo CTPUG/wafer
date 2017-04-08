@@ -29,10 +29,8 @@
           <ul class="float-right btn-group btn-group-vertical profile-links">
               <li><a href="{% url 'wafer_user_edit' object.username %}" class="btn btn-secondary">{% trans 'Edit User' %}</a></li>
               <li><a href="{% url 'wafer_user_edit_profile' object.username %}" class="btn btn-secondary">{% trans 'Edit Profile' %}</a></li>
-              {% if WAFER_REGISTRATION_OPEN %}
-                  {% if WAFER_REGISTRATION_MODE == 'form' %}
-                      {% url 'wafer_register_view' object.username as register_url %}
-                  {% elif WAFER_REGISTRATION_MODE == 'ticket' and not profile.is_registered %}
+              {% if WAFER_REGISTRATION_OPEN and not profile.is_registered %}
+                  {% if WAFER_REGISTRATION_MODE == 'ticket' %}
                       {% url 'wafer_ticket_claim' as register_url %}
                   {% endif %}
                   {% if register_url %}
