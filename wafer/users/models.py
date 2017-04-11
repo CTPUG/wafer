@@ -4,6 +4,7 @@ from django.db import models
 from django.db.models import Q
 from django.db.models.signals import post_save
 from django.utils.encoding import python_2_unicode_compatible
+from django.utils.module_loading import import_string
 from django.core.validators import RegexValidator
 
 from libravatar import libravatar_url
@@ -22,6 +23,7 @@ from wafer.talks.models import (ACCEPTED, SUBMITTED, UNDER_CONSIDERATION,
 # Specification taken from https://support.twitter.com/articles/101299
 TwitterValidator = RegexValidator('^[A-Za-z0-9_]{1,15}$',
                                   'Incorrectly formatted twitter handle')
+is_registered = import_string(settings.WAFER_USER_IS_REGISTERED)
 
 
 @python_2_unicode_compatible
@@ -84,10 +86,7 @@ class UserProfile(models.Model):
         return self.user.get_full_name() or self.user.username
 
     def is_registered(self):
-        if settings.WAFER_REGISTRATION_MODE == 'ticket':
-            return self.user.ticket.exists()
-        raise NotImplemented('Invalid WAFER_REGISTRATION_MODE: %s'
-                             % settings.WAFER_REGISTRATION_MODE)
+        return is_registered(self.user)
 
     is_registered.boolean = True
 

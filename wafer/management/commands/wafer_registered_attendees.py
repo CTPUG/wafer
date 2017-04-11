@@ -57,7 +57,7 @@ class Command(BaseCommand):
         if settings.WAFER_REGISTRATION_MODE == 'ticket':
             user_list = TicketRegisteredUserList()
         else:
-            raise NotImplemented('Unknown WAFER_REGISTRATION_MODE')
+            user_list = RegisteredUserList()
 
         csv_file.writerow(user_list.fields())
         for row in user_list.attendees():

@@ -280,8 +280,12 @@ WAFER_VIDEO_REVIEWER = True
 
 # Set this to False to disable registration
 WAFER_REGISTRATION_OPEN = True
-# Can be 'ticket' for Quicket tickets
+
+# WAFER_REGISTRATION_MODE can be 'ticket' for Quicket tickets, or 'custom' if
+# you implement your own registration system.
 WAFER_REGISTRATION_MODE = 'ticket'
+# WAFER_USER_IS_REGISTERED should return a boolean, when passed a Django user.
+WAFER_USER_IS_REGISTERED = 'wafer.tickets.models.user_is_registered'
 
 # Allow registered and anonymous users to see registered users
 WAFER_PUBLIC_ATTENDEE_LIST = True

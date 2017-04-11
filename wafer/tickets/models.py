@@ -25,3 +25,7 @@ class Ticket(models.Model):
 
     def __str__(self):
         return u'%s (%s)' % (self.barcode, self.email)
+
+
+def user_is_registered(user):
+    return Ticket.objects.filter(user=user).exists()

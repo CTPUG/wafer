@@ -77,8 +77,14 @@ Wafer's settings
     profiles.
 
 ``WAFER_REGISTRATION_MODE``
-    The mechanism wafer will use to decide if an attendee is registered.
-    The default is ``'ticket'`` for Quicket integration.
+    The mechanisms users will register for the conference, with.
+    Possible options are:
+
+    ``'ticket'``
+        For Quicket integration. The default.
+
+    ``'custom'``
+        For your own implementation. See ``WAFER_USER_IS_REGISTERED``.
 
 ``WAFER_REGISTRATION_OPEN``
     A boolean flag.
@@ -92,6 +98,12 @@ Wafer's settings
 ``WAFER_TICKETS_SECRET``
     The secret for the Quicket API.
     Used when ``WAFER_REGISTRATION_MODE`` is ``'ticket'``.
+
+``WAFER_USER_IS_REGISTERED``
+    A function, which takes a user, and determines if they have
+    registered for attendance at the conference.
+    It should return a boolean result.
+    The default function checks for a Quicket ticket.
 
 ``WAFER_VIDEO``
     A boolean flag.
