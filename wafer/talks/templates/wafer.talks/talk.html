@@ -62,17 +62,17 @@
       <p>
         {% trans 'Status:' %}
         {% if object.submitted %}
-          <span class="tag tag-info">{% trans 'Submitted' %}</span>
+          <span class="badge badge-info">{% trans 'Submitted' %}</span>
         {% elif object.under_consideration %}
-          <span class="tag tag-info">{% trans 'Under consideration' %}</span>
+          <span class="badge badge-info">{% trans 'Under consideration' %}</span>
         {% elif object.provisional %}
-          <span class="tag tag-success">{% trans 'Provisionally Accepted' %}</span>
+          <span class="badge badge-success">{% trans 'Provisionally Accepted' %}</span>
         {% elif object.accepted %}
-          <span class="tag tag-success">{% trans 'Accepted' %}</span>
+          <span class="badge badge-success">{% trans 'Accepted' %}</span>
         {% elif object.cancelled %}
-          <span class="tag tag-warning">{% trans 'Cancelled' %}</span>
+          <span class="badge badge-warning">{% trans 'Cancelled' %}</span>
         {% else %}
-          <span class="tag tag-danger">{% trans 'Not accepted' %}</span>
+          <span class="badge badge-danger">{% trans 'Not accepted' %}</span>
         {% endif %}
       </p>
     </div>
