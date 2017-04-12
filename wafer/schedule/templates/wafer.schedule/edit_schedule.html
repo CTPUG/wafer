@@ -107,7 +107,7 @@
         <div role="tabpanel" class="tab-pane row"
              id="unassignedTalks">
           {% for talk in talks_unassigned %}
-            <span draggable="true" class="col-md-6 tag tag-success draggable"
+            <span draggable="true" class="col-md-6 badge badge-success draggable"
                   id="talk{{ talk.talk_id }}"
                   data-toggle="tooltip" data-placement="left"
                   title="{{ talk.title }}" data-type="talk" data-talk-id="{{ talk.talk_id }}">
@@ -118,7 +118,7 @@
         <div role="tabpanel" class="tab-pane active row"
              id="allTalks">
           {% for talk in talks_all %}
-            <span draggable="true" class="col-md-6 tag tag-warning draggable"
+            <span draggable="true" class="col-md-6 badge badge-warning draggable"
                   id="talk{{ talk.talk_id }}"
                   data-toggle="tooltip" data-placement="left"
                   title="{{ talk.title }}" data-type="talk" data-talk-id="{{ talk.talk_id }}">
@@ -128,7 +128,7 @@
         </div>
         <div role="tabpanel" class="tab-pane row" id="pages">
           {% for page in pages %}
-            <span draggable="true" class="col-md-6 tag tag-info draggable"
+            <span draggable="true" class="col-md-6 badge badge-info draggable"
                   id="page{{ page.id }}"
                   data-toggle="tooltip" data-placement="left"
                   title="{{ page.name }}" data-type="page" data-page-id="{{ page.id }}">

@@ -76,7 +76,7 @@
 {% if can_edit %}
     {% if profile.pending_talks.exists or profile.accepted_talks.exists or profile.provisional_talks.exists%}
         {% if profile.is_registered %}
-            <div class="tag tag-success">
+            <div class="badge badge-success">
                 {% blocktrans %}
                     Registered
                 {% endblocktrans %}
