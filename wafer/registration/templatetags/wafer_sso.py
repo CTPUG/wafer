@@ -1,6 +1,6 @@
-from urllib.parse import urlencode
 from django import template
 from django.core.urlresolvers import reverse
+from django.utils.http import urlencode
 
 register = template.Library()
 
