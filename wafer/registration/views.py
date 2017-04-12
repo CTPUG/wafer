@@ -1,11 +1,10 @@
-import urllib
-
 from django.contrib.auth import login
 from django.contrib.auth.views import redirect_to_login
 from django.contrib import messages
 from django.core.urlresolvers import reverse
 from django.conf import settings
 from django.http import Http404, HttpResponseRedirect
+from django.utils.http import urlencode
 
 from wafer.registration.sso import SSOError, debian_sso, github_sso
 
@@ -27,7 +26,7 @@ def github_login(request):
 
     if 'code' not in request.GET:
         return HttpResponseRedirect(
-            'https://github.com/login/oauth/authorize?' + urllib.urlencode({
+            'https://github.com/login/oauth/authorize?' + urlencode({
                 'client_id': settings.WAFER_GITHUB_CLIENT_ID,
                 'redirect_uri': request.build_absolute_uri(
                     reverse(github_login)),
@@ -45,6 +44,9 @@ def github_login(request):
         return HttpResponseRedirect(reverse('auth_login'))
 
     login(request, user)
+
+    if 'next' in request.GET:
+        return HttpResponseRedirect(request.GET['next'])
     return redirect_profile(request)
 
 
@@ -59,4 +61,7 @@ def debian_login(request):
         return HttpResponseRedirect(reverse('auth_login'))
 
     login(request, user)
+
+    if 'next' in request.GET:
+        return HttpResponseRedirect(request.GET['next'])
     return redirect_profile(request)
