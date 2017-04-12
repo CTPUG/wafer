@@ -45,6 +45,9 @@ def github_login(request):
         return HttpResponseRedirect(reverse('auth_login'))
 
     login(request, user)
+
+    if 'next' in request.GET:
+        return HttpResponseRedirect(request.GET['next'])
     return redirect_profile(request)
 
 
@@ -59,4 +62,7 @@ def debian_login(request):
         return HttpResponseRedirect(reverse('auth_login'))
 
     login(request, user)
+
+    if 'next' in request.GET:
+        return HttpResponseRedirect(request.GET['next'])
     return redirect_profile(request)

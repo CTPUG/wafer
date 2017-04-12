@@ -2,6 +2,7 @@
 {% load i18n %}
 {% load crispy_forms_tags %}
 {% load wafer_crispy %}
+{% load wafer_sso %}
 {% block title %}Login - {{ WAFER_CONFERENCE_NAME }}{% endblock %}
 {% block content %}
 <div class="container">
@@ -21,12 +22,10 @@
             <h2>{% trans 'Shared/Social Log in and Sign up' %}</h2>
             <ul>
                 {% if 'github' in WAFER_SSO %}
-                {% url 'wafer.registration.views.github_login' as github_sso_url %}
-                <li><a href="{{ github_sso_url }}">GitHub</a></li>
+                <li><a href="{% wafer_sso_url 'github' %}">GitHub</a></li>
                 {% endif %}
                 {% if 'debian' in WAFER_SSO %}
-                {% url 'wafer.registration.views.debian_login' as debian_sso_url %}
-                <li><a href="{{ debian_sso_url }}">Debian SSO</a></li>
+                <li><a href="{% wafer_sso_url 'debian' %}">Debian SSO</a></li>
                 {% endif %}
             </ul>
             {% endif %}
