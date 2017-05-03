@@ -126,7 +126,7 @@ class Slot(models.Model):
         if not self.previous_slot and not self.start_time:
             raise ValidationError("Slots must have a start time"
                                   " or previous slot set")
-        if self.get_start_time() >= self.end_time:
+        if self.end_time and self.get_start_time() >= self.end_time:
             raise ValidationError("Start time must be before end time")
         # Slots should either have day + start_time, or a previous_slot, but
         # not both (since previous_slot overrides the others)
