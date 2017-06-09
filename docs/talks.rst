@@ -26,8 +26,10 @@ Talk Mentors
 ============
 
 The ``Talk Mentors`` group has permission to view all talk submissions and
-to edit talks. They also have permission to view the notes submitted along
-with a talk.
+to edit talks. They have permission to view and the notes submitted along
+with a talk, which are visible to the talk submitter, and also have
+permission to view and edit the private notes which are only visible to
+the ``Talk Mentors`` and administrators by default.
 
 Managing talks from the admin interface
 =======================================
