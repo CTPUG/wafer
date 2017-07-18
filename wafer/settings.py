@@ -163,6 +163,7 @@ INSTALLED_APPS = (
     'wafer.pages',
     'wafer.tickets',
     'wafer.compare',
+    'wafer.volunteers',
     # Django isn't finding the overridden templates
     'registration',
     'django.contrib.admin',
