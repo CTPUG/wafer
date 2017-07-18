@@ -2,6 +2,8 @@ from django.db import models
 from django.conf import settings
 from django.utils.encoding import python_2_unicode_compatible
 
+from wafer.talks.models import Talk
+
 
 @python_2_unicode_compatible
 class Volunteer(models.Model):
@@ -45,6 +47,8 @@ class Task(models.Model):
     volunteers = models.ManyToManyField('Volunteer', blank=True)
     nbr_volunteers_min = models.IntegerField(default=1)
     nbr_volunteers_max = models.IntegerField(default=1)
+
+    talk = models.ForeignKey(Talk, null=True, blank=True)
 
     def __str__(self):
         return u'%s (%s: %s - %s)' % (self.name, self.date, self.start_time, self.end_time)
