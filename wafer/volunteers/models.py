@@ -1,6 +1,7 @@
 from django.db import models
 from django.conf import settings
 from django.utils.encoding import python_2_unicode_compatible
+from django.utils.translation import ugettext_lazy as _
 
 from wafer.talks.models import Talk
 
@@ -21,6 +22,7 @@ class Volunteer(models.Model):
                                 related_name='volunteer')
 
     tasks = models.ManyToManyField('Task', blank=True)
+    preferred_categories = models.ManyToManyField('TaskCategory', blank=True)
 
     staff_rating = models.IntegerField(null=True, blank=True, choices=RATINGS)
     staff_notes = models.TextField(null=True, blank=True)
@@ -37,6 +39,7 @@ class Task(models.Model):
 
     name = models.CharField(max_length=1024)
     description = models.TextField()
+    category = models.ForeignKey('TaskCategory', null=True, blank=True)
 
     # Date/Time
     date = models.DateField()
@@ -55,3 +58,18 @@ class Task(models.Model):
 
     def nbr_volunteers(self):
         return self.volunteer_set.count()
+
+
+@python_2_unicode_compatible
+class TaskCategory(models.Model):
+    """ Category of a task, like: cleanup, moderation, etc. """
+
+    class Meta:
+        verbose_name = _('task category')
+        verbose_name_plural = _('task categories')
+
+    name = models.CharField(max_length=1024)
+    description = models.TextField()
+
+    def __str__(self):
+        return self.name
