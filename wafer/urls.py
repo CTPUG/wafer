@@ -16,6 +16,7 @@ urlpatterns = [
     url(r'^schedule/', include('wafer.schedule.urls')),
     url(r'^tickets/', include('wafer.tickets.urls')),
     url(r'^kv/', include('wafer.kv.urls')),
+    url(r'^volunteers/', include('wafer.volunteers.urls')),
 ]
 
 # Serve media
