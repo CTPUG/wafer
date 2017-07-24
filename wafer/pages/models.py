@@ -6,11 +6,12 @@ from django.core.urlresolvers import reverse
 from django.core.exceptions import ValidationError, NON_FIELD_ERRORS
 from django.conf import settings
 from django.db import models
+from django.core.cache import caches
 from django.db.models.signals import post_save
 from django.utils.encoding import python_2_unicode_compatible
 
 
-from markitup.fields import MarkupField
+from markitup.fields import MarkupField, render_func
 from wafer.menu import MenuError, refresh_menu_cache
 
 
@@ -54,6 +55,8 @@ class Page(models.Model):
     def __str__(self):
         return u'%s' % (self.name,)
 
+    cache_name = settings.WAFER_CACHE
+
     def get_path(self):
         path, parent = [self.slug], self.parent
         while parent is not None:
@@ -67,6 +70,22 @@ class Page(models.Model):
 
         url = "/".join(self.get_path())
         return reverse('wafer_page', args=(url,))
+
+    def cached_render(self):
+        cache = caches[self.cache_name]
+        cache_key = self.get_absolute_url()
+        rendered = cache.get(cache_key)
+        if rendered is None:
+            rendered = render_func(self.content.raw)
+            # Should reset the database copy, but this is enough for
+            # now
+            cache.set(cache_key, rendered, 60)
+        return rendered
+
+    def invalidate_cache(self):
+        cache = caches[self.cache_name]
+        cache_key = self.get_absolute_url()
+        cache.delete(cache_key)
 
     get_absolute_url.short_description = 'page url'
 
