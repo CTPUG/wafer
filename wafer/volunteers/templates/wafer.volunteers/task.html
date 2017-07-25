@@ -19,7 +19,11 @@
     </li>
     <li>
         <b>{% trans "Talk" %}:</b>
-        <span>{{ object.talk }}</span>
+        {% if object.talk %}
+        <a href="{% url 'wafer_talk' object.talk.pk %}">{{ object.talk.title }}</a>
+        {% else %}
+        {{ object.talk }}
+        {% endif %}
     </li>
 </ul>
 

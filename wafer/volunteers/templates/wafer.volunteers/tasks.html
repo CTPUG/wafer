@@ -2,4 +2,38 @@
 {% load i18n %}
 
 {% block content %}
+{% regroup object_list by date as task_list %}
+
+{% if object_list %}
+{% for task in task_list %}
+<h2>{{ task.grouper }}</h2>
+<table>
+    <thead>
+        <tr>
+            <th>{% trans "Title" %}</th>
+            <th>{% trans "Volunteers" %}</th>
+            <th>{% trans "Category" %}</th>
+            <th>{% trans "Talk" %}</th>
+        </tr>
+
+        {% for item in task.list %}
+        <tr>
+            <td>
+                <a href="{% url 'wafer_task' item.pk %}">{{ item.name }}</a>
+            </td>
+            <td>{{ item.nbr_volunteers }}/{{ item.nbr_volunteers_max }}</td>
+            <td>{{ item.category }}</td>
+            <td>
+                {% if item.talk %}
+                <a href="{% url 'wafer_talk' item.talk.pk %}">{{ item.talk.title }}</a>
+                {% else %}
+                {{ item.talk }}
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </thead>
+</table>
+{% endfor %}
+{% endif %}
 {% endblock %}

@@ -18,3 +18,8 @@ class VolunteerView(DetailView):
     model = Volunteer
     slug_field = 'user__username'
     template_name = 'wafer.volunteers/volunteer.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(VolunteerView, self).get_context_data(**kwargs)
+        context['profile'] = self.object.user.userprofile
+        return context
