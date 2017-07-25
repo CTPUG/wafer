@@ -1,0 +1,13 @@
+{% extends 'wafer/base.html' %}
+{% load i18n %}
+
+<!-- TODO Nicer form -->
+{% block content %}
+<form action="" method="post">{% csrf_token %}
+    <label for="id_preferred_categories">Preferred categories:</label>
+    <br />
+    {{ form.preferred_categories }}
+    <br />
+    <input type="submit" value="Update" class="btn btn-secondary" />
+</form>
+{% endblock %}

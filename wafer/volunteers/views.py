@@ -1,5 +1,7 @@
 from django.views.generic import DetailView
 from django.views.generic.list import ListView
+from django.views.generic.edit import UpdateView
+from django.core.urlresolvers import reverse
 
 from wafer.users.views import EditOneselfMixin
 from wafer.volunteers.models import Volunteer, Task
@@ -31,3 +33,14 @@ class VolunteerView(EditOneselfMixin, DetailView):
         context = super(VolunteerView, self).get_context_data(**kwargs)
         context['profile'] = self.object.user.userprofile
         return context
+
+
+class VolunteerUpdate(EditOneselfMixin, UpdateView):
+    model = Volunteer
+    slug_field = 'user__username'
+    fields = ['preferred_categories']
+    template_name = 'wafer.volunteers/volunteer_update.html'
+
+    def get_success_url(self):
+        return reverse('wafer_volunteer',
+                       kwargs={'slug': self.object.user.username})

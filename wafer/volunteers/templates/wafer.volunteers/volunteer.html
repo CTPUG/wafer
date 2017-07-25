@@ -21,6 +21,10 @@
 <p>{% trans "No preferred categories" %}.</p>
 {% endif %}
 
+<a href="{% url 'wafer_volunteer_update' object.user.username %}" class="btn btn-secondary">
+    {% trans "Update preferred categories" %}
+</a>
+
 <h2>Tasks</h2>
 {% if object.tasks.all %}
 <table>
