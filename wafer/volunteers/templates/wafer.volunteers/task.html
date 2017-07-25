@@ -30,4 +30,11 @@
 <hr />
 
 <p>{{ object.description }}</p>
+
+{% if can_volunteer %}
+<form action="" method="post">
+    {% csrf_token %}
+    <input type="submit" value="Volunteer" />
+</form>
+{% endif %}
 {% endblock %}

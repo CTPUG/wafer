@@ -2,6 +2,8 @@ from django.views.generic import DetailView
 from django.views.generic.list import ListView
 from django.views.generic.edit import UpdateView
 from django.core.urlresolvers import reverse
+from django.http import HttpResponseForbidden
+from django.shortcuts import redirect
 
 from wafer.users.views import EditOneselfMixin
 from wafer.volunteers.models import Volunteer, Task
@@ -15,6 +17,25 @@ class TasksView(ListView):
 class TaskView(DetailView):
     model = Task
     template_name = 'wafer.volunteers/task.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(TaskView, self).get_context_data(**kwargs)
+        context['can_volunteer'] = (
+            self.request.user.is_authenticated() and
+            self.object.nbr_volunteers() < self.object.nbr_volunteers_max
+        )
+        return context
+
+    def post(self, request, *args, **kwargs):
+        if not request.user.is_authenticated():
+            return HttpResponseForbidden()
+        self.object = self.get_object()
+
+        if self.object.nbr_volunteers() < self.object.nbr_volunteers_max:
+            volunteer, new = Volunteer.objects.get_or_create(user=request.user)
+            volunteer.tasks.add(self.object)
+
+        return redirect('wafer_task', pk=self.object.pk)
 
 
 class VolunteerView(EditOneselfMixin, DetailView):
