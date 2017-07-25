@@ -2,6 +2,7 @@ from django.db import models
 from django.conf import settings
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
+from django.template.defaultfilters import date
 
 from wafer.talks.models import Talk
 
@@ -54,10 +55,16 @@ class Task(models.Model):
     talk = models.ForeignKey(Talk, null=True, blank=True)
 
     def __str__(self):
-        return u'%s (%s: %s - %s)' % (self.name, self.date, self.start_time, self.end_time)
+        return u'%s (%s: %s - %s)' % (self.name, self.date,
+                                      self.start_time, self.end_time)
 
     def nbr_volunteers(self):
         return self.volunteer_set.count()
+
+    def datetime(self):
+        return u'%s: %s - %s' % (date(self.date, 'l, F d'),
+                                 date(self.start_time, 'H:i'),
+                                 date(self.end_time, 'H:i'))
 
 
 @python_2_unicode_compatible

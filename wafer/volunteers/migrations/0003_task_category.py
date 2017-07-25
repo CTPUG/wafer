@@ -19,8 +19,8 @@ class Migration(migrations.Migration):
                 ('description', models.TextField()),
             ],
             options={
-                'verbose_name': 'Task Category',
-                'verbose_name_plural': 'Task Categories',
+                'verbose_name': 'task category',
+                'verbose_name_plural': 'task categories',
             },
         ),
         migrations.AddField(
