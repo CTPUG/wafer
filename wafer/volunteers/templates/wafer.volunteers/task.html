@@ -2,4 +2,28 @@
 {% load i18n %}
 
 {% block content %}
+<h1>{{ object.name }}</h1>
+
+<ul>
+    <li>
+        <b>{% trans "Date" %}:</b>
+        <span>{{ object.datetime }}</span>
+    </li>
+    <li>
+        <b>{% trans "Number of volunteers" %}:</b>
+        <span>{{ object.nbr_volunteers }}/{{ object.nbr_volunteers_max }}</span>
+    </li>
+    <li>
+        <b>{% trans "Category" %}:</b>
+        <span>{{ object.category }}</span>
+    </li>
+    <li>
+        <b>{% trans "Talk" %}:</b>
+        <span>{{ object.talk }}</span>
+    </li>
+</ul>
+
+<hr />
+
+<p>{{ object.description }}</p>
 {% endblock %}
