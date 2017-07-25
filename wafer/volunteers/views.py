@@ -13,6 +13,20 @@ class TasksView(ListView):
     model = Task
     template_name = 'wafer.volunteers/tasks.html'
 
+    def get_context_data(self, **kwargs):
+        context = super(TasksView, self).get_context_data(**kwargs)
+
+        if self.request.user.is_authenticated():
+            try:
+                volunteer = Volunteer.objects.get(user=self.request.user)
+                context['preferred_tasks'] = Task.objects.filter(
+                    category__in=volunteer.preferred_categories.all()
+                )
+            except Volunteer.DoesNotExist:
+                pass
+
+        return context
+
 
 class TaskView(DetailView):
     model = Task
