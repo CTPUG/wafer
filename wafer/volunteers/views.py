@@ -20,6 +20,11 @@ class TaskView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(TaskView, self).get_context_data(**kwargs)
+        # TODO Find a better way
+        context['already_volunteer'] = (
+            self.request.user.is_authenticated() and
+            self.object.volunteers.filter(user=self.request.user).exists()
+        )
         context['can_volunteer'] = (
             self.request.user.is_authenticated() and
             self.object.nbr_volunteers() < self.object.nbr_volunteers_max
@@ -30,10 +35,14 @@ class TaskView(DetailView):
         if not request.user.is_authenticated():
             return HttpResponseForbidden()
         self.object = self.get_object()
+        volunteer, new = Volunteer.objects.get_or_create(user=request.user)
 
-        if self.object.nbr_volunteers() < self.object.nbr_volunteers_max:
-            volunteer, new = Volunteer.objects.get_or_create(user=request.user)
+        if self.object in volunteer.tasks.all():
+            volunteer.tasks.remove(self.object)
+            self.object.volunteers.remove(volunteer)
+        elif self.object.nbr_volunteers() < self.object.nbr_volunteers_max:
             volunteer.tasks.add(self.object)
+            self.object.volunteers.add(volunteer)
 
         return redirect('wafer_task', pk=self.object.pk)
 

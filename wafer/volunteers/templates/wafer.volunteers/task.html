@@ -31,10 +31,14 @@
 
 <p>{{ object.description }}</p>
 
-{% if can_volunteer %}
 <form action="" method="post">
     {% csrf_token %}
-    <input type="submit" value="Volunteer" />
+    {% if already_volunteer %}
+    <input type="submit" value="{% trans "Remove from volunteers" %}" />
+    {% else %}
+    {% if can_volunteer %}
+    <input type="submit" value="{% trans 'Volunteer' %}" />
+    {% endif %}
+    {% endif %}
 </form>
-{% endif %}
 {% endblock %}
