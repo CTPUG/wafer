@@ -4,6 +4,12 @@
 {% block content %}
 <h1>{{ profile.display_name }}</h1>
 
+{% if not profile.contact_number %}
+<div class="alert alert-warning">
+    {% trans "You haven't added your contact number" %}.
+</div>
+{% endif %}
+
 <h2>Preferred categories</h2>
 {% if object.preferred_categories.all %}
 <ul>
