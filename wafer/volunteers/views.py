@@ -25,8 +25,11 @@ class TasksView(ListView):
         if self.request.user.is_authenticated():
             try:
                 volunteer = Volunteer.objects.get(user=self.request.user)
-                context['preferred_tasks'] = Task.objects.filter(
-                    category__in=volunteer.preferred_categories.all()
+                context['preferred_tasks'] = Task.objects.annotate(
+                    nbr_volunteers=Count('volunteers')
+                ).filter(
+                    category__in=volunteer.preferred_categories.all(),
+                    nbr_volunteers__lt=F('nbr_volunteers_max')
                 )
             except Volunteer.DoesNotExist:
                 pass
