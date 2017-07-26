@@ -44,12 +44,18 @@
                 <a href="{% url 'wafer_task' task.pk %}">{{ task.name }}</a>
             </td>
             <td>{{ task.nbr_volunteers }}/{{ task.nbr_volunteers_max }}</td>
-            <td>{{ task.category }}</td>
             <td>
-                {% if task.talk %}
-                <a href="{% url 'wafer_talk' task.talk.pk %}">{{ task.talk.title }}</a>
+                {% if item.category %}
+                {{ item.category }}
                 {% else %}
-                {{ task.talk }}
+                N/A
+                {% endif %}
+            </td>
+            <td>
+                {% if item.talk %}
+                <a href="{% url 'wafer_talk' item.talk.pk %}">{{ item.talk.title }}</a>
+                {% else %}
+                N/A
                 {% endif %}
             </td>
         </tr>

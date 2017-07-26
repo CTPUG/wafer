@@ -15,15 +15,23 @@
     </li>
     <li>
         <b>{% trans "Category" %}:</b>
-        <span>{{ object.category }}</span>
+        <span>
+            {% if object.category %}
+            {{ object.category }}
+            {% else %}
+            N/A
+            {% endif %}
+        </span>
     </li>
     <li>
         <b>{% trans "Talk" %}:</b>
-        {% if object.talk %}
-        <a href="{% url 'wafer_talk' object.talk.pk %}">{{ object.talk.title }}</a>
-        {% else %}
-        {{ object.talk }}
-        {% endif %}
+        <span>
+            {% if object.talk %}
+            <a href="{% url 'wafer_talk' object.talk.pk %}">{{ object.talk.title }}</a>
+            {% else %}
+            N/A
+            {% endif %}
+        </span>
     </li>
 </ul>
 

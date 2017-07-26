@@ -24,12 +24,18 @@
                     <a href="{% url 'wafer_task' item.pk %}">{{ item.name }}</a>
                 </td>
                 <td>{{ item.nbr_volunteers }}/{{ item.nbr_volunteers_max }}</td>
-                <td>{{ item.category }}</td>
+                <td>
+                    {% if item.category %}
+                    {{ item.category }}
+                    {% else %}
+                    N/A
+                    {% endif %}
+                </td>
                 <td>
                     {% if item.talk %}
                     <a href="{% url 'wafer_talk' item.talk.pk %}">{{ item.talk.title }}</a>
                     {% else %}
-                    {{ item.talk }}
+                    N/A
                     {% endif %}
                 </td>
             </tr>
@@ -62,12 +68,18 @@
                     <a href="{% url 'wafer_task' item.pk %}">{{ item.name }}</a>
                 </td>
                 <td>{{ item.nbr_volunteers }}/{{ item.nbr_volunteers_max }}</td>
-                <td>{{ item.category }}</td>
+                <td>
+                    {% if item.category %}
+                    {{ item.category }}
+                    {% else %}
+                    N/A
+                    {% endif %}
+                </td>
                 <td>
                     {% if item.talk %}
                     <a href="{% url 'wafer_talk' item.talk.pk %}">{{ item.talk.title }}</a>
                     {% else %}
-                    {{ item.talk }}
+                    N/A
                     {% endif %}
                 </td>
             </tr>
