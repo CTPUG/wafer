@@ -10,7 +10,7 @@
 </div>
 {% endif %}
 
-<h2>Preferred categories</h2>
+<h2>{% trans "Preferred categories" %}</h2>
 {% if object.preferred_categories.all %}
 <ul>
     {% for category in object.preferred_categories.all %}
@@ -25,44 +25,51 @@
     {% trans "Update preferred categories" %}
 </a>
 
-<h2>Tasks</h2>
-{% if object.tasks.all %}
-<table>
-    <thead>
-        <tr>
-            <th>{% trans 'When' %}</th>
-            <th>{% trans 'Title' %}</th>
-            <th>{% trans 'Volunteers' %}</th>
-            <th>{% trans 'Category' %}</th>
-            <th>{% trans 'Talk' %}</th>
-        </tr>
+<h2>{%trans "My tasks" %}</h2>
+<div>
+    <a href="{% url 'wafer_tasks' %}" class="btn btn-secondary">
+        {% trans "Available tasks" %}
+    </a>
+</div>
+<div>
+    {% if object.tasks.all %}
+    <table>
+        <thead>
+            <tr>
+                <th>{% trans 'When' %}</th>
+                <th>{% trans 'Title' %}</th>
+                <th>{% trans 'Volunteers' %}</th>
+                <th>{% trans 'Category' %}</th>
+                <th>{% trans 'Talk' %}</th>
+            </tr>
 
-        {% for task in object.tasks.all %}
-        <tr>
-            <td>{{ task.datetime }}</td>
-            <td>
-                <a href="{% url 'wafer_task' task.pk %}">{{ task.name }}</a>
-            </td>
-            <td>{{ task.nbr_volunteers }}/{{ task.nbr_volunteers_max }}</td>
-            <td>
-                {% if item.category %}
-                {{ item.category }}
-                {% else %}
-                N/A
-                {% endif %}
-            </td>
-            <td>
-                {% if item.talk %}
-                <a href="{% url 'wafer_talk' item.talk.pk %}">{{ item.talk.title }}</a>
-                {% else %}
-                N/A
-                {% endif %}
-            </td>
-        </tr>
-        {% endfor %}
-    </thead>
-</table>
-{% else %}
-<p>{% trans "You haven't volunteered to any task" %}.</p>
-{% endif %}
+            {% for task in object.tasks.all %}
+            <tr>
+                <td>{{ task.datetime }}</td>
+                <td>
+                    <a href="{% url 'wafer_task' task.pk %}">{{ task.name }}</a>
+                </td>
+                <td>{{ task.nbr_volunteers }}/{{ task.nbr_volunteers_max }}</td>
+                <td>
+                    {% if item.category %}
+                    {{ item.category }}
+                    {% else %}
+                    N/A
+                    {% endif %}
+                </td>
+                <td>
+                    {% if item.talk %}
+                    <a href="{% url 'wafer_talk' item.talk.pk %}">{{ item.talk.title }}</a>
+                    {% else %}
+                    N/A
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </thead>
+    </table>
+    {% else %}
+    <p>{% trans "You haven't volunteered to any task" %}.</p>
+    {% endif %}
+</div>
 {% endblock %}

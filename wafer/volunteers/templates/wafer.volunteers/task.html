@@ -42,10 +42,10 @@
 <form action="" method="post">
     {% csrf_token %}
     {% if already_volunteer %}
-    <input type="submit" value="{% trans "Remove from volunteers" %}" />
+    <button type="submit" class="btn btn-primary">{% trans "Remove from volunteers" %}</button>
     {% else %}
     {% if can_volunteer %}
-    <input type="submit" value="{% trans 'Volunteer' %}" />
+    <button type="submit" class="btn btn-primary">{% trans "Volunteer" %}</button>
     {% endif %}
     {% endif %}
 </form>

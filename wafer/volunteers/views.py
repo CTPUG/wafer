@@ -5,6 +5,7 @@ from django.core.urlresolvers import reverse
 from django.http import HttpResponseForbidden
 from django.shortcuts import redirect
 from django.db.models import F, Count
+from django import forms
 
 from wafer.users.views import EditOneselfMixin
 from wafer.volunteers.models import Volunteer, Task
@@ -84,10 +85,21 @@ class VolunteerView(EditOneselfMixin, DetailView):
         return context
 
 
+class VolunteerUpdateForm(forms.ModelForm):
+    class Meta:
+        model = Volunteer
+        fields = ['preferred_categories']
+        widgets = {
+            'preferred_categories': forms.SelectMultiple(
+                attrs={'class': 'form-control'}
+            )
+        }
+
+
 class VolunteerUpdate(EditOneselfMixin, UpdateView):
     model = Volunteer
     slug_field = 'user__username'
-    fields = ['preferred_categories']
+    form_class = VolunteerUpdateForm
     template_name = 'wafer.volunteers/volunteer_update.html'
 
     def get_success_url(self):
