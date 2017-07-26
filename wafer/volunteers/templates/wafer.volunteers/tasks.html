@@ -47,7 +47,7 @@
 {% endif %}
 
 <div>
-    <h2>All tasks</h2>
+    <h2>All available tasks</h2>
     {% if object_list %}
     {% regroup object_list by date as task_list %}
 
@@ -88,7 +88,7 @@
     </table>
     {% endfor %}
     {% else %}
-    <p>{% trans "No tasks" %}.</p>
+    <p>{% trans "No available tasks" %}.</p>
     {% endif %}
 </div>
 {% endblock %}

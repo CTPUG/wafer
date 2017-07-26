@@ -4,6 +4,7 @@ from django.views.generic.edit import UpdateView
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseForbidden
 from django.shortcuts import redirect
+from django.db.models import F, Count
 
 from wafer.users.views import EditOneselfMixin
 from wafer.volunteers.models import Volunteer, Task
@@ -12,6 +13,10 @@ from wafer.volunteers.models import Volunteer, Task
 class TasksView(ListView):
     model = Task
     template_name = 'wafer.volunteers/tasks.html'
+
+    def get_queryset(self):
+        return Task.objects.annotate(nbr_volunteers=Count('volunteers')) \
+                           .filter(nbr_volunteers__lt=F('nbr_volunteers_max'))
 
     def get_context_data(self, **kwargs):
         context = super(TasksView, self).get_context_data(**kwargs)
