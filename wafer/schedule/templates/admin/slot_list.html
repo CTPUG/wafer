@@ -8,6 +8,7 @@
        {% if errors %}
        <div name="errors">
           <h2>{% trans "Errors in the slots" %}</h2>
+          {% block displayerrors %}
           {% if errors.overlaps %}
           <h3>{% trans "OVerlapping slots" %}</h3>
           <ul>
@@ -16,6 +17,7 @@
              {% endfor %}
           </ul>
           {% endif %}
+          {% endblock %}
        </div>
        {% endif %}
     </div>
