@@ -10,7 +10,8 @@ from wafer.schedule.admin import (
     prefetch_schedule_items, prefetch_slots,
     find_overlapping_slots, validate_items,
     find_duplicate_schedule_items, find_clashes, find_invalid_venues,
-    find_non_contiguous)
+    find_non_contiguous,
+    check_schedule, validate_schedule)
 from wafer.schedule.models import Day, Venue, Slot, ScheduleItem
 from wafer.talks.models import (Talk, ACCEPTED, REJECTED, CANCELLED,
                                 SUBMITTED, UNDER_CONSIDERATION)
@@ -675,3 +676,55 @@ class ValidationTests(TestCase):
         assert set(venues) == set([venue1, venue2])
         assert set(venues[venue1]) == set([item4])
         assert set(venues[venue2]) == set([item2, item5])
+
+    def test_validate_schedule(self):
+        """Check the behaviour of validate schedule
+
+           We also test check_schedule, since the logic of the two funcions
+           is so similar it doesn't make sense to have a second test
+           case for it."""
+        day1 = Day.objects.create(date=D.date(2013, 9, 22))
+        venue1 = Venue.objects.create(order=1, name='Venue 1')
+        venue1.days.add(day1)
+        page = Page.objects.create(name="test page", slug="test")
+
+        start1 = D.time(10, 0, 0)
+        start2 = D.time(11, 0, 0)
+        end = D.time(12, 0, 0)
+
+        slot1 = Slot.objects.create(start_time=start1, end_time=start2,
+                                    day=day1)
+        slot2 = Slot.objects.create(start_time=start2, end_time=end,
+                                    day=day1)
+
+        item1 = ScheduleItem.objects.create(venue=venue1,
+                                            page_id=page.pk,
+                                            details="Item 1")
+        # Create an invalid item
+        item2 = ScheduleItem.objects.create(venue=venue1, details="Item 2")
+        # Create a simple venue/slot clash
+        item1.slots.add(slot1)
+        item2.slots.add(slot1)
+        # Schedule shoudln't validate
+        check_schedule.invalidate()
+        self.assertFalse(check_schedule())
+        # Invalid item & clash should be reported
+        errors = validate_schedule()
+        self.assertEqual(len(errors), 2)
+        # Fix the invalid item
+        item2.page_id = page.pk
+        item2.save()
+        # Schedule is still invalid, but only the clash remains
+        check_schedule.invalidate()
+        self.assertFalse(check_schedule())
+        errors = validate_schedule()
+        self.assertEqual(len(errors), 1)
+        # Fix clashes
+        item2.slots.remove(slot1)
+        item2.slots.add(slot2)
+        item2.save()
+        # Schedule should now be valid
+        check_schedule.invalidate()
+        self.assertTrue(check_schedule())
+        errors = validate_schedule()
+        self.assertEqual(len(errors), 0)
