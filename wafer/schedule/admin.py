@@ -15,10 +15,10 @@ from wafer.utils import cache_result
 
 
 # These are functions to simplify testing
-def find_overlapping_slots():
+# Slot validation
+def find_overlapping_slots(all_slots):
     """Find any slots that overlap"""
     overlaps = set([])
-    all_slots = list(Slot.objects.all())
     for slot in all_slots:
         # Because slots are ordered, we can be more efficient than this
         # N^2 loop, but this is simple and, since the number of slots
@@ -46,10 +46,9 @@ def find_overlapping_slots():
     return overlaps
 
 
-def find_non_contiguous(all_items=None):
+# Schedule item validators
+def find_non_contiguous(all_items):
     """Find any items that have slots that aren't contiguous"""
-    if all_items is None:
-        all_items = prefetch_schedule_items()
     non_contiguous = []
     for item in all_items:
         if item.slots.count() < 2:
@@ -65,14 +64,12 @@ def find_non_contiguous(all_items=None):
     return non_contiguous
 
 
-def validate_items(all_items=None):
+def validate_items(all_items):
     """Find errors in the schedule. Check for:
          - pending / rejected talks in the schedule
          - items with both talks and pages assigned
          - items with neither talks nor pages assigned
          """
-    if all_items is None:
-        all_items = prefetch_schedule_items()
     validation = []
     for item in all_items:
         if item.talk is not None and item.page is not None:
@@ -84,10 +81,8 @@ def validate_items(all_items=None):
     return validation
 
 
-def find_duplicate_schedule_items(all_items=None):
+def find_duplicate_schedule_items(all_items):
     """Find talks / pages assigned to mulitple schedule items"""
-    if all_items is None:
-        all_items = prefetch_schedule_items()
     duplicates = []
     seen_talks = {}
     for item in all_items:
@@ -103,10 +98,8 @@ def find_duplicate_schedule_items(all_items=None):
     return duplicates
 
 
-def find_clashes(all_items=None):
+def find_clashes(all_items):
     """Find schedule items which clash (common slot and venue)"""
-    if all_items is None:
-        all_items = prefetch_schedule_items()
     clashes = {}
     seen_venue_slots = {}
     for item in all_items:
@@ -121,11 +114,9 @@ def find_clashes(all_items=None):
     return clashes
 
 
-def find_invalid_venues(all_items=None):
+def find_invalid_venues(all_items):
     """Find venues assigned slots that aren't on the allowed list
        of days."""
-    if all_items is None:
-        all_items = prefetch_schedule_items()
     venues = {}
     for item in all_items:
         valid = False
@@ -141,6 +132,7 @@ def find_invalid_venues(all_items=None):
     return venues
 
 
+# Helper methods for calling the validators
 def prefetch_schedule_items():
     """Prefetch all schedule items and related objects."""
     return list(ScheduleItem.objects
@@ -151,6 +143,11 @@ def prefetch_schedule_items():
                 .all())
 
 
+def prefetch_slots():
+    return list(Slot.objects.all())
+
+
+# Utility functions for checking the schedule state
 @cache_result('wafer_schedule_check_schedule', 60*60)
 def check_schedule():
     """Helper routine to easily test if the schedule is valid"""
@@ -161,17 +158,19 @@ def check_schedule():
         return False
     if validate_items(all_items):
         return False
-    if find_overlapping_slots():
-        return False
     if find_non_contiguous(all_items):
         return False
     if find_invalid_venues(all_items):
+        return False
+
+    all_slots = prefetch_slots()
+    if find_overlapping_slots(all_slots):
         return False
     return True
 
 
 def validate_schedule():
-    """Helper routine to easily test if the schedule is valid"""
+    """Helper routine to report issues with the schedule"""
     all_items = prefetch_schedule_items()
     errors = []
     if find_clashes(all_items):
@@ -180,12 +179,14 @@ def validate_schedule():
         errors.append('Duplicate schedule items found in schedule.')
     if validate_items(all_items):
         errors.append('Invalid schedule items found in schedule.')
-    if find_overlapping_slots():
-        errors.append('Overlapping slots found in schedule.')
     if find_non_contiguous(all_items):
         errors.append('Non contiguous slots found in schedule.')
     if find_invalid_venues(all_items):
         errors.append('Invalid venues found in schedule.')
+
+    all_slots = prefetch_slots()
+    if find_overlapping_slots(all_slots):
+        errors.append('Overlapping slots found in schedule.')
     return errors
 
 
@@ -218,10 +219,10 @@ class ScheduleItemAdmin(admin.ModelAdmin):
     def changelist_view(self, request, extra_context=None):
         extra_context = extra_context or {}
         # Find issues in the schedule
-        all_items = None
-        clashes = find_clashes()
+        all_items = prefetch_schedule_items()
+        clashes = find_clashes(all_items)
         validation = validate_items(all_items)
-        venues = find_invalid_venues()
+        venues = find_invalid_venues(all_items)
         duplicates = find_duplicate_schedule_items(all_items)
         non_contiguous = find_non_contiguous(all_items)
         errors = {}
@@ -319,7 +320,8 @@ class SlotAdmin(admin.ModelAdmin):
         extra_context = extra_context or {}
         # Find issues with the slots
         errors = {}
-        overlaps = find_overlapping_slots()
+        all_slots = prefetch_slots()
+        overlaps = find_overlapping_slots(all_slots)
         if overlaps:
             errors['overlaps'] = overlaps
         extra_context['errors'] = errors
