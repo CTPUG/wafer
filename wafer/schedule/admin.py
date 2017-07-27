@@ -148,24 +148,41 @@ def prefetch_slots():
 
 
 # Validators are listed as (function, error type, error message) tuples
-SLOT_VALIDATORS = [
-   (find_overlapping_slots, 'overlaps',
-       _('Overlapping slots found in schedule.')),
-]
+SLOT_VALIDATORS = []
+SCHEDULE_ITEM_VALIDATORS = []
 
 
-SCHEDULE_ITEM_VALIDATORS = [
-   (find_clashes, 'clashes',
-       _('Clashes found in schedule.')),
-   (find_duplicate_schedule_items, 'duplicates',
-       _('Duplicate schedule items found in schedule.')),
-   (validate_items, '',
-       _('Invalid schedule items found in schedule.')),
-   (find_non_contiguous, '',
-       _('Non contiguous slots found in schedule.')),
-   (find_invalid_venues, '',
-       _('Invalid venues found in schedule.')),
-]
+# Helpers for people extending the tests
+def register_slot_validator(function, err_type, msg):
+    global SLOT_VALIDATORS
+    SLOT_VALIDATORS.append((function, err_type, msg))
+
+
+def register_schedule_item_validator(function, err_type, msg):
+    global SCHEDULE_ITEM_VALIDATORS
+    SCHEDULE_ITEM_VALIDATORS.append((function, err_type, msg))
+
+
+# Register our validators
+register_slot_validator(
+        find_overlapping_slots, 'overlaps',
+        _('Overlapping slots found in schedule.'))
+
+register_schedule_item_validator(
+        find_clashes, 'clashes',
+        _('Clashes found in schedule.'))
+register_schedule_item_validator(
+        find_duplicate_schedule_items, 'duplicates',
+        _('Duplicate schedule items found in schedule.'))
+register_schedule_item_validator(
+        validate_items, 'validation',
+        _('Invalid schedule items found in schedule.'))
+register_schedule_item_validator(
+        find_non_contiguous, 'non_contiguous',
+        _('Non contiguous slots found in schedule.'))
+register_schedule_item_validator(
+        find_invalid_venues, 'venues',
+        _('Invalid venues found in schedule.'))
 
 
 # Utility functions for checking the schedule state
