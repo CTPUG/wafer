@@ -52,6 +52,13 @@ class Page(models.Model):
         help_text=_("People associated with this page for display in the"
                     " schedule (Session chairs, panelists, etc.)"))
 
+    cache_time = models.IntegerField(
+        default=-1,
+        help_text=_("Length of time (in seconds) to cache the page for "
+                    "dynamic page content. A negative value means this page "
+                    "is not dynamic and it will be not be regenerated "
+                    "until it is next edited."))
+
     def __str__(self):
         return u'%s' % (self.name,)
 
@@ -72,6 +79,8 @@ class Page(models.Model):
         return reverse('wafer_page', args=(url,))
 
     def cached_render(self):
+        if self.cache_time < 0:
+            return self.content.rendered
         cache = caches[self.cache_name]
         cache_key = self.get_absolute_url()
         rendered = cache.get(cache_key)
@@ -79,7 +88,7 @@ class Page(models.Model):
             rendered = render_func(self.content.raw)
             # Should reset the database copy, but this is enough for
             # now
-            cache.set(cache_key, rendered, 60)
+            cache.set(cache_key, rendered, self.cache_time)
         return rendered
 
     def invalidate_cache(self):
@@ -139,6 +148,11 @@ class Page(models.Model):
                     ],
                 })
         return super(Page, self).validate_unique(exclude)
+
+    def save(self, *args, **kwargs):
+        """Ensure we invalidate the cache after saving"""
+        super(Page, self).save(*args, **kwargs)
+        self.invalidate_cache()
 
 
 def page_menus(root_menu):
