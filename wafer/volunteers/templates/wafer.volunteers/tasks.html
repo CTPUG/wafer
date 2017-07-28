@@ -12,6 +12,7 @@
     <table>
         <thead>
             <tr>
+                <th>{% trans "When" %}</th>
                 <th>{% trans "Title" %}</th>
                 <th>{% trans "Volunteers" %}</th>
                 <th>{% trans "Category" %}</th>
@@ -20,6 +21,7 @@
 
             {% for item in task.list %}
             <tr>
+                <td>{{ item.start_time }} {% trans 'to' %} {{ item.end_time }}</td>
                 <td>
                     <a href="{% url 'wafer_task' item.pk %}">{{ item.name }}</a>
                 </td>
@@ -56,6 +58,7 @@
     <table>
         <thead>
             <tr>
+                <th>{% trans "When" %}</th>
                 <th>{% trans "Title" %}</th>
                 <th>{% trans "Volunteers" %}</th>
                 <th>{% trans "Category" %}</th>
@@ -64,6 +67,7 @@
 
             {% for item in task.list %}
             <tr>
+                <td>{{ item.start_time }} {% trans 'to' %} {{ item.end_time }}</td>
                 <td>
                     <a href="{% url 'wafer_task' item.pk %}">{{ item.name }}</a>
                 </td>
