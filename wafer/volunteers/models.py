@@ -4,6 +4,7 @@ from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
 from django.template.defaultfilters import date
 
+from wafer.schedule.models import Venue
 from wafer.talks.models import Talk
 
 
@@ -33,6 +34,14 @@ class Volunteer(models.Model):
 
 
 @python_2_unicode_compatible
+class TaskLocation(models.Model):
+    name = models.CharField(max_length=1024)
+    venue = models.ForeignKey(Venue, null=True, blank=True)
+
+    def __str__(self):
+        return self.name
+
+@python_2_unicode_compatible
 class Task(models.Model):
 
     class Meta:
@@ -41,6 +50,8 @@ class Task(models.Model):
     name = models.CharField(max_length=1024)
     description = models.TextField()
     category = models.ForeignKey('TaskCategory', null=True, blank=True)
+
+    location = models.ForeignKey('TaskLocation', null=True)
 
     # Date/Time
     date = models.DateField()

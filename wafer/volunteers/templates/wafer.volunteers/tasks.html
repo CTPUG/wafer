@@ -14,6 +14,7 @@
             <tr>
                 <th>{% trans "When" %}</th>
                 <th>{% trans "Title" %}</th>
+                <th>{% trans "Where" %}</th>
                 <th>{% trans "Volunteers" %}</th>
                 <th>{% trans "Category" %}</th>
                 <th>{% trans "Talk" %}</th>
@@ -25,6 +26,7 @@
                 <td>
                     <a href="{% url 'wafer_task' item.pk %}">{{ item.name }}</a>
                 </td>
+                <td>{{ item.location }}</td>
                 <td>{{ item.nbr_volunteers }}/{{ item.nbr_volunteers_max }}</td>
                 <td>
                     {% if item.category %}
@@ -60,6 +62,7 @@
             <tr>
                 <th>{% trans "When" %}</th>
                 <th>{% trans "Title" %}</th>
+                <th>{% trans "Where" %}</th>
                 <th>{% trans "Volunteers" %}</th>
                 <th>{% trans "Category" %}</th>
                 <th>{% trans "Talk" %}</th>
@@ -71,6 +74,7 @@
                 <td>
                     <a href="{% url 'wafer_task' item.pk %}">{{ item.name }}</a>
                 </td>
+                <td>{{ item.location }}</td>
                 <td>{{ item.nbr_volunteers }}/{{ item.nbr_volunteers_max }}</td>
                 <td>
                     {% if item.category %}

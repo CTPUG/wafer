@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.utils.translation import ugettext_lazy as _
 from django.db.models import Count
 
-from wafer.volunteers.models import Volunteer, Task, TaskCategory
+from wafer.volunteers.models import Volunteer, Task, TaskCategory, TaskLocation
 
 
 class DayListFilter(admin.SimpleListFilter):
@@ -112,6 +112,12 @@ class TaskCategoryAdmin(admin.ModelAdmin):
     list_display = ('name', 'description')
 
 
+class LocationAdmin(admin.ModelAdmin):
+    list_display = ('name', 'venue')
+    list_editable = ('name', 'venue')
+
+
 admin.site.register(Volunteer, VolunteerAdmin)
 admin.site.register(Task, TaskAdmin)
 admin.site.register(TaskCategory, TaskCategoryAdmin)
+admin.site.register(TaskLocation, LocationAdmin)
