@@ -104,11 +104,11 @@ class PageEditTests(TestCase):
             cache = caches['wafer_cache']
             result = uncached_page.cached_render()
             self.assertEqual(result, uncached_page.content.rendered)
-            self.assertEqual(cache.get(uncached_page.get_absolute_url()), None)
+            self.assertEqual(cache.get(uncached_page._cache_key()), None)
             result = cached_page.cached_render()
             self.assertEqual(result, cached_page.content.rendered)
-            self.assertEqual(cache.get(cached_page.get_absolute_url()), result)
+            self.assertEqual(cache.get(cached_page._cache_key()), result)
             # Check that updating the page content invalidates the cache
             cached_page.content = '*cc*'
             cached_page.save()
-            self.assertEqual(cache.get(cached_page.get_absolute_url()), None)
+            self.assertEqual(cache.get(cached_page._cache_key()), None)

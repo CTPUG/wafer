@@ -78,11 +78,14 @@ class Page(models.Model):
         url = "/".join(self.get_path())
         return reverse('wafer_page', args=(url,))
 
+    def _cache_key(self):
+        return "wafer.pages:rendered:%s" % self.get_absolute_url()
+
     def cached_render(self):
         if self.cache_time < 0:
             return self.content.rendered
         cache = caches[self.cache_name]
-        cache_key = self.get_absolute_url()
+        cache_key = self._cache_key()
         rendered = cache.get(cache_key)
         if rendered is None:
             rendered = render_func(self.content.raw)
@@ -93,8 +96,7 @@ class Page(models.Model):
 
     def invalidate_cache(self):
         cache = caches[self.cache_name]
-        cache_key = self.get_absolute_url()
-        cache.delete(cache_key)
+        cache.delete(self._cache_key())
 
     get_absolute_url.short_description = 'page url'
 
