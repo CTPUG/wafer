@@ -1,4 +1,5 @@
 import datetime
+from collections import defaultdict
 
 from django.db.models import Q
 from django.conf.urls import url
@@ -246,11 +247,11 @@ class ScheduleItemAdmin(admin.ModelAdmin):
         extra_context = extra_context or {}
         # Find issues in the schedule
         all_items = prefetch_schedule_items()
-        errors = {}
+        errors = defaultdict(list)
         for validator, err_type, _msg in SCHEDULE_ITEM_VALIDATORS:
             failed_items = validator(all_items)
             if failed_items:
-                errors[err_type] = failed_items
+                errors[err_type].extend(failed_items)
         extra_context['errors'] = errors
         return super(ScheduleItemAdmin, self).changelist_view(request,
                                                               extra_context)
@@ -334,12 +335,12 @@ class SlotAdmin(admin.ModelAdmin):
     def changelist_view(self, request, extra_context=None):
         extra_context = extra_context or {}
         # Find issues with the slots
-        errors = {}
+        errors = defaultdict(list)
         all_slots = prefetch_slots()
         for validator, err_type, _msg in SLOT_VALIDATORS:
             failed_slots = validator(all_slots)
             if failed_slots:
-                errors[err_type] = failed_slots
+                errors[err_type].extend(failed_slots)
         extra_context['errors'] = errors
         return super(SlotAdmin, self).changelist_view(request,
                                                       extra_context)
