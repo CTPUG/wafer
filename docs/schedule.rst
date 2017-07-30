@@ -82,7 +82,7 @@ schedule item validator is called with a list of all schedule items.
 Validators are expected to return a list of invalid items or an
 empty list if the validator finds no error.
 
-Use ``register_schedule_item_validator`` and ``register_slot_vaildator``
+Use ``register_schedule_item_validator`` and ``register_slot_validator``
 to add the validators to the list.
 
 To display the errors in the admin form, you will also need to extend the
