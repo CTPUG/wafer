@@ -4,36 +4,28 @@
 {% block content %}
 <h1>{{ object.name }}</h1>
 
-<ul>
-    <li>
-        <b>{% trans "Date" %}:</b>
-        <span>{{ object.datetime }}</span>
-    </li>
-    <li>
-        <b>{% trans "Number of volunteers" %}:</b>
-        <span>{{ object.nbr_volunteers }}/{{ object.nbr_volunteers_max }}</span>
-    </li>
-    <li>
-        <b>{% trans "Category" %}:</b>
-        <span>
-            {% if object.category %}
-            {{ object.category }}
-            {% else %}
-            N/A
-            {% endif %}
-        </span>
-    </li>
-    <li>
-        <b>{% trans "Talk" %}:</b>
-        <span>
-            {% if object.talk %}
-            <a href="{% url 'wafer_talk' object.talk.pk %}">{{ object.talk.title }}</a>
-            {% else %}
-            N/A
-            {% endif %}
-        </span>
-    </li>
-</ul>
+<dl>
+  <dt>{% trans "Date and time" %}:</dt>
+  <dd>
+      {% blocktrans with date=object.start|date start_time=object.start|time end_time=object.end|time %}
+      {{date}} from {{start_time}} to {{end_time}}
+      {% endblocktrans %}
+  </dd>
+  <dt>{% trans "Registered volunteers" %} ({{ object.nbr_volunteers }}/{{ object.nbr_volunteers_max }}):</dt>
+  <dd>
+      {% if object.nbr_volunteers %}
+      <ul>{% for volunteer in object.volunteers.all %}<li>{{ volunteer.user.get_full_name }}</li>{% endfor %}</ul>
+      {% endif %}
+  </dd>
+  {% if object.category %}
+  <dt>{% trans "Category" %}:</dt>
+  <dd>{{ object.category }}</dd>
+  {% endif %}
+  {% if object.talk %}
+  <dt>{% trans "Talk" %}:</dt>
+  <dd><a href="{% url 'wafer_talk' object.talk.pk %}">{{ object.talk.title }}</a></dd>
+  {% endif %}
+</dl>
 
 <hr />
 

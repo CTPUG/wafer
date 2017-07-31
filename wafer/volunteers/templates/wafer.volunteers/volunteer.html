@@ -45,21 +45,25 @@
 
             {% for task in object.tasks.all %}
             <tr>
-                <td>{{ task.datetime }}</td>
+                <td>
+                    {% blocktrans with date=task.start|date start_time=task.start|time end_time=task.end|time %}
+                    {{date}} from {{start_time}} to {{end_time}}
+                    {% endblocktrans %}
+                </td>
                 <td>
                     <a href="{% url 'wafer_task' task.pk %}">{{ task.name }}</a>
                 </td>
                 <td>{{ task.nbr_volunteers }}/{{ task.nbr_volunteers_max }}</td>
                 <td>
-                    {% if item.category %}
-                    {{ item.category }}
+                    {% if task.category %}
+                    {{ task.category }}
                     {% else %}
                     N/A
                     {% endif %}
                 </td>
                 <td>
-                    {% if item.talk %}
-                    <a href="{% url 'wafer_talk' item.talk.pk %}">{{ item.talk.title }}</a>
+                    {% if task.talk %}
+                    <a href="{% url 'wafer_talk' task.talk.pk %}">{{ task.talk.title }}</a>
                     {% else %}
                     N/A
                     {% endif %}
