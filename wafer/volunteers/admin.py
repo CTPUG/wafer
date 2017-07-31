@@ -138,6 +138,7 @@ class TaskAdmin(admin.ModelAdmin):
         'location', 'nbr_volunteers_min', 'nbr_volunteers_max', 'category'
     )
     list_filter = ('category', DayListFilter, HasVolunteersListFilter)
+    search_fields = ('name', 'description')
 
     actions = [duplicate]
 
