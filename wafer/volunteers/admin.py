@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.utils.html import format_html, format_html_join
 from django.utils.translation import ugettext_lazy as _
 from django.db.models import Count, F
 
@@ -130,7 +131,7 @@ class TaskAdmin(admin.ModelAdmin):
     )
 
     list_display = (
-        'name', 'start', 'end', 'location', 'nbr_volunteers',
+        'name', 'start', 'end', 'location', 'nbr_volunteers', 'volunteers_',
         'nbr_volunteers_min', 'nbr_volunteers_max', 'category', 'talk',
     )
     list_editable = (
@@ -139,6 +140,15 @@ class TaskAdmin(admin.ModelAdmin):
     list_filter = ('category', DayListFilter, HasVolunteersListFilter)
 
     actions = [duplicate]
+
+    def volunteers_(self, instance):
+        return format_html('<ul>{0}</ul>', format_html_join(
+            '',
+            '<li>{}</li>',
+            ((volunteer.user.get_full_name(),)
+             for volunteer in instance.volunteers.all())
+        ))
+    volunteers_.short_description = 'Volunteers'
 
 
 class TaskCategoryAdmin(admin.ModelAdmin):
