@@ -5,6 +5,15 @@ from django.db.models import Count
 from wafer.volunteers.models import Volunteer, Task, TaskCategory, TaskLocation
 
 
+def duplicate(modeladmin, request, queryset):
+    for object in queryset:
+        object.id = None
+        object.save()
+
+
+duplicate.short_description = "Duplicate selected record"
+
+
 class DayListFilter(admin.SimpleListFilter):
     title = _('day')
     parameter_name = 'day'
@@ -106,6 +115,8 @@ class TaskAdmin(admin.ModelAdmin):
         'location', 'nbr_volunteers_min', 'nbr_volunteers_max', 'category'
     )
     list_filter = ('category', DayListFilter)
+
+    actions = [duplicate]
 
 
 class TaskCategoryAdmin(admin.ModelAdmin):
