@@ -8,6 +8,7 @@
        {% if errors %}
        <div name="errors">
           <h2>{% trans "Errors in the schedule" %}</h2>
+          {% block displayerrors %}
           {% if errors.clashes %}
           <h3>{% trans "Clashes" %}</h3>
           <ul>
@@ -56,6 +57,7 @@
              {% endfor %}
           </ul>
           {% endif %}
+          {% endblock %}
        </div>
        {% endif %}
     </div>

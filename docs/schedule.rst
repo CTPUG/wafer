@@ -69,3 +69,22 @@ Schedule items which are not talks have ``talk-type-none`` as the CSS class.
 
 A per item CSS class can also be set using the ``css_class`` attribute on the
 schedule item.
+
+
+Adding additional schedule validation
+=====================================
+
+Wafer runs validation on the slots and the schedule items. This behaviour
+can be extended by providing custom validators.
+
+Each slot validator is called with a list of all the slots, and each
+schedule item validator is called with a list of all schedule items.
+Validators are expected to return a list of invalid items or an
+empty list if the validator finds no error.
+
+Use ``register_schedule_item_validator`` and ``register_slot_validator``
+to add the validators to the list.
+
+To display the errors in the admin form, you will also need to extend the
+``displayerrors`` block in ``scheduleitem_list.html`` and ``slot_list.html``
+templates.
