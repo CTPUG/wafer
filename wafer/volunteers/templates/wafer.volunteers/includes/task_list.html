@@ -1,0 +1,40 @@
+{% load i18n %}
+
+{% for task in task_list %}
+<h3>{{ task.grouper }}</h3>
+<table>
+    <thead>
+        <tr>
+            <th>{% trans "When" %}</th>
+            <th>{% trans "Title" %}</th>
+            <th>{% trans "Where" %}</th>
+            <th>{% trans "Volunteers" %}</th>
+            <th>{% trans "Category" %}</th>
+            <th>{% trans "Talk" %}</th>
+        </tr>
+
+        {% for item in task.list %}
+        <tr>
+            <td>{{ item.start|time }} {% trans 'to' %} {{ item.end|time }}</td>
+            <td>
+                <a href="{% url 'wafer_task' item.pk %}">{{ item.name }}</a>
+            </td>
+            <td>{{ item.location }}</td>
+            <td>{{ item.nbr_volunteers }}/{{ item.nbr_volunteers_max }}</td>
+            <td>
+                {% if item.category %}
+                {{ item.category }}
+                {% else %}
+                N/A
+                {% endif %}
+            </td>
+            <td>
+                {% if item.talk %}
+                <a href="{% url 'wafer_talk' item.talk.pk %}">{{ item.talk.title }}</a>
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </thead>
+</table>
+{% endfor %}

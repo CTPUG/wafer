@@ -3,6 +3,7 @@ from django.views.generic.list import ListView
 from django.views.generic.edit import UpdateView
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseForbidden
+from django.utils import timezone
 from django.shortcuts import redirect
 from django.db.models import F, Count
 from django import forms
@@ -16,20 +17,21 @@ class TasksView(ListView):
     template_name = 'wafer.volunteers/tasks.html'
 
     def get_queryset(self):
-        return Task.objects.annotate(nbr_volunteers=Count('volunteers')) \
-                           .filter(nbr_volunteers__lt=F('nbr_volunteers_max'))
+        return Task.objects.annotate(nbr_volunteers=Count('volunteers'))
 
     def get_context_data(self, **kwargs):
         context = super(TasksView, self).get_context_data(**kwargs)
 
+        context['future_tasks'] = context['object_list'].filter(
+            end__gte=timezone.now())
+        context['volunteers_needed'] = context['future_tasks'].filter(
+            nbr_volunteers__lt=F('nbr_volunteers_max'))
+
         if self.request.user.is_authenticated():
             try:
                 volunteer = Volunteer.objects.get(user=self.request.user)
-                context['preferred_tasks'] = Task.objects.annotate(
-                    nbr_volunteers=Count('volunteers')
-                ).filter(
+                context['preferred_tasks'] = context['volunteers_needed'].filter(
                     category__in=volunteer.preferred_categories.all(),
-                    nbr_volunteers__lt=F('nbr_volunteers_max')
                 )
             except Volunteer.DoesNotExist:
                 pass

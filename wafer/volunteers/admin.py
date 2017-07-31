@@ -31,7 +31,7 @@ class DayListFilter(admin.SimpleListFilter):
 
     def queryset(self, request, queryset):
         if self.value():
-            return queryset.filter(date__week_day=self.value())
+            return queryset.filter(start__week_day=self.value())
 
 
 class NumTasksListFilter(admin.SimpleListFilter):
@@ -118,7 +118,7 @@ class TaskAdmin(admin.ModelAdmin):
             'fields': ('name', 'description'),
         }),
         (None, {
-            'fields': ('date', 'start_time', 'end_time'),
+            'fields': ('start', 'end'),
         }),
         ('Volunteers', {
             'fields': ('volunteers',
@@ -130,7 +130,7 @@ class TaskAdmin(admin.ModelAdmin):
     )
 
     list_display = (
-        'name', 'date', 'location', 'start_time', 'end_time', 'nbr_volunteers',
+        'name', 'start', 'end', 'location', 'nbr_volunteers',
         'nbr_volunteers_min', 'nbr_volunteers_max', 'category', 'talk',
     )
     list_editable = (

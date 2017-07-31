@@ -45,7 +45,7 @@ class TaskLocation(models.Model):
 class Task(models.Model):
 
     class Meta:
-        ordering = ['date', 'start_time', '-end_time', 'name']
+        ordering = ['start', '-end', 'name']
 
     name = models.CharField(max_length=1024)
     description = models.TextField()
@@ -53,10 +53,8 @@ class Task(models.Model):
 
     location = models.ForeignKey('TaskLocation', null=True)
 
-    # Date/Time
-    date = models.DateField()
-    start_time = models.TimeField()
-    end_time = models.TimeField()
+    start = models.DateTimeField()
+    end = models.DateTimeField()
 
     # Volunteers
     volunteers = models.ManyToManyField('Volunteer', blank=True)
@@ -66,16 +64,16 @@ class Task(models.Model):
     talk = models.ForeignKey(Talk, null=True, blank=True)
 
     def __str__(self):
-        return u'%s (%s: %s - %s)' % (self.name, self.date,
-                                      self.start_time, self.end_time)
+        return u'%s (%s: %s - %s)' % (self.name, self.start.date(),
+                                      self.start.time(), self.end.time())
 
     def nbr_volunteers(self):
         return self.volunteer_set.count()
 
     def datetime(self):
-        return u'%s: %s - %s' % (date(self.date, 'l, F d'),
-                                 date(self.start_time, 'H:i'),
-                                 date(self.end_time, 'H:i'))
+        return u'%s: %s - %s' % (date(self.start.date(), 'l, F d'),
+                                 date(self.start.time(), 'H:i'),
+                                 date(self.end.time(), 'H:i'))
 
 
 @python_2_unicode_compatible
