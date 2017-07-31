@@ -1,9 +1,10 @@
 # Simple test of the edit logic around pages
 
-from django.test import Client, TestCase
+from django.test import Client, TestCase, override_settings
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Permission
 from django.contrib.contenttypes.models import ContentType
+from django.core.cache import caches
 
 from wafer.pages.models import Page
 
@@ -88,3 +89,26 @@ class PageEditTests(TestCase):
         templates = [x.name for x in response.templates]
         self.assertTrue('wafer.pages/page_form.html' in templates)
         self.assertEqual(response.status_code, 200)
+
+    def test_cache_time(self):
+        """Test the behaviour of cache_time"""
+        uncached_page = Page.objects.create(name="not cached", slug="no_cache",
+                                            content="*aa*")
+        cached_page = Page.objects.create(name="Cached Page", slug="cached",
+                                          content="*bb*",
+                                          cache_time=100)
+        # We use a memory cache here to actually check caching behaviour
+        with override_settings(CACHES={"default": {'BACKEND': 'django.core.cache.backends.locmem.LocMemCache'},
+                                       "wafer_cache": {'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+                                                       'LOCATION': 'test_cache'}}):
+            cache = caches['wafer_cache']
+            result = uncached_page.cached_render()
+            self.assertEqual(result, uncached_page.content.rendered)
+            self.assertEqual(cache.get(uncached_page._cache_key()), None)
+            result = cached_page.cached_render()
+            self.assertEqual(result, cached_page.content.rendered)
+            self.assertEqual(cache.get(cached_page._cache_key()), result)
+            # Check that updating the page content invalidates the cache
+            cached_page.content = '*cc*'
+            cached_page.save()
+            self.assertEqual(cache.get(cached_page._cache_key()), None)

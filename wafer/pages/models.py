@@ -6,11 +6,12 @@ from django.core.urlresolvers import reverse
 from django.core.exceptions import ValidationError, NON_FIELD_ERRORS
 from django.conf import settings
 from django.db import models
+from django.core.cache import caches
 from django.db.models.signals import post_save
 from django.utils.encoding import python_2_unicode_compatible
 
 
-from markitup.fields import MarkupField
+from markitup.fields import MarkupField, render_func
 from wafer.menu import MenuError, refresh_menu_cache
 
 
@@ -51,8 +52,17 @@ class Page(models.Model):
         help_text=_("People associated with this page for display in the"
                     " schedule (Session chairs, panelists, etc.)"))
 
+    cache_time = models.IntegerField(
+        default=-1,
+        help_text=_("Length of time (in seconds) to cache the page for "
+                    "dynamic page content. A negative value means this page "
+                    "is not dynamic and it will be not be regenerated "
+                    "until it is next edited."))
+
     def __str__(self):
         return u'%s' % (self.name,)
+
+    cache_name = settings.WAFER_CACHE
 
     def get_path(self):
         path, parent = [self.slug], self.parent
@@ -67,6 +77,26 @@ class Page(models.Model):
 
         url = "/".join(self.get_path())
         return reverse('wafer_page', args=(url,))
+
+    def _cache_key(self):
+        return "wafer.pages:rendered:%s" % self.get_absolute_url()
+
+    def cached_render(self):
+        if self.cache_time < 0:
+            return self.content.rendered
+        cache = caches[self.cache_name]
+        cache_key = self._cache_key()
+        rendered = cache.get(cache_key)
+        if rendered is None:
+            rendered = render_func(self.content.raw)
+            # Should reset the database copy, but this is enough for
+            # now
+            cache.set(cache_key, rendered, self.cache_time)
+        return rendered
+
+    def invalidate_cache(self):
+        cache = caches[self.cache_name]
+        cache.delete(self._cache_key())
 
     get_absolute_url.short_description = 'page url'
 
@@ -120,6 +150,11 @@ class Page(models.Model):
                     ],
                 })
         return super(Page, self).validate_unique(exclude)
+
+    def save(self, *args, **kwargs):
+        """Ensure we invalidate the cache after saving"""
+        super(Page, self).save(*args, **kwargs)
+        self.invalidate_cache()
 
 
 def page_menus(root_menu):
