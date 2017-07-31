@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.utils.translation import ugettext_lazy as _
-from django.db.models import Count
+from django.db.models import Count, F
 
 from wafer.volunteers.models import Volunteer, Task, TaskCategory, TaskLocation
 
@@ -54,6 +54,28 @@ class NumTasksListFilter(admin.SimpleListFilter):
             return query.filter(num_tasks__gte=1, num_tasks__lte=5)
         if self.value() == '2':
             return query.filter(num_tasks__gte=6)
+
+
+class HasVolunteersListFilter(admin.SimpleListFilter):
+    title = _('volunteers')
+    parameter_name = 'volunteers'
+
+    def lookups(self, request, model_admin):
+        return (
+            ('full', _('No more needed')),
+            ('some', _('More needed')),
+            ('none', _('None')),
+        )
+
+    def queryset(self, request, queryset):
+        query = queryset.annotate(nbr_volunteers=Count('volunteers'))
+
+        if self.value() == 'full':
+            return query.filter(nbr_volunteers=F('nbr_volunteers_max'))
+        elif self.value() == 'some':
+            return query.filter(nbr_volunteers__lt=F('nbr_volunteers_max'))
+        elif self.value() == 'none':
+            return query.filter(nbr_volunteers=0)
 
 
 class VolunteerAdmin(admin.ModelAdmin):
@@ -114,7 +136,7 @@ class TaskAdmin(admin.ModelAdmin):
     list_editable = (
         'location', 'nbr_volunteers_min', 'nbr_volunteers_max', 'category'
     )
-    list_filter = ('category', DayListFilter)
+    list_filter = ('category', DayListFilter, HasVolunteersListFilter)
 
     actions = [duplicate]
 
