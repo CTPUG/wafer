@@ -1,13 +1,12 @@
-from datetime import datetime, timedelta
-
 from django import forms
-from django.utils import timezone
 
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Div, Fieldset, Layout, HTML, Submit
 
 from wafer.schedule.models import ScheduleItem, Venue
+
 from wafer.volunteers.models import Task, TaskTemplate, TaskLocation
+from wafer.volunteers.utils import get_start_end_for_scheduleitem
 
 
 class VideoMassCreateTaskForm(forms.Form):
@@ -34,8 +33,13 @@ class VideoMassCreateTaskForm(forms.Form):
             ))
             for task in video_tasks:
                 fieldname = '%s:%s' % (schedule_item.pk, task.pk)
-                self.fields[fieldname] = forms.BooleanField(required=False,
-                                                            label=task.name)
+                initial = Task.objects.filter(talk=schedule_item.talk,
+                                              template=task).exists()
+                self.fields[fieldname] = forms.BooleanField(
+                    required=False,
+                    label=task.name,
+                    initial=initial,
+                )
                 tasks_for_item.append(fieldname)
             venue_divs[schedule_item.venue.pk].append(tasks_for_item)
 
@@ -44,7 +48,6 @@ class VideoMassCreateTaskForm(forms.Form):
         self.helper.add_input(Submit('submit', 'Create Tasks'))
 
     def clean(self):
-        tz = timezone.get_default_timezone()
         cleaned_data = super().clean()
         new_data = {}
         for pks, create_task in cleaned_data.items():
@@ -52,11 +55,7 @@ class VideoMassCreateTaskForm(forms.Form):
             si = ScheduleItem.objects.get(pk=schedule_item_pk)
             template = TaskTemplate.objects.get(pk=task_template_pk)
 
-            start = timezone.make_aware(datetime.strptime(
-                si.get_start_time(), "%b %d (%a), %H:%M"
-            ).replace(year=2017), tz)
-
-            end = start + timedelta(minutes=si.get_duration_minutes())
+            start, end = get_start_end_for_scheduleitem(si)
 
             task_data = {
                 'start': start,

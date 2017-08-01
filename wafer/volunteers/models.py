@@ -1,13 +1,15 @@
 from django.db import models
+from django.db.models.signals import m2m_changed, post_save
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
 from django.template.defaultfilters import date
 
-from wafer.schedule.models import Venue
+from wafer.schedule.models import ScheduleItem, Venue
 from wafer.talks.models import Talk
 
+from wafer.volunteers.utils import get_start_end_for_scheduleitem
 
 @python_2_unicode_compatible
 class Volunteer(models.Model):
@@ -189,3 +191,33 @@ class TaskCategory(models.Model):
 
     def __str__(self):
         return self.name
+
+
+def update_video_tasks(sender, **kwargs):
+    if kwargs.get('action', 'post_add') != 'post_add':
+        return
+    schedule_item = kwargs['instance']
+    talk = schedule_item.talk
+
+    try:
+        start, end = get_start_end_for_scheduleitem(schedule_item)
+    except ValueError:
+        # something is wrong with this schedule item, ignore...
+        return
+
+    for task in Task.objects.filter(talk=talk).all():
+        modified = False
+        if task.start != start or task.end != end:
+            modified = True
+            task.start = start
+            task.end = end
+            task.volunteers.clear()
+        if task.location.venue != schedule_item.venue:
+            modified = True
+            task.location = TaskLocation.objects.get(venue=schedule_item.venue)
+        if modified:
+            task.save()
+
+
+post_save.connect(update_video_tasks, sender=ScheduleItem)
+m2m_changed.connect(update_video_tasks, sender=ScheduleItem.slots.through)
