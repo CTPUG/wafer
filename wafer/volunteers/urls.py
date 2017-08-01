@@ -1,7 +1,8 @@
 from django.conf.urls import url
 
-from wafer.volunteers.views import (TaskView, TasksView,
-                                    VolunteerView, VolunteerUpdate)
+from wafer.volunteers.views import (
+    TaskView, TasksView, VideoMassScheduleView, VolunteerView, VolunteerUpdate,
+)
 
 urlpatterns = [
     url(r'^tasks/$', TasksView.as_view(), name='wafer_tasks'),
@@ -10,4 +11,5 @@ urlpatterns = [
         name='wafer_volunteer'),
     url(r'^(?P<slug>[\w.@+-]+)/update/$', VolunteerUpdate.as_view(),
         name='wafer_volunteer_update'),
+    url(r'^admin/video_mass_schedule/$', VideoMassScheduleView.as_view())
 ]

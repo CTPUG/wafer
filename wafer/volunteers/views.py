@@ -1,15 +1,19 @@
-from django.views.generic import DetailView
+from django.views.generic import FormView, DetailView
 from django.views.generic.list import ListView
 from django.views.generic.edit import UpdateView
-from django.core.urlresolvers import reverse
+from django.core.urlresolvers import reverse, reverse_lazy
 from django.db.models import F
 from django.http import HttpResponseForbidden
 from django.utils import timezone
+from django.utils.decorators import method_decorator
 from django.shortcuts import redirect
 from django import forms
 
+from django.contrib.auth.decorators import permission_required
+
 from wafer.users.views import EditOneselfMixin
 from wafer.volunteers.models import Volunteer, Task
+from wafer.volunteers.forms import VideoMassCreateTaskForm
 
 
 class TasksView(ListView):
@@ -116,3 +120,13 @@ class VolunteerUpdate(EditOneselfMixin, UpdateView):
     def get_success_url(self):
         return reverse('wafer_volunteer',
                        kwargs={'slug': self.object.user.username})
+
+
+class VideoMassScheduleView(FormView):
+    @method_decorator(permission_required('volunteers.add_task'))
+    def dispatch(self, *args, **kwargs):
+        return super().dispatch(*args, **kwargs)
+
+    form_class = VideoMassCreateTaskForm
+    template_name = 'wafer.volunteers/admin/video_mass_schedule.html'
+    success_url = reverse_lazy('admin:volunteers_task_changelist')
