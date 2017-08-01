@@ -2,7 +2,7 @@
 {% load i18n %}
 
 {% block content %}
-<h1>{{ object.name }}</h1>
+<h1>{{ object.get_name }}</h1>
 
 <dl>
   <dt>{% trans "Date and time" %}:</dt>
@@ -11,15 +11,15 @@
       {{date}} from {{start_time}} to {{end_time}}
       {% endblocktrans %}
   </dd>
-  <dt>{% trans "Registered volunteers" %} ({{ object.nbr_volunteers }}/{{ object.nbr_volunteers_max }}):</dt>
+  <dt>{% trans "Registered volunteers" %} ({{ object.nbr_volunteers }}/{{ object.get_nbr_volunteers_max }}):</dt>
   <dd>
       {% if object.nbr_volunteers %}
       <ul>{% for volunteer in object.volunteers.all %}<li>{{ volunteer.user.get_full_name }}</li>{% endfor %}</ul>
       {% endif %}
   </dd>
-  {% if object.category %}
+  {% if object.get_category %}
   <dt>{% trans "Category" %}:</dt>
-  <dd>{{ object.category }}</dd>
+  <dd>{{ object.get_category }}</dd>
   {% endif %}
   {% if object.talk %}
   <dt>{% trans "Talk" %}:</dt>
@@ -29,7 +29,7 @@
 
 <hr />
 
-<p>{{ object.description }}</p>
+<p>{{ object.get_description }}</p>
 
 <form action="" method="post">
     {% csrf_token %}

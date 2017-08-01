@@ -1,5 +1,6 @@
 from django.db import models
 from django.conf import settings
+from django.utils import timezone
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
 from django.template.defaultfilters import date
@@ -41,15 +42,70 @@ class TaskLocation(models.Model):
     def __str__(self):
         return self.name
 
+
 @python_2_unicode_compatible
-class Task(models.Model):
+class AbstractTaskTemplate(models.Model):
+    name = models.CharField(max_length=1024, blank=True, null=True)
+    description = models.TextField(blank=True, null=True)
+    category = models.ForeignKey('TaskCategory', blank=True, null=True)
+
+    nbr_volunteers_min = models.IntegerField(default=1, blank=True, null=True)
+    nbr_volunteers_max = models.IntegerField(default=1, blank=True, null=True)
+
+    def clean(self):
+        super().clean()
+        fields = ['name', 'description', 'nbr_volunteers_min',
+                  'nbr_volunteers_max']
+        for field in fields:
+            if not getattr(self, field):
+                setattr(self, field, None)
+
+        # Only keep fields that have been overridden from the template
+        if hasattr(self, 'template') and self.template:
+            for field in fields:
+                if getattr(self.template, field) == getattr(self, field):
+                    setattr(self, field, None)
 
     class Meta:
-        ordering = ['start', '-end', 'name']
+        abstract = True
 
-    name = models.CharField(max_length=1024)
-    description = models.TextField()
-    category = models.ForeignKey('TaskCategory', null=True, blank=True)
+
+@python_2_unicode_compatible
+class TaskTemplate(AbstractTaskTemplate):
+    """a template for a Task"""
+    video_task = models.BooleanField(default=False)
+
+    def __str__(self):
+        return u'Template for %s' % self.name
+
+
+class TaskQuerySet(models.QuerySet):
+    def filter_future(self):
+        return self.filter(end_time__gte=timezone.now())
+
+    def nbr_volunteers_lt_max(self):
+        return self.filter(
+            nbr_volunteers__lt=(
+                models.Func(
+                    models.F('nbr_volunteers_max'),
+                    models.F('template__nbr_volunteers_max'),
+                    function='coalesce',
+                )
+            ),
+        )
+
+
+@python_2_unicode_compatible
+class Task(AbstractTaskTemplate):
+    """Something to do.
+
+    If the template is set, it will override the name, description and
+    category fields.
+    """
+    class Meta:
+        ordering = ['start', '-end', 'template__name', 'name']
+
+    objects = TaskQuerySet.as_manager()
 
     location = models.ForeignKey('TaskLocation', null=True)
 
@@ -58,22 +114,46 @@ class Task(models.Model):
 
     # Volunteers
     volunteers = models.ManyToManyField('Volunteer', blank=True)
-    nbr_volunteers_min = models.IntegerField(default=1)
-    nbr_volunteers_max = models.IntegerField(default=1)
 
     talk = models.ForeignKey(Talk, null=True, blank=True)
+    template = models.ForeignKey(TaskTemplate, null=True, blank=True)
 
     def __str__(self):
-        return u'%s (%s: %s - %s)' % (self.name, self.start.date(),
+        return u'%s (%s: %s - %s)' % (self.get_name(), self.start.date(),
                                       self.start.time(), self.end.time())
 
     def nbr_volunteers(self):
         return self.volunteer_set.count()
+    nbr_volunteers.short_description = "# reg'd"
 
     def datetime(self):
         return u'%s: %s - %s' % (date(self.start.date(), 'l, F d'),
                                  date(self.start.time(), 'H:i'),
                                  date(self.end.time(), 'H:i'))
+
+    def get_name(self):
+        return self.name or self.template.name
+    get_name.short_description = 'Name'
+
+    def get_description(self):
+        return self.description or self.template.description
+    get_description.short_description = 'Description'
+
+    def get_category(self):
+        if not self.category:
+            if self.template:
+                return self.template.category
+
+        return self.category
+    get_category.short_description = 'Category'
+
+    def get_nbr_volunteers_min(self):
+        return self.nbr_volunteers_min or self.template.nbr_volunteers_min
+    get_nbr_volunteers_min.short_description = '# min'
+
+    def get_nbr_volunteers_max(self):
+        return self.nbr_volunteers_max or self.template.nbr_volunteers_max
+    get_nbr_volunteers_max.short_description = '# max'
 
 
 @python_2_unicode_compatible

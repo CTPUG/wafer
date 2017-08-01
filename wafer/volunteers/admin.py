@@ -3,7 +3,9 @@ from django.utils.html import format_html, format_html_join
 from django.utils.translation import ugettext_lazy as _
 from django.db.models import Count, F
 
-from wafer.volunteers.models import Volunteer, Task, TaskCategory, TaskLocation
+from wafer.volunteers.models import (
+    Volunteer, Task, TaskCategory, TaskLocation, TaskTemplate,
+)
 
 
 def duplicate(modeladmin, request, queryset):
@@ -116,6 +118,9 @@ class VolunteerAdmin(admin.ModelAdmin):
 class TaskAdmin(admin.ModelAdmin):
     fieldsets = (
         (None, {
+            'fields': ('template',),
+        }),
+        (None, {
             'fields': ('name', 'description'),
         }),
         (None, {
@@ -131,14 +136,14 @@ class TaskAdmin(admin.ModelAdmin):
     )
 
     list_display = (
-        'name', 'start', 'end', 'location', 'nbr_volunteers', 'volunteers_',
-        'nbr_volunteers_min', 'nbr_volunteers_max', 'category', 'talk',
+        'get_name', 'template', 'start', 'end', 'location', 'nbr_volunteers',
+        'get_nbr_volunteers_min', 'get_nbr_volunteers_max', 'volunteers_',
+        'get_category', 'talk',
     )
-    list_editable = (
-        'location', 'nbr_volunteers_min', 'nbr_volunteers_max', 'category'
-    )
+    list_editable = ('location', 'template')
     list_filter = ('category', DayListFilter, HasVolunteersListFilter)
-    search_fields = ('name', 'description')
+    search_fields = ('name', 'template__name', 'description',
+                     'template__description')
 
     actions = [duplicate]
 
@@ -156,6 +161,11 @@ class TaskCategoryAdmin(admin.ModelAdmin):
     list_display = ('name', 'description')
 
 
+class TaskTemplateAdmin(admin.ModelAdmin):
+    list_display = ('name', 'nbr_volunteers_min', 'nbr_volunteers_max',
+                    'video_task')
+
+
 class LocationAdmin(admin.ModelAdmin):
     list_display = ('name', 'venue')
     list_editable = ('name', 'venue')
@@ -165,3 +175,4 @@ admin.site.register(Volunteer, VolunteerAdmin)
 admin.site.register(Task, TaskAdmin)
 admin.site.register(TaskCategory, TaskCategoryAdmin)
 admin.site.register(TaskLocation, LocationAdmin)
+admin.site.register(TaskTemplate, TaskTemplateAdmin)

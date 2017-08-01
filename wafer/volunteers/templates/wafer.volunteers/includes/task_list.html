@@ -17,13 +17,13 @@
         <tr>
             <td>{{ item.start|time }} {% trans 'to' %} {{ item.end|time }}</td>
             <td>
-                <a href="{% url 'wafer_task' item.pk %}">{{ item.name }}</a>
+                <a href="{% url 'wafer_task' item.pk %}">{{ item.get_name }}</a>
             </td>
             <td>{{ item.location }}</td>
-            <td>{{ item.nbr_volunteers }}/{{ item.nbr_volunteers_max }}</td>
+            <td>{{ item.nbr_volunteers }}/{{ item.get_nbr_volunteers_max }}</td>
             <td>
-                {% if item.category %}
-                {{ item.category }}
+                {% if item.get_category %}
+                {{ item.get_category }}
                 {% else %}
                 N/A
                 {% endif %}

@@ -5,7 +5,7 @@ from django.core.urlresolvers import reverse
 from django.http import HttpResponseForbidden
 from django.utils import timezone
 from django.shortcuts import redirect
-from django.db.models import F, Count
+from django.db.models import Count
 from django import forms
 
 from wafer.users.views import EditOneselfMixin
@@ -24,14 +24,17 @@ class TasksView(ListView):
 
         context['future_tasks'] = context['object_list'].filter(
             end__gte=timezone.now())
-        context['volunteers_needed'] = context['future_tasks'].filter(
-            nbr_volunteers__lt=F('nbr_volunteers_max'))
+        context['volunteers_needed'] = (
+            context['future_tasks'].nbr_volunteers_lt_max()
+        )
 
         if self.request.user.is_authenticated():
             try:
                 volunteer = Volunteer.objects.get(user=self.request.user)
-                context['preferred_tasks'] = context['volunteers_needed'].filter(
-                    category__in=volunteer.preferred_categories.all(),
+                context['preferred_tasks'] = (
+                    context['volunteers_needed'].filter(
+                        category__in=volunteer.preferred_categories.all(),
+                    )
                 )
             except Volunteer.DoesNotExist:
                 pass
