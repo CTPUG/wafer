@@ -1,5 +1,6 @@
 from django.db import models
 from django.conf import settings
+from django.core.exceptions import ValidationError
 from django.utils import timezone
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
@@ -45,6 +46,14 @@ class TaskLocation(models.Model):
 
 @python_2_unicode_compatible
 class AbstractTaskTemplate(models.Model):
+    class Meta:
+        abstract = True
+
+    MANDATORY_TASK_FIELDS = [
+        'name', 'description', 'nbr_volunteers_min', 'nbr_volunteers_max',
+    ]
+    TASK_TEMPLATE_FIELDS = MANDATORY_TASK_FIELDS + ['category']
+
     name = models.CharField(max_length=1024, blank=True, null=True)
     description = models.TextField(blank=True, null=True)
     category = models.ForeignKey('TaskCategory', blank=True, null=True)
@@ -54,20 +63,24 @@ class AbstractTaskTemplate(models.Model):
 
     def clean(self):
         super().clean()
-        fields = ['name', 'description', 'nbr_volunteers_min',
-                  'nbr_volunteers_max']
-        for field in fields:
+        for field in self.MANDATORY_TASK_FIELDS:
             if not getattr(self, field):
                 setattr(self, field, None)
 
         # Only keep fields that have been overridden from the template
         if hasattr(self, 'template') and self.template:
-            for field in fields:
+            for field in self.TASK_TEMPLATE_FIELDS:
                 if getattr(self.template, field) == getattr(self, field):
                     setattr(self, field, None)
 
-    class Meta:
-        abstract = True
+        # If TaskTemplate or Task without template, check mandatory fields
+        if not hasattr(self, 'template') or not self.template:
+            errors = {}
+            for field in self.MANDATORY_TASK_FIELDS:
+                if not getattr(self, field):
+                    errors[field] = 'Your task needs a %s' % field
+            if errors:
+                raise ValidationError(errors)
 
 
 @python_2_unicode_compatible
