@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.utils.html import format_html, format_html_join
 from django.utils.translation import ugettext_lazy as _
-from django.db.models import Count, F
+from django.db.models import Count, F, Q
 
 from wafer.volunteers.models import (
     Volunteer, Task, TaskCategory, TaskLocation, TaskTemplate,
@@ -81,6 +81,20 @@ class HasVolunteersListFilter(admin.SimpleListFilter):
             return query.filter(nbr_volunteers=0)
 
 
+class CategoryFilter(admin.SimpleListFilter):
+    title = _('Category')
+    parameter_name = 'category'
+
+    def lookups(self, request, model_admin):
+        return [(cat.pk, cat.name) for cat in TaskCategory.objects.all()]
+
+    def queryset(self, request, queryset):
+        pk = self.value()
+        return queryset.filter(
+            Q(category__pk=pk) | Q(template__category__pk=pk)
+        )
+
+
 class VolunteerAdmin(admin.ModelAdmin):
     fieldsets = (
         ('Personal information', {
@@ -141,7 +155,7 @@ class TaskAdmin(admin.ModelAdmin):
         'get_category', 'talk',
     )
     list_editable = ('location', 'template')
-    list_filter = ('category', DayListFilter, HasVolunteersListFilter)
+    list_filter = (CategoryFilter, DayListFilter, HasVolunteersListFilter)
     search_fields = ('name', 'template__name', 'description',
                      'template__description')
 
