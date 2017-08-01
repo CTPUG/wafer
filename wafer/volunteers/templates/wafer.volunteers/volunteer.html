@@ -32,7 +32,7 @@
     </a>
 </div>
 <div>
-    {% if object.tasks.all %}
+    {% if object.annotated_tasks.all %}
     <table>
         <thead>
             <tr>
@@ -43,7 +43,7 @@
                 <th>{% trans 'Talk' %}</th>
             </tr>
 
-            {% for task in object.tasks.all %}
+            {% for task in object.annotated_tasks.all %}
             <tr>
                 <td>
                     {% blocktrans with date=task.start|date start_time=task.start|time end_time=task.end|time %}
@@ -51,12 +51,12 @@
                     {% endblocktrans %}
                 </td>
                 <td>
-                    <a href="{% url 'wafer_task' task.pk %}">{{ task.name }}</a>
+                    <a href="{% url 'wafer_task' task.pk %}">{{ task.name_ }}</a>
                 </td>
-                <td>{{ task.nbr_volunteers }}/{{ task.nbr_volunteers_max }}</td>
+                <td>{{ task.nbr_volunteers }}/{{ task.max_volunteers }}</td>
                 <td>
-                    {% if task.category %}
-                    {{ task.category }}
+                    {% if task.category_ %}
+                    {{ task.category_ }}
                     {% else %}
                     N/A
                     {% endif %}

@@ -30,6 +30,10 @@ class Volunteer(models.Model):
     staff_rating = models.IntegerField(null=True, blank=True, choices=RATINGS)
     staff_notes = models.TextField(null=True, blank=True)
 
+    @property
+    def annotated_tasks(self):
+        return self.tasks.annotate_all()
+
     def __str__(self):
         return u'%s' % self.user
 
@@ -107,7 +111,7 @@ class TaskQuerySet(models.QuerySet):
             max_volunteers=self.coalesce_from_template('nbr_volunteers_max'),
             name_=self.coalesce_from_template('name'),
             description_=self.coalesce_from_template('description'),
-            category_=self.coalesce_from_template('category'),
+            category_=self.coalesce_from_template('category__name'),
         )
 
 
