@@ -1,7 +1,6 @@
 from django.db import models
 from django.conf import settings
 from django.core.exceptions import ValidationError
-from django.utils import timezone
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
 from django.template.defaultfilters import date
@@ -93,18 +92,22 @@ class TaskTemplate(AbstractTaskTemplate):
 
 
 class TaskQuerySet(models.QuerySet):
-    def filter_future(self):
-        return self.filter(end_time__gte=timezone.now())
+    @staticmethod
+    def coalesce_from_template(field):
+        return models.Func(
+            models.F(field),
+            models.F('template__%s' % field),
+            function='coalesce',
+        )
 
-    def nbr_volunteers_lt_max(self):
-        return self.filter(
-            nbr_volunteers__lt=(
-                models.Func(
-                    models.F('nbr_volunteers_max'),
-                    models.F('template__nbr_volunteers_max'),
-                    function='coalesce',
-                )
-            ),
+    def annotate_all(self):
+        return self.select_related('template').annotate(
+            nbr_volunteers=models.Count('volunteers'),
+            min_volunteers=self.coalesce_from_template('nbr_volunteers_min'),
+            max_volunteers=self.coalesce_from_template('nbr_volunteers_max'),
+            name_=self.coalesce_from_template('name'),
+            description_=self.coalesce_from_template('description'),
+            category_=self.coalesce_from_template('category'),
         )
 
 

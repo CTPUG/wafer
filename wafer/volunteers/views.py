@@ -2,10 +2,10 @@ from django.views.generic import DetailView
 from django.views.generic.list import ListView
 from django.views.generic.edit import UpdateView
 from django.core.urlresolvers import reverse
+from django.db.models import F
 from django.http import HttpResponseForbidden
 from django.utils import timezone
 from django.shortcuts import redirect
-from django.db.models import Count
 from django import forms
 
 from wafer.users.views import EditOneselfMixin
@@ -16,8 +16,7 @@ class TasksView(ListView):
     model = Task
     template_name = 'wafer.volunteers/tasks.html'
 
-    def get_queryset(self):
-        return Task.objects.annotate(nbr_volunteers=Count('volunteers'))
+    queryset = Task.objects.annotate_all()
 
     def get_context_data(self, **kwargs):
         context = super(TasksView, self).get_context_data(**kwargs)
@@ -25,7 +24,9 @@ class TasksView(ListView):
         context['future_tasks'] = context['object_list'].filter(
             end__gte=timezone.now())
         context['volunteers_needed'] = (
-            context['future_tasks'].nbr_volunteers_lt_max()
+            context['future_tasks'].filter(
+                nbr_volunteers__lt=F('max_volunteers'),
+            )
         )
 
         if self.request.user.is_authenticated():
@@ -46,6 +47,8 @@ class TaskView(DetailView):
     model = Task
     template_name = 'wafer.volunteers/task.html'
 
+    queryset = Task.objects.annotate_all()
+
     def get_context_data(self, **kwargs):
         context = super(TaskView, self).get_context_data(**kwargs)
         # TODO Find a better way
@@ -55,7 +58,7 @@ class TaskView(DetailView):
         )
         context['can_volunteer'] = (
             self.request.user.is_authenticated() and
-            self.object.nbr_volunteers() < self.object.nbr_volunteers_max
+            self.object.nbr_volunteers < self.object.max_volunteers
         )
         return context
 
@@ -68,7 +71,7 @@ class TaskView(DetailView):
         if self.object in volunteer.tasks.all():
             volunteer.tasks.remove(self.object)
             self.object.volunteers.remove(volunteer)
-        elif self.object.nbr_volunteers() < self.object.nbr_volunteers_max:
+        elif (self.object.nbr_volunteers < self.object.max_volunteers):
             volunteer.tasks.add(self.object)
             self.object.volunteers.add(volunteer)
 
