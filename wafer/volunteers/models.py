@@ -125,7 +125,7 @@ class Task(AbstractTaskTemplate):
     category fields.
     """
     class Meta:
-        ordering = ['start', '-end', 'template__name', 'name']
+        ordering = ['start', '-end', 'talk', 'template__name', 'name']
 
     objects = TaskQuerySet.as_manager()
 
