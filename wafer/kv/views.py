@@ -3,6 +3,8 @@ from rest_framework import viewsets
 from wafer.kv.models import KeyValue
 from wafer.kv.serializers import KeyValueSerializer
 from wafer.kv.permissions import KeyValueGroupPermission
+from wafer.utils import order_results_by
+
 
 class KeyValueViewSet(viewsets.ModelViewSet):
     """API endpoint that allows key-value pairs to be viewed or edited."""
@@ -10,6 +12,7 @@ class KeyValueViewSet(viewsets.ModelViewSet):
     serializer_class = KeyValueSerializer
     permission_classes = (KeyValueGroupPermission, )
 
+    @order_results_by('key', 'id')
     def get_queryset(self):
         # Restrict the list to only those that match the user's
         # groups
