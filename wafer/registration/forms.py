@@ -9,7 +9,7 @@ from crispy_forms.layout import Hidden, Submit
 class RegistrationFormHelper(FormHelper):
     form_action = reverse('registration_register')
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, request, *args, **kwargs):
         super(RegistrationFormHelper, self).__init__(*args, **kwargs)
         self.add_input(Submit('submit', _('Sign up')))
 
