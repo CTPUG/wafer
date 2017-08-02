@@ -20,6 +20,7 @@ from wafer.talks.models import Talk, TalkType, TalkUrl, ACCEPTED, CANCELLED
 from wafer.talks.forms import get_talk_form_class
 from wafer.talks.serializers import TalkSerializer, TalkUrlSerializer
 from wafer.users.models import UserProfile
+from wafer.utils import order_results_by
 
 
 class EditOwnTalksMixin(object):
@@ -37,13 +38,14 @@ class UsersTalks(ListView):
     template_name = 'wafer.talks/talks.html'
     paginate_by = 25
 
+    @order_results_by('talk_id')
     def get_queryset(self):
         # self.request will be None when we come here via the static site
         # renderer
         if (self.request and Talk.can_view_all(self.request.user)):
             return Talk.objects.all()
-        return Talk.objects.filter( Q(status=ACCEPTED) |
-                                    Q(status=CANCELLED))
+        return Talk.objects.filter(Q(status=ACCEPTED) |
+                                   Q(status=CANCELLED))
 
 
 class TalkView(DetailView):
@@ -162,6 +164,7 @@ class TalksViewSet(viewsets.ModelViewSet, NestedViewSetMixin):
     # XXX: Do we want to allow authors to edit talks via the API?
     permission_classes = (DjangoModelPermissionsOrAnonReadOnly, )
 
+    @order_results_by('talk_id')
     def get_queryset(self):
         # We override the default implementation to only show accepted talks
         # to people who aren't part of the management group
@@ -191,7 +194,7 @@ class TalkExistsPermission(BasePermission):
 
 class TalkUrlsViewSet(viewsets.ModelViewSet, NestedViewSetMixin):
     """API endpoint that allows talks to be viewed or edited."""
-    queryset = TalkUrl.objects.all()
+    queryset = TalkUrl.objects.all().order_by('id')
     serializer_class = TalkUrlSerializer
     permission_classes = (DjangoModelPermissions, TalkExistsPermission)
 
