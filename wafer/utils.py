@@ -14,6 +14,19 @@ def normalize_unicode(u):
     return unicodedata.normalize('NFKD', u).encode('ascii', 'ignore')
 
 
+def order_results_by(*fields):
+    """A decorator that applies an ordering to the QuerySet returned by a
+       function.
+       """
+    def decorator(f):
+        @functools.wraps(f)
+        def wrapper(*args, **kw):
+            result = f(*args, **kw)
+            return result.order_by(*fields)
+        return wrapper
+    return decorator
+
+
 def cache_result(cache_key, timeout):
     """A decorator for caching the result of a function."""
     def decorator(f):

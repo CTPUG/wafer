@@ -248,7 +248,7 @@ class ScheduleItemViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows groups to be viewed or edited.
     """
-    queryset = ScheduleItem.objects.all()
+    queryset = ScheduleItem.objects.all().order_by('id')
     serializer_class = ScheduleItemSerializer
     permission_classes = (IsAdminUser, )
 
