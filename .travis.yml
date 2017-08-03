@@ -11,8 +11,8 @@ env:
    - DJANGO='django>=1.9.0,<1.10.0' TESTDB=postgres
    - DJANGO='django>=1.10.0,<1.11.0' TESTDB=sqlite
    - DJANGO='django>=1.10.0,<1.11.0' TESTDB=postgres
-   - DJANGO='https://github.com/django/django/archive/stable/1.11.x.tar.gz' TESTDB=sqlite
-   - DJANGO='https://github.com/django/django/archive/stable/1.11.x.tar.gz' TESTDB=postgres
+   - DJANGO='django>=1.11.0,<1.12.0' TESTDB=sqlite
+   - DJANGO='django>=1.11.0,<1.12.0' TESTDB=postgres
    - DJANGO='https://github.com/django/django/archive/master.tar.gz' TESTDB=sqlite
    - DJANGO='https://github.com/django/django/archive/master.tar.gz' TESTDB=postgres
 
