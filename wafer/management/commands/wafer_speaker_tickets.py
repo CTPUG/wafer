@@ -4,17 +4,20 @@ import csv
 from django.core.management.base import BaseCommand
 
 from django.contrib.auth import get_user_model
-from wafer.talks.models import ACCEPTED
+from wafer.talks.models import ACCEPTED, PROVISIONAL
 
 
 class Command(BaseCommand):
     help = ("List speakers and associated tickets. By default, only lists"
-            " speakers for accepted talk, but this can be overriden by"
-            " the --all option")
+            " speakers for provisionally accepted talks, but this can be"
+            " overriden by the --all or --accepted options")
 
     def add_arguments(self, parser):
         parser.add_argument('--all', action="store_true",
                             help='List speakers and tickets (for all talks)')
+        parser.add_argument('--accepted', action="store_true",
+                            help='List speakers and tickets (for'
+                                 ' fully accepted talks)')
 
     def _speaker_tickets(self, options):
         people = get_user_model().objects.filter(
@@ -26,9 +29,12 @@ class Command(BaseCommand):
             # accounts
             if options['all']:
                 titles = [x.title for x in person.talks.all()]
-            else:
+            elif options['accepted']:
                 titles = [x.title for x in
                           person.talks.filter(status=ACCEPTED)]
+            else:
+                titles = [x.title for x in
+                          person.talks.filter(status=PROVISIONAL)]
             if not titles:
                 continue
             tickets = person.ticket.all()
