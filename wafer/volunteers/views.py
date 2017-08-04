@@ -64,6 +64,11 @@ class TaskView(DetailView):
             self.request.user.is_authenticated() and
             self.object.nbr_volunteers < self.object.max_volunteers
         )
+
+        if self.object.talk:
+            context['related_tasks'] = Task.objects.filter(
+                talk=self.object.talk).exclude(id=self.object.id)
+
         return context
 
     def post(self, request, *args, **kwargs):

@@ -24,6 +24,18 @@
   {% if object.talk %}
   <dt>{% trans "Talk" %}:</dt>
   <dd><a href="{% url 'wafer_talk' object.talk.pk %}">{{ object.talk.title }}</a></dd>
+  {% if related_tasks %}
+  <dt>{% trans "Related tasks" %}:</dt>
+  <dd>
+    <ul>
+      {% for task in related_tasks %}
+      <li>
+        <a href="{% url 'wafer_task' task.pk %}">{{ task.get_name }}</a>
+      </li>
+      {% endfor %}
+    </ul>
+  </dd>
+  {% endif %}
   {% endif %}
 </dl>
 
