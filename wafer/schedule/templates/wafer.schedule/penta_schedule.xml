@@ -23,7 +23,7 @@
             {% if venue in row.items %}
               {# this is more than a little horrible, but will do for testing #}
               {% for row_venue, items in row.items.items %}
-                {% if row_venue == venue %}
+                {% if row_venue == venue and items.item %}
                   {# The event id is the ScheduleItem pk, which should be unique enough #}
                   <event id="{{ items.item.pk }}">
                     {# Not sure what to do about timezones here #}
