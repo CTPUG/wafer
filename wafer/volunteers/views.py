@@ -2,7 +2,7 @@ from django.views.generic import FormView, DetailView
 from django.views.generic.list import ListView
 from django.views.generic.edit import UpdateView
 from django.core.urlresolvers import reverse, reverse_lazy
-from django.db.models import F
+from django.db.models import F, Q
 from django.http import HttpResponseForbidden
 from django.utils import timezone
 from django.utils.decorators import method_decorator
@@ -65,9 +65,10 @@ class TaskView(DetailView):
             self.object.nbr_volunteers < self.object.max_volunteers
         )
 
-        if self.object.talk:
-            context['related_tasks'] = Task.objects.filter(
-                talk=self.object.talk).exclude(id=self.object.id)
+        context['concurrent_tasks'] = Task.objects.filter(
+            (Q(start__lte=self.object.start) & Q(end__gt=self.object.start)) |
+            (Q(start__gt=self.object.start) & Q(start__lt=self.object.end))
+        ).exclude(id=self.object.id)
 
         return context
 

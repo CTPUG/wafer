@@ -24,24 +24,10 @@
   {% if object.talk %}
   <dt>{% trans "Talk" %}:</dt>
   <dd><a href="{% url 'wafer_talk' object.talk.pk %}">{{ object.talk.title }}</a></dd>
-  {% if related_tasks %}
-  <dt>{% trans "Related tasks" %}:</dt>
-  <dd>
-    <ul>
-      {% for task in related_tasks %}
-      <li>
-        <a href="{% url 'wafer_task' task.pk %}">{{ task.get_name }}</a>
-      </li>
-      {% endfor %}
-    </ul>
-  </dd>
   {% endif %}
-  {% endif %}
+  <dt>{% trans "Description" %}:</dt>
+  <dd>{{ object.get_description }}</dd>
 </dl>
-
-<hr />
-
-<p>{{ object.get_description }}</p>
 
 <form action="" method="post">
     {% csrf_token %}
@@ -53,4 +39,37 @@
     {% endif %}
     {% endif %}
 </form>
+
+<hr />
+
+{% if concurrent_tasks %}
+<h3>{% trans "Happening at the same time" %}</h3>
+<table>
+  <thead>
+    <tr>
+      <th>When</th>
+      <th>Title</th>
+      <th>Where</th>
+      <th>Volunteers</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for task in concurrent_tasks %}
+    <tr>
+      <td>{{ task.start|time }} {% trans 'to' %} {{ task.end|time }}</td>
+      <td>
+        <a href="{% url 'wafer_task' task.pk %}">{{ task.get_name }}</a>
+      </td>
+      <td>{{ task.location }}</td>
+      <td>
+      {% for volunteer in task.volunteers.all %}
+      {{ volunteer.user.get_full_name }}
+      {% if not forloop.last %}, {% endif %}
+      {% endfor %}
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endif %}
 {% endblock %}
