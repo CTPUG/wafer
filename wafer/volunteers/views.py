@@ -2,7 +2,7 @@ from django.views.generic import FormView, DetailView
 from django.views.generic.list import ListView
 from django.views.generic.edit import UpdateView
 from django.core.urlresolvers import reverse, reverse_lazy
-from django.db.models import F, Q
+from django.db.models import F
 from django.http import HttpResponseForbidden
 from django.utils import timezone
 from django.utils.decorators import method_decorator
@@ -65,10 +65,7 @@ class TaskView(DetailView):
             self.object.nbr_volunteers < self.object.max_volunteers
         )
 
-        context['concurrent_tasks'] = Task.objects.filter(
-            (Q(start__lte=self.object.start) & Q(end__gt=self.object.start)) |
-            (Q(start__gt=self.object.start) & Q(start__lt=self.object.end))
-        ).exclude(id=self.object.id)
+        context['concurrent_tasks'] = self.object.concurrent_tasks()
 
         return context
 
@@ -77,11 +74,15 @@ class TaskView(DetailView):
             return HttpResponseForbidden()
         self.object = self.get_object()
         volunteer, new = Volunteer.objects.get_or_create(user=request.user)
+        concurrent_volunteers = [volunteer
+                                 for task in self.object.concurrent_tasks()
+                                 for volunteer in task.volunteers.all()]
 
+        # TODO Show an error message
         if self.object in volunteer.tasks.all():
             volunteer.tasks.remove(self.object)
             self.object.volunteers.remove(volunteer)
-        elif (self.object.nbr_volunteers < self.object.max_volunteers):
+        elif (self.object.nbr_volunteers < self.object.max_volunteers) and (volunteer not in concurrent_volunteers):
             volunteer.tasks.add(self.object)
             self.object.volunteers.add(volunteer)
 

@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models import Q
 from django.db.models.signals import m2m_changed, post_save
 from django.conf import settings
 from django.core.exceptions import ValidationError
@@ -176,6 +177,12 @@ class Task(AbstractTaskTemplate):
     def get_nbr_volunteers_max(self):
         return self.nbr_volunteers_max or self.template.nbr_volunteers_max
     get_nbr_volunteers_max.short_description = '# max'
+
+    def concurrent_tasks(self):
+        return Task.objects.filter(
+            (Q(start__lte=self.start) & Q(end__gt=self.start)) |
+            (Q(start__gt=self.start) & Q(start__lt=self.end))
+        ).exclude(id=self.id)
 
 
 @python_2_unicode_compatible
