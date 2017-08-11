@@ -1,3 +1,5 @@
+.. _staticsitegen:
+
 ======================
 Static Site Generation
 ======================
