@@ -67,6 +67,8 @@ e.g. ``pages/index.md``::
 
 The front matter can contain a couple of flags:
 
+``published``
+    If set to ``false``, the page will not be loaded.
 ``include_in_menu``
     If set to ``true``, the page will be added to the menu structure.
 ``exclude_from_static``
