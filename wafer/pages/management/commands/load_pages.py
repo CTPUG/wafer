@@ -52,6 +52,8 @@ class Command(BaseCommand):
         return meta, contents
 
     def load_page(self, parent, slug, meta, content):
+        if not meta.get('published', True):
+            return
         page, created = Page.objects.get_or_create(parent=parent, slug=slug)
         page.name = meta['name']
         page.content = content
