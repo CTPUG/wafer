@@ -67,6 +67,9 @@ class AbstractTaskTemplate(models.Model):
     nbr_volunteers_min = models.IntegerField(default=1, blank=True, null=True)
     nbr_volunteers_max = models.IntegerField(default=1, blank=True, null=True)
 
+    def __str__(self):
+        return u'Template for %s' % self.name
+
     def clean(self):
         super().clean()
         for field in self.MANDATORY_TASK_FIELDS:
@@ -93,9 +96,6 @@ class AbstractTaskTemplate(models.Model):
 class TaskTemplate(AbstractTaskTemplate):
     """a template for a Task"""
     video_task = models.BooleanField(default=False)
-
-    def __str__(self):
-        return u'Template for %s' % self.name
 
 
 class TaskQuerySet(models.QuerySet):
