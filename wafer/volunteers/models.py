@@ -12,16 +12,17 @@ from wafer.talks.models import Talk
 
 from wafer.volunteers.utils import get_start_end_for_scheduleitem
 
+
 @python_2_unicode_compatible
 class Volunteer(models.Model):
 
     RATINGS = (
-            (0, 'No longer welcome'),
-            (1, 'Poor'),
-            (2, 'Not great'),
-            (3, 'Average'),
-            (4, 'Good'),
-            (5, 'Superb'),
+        (0, 'No longer welcome'),
+        (1, 'Poor'),
+        (2, 'Not great'),
+        (3, 'Average'),
+        (4, 'Good'),
+        (5, 'Superb'),
     )
 
     user = models.OneToOneField(settings.AUTH_USER_MODEL,

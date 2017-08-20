@@ -15,9 +15,9 @@ class VideoMassCreateTaskForm(forms.Form):
 
         video_tasks = TaskTemplate.objects.filter(video_task=True)
         schedule_items = list(
-            ScheduleItem.objects.filter(talk__video=True,
-                                        venue__tasklocation__isnull=False)
-                                .all()
+            ScheduleItem.objects.filter(
+                talk__video=True,
+                venue__tasklocation__isnull=False).all()
         )
         venues = Venue.objects.filter(tasklocation__isnull=False).all()
         schedule_items.sort(key=lambda si: si.get_start_time())

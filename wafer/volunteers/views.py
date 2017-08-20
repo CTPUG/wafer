@@ -82,7 +82,8 @@ class TaskView(DetailView):
         if self.object in volunteer.tasks.all():
             volunteer.tasks.remove(self.object)
             self.object.volunteers.remove(volunteer)
-        elif (self.object.nbr_volunteers < self.object.max_volunteers) and (volunteer not in concurrent_volunteers):
+        elif ((self.object.nbr_volunteers < self.object.max_volunteers)
+              and (volunteer not in concurrent_volunteers)):
             volunteer.tasks.add(self.object)
             self.object.volunteers.add(volunteer)
 

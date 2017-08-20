@@ -21,13 +21,13 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         try:
             task = Task.objects.create(
-                    name=options['name'],
-                    description=options['description'],
-                    date=options['date'],
-                    start_time=options['start_time'],
-                    end_time=options['end_time'],
-                    nbr_volunteers_min=options['nbr_volunteers_min'],
-                    nbr_volunteers_max=options['nbr_volunteers_max'])
+                name=options['name'],
+                description=options['description'],
+                date=options['date'],
+                start_time=options['start_time'],
+                end_time=options['end_time'],
+                nbr_volunteers_min=options['nbr_volunteers_min'],
+                nbr_volunteers_max=options['nbr_volunteers_max'])
         except ValidationError as e:
             raise CommandError('Invalid task: "%s"' % e)
 
