@@ -375,18 +375,25 @@ class SpeakerTests(TestCase):
             reverse('wafer_talks_speakers'))
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "\n".join([
-            '<div class="container">',
-            '<div class="row">',
+            '<section class="wafer wafer-speakers">',
+            '<h1>Speakers</h1>'
+            '<div class="container">'
+            '  <div class="row">',
             '    <div class="col-md-3">',
-            '      <a href="/users/%s/">' % username,
-            '        <img class="thumbnail mx-auto" src="%s">' % img,
-            '      </a>',
-            '      <a href="/users/%s/">' % username,
-            '        <h3 class="text-center">author_a</h3>',
-            '      </a>',
+            '      <div class="wafer-speakers-logo">',
+            '        <a href="/users/%s/">' % username,
+            '          <img class="thumbnail mx-auto" src="%s">' % img,
+            '        </a>',
+            '      </div>',
+            '      <div class="wafer-speakers-name">',
+            '        <a href="/users/%s/">' % username,
+            '          author_a',
+            '        </a>',
+            '      </div>',
             '    </div>',
+            '  </div>',
             '</div>',
-            '</div>',
+            '</section>',
         ]), html=True)
 
     def check_n_speakers(self, n, expected_rows):
