@@ -18,9 +18,10 @@ class TicketType(models.Model):
 class Ticket(models.Model):
     barcode = models.IntegerField(primary_key=True)
     email = models.EmailField(blank=True)
-    type = models.ForeignKey(TicketType)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='ticket',
-                             blank=True, null=True, on_delete=models.SET_NULL)
+    type = models.ForeignKey(TicketType, on_delete=models.CASCADE)
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL, related_name='ticket',
+        blank=True, null=True, on_delete=models.SET_NULL)
 
     def __str__(self):
         return u'%s (%s)' % (self.barcode, self.email)

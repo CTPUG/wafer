@@ -5,7 +5,7 @@ from jsonfield import JSONField
 
 
 class KeyValue(models.Model):
-    group = models.ForeignKey(Group)
+    group = models.ForeignKey(Group, on_delete=models.CASCADE)
     key = models.CharField(max_length=64, db_index=True)
     value = JSONField()
 

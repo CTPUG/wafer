@@ -31,7 +31,8 @@ class Page(models.Model):
     """An extra page for the site."""
     name = models.CharField(max_length=255)
     slug = models.SlugField(help_text=_("Last component of the page URL"))
-    parent = models.ForeignKey('self', null=True, blank=True)
+    parent = models.ForeignKey(
+        'self', null=True, blank=True, on_delete=models.CASCADE)
     content = MarkupField(
         help_text=_("Markdown contents for the page."))
     include_in_menu = models.BooleanField(

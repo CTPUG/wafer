@@ -112,8 +112,10 @@ class Talk(models.Model):
     )
 
     talk_id = models.AutoField(primary_key=True)
-    talk_type = models.ForeignKey(TalkType, null=True, blank=True)
-    track = models.ForeignKey(Track, null=True, blank=True)
+    talk_type = models.ForeignKey(
+        TalkType, null=True, blank=True, on_delete=models.CASCADE)
+    track = models.ForeignKey(
+        Track, null=True, blank=True, on_delete=models.CASCADE)
 
     title = models.CharField(max_length=1024)
 
@@ -137,6 +139,7 @@ class Talk(models.Model):
 
     corresponding_author = models.ForeignKey(
         settings.AUTH_USER_MODEL, related_name='contact_talks',
+        on_delete=models.CASCADE,
         help_text=_(
             "The person submitting the talk (and who questions regarding the "
             "talk should be addressed to)."))
@@ -260,4 +263,4 @@ class TalkUrl(models.Model):
 
     description = models.CharField(max_length=256)
     url = models.URLField()
-    talk = models.ForeignKey(Talk)
+    talk = models.ForeignKey(Talk, on_delete=models.CASCADE)
