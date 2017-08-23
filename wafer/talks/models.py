@@ -113,9 +113,9 @@ class Talk(models.Model):
 
     talk_id = models.AutoField(primary_key=True)
     talk_type = models.ForeignKey(
-        TalkType, null=True, blank=True, on_delete=models.CASCADE)
+        TalkType, null=True, blank=True, on_delete=models.SET_NULL)
     track = models.ForeignKey(
-        Track, null=True, blank=True, on_delete=models.CASCADE)
+        Track, null=True, blank=True, on_delete=models.SET_NULL)
 
     title = models.CharField(max_length=1024)
 
