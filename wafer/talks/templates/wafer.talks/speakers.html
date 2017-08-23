@@ -2,22 +2,27 @@
 {% load i18n %}
 {% block title %}{% trans "Speakers" %} - {{ WAFER_CONFERENCE_NAME }}{% endblock %}
 {% block content %}
-<div class="container">
-  {% for row in speaker_rows %}
-    <div class="row">
-      {% for user_profile in row %}
-        <div class="col-md-3">
-          <a href="{% url 'wafer_user_profile' username=user_profile.user.username %}">
-            <img class="thumbnail mx-auto" src="{{ user_profile.avatar_url }}">
-          </a>
-          <a href="{% url 'wafer_user_profile' username=user_profile.user.username %}">
-            <h3 class="text-center">
-              {{ user_profile.display_name }}
-            </h3>
-          </a>
-        </div>
-      {% endfor %}
-    </div>
-  {% endfor %}
-</div>
+<section class="wafer wafer-speakers">
+  <h1>{% trans 'Speakers' %}</h1>
+  <div class="container">
+    {% for row in speaker_rows %}
+      <div class="row">
+        {% for user_profile in row %}
+          <div class="col-md-3">
+            <div class="wafer-speakers-logo">
+              <a href="{% url 'wafer_user_profile' username=user_profile.user.username %}">
+                <img class="thumbnail mx-auto" src="{{ user_profile.avatar_url }}">
+              </a>
+            </div>
+            <div class="wafer-speakers-name">
+              <a href="{% url 'wafer_user_profile' username=user_profile.user.username %}">
+                {{ user_profile.display_name }}
+              </a>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    {% endfor %}
+  </div>
+</section>
 {% endblock %}
