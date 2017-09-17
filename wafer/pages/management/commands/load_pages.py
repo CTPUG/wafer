@@ -48,7 +48,7 @@ class Command(BaseCommand):
                     break
                 front_matter.append(line)
             meta = yaml.load(''.join(front_matter))
-            contents = f.read()
+            contents = ''.join(f)
         return meta, contents
 
     def load_page(self, parent, slug, meta, content):
