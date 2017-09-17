@@ -38,8 +38,8 @@ class LoadPagesTest(TestCase):
         out = StringIO()
         with self.settings(PAGE_DIR=self._page_dir + "/"):
             call_command('load_pages', stdout=out)
-        self.assertEqual(out.getvalue(), "\n".join([
+        logs = out.getvalue().splitlines()
+        self.assertEqual(sorted(logs), [
             "Loaded page page1",
             "Loaded page page2",
-            "",
-        ]))
+        ])
