@@ -8,6 +8,8 @@ from django.core.management import call_command
 from django.test import TestCase
 from django.utils.six import StringIO
 
+from wafer.pages.models import Page
+
 PAGES = {
     "page1.md": "\n".join([
         "---",
@@ -43,3 +45,8 @@ class LoadPagesTest(TestCase):
             "Loaded page page1",
             "Loaded page page2",
         ])
+        pages = sorted(Page.objects.all(), key=lambda p: p.name)
+        self.assertEqual(pages[0].name, "Page 1")
+        self.assertEqual(pages[1].name, "Page 2")
+        self.assertEqual(pages[0].content.raw, "This is page 1.")
+        self.assertEqual(pages[1].content.raw, "This is page 2.")
