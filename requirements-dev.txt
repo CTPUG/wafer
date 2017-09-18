@@ -1,3 +1,4 @@
+PyYAML
 mock
 pep8
 pyflakes
