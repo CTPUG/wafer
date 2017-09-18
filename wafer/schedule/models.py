@@ -58,6 +58,7 @@ class Slot(models.Model):
     #      requirements.
 
     previous_slot = models.ForeignKey('self', null=True, blank=True,
+                                      on_delete=models.CASCADE,
                                       help_text=_("Previous slot if "
                                                   "applicable (slots should "
                                                   "have either a previous "
@@ -144,8 +145,10 @@ class ScheduleItem(models.Model):
     # Items can span multiple slots (tutorials, etc).
     slots = models.ManyToManyField(Slot)
 
-    talk = models.ForeignKey(Talk, null=True, blank=True)
-    page = models.ForeignKey(Page, null=True, blank=True)
+    talk = models.ForeignKey(
+        Talk, null=True, blank=True, on_delete=models.CASCADE)
+    page = models.ForeignKey(
+        Page, null=True, blank=True, on_delete=models.CASCADE)
     details = MarkdownTextField(
         null=False, blank=True,
         help_text=_("Additional details (if required)"))
