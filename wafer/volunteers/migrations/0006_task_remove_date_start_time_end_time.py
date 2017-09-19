@@ -7,7 +7,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('volunteers', '0006_task_populate_start_end'),
+        ('volunteers', '0005_task_add_start_end'),
     ]
 
     operations = [

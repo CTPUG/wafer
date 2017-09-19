@@ -98,6 +98,9 @@ class TaskTemplate(AbstractTaskTemplate):
     """a template for a Task"""
     video_task = models.BooleanField(default=False)
 
+    def __str__(self):
+        return u'Template for %s' % self.name
+
 
 class TaskQuerySet(models.QuerySet):
     @staticmethod

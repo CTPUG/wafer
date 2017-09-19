@@ -7,7 +7,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('volunteers', '0007_task_remove_date_start_time_end_time'),
+        ('volunteers', '0006_task_remove_date_start_time_end_time'),
     ]
 
     operations = [

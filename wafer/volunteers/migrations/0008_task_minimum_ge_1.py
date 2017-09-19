@@ -17,7 +17,7 @@ def update_task_min_nbr(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('volunteers', '0008_add_task_template'),
+        ('volunteers', '0007_add_task_template'),
     ]
 
     operations = [

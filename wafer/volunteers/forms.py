@@ -69,7 +69,7 @@ class VideoMassCreateTaskForm(forms.Form):
                                                   defaults=task_data)
                 new_data[(si, template)] = task
             else:
-                Task.objects.filter(talk=si.talk, template=template,).delete()
+                Task.objects.filter(talk=si.talk, template=template).delete()
                 new_data[(si, template)] = None
         cleaned_data.update(new_data)
         return cleaned_data
