@@ -131,7 +131,7 @@
                   data-toggle="tooltip" data-placement="left"
                   title="{{ talk.title }} (Cancelled)" data-type="talk" data-talk-id="{{ talk.talk_id }}">
               {% if not talk.cancelled %}
-              {{ talk.title|truncatechars:24 }} Isn't cancelled
+              {{ talk.title|truncatechars:24 }}
               {% else %}
               <del>{{ talk.title|truncatechars:12 }} (Cancelled)</del>
               {% endif %}
