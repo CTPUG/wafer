@@ -12,10 +12,10 @@
           {% if errors.clashes %}
           <h3>{% trans "Clashes" %}</h3>
           <ul>
-             {% for pos, items in errors.clashes.items %}
-             <li>{{ pos.0 }} at {{ pos.1.get_start_time|time:"H:i" }} --
+             {% for pos, items in errors.clashes %}
+             <li>{{ pos.0 }} at {{ items.0.get_start_time }} --
                  {% for item in items %}
-                     {{ item }},
+                 <b>{{ item.get_desc|escape }}</b>,
                  {% endfor %}
              </li>
              {% endfor %}
@@ -48,10 +48,10 @@
           {% if errors.venues %}
           <h3>{% trans "Venues assigned on days they are not available" %}</h3>
           <ul>
-             {% for venue, items in errors.venues.items %}
-             <li>{{ venue }} --
+             {% for venue, items in errors.venues %}
+             <li>{{ venue }} at {{ items.0.get_start_time }} --
                  {% for item in items %}
-                    {{ item }},
+                 <b>{{ item.get_desc|escape }}</b>,
                  {% endfor %}
              </li>
              {% endfor %}

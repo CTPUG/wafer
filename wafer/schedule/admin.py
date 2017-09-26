@@ -112,7 +112,8 @@ def find_clashes(all_items):
                 clashes[pos].append(item)
             else:
                 seen_venue_slots[pos] = item
-    return clashes
+    # We return a list, to match other validators
+    return clashes.items()
 
 
 def find_invalid_venues(all_items):
@@ -130,7 +131,7 @@ def find_invalid_venues(all_items):
         if not valid:
             venues.setdefault(item.venue, [])
             venues[item.venue].append(item)
-    return venues
+    return venues.items()
 
 
 # Helper methods for calling the validators
