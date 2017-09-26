@@ -407,35 +407,40 @@ class ValidationTests(TestCase):
         item1.slots.add(slot1)
         item2.slots.add(slot1)
         all_items = prefetch_schedule_items()
-        clashes = find_clashes(all_items)
+        # Needs to be an explicit list, not a generator on python 3 here
+        clashes = list(find_clashes(all_items))
         assert len(clashes) == 1
         pos = (venue1, slot1)
-        assert pos in clashes
-        assert item1 in clashes[pos]
-        assert item2 in clashes[pos]
+        assert pos == clashes[0][0]
+        assert item1 in clashes[0][1]
+        assert item2 in clashes[0][1]
         # Create a overlapping clashes
         item2.slots.remove(slot1)
         item1.slots.add(slot2)
         item2.slots.add(slot2)
         all_items = prefetch_schedule_items()
-        clashes = find_clashes(all_items)
+        clashes = list(find_clashes(all_items))
         assert len(clashes) == 1
         pos = (venue1, slot2)
-        assert pos in clashes
-        assert item1 in clashes[pos]
-        assert item2 in clashes[pos]
+        assert pos == clashes[0][0]
+        assert item1 in clashes[0][1]
+        assert item2 in clashes[0][1]
         # Add a clash in a second venue
         item3 = ScheduleItem.objects.create(venue=venue2, details="Item 3")
         item4 = ScheduleItem.objects.create(venue=venue2, details="Item 4")
         item3.slots.add(slot2)
         item4.slots.add(slot2)
         all_items = prefetch_schedule_items()
-        clashes = find_clashes(all_items)
+        clashes = list(find_clashes(all_items))
         assert len(clashes) == 2
         pos = (venue2, slot2)
-        assert pos in clashes
-        assert item3 in clashes[pos]
-        assert item4 in clashes[pos]
+        assert pos in [x[0] for x in clashes]
+        clash_items = []
+        for sublist in clashes:
+            if sublist[0] == pos:
+                clash_items.extend(sublist[1])
+        assert item3 in clash_items
+        assert item4 in clash_items
         # Fix clashes
         item1.slots.remove(slot2)
         item3.slots.remove(slot2)
@@ -652,9 +657,10 @@ class ValidationTests(TestCase):
         item2.slots.add(slot1)
 
         all_items = prefetch_schedule_items()
-        venues = find_invalid_venues(all_items)
-        assert set(venues) == set([venue2])
-        assert set(venues[venue2]) == set([item2])
+        # Needs to be an explicit list, as in the find_clashes test
+        venues = list(find_invalid_venues(all_items))
+        assert venues[0][0] == venue2
+        assert set(venues[0][1]) == set([item2])
 
         slot2 = Slot.objects.create(start_time=start1, end_time=start2,
                                     day=day2)
@@ -662,9 +668,9 @@ class ValidationTests(TestCase):
 
         item3.slots.add(slot2)
         all_items = prefetch_schedule_items()
-        venues = find_invalid_venues(all_items)
-        assert set(venues) == set([venue2])
-        assert set(venues[venue2]) == set([item2])
+        venues = list(find_invalid_venues(all_items))
+        assert venues[0][0] == venue2
+        assert set(venues[0][1]) == set([item2])
 
         item4 = ScheduleItem.objects.create(venue=venue1, page_id=page.pk)
         item5 = ScheduleItem.objects.create(venue=venue2, page_id=page.pk)
@@ -672,10 +678,17 @@ class ValidationTests(TestCase):
         item4.slots.add(slot2)
         item5.slots.add(slot1)
         all_items = prefetch_schedule_items()
-        venues = find_invalid_venues(all_items)
-        assert set(venues) == set([venue1, venue2])
-        assert set(venues[venue1]) == set([item4])
-        assert set(venues[venue2]) == set([item2, item5])
+        venues = list(find_invalid_venues(all_items))
+        assert set([x[0] for x in venues]) == set([venue1, venue2])
+        venue_1_items = []
+        venue_2_items = []
+        for sublist in venues:
+            if sublist[0] == venue1:
+                venue_1_items.extend(sublist[1])
+            elif sublist[0] == venue2:
+                venue_2_items.extend(sublist[1])
+        assert set(venue_1_items) == set([item4])
+        assert set(venue_2_items) == set([item2, item5])
 
     def test_validate_schedule(self):
         """Check the behaviour of validate schedule
