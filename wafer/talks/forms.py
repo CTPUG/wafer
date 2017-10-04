@@ -107,8 +107,8 @@ class TalkForm(forms.ModelForm):
                 FormActions(
                     submit_button,
                     HTML('<a href="%s" class="btn btn-danger">%s</a>'
-                         % (reverse('wafer_talk_delete', args=(instance.pk,)),
-                            _('Delete')))))
+                         % (reverse('wafer_talk_withdraw', args=(instance.pk,)),
+                            _('Withdraw Talk')))))
         else:
             self.helper.add_input(submit_button)
 
