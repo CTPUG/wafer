@@ -42,5 +42,11 @@ install:
    # Install the right version of Django first
    - pip install "$DJANGO"
    - pip install -r requirements.txt -r requirements-dev.txt
+   # For Django 1.8 & Django 1.9, we need to downgrade djangorestframework
+   # This goes away when we drop support for Django 1.8 & 1.9
+   - |
+       if [ "$DJANGO" = 'django>=1.8.0,<1.9.0' || "$DJANGO" = "django>=1.9.0,<1.10.0" ]; then
+           pip install -U  'djangorestframework<3.7'
+       fi
 # command to run tests
 script: NOSE_WITH_COVERAGE=1 python manage.py test

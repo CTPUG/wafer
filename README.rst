@@ -39,6 +39,10 @@ Installation
 1. ``pip install -r requirements.txt`` should install all the required
    python and django dependencies.
 
+   If you're using Django 1.8 or 1.9, you will need to downgrade
+   djangorestframework to the 3.6 series, since djangorestframework 3.7
+   does not support those versions.
+
 2. Wafer uses npm to manage front-end dependencies
 
    * Make sure you have a recent version of Node.js installed that
