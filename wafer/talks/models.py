@@ -18,6 +18,7 @@ PROVISIONAL = 'P'
 ACCEPTED = 'A'
 REJECTED = 'R'
 CANCELLED = 'C'
+WITHDRAWN = 'W'
 
 
 # Utility functions used in the forms
@@ -109,6 +110,7 @@ class Talk(models.Model):
         (UNDER_CONSIDERATION, 'Under Consideration'),
         (SUBMITTED, 'Submitted'),
         (PROVISIONAL, 'Provisionally Accepted'),
+        (WITHDRAWN, 'Talk Withdrawn'),
     )
 
     talk_id = models.AutoField(primary_key=True)
@@ -226,6 +228,7 @@ class Talk(models.Model):
         fget=lambda x: x.status == UNDER_CONSIDERATION)
     reject = property(fget=lambda x: x.status == REJECTED)
     cancelled = property(fget=lambda x: x.status == CANCELLED)
+    withdrawn = property(fget=lambda x: x.status == WITHDRAWN)
 
     def _is_among_authors(self, user):
         if self.corresponding_author.username == user.username:

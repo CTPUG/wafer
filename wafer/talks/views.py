@@ -16,7 +16,8 @@ from rest_framework.permissions import (
 from rest_framework_extensions.mixins import NestedViewSetMixin
 
 from wafer.utils import LoginRequiredMixin
-from wafer.talks.models import Talk, TalkType, TalkUrl, ACCEPTED, CANCELLED
+from wafer.talks.models import (Talk, TalkType, TalkUrl, ACCEPTED, CANCELLED,
+                                WITHDRAWN)
 from wafer.talks.forms import get_talk_form_class
 from wafer.talks.serializers import TalkSerializer, TalkUrlSerializer
 from wafer.users.models import UserProfile
@@ -129,15 +130,22 @@ class TalkUpdate(EditOwnTalksMixin, UpdateView):
         return super(TalkUpdate, self).form_valid(form)
 
 
-class TalkDelete(EditOwnTalksMixin, DeleteView):
+class TalkWithdraw(EditOwnTalksMixin, DeleteView):
     model = Talk
-    template_name = 'wafer.talks/talk_delete.html'
+    template_name = 'wafer.talks/talk_withdraw.html'
     success_url = reverse_lazy('wafer_page')
+
+    def delete(self, request, *args, **kwargs):
+        """Override delete to only withdraw"""
+        talk = self.get_object()
+        talk.status = WITHDRAWN
+        talk.save()
+        return HttpResponseRedirect(self.success_url)
 
     @revisions.create_revision()
     def form_valid(self, form):
-        # We don't add any metadata, as the admin site
-        # doesn't show it for deleted talks.
+        revisions.set_user(self.request.user)
+        revisions.set_comment("Talk Withdrawn")
         return super(TalkDelete, self).form_valid(form)
 
 
