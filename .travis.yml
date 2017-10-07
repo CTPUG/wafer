@@ -45,7 +45,7 @@ install:
    # For Django 1.8 & Django 1.9, we need to downgrade djangorestframework
    # This goes away when we drop support for Django 1.8 & 1.9
    - |
-       if [ "$DJANGO" = 'django>=1.8.0,<1.9.0' || "$DJANGO" = "django>=1.9.0,<1.10.0" ]; then
+     if [ "$DJANGO" = 'django>=1.8.0,<1.9.0' -o "$DJANGO" = 'django>=1.9.0,<1.10.0' ]; then
            pip install -U  'djangorestframework<3.7'
        fi
 # command to run tests
