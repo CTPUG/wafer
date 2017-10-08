@@ -62,18 +62,11 @@ Recommended production setup
        TIME_ZONE = 'Africa/Johannesburg'
        ...
 
-#. You'll need to be careful to include wafer's values for some
-   settings, e.g. ``INSTALLED_APPS``, rather than completely overriding
-   them.
+#. You'll want to include wafer's default values for some settings, e.g.
+   ``INSTALLED_APPS``, rather than completely overriding them.
+   See :ref:`settings` for the wafer-specific settings.
 
 #. Override templates as necessary, by putting your own templates
    directory early in ``TEMPLATES``.
 
 #. And then continue with the basic instructions above.
-
-Important settings
-==================
-
-``TALKS_OPEN`` controls whether talk submissions are accepted. Set to False to close talk submissions.
-
-``WAFER_MENUS`` adds the top level menu items for the site. 

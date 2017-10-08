@@ -12,6 +12,7 @@ Contents:
    sponsors
    schedule
    static
+   settings
 
 
 Indices and tables
