@@ -5,26 +5,18 @@ Installation
 Supported versions
 ==================
 
-Wafer supports Django 1.8 and 1.9 and python 2.7, 3.4 and 3.5.
+Wafer supports Django 1.8-1.11 and Python 2.7, 3.4-3.6.
 
 Requirements
 ============
 
-In addition to Django, wafer requires:
+In addition to Django, wafer has some requirements on external
+libraries. They're listed in ``setup.py``.
 
-* django-crispy-forms
-* django-registration-redux
-* pyLibravatar
-* django-medusa
-* django-markitup
+Basic Dev install
+=================
 
-and their dependancies.
-
-Basic instructions
-==================
-
-
-#. Install all the dependancies
+#. Install all the dependencies
    ``pip install -r requirements.txt``
  
 #. Create the initial database schema
@@ -42,7 +34,7 @@ Basic instructions
 
    * By default, wafer assumes that the site will be accessible over ssl,
      so the registration emails will use an 'https' prefix. If this
-     is not the case, override the wafer/registration/activation_email.txt
+     is not the case, override the ``wafer/registration/activation_email.txt``
      template.
 
 #. Wafer uses the Django caching infrastructure in several places, so
@@ -57,12 +49,24 @@ Basic instructions
 
 #. Have a fun conference.
 
-Important settings
-==================
+Recommended production setup
+============================
 
-``TALKS_OPEN`` controls whether talk submissions are accepted. Set to False to close talk submissions.
+#. Create a new Django app, in your own VCS repository. Add wafer
+   (probably pinned) as a requirement.
 
-``WAFER_MENUS`` adds the top level menu items for the site. 
+#. Include wafer's ``wafer.settings`` in your ``settings.py``::
 
+       from wafer.settings import *
 
+       TIME_ZONE = 'Africa/Johannesburg'
+       ...
 
+#. You'll want to include wafer's default values for some settings, e.g.
+   ``INSTALLED_APPS``, rather than completely overriding them.
+   See :ref:`settings` for the wafer-specific settings.
+
+#. Override templates as necessary, by putting your own templates
+   directory early in ``TEMPLATES``.
+
+#. And then continue with the basic instructions above.
