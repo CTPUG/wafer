@@ -10,15 +10,8 @@ Wafer supports Django 1.8-1.11 and Python 2.7, 3.4-3.6.
 Requirements
 ============
 
-In addition to Django, wafer requires:
-
-* django-crispy-forms
-* django-registration-redux
-* pyLibravatar
-* django-medusa
-* django-markitup
-
-and their dependancies.
+In addition to Django, wafer has some requirements on external
+libraries. They're listed in ``setup.py``.
 
 Basic instructions
 ==================
