@@ -13,11 +13,10 @@ Requirements
 In addition to Django, wafer has some requirements on external
 libraries. They're listed in ``setup.py``.
 
-Basic instructions
-==================
+Basic Dev install
+=================
 
-
-#. Install all the dependancies
+#. Install all the dependencies
    ``pip install -r requirements.txt``
  
 #. Create the initial database schema
@@ -35,7 +34,7 @@ Basic instructions
 
    * By default, wafer assumes that the site will be accessible over ssl,
      so the registration emails will use an 'https' prefix. If this
-     is not the case, override the wafer/registration/activation_email.txt
+     is not the case, override the ``wafer/registration/activation_email.txt``
      template.
 
 #. Wafer uses the Django caching infrastructure in several places, so
@@ -50,12 +49,31 @@ Basic instructions
 
 #. Have a fun conference.
 
+Recommended production setup
+============================
+
+#. Create a new Django app, in your own VCS repository. Add wafer
+   (probably pinned) as a requirement.
+
+#. Include wafer's ``wafer.settings`` in your ``settings.py``::
+
+       from wafer.settings import *
+
+       TIME_ZONE = 'Africa/Johannesburg'
+       ...
+
+#. You'll need to be careful to include wafer's values for some
+   settings, e.g. ``INSTALLED_APPS``, rather than completely overriding
+   them.
+
+#. Override templates as necessary, by putting your own templates
+   directory early in ``TEMPLATES``.
+
+#. And then continue with the basic instructions above.
+
 Important settings
 ==================
 
 ``TALKS_OPEN`` controls whether talk submissions are accepted. Set to False to close talk submissions.
 
 ``WAFER_MENUS`` adds the top level menu items for the site. 
-
-
-
