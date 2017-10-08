@@ -73,7 +73,8 @@ Wafer's settings
 ``WAFER_PUBLIC_ATTENDEE_LIST``
     A boolean flag.
     When ``True``, all registered users' profiles are publicly visible.
-    Otherwise, only users with associated talks have public profiles.
+    Otherwise, only users with associated public talks have public
+    profiles.
 
 ``WAFER_REGISTRATION_FORM``
     A Django Form used for KV registration.
