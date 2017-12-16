@@ -95,7 +95,7 @@ class Sponsor(models.Model):
         return self.files.get(name='logo').item
 
 
-def sponsor_menu(root_menu):
+def sponsor_menu(root_menu, menu="sponsors"):
     """Add sponsor menu links."""
     for sponsor in (
             Sponsor.objects.all()
@@ -104,15 +104,24 @@ def sponsor_menu(root_menu):
         packages = sponsor.packages.all()
         symbols = u"".join(p.symbol for p in packages if p.symbol)
         if symbols:
-            item_name = u"%s %s" % (sponsor.name, symbols)
+            item_name = u"» %s %s" % (sponsor.name, symbols)
         else:
-            item_name = u"%s" % (sponsor.name,)
+            item_name = u"» %s" % (sponsor.name,)
         try:
             root_menu.add_item(
-                item_name, sponsor.get_absolute_url(), menu="sponsors")
+                item_name, sponsor.get_absolute_url(), menu=menu)
         except MenuError as e:
             logger.error("Bad menu item %r for sponsor with name %r."
                          % (e, sponsor.name))
+
+    try:
+        root_menu.add_item(
+            _("Our sponsors"), reverse("wafer_sponsors"), menu)
+        root_menu.add_item(
+            _("Sponsorship packages"), reverse("wafer_sponsorship_packages"),
+            menu)
+    except MenuError as e:
+        logger.error("Bad menu item %r default sponsor links." % (e,))
 
 
 post_save.connect(refresh_menu_cache, sender=Sponsor)
