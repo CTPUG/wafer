@@ -1,0 +1,85 @@
+=====
+Menus
+=====
+
+Overview
+========
+
+Wafer includes a simple system for generating either static or dynamic menus for the
+navigation bar at the top of each page.
+
+A single level of sub-menus is supported.
+
+Static menus
+============
+
+Static menus are configured using the ``WAFER_MENUS`` setting.  ``WAFER_MENUS`` is a list of
+either sub-menus or menu items.
+
+Menu items have the following keys:
+
+``label``
+    The text displayed for the menu item.
+``url``
+    The URL the item links to.
+``sort_key``
+    A value used to sort the list of items into a custom order (optional).
+``image``
+    An absolute or relative URL to an image to display instead of the label (optional).
+
+Sub-menu have the keys:
+
+``menu``
+    The unique name of the sub-menu.
+``label``
+    The text to display for the sub-menu.
+``items``
+    A list of menu items in the sub-menu (sub-sub-menus are not supported).
+``sort_key``
+    A value used to sort the list of items into a custom order (optional).
+
+Example snippet from ``settings.py``::
+
+    from django.utils.translation import ugettext_lazy as _
+    from django.core.urlresolvers import reverse_lazy
+
+    WAFER_MENUS += (
+        {"menu": "about", "label": _("About"), "items": []},
+        {"name": "venue", "label": _("Venue"),
+         "url": reverse_lazy("wafer_page", args=("venue",))},
+        {"menu": "sponsors", "label": _("Sponsors"),
+         "items": []},
+        {"menu": "talks", "label": _("Talks"),
+         "items": [
+             {"name": "schedule", "label": _("Schedule"),
+              "url": reverse_lazy("wafer_full_schedule")},
+             {"name": "accepted-talks", "label": _("Accepted Talks"),
+              "url": reverse_lazy("wafer_users_talks")},
+             {"name": "speakers", "label": _("Speakers"),
+              "url": reverse_lazy("wafer_talks_speakers")},
+         ]},
+    }
+
+The empty sub-menus are populate dynamically (see the next section).
+
+
+Dynamic menus
+=============
+
+Dynamic menus are configured using the ``WAFER_DYNAMIC_MENUS`` setting.
+``WAFER_DYNAMIC_MENUS`` is a list of functions or names of functions to call to dynamically
+add sub-menus or menu items.
+
+Dynamic sub-menus and menu items are added after static ones.
+
+By default, two kinds of menu items are dynamically generated:
+
+* Menus and menu items for pages.
+* A menu and menu items for sponsors.
+
+Example snippet from ``settings.py``::
+
+    WAFER_DYNAMIC_MENUS = (
+        'wafer.pages.models.page_menus',
+        'wafer.sponsors.models.sponsor_menu',
+    )
