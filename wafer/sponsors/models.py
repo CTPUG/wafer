@@ -101,6 +101,10 @@ class Sponsor(models.Model):
     def logo(self):
         return self.files.get(name='logo').item
 
+    @property
+    def symbol(self):
+        """The symbol of the highest level package this sponsor has taken."""
+        return self.packages.first.symbol
 
 
 def sponsor_menu(root_menu, menu="sponsors"):
