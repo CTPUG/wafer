@@ -116,6 +116,14 @@ class Slot(models.Model):
         result['hours'], result['minutes'] = divmod(duration // 60, 60)
         return result
 
+    def get_start_datetime(self):
+        return datetime.datetime.combine(self.get_day().date,
+                                         self.get_start_time())
+
+    def get_end_datetime(self):
+        return datetime.datetime.combine(self.get_day().date,
+                                         self.end_time)
+
     def get_day(self):
         if self.previous_slot:
             return self.previous_slot.get_day()
@@ -214,6 +222,13 @@ class ScheduleItem(models.Model):
 
     def get_details(self):
         return self.get_desc()
+
+    def get_start_datetime(self):
+        slots = list(self.slots.all())
+        if slots:
+            return slots[0].get_start_datetime()
+        else:
+            return None
 
     def get_start_time(self):
         slots = list(self.slots.all())

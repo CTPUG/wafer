@@ -20,6 +20,7 @@ REQUIRES = [
     'django-easy-select2',
     'django-markitup>=2.2.2',
     'markdown>=2.5',
+    'icalendar>=4.0',
 ]
 
 SOURCES = []
