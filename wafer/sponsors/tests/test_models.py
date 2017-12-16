@@ -76,9 +76,10 @@ class SponsorMenuTests(TestCase):
         ])
         menu = get_cached_menus()
         self.assertEqual(menu.items, [
-            Menu.mk_menu("sponsors", "Sponsors", items=[
-                Menu.mk_item("» Awesome Co", sponsor.get_absolute_url()),
-                Menu.mk_item("Our sponsors", reverse('wafer_sponsors')),
-                Menu.mk_item("Sponsorship packages", reverse('wafer_sponsorship_packages')),
+            Menu.mk_menu(u"sponsors", u"Sponsors", items=[
+                Menu.mk_item(u"» Awesome Co", sponsor.get_absolute_url()),
+                Menu.mk_item(u"Our sponsors", reverse('wafer_sponsors')),
+                Menu.mk_item(u"Sponsorship packages", reverse(
+                    'wafer_sponsorship_packages')),
             ])
         ])
