@@ -2,17 +2,13 @@ language: python
 sudo: false
 python:
    - "2.7"
-   - "3.4"
    - "3.5"
+   - "3.6"
 env:
-   - DJANGO='django>=1.8.0,<1.9.0' TESTDB=sqlite
-   - DJANGO='django>=1.8.0,<1.9.0' TESTDB=postgres
-   - DJANGO='django>=1.9.0,<1.10.0' TESTDB=sqlite
-   - DJANGO='django>=1.9.0,<1.10.0' TESTDB=postgres
-   - DJANGO='django>=1.10.0,<1.11.0' TESTDB=sqlite
-   - DJANGO='django>=1.10.0,<1.11.0' TESTDB=postgres
    - DJANGO='django>=1.11.0,<1.12.0' TESTDB=sqlite
    - DJANGO='django>=1.11.0,<1.12.0' TESTDB=postgres
+   - DJANGO='django>=2.0,<2.1.0' TESTDB=sqlite
+   - DJANGO='django>=2.0,<2.1.0' TESTDB=postgres
    - DJANGO='https://github.com/django/django/archive/master.tar.gz' TESTDB=sqlite
    - DJANGO='https://github.com/django/django/archive/master.tar.gz' TESTDB=postgres
 
@@ -20,11 +16,17 @@ matrix:
    exclude:
       # Django 2.0 will drop python 2 support - https://www.djangoproject.com/weblog/2015/jun/25/roadmap/
       - python: "2.7"
+        env: DJANGO='django>=2.0,<2.1.0' TESTDB=sqlite
+      - python: "2.7"
+        env: DJANGO='django>=2.0,<2.1.0' TESTDB=sqlite
+      - python: "2.7"
         env: DJANGO='https://github.com/django/django/archive/master.tar.gz' TESTDB=sqlite
       - python: "2.7"
         env: DJANGO='https://github.com/django/django/archive/master.tar.gz' TESTDB=postgres
 
    allow_failures:
+      - env: DJANGO='django>=2.0,<2.1.0' TESTDB=sqlite
+      - env: DJANGO='django>=2.0,<2.1.0' TESTDB=postgres
       - env: DJANGO='https://github.com/django/django/archive/master.tar.gz' TESTDB=postgres
       - env: DJANGO='https://github.com/django/django/archive/master.tar.gz' TESTDB=sqlite
 
