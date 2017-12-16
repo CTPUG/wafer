@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 """Tests for wafer.sponsors models."""
 
 from django.test import TestCase
@@ -23,7 +25,7 @@ class SponsorTests(TestCase):
         sponsor = create_sponsor(u"Awesome Co", [
             (u"Gold", u"*", 500),
         ])
-        self.assertEqual(sponsor.symbol, "*")
+        self.assertEqual(sponsor.symbol, u"*")
 
     def test_sponsor_symbol_with_blank(self):
         """Test that a sponsor's symbol is retrieved properly when the package
@@ -39,10 +41,26 @@ class SponsorTests(TestCase):
         sponsor = create_sponsor(u"Awesome Co", [])
         self.assertEqual(sponsor.symbol, u"")
 
-    def test_sponsor_some_symbols(self):
+    def test_sponsor_symbols_with_one_symbol(self):
         """Test that a sponsor's symbols are retrieved properly when some
            packages have symbols."""
+        sponsor = create_sponsor(u"Awesome Co", [
+            (u"Gold", u"*", 500),
+        ])
+        self.assertEqual(sponsor.symbols(), u"*")
 
-    def test_sponsor_no_symbols(self):
-        """Test that a sponsor's symbols are retrieved properly when no packages
-           have symbols."""
+    def test_sponsor_symbols_with_multiple_symbols(self):
+        """Test that a sponsor's symbols are retrieved properly when some
+           packages have symbols."""
+        sponsor = create_sponsor(u"Awesome Co", [
+            (u"Gold", u"★", 500),
+            (u"Silver", u"", 400),
+            (u"Bronze", u"*", 300),
+        ])
+        self.assertEqual(sponsor.symbols(), u"★*")
+
+    def test_sponsor_symbols_with_no_package(self):
+        """Test that a sponsor's symbols are retrieved properly when some
+           packages have symbols."""
+        sponsor = create_sponsor(u"Awesome Co", [])
+        self.assertEqual(sponsor.symbols(), u"")
