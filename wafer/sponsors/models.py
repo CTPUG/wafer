@@ -97,10 +97,19 @@ class Sponsor(models.Model):
 
 def sponsor_menu(root_menu):
     """Add sponsor menu links."""
-    for sponsor in Sponsor.objects.all().order_by('packages', 'order', 'id'):
+    for sponsor in (
+            Sponsor.objects.all()
+            .order_by('packages', 'order', 'id')
+            .prefetch_related('packages')):
+        packages = sponsor.packages.all()
+        symbols = u"".join(p.symbol for p in packages if p.symbol)
+        if symbols:
+            item_name = u"%s %s" % (sponsor.name, symbols)
+        else:
+            item_name = u"%s" % (sponsor.name,)
         try:
             root_menu.add_item(
-                sponsor.name, sponsor.get_absolute_url(), menu="sponsors")
+                item_name, sponsor.get_absolute_url(), menu="sponsors")
         except MenuError as e:
             logger.error("Bad menu item %r for sponsor with name %r."
                          % (e, sponsor.name))
