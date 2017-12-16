@@ -18,7 +18,7 @@ matrix:
       - python: "2.7"
         env: DJANGO='django>=2.0,<2.1.0' TESTDB=sqlite
       - python: "2.7"
-        env: DJANGO='django>=2.0,<2.1.0' TESTDB=sqlite
+        env: DJANGO='django>=2.0,<2.1.0' TESTDB=postgres
       - python: "2.7"
         env: DJANGO='https://github.com/django/django/archive/master.tar.gz' TESTDB=sqlite
       - python: "2.7"
