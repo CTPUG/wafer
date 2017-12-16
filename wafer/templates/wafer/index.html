@@ -1,4 +1,10 @@
 {% extends "wafer/base.html" %}
+{% load i18n %}
 {% block content %}
-<h1>Create a Page called 'index'</h1>
+<div>
+  <section class="section1">
+    <h1>{% trans 'Index page missing' %}</h1>
+    <p>{% trans "Create a Page called 'index'." %}</p>
+  </section>
+</div>
 {% endblock %}
