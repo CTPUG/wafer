@@ -90,9 +90,17 @@ class Sponsor(models.Model):
     def get_absolute_url(self):
         return reverse('wafer_sponsor', args=(self.pk,))
 
+    def symbols(self):
+        """Return a string of the symbols of all the packages this sponsor has
+           taken."""
+        packages = self.packages.all()
+        symbols = u"".join(p.symbol for p in packages if p.symbol)
+        return symbols
+
     @property
     def logo(self):
         return self.files.get(name='logo').item
+
 
 
 def sponsor_menu(root_menu, menu="sponsors"):
@@ -101,8 +109,7 @@ def sponsor_menu(root_menu, menu="sponsors"):
             Sponsor.objects.all()
             .order_by('packages', 'order', 'id')
             .prefetch_related('packages')):
-        packages = sponsor.packages.all()
-        symbols = u"".join(p.symbol for p in packages if p.symbol)
+        symbols = sponsor.symbols()
         if symbols:
             item_name = u"» %s %s" % (sponsor.name, symbols)
         else:
