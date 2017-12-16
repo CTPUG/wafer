@@ -11,7 +11,7 @@ from django.utils.encoding import python_2_unicode_compatible
 
 from markitup.fields import MarkupField
 
-from wafer.menu import MenuError, refresh_menu_cache
+from wafer.menu import menu_logger, refresh_menu_cache
 
 logger = logging.getLogger(__name__)
 
@@ -112,8 +112,12 @@ class Sponsor(models.Model):
         return u""
 
 
-def sponsor_menu(root_menu, menu="sponsors"):
+def sponsor_menu(
+        root_menu, menu="sponsors", label=_("Sponsors"),
+        sponsors_item=_("Our sponsors"),
+        packages_item=_("Sponsorship packages")):
     """Add sponsor menu links."""
+    root_menu.add_menu(menu, label, items=[])
     for sponsor in (
             Sponsor.objects.all()
             .order_by('packages', 'order', 'id')
@@ -123,21 +127,18 @@ def sponsor_menu(root_menu, menu="sponsors"):
             item_name = u"» %s %s" % (sponsor.name, symbols)
         else:
             item_name = u"» %s" % (sponsor.name,)
-        try:
+        with menu_logger(logger, "sponsor %r" % (sponsor.name,)):
             root_menu.add_item(
                 item_name, sponsor.get_absolute_url(), menu=menu)
-        except MenuError as e:
-            logger.error("Bad menu item %r for sponsor with name %r."
-                         % (e, sponsor.name))
 
-    try:
-        root_menu.add_item(
-            _("Our sponsors"), reverse("wafer_sponsors"), menu)
-        root_menu.add_item(
-            _("Sponsorship packages"), reverse("wafer_sponsorship_packages"),
-            menu)
-    except MenuError as e:
-        logger.error("Bad menu item %r default sponsor links." % (e,))
+    if sponsors_item:
+        with menu_logger(logger, "sponsors page link"):
+            root_menu.add_item(
+                sponsors_item, reverse("wafer_sponsors"), menu)
+    if packages_item:
+        with menu_logger(logger, "sponsorship package page link"):
+            root_menu.add_item(
+                packages_item, reverse("wafer_sponsorship_packages"), menu)
 
 
 post_save.connect(refresh_menu_cache, sender=Sponsor)
