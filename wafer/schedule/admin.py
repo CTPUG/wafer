@@ -221,6 +221,7 @@ def validate_schedule():
 class ScheduleItemAdminForm(forms.ModelForm):
     class Meta:
         model = ScheduleItem
+        readonly_fields = ('last_updated')
         fields = ('slots', 'venue', 'talk', 'page', 'details', 'notes',
                   'css_class', 'expand')
 
