@@ -5,7 +5,7 @@
 <h1>{% trans 'Sponsorship Packages' %}</h1>
 <div class="wafer list">
     {% for package in sponsorshippackage_list %}
-    <section class="wafer wafer-sponsorhip-package">
+    <section class="wafer wafer-sponsorship-package">
     <div>
         <h2>{{ package.name }} ({{ package.currency }} {{ package.price|floatformat:0 }})</h1>
         {% if package.number_available %}
