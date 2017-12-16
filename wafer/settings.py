@@ -241,6 +241,7 @@ WAFER_MENUS = ()
 
 WAFER_DYNAMIC_MENUS = (
     'wafer.pages.models.page_menus',
+    'wafer.sponsors.models.sponsor_menu',
 )
 
 # Enabled SSO mechanims:

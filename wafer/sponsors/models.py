@@ -1,10 +1,17 @@
+import logging
+
 from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse
 from django.core.validators import MinValueValidator
 from django.db import models
+from django.db.models.signals import post_save
 from django.utils.encoding import python_2_unicode_compatible
 
 from markitup.fields import MarkupField
+
+from wafer.menu import MenuError, refresh_menu_cache
+
+logger = logging.getLogger(__name__)
 
 
 @python_2_unicode_compatible
@@ -86,3 +93,17 @@ class Sponsor(models.Model):
     @property
     def logo(self):
         return self.files.get(name='logo').item
+
+
+def sponsor_menu(root_menu):
+    """Add sponsor menu links."""
+    for sponsor in Sponsor.objects.all().order_by('packages', 'order', 'id'):
+        try:
+            root_menu.add_item(
+                sponsor.name, sponsor.get_absolute_url(), menu="sponsors")
+        except MenuError as e:
+            logger.error("Bad menu item %r for sponsor with name %r."
+                         % (e, sponsor.name))
+
+
+post_save.connect(refresh_menu_cache, sender=Sponsor)
