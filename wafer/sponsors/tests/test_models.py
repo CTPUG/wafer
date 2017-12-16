@@ -2,8 +2,10 @@
 
 """Tests for wafer.sponsors models."""
 
+from django.core.urlresolvers import reverse
 from django.test import TestCase
 
+from wafer.menu import get_cached_menus, Menu
 from wafer.sponsors.models import SponsorshipPackage, Sponsor
 
 
@@ -64,3 +66,19 @@ class SponsorTests(TestCase):
            packages have symbols."""
         sponsor = create_sponsor(u"Awesome Co", [])
         self.assertEqual(sponsor.symbols(), u"")
+
+
+class SponsorMenuTests(TestCase):
+
+    def test_cached_menu(self):
+        sponsor = create_sponsor(u"Awesome Co", [
+            (u"Gold", u"*", 500),
+        ])
+        menu = get_cached_menus()
+        self.assertEqual(menu.items, [
+            Menu.mk_menu("sponsors", "Sponsors", items=[
+                Menu.mk_item("» Awesome Co", sponsor.get_absolute_url()),
+                Menu.mk_item("Our sponsors", reverse('wafer_sponsors')),
+                Menu.mk_item("Sponsorship packages", reverse('wafer_sponsorship_packages')),
+            ])
+        ])
