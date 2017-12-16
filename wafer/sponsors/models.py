@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import logging
 
 from django.utils.translation import ugettext_lazy as _
@@ -94,7 +96,7 @@ class Sponsor(models.Model):
         """Return a string of the symbols of all the packages this sponsor has
            taken."""
         packages = self.packages.all()
-        symbols = u"".join(p.symbol for p in packages if p.symbol)
+        symbols = u"".join(p.symbol for p in packages)
         return symbols
 
     @property
@@ -104,7 +106,10 @@ class Sponsor(models.Model):
     @property
     def symbol(self):
         """The symbol of the highest level package this sponsor has taken."""
-        return self.packages.first.symbol
+        package = self.packages.first()
+        if package:
+            return package.symbol
+        return u""
 
 
 def sponsor_menu(root_menu, menu="sponsors"):
