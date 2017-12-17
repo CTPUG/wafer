@@ -342,6 +342,8 @@ class ICalView(View):
             sched_event.add('location', item.venue.name)
             sched_event.add('dtstart', item.get_start_datetime())
             sched_event.add('duration', datetime.timedelta(minutes=item.get_duration_minutes()))
+            sched_event.add('class', 'PUBLIC')
+            sched_event.add('uid', '%s@%s' % (item.pk, site.domain))
             calendar.add_component(sched_event)
         response = HttpResponse(calendar.to_ical(), content_type="text/calendar")
         response['Content-Disposition'] = 'attachment; filename=schedule.ics'
