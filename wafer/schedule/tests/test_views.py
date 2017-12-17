@@ -1086,9 +1086,9 @@ class NonHTMLViewTests(TestCase):
             item.slots.add(slots[index // 2])
 
     def test_pentabarf_view(self):
-        # We don't test that the pentabarf view is valid pentabarf,
+        # We don't exhaustively test that the pentabarf view is valid pentabarf,
         # instead we test that the XML is valid, and that we
-        # have the details we expect present
+        # have the basic details we expect present
         c = Client()
         response = c.get('/schedule/pentabarf.xml')
         parsed = ElementTree.XML(response.content)
@@ -1110,6 +1110,7 @@ class NonHTMLViewTests(TestCase):
         # This is a bit circular, since we use icalendar to generate
         # the data, but does test we can at least parse the generated
         # file, and that we are including the right number of events
+        # and some of the required details
         c = Client()
         response = c.get('/schedule/schedule.ics')
         calendar = icalendar.Calendar.from_ical(response.content)
