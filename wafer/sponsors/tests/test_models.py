@@ -38,14 +38,14 @@ class SponsorTests(TestCase):
         self.assertEqual(sponsor.symbol, u"")
 
     def test_sponsor_symbol_no_package(self):
-        """Test that a sponsor's symbol is retrieved properly when the package
-           has no symbol."""
+        """Test that a sponsor's symbol is retrieved properly when the sponsor
+           has no packages."""
         sponsor = create_sponsor(u"Awesome Co", [])
         self.assertEqual(sponsor.symbol, u"")
 
     def test_sponsor_symbols_with_one_symbol(self):
-        """Test that a sponsor's symbols are retrieved properly when some
-           packages have symbols."""
+        """Test that a sponsor's symbols are retrieved properly when there
+           is one package with a symbol."""
         sponsor = create_sponsor(u"Awesome Co", [
             (u"Gold", u"*", 500),
         ])
@@ -62,8 +62,8 @@ class SponsorTests(TestCase):
         self.assertEqual(sponsor.symbols(), u"★*")
 
     def test_sponsor_symbols_with_no_package(self):
-        """Test that a sponsor's symbols are retrieved properly when some
-           packages have symbols."""
+        """Test that a sponsor's symbols are retrieved properly when the
+           sponsor has no packages."""
         sponsor = create_sponsor(u"Awesome Co", [])
         self.assertEqual(sponsor.symbols(), u"")
 
@@ -71,6 +71,8 @@ class SponsorTests(TestCase):
 class SponsorMenuTests(TestCase):
 
     def test_cached_menu(self):
+        """Test that the default sponsor menu is generated correctly when
+           a sponsor is added."""
         sponsor = create_sponsor(u"Awesome Co", [
             (u"Gold", u"*", 500),
         ])
