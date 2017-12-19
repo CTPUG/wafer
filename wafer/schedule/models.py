@@ -289,7 +289,7 @@ def update_schedule_items(*args, **kw):
     if not slot:
         return
     for item in slot.scheduleitem_set.all():
-       item.save()
+        item.save(update_fields=['last_updated'])
     # We also need to update the next slot, in case we changed it's
     # times as well
     next_slot = slot.slot_set.all()
@@ -297,7 +297,7 @@ def update_schedule_items(*args, **kw):
         # From the way we structure the slot tree, we know that
         # there's only 1 next slot that could have changed.
         for item in next_slot[0].scheduleitem_set.all():
-            item.save()
+            item.save(update_fields=['last_updated'])
 
 
 post_save.connect(invalidate_check_schedule, sender=Day)
