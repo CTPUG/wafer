@@ -62,20 +62,19 @@ class LastUpdateTests(TestCase):
 
     def test_slot_save_no_next_slot(self):
         """Check that we handle a slot hierachy just using times as expected"""
-        update_times = []
-        for item in self.items:
-            update_times.append(item.last_updated)
+        update_times = {}
+        for item in ScheduleItem.objects.all():
+            update_times[item.pk] = item.last_updated
 
         self.slots[0].name = 'New name'
         self.slots[0].save()
         # Check that we've changed all items associated with this slot, but
         # not any of the other (no next/previous slot relationships exist)
-        for i, item in enumerate(self.items):
-            item.refresh_from_db()
+        for item in ScheduleItem.objects.all():
             if self.slots[0] == item.slots.all()[0]:
-                self.assertNotEqual(item.last_updated, update_times[i])
+                self.assertNotEqual(item.last_updated, update_times[item.pk])
             else:
-                self.assertEqual(item.last_updated, update_times[i])
+                self.assertEqual(item.last_updated, update_times[item.pk])
 
     def test_slot_save_prev_next(self):
         """Check we update current and next slot items as expected."""
@@ -86,23 +85,21 @@ class LastUpdateTests(TestCase):
         self.slots[2].previous_slot = self.slots[1]
         self.slots[2].save()
 
-        update_times = []
-        for item in self.items:
-            item.refresh_from_db()
-            update_times.append(item.last_updated)
+        update_times = {}
+        for item in ScheduleItem.objects.all():
+            update_times[item.pk] = item.last_updated
 
         self.slots[0].name = 'New name'
         self.slots[0].save()
         # Check that we've changed all items associated with this slot, but
         # not any of the other (no next/previous slot relationships exist)
-        for i, item in enumerate(self.items):
-            item.refresh_from_db()
+        for item in ScheduleItem.objects.all():
             if self.slots[0] == item.slots.all()[0]:
-                self.assertNotEqual(item.last_updated, update_times[i])
+                self.assertNotEqual(item.last_updated, update_times[item.pk])
             elif self.slots[1] == item.slots.all()[0]:
                 # Next slot, so items should have changed
-                self.assertNotEqual(item.last_updated, update_times[i])
+                self.assertNotEqual(item.last_updated, update_times[item.pk])
             else:
                 # No other items should have changed, as time changes don't
                 # cascade that way
-                self.assertEqual(item.last_updated, update_times[i])
+                self.assertEqual(item.last_updated, update_times[item.pk])
