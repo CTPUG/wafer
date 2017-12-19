@@ -1057,16 +1057,6 @@ class NonHTMLViewTests(TestCase):
         start4 = D.time(13, 0, 0)
         start5 = D.time(14, 0, 0)
 
-        # During the first slot
-        cur1 = D.time(10, 30, 0)
-        # Middle of the day
-        cur2 = D.time(11, 30, 0)
-        cur3 = D.time(12, 30, 0)
-        # During the last slot
-        cur4 = D.time(13, 30, 0)
-        # After the last slot
-        cur5 = D.time(15, 30, 0)
-
         slots = []
 
         slots.append(Slot.objects.create(start_time=start1, end_time=start2,
