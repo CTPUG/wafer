@@ -73,7 +73,6 @@ class LastUpdateTests(TestCase):
         for i, item in enumerate(self.items):
             item.refresh_from_db()
             if self.slots[0] == item.slots.all()[0]:
-                print('item slot 1', item)
                 self.assertNotEqual(item.last_updated, update_times[i])
             else:
                 self.assertEqual(item.last_updated, update_times[i])
