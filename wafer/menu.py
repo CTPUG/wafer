@@ -1,3 +1,4 @@
+import contextlib
 import copy
 
 from django.core.cache import cache
@@ -76,6 +77,15 @@ class MenuError(Exception):
     """Raised when attempting illegal operations while constructiong menus."""
 
 
+@contextlib.contextmanager
+def menu_logger(logger, msg):
+    """Context manager for logging MenuErrors."""
+    try:
+        yield
+    except MenuError as e:
+        logger.error("Bad menu item %r for %r." % (e, msg))
+
+
 class Menu(object):
     """Utility class for manipulating a hierarchy of menus.
 
@@ -115,23 +125,34 @@ class Menu(object):
 
     @staticmethod
     def mk_menu(name, label, items, sort_key=None):
-        return {"name": name, "label": label, "items": items,
+        return {"menu": name, "label": label, "items": items,
                 "sort_key": sort_key}
 
+    def _match_menus(self, menu):
+        return [
+            item for item in self.items
+            if "items" in item and item.get("menu") == menu
+        ]
+
     def _descend_items(self, menu):
-        menu_items = self.items
         if menu is not None:
-            matches = [item for item in menu_items
-                       if "items" in item and item.get("menu") == menu]
+            matches = self._match_menus(menu)
             if len(matches) != 1:
                 raise MenuError("Unable to find sub-menu %r." % (menu,))
-            menu_items = matches[0]["items"]
-        return menu_items
+            return matches[0]["items"]
+        return self.items
 
     def add_item(self, label, url, menu=None, sort_key=None, image=None):
         menu_items = self._descend_items(menu)
-        menu_items.append(self.mk_item(label, url, sort_key=sort_key,
-            image=image))
+        menu_items.append(self.mk_item(
+            label, url, sort_key=sort_key, image=image))
 
     def add_menu(self, name, label, items, sort_key=None):
-        self.items.append(self.mk_menu(name, label, items, sort_key=sort_key))
+        matches = self._match_menus(name)
+        if len(matches) == 0:
+            self.items.append(
+                self.mk_menu(name, label, items, sort_key=sort_key))
+        elif len(matches) == 1:
+            matches[0]["items"].extend(items)
+        else:
+            raise MenuError("Multiple sub-menus named %r exist." % (name,))

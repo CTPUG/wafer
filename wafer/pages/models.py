@@ -1,5 +1,4 @@
 import logging
-logger = logging.getLogger(__name__)
 
 from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse
@@ -13,6 +12,8 @@ from django.utils.encoding import python_2_unicode_compatible
 
 from markitup.fields import MarkupField, render_func
 from wafer.menu import MenuError, refresh_menu_cache
+
+logger = logging.getLogger(__name__)
 
 
 @python_2_unicode_compatible

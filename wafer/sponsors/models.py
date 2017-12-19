@@ -1,10 +1,19 @@
+# -*- coding: utf-8 -*-
+
+import logging
+
 from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse
 from django.core.validators import MinValueValidator
 from django.db import models
+from django.db.models.signals import post_save
 from django.utils.encoding import python_2_unicode_compatible
 
 from markitup.fields import MarkupField
+
+from wafer.menu import menu_logger, refresh_menu_cache
+
+logger = logging.getLogger(__name__)
 
 
 @python_2_unicode_compatible
@@ -83,6 +92,53 @@ class Sponsor(models.Model):
     def get_absolute_url(self):
         return reverse('wafer_sponsor', args=(self.pk,))
 
+    def symbols(self):
+        """Return a string of the symbols of all the packages this sponsor has
+           taken."""
+        packages = self.packages.all()
+        symbols = u"".join(p.symbol for p in packages)
+        return symbols
+
     @property
     def logo(self):
         return self.files.get(name='logo').item
+
+    @property
+    def symbol(self):
+        """The symbol of the highest level package this sponsor has taken."""
+        package = self.packages.first()
+        if package:
+            return package.symbol
+        return u""
+
+
+def sponsor_menu(
+        root_menu, menu="sponsors", label=_("Sponsors"),
+        sponsors_item=_("Our sponsors"),
+        packages_item=_("Sponsorship packages")):
+    """Add sponsor menu links."""
+    root_menu.add_menu(menu, label, items=[])
+    for sponsor in (
+            Sponsor.objects.all()
+            .order_by('packages', 'order', 'id')
+            .prefetch_related('packages')):
+        symbols = sponsor.symbols()
+        if symbols:
+            item_name = u"» %s %s" % (sponsor.name, symbols)
+        else:
+            item_name = u"» %s" % (sponsor.name,)
+        with menu_logger(logger, "sponsor %r" % (sponsor.name,)):
+            root_menu.add_item(
+                item_name, sponsor.get_absolute_url(), menu=menu)
+
+    if sponsors_item:
+        with menu_logger(logger, "sponsors page link"):
+            root_menu.add_item(
+                sponsors_item, reverse("wafer_sponsors"), menu)
+    if packages_item:
+        with menu_logger(logger, "sponsorship package page link"):
+            root_menu.add_item(
+                packages_item, reverse("wafer_sponsorship_packages"), menu)
+
+
+post_save.connect(refresh_menu_cache, sender=Sponsor)

@@ -8,7 +8,7 @@ register = template.Library()
 @register.inclusion_tag('wafer.sponsors/sponsors_block.html')
 def sponsors():
     return {
-        'sponsors': Sponsor.objects.all().order_by('packages'),
+        'sponsors': Sponsor.objects.all().order_by('packages', 'order', 'id'),
         'packages': SponsorshipPackage.objects.all().prefetch_related('files'),
     }
 

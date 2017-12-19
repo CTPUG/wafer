@@ -11,6 +11,7 @@ Contents:
    talks
    sponsors
    schedule
+   menus
    static
    settings
 
