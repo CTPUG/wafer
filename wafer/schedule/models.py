@@ -116,6 +116,14 @@ class Slot(models.Model):
         result['hours'], result['minutes'] = divmod(duration // 60, 60)
         return result
 
+    def get_start_datetime(self):
+        return datetime.datetime.combine(self.get_day().date,
+                                         self.get_start_time())
+
+    def get_end_datetime(self):
+        return datetime.datetime.combine(self.get_day().date,
+                                         self.end_time)
+
     def get_day(self):
         if self.previous_slot:
             return self.previous_slot.get_day()
@@ -165,6 +173,11 @@ class ScheduleItem(models.Model):
         null=False, default=False,
         help_text=_("Expand to neighbouring venues"))
 
+    last_updated = models.DateTimeField(null=True, blank=True,
+                                        auto_now=True,
+                                        help_text=_("Date & Time this was"
+                                                    " last updated"))
+
     def get_title(self):
         if self.talk:
             return self.talk.title
@@ -209,6 +222,13 @@ class ScheduleItem(models.Model):
 
     def get_details(self):
         return self.get_desc()
+
+    def get_start_datetime(self):
+        slots = list(self.slots.all())
+        if slots:
+            return slots[0].get_start_datetime()
+        else:
+            return None
 
     def get_start_time(self):
         slots = list(self.slots.all())
@@ -261,6 +281,25 @@ def invalidate_check_schedule(*args, **kw):
     check_schedule.invalidate()
 
 
+def update_schedule_items(*args, **kw):
+    """We save all the schedule items associated with this slot, so
+       the last_update time is updated to reflect any changes to the
+       timing of the slots"""
+    slot = kw.pop('instance', None)
+    if not slot:
+        return
+    for item in slot.scheduleitem_set.all():
+        item.save(update_fields=['last_updated'])
+    # We also need to update the next slot, in case we changed it's
+    # times as well
+    next_slot = slot.slot_set.all()
+    if next_slot.count():
+        # From the way we structure the slot tree, we know that
+        # there's only 1 next slot that could have changed.
+        for item in next_slot[0].scheduleitem_set.all():
+            item.save(update_fields=['last_updated'])
+
+
 post_save.connect(invalidate_check_schedule, sender=Day)
 post_save.connect(invalidate_check_schedule, sender=Venue)
 post_save.connect(invalidate_check_schedule, sender=Slot)
@@ -278,3 +317,6 @@ post_delete.connect(invalidate_check_schedule, sender=ScheduleItem)
 # if they are in the schedule
 post_save.connect(invalidate_check_schedule, sender=Talk)
 post_save.connect(invalidate_check_schedule, sender=Page)
+
+# Hook up post save connection between slots and schedule items
+post_save.connect(update_schedule_items, sender=Slot)

@@ -1,5 +1,7 @@
 import json
 import datetime as D
+import icalendar
+from xml.etree import ElementTree
 
 from django.test import Client, TestCase
 from django.contrib.auth import get_user_model
@@ -1036,6 +1038,80 @@ class CurrentViewTests(TestCase):
                          {'day': day1.date.strftime('%Y-%m-%d'),
                           'time': cur1.strftime('%H:%M')})
         assert response.context['active'] is False
+
+
+class NonHTMLViewTests(TestCase):
+
+    def setUp(self):
+        # Create the schedule used for these tests
+        day1 = Day.objects.create(date=D.date(2013, 9, 22))
+        day2 = Day.objects.create(date=D.date(2013, 9, 23))
+        venue1 = Venue.objects.create(order=1, name='Venue 1')
+        venue2 = Venue.objects.create(order=2, name='Venue 2')
+        venue1.days.add(day1)
+        venue2.days.add(day1)
+
+        start1 = D.time(10, 0, 0)
+        start2 = D.time(11, 0, 0)
+        start3 = D.time(12, 0, 0)
+        start4 = D.time(13, 0, 0)
+        start5 = D.time(14, 0, 0)
+
+        slots = []
+
+        slots.append(Slot.objects.create(start_time=start1, end_time=start2,
+                                         day=day1))
+        slots.append(Slot.objects.create(start_time=start2, end_time=start3,
+                                         day=day1))
+        slots.append(Slot.objects.create(start_time=start3, end_time=start4,
+                                         day=day1))
+        slots.append(Slot.objects.create(start_time=start4, end_time=start5,
+                                         day=day1))
+
+        pages = make_pages(8)
+        venues = [venue1, venue2] * 4
+        items = make_items(venues, pages)
+
+        for index, item in enumerate(items):
+            item.slots.add(slots[index // 2])
+
+    def test_pentabarf_view(self):
+        # We don't exhaustively test that the pentabarf view is valid pentabarf,
+        # instead we test that the XML is valid, and that we
+        # have the basic details we expect present
+        c = Client()
+        response = c.get('/schedule/pentabarf.xml')
+        parsed = ElementTree.XML(response.content)
+        self.assertEqual(parsed.tag, 'schedule')
+        self.assertEqual(parsed[0].tag, 'conference')
+        self.assertEqual(parsed[1].tag, 'day')
+
+        day = parsed[1]
+        self.assertIn(('date', '2013-09-22'), day.items())
+        self.assertEqual(day[0].tag, 'room')
+        self.assertIn(('name', 'Venue 1'), day[0].items())
+        talk = day[0][0]
+        self.assertEqual(talk[0].tag, 'date')
+        self.assertEqual(talk[0].text, '2013-09-22T10:00:00+00:00')
+        title = [z for z in talk if z.tag == 'title'][0]
+        self.assertEqual(title.text, 'Item 0')
+
+    def test_ics_view(self):
+        # This is a bit circular, since we use icalendar to generate
+        # the data, but does test we can at least parse the generated
+        # file, and that we are including the right number of events
+        # and some of the required details
+        c = Client()
+        response = c.get('/schedule/schedule.ics')
+        calendar = icalendar.Calendar.from_ical(response.content)
+        # No major errors
+        self.assertFalse(calendar.is_broken)
+        # Check number of events
+        self.assertEqual(len(calendar.walk(name='VEVENT')), 8)
+        # Check we have the right time in places
+        event = calendar.walk(name='VEVENT')[0]
+        self.assertEqual(event['dtstart'].params['value'], 'DATE-TIME')
+        self.assertEqual(event['dtstart'].dt, D.datetime(2013, 9, 22, 10, 0, 0))
 
 
 class ScheduleItemViewSetTests(TestCase):
