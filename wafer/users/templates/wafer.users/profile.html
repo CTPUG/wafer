@@ -38,6 +38,7 @@
                   {% endif %}
               {% endif %}
               <li><a href="{% url 'wafer_talk_submit' %}" class="btn btn-secondary">{% trans 'Submit Talk Proposal' %}</a></li>
+              <li><a href="{% url 'wafer_volunteer' object.username %}" class="btn btn-secondary">{% trans 'Volunteer' %}</a></li>
           </ul>
           {% endif %}
           {% spaceless %}

@@ -1,0 +1,64 @@
+{% load i18n %}
+
+{% for day in task_list %}
+<h3>{{ day.grouper }}</h3>
+{% regroup day.list by talk as talks %}
+{% for talk_tasks in talks %}
+{% if talk_tasks.grouper %}
+{# This is the group of tasks for a talk #}
+{% with task=talk_tasks.list|first %}
+<h5>
+    {% blocktrans with start_time=task.start|time end_time=task.end|time location=task.location %}
+    {{ start_time }} to {{ end_time }} in {{ location }}
+    {% endblocktrans %}
+</h5>
+{% endwith %}
+<p>
+    <a href="{% url 'wafer_talk' talk_tasks.grouper.pk %}">
+        {{ talk_tasks.grouper.get_authors_display_name }}: {{ talk_tasks.grouper.title }}
+    </a>
+</p>
+{% endif %}
+<table>
+    <thead>
+        <tr>
+            {% if not talk_tasks.grouper %}
+            <th>{% trans "When" %}</th>
+            {% endif %}
+            <th>{% trans "Title" %}</th>
+            {% if not talk_tasks.grouper %}
+            <th>{% trans "Where" %}</th>
+            {% endif %}
+            <th>{% trans "Volunteers" %}</th>
+            {% if not talk_tasks.grouper %}
+            <th>{% trans "Category" %}</th>
+            {% endif %}
+        </tr>
+
+        {% for item in talk_tasks.list %}
+        <tr>
+            {% if not talk_tasks.grouper %}
+            <td>{{ item.start|time }} {% trans 'to' %} {{ item.end|time }}</td>
+            {% endif %}
+            <td>
+                <a href="{% url 'wafer_task' item.pk %}">{{ item.get_name }}</a>
+            </td>
+            {% if not talk_tasks.grouper %}
+            <td>{{ item.location }}</td>
+            {% endif %}
+            <td>{{ item.nbr_volunteers }}/{{ item.get_nbr_volunteers_max }}</td>
+            {% if not talk_tasks.grouper %}
+            <td>
+                {% if item.get_category %}
+                {{ item.get_category }}
+                {% else %}
+                N/A
+                {% endif %}
+            </td>
+            {% endif %}
+        </tr>
+        {% endfor %}
+    </thead>
+</table>
+{% endfor %}
+{% endfor %}

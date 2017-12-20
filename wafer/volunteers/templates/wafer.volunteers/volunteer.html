@@ -1,0 +1,79 @@
+{% extends 'wafer/base.html' %}
+{% load i18n %}
+
+{% block content %}
+<h1>{{ profile.display_name }}</h1>
+
+{% if not profile.contact_number %}
+<div class="alert alert-warning">
+    {% trans "You haven't added your contact number" %}.
+</div>
+{% endif %}
+
+<h2>{% trans "Preferred categories" %}</h2>
+{% if object.preferred_categories.all %}
+<ul>
+    {% for category in object.preferred_categories.all %}
+    <li>{{ category }}</li>
+    {% endfor %}
+</ul>
+{% else %}
+<p>{% trans "No preferred categories" %}.</p>
+{% endif %}
+
+<a href="{% url 'wafer_volunteer_update' object.user.username %}" class="btn btn-secondary">
+    {% trans "Update preferred categories" %}
+</a>
+
+<h2>{%trans "My tasks" %}</h2>
+<div>
+    <a href="{% url 'wafer_tasks' %}" class="btn btn-secondary">
+        {% trans "Available tasks" %}
+    </a>
+</div>
+<div>
+    {% if object.annotated_tasks.all %}
+    <table>
+        <thead>
+            <tr>
+                <th>{% trans 'When' %}</th>
+                <th>{% trans 'Title' %}</th>
+                <th>{% trans 'Volunteers' %}</th>
+                <th>{% trans 'Category' %}</th>
+                <th>{% trans 'Talk' %}</th>
+            </tr>
+
+            {% for task in object.annotated_tasks.all %}
+            <tr>
+                <td>
+                    {% blocktrans with date=task.start|date start_time=task.start|time end_time=task.end|time %}
+                    {{date}} from {{start_time}} to {{end_time}}
+                    {% endblocktrans %}
+                </td>
+                <td>
+                    <a href="{% url 'wafer_task' task.pk %}">{{ task.name_ }}</a>
+                </td>
+                <td>{{ task.nbr_volunteers }}/{{ task.max_volunteers }}</td>
+                <td>
+                    {% if task.category_ %}
+                    {{ task.category_ }}
+                    {% else %}
+                    N/A
+                    {% endif %}
+                </td>
+                <td>
+                    {% if task.talk %}
+                    <a href="{% url 'wafer_talk' task.talk.pk %}">{{ task.talk.title }}</a>
+                    {% else %}
+                    N/A
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </thead>
+    </table>
+    {% else %}
+    <p>{% trans "You haven't volunteered to any task" %}.</p>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,22 @@
+{% extends 'wafer/base.html' %}
+{% load i18n %}
+
+{% block content %}
+{% if preferred_tasks %}
+<div>
+    <h2>Preferred tasks</h2>
+    {% regroup preferred_tasks by start|date as task_list %}
+    {% include "wafer.volunteers/includes/task_list.html" %}
+</div>
+{% endif %}
+
+<div>
+    <h2>All available tasks</h2>
+    {% if volunteers_needed %}
+    {% regroup volunteers_needed by start|date as task_list %}
+    {% include "wafer.volunteers/includes/task_list.html" %}
+    {% else %}
+    <p>{% trans "No available tasks" %}.</p>
+    {% endif %}
+</div>
+{% endblock %}
