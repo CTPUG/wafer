@@ -4,16 +4,15 @@ import logging
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.core.exceptions import PermissionDenied, ValidationError
-from django.core.urlresolvers import reverse
 from django.http import HttpResponse, Http404
+from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 from django.views.generic.edit import FormView
 
-from wafer.utils import LoginRequiredMixin
-
 from wafer.tickets.models import Ticket, TicketType
 from wafer.tickets.forms import TicketForm
+from wafer.utils import LoginRequiredMixin
 
 log = logging.getLogger(__name__)
 

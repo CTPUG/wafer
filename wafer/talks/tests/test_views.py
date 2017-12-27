@@ -4,8 +4,8 @@ import mock
 
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Permission
-from django.core.urlresolvers import reverse
 from django.test import Client, TestCase
+from django.urls import reverse
 
 from wafer.tests.api_utils import SortedResultsClient
 from wafer.talks.models import (

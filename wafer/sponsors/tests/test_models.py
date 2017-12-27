@@ -2,8 +2,8 @@
 
 """Tests for wafer.sponsors models."""
 
-from django.core.urlresolvers import reverse
 from django.test import TestCase
+from django.urls import reverse
 
 from wafer.menu import get_cached_menus, Menu
 from wafer.sponsors.models import SponsorshipPackage, Sponsor

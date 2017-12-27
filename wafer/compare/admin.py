@@ -4,18 +4,18 @@
 from diff_match_patch import diff_match_patch
 import datetime
 
-from reversion.admin import VersionAdmin
-from reversion.models import Version
 from django.conf.urls import url
-from django.shortcuts import get_object_or_404, render
-from django.contrib.admin.utils import unquote, quote
-from django.core.urlresolvers import reverse
-from django.utils.translation import ugettext as _
-from django.utils.encoding import force_text
 from django.contrib.admin import SimpleListFilter
+from django.contrib.admin.utils import unquote, quote
 from django.contrib.contenttypes.models import ContentType
+from django.shortcuts import get_object_or_404, render
+from django.utils.encoding import force_text
+from django.utils.translation import ugettext as _
+from django.urls import reverse
 
 from markitup.fields import Markup
+from reversion.admin import VersionAdmin
+from reversion.models import Version
 
 
 class DateModifiedFilter(SimpleListFilter):

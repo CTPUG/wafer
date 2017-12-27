@@ -1,7 +1,9 @@
+from django.urls import reverse
+
 from django_medusa.renderers import StaticSiteRenderer
+
 from wafer.talks.models import Talk, ACCEPTED
 from wafer.talks.views import UsersTalks
-from django.core.urlresolvers import reverse
 
 
 class TalksRenderer(StaticSiteRenderer):

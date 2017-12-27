@@ -1,6 +1,8 @@
+from django.urls import reverse
+
 from django_medusa.renderers import StaticSiteRenderer
+
 from wafer.sponsors.models import Sponsor
-from django.core.urlresolvers import reverse
 
 
 class SponsorRenderer(StaticSiteRenderer):

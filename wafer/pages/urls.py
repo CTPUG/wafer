@@ -1,6 +1,7 @@
 from django.conf.urls import include, url
-from django.core.urlresolvers import get_script_prefix
+from django.urls import get_script_prefix
 from django.views.generic import RedirectView
+
 from rest_framework import routers
 
 from wafer.pages.views import PageViewSet, slug

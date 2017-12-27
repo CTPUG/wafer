@@ -1,16 +1,15 @@
 import datetime
 
-from django.utils.translation import ugettext_lazy as _
-from django.core.urlresolvers import reverse
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models.signals import post_save, post_delete
+from django.urls import reverse
 from django.utils.encoding import python_2_unicode_compatible
+from django.utils.translation import ugettext_lazy as _
 
-from wafer.snippets.markdown_field import MarkdownTextField
-
-from wafer.talks.models import Talk
 from wafer.pages.models import Page
+from wafer.snippets.markdown_field import MarkdownTextField
+from wafer.talks.models import Talk
 
 
 @python_2_unicode_compatible

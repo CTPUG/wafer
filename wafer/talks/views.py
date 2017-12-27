@@ -1,19 +1,19 @@
+from django.conf import settings
 from django.core.exceptions import PermissionDenied, ValidationError
-from django.core.urlresolvers import reverse_lazy
+from django.db.models import Q
+from django.http import Http404
 from django.http import HttpResponseRedirect
+from django.urls import reverse_lazy
 from django.views.generic import DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic.list import ListView
-from django.conf import settings
-from django.db.models import Q
-from django.http import Http404
 
-from reversion import revisions
 from rest_framework import viewsets
 from rest_framework.permissions import (
     DjangoModelPermissions, DjangoModelPermissionsOrAnonReadOnly,
     BasePermission)
 from rest_framework_extensions.mixins import NestedViewSetMixin
+from reversion import revisions
 
 from wafer.utils import LoginRequiredMixin
 from wafer.talks.models import (Talk, TalkType, TalkUrl, ACCEPTED, CANCELLED,
