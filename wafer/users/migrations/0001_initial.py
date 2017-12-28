@@ -27,7 +27,8 @@ class Migration(migrations.Migration):
                     max_length=15, null=True, blank=True)),
                 ('github_username', models.CharField(
                     max_length=32, null=True, blank=True)),
-                ('user', models.OneToOneField(to=settings.AUTH_USER_MODEL)),
+                ('user', models.OneToOneField(
+                    to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE)),
             ],
             options={
             },

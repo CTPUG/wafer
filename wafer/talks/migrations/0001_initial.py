@@ -23,7 +23,7 @@ class Migration(migrations.Migration):
                 ('status', models.CharField(default=b'P', max_length=1, choices=[(b'A', b'Accepted'), (b'R', b'Not Accepted'), (b'P', b'Under Consideration')])),
                 ('_abstract_rendered', models.TextField(editable=False, blank=True)),
                 ('authors', models.ManyToManyField(related_name='talks', to=settings.AUTH_USER_MODEL)),
-                ('corresponding_author', models.ForeignKey(related_name='contact_talks', to=settings.AUTH_USER_MODEL)),
+                ('corresponding_author', models.ForeignKey(related_name='contact_talks', to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE)),
             ],
             options={
             },
@@ -46,7 +46,8 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('description', models.CharField(max_length=256)),
                 ('url', models.URLField()),
-                ('talk', models.ForeignKey(to='talks.Talk')),
+                ('talk', models.ForeignKey(to='talks.Talk',
+                                           on_delete=models.CASCADE)),
             ],
             options={
             },
@@ -55,7 +56,8 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='talk',
             name='talk_type',
-            field=models.ForeignKey(to='talks.TalkType', null=True),
+            field=models.ForeignKey(to='talks.TalkType', null=True,
+                                    on_delete=models.SET_NULL),
             preserve_default=True,
         ),
     ]

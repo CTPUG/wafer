@@ -33,7 +33,8 @@ class Migration(migrations.Migration):
                 ('css_class', models.CharField(help_text='Custom css class for this schedule item', max_length=128, blank=True)),
                 ('details_html', models.TextField(editable=False)),
                 ('page', models.ForeignKey(
-                    blank=True, to='pages.Page', null=True)),
+                    blank=True, to='pages.Page', null=True,
+                    on_delete=models.CASCADE)),
             ],
             options={
             },
@@ -48,10 +49,10 @@ class Migration(migrations.Migration):
                 ('name', models.CharField(help_text='Identifier for use in the admin panel', max_length=1024, null=True, blank=True)),
                 ('day', models.ForeignKey(
                     blank=True, to='schedule.Day', null=True,
-                    help_text='Day for this slot')),
+                    help_text='Day for this slot', on_delete=models.PROTECT)),
                 ('previous_slot', models.ForeignKey(
                     blank=True, to='schedule.Slot', help_text='Previous slot',
-                    null=True)),
+                    null=True, on_delete=models.CASCADE)),
             ],
             options={
                 'ordering': ['end_time', 'start_time'],
@@ -86,13 +87,16 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='scheduleitem',
             name='talk',
-            field=models.ForeignKey(blank=True, to='talks.Talk', null=True),
+            field=models.ForeignKey(
+                blank=True, to='talks.Talk', null=True,
+                on_delete=models.CASCADE),
             preserve_default=True,
         ),
         migrations.AddField(
             model_name='scheduleitem',
             name='venue',
-            field=models.ForeignKey(to='schedule.Venue'),
+            field=models.ForeignKey(
+                to='schedule.Venue', on_delete=models.PROTECT),
             preserve_default=True,
         ),
     ]

@@ -35,7 +35,8 @@ class Migration(migrations.Migration):
                 ('_content_rendered', models.TextField(editable=False, blank=True)),
                 ('files', models.ManyToManyField(help_text='Images and other files for use in the content markdown field.', related_name='pages', null=True, to='pages.File', blank=True)),
                 ('parent', models.ForeignKey(
-                    blank=True, to='pages.Page', null=True)),
+                    blank=True, to='pages.Page', null=True,
+                    on_delete=models.CASCADE)),
             ],
             options={
             },

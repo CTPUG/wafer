@@ -20,7 +20,8 @@ class Migration(migrations.Migration):
                                         auto_created=True, primary_key=True)),
                 ('key', models.CharField(max_length=64, db_index=True)),
                 ('value', jsonfield.fields.JSONField()),
-                ('group', models.ForeignKey(to='auth.Group')),
+                ('group', models.ForeignKey(
+                    to='auth.Group', on_delete=models.CASCADE)),
             ],
         ),
     ]

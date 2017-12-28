@@ -25,6 +25,7 @@ class Migration(migrations.Migration):
             field=models.ForeignKey(
                 related_name='contact_talks', to=settings.AUTH_USER_MODEL,
                 help_text='The person submitting the talk (and who questions '
-                          'regarding the talk should be addressed to).'),
+                          'regarding the talk should be addressed to).',
+                on_delete=models.CASCADE),
         ),
     ]
