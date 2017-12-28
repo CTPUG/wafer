@@ -13,10 +13,7 @@ def sponsors():
     }
 
 
-# We use assignment_tag for compatibility with Django 1.8
-# Once we drop 1.8 support, we should change this to
-# simple_tag
-@register.assignment_tag()
+@register.simple_tag()
 def sponsor_image_url(sponsor, name):
     """Returns the corresponding url from the sponsors images"""
     if sponsor.files.filter(name=name).exists():

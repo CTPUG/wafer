@@ -4,7 +4,7 @@ import sys
 register = template.Library()
 
 
-@register.assignment_tag(takes_context=True)
+@register.simple_tag(takes_context=True)
 def wafer_form_helper(context, helper_name):
     '''
     Find the specified Crispy FormHelper and instantiate it.
