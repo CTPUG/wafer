@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+import django.core.validators
 from django.db import models, migrations
 from django.conf import settings
 
@@ -24,7 +25,12 @@ class Migration(migrations.Migration):
                 ('homepage', models.CharField(
                     max_length=256, null=True, blank=True)),
                 ('twitter_handle', models.CharField(
-                    max_length=15, null=True, blank=True)),
+                    max_length=15, null=True, blank=True,
+                    validators=[
+                        django.core.validators.RegexValidator(
+                            '^[A-Za-z0-9_]{1,15}$',
+                            'Incorrectly formatted twitter handle')
+                    ])),
                 ('github_username', models.CharField(
                     max_length=32, null=True, blank=True)),
                 ('user', models.OneToOneField(
