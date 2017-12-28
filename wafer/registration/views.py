@@ -1,9 +1,9 @@
+from django.conf import settings
+from django.contrib import messages
 from django.contrib.auth import login
 from django.contrib.auth.views import redirect_to_login
-from django.contrib import messages
-from django.core.urlresolvers import reverse
-from django.conf import settings
 from django.http import Http404, HttpResponseRedirect
+from django.urls import reverse
 from django.utils.http import urlencode
 
 from wafer.registration.sso import SSOError, debian_sso, github_sso

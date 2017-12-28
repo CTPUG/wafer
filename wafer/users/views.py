@@ -3,8 +3,8 @@ import logging
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.core.exceptions import PermissionDenied
-from django.core.urlresolvers import reverse
 from django.http import Http404
+from django.urls import reverse
 from django.views.generic import DetailView, UpdateView
 from django.views.generic.list import ListView
 
