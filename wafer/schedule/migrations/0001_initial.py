@@ -32,7 +32,8 @@ class Migration(migrations.Migration):
                 ('notes', models.TextField(help_text='Notes for the conference organisers', blank=True)),
                 ('css_class', models.CharField(help_text='Custom css class for this schedule item', max_length=128, blank=True)),
                 ('details_html', models.TextField(editable=False)),
-                ('page', models.ForeignKey(blank=True, to='pages.Page', null=True)),
+                ('page', models.ForeignKey(
+                    blank=True, to='pages.Page', null=True)),
             ],
             options={
             },
@@ -45,8 +46,12 @@ class Migration(migrations.Migration):
                 ('start_time', models.TimeField(help_text='Start time (if no previous slot)', null=True, blank=True)),
                 ('end_time', models.TimeField(help_text='Slot end time', null=True)),
                 ('name', models.CharField(help_text='Identifier for use in the admin panel', max_length=1024, null=True, blank=True)),
-                ('day', models.ForeignKey(blank=True, to='schedule.Day', help_text='Day for this slot', null=True)),
-                ('previous_slot', models.ForeignKey(blank=True, to='schedule.Slot', help_text='Previous slot', null=True)),
+                ('day', models.ForeignKey(
+                    blank=True, to='schedule.Day', null=True,
+                    help_text='Day for this slot')),
+                ('previous_slot', models.ForeignKey(
+                    blank=True, to='schedule.Slot', help_text='Previous slot',
+                    null=True)),
             ],
             options={
                 'ordering': ['end_time', 'start_time'],

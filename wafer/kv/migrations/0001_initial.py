@@ -16,7 +16,8 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='KeyValue',
             fields=[
-                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('id', models.AutoField(verbose_name='ID', serialize=False,
+                                        auto_created=True, primary_key=True)),
                 ('key', models.CharField(max_length=64, db_index=True)),
                 ('value', jsonfield.fields.JSONField()),
                 ('group', models.ForeignKey(to='auth.Group')),
