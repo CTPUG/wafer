@@ -15,11 +15,17 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='talk',
             name='authors',
-            field=models.ManyToManyField(help_text='The speakers presenting the talk.', related_name='talks', to=settings.AUTH_USER_MODEL),
+            field=models.ManyToManyField(
+                help_text='The speakers presenting the talk.',
+                related_name='talks', to=settings.AUTH_USER_MODEL),
         ),
         migrations.AlterField(
             model_name='talk',
             name='corresponding_author',
-            field=models.ForeignKey(related_name='contact_talks', to=settings.AUTH_USER_MODEL, help_text='The person submitting the talk (and who questions regarding the talk should be addressed to).'),
+            field=models.ForeignKey(
+                related_name='contact_talks', to=settings.AUTH_USER_MODEL,
+                help_text='The person submitting the talk (and who questions '
+                          'regarding the talk should be addressed to).',
+                on_delete=models.CASCADE),
         ),
     ]

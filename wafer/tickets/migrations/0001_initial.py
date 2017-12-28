@@ -36,7 +36,8 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='ticket',
             name='type',
-            field=models.ForeignKey(to='tickets.TicketType'),
+            field=models.ForeignKey(
+                to='tickets.TicketType', on_delete=models.CASCADE),
             preserve_default=True,
         ),
         migrations.AddField(

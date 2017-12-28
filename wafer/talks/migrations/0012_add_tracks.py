@@ -28,7 +28,8 @@ class Migration(migrations.Migration):
             model_name='talk',
             name='track',
             field=models.ForeignKey(null=True, blank=True, default=None,
-                                    to='talks.Track'),
+                                    to='talks.Track',
+                                    on_delete=models.SET_NULL),
             preserve_default=False,
         ),
     ]
