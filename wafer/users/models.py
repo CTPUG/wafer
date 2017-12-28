@@ -32,7 +32,7 @@ class UserProfile(models.Model):
     class Meta:
         ordering = ['id']
 
-    user = models.OneToOneField(User)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     kv = models.ManyToManyField(KeyValue)
     contact_number = models.CharField(max_length=16, null=True, blank=True)
     bio = models.TextField(null=True, blank=True)
