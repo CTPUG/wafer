@@ -129,7 +129,8 @@ class Talk(models.Model):
 
     notes = models.TextField(
         null=True, blank=True,
-        help_text=_("Any notes for the conference organisers?"))
+        help_text=_("Any notes for the conference organisers?  "
+                    "These are not visible to the public."))
 
     private_notes = models.TextField(
         null=True, blank=True,
