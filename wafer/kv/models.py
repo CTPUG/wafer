@@ -11,3 +11,6 @@ class KeyValue(models.Model):
 
     def __unicode__(self):
         return u'KV(%s, %s, %r)' % (self.group.name, self.key, self.value)
+
+    def __str__(self):
+        return 'KV(%s, %s, %r)' % (self.group.name, self.key, self.value)
