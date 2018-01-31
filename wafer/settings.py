@@ -297,7 +297,10 @@ WAFER_PUBLIC_ATTENDEE_LIST = True
 # django_medusa -- disk-based renderer
 MEDUSA_RENDERER_CLASS = "wafer.management.static.WaferDiskStaticSiteRenderer"
 MEDUSA_DEPLOY_DIR = os.path.join(project_root, 'static_mirror')
+
 MARKITUP_FILTER = ('markdown.markdown', {'safe_mode': True})
+JQUERY_URL = None
+SELECT2_USE_BUNDLED_JQUERY = False
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': ('rest_framework.permissions.IsAdminUser',),
