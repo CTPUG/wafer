@@ -1,13 +1,7 @@
-{% extends "wafer/base.html" %}
+{% extends "wafer/base_form.html" %}
 {% load i18n %}
 {% load crispy_forms_tags %}
-{% block extra_head %}
-{{ form.media.css }}
-{% endblock %}
 {% block content %}
 <h1>{% trans 'Edit Profile:' %}</h1>
 {% crispy form %}
-{% endblock %}
-{% block extra_foot %}
-{{ form.media.js }}
 {% endblock %}

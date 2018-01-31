@@ -1,9 +1,6 @@
-{% extends "wafer/base.html" %}
+{% extends "wafer/base_form.html" %}
 {% load i18n %}
 {% load crispy_forms_tags %}
-{% block extra_head %}
-{{ form.media.css }}
-{% endblock %}
 {% block content %}
 <h1>{% trans 'Edit User:' %}</h1>
 {% if profile_user == user and profile_user.has_usable_password %}
@@ -16,7 +13,4 @@
   </ul>
 {% endif %}
 {% crispy form %}
-{% endblock %}
-{% block extra_foot %}
-{{ form.media.js }}
 {% endblock %}

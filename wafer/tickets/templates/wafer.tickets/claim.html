@@ -1,9 +1,6 @@
-{% extends 'wafer/base.html' %}
+{% extends 'wafer/base_form.html' %}
 {% load i18n %}
 {% load crispy_forms_tags %}
-{% block extra_head %}
-{{ form.media.css }}
-{% endblock %}
 {% block content %}
 {% if not WAFER_REGISTRATION_OPEN %}
   {% trans "Ticket sales are not currently open" %}
@@ -26,7 +23,4 @@
     {% crispy form %}
   </section>
 {% endif %}
-{% endblock %}
-{% block extra_foot %}
-{{ form.media.js }}
 {% endblock %}
