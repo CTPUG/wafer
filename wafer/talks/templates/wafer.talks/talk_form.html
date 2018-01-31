@@ -1,6 +1,7 @@
 {% extends 'wafer/base.html' %}
 {% load i18n %}
 {% load crispy_forms_tags %}
+{% load static from staticfiles %}
 {% block extra_head %}
 {{ form.media.css }}
 {% endblock %}
@@ -28,4 +29,5 @@
 {% endblock %}
 {% block extra_foot %}
 {{ form.media.js }}
+<script type="text/javascript" src="{% static 'js/markitup.js' %}"></script>
 {% endblock %}

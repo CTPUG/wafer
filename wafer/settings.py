@@ -150,7 +150,6 @@ INSTALLED_APPS = (
     'django_medusa',
     'crispy_forms',
     'django_nose',
-    'markitup',
     'rest_framework',
     'easy_select2',
     'wafer',
@@ -164,6 +163,7 @@ INSTALLED_APPS = (
     'wafer.tickets',
     'wafer.compare',
     # Django isn't finding the overridden templates
+    'markitup',
     'registration',
     'django.contrib.admin',
 )
