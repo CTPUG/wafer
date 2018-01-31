@@ -11,6 +11,7 @@ class PageForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super(PageForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
+        self.helper.include_media = False
         self.helper.add_input(Submit('submit', 'Submit'))
 
     class Meta:

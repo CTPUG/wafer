@@ -1,10 +1,15 @@
 {% extends 'wafer/base.html' %}
 {% load crispy_forms_tags %}
 {% load i18n %}
+{% block extra_head %}
+{{ form.media.css }}
+{% endblock %}
 {% block content %}
 <section class="wafer wafer-page-edit">
 <h1>{% trans "Edit Page" %}</h1>
-{{ form.media }}
 {% crispy form %}
 </section>
+{% endblock %}
+{% block extra_foot %}
+{{ form.media.js }}
 {% endblock %}

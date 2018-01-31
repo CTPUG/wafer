@@ -8,6 +8,7 @@ from crispy_forms.layout import Hidden, Submit
 
 class RegistrationFormHelper(FormHelper):
     form_action = reverse('registration_register')
+    include_media = False
 
     def __init__(self, request, *args, **kwargs):
         super(RegistrationFormHelper, self).__init__(*args, **kwargs)

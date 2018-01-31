@@ -14,6 +14,7 @@ class TicketForm(forms.Form):
     def __init__(self, *args, **kwargs):
         super(TicketForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
+        self.helper.include_media = False
         self.helper.add_input(Submit('submit', _('Claim')))
 
     def clean_barcode(self):

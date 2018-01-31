@@ -4,6 +4,9 @@
 {% load wafer_crispy %}
 {% load wafer_sso %}
 {% block title %}Login - {{ WAFER_CONFERENCE_NAME }}{% endblock %}
+{% block extra_head %}
+{{ form.media.css }}
+{% endblock %}
 {% block content %}
 <div class="container">
     <div class="row">
@@ -32,4 +35,7 @@
         </div>
     </div>
 </div>
+{% endblock %}
+{% block extra_foot %}
+{{ form.media.js }}
 {% endblock %}
