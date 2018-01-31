@@ -171,10 +171,3 @@
   </section>
 {% endif %}
 {% endblock %}
-{% block extra_foot %}
-  {{ block.super }}
-  {% if can_review %}
-    {{ review_form.media.js }}
-    <script type="text/javascript" src="{% static 'js/markitup.js' %}"></script>
-  {% endif %}
-{% endblock %}
