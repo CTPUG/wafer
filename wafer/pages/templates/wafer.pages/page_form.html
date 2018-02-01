@@ -1,10 +1,14 @@
-{% extends 'wafer/base.html' %}
+{% extends 'wafer/base_form.html' %}
 {% load crispy_forms_tags %}
 {% load i18n %}
+{% load static from staticfiles %}
 {% block content %}
 <section class="wafer wafer-page-edit">
 <h1>{% trans "Edit Page" %}</h1>
-{{ form.media }}
 {% crispy form %}
 </section>
+{% endblock %}
+{% block extra_foot %}
+{{ block.super }}
+<script type="text/javascript" src="{% static 'js/markitup.js' %}"></script>
 {% endblock %}

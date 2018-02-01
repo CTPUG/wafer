@@ -1,0 +1,6 @@
+{% extends "admin/change_form.html" %}
+{% load static from staticfiles %}
+{% block footer %}
+{{ block.super }}
+<script src="{% static 'js/markitup.js' %}"></script>
+{% endblock %}

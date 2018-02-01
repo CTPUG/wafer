@@ -1,6 +1,7 @@
-{% extends 'wafer/base.html' %}
+{% extends 'wafer/base_form.html' %}
 {% load i18n %}
 {% load crispy_forms_tags %}
+{% load static from staticfiles %}
 {% block content %}
 <section class="wafer wafer-talk-edit">
   {% if can_edit %}
@@ -19,8 +20,11 @@
       <em>Talk submission is closed</em>
     {% endblocktrans %}
   {% else %}
-    {{ form.media }}
     {% crispy form %}
   {% endif %}
 </section>
+{% endblock %}
+{% block extra_foot %}
+{{ block.super }}
+<script type="text/javascript" src="{% static 'js/markitup.js' %}"></script>
 {% endblock %}

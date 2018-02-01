@@ -150,7 +150,6 @@ INSTALLED_APPS = (
     'django_medusa',
     'crispy_forms',
     'django_nose',
-    'markitup',
     'rest_framework',
     'easy_select2',
     'wafer',
@@ -164,6 +163,7 @@ INSTALLED_APPS = (
     'wafer.tickets',
     'wafer.compare',
     # Django isn't finding the overridden templates
+    'markitup',
     'registration',
     'django.contrib.admin',
 )
@@ -297,7 +297,10 @@ WAFER_PUBLIC_ATTENDEE_LIST = True
 # django_medusa -- disk-based renderer
 MEDUSA_RENDERER_CLASS = "wafer.management.static.WaferDiskStaticSiteRenderer"
 MEDUSA_DEPLOY_DIR = os.path.join(project_root, 'static_mirror')
+
 MARKITUP_FILTER = ('markdown.markdown', {'safe_mode': True})
+JQUERY_URL = 'vendor/jquery/dist/jquery.min.js'
+SELECT2_USE_BUNDLED_JQUERY = False
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': ('rest_framework.permissions.IsAdminUser',),

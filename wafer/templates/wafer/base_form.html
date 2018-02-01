@@ -1,0 +1,12 @@
+{% extends "wafer/base.html" %}
+{% load i18n %}
+{% load crispy_forms_tags %}
+{% block extra_head %}
+  {{ form.media.css }}
+{% endblock %}
+{% block content %}
+  {% crispy form %}
+{% endblock %}
+{% block extra_foot %}
+  {{ form.media.js }}
+{% endblock %}

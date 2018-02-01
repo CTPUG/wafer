@@ -14,6 +14,7 @@ class UserForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(UserForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
+        self.helper.include_media = False
         username = kwargs['instance'].username
         self.helper.form_action = reverse('wafer_user_edit',
                                           args=(username,))
@@ -31,6 +32,7 @@ class UserProfileForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(UserProfileForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper(self)
+        self.helper.include_media = False
         username = kwargs['instance'].user.username
         self.helper.form_action = reverse('wafer_user_edit_profile',
                                           args=(username,))
