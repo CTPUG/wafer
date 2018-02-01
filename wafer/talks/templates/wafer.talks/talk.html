@@ -82,22 +82,34 @@
   </div>
   {% if perms.talks.view_all_talks or user.is_superuser %}
     {% if talk.notes %}
-      {% blocktrans %}
-        <h2>Talk Notes</h2>
-        <p>(The following is not visible to attendees.)</p>
-      {% endblocktrans %}
-      <div id="notes">
-        {{ object.notes|urlize|linebreaks }}
+      <div id="notes" class="card mb-3">
+        <div class="card-header">
+          {% blocktrans %}
+            <h2>Talk Notes</h2>
+            <p>(The following is not visible to attendees.)</p>
+          {% endblocktrans %}
+        </div>
+        <div class="card-body">
+          <p class="card-text">
+            {{ object.notes|urlize|linebreaksbr }}
+          </p>
+        </div>
       </div>
     {% endif %}
   {% endif %}
   {% if perms.talks.edit_private_notes and object.private_notes %}
-    {% blocktrans %}
-      <h2>Private notes</h2>
-      <p>(The following is not visible to submitters or attendees.)</p>
-    {% endblocktrans %}
-    <div id="private_notes">
-      {{ object.private_notes|urlize|linebreaks }}
+    <div id="private_notes" class="card mb-3">
+      <div class="card-header">
+        {% blocktrans %}
+          <h2>Private notes</h2>
+          <p>(The following is not visible to submitters or attendees.)</p>
+        {% endblocktrans %}
+      </div>
+      <div class="card-body">
+        <p class="card-text">
+          {{ object.private_notes|urlize|linebreaksbr }}
+        </p>
+      </div>
     </div>
   {% endif %}
   {% if talk.talkurl_set.all %}
