@@ -33,7 +33,7 @@
           <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">
             {{ item.label }}
           </a>
-          <ul class="dropdown-menu">
+          <ul class="dropdown-menu dropdown-menu-right">
             {% for subitem in item.items %}
             <li><a class="dropdown-item" href="{{ subitem.url }}">
                 {{ subitem.label }}
@@ -53,7 +53,7 @@
           <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">
             {{ user.username }}
           </a>
-          <ul class="dropdown-menu">
+          <ul class="dropdown-menu dropdown-menu-right">
             <li><a class="dropdown-item" href="{% url 'wafer_user_profile' username=user.username %}">
                 {% blocktrans with name=user.userprofile.display_name %}
                 {{ name }}'s profile
