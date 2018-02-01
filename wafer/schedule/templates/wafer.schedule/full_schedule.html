@@ -3,16 +3,16 @@
 {% block title %}{% trans "Schedule" %} - {{ WAFER_CONFERENCE_NAME }}{% endblock %}
 {% block content %}
 <section class="wafer wafer-schedule">
+  {% if user.is_authenticated and user.is_staff %}
+    <div class="float-right">
+      <a class="btn btn-secondary"
+          href="{% url 'admin:schedule_editor' %}">
+        Edit schedule
+      </a>
+    </div>
+  {% endif %}
   <h1>
     {% trans "Schedule" %}
-    {% if user.is_authenticated and user.is_staff %}
-      <div class="float-right">
-        <a class="btn btn-secondary"
-            href="{% url 'admin:schedule_editor' %}">
-          Edit schedule
-        </a>
-      </div>
-    {% endif %}
   </h1>
   <div class="wafer_schedule">
     {% if not schedule_days %}
