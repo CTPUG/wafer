@@ -129,6 +129,8 @@ class ScheduleView(TemplateView):
         context = super(ScheduleView, self).get_context_data(**kwargs)
         # Check if the schedule is valid
         context['active'] = False
+        context['prev_day'] = None
+        context['next_day'] = None
         if not check_schedule():
             return context
         context['active'] = True
@@ -136,8 +138,16 @@ class ScheduleView(TemplateView):
         dates = dict([(x.date.strftime('%Y-%m-%d'), x) for x in
                       Day.objects.all()])
         # We choose to return the full schedule if given an invalid date
-        day = dates.get(day, None)
-        context['schedule_days'] = generate_schedule(day)
+        schedule_day = dates.get(day, None)
+        if schedule_day is not None:
+            # Add next / prev day links
+            sorted_days = sorted(dates)
+            pos = sorted_days.index(day)
+            if pos > 0:
+                context['prev_day'] = sorted_days[pos - 1]
+            if pos < len(sorted_days) - 1:
+                context['next_day'] = sorted_days[pos + 1]
+        context['schedule_days'] = generate_schedule(schedule_day)
         return context
 
 
