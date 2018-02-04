@@ -21,6 +21,19 @@
         <p>The final schedule has not been published yet.</p>
       {% endblocktrans %}
     {% else %}
+      {% if next_day or prev_day %}
+      <div class="clearfix">
+         {% url 'wafer_full_schedule' as schedule_url %}
+         {% if prev_day %}
+             <a href="{{ schedule_url }}?day={{ prev_day }}"
+                class="float-left btn btn-secondary btn-lg">{% trans "Previous Day" %}</a>
+         {% endif %}
+         {% if next_day %}
+             <a href="{{ schedule_url }}?day={{ next_day }}"
+                class="float-right btn btn-secondary btn-lg">{% trans "Next Day" %}</a>
+         {% endif %}
+      </div>
+      {% endif %}
       {% for schedule_day in schedule_days %}
         <table cellspacing=1 cellpadding=0>
           {# We assume that the admin has created a valid timetable #}
