@@ -146,7 +146,7 @@ class TalkWithdraw(EditOwnTalksMixin, DeleteView):
     def form_valid(self, form):
         revisions.set_user(self.request.user)
         revisions.set_comment("Talk Withdrawn")
-        return super(TalkDelete, self).form_valid(form)
+        return super(TalkWithdraw, self).form_valid(form)
 
 
 class Speakers(ListView):
