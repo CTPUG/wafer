@@ -34,8 +34,6 @@ def cache_result(cache_key, timeout):
 
         @functools.wraps(f)
         def wrapper(*args, **kw):
-            # replace this with cache.caches when we drop Django 1.6
-            # compatibility
             cache = caches[cache_name]
             result = cache.get(cache_key)
             if result is None:
