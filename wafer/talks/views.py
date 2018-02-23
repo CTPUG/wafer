@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import PermissionDenied, ValidationError
 from django.db.models import Q
 from django.http import Http404
@@ -15,7 +16,6 @@ from rest_framework.permissions import (
 from rest_framework_extensions.mixins import NestedViewSetMixin
 from reversion import revisions
 
-from wafer.utils import LoginRequiredMixin
 from wafer.talks.models import (Talk, TalkType, TalkUrl, ACCEPTED, CANCELLED,
                                 WITHDRAWN)
 from wafer.talks.forms import get_talk_form_class
