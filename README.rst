@@ -30,7 +30,7 @@ Available on `readthedocs.org`_.
 Supported Django versions
 =========================
 
-Wafer supports Django 1.8 and Django 1.9.
+Wafer supports Django 1.11 and Django 2.0.
 
 
 Installation
@@ -38,10 +38,6 @@ Installation
 
 1. ``pip install -r requirements.txt`` should install all the required
    python and django dependencies.
-
-   If you're using Django 1.8 or 1.9, you will need to downgrade
-   djangorestframework to the 3.6 series, since djangorestframework 3.7
-   does not support those versions.
 
 2. Wafer uses npm to manage front-end dependencies
 
