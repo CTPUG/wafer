@@ -71,13 +71,3 @@ class QueryTracker(object):
     def queries(self):
         from django.db import connection
         return connection.queries[:]
-
-
-# XXX: Should we use Django's version for Django >= 1.9 ?
-# This should certainly go away when we drop support for
-# Django 1.8
-class LoginRequiredMixin(object):
-    '''Must be logged in'''
-    @method_decorator(login_required)
-    def dispatch(self, *args, **kwargs):
-        return super(LoginRequiredMixin, self).dispatch(*args, **kwargs)
