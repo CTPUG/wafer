@@ -36,10 +36,13 @@ Wafer supports Django 1.11 and Django 2.0.
 Installation
 ============
 
-1. ``pip install -r requirements.txt`` should install all the required
-   python and django dependencies.
+1. wafer can be installed either from pypi (``pip install wafer``)
+   or from the github repository.
 
-2. Wafer uses npm to manage front-end dependencies
+2. If installing from github, ``pip install -r requirements.txt``
+   should install all the required python and django dependencies.
+
+3. Wafer uses npm to manage front-end dependencies
 
    * Make sure you have a recent version of Node.js installed that
      includes ``npm``.
@@ -47,13 +50,13 @@ Installation
    * Run ``npm install`` to install all dependencies, which also copies
      them to ``wafer/static/vendor``.
 
-3. Install the wafer applications
+4. Install the wafer applications
    ``manage.py migrate``
 
-4. If you don't have one yet, create a superuser with
+5. If you don't have one yet, create a superuser with
    ``manage.py createsuperuser``.
 
-5. Examine the ``settings.py`` file and create a
+6. Examine the ``settings.py`` file and create a
    ``localsettings.py`` file overriding the defaults
    as required.
 
@@ -65,20 +68,20 @@ Installation
    If you add extensions to ``MARKITUP_FILTER``, be
    sure to install the appropriate python packages as well.
 
-6. Log in and configure the Site:
+7. Log in and configure the Site:
 
    * The domain will be used as the base for e-mails sent during
      registration.
 
    * The name will be the conference's name.
 
-7. Wafer uses the Django caching infrastructure in several places, so
+8. Wafer uses the Django caching infrastructure in several places, so
    the cache table needs to be created using ``manage.py createcachetable``.
 
-8. Create the default 'Page Editors' and 'Talk Mentors' groups using
+9. Create the default 'Page Editors' and 'Talk Mentors' groups using
    ``manage.py wafer_add_default_groups``.
 
-9. Have a fun conference.
+10. Have a fun conference.
 
 Installing Bootstrap
 ====================

@@ -70,3 +70,13 @@ Recommended production setup
    directory early in ``TEMPLATES``.
 
 #. And then continue with the basic instructions above.
+
+
+Example setup
+=============
+
+For an example of a conference using wafer, see the 2017 PyCon ZA
+conference repository, available from `github`_
+
+
+.. _github: https://github.com/CTPUG/pyconza2017
