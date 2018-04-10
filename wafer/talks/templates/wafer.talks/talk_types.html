@@ -4,10 +4,11 @@
 {% block content %}
 <section class="wafer wafer-talk-types">
   <h1>{% trans 'Talk Types' %}</h1>
-    <ul class="talk-type-list">
+    <dl class="talk-type-list">
     {% for type in object_list %}
-        <li>{{ type.name }} &mdash; {{ type.description }}</li>
+      <dt class="talk-type-name">{{ type.name }}</dt>
+      <dd class="talk-type-description">{{ type.description }}</dd>
     {% endfor %}
-    </ul>
+    </dl>
 </section>
 {% endblock %}

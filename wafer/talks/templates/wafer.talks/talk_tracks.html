@@ -4,12 +4,11 @@
 {% block content %}
 <section class="wafer wafer-talk-tracks">
   <h1>{% trans 'Tracks' %}</h1>
-    <ul class="track-list">
+    <dl class="track-list">
     {% for track in object_list %}
-       <li>{{ track.name }} &mdash; {{ track.description }}</li>
-    {% empty %}
-       <li>No Talk Tracks specified for this conference</li>
+      <dt class="track-name">{{ track.name }}</dt>
+      <dd class="track-description">{{ track.description }}</dt>
     {% endfor %}
-    </ul>
+    </dl>
 </section>
 {% endblock %}
