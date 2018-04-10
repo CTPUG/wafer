@@ -3,7 +3,7 @@ from rest_framework_extensions import routers
 
 from wafer.talks.views import (
     Speakers, TalkCreate, TalkWithdraw, TalkUpdate, TalkView, UsersTalks,
-    TalksViewSet, TalkUrlsViewSet)
+    TalkTypesView, TracksView, TalksViewSet, TalkUrlsViewSet)
 
 router = routers.ExtendedSimpleRouter()
 
@@ -23,5 +23,7 @@ urlpatterns = [
     url(r'^(?P<pk>\d+)/withdraw/$', TalkWithdraw.as_view(),
         name='wafer_talk_withdraw'),
     url(r'^speakers/$', Speakers.as_view(), name='wafer_talks_speakers'),
+    url(r'^tracks/', TracksView.as_view(), name='wafer_talk_tracks'),
+    url(r'^types/', TalkTypesView.as_view(), name='wafer_talk_types'),
     url(r'^api/', include(router.urls)),
 ]

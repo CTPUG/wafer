@@ -1,0 +1,15 @@
+{% extends "wafer/base.html" %}
+{% load i18n %}
+{% block title %}{% trans "Tracks" %} - {{ WAFER_CONFERENCE_NAME }}{% endblock %}
+{% block content %}
+<section class="wafer wafer-talk-tracks">
+  <h1>{% trans 'Tracks' %}</h1>
+    <ul class="track-list">
+    {% for track in object_list %}
+       <li>{{ track.name }} &mdash; {{ track.description }}</li>
+    {% empty %}
+       <li>No Talk Tracks specified for this conference</li>
+    {% endfor %}
+    </ul>
+</section>
+{% endblock %}
