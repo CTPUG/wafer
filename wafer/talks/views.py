@@ -16,8 +16,8 @@ from rest_framework.permissions import (
 from rest_framework_extensions.mixins import NestedViewSetMixin
 from reversion import revisions
 
-from wafer.talks.models import (Talk, TalkType, TalkUrl, ACCEPTED, CANCELLED,
-                                WITHDRAWN)
+from wafer.talks.models import (Talk, TalkType, TalkUrl, Track, ACCEPTED,
+                                CANCELLED, WITHDRAWN)
 from wafer.talks.forms import get_talk_form_class
 from wafer.talks.serializers import TalkSerializer, TalkUrlSerializer
 from wafer.users.models import UserProfile
@@ -163,6 +163,16 @@ class Speakers(ListView):
                 'user').order_by('user__first_name', 'user__last_name')
         context["speaker_rows"] = self._by_row(speakers, 4)
         return context
+
+
+class TracksView(ListView):
+    model = Track
+    template_name = 'wafer.talks/talk_tracks.html'
+
+
+class TalkTypesView(ListView):
+    model = TalkType
+    template_name = 'wafer.talks/talk_types.html'
 
 
 class TalksViewSet(viewsets.ModelViewSet, NestedViewSetMixin):
