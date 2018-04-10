@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.core import validators
 from django.db import models
 from django.template.defaultfilters import slugify
 from django.urls import reverse
@@ -221,6 +222,11 @@ class Talk(models.Model):
 
     has_url.boolean = True
 
+    @property
+    def review_score(self):
+        reviews = [review.total_score for review in self.reviews.all()]
+        return sum(reviews) / len(reviews)
+
     # Helpful properties for the templates
     accepted = property(fget=lambda x: x.status == ACCEPTED)
     provisional = property(fget=lambda x: x.status == PROVISIONAL)
@@ -268,3 +274,51 @@ class TalkUrl(models.Model):
     description = models.CharField(max_length=256)
     url = models.URLField()
     talk = models.ForeignKey(Talk, on_delete=models.CASCADE)
+
+
+@python_2_unicode_compatible
+class Review(models.Model):
+    talk = models.ForeignKey(Talk, on_delete=models.CASCADE,
+                             related_name='reviews')
+    reviewer = models.ForeignKey(settings.AUTH_USER_MODEL,
+                                 on_delete=models.CASCADE)
+
+    notes = models.TextField(
+        null=True, blank=True,
+        help_text=_("Comments on the proposal"))
+
+    def __str__(self):
+        return u'Review of %s by %s (%i)' % (
+            self.reviewer, self.talk.title, self.total_score)
+
+    @property
+    def total_score(self):
+        return self.scores.aggregate(total=models.Sum('value'))['total']
+
+
+@python_2_unicode_compatible
+class ReviewAspect(models.Model):
+    name = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.name
+
+
+@python_2_unicode_compatible
+class Score(models.Model):
+    review = models.ForeignKey(Review, on_delete=models.CASCADE,
+                               related_name='scores')
+    aspect = models.ForeignKey(ReviewAspect, on_delete=models.CASCADE)
+
+    value = models.IntegerField(default=1, validators=[
+        validators.MinValueValidator(0),
+        validators.MaxValueValidator(10)
+    ])
+
+    def __str__(self):
+        review = self.review
+        return u'Review of %s by %s on %s: %i' % (
+            review.reviewer, review.talk.title, self.aspect.name, self.value)
+
+    class Meta:
+        unique_together = (('review', 'aspect'),)

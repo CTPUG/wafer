@@ -6,7 +6,8 @@ from reversion.admin import VersionAdmin
 from easy_select2 import select2_modelform_meta
 
 from wafer.compare.admin import CompareVersionAdmin, DateModifiedFilter
-from wafer.talks.models import TalkType, Talk, TalkUrl, Track, render_author
+from wafer.talks.models import (
+    Review, ReviewAspect, Score, Talk, TalkType, TalkUrl, Track, render_author)
 
 
 class AdminTalkForm(forms.ModelForm):
@@ -48,7 +49,7 @@ class TalkUrlInline(admin.TabularInline):
 class TalkAdmin(CompareVersionAdmin, admin.ModelAdmin):
     list_display = ('title', 'get_corresponding_author_name',
                     'get_corresponding_author_contact', 'talk_type',
-                    'get_in_schedule', 'has_url', 'status')
+                    'get_in_schedule', 'has_url', 'status', 'review_score')
     list_editable = ('status',)
     list_filter = ('status', 'talk_type', 'track', ScheduleListFilter,
                    DateModifiedFilter)
@@ -70,7 +71,18 @@ class TrackAdmin(VersionAdmin, admin.ModelAdmin):
     readonly_fields = ('css_class',)
 
 
+class ReviewScoreInline(admin.TabularInline):
+    model = Score
+
+
+class ReviewAdmin(admin.ModelAdmin):
+    list_display = ('talk', 'reviewer', 'total_score')
+    inlines = (ReviewScoreInline,)
+
+
+admin.site.register(Review, ReviewAdmin)
+admin.site.register(ReviewAspect)
 admin.site.register(Talk, TalkAdmin)
 admin.site.register(TalkType, TalkTypeAdmin)
-admin.site.register(Track, TrackAdmin)
 admin.site.register(TalkUrl, TalkUrlAdmin)
+admin.site.register(Track, TrackAdmin)
