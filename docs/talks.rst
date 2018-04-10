@@ -28,6 +28,11 @@ admin interface. Both the global ``WAFER_TALKS_OPEN`` setting and the individual
 ``Talk Type`` must be set to allow submissions for submissions of the given
 type to be accepted.
 
+There is a Django view at ``/talks/types`` which displays the list of
+types and their descriptions. By default, this list isn't linked to the menu,
+since it's intended to be linked to by pages describing the talks and talk
+submission process.
+
 Submitting Talks
 ================
 
@@ -99,6 +104,11 @@ the option will be hidden from the submitter.
 
 Currently, tracks merely provide extra information for talk reviewers and
 attendees.
+
+There is a Django view at ``/talks/tracks`` which displays the list of
+tracks and their descriptions. As with talk types, this list isn't linked to
+the menu, since it's intended to be linked to by pages describing the talks and
+talk submission process.
 
 Talk urls
 =========
