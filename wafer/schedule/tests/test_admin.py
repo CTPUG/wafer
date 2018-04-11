@@ -6,7 +6,8 @@ from django.http import HttpRequest
 
 from wafer.pages.models import Page
 from wafer.schedule.admin import (
-    SlotAdmin, SlotDayFilter,
+    SlotAdmin, SlotDayFilter, ScheduleItemDayFilter, SlotStartTimeFilter,
+    ScheduleItemStartTimeFilter, ScheduleItemVenueFilter,
     prefetch_schedule_items, prefetch_slots,
     find_overlapping_slots, validate_items,
     find_duplicate_schedule_items, find_clashes, find_invalid_venues,
@@ -157,7 +158,7 @@ class SlotAdminTests(TestCase):
         self.assertEqual(slot2.end_time, D.time(13, 00, 0))
 
 
-class ListFilterTest(TestCase):
+class SlotListFilterTest(TestCase):
     """Test the list filter"""
     # Because of how we implement the filter, the order of results
     # won't match order of creation or time order. This isn't
@@ -170,9 +171,10 @@ class ListFilterTest(TestCase):
         self.day1 = Day.objects.create(date=D.date(2013, 9, 22))
         self.day2 = Day.objects.create(date=D.date(2013, 9, 23))
         self.day3 = Day.objects.create(date=D.date(2013, 9, 24))
+
         self.admin = SlotAdmin(Slot, None)
 
-    def _make_filter(self, day):
+    def _make_day_filter(self, day):
         """create a list filter for testing."""
         # We can get away with request None, since SimpleListFilter
         # doesn't use request in the bits we want to test
@@ -181,24 +183,56 @@ class ListFilterTest(TestCase):
         else:
             return SlotDayFilter(None, {'day': None}, Slot, self.admin)
 
-    def test_filter_lookups(self):
+    def _make_time_filter(self, time):
+        """create a list filter for testing."""
+        if time:
+            return SlotStartTimeFilter(None, {'start': time}, Slot, self.admin)
+        else:
+            return SlotStarTimeFilter(None, {'start': None}, Slot, self.admin)
+
+    def test_day_filter_lookups(self):
         """Test that filter lookups are sane."""
-        TestFilter = self._make_filter(self.day1)
+        TestFilter = self._make_day_filter(self.day1)
         # Check lookup details
         lookups = TestFilter.lookups(None, self.admin)
         self.assertEqual(len(lookups), 3)
         self.assertEqual(lookups[0], ('%d' % self.day1.pk, str(self.day1)))
-        TestFilter = self._make_filter(self.day3)
+        TestFilter = self._make_day_filter(self.day3)
         lookups2 = TestFilter.lookups(None, self.admin)
+        self.assertEqual(lookups, lookups2)
+
+    def test_time_filter_lookups(self):
+        """Test that filter lookups are sane."""
+        # Add some slots
+        slot1 = Slot(day=self.day1, start_time=D.time(11, 0, 0),
+                    end_time=D.time(12, 00, 0))
+        slot2 = Slot(day=self.day2, start_time=D.time(11, 0, 0),
+                    end_time=D.time(12, 00, 0))
+        slot3 = Slot(day=self.day1, start_time=D.time(12, 0, 0),
+                      end_time=D.time(13, 0, 0))
+        slot4 = Slot(day=self.day1, start_time=D.time(13, 0, 0),
+                      end_time=D.time(14, 0, 0))
+        slot1.save()
+        slot2.save()
+        slot3.save()
+        slot4.save()
+        TestFilter = self._make_time_filter('11:00')
+        # Check lookup details
+        lookups = list(TestFilter.lookups(None, self.admin))
+        self.assertEqual(len(lookups), 3)
+        self.assertEqual(lookups[0], ('11:00', '11:00'))
+        TestFilter = self._make_time_filter('12:00')
+        lookups2 = list(TestFilter.lookups(None, self.admin))
         self.assertEqual(lookups, lookups2)
 
     def test_queryset_day_time(self):
         """Test queries with slots created purely by day + start_time"""
-        slots = {}
+        slots ={}
         slots[self.day1] = [Slot(day=self.day1, start_time=D.time(11, 0, 0),
-                                 end_time=D.time(12, 00, 0))]
+                    end_time=D.time(12, 00, 0))]
         slots[self.day2] = [Slot(day=self.day2, start_time=D.time(11, 0, 0),
-                                 end_time=D.time(12, 00, 0))]
+                    end_time=D.time(12, 00, 0))]
+
         # Day1 slots
         for x in range(12, 17):
             slots[self.day1].append(Slot(day=self.day1,
@@ -213,22 +247,35 @@ class ListFilterTest(TestCase):
             for s in slots[d]:
                 s.save()
         # Check Null filter
-        TestFilter = self._make_filter(None)
+        TestFilter = self._make_day_filter(None)
         self.assertEqual(list(TestFilter.queryset(None, Slot.objects.all())),
                          list(Slot.objects.all()))
         # Test Day1
-        TestFilter = self._make_filter(self.day1)
+        TestFilter = self._make_day_filter(self.day1)
         queries = set(TestFilter.queryset(None, Slot.objects.all()))
         self.assertEqual(queries, set(slots[self.day1]))
         # Test Day2
-        TestFilter = self._make_filter(self.day2)
+        TestFilter = self._make_day_filter(self.day2)
         queries = set(TestFilter.queryset(None, Slot.objects.all()))
         self.assertEqual(queries, set(slots[self.day2]))
 
         # Check no match case
-        TestFilter = self._make_filter(self.day3)
+        TestFilter = self._make_day_filter(self.day3)
         queries = list(TestFilter.queryset(None, Slot.objects.all()))
         self.assertEqual(queries, [])
+
+        # Check for slots starting at 11:00
+        TestFilter = self._make_time_filter('11:00')
+        # Should be the first slot of each day
+        queries = set(TestFilter.queryset(None, Slot.objects.all()))
+        self.assertEqual(queries,
+                         set([slots[self.day1][0], slots[self.day2][0]]))
+
+        TestFilter = self._make_time_filter('12:00')
+        # Should be the second slot of each day
+        queries = set(TestFilter.queryset(None, Slot.objects.all()))
+        self.assertEqual(queries,
+                         set([slots[self.day1][1], slots[self.day2][1]]))
 
     def test_queryset_prev_slot(self):
         """Test lookup with a chain of previous slots."""
@@ -254,22 +301,35 @@ class ListFilterTest(TestCase):
                                              end_time=D.time(x+1, 0, 0)))
                 slots[self.day2][-1].save()
         # Check Null filter
-        TestFilter = self._make_filter(None)
+        TestFilter = self._make_day_filter(None)
         self.assertEqual(list(TestFilter.queryset(None, Slot.objects.all())),
                          list(Slot.objects.all()))
         # Test Day1
-        TestFilter = self._make_filter(self.day1)
+        TestFilter = self._make_day_filter(self.day1)
         queries = set(TestFilter.queryset(None, Slot.objects.all()))
         self.assertEqual(queries, set(slots[self.day1]))
         # Test Day2
-        TestFilter = self._make_filter(self.day2)
+        TestFilter = self._make_day_filter(self.day2)
         queries = set(TestFilter.queryset(None, Slot.objects.all()))
         self.assertEqual(queries, set(slots[self.day2]))
 
         # Check no match case
-        TestFilter = self._make_filter(self.day3)
+        TestFilter = self._make_day_filter(self.day3)
         queries = list(TestFilter.queryset(None, Slot.objects.all()))
         self.assertEqual(queries, [])
+
+        # Check for slots starting at 11:00
+        TestFilter = self._make_time_filter('11:00')
+        # Should be the first slot of each day
+        queries = set(TestFilter.queryset(None, Slot.objects.all()))
+        self.assertEqual(queries,
+                         set([slots[self.day1][0], slots[self.day2][0]]))
+
+        TestFilter = self._make_time_filter('12:00')
+        # Should be the second slot of each day
+        queries = set(TestFilter.queryset(None, Slot.objects.all()))
+        self.assertEqual(queries,
+                         set([slots[self.day1][1], slots[self.day2][1]]))
 
     def test_queryset_mixed(self):
         """Test with a mix of day+time and previous slot cases."""
@@ -304,20 +364,20 @@ class ListFilterTest(TestCase):
                                              end_time=D.time(x+1, 0, 0)))
             slots[self.day2][-1].save()
         # Check Null filter
-        TestFilter = self._make_filter(None)
+        TestFilter = self._make_day_filter(None)
         self.assertEqual(list(TestFilter.queryset(None, Slot.objects.all())),
                          list(Slot.objects.all()))
         # Test Day1
-        TestFilter = self._make_filter(self.day1)
+        TestFilter = self._make_day_filter(self.day1)
         queries = set(TestFilter.queryset(None, Slot.objects.all()))
         self.assertEqual(queries, set(slots[self.day1]))
         # Test Day2
-        TestFilter = self._make_filter(self.day2)
+        TestFilter = self._make_day_filter(self.day2)
         queries = set(TestFilter.queryset(None, Slot.objects.all()))
         self.assertEqual(queries, set(slots[self.day2]))
 
         # Check no match case
-        TestFilter = self._make_filter(self.day3)
+        TestFilter = self._make_day_filter(self.day3)
         queries = list(TestFilter.queryset(None, Slot.objects.all()))
         self.assertEqual(queries, [])
 
