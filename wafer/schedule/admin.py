@@ -9,6 +9,8 @@ from django.utils.encoding import force_text
 from django.utils.translation import ugettext as _
 from django import forms
 
+from easy_select2 import Select2Multiple
+
 from wafer.schedule.models import Day, Venue, Slot, ScheduleItem
 from wafer.talks.models import Talk, ACCEPTED, CANCELLED
 from wafer.pages.models import Page
@@ -352,6 +354,9 @@ class ScheduleItemAdminForm(forms.ModelForm):
         readonly_fields = ('last_updated',)
         fields = ('slots', 'venue', 'talk', 'page', 'details', 'notes',
                   'css_class', 'expand')
+        widgets = {
+            'slots': Select2Multiple(),
+        }
 
     def __init__(self, *args, **kwargs):
         super(ScheduleItemAdminForm, self).__init__(*args, **kwargs)
