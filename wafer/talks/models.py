@@ -289,9 +289,9 @@ class Review(models.Model):
     reviewer = models.ForeignKey(settings.AUTH_USER_MODEL,
                                  on_delete=models.CASCADE)
 
-    notes = models.TextField(
+    notes = MarkupField(
         null=True, blank=True,
-        help_text=_("Comments on the proposal"))
+        help_text=_("Comments on the proposal (markdown)"))
 
     def __str__(self):
         return u'Review of %s by %s (%i)' % (

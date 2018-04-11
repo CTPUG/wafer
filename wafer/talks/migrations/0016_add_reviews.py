@@ -6,6 +6,8 @@ from django.conf import settings
 import django.core.validators
 from django.db import migrations, models
 import django.db.models.deletion
+import markitup.fields
+
 import wafer.talks.models
 
 
@@ -21,7 +23,11 @@ class Migration(migrations.Migration):
             name='Review',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('notes', models.TextField(blank=True, help_text='Comments on the proposal', null=True)),
+                ('notes', markitup.fields.MarkupField(
+                    blank=True, no_rendered_field=True, null=True,
+                    help_text='Comments on the proposal (markdown)')),
+                ('_notes_rendered', models.TextField(
+                    editable=False, blank=True)),
                 ('reviewer', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
             ],
         ),
