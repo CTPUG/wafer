@@ -225,6 +225,8 @@ class Talk(models.Model):
     @property
     def review_score(self):
         reviews = [review.total_score for review in self.reviews.all()]
+        if not reviews:
+            return None
         return sum(reviews) / len(reviews)
 
     @property
