@@ -227,6 +227,10 @@ class Talk(models.Model):
         reviews = [review.total_score for review in self.reviews.all()]
         return sum(reviews) / len(reviews)
 
+    @property
+    def review_count(self):
+        return self.reviews.all().count()
+
     # Helpful properties for the templates
     accepted = property(fget=lambda x: x.status == ACCEPTED)
     provisional = property(fget=lambda x: x.status == PROVISIONAL)

@@ -49,7 +49,8 @@ class TalkUrlInline(admin.TabularInline):
 class TalkAdmin(CompareVersionAdmin, admin.ModelAdmin):
     list_display = ('title', 'get_corresponding_author_name',
                     'get_corresponding_author_contact', 'talk_type',
-                    'get_in_schedule', 'has_url', 'status', 'review_score')
+                    'get_in_schedule', 'has_url', 'status',
+                    'review_count', 'review_score')
     list_editable = ('status',)
     list_filter = ('status', 'talk_type', 'track', ScheduleListFilter,
                    DateModifiedFilter)
