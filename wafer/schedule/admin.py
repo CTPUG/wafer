@@ -218,6 +218,134 @@ def validate_schedule():
     return errors
 
 
+# Useful filters for the admin forms
+
+class BaseDayFilter(admin.SimpleListFilter):
+    # Common logic for filtering on Slots and ScheduleItem.slots by Day
+    # We need to do this as a filter, since we can't use sorting since
+    # day is dynamic (either the model field or the previous_slot)
+    title = _('Day')
+    parameter_name = 'day'
+
+    def lookups(self, request, model_admin):
+        # List filter wants the value to be a string, so we use
+        # pk to avoid bouncing through strptime.
+        return [('%d' % day.pk, str(day)) for day in Day.objects.all()]
+
+    def _get_slots(self):
+        if self.value():
+            day_pk = int(self.value())
+            day = Day.objects.get(pk=day_pk)
+            # Find all slots that have the day explicitly set
+            slots = list(Slot.objects.filter(day=day))
+            all_slots = slots[:]
+            # Recursively find slots with a previous_slot set to one of these
+            while Slot.objects.filter(previous_slot__in=slots).exists():
+                slots = list(Slot.objects.filter(
+                    previous_slot__in=slots).all())
+                all_slots.extend(slots)
+            # Return the filtered list
+            return {'slots': all_slots, 'day': day}
+        return None
+
+
+class SlotDayFilter(BaseDayFilter):
+    # Allow filtering slots by the day, to make editing slots easier
+
+    def queryset(self, request, queryset):
+        query = self._get_slots()
+        if query:
+            return queryset.filter(Q(previous_slot__in=query['slots']) |
+                                   Q(day=query['day']))
+        # No value, so no filtering
+        return queryset
+
+
+class ScheduleItemDayFilter(BaseDayFilter):
+    # Allow filtering scheduleitems by the day, to make editing easier
+
+    def queryset(self, request, queryset):
+        query = self._get_slots()
+        if query:
+            return queryset.filter(Q(slots__previous_slot__in=query['slots']) |
+                                   Q(slots__day=query['day']))
+        # No value, so no filtering
+        return queryset
+
+
+class BaseStartTimeFilter(admin.SimpleListFilter):
+    # Common logic for filtering on Slots and ScheduleItem.slots by start_time
+    title = _('Start Time')
+    parameter_name = 'start'
+
+    def lookups(self, request, model_admin):
+        values = [slot.get_formatted_start_time() for slot in Slot.objects.all()]
+        # We order drop duplicates and order globally.
+        values = sorted(set(values))
+        # It's not great to use the string value as the admin key, but we
+        # don't have a better way of dealing with it unfortunately.
+        return zip(values, values)
+
+    def _get_slots(self):
+        # We choose to filter on the range from %H:%M:00 to %H:%M:59
+        # because, while second specifications are possible,
+        # we're only using the %H:%M values in lookups, as that matches the
+        # schedule display.
+        if self.value():
+            base_time = datetime.datetime.strptime(self.value(), '%H:%M')
+            max_time = base_time + datetime.timedelta(seconds=59)
+            # We find all start times between base_time and max_time
+            # or slots with the previous_slot end time in this range
+            slots = Slot.objects.filter(
+                Q(start_time__gte=base_time.time(),
+                  start_time__lte=max_time.time()) |
+                Q(previous_slot__end_time__gte=base_time.time(),
+                  previous_slot__end_time__lte=max_time.time()))
+            # Return the queryset
+            return slots
+        return None
+
+
+class SlotStartTimeFilter(BaseStartTimeFilter):
+    # Allow filtering slots by the start_time
+
+    def queryset(self, request, queryset):
+        query = self._get_slots()
+        if query:
+            return query
+        # No value, so no filtering
+        return queryset
+
+
+class ScheduleItemStartTimeFilter(BaseStartTimeFilter):
+    # Allow filtering scheduleitems by the start time
+
+    def queryset(self, request, queryset):
+        query = self._get_slots()
+        if query:
+            slots = list(query)
+            return queryset.filter(slots__in=slots)
+        # No value, so no filtering
+        return queryset
+
+
+class ScheduleItemVenueFilter(admin.SimpleListFilter):
+    # Allow filtering schedule item by venue
+    title = _('Venue')
+    parameter_name = 'venue'
+
+    def lookups(self, request, model_admin):
+        return [('%d' % venue.pk, str(venue)) for venue in Venue.objects.all()]
+
+    def queryset(self, request, queryset):
+        if self.value():
+            # Filter by venue id
+            return queryset.filter(venue__pk=int(self.value()))
+        # No value, so no filtering
+        return queryset
+
+
+# Actual admin forms and so forth
 class ScheduleItemAdminForm(forms.ModelForm):
     class Meta:
         model = ScheduleItem
@@ -240,6 +368,9 @@ class ScheduleItemAdmin(admin.ModelAdmin):
     readonly_fields = ('get_css_classes',)
     list_display = ('get_start_time', 'venue', 'get_title', 'expand')
     list_editable = ('expand',)
+
+    list_filter = (ScheduleItemDayFilter, ScheduleItemStartTimeFilter,
+                   ScheduleItemVenueFilter)
 
     # We stuff these validation results into the view, rather than
     # enforcing conditions on the actual model, since it can be hard
@@ -292,37 +423,6 @@ class SlotAdminAddForm(SlotAdminForm):
                                                 "this one"))
 
 
-class SlotDayFilter(admin.SimpleListFilter):
-    # Allow filtering slots by the day, to make editing slots easier
-    # We need to do this as a filter, since we can't use sorting since
-    # day is dynamic (either the model field or the previous_slot)
-    title = _('Day')
-    parameter_name = 'day'
-
-    def lookups(self, request, model_admin):
-        # List filter wants the value to be a string, so we use
-        # pk to avoid bouncing through strptime.
-        return [('%d' % day.pk, str(day)) for day in Day.objects.all()]
-
-    def queryset(self, request, queryset):
-        if self.value():
-            day_pk = int(self.value())
-            day = Day.objects.get(pk=day_pk)
-            # Find all slots that have the day explicitly set
-            slots = list(Slot.objects.filter(day=day))
-            all_slots = slots[:]
-            # Recursively find slots with a previous_slot set to one of these
-            while Slot.objects.filter(previous_slot__in=slots).exists():
-                slots = list(Slot.objects.filter(
-                    previous_slot__in=slots).all())
-                all_slots.extend(slots)
-            # Return the filtered list
-            return queryset.filter(Q(previous_slot__in=all_slots) |
-                                   Q(day=day))
-        # No value, so no filtering
-        return queryset
-
-
 class SlotAdmin(admin.ModelAdmin):
     form = SlotAdminForm
 
@@ -332,7 +432,7 @@ class SlotAdmin(admin.ModelAdmin):
 
     change_list_template = 'admin/slot_list.html'
 
-    list_filter = (SlotDayFilter, )
+    list_filter = (SlotDayFilter, SlotStartTimeFilter)
 
     def changelist_view(self, request, extra_context=None):
         extra_context = extra_context or {}
