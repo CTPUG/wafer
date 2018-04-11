@@ -227,7 +227,7 @@ class SlotListFilterTest(TestCase):
 
     def test_queryset_day_time(self):
         """Test queries with slots created purely by day + start_time"""
-        slots ={}
+        slots = {}
         slots[self.day1] = [Slot(day=self.day1, start_time=D.time(11, 0, 0),
                     end_time=D.time(12, 00, 0))]
         slots[self.day2] = [Slot(day=self.day2, start_time=D.time(11, 0, 0),
