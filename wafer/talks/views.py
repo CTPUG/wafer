@@ -70,7 +70,7 @@ class TalkView(DetailView):
 
         context['can_edit'] = talk.can_edit(user)
 
-        can_review = Review.can_review(user)
+        can_review = talk.can_review(user)
         context['can_review'] = can_review
         if can_review:
             review = talk.reviews.filter(reviewer=user).first()

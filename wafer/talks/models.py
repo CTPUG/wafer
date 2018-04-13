@@ -270,6 +270,10 @@ class Talk(models.Model):
                 return True
         return False
 
+    def can_review(self, user):
+        return (user.has_perm('talks.add_review')
+                and not self._is_among_authors(user))
+
 
 class TalkUrl(models.Model):
     """An url to stuff relevant to the talk - videos, slides, etc.
@@ -300,10 +304,6 @@ class Review(models.Model):
     @property
     def total_score(self):
         return self.scores.aggregate(total=models.Sum('value'))['total']
-
-    @classmethod
-    def can_review(cls, user):
-        return user.has_perm('talks.add_review')
 
     class Meta:
         unique_together = (('talk', 'reviewer'),)
