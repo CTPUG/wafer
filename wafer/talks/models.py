@@ -7,6 +7,7 @@ from django.utils.encoding import python_2_unicode_compatible
 from django.utils.functional import lazy
 from django.utils.translation import ugettext, ugettext_lazy as _
 
+import reversion
 from markitup.fields import MarkupField
 
 from wafer.kv.models import KeyValue
@@ -286,6 +287,7 @@ class TalkUrl(models.Model):
     talk = models.ForeignKey(Talk, on_delete=models.CASCADE)
 
 
+@reversion.register(follow=('scores',))
 @python_2_unicode_compatible
 class Review(models.Model):
     talk = models.ForeignKey(Talk, on_delete=models.CASCADE,
@@ -298,7 +300,7 @@ class Review(models.Model):
         help_text=_("Comments on the proposal (markdown)"))
 
     def __str__(self):
-        return u'Review of %s by %s (%i)' % (
+        return u'Review of %s by %s (%s)' % (
             self.reviewer, self.talk.title, self.total_score)
 
     @property
@@ -317,6 +319,7 @@ class ReviewAspect(models.Model):
         return self.name
 
 
+@reversion.register()
 @python_2_unicode_compatible
 class Score(models.Model):
     review = models.ForeignKey(Review, on_delete=models.CASCADE,

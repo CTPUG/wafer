@@ -76,7 +76,7 @@ class ReviewScoreInline(admin.TabularInline):
     model = Score
 
 
-class ReviewAdmin(admin.ModelAdmin):
+class ReviewAdmin(CompareVersionAdmin, admin.ModelAdmin):
     list_display = ('talk', 'reviewer', 'total_score')
     inlines = (ReviewScoreInline,)
 

@@ -16,6 +16,7 @@ from rest_framework.permissions import (
     BasePermission)
 from rest_framework_extensions.mixins import NestedViewSetMixin
 from reversion import revisions
+from reversion.models import Version
 
 from wafer.talks.models import (
     Review, Talk, TalkType, TalkUrl, Track,
@@ -182,15 +183,23 @@ class TalkReview(PermissionRequiredMixin, CreateView):
         except Review.DoesNotExist:
             return None
 
-    @revisions.create_revision()
     def form_valid(self, form):
-        user = self.request.user
-        revisions.set_user(user)
-        if self.get_object():
-            revisions.set_comment("Review Modified")
-        else:
-            revisions.set_comment("Review Created")
-        return super(TalkReview, self).form_valid(form)
+        existing = self.get_object()
+        with revisions.create_revision():
+            response = super(TalkReview, self).form_valid(form)
+            revisions.set_user(self.request.user)
+            if existing:
+                revisions.set_comment("Review Modified")
+            else:
+                revisions.set_comment("Review Created")
+
+        # Because Review.save() was called before any scores were added,
+        # the str() on the version would have had the previous total. Update.
+        review = self.get_object()
+        version = Version.objects.get_for_object(review).order_by('-pk').first()
+        version.object_repr = str(review)
+        version.save()
+        return response
 
     def get_success_url(self):
         return reverse('wafer_talk', kwargs={'pk': self.kwargs['pk']})
