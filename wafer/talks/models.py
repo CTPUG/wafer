@@ -9,6 +9,7 @@ from django.utils.translation import ugettext, ugettext_lazy as _
 
 import reversion
 from markitup.fields import MarkupField
+from reversion.models import Version
 
 from wafer.kv.models import KeyValue
 
@@ -306,6 +307,14 @@ class Review(models.Model):
     @property
     def total_score(self):
         return self.scores.aggregate(total=models.Sum('value'))['total']
+
+    def is_current(self):
+        def last_updated(obj):
+            version = Version.objects.get_for_object(obj).first()
+            return version.revision.date_created
+        return last_updated(self) >= last_updated(self.talk)
+
+    is_current.boolean = True
 
     class Meta:
         unique_together = (('talk', 'reviewer'),)

@@ -77,7 +77,7 @@ class ReviewScoreInline(admin.TabularInline):
 
 
 class ReviewAdmin(CompareVersionAdmin, admin.ModelAdmin):
-    list_display = ('talk', 'reviewer', 'total_score')
+    list_display = ('talk', 'reviewer', 'total_score', 'is_current')
     inlines = (ReviewScoreInline,)
 
 
