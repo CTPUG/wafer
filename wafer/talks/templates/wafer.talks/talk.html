@@ -1,5 +1,13 @@
 {% extends "wafer/base.html" %}
 {% load i18n %}
+{% load crispy_forms_tags %}
+{% load static from staticfiles %}
+{% block extra_head %}
+  {{ block.super }}
+  {% if can_review %}
+    {{ review_form.media.css }}
+  {% endif %}
+{% endblock %}
 {% block title %}{{ object.title }} - {{ WAFER_CONFERENCE_NAME }}{% endblock %}
 {% block content %}
 <section class="wafer wafer-talk">
@@ -7,6 +15,9 @@
     {{ object.title }}
     {% if can_edit %}
       <a href="{% url 'wafer_talk_edit' object.pk %}" class="float-right btn btn-secondary btn-lg">{% trans 'Edit' %}</a>
+    {% endif %}
+    {% if can_review %}
+      <a href="#review" class="float-right btn btn-secondary btn-lg" data-toggle="collapse" data-target="#review">{% trans 'Review' %}</a>
     {% endif %}
   </h1>
   <div>
@@ -121,4 +132,17 @@
     </ul>
   {% endif %}
 </section>
+{% if can_review %}
+  <section class="wafer wafer-talk-review collapse" id="review">
+    <h2>Review</h2>
+    {% crispy review_form %}
+  </section>
+{% endif %}
+{% endblock %}
+{% block extra_foot %}
+  {{ block.super }}
+  {% if can_review %}
+    {{ review_form.media.js }}
+    <script type="text/javascript" src="{% static 'js/markitup.js' %}"></script>
+  {% endif %}
 {% endblock %}

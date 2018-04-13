@@ -1,10 +1,11 @@
 from django.conf import settings
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import (
+    LoginRequiredMixin, PermissionRequiredMixin)
 from django.core.exceptions import PermissionDenied, ValidationError
 from django.db.models import Q
 from django.http import Http404
 from django.http import HttpResponseRedirect
-from django.urls import reverse_lazy
+from django.urls import reverse, reverse_lazy
 from django.views.generic import DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic.list import ListView
@@ -16,9 +17,10 @@ from rest_framework.permissions import (
 from rest_framework_extensions.mixins import NestedViewSetMixin
 from reversion import revisions
 
-from wafer.talks.models import (Talk, TalkType, TalkUrl, Track, ACCEPTED,
-                                CANCELLED, WITHDRAWN)
-from wafer.talks.forms import get_talk_form_class
+from wafer.talks.models import (
+    Review, Talk, TalkType, TalkUrl, Track,
+    ACCEPTED, CANCELLED, WITHDRAWN)
+from wafer.talks.forms import ReviewForm, get_talk_form_class
 from wafer.talks.serializers import TalkSerializer, TalkUrlSerializer
 from wafer.users.models import UserProfile
 from wafer.utils import order_results_by
@@ -63,7 +65,18 @@ class TalkView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(TalkView, self).get_context_data(**kwargs)
-        context['can_edit'] = self.object.can_edit(self.request.user)
+        talk = self.object
+        user = self.request.user
+
+        context['can_edit'] = talk.can_edit(user)
+
+        can_review = Review.can_review(user)
+        context['can_review'] = can_review
+        if can_review:
+            review = talk.reviews.filter(reviewer=user).first()
+            context['review_form'] = ReviewForm(
+                instance=review, talk=talk, user=user)
+
         return context
 
 
@@ -147,6 +160,40 @@ class TalkWithdraw(EditOwnTalksMixin, DeleteView):
         revisions.set_user(self.request.user)
         revisions.set_comment("Talk Withdrawn")
         return super(TalkWithdraw, self).form_valid(form)
+
+
+class TalkReview(PermissionRequiredMixin, CreateView):
+    model = Review
+    form_class = ReviewForm
+    permission_required = 'talks.add_review'
+    template_name = 'wafer.talks/review_talk.html'
+
+    def get_form_kwargs(self):
+        kwargs = super(TalkReview, self).get_form_kwargs()
+        kwargs['talk'] = Talk.objects.get(pk=self.kwargs['pk'])
+        kwargs['instance'] = self.get_object()
+        kwargs['user'] = self.request.user
+        return kwargs
+
+    def get_object(self):
+        try:
+            return Review.objects.get(
+                talk_id=self.kwargs['pk'], reviewer=self.request.user)
+        except Review.DoesNotExist:
+            return None
+
+    @revisions.create_revision()
+    def form_valid(self, form):
+        user = self.request.user
+        revisions.set_user(user)
+        if self.get_object():
+            revisions.set_comment("Review Modified")
+        else:
+            revisions.set_comment("Review Created")
+        return super(TalkReview, self).form_valid(form)
+
+    def get_success_url(self):
+        return reverse('wafer_talk', kwargs={'pk': self.kwargs['pk']})
 
 
 class Speakers(ListView):

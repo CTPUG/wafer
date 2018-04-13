@@ -53,6 +53,10 @@ class Migration(migrations.Migration):
             field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='reviews', to='talks.Talk'),
         ),
         migrations.AlterUniqueTogether(
+            name='review',
+            unique_together=set([('talk', 'reviewer')]),
+        ),
+        migrations.AlterUniqueTogether(
             name='score',
             unique_together=set([('review', 'aspect')]),
         ),

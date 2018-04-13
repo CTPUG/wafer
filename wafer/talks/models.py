@@ -301,6 +301,13 @@ class Review(models.Model):
     def total_score(self):
         return self.scores.aggregate(total=models.Sum('value'))['total']
 
+    @classmethod
+    def can_review(cls, user):
+        return user.has_perm('talks.add_review')
+
+    class Meta:
+        unique_together = (('talk', 'reviewer'),)
+
 
 @python_2_unicode_compatible
 class ReviewAspect(models.Model):
