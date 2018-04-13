@@ -46,6 +46,21 @@ class TalkUrlInline(admin.TabularInline):
     model = TalkUrl
 
 
+class ReviewInline(admin.TabularInline):
+    model = Review
+    readonly_fields = ('reviewer', 'notes', 'total_score', 'scores')
+    extra = 0
+
+    def scores(self, instance):
+        output = []
+        for score in instance.scores.all():
+            output.append('{}: {}'.format(score.aspect.name, score.value))
+        return ', '.join(output)
+
+    def has_delete_permission(self, request, obj=None):
+        return False
+
+
 class TalkAdmin(CompareVersionAdmin, admin.ModelAdmin):
     list_display = ('title', 'get_corresponding_author_name',
                     'get_corresponding_author_contact', 'talk_type',
@@ -58,6 +73,7 @@ class TalkAdmin(CompareVersionAdmin, admin.ModelAdmin):
 
     inlines = [
         TalkUrlInline,
+        ReviewInline,
     ]
     form = AdminTalkForm
 
