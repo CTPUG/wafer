@@ -63,6 +63,12 @@ class TalkView(DetailView):
             raise PermissionDenied
         return object_
 
+    def render_to_response(self, *args, **kwargs):
+        '''Canonicalize the URL if the slug changed'''
+        if self.request.path != self.object.get_absolute_url():
+            return HttpResponseRedirect(self.object.get_absolute_url())
+        return super(TalkView, self).render_to_response(*args, **kwargs)
+
     def get_context_data(self, **kwargs):
         context = super(TalkView, self).get_context_data(**kwargs)
         talk = self.object

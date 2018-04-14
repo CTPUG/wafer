@@ -179,6 +179,17 @@ class TalkViewTests(TestCase):
             'username': 'reviewer', 'password': 'reviewer_password',
         })
 
+    def test_view_canonicalizes_url(self):
+        response = self.client.get(
+            reverse('wafer_talk', kwargs={'pk': self.talk_a.pk}))
+        self.assertEqual(response.status_code, 302)
+
+    def test_view_canonicalizes_url_correctly(self):
+        response = self.client.get(
+            reverse('wafer_talk', kwargs={'pk': self.talk_a.pk}),
+            follow=True)
+        self.assertEqual(response.status_code, 200)
+
 
 class TalkNoteViewTests(TestCase):
     def setUp(self):
