@@ -2,82 +2,82 @@
 <nav class="navbar navbar-expand-sm navbar-dark bg-dark {{ WAFER_NAVIGATION_VISIBILITY }}">
   <div class="container">
     {% block navtogglebutton %}
-    <button type="button" class="navbar-toggler navbar-toggler-right"
-            data-toggle="collapse" data-target="#wafer-navbar-collapse"
-            aria-controls="wafer-navbar-collapse" aria-expanded="false"
-            aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
+      <button type="button" class="navbar-toggler navbar-toggler-right"
+              data-toggle="collapse" data-target="#wafer-navbar-collapse"
+              aria-controls="wafer-navbar-collapse" aria-expanded="false"
+              aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
     {% endblock navtogglebutton %}
 
     {% block navtitle %}
-    <a class="navbar-brand" href="{% url 'wafer_page' %}">{{ WAFER_CONFERENCE_NAME }}</a>
+      <a class="navbar-brand" href="{% url 'wafer_page' %}">{{ WAFER_CONFERENCE_NAME }}</a>
     {% endblock navtitle %}
 
     <div class="collapse navbar-collapse" id="wafer-navbar-collapse">
       {% block navmenulist %}
-      <ul class="navbar-nav mr-auto">
-      {% for item in WAFER_MENUS.items %}
-        {% if item.image and item.url %}
-        <li class="nav-item icon">
-           <a class="nav-link" href="{{ item.url }}" alt="{{ item.label }}">
-                 <img src="{{ item.image }}" />
-           </a>
-        </li>
-        {% elif item.url %}
-        <li class="nav-item"><a class="nav-link" href="{{ item.url }}">
-            {{ item.label }}
-        </a></li>
-        {% else %}
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">
-            {{ item.label }}
-          </a>
-          <ul class="dropdown-menu">
-            {% for subitem in item.items %}
-            <li><a class="dropdown-item" href="{{ subitem.url }}">
-                {{ subitem.label }}
-            </a></li>
-            {% endfor %}
-          </ul>
-        </li>
-        {% endif %}
-      {% endfor %}
-      </ul>
+        <ul class="navbar-nav mr-auto">
+          {% for item in WAFER_MENUS.items %}
+            {% if item.image and item.url %}
+              <li class="nav-item icon">
+                <a class="nav-link" href="{{ item.url }}" alt="{{ item.label }}">
+                  <img src="{{ item.image }}" />
+                </a>
+              </li>
+            {% elif item.url %}
+              <li class="nav-item"><a class="nav-link" href="{{ item.url }}">
+                {{ item.label }}
+              </a></li>
+            {% else %}
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">
+                  {{ item.label }}
+                </a>
+                <ul class="dropdown-menu">
+                  {% for subitem in item.items %}
+                    <li><a class="dropdown-item" href="{{ subitem.url }}">
+                      {{ subitem.label }}
+                    </a></li>
+                  {% endfor %}
+                </ul>
+              </li>
+            {% endif %}
+          {% endfor %}
+        </ul>
       {% endblock navmenulist %}
       {% block navauthmenu %}
-      <ul class="navbar-nav float-md-right">
-        {% if user.is_authenticated %}
-        {% block navauthenticated %}
-        <li class="nav-item dropdown">
-          <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">
-            {{ user.username }}
-          </a>
-          <ul class="dropdown-menu dropdown-menu-right">
-            <li><a class="dropdown-item" href="{% url 'wafer_user_profile' username=user.username %}">
-                {% blocktrans with name=user.userprofile.display_name %}
-                {{ name }}'s profile
-                {% endblocktrans %}
-            </a></li>
-            <li><a class="dropdown-item" href="{% url 'auth_logout' %}">
-                {% trans 'Log out' %}
-            </a></li>
-            {% if user.is_staff %}
-            <li><a class="dropdown-item" href="{% url 'admin:index' %}">
-                {% trans 'Site admin' %}
-            </a></li>
-            {% endif %}
-          </ul>
-        </li>
-        {% endblock navauthenticated %}
-        {% elif not WAFER_HIDE_LOGIN %}
-        {% block navnotauth %}
-        <li class="nav-item"><a class="nav-link" href="{% url 'auth_login' %}">
-            {% trans 'Sign up / Log In' %}
-        </a></li>
-        {% endblock navnotauth %}
-        {% endif %}
-      </ul>
+        <ul class="navbar-nav float-md-right">
+          {% if user.is_authenticated %}
+            {% block navauthenticated %}
+              <li class="nav-item dropdown">
+                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">
+                  {{ user.username }}
+                </a>
+                <ul class="dropdown-menu dropdown-menu-right">
+                  <li><a class="dropdown-item" href="{% url 'wafer_user_profile' username=user.username %}">
+                    {% blocktrans with name=user.userprofile.display_name %}
+                    {{ name }}'s profile
+                    {% endblocktrans %}
+                  </a></li>
+                  <li><a class="dropdown-item" href="{% url 'auth_logout' %}">
+                    {% trans 'Log out' %}
+                  </a></li>
+                  {% if user.is_staff %}
+                  <li><a class="dropdown-item" href="{% url 'admin:index' %}">
+                    {% trans 'Site admin' %}
+                  </a></li>
+                  {% endif %}
+                </ul>
+              </li>
+            {% endblock navauthenticated %}
+          {% elif not WAFER_HIDE_LOGIN %}
+            {% block navnotauth %}
+              <li class="nav-item"><a class="nav-link" href="{% url 'auth_login' %}">
+                {% trans 'Sign up / Log In' %}
+              </a></li>
+            {% endblock navnotauth %}
+          {% endif %}
+        </ul>
       {% endblock navauthmenu %}
     </div>
   </div>

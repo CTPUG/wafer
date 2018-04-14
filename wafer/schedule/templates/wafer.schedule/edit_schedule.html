@@ -61,9 +61,9 @@
                   </button>
                 {% endif %}
                 {% if venue.talk and venue.talk.cancelled %}
-                <del>{{ venue.title }} (Cancelled)</del>
+                  <del>{{ venue.title }} (Cancelled)</del>
                 {% else %}
-                {{ venue.title }}
+                  {{ venue.title }}
                 {% endif %}
               </td>
             {% endfor %}
@@ -107,9 +107,9 @@
                   data-toggle="tooltip" data-placement="left"
                   title="{{ talk.title }}" data-type="talk" data-talk-id="{{ talk.talk_id }}">
               {% if not talk.cancelled %}
-              {{ talk.title|truncatechars:24 }}
+                {{ talk.title|truncatechars:24 }}
               {% else %}
-              <del>{{ talk.title|truncatechars:12 }} (Cancelled)</del>
+                <del>{{ talk.title|truncatechars:12 }} (Cancelled)</del>
               {% endif %}
             </span>
           {% endfor %}
@@ -122,9 +122,9 @@
                   data-toggle="tooltip" data-placement="left"
                   title="{{ talk.title }} (Cancelled)" data-type="talk" data-talk-id="{{ talk.talk_id }}">
               {% if not talk.cancelled %}
-              {{ talk.title|truncatechars:24 }}
+                {{ talk.title|truncatechars:24 }}
               {% else %}
-              <del>{{ talk.title|truncatechars:12 }} (Cancelled)</del>
+                <del>{{ talk.title|truncatechars:12 }} (Cancelled)</del>
               {% endif %}
             </span>
           {% endfor %}
