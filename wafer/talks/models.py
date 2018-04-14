@@ -97,6 +97,7 @@ class Track(models.Model):
     css_class.short_description = 'CSS class name'
 
 
+@reversion.register(follow=('talkurl_set',))
 @python_2_unicode_compatible
 class Talk(models.Model):
 
@@ -277,6 +278,7 @@ class Talk(models.Model):
                 and not self._is_among_authors(user))
 
 
+@reversion.register()
 class TalkUrl(models.Model):
     """An url to stuff relevant to the talk - videos, slides, etc.
 
