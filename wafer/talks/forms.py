@@ -14,7 +14,8 @@ from crispy_forms.layout import Submit, HTML
 from easy_select2.widgets import Select2Multiple
 from markitup.widgets import MarkItUpWidget
 
-from wafer.talks.models import Talk, TalkType, Track, render_author
+from wafer.talks.models import (
+    Review, ReviewAspect, Score, Talk, TalkType, Track, render_author)
 
 
 def get_talk_form_class():
@@ -130,3 +131,49 @@ class TalkForm(forms.ModelForm):
             'notes': forms.Textarea(attrs={'class': 'input-xxlarge'}),
             'authors': Select2Multiple(),
         }
+
+
+class ReviewForm(forms.Form):
+    notes = forms.CharField(widget=MarkItUpWidget, required=False)
+
+    def __init__(self, *args, **kwargs):
+        self.instance = kwargs.pop('instance', None)
+        self.talk = kwargs.pop('talk')
+        self.user = kwargs.pop('user')
+
+        if self.instance:
+            kwargs['initial'] = {
+                'notes': self.instance.notes.raw,
+            }
+
+        super(ReviewForm, self).__init__(*args, **kwargs)
+
+        for aspect in ReviewAspect.objects.all():
+            initial = None
+            if self.instance:
+                try:
+                    initial = self.instance.scores.get(aspect=aspect).value
+                except Score.DoesNotExist:
+                    initial = None
+            self.fields['aspect_{}'.format(aspect.pk)] = forms.IntegerField(
+                initial=initial, label=aspect.name, min_value=0, max_value=10)
+
+        self.helper = FormHelper(self)
+        self.helper.form_action = reverse('wafer_talk_review',
+                                          kwargs={'pk': self.talk.pk})
+        self.helper.include_media = False
+        self.helper.add_input(Submit('submit', _('Submit')))
+
+    def save(self):
+        review = self.instance
+        if not review:
+            review = Review(reviewer=self.user, talk=self.talk)
+        review.notes = self.cleaned_data['notes']
+        review.save()
+        for aspect in ReviewAspect.objects.all():
+            try:
+                score = review.scores.get(aspect=aspect)
+            except Score.DoesNotExist:
+                score = Score(review=review, aspect=aspect)
+            score.value = self.cleaned_data['aspect_{}'.format(aspect.pk)]
+            score.save()

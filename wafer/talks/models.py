@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.core import validators
 from django.db import models
 from django.template.defaultfilters import slugify
 from django.urls import reverse
@@ -6,7 +7,9 @@ from django.utils.encoding import python_2_unicode_compatible
 from django.utils.functional import lazy
 from django.utils.translation import ugettext, ugettext_lazy as _
 
+import reversion
 from markitup.fields import MarkupField
+from reversion.models import Version
 
 from wafer.kv.models import KeyValue
 
@@ -94,6 +97,7 @@ class Track(models.Model):
     css_class.short_description = 'CSS class name'
 
 
+@reversion.register(follow=('urls',))
 @python_2_unicode_compatible
 class Talk(models.Model):
 
@@ -215,11 +219,22 @@ class Talk(models.Model):
 
     def has_url(self):
         """Test if the talk has urls associated with it"""
-        if self.talkurl_set.all():
+        if self.urls.all():
             return True
         return False
 
     has_url.boolean = True
+
+    @property
+    def review_score(self):
+        reviews = [review.total_score for review in self.reviews.all()]
+        if not reviews:
+            return None
+        return sum(reviews) / len(reviews)
+
+    @property
+    def review_count(self):
+        return self.reviews.all().count()
 
     # Helpful properties for the templates
     accepted = property(fget=lambda x: x.status == ACCEPTED)
@@ -258,7 +273,12 @@ class Talk(models.Model):
                 return True
         return False
 
+    def can_review(self, user):
+        return (user.has_perm('talks.add_review')
+                and not self._is_among_authors(user))
 
+
+@reversion.register()
 class TalkUrl(models.Model):
     """An url to stuff relevant to the talk - videos, slides, etc.
 
@@ -267,4 +287,66 @@ class TalkUrl(models.Model):
 
     description = models.CharField(max_length=256)
     url = models.URLField()
-    talk = models.ForeignKey(Talk, on_delete=models.CASCADE)
+    talk = models.ForeignKey(Talk, related_name='urls',
+                             on_delete=models.CASCADE)
+
+
+@reversion.register(follow=('scores',))
+@python_2_unicode_compatible
+class Review(models.Model):
+    talk = models.ForeignKey(Talk, on_delete=models.CASCADE,
+                             related_name='reviews')
+    reviewer = models.ForeignKey(settings.AUTH_USER_MODEL,
+                                 on_delete=models.CASCADE)
+
+    notes = MarkupField(
+        null=True, blank=True,
+        help_text=_("Comments on the proposal (markdown)"))
+
+    def __str__(self):
+        return u'Review of %s by %s (%s)' % (
+            self.reviewer, self.talk.title, self.total_score)
+
+    @property
+    def total_score(self):
+        return self.scores.aggregate(total=models.Sum('value'))['total']
+
+    def is_current(self):
+        def last_updated(obj):
+            version = Version.objects.get_for_object(obj).first()
+            return version.revision.date_created
+        return last_updated(self) >= last_updated(self.talk)
+
+    is_current.boolean = True
+
+    class Meta:
+        unique_together = (('talk', 'reviewer'),)
+
+
+@python_2_unicode_compatible
+class ReviewAspect(models.Model):
+    name = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.name
+
+
+@reversion.register()
+@python_2_unicode_compatible
+class Score(models.Model):
+    review = models.ForeignKey(Review, on_delete=models.CASCADE,
+                               related_name='scores')
+    aspect = models.ForeignKey(ReviewAspect, on_delete=models.CASCADE)
+
+    value = models.IntegerField(default=1, validators=[
+        validators.MinValueValidator(0),
+        validators.MaxValueValidator(10)
+    ])
+
+    def __str__(self):
+        review = self.review
+        return u'Review of %s by %s on %s: %i' % (
+            review.reviewer, review.talk.title, self.aspect.name, self.value)
+
+    class Meta:
+        unique_together = (('review', 'aspect'),)

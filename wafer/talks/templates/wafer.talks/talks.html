@@ -1,5 +1,6 @@
 {% extends "wafer/base.html" %}
 {% load i18n %}
+{% load review %}
 {% block title %}{% trans "Talks" %} - {{ WAFER_CONFERENCE_NAME }}{% endblock %}
 {% block content %}
 <section class="wafer wafer-talks">
@@ -18,6 +19,7 @@
         {% elif talk.provisional %}
           <span class="badge badge-success" title="{% trans 'Provisionally Accepted' %}">{{ talk.status }}</span>
         {% endif %}
+        {% reviewed_badge user talk %}
         <a href="{{ talk.get_absolute_url }}">{{ talk.title }}</a>
         by
         <span class="author">{{ talk.get_authors_display_name }}</span>

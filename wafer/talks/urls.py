@@ -2,8 +2,9 @@ from django.conf.urls import url, include
 from rest_framework_extensions import routers
 
 from wafer.talks.views import (
-    Speakers, TalkCreate, TalkWithdraw, TalkUpdate, TalkView, UsersTalks,
-    TalkTypesView, TracksView, TalksViewSet, TalkUrlsViewSet)
+    Speakers, TalkCreate, TalkReview, TalkTypesView, TalkUpdate,
+    TalkUrlsViewSet, TalkView, TalkWithdraw, TalksViewSet, TracksView,
+    UsersTalks)
 
 router = routers.ExtendedSimpleRouter()
 
@@ -20,6 +21,8 @@ urlpatterns = [
     url(r'^(?P<pk>\d+)/$', TalkView.as_view(), name='wafer_talk'),
     url(r'^(?P<pk>\d+)/edit/$', TalkUpdate.as_view(),
         name='wafer_talk_edit'),
+    url(r'^(?P<pk>\d+)/review/$', TalkReview.as_view(),
+        name='wafer_talk_review'),
     url(r'^(?P<pk>\d+)/withdraw/$', TalkWithdraw.as_view(),
         name='wafer_talk_withdraw'),
     url(r'^speakers/$', Speakers.as_view(), name='wafer_talks_speakers'),

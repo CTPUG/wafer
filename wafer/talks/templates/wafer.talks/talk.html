@@ -1,5 +1,13 @@
 {% extends "wafer/base.html" %}
 {% load i18n %}
+{% load crispy_forms_tags %}
+{% load static from staticfiles %}
+{% block extra_head %}
+  {{ block.super }}
+  {% if can_review %}
+    {{ review_form.media.css }}
+  {% endif %}
+{% endblock %}
 {% block title %}{{ object.title }} - {{ WAFER_CONFERENCE_NAME }}{% endblock %}
 {% block content %}
 <section class="wafer wafer-talk">
@@ -8,6 +16,9 @@
     {% if can_edit %}
       <a href="{% url 'wafer_talk_edit' object.pk %}"
          class="float-right btn btn-secondary btn-lg d-print-none">{% trans 'Edit' %}</a>
+    {% endif %}
+    {% if can_review %}
+      <a href="#review" class="float-right btn btn-secondary btn-lg" data-toggle="collapse" data-target="#review">{% trans 'Review' %}</a>
     {% endif %}
   </h1>
   <div>
@@ -113,13 +124,26 @@
       </div>
     </div>
   {% endif %}
-  {% if talk.talkurl_set.all %}
+  {% if talk.urls.all %}
     <h3 id="urls_title">{% trans "URLs" %}</h3>
     <ul class="list-group" id="urls">
-      {% for talkurl in talk.talkurl_set.all %}
+      {% for talkurl in talk.urls.all %}
         <li class="list-group-item"><a href="{{ talkurl.url }}">{{ talkurl.description }}</a></li>
       {% endfor %}
     </ul>
   {% endif %}
 </section>
+{% if can_review %}
+  <section class="wafer wafer-talk-review collapse" id="review">
+    <h2>{% trans 'Review' %}</h2>
+    {% crispy review_form %}
+  </section>
+{% endif %}
+{% endblock %}
+{% block extra_foot %}
+  {{ block.super }}
+  {% if can_review %}
+    {{ review_form.media.js }}
+    <script type="text/javascript" src="{% static 'js/markitup.js' %}"></script>
+  {% endif %}
 {% endblock %}
