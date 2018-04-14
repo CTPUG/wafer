@@ -97,7 +97,7 @@ class Track(models.Model):
     css_class.short_description = 'CSS class name'
 
 
-@reversion.register(follow=('talkurl_set',))
+@reversion.register(follow=('urls',))
 @python_2_unicode_compatible
 class Talk(models.Model):
 
@@ -219,7 +219,7 @@ class Talk(models.Model):
 
     def has_url(self):
         """Test if the talk has urls associated with it"""
-        if self.talkurl_set.all():
+        if self.urls.all():
             return True
         return False
 
@@ -287,7 +287,8 @@ class TalkUrl(models.Model):
 
     description = models.CharField(max_length=256)
     url = models.URLField()
-    talk = models.ForeignKey(Talk, on_delete=models.CASCADE)
+    talk = models.ForeignKey(Talk, related_name='urls',
+                             on_delete=models.CASCADE)
 
 
 @reversion.register(follow=('scores',))

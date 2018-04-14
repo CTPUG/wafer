@@ -31,7 +31,7 @@ class TalkSerializer(serializers.ModelSerializer):
 
     abstract = MarkdownSerializer()
 
-    urls = TalkUrlSerializer(source='talkurl_set', many=True, read_only=True)
+    urls = TalkUrlSerializer(many=True, read_only=True)
 
     class Meta:
         model = Talk

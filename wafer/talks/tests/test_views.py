@@ -530,7 +530,7 @@ class TalkViewSetTests(TestCase):
             'corresponding_author': talk.corresponding_author.id,
             'authors': [talk.corresponding_author.id],
             'kv': [],
-            'urls': [mk_url(url) for url in talk.talkurl_set.all()]
+            'urls': [mk_url(url) for url in talk.urls.all()]
         }
 
     def test_list_talks(self):
@@ -680,7 +680,7 @@ class TalkUrlsViewSetTests(TestCase):
                 'description': u'slides',
                 'url': u'http://www.example.com/video',
             }, format="json")
-        [talk_url] = talk.talkurl_set.all()
+        [talk_url] = talk.urls.all()
         self.assertEqual(response.data, self.mk_result(talk_url))
         self.assertEqual(talk_url.url, u'http://www.example.com/video')
         self.assertEqual(talk_url.description, u'slides')
@@ -694,7 +694,7 @@ class TalkUrlsViewSetTests(TestCase):
                 'description': u'slides',
                 'url': u'http://www.example.com/video',
             }, format="json")
-        [talk_url] = talk.talkurl_set.all()
+        [talk_url] = talk.urls.all()
         self.assertEqual(response.data, self.mk_result(talk_url))
         self.assertEqual(talk_url.url, u'http://www.example.com/video')
         self.assertEqual(talk_url.description, u'slides')
@@ -707,7 +707,7 @@ class TalkUrlsViewSetTests(TestCase):
             '/talks/api/talks/%d/urls/%d/' % (talk.talk_id, url.id), data={
                 'url': 'http://new.example.com/',
             }, format="json")
-        [talk_url] = talk.talkurl_set.all()
+        [talk_url] = talk.urls.all()
         self.assertEqual(response.data, self.mk_result(talk_url))
         self.assertEqual(talk_url.url, u'http://new.example.com/')
         self.assertEqual(talk_url.description, u'video')
@@ -720,7 +720,7 @@ class TalkUrlsViewSetTests(TestCase):
             talk=talk, url="http://a.example.com/", description="video")
         response = self.client.delete(
             '/talks/api/talks/%d/urls/%d/' % (talk.talk_id, url_a.id))
-        [talk_url_b] = talk.talkurl_set.all()
+        [talk_url_b] = talk.urls.all()
         self.assertEqual(response.data, None)
         self.assertEqual(response.status_code, 204)
         self.assertEqual(talk_url_b, url_b)

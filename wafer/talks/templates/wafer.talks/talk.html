@@ -123,10 +123,10 @@
       </div>
     </div>
   {% endif %}
-  {% if talk.talkurl_set.all %}
+  {% if talk.urls.all %}
     <h3 id="urls_title">{% trans "URLs" %}</h3>
     <ul class="list-group" id="urls">
-      {% for talkurl in talk.talkurl_set.all %}
+      {% for talkurl in talk.urls.all %}
         <li class="list-group-item"><a href="{{ talkurl.url }}">{{ talkurl.description }}</a></li>
       {% endfor %}
     </ul>

@@ -87,4 +87,9 @@ class Migration(migrations.Migration):
             name='disable_submission',
             field=models.BooleanField(default=False, help_text="Don't allow users to submit talks of this type."),
         ),
+        migrations.AlterField(
+            model_name='talkurl',
+            name='talk',
+            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='urls', to='talks.Talk'),
+        ),
     ]
