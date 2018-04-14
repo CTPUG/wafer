@@ -3,8 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@fortawesome/fontawesome-free-webfonts": "1.0.x",
     "bootstrap": "^4.0.0",
-    "font-awesome": "^4.6.3",
     "jquery": ">=1.9.1",
     "popper.js": "1.12.x"
   },
