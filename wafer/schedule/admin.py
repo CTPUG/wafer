@@ -424,7 +424,7 @@ class SlotAdminAddForm(SlotAdminForm):
     additional = forms.IntegerField(min_value=0, max_value=30, required=False,
                                     label=_("Additional slots"),
                                     help_text=_("Create this number of "
-                                                "additional slots following"
+                                                "additional slots following "
                                                 "this one"))
 
 
