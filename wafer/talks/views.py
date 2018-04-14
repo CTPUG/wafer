@@ -59,10 +59,9 @@ class TalkView(DetailView):
     def get_object(self, *args, **kwargs):
         '''Only talk owners can see talks, unless they've been accepted'''
         object_ = super(TalkView, self).get_object(*args, **kwargs)
-        if object_.can_view(self.request.user):
-            return object_
-        else:
+        if not object_.can_view(self.request.user):
             raise PermissionDenied
+        return object_
 
     def get_context_data(self, **kwargs):
         context = super(TalkView, self).get_context_data(**kwargs)
