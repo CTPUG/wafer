@@ -59,10 +59,15 @@ class TalkView(DetailView):
     def get_object(self, *args, **kwargs):
         '''Only talk owners can see talks, unless they've been accepted'''
         object_ = super(TalkView, self).get_object(*args, **kwargs)
-        if object_.can_view(self.request.user):
-            return object_
-        else:
+        if not object_.can_view(self.request.user):
             raise PermissionDenied
+        return object_
+
+    def render_to_response(self, *args, **kwargs):
+        '''Canonicalize the URL if the slug changed'''
+        if self.request.path != self.object.get_absolute_url():
+            return HttpResponseRedirect(self.object.get_absolute_url())
+        return super(TalkView, self).render_to_response(*args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super(TalkView, self).get_context_data(**kwargs)
@@ -202,7 +207,7 @@ class TalkReview(PermissionRequiredMixin, CreateView):
         return response
 
     def get_success_url(self):
-        return reverse('wafer_talk', kwargs={'pk': self.kwargs['pk']})
+        return self.get_object().talk.get_absolute_url()
 
 
 class Speakers(ListView):

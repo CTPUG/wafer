@@ -175,11 +175,18 @@ class Talk(models.Model):
 
     kv = models.ManyToManyField(KeyValue)
 
+    @property
+    def slug(self):
+        return slugify(self.title)
+
     def __str__(self):
         return u'%s: %s' % (self.corresponding_author, self.title)
 
     def get_absolute_url(self):
-        return reverse('wafer_talk', args=(self.talk_id,))
+        return reverse('wafer_talk', kwargs={
+            'pk': self.talk_id,
+            'slug': self.slug,
+        })
 
     def get_corresponding_author_contact(self):
         email = self.corresponding_author.email

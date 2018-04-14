@@ -97,8 +97,7 @@ class TalkViewTests(TestCase):
     def check_talk_view(self, talk, status_code, auth=None):
         if auth is not None:
             self.client.login(**auth)
-        response = self.client.get(
-            reverse('wafer_talk', kwargs={'pk': talk.pk}))
+        response = self.client.get(talk.get_absolute_url())
         self.assertEqual(response.status_code, status_code)
 
     def test_view_accepted_not_logged_in(self):
@@ -180,6 +179,17 @@ class TalkViewTests(TestCase):
             'username': 'reviewer', 'password': 'reviewer_password',
         })
 
+    def test_view_canonicalizes_url(self):
+        response = self.client.get(
+            reverse('wafer_talk', kwargs={'pk': self.talk_a.pk}))
+        self.assertEqual(response.status_code, 302)
+
+    def test_view_canonicalizes_url_correctly(self):
+        response = self.client.get(
+            reverse('wafer_talk', kwargs={'pk': self.talk_a.pk}),
+            follow=True)
+        self.assertEqual(response.status_code, 200)
+
 
 class TalkNoteViewTests(TestCase):
     def setUp(self):
@@ -191,8 +201,7 @@ class TalkNoteViewTests(TestCase):
                         auth=None):
         if auth is not None:
             self.client.login(**auth)
-        response = self.client.get(
-            reverse('wafer_talk', kwargs={'pk': talk.pk}))
+        response = self.client.get(talk.get_absolute_url())
         if notes_visible:
             self.assertTrue('Some notes for talk' in response.rendered_content)
         else:
