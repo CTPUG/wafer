@@ -6,7 +6,8 @@
   <h1>
     {{ object.title }}
     {% if can_edit %}
-      <a href="{% url 'wafer_talk_edit' object.pk %}" class="float-right btn btn-secondary btn-lg">{% trans 'Edit' %}</a>
+      <a href="{% url 'wafer_talk_edit' object.pk %}"
+         class="float-right btn btn-secondary btn-lg d-print-none">{% trans 'Edit' %}</a>
     {% endif %}
   </h1>
   <div>

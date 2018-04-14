@@ -4,7 +4,7 @@
 {% block content %}
 <section class="wafer wafer-schedule">
   {% if user.is_authenticated and user.is_staff %}
-    <div class="float-right">
+    <div class="float-right d-print-none">
       <a class="btn btn-secondary"
           href="{% url 'admin:schedule_editor' %}">
         Edit schedule
@@ -22,7 +22,7 @@
       {% endblocktrans %}
     {% else %}
       {% if next_day or prev_day %}
-        <div class="clearfix">
+        <div class="clearfix d-print-none">
          {% url 'wafer_full_schedule' as schedule_url %}
            {% if prev_day %}
              <a href="{{ schedule_url }}?day={{ prev_day }}"

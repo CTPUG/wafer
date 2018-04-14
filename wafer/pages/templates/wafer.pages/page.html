@@ -5,7 +5,7 @@
 <div>
   {{ page.cached_render|safe }}
   {% if perms.pages.change_page %}
-    <div class="clearfix">
+    <div class="clearfix d-print-none">
       <a href="{{ page.get_absolute_url }}?compare"
          class="float-right btn btn-secondary btn-lg"
          >{% trans 'Compare to Previous version' %}</a>
