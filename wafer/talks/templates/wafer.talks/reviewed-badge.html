@@ -1,0 +1,10 @@
+{% load i18n %}
+{% if reviewed %}
+  {% if review_is_current %}
+    <span class="badge badge-success"
+          title="{% trans 'Reviewed' %}">R</span>
+  {% else %}
+    <span class="badge badge-info"
+          title="{% trans 'Reviewed, but outdated (modified since last review)' %}">O</span>
+  {% endif %}
+{% endif %}
