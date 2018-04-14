@@ -202,7 +202,7 @@ class TalkReview(PermissionRequiredMixin, CreateView):
         return response
 
     def get_success_url(self):
-        return reverse('wafer_talk', kwargs={'pk': self.kwargs['pk']})
+        return self.get_object().talk.get_absolute_url()
 
 
 class Speakers(ListView):

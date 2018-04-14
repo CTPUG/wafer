@@ -97,8 +97,7 @@ class TalkViewTests(TestCase):
     def check_talk_view(self, talk, status_code, auth=None):
         if auth is not None:
             self.client.login(**auth)
-        response = self.client.get(
-            reverse('wafer_talk', kwargs={'pk': talk.pk}))
+        response = self.client.get(talk.get_absolute_url())
         self.assertEqual(response.status_code, status_code)
 
     def test_view_accepted_not_logged_in(self):
@@ -191,8 +190,7 @@ class TalkNoteViewTests(TestCase):
                         auth=None):
         if auth is not None:
             self.client.login(**auth)
-        response = self.client.get(
-            reverse('wafer_talk', kwargs={'pk': talk.pk}))
+        response = self.client.get(talk.get_absolute_url())
         if notes_visible:
             self.assertTrue('Some notes for talk' in response.rendered_content)
         else:
