@@ -4,12 +4,12 @@
     {% if review_is_current %}
       <span class="badge badge-success"
             title="{% trans 'Reviewed' %}">
-        R: <i class="fa fa-check"></i>
+        R: <i class="fas fa-check"></i>
       </span>
     {% else %}
       <span class="badge badge-info"
             title="{% trans 'Reviewed, but outdated (modified since last review)' %}">
-        R: <i class="fa fa-clock-o"></i>
+        R: <i class="fas fa-clock"></i>
       </span>
     {% endif %}
   {% endif %}
