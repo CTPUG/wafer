@@ -4,11 +4,11 @@ from wafer.sponsors.models import File, SponsorshipPackage, Sponsor
 
 from reversion.admin import VersionAdmin
 
-class SponsorAdmin(VersionAdmin, admin.ModelAdmin):
+class SponsorAdmin(VersionAdmin):
     pass
 
 
-class SponsorshipPackageAdmin(VersionAdmin, admin.ModelAdmin):
+class SponsorshipPackageAdmin(VersionAdmin):
     pass
 
 

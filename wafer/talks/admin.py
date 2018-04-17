@@ -38,7 +38,7 @@ class ScheduleListFilter(admin.SimpleListFilter):
         return queryset
 
 
-class TalkUrlAdmin(VersionAdmin, admin.ModelAdmin):
+class TalkUrlAdmin(VersionAdmin):
     list_display = ('description', 'talk', 'url')
 
 
@@ -61,7 +61,7 @@ class ReviewInline(admin.TabularInline):
         return False
 
 
-class TalkAdmin(CompareVersionAdmin, admin.ModelAdmin):
+class TalkAdmin(CompareVersionAdmin):
     list_display = ('title', 'get_corresponding_author_name',
                     'get_corresponding_author_contact', 'talk_type',
                     'get_in_schedule', 'has_url', 'status',
@@ -78,12 +78,12 @@ class TalkAdmin(CompareVersionAdmin, admin.ModelAdmin):
     form = AdminTalkForm
 
 
-class TalkTypeAdmin(VersionAdmin, admin.ModelAdmin):
+class TalkTypeAdmin(VersionAdmin):
     list_display = ('name', 'order', 'disable_submission', 'css_class')
     readonly_fields = ('css_class',)
 
 
-class TrackAdmin(VersionAdmin, admin.ModelAdmin):
+class TrackAdmin(VersionAdmin):
     list_display = ('name', 'order', 'css_class')
     readonly_fields = ('css_class',)
 
@@ -92,7 +92,7 @@ class ReviewScoreInline(admin.TabularInline):
     model = Score
 
 
-class ReviewAdmin(CompareVersionAdmin, admin.ModelAdmin):
+class ReviewAdmin(CompareVersionAdmin):
     list_display = ('talk', 'reviewer', 'total_score', 'is_current')
     inlines = (ReviewScoreInline,)
 
