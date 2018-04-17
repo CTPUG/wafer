@@ -49,7 +49,7 @@ class DateModifiedFilter(SimpleListFilter):
 
 
 def get_date(revision):
-    return revision.revision.date_created.strftime("%Y-%m-%d %H:%m:%S")
+    return revision.revision.date_created.strftime("%Y-%m-%d %H:%M:%S")
 
 
 def get_author(revision):
