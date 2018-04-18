@@ -279,6 +279,9 @@ WAFER_TALK_FORM = 'wafer.talks.forms.TalkForm'
 WAFER_VIDEO = True
 WAFER_VIDEO_REVIEWER = True
 
+# Range of scores for talk reviews (inclusive)
+WAFER_TALK_REVIEW_SCORES = (-2, 2)
+
 # Set this to False to disable registration
 WAFER_REGISTRATION_OPEN = True
 

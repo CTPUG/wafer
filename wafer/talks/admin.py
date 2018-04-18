@@ -49,7 +49,7 @@ class TalkUrlInline(admin.TabularInline):
 
 class ReviewInline(admin.TabularInline):
     model = Review
-    readonly_fields = ('reviewer', 'notes', 'total_score', 'scores')
+    readonly_fields = ('reviewer', 'notes', 'avg_score', 'scores')
     extra = 0
 
     def scores(self, instance):
@@ -112,7 +112,7 @@ class ReviewScoreInline(admin.TabularInline):
 
 
 class ReviewAdmin(CompareVersionAdmin):
-    list_display = ('talk', 'reviewer', 'total_score', 'is_current')
+    list_display = ('talk', 'reviewer', 'avg_score', 'is_current')
     inlines = (ReviewScoreInline,)
 
 

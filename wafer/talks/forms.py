@@ -156,7 +156,9 @@ class ReviewForm(forms.Form):
                 except Score.DoesNotExist:
                     initial = None
             self.fields['aspect_{}'.format(aspect.pk)] = forms.IntegerField(
-                initial=initial, label=aspect.name, min_value=0, max_value=10)
+                initial=initial, label=aspect.name,
+                min_value=settings.WAFER_TALK_REVIEW_SCORES[0],
+                max_value=settings.WAFER_TALK_REVIEW_SCORES[1])
 
         self.helper = FormHelper(self)
         self.helper.form_action = reverse('wafer_talk_review',
