@@ -72,7 +72,7 @@ talk:
   talk submitter.
 * View the private notes which are only visible to the "Talk Mentors",
   "Talk Reviewers", and administrators by default.
-* Leave reviews on talks.
+* Leave reviews on talks. See :ref:`talk_review`.
 
 Managing talks from the admin interface
 =======================================
@@ -128,6 +128,30 @@ There is a Django view at ``/talks/tracks`` which displays the list of
 tracks and their descriptions. As with talk types, this list isn't
 linked to the menu, since it's intended to be linked to by pages
 describing the talks and talk submission process.
+
+.. _talk_review:
+
+Talk Reviews
+============
+
+Talk Mentors can review talks by metrics chosen by the administrators.
+Create the desired metrics in the admin interface.
+
+Reviewers ("Talk Reviewers" team by default) see a "Review" button on
+talk pages, and will be prompted to review each talk by each defined
+metric.
+The reviews are a score for each metric (in the range of -2 to 2, by
+default, configurable via ``WAFER_TALK_REVIEW_SCORES``).
+The reviewer can also leave a textual review, in Markdown.
+
+If a reviewer re-reviews a talk, it just updates the previous review.
+
+The aggregate reviews are visible in the talk admin.
+
+In the public talk listing, reviewers will see a symbol next to talks
+they have reviewed. It will change to a clock symbol, if their review is
+out of date (someone has changed the talk, since the review was last
+updated).
 
 Talk URLs
 =========
