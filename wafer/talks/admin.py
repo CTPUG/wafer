@@ -1,5 +1,6 @@
 from django.contrib import admin
 from django import forms
+from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
 from reversion.admin import VersionAdmin
@@ -76,6 +77,24 @@ class TalkAdmin(CompareVersionAdmin):
         ReviewInline,
     ]
     form = AdminTalkForm
+
+    def get_queryset(self, request):
+        qs = super(TalkAdmin, self).get_queryset(request)
+        qs = qs.annotate(
+            review_count_annotation=models.Count('reviews'),
+            review_score_annotation=models.Avg('reviews__scores__value')
+        )
+        return qs
+
+    def review_count(self, obj):
+        return obj.review_count_annotation
+
+    review_count.admin_order_field = 'review_count_annotation'
+
+    def review_score(self, obj):
+        return obj.review_score_annotation
+
+    review_score.admin_order_field = 'review_score_annotation'
 
 
 class TalkTypeAdmin(VersionAdmin):
