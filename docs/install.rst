@@ -32,7 +32,7 @@ Basic Dev install
 
    * The name will be the conference's name.
 
-   * By default, wafer assumes that the site will be accessible over ssl,
+   * By default, wafer assumes that the site will be accessible over SSL,
      so the registration emails will use an 'https' prefix. If this
      is not the case, override the ``wafer/registration/activation_email.txt``
      template.

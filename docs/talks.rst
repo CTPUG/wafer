@@ -6,7 +6,7 @@ Talk Properties
 ===============
 
 Talks have a title, an abstract / description and authors. These fields
-will be the publically visible information about the talk once the talk is
+will be the publicly visible information about the talk once the talk is
 accepted.
 
 In addition, talks have a ``notes`` field, which the submitters can use
@@ -37,7 +37,7 @@ Submitting Talks
 ================
 
 Users can submit talks from their profile page using the ``Submit Talk Proposal``
-option. The abstract can be formatted using Markdown
+option. The abstract can be formatted using Markdown.
 
 The notes section is only visible to the talk author, talk mentors and 
 admins. It is intended for providing extra information and recording
@@ -89,8 +89,8 @@ either ``Accepted`` or ``Not Accepted``. For conferences where a submitter
 needs to confirm attendance before the decision is finalised, the
 status can be set to ``Provisionally Accepted`` for talks waiting for
 confirmation. Once a talk is in any of these states, it can no longer
-be edited by the subimtter. ``Not Accepted`` and ``Provisionally Accepted``
-talks are not publically visible, while ``Accepted`` talks are public.
+be edited by the submitter. ``Not Accepted`` and ``Provisionally Accepted``
+talks are not publicly visible, while ``Accepted`` talks are public.
 
 If for some reason, an ``Accepted`` talk cannot be given, it can be
 marked as ``Cancelled``. ``Cancelled`` talks are still public, so that
@@ -112,9 +112,9 @@ tracks and their descriptions. As with talk types, this list isn't linked to
 the menu, since it's intended to be linked to by pages describing the talks and
 talk submission process.
 
-Talk urls
+Talk URLs
 =========
 
-Urls can be associated with talks using the admin interface. This is
+URLs can be associated with talks using the admin interface. This is
 intended for adding links to slides and videos of the talk after the
 conference.

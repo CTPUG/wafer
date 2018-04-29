@@ -43,7 +43,7 @@ Schedule views
 ==============
 
 The schedule can be restricted to a single day by specifying the ``day``
-parameter in the url - e.g. ``https://localhost/schedule/?day=2014-10-23``. If
+parameter in the URL - e.g. ``https://localhost/schedule/?day=2014-10-23``. If
 the specified day is not one of the days in the schedule, the full schedule is
 shown.
 
