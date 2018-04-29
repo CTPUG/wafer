@@ -25,5 +25,5 @@ Files
 =====
 
 Additional files, such as images, can be uploaded so they can be referenced.
-These files are placed in MEDIA_ROOT/sponsors_files by default. This location needs to
-be writeable by the webserver for uploads to work.
+These files are placed in ``MEDIA_ROOT/sponsors_files`` by default. This
+location needs to be writeable by the webserver for uploads to work.

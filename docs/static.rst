@@ -18,5 +18,5 @@ otherwise it will attempt to create files with the same name as the
 containing directories and the export will fail. If this happens, simply
 correct the problematic pages and rerun the command.
 
-We suggest setting WAFER_HIDE_LOGIN to True when generating the
+We suggest setting ``WAFER_HIDE_LOGIN`` to ``True`` when generating the
 static site so there is no login button on the static site.

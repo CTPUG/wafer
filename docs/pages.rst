@@ -27,9 +27,9 @@ Files
 =====
 
 Additional files, such as images, can be uploaded so they can be
-referenced in page.  These files are placed in MEDIA_ROOT/pages_files by
-default. This location needs to be writeable by the webserver for uploads
-to work.
+referenced in page.  These files are placed in
+``MEDIA_ROOT/pages_files`` by default. This location needs to be
+writeable by the webserver for uploads to work.
 
 Maintaining pages in files
 ==========================

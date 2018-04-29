@@ -53,7 +53,7 @@ The ``refresh`` parameter can be used to add a refresh header to the view - e.g
 
 Note that the current time is the time of the webserver. If this is in a different
 timezone from the conference, the correct ``TIME_ZONE`` value should be set
-in the settings.py file.
+in the ``settings.py`` file.
 
 A specific time can be passed via the ``time`` parameter to the current view,
 specified as ``HH:mm`` e.g. ``https://localhost/schedule/current/?time=08:30``
