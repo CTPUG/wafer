@@ -58,7 +58,21 @@ The "Talk Mentors" group has permission to do the following through the
 * View and edit the notes submitted along with a talk, which are visible
   to the talk submitter.
 * View and edit the private notes which are only visible to the "Talk
-  Mentors" and administrators by default.
+  Mentors", "Talk Reviewers", and administrators by default.
+
+Talk Reviewers
+==============
+
+The "Talk Reviewers" group has permission to do the following through
+the ``/talks/`` (public) talk interface, and the detail pages of each
+talk:
+
+* View *all* talk submissions (not just accepted talks).
+* View the notes submitted along with a talk, which are visible to the
+  talk submitter.
+* View the private notes which are only visible to the "Talk Mentors",
+  "Talk Reviewers", and administrators by default.
+* Leave reviews on talks.
 
 Managing talks from the admin interface
 =======================================
