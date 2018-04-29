@@ -234,6 +234,7 @@ class Talk(models.Model):
 
     @property
     def review_score(self):
+        # Overridden in admin, to allow sorting
         reviews = [review.total_score for review in self.reviews.all()]
         if not reviews:
             return None
@@ -241,6 +242,7 @@ class Talk(models.Model):
 
     @property
     def review_count(self):
+        # Overridden in admin, to allow sorting
         return self.reviews.all().count()
 
     # Helpful properties for the templates
