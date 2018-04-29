@@ -44,8 +44,8 @@ Basic Dev install
    ``manage.py wafer_add_default_groups``.
 
 #. Ensure the permissions on the MEDIA_ROOT directory are correctly set so the
-   webserver can create new files there. This location is used for files uploaded
-   for pages and sponsor information.
+   webserver can create new files there. This location is used for files
+   uploaded for pages and sponsor information.
 
 #. Have a fun conference.
 

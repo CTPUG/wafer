@@ -13,9 +13,9 @@ In addition, talks have a ``notes`` field, which the submitters can use
 to provide additional private information about the talk, such as specialised
 equipment requirements.
 
-The talks also have a ``private notes`` field that is only visible to organisers,
-which can be used to track any additional information on the talk, such as
-assigned reviewers and so forth.
+The talks also have a ``private notes`` field that is only visible to
+organisers, which can be used to track any additional information on the
+talk, such as assigned reviewers and so forth.
 
 Talk Types
 ==========
@@ -23,10 +23,10 @@ Talk Types
 Before opening up talk submissions, define the talk types available to
 talk submitters, such as Tutorial, Short Talks and so forth.
 
-Each ``Talk Type`` can be opened or closed for submissions individually via the
-admin interface. Both the global ``WAFER_TALKS_OPEN`` setting and the individual
-``Talk Type`` must be set to allow submissions for submissions of the given
-type to be accepted.
+Each ``Talk Type`` can be opened or closed for submissions individually
+via the admin interface. Both the global ``WAFER_TALKS_OPEN`` setting
+and the individual ``Talk Type`` must be set to allow submissions for
+submissions of the given type to be accepted.
 
 There is a Django view at ``/talks/types`` which displays the list of
 types and their descriptions. By default, this list isn't linked to the menu,
@@ -36,8 +36,8 @@ submission process.
 Submitting Talks
 ================
 
-Users can submit talks from their profile page using the ``Submit Talk Proposal``
-option. The abstract can be formatted using Markdown.
+Users can submit talks from their profile page using the ``Submit Talk
+Proposal`` option. The abstract can be formatted using Markdown.
 
 The notes section is only visible to the talk author, talk mentors and 
 admins. It is intended for providing extra information and recording
@@ -50,18 +50,18 @@ the corresponding author can edit the talk submission.
 Talk Mentors
 ============
 
-The ``Talk Mentors`` group has permission to view all talk submissions and
-to edit talks. They have permission to view and edit the notes submitted along
-with a talk, which are visible to the talk submitter, and also have
-permission to view and edit the private notes which are only visible to
-the ``Talk Mentors`` and administrators by default.
+The ``Talk Mentors`` group has permission to view all talk submissions
+and to edit talks. They have permission to view and edit the notes
+submitted along with a talk, which are visible to the talk submitter,
+and also have permission to view and edit the private notes which are
+only visible to the ``Talk Mentors`` and administrators by default.
 
 
 Managing talks from the admin interface
 =======================================
 
-From the admin interface talks can be modified, and the status can be updated
-as required.
+From the admin interface talks can be modified, and the status can be
+updated as required.
 
 Talks can have following states:
 
@@ -108,9 +108,9 @@ Currently, tracks merely provide extra information for talk reviewers and
 attendees.
 
 There is a Django view at ``/talks/tracks`` which displays the list of
-tracks and their descriptions. As with talk types, this list isn't linked to
-the menu, since it's intended to be linked to by pages describing the talks and
-talk submission process.
+tracks and their descriptions. As with talk types, this list isn't
+linked to the menu, since it's intended to be linked to by pages
+describing the talks and talk submission process.
 
 Talk URLs
 =========
