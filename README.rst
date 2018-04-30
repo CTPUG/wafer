@@ -105,7 +105,7 @@ Features
 
 * Support for adding and editing sponsors via Django admin.
 * Schedule can be created and updated via Django admin.
-* Pages for static content, news and so forthe can be handled via Django admin.
+* Pages for static content, news and so forth can be handled via Django admin.
 
   * Can be delegated to the 'Page Editors' group.
   * Pages can be updated via the web interface.
@@ -117,7 +117,7 @@ Features
 TODO
 ====
 
-* Make the code easier to use for other conferences (split out theming, etc).
+* Make the code easier to use for other conferences (split out theming, etc.).
 * Improve the talk submission management module:
 
   * Better display of accepted talks.
