@@ -13,7 +13,7 @@ uploaded using the ``files`` field.
 The ``slug`` defines the last part of the path.
 
 The parent field is used to group the page under specific parts of the namespace.
-A page with the slug ``announcements`` and the parent ``news`` will have a url
+A page with the slug ``announcements`` and the parent ``news`` will have a URL
 of ``/news/announcements``
 
 Container pages
@@ -26,9 +26,10 @@ and should be excluded from the static site generation.
 Files
 =====
 
-Additional files, such as images, can be uploaded so they can be referenced in page.
-These files are placed in MEDIA_ROOT/pages_files by default. This location needs to
-be writable by the webserver for uploads to work.
+Additional files, such as images, can be uploaded so they can be
+referenced in page.  These files are placed in
+``MEDIA_ROOT/pages_files`` by default. This location needs to be
+writeable by the webserver for uploads to work.
 
 Maintaining pages in files
 ==========================

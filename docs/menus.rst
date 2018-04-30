@@ -5,16 +5,16 @@ Menus
 Overview
 ========
 
-Wafer includes a simple system for generating either static or dynamic menus for the
-navigation bar at the top of each page.
+Wafer includes a simple system for generating either static or dynamic
+menus for the navigation bar at the top of each page.
 
 A single level of sub-menus is supported.
 
 Static menus
 ============
 
-Static menus are configured using the ``WAFER_MENUS`` setting.  ``WAFER_MENUS`` is a list of
-either sub-menus or menu items.
+Static menus are configured using the ``WAFER_MENUS`` setting.
+``WAFER_MENUS`` is a list of either sub-menus or menu items.
 
 Menu items have the following keys:
 
@@ -25,7 +25,8 @@ Menu items have the following keys:
 ``sort_key``
     A value used to sort the list of items into a custom order (optional).
 ``image``
-    An absolute or relative URL to an image to display instead of the label (optional).
+    An absolute or relative URL to an image to display instead of the
+    label (optional).
 
 Sub-menu have the keys:
 
@@ -67,8 +68,8 @@ Dynamic menus
 =============
 
 Dynamic menus are configured using the ``WAFER_DYNAMIC_MENUS`` setting.
-``WAFER_DYNAMIC_MENUS`` is a list of functions or names of functions to call to dynamically
-add sub-menus or menu items.
+``WAFER_DYNAMIC_MENUS`` is a list of functions or names of functions to
+call to dynamically add sub-menus or menu items.
 
 Dynamic sub-menus and menu items are added after static ones.
 

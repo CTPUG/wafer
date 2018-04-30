@@ -32,7 +32,7 @@ Basic Dev install
 
    * The name will be the conference's name.
 
-   * By default, wafer assumes that the site will be accessible over ssl,
+   * By default, wafer assumes that the site will be accessible over SSL,
      so the registration emails will use an 'https' prefix. If this
      is not the case, override the ``wafer/registration/activation_email.txt``
      template.
@@ -40,12 +40,12 @@ Basic Dev install
 #. Wafer uses the Django caching infrastructure in several places, so
    the cache table needs to be created using ``manage.py createcachetable``.
 
-#. Create the default 'Page Editors' and 'Talk Mentors' groups using
-   ``manage.py wafer_add_default_groups``.
+#. Create the default 'Page Editors', 'Talk Mentors', and 'Talk
+   Reviewers' groups using ``manage.py wafer_add_default_groups``.
 
-#. Ensure the permissions on the MEDIA_ROOT directory are correctly set so the
-   webserver can create new files there. This location is used for files uploaded
-   for pages and sponsor information.
+#. Ensure the permissions on the ``MEDIA_ROOT`` directory are correctly
+   set so the webserver can create new files there. This location is
+   used for files uploaded for pages and sponsor information.
 
 #. Have a fun conference.
 

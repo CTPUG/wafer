@@ -43,7 +43,7 @@ Schedule views
 ==============
 
 The schedule can be restricted to a single day by specifying the ``day``
-parameter in the url - e.g. ``https://localhost/schedule/?day=2014-10-23``. If
+parameter in the URL - e.g. ``https://localhost/schedule/?day=2014-10-23``. If
 the specified day is not one of the days in the schedule, the full schedule is
 shown.
 
@@ -53,7 +53,7 @@ The ``refresh`` parameter can be used to add a refresh header to the view - e.g
 
 Note that the current time is the time of the webserver. If this is in a different
 timezone from the conference, the correct ``TIME_ZONE`` value should be set
-in the settings.py file.
+in the ``settings.py`` file.
 
 A specific time can be passed via the ``time`` parameter to the current view,
 specified as ``HH:mm`` e.g. ``https://localhost/schedule/current/?time=08:30``
