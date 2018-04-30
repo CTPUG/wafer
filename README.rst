@@ -110,7 +110,7 @@ Features
   * Can be delegated to the 'Page Editors' group.
   * Pages can be updated via the web interface.
 
-* Talk submissions and acceptance.
+* Talk submissions, review and acceptance.
 * Generate a static version of the site for archival.
 
 
