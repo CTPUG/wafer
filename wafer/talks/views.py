@@ -5,7 +5,7 @@ from django.core.exceptions import PermissionDenied, ValidationError
 from django.db.models import Q
 from django.http import Http404
 from django.http import HttpResponseRedirect
-from django.urls import reverse, reverse_lazy
+from django.urls import reverse_lazy
 from django.views.generic import DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic.list import ListView
@@ -20,7 +20,7 @@ from reversion.models import Version
 
 from wafer.talks.models import (
     Review, Talk, TalkType, TalkUrl, Track,
-    ACCEPTED, CANCELLED, WITHDRAWN)
+    ACCEPTED, CANCELLED, SUBMITTED, UNDER_CONSIDERATION, WITHDRAWN)
 from wafer.talks.forms import ReviewForm, get_talk_form_class
 from wafer.talks.serializers import TalkSerializer, TalkUrlSerializer
 from wafer.users.models import UserProfile
@@ -204,6 +204,12 @@ class TalkReview(PermissionRequiredMixin, CreateView):
         version = Version.objects.get_for_object(review).order_by('-pk').first()
         version.object_repr = str(review)
         version.save()
+
+        talk = review.talk
+        if talk.status == SUBMITTED:
+            talk.status = UNDER_CONSIDERATION
+            talk.save()
+
         return response
 
     def get_success_url(self):

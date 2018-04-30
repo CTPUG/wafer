@@ -74,8 +74,10 @@ Talks can have following states:
 - Not Accepted
 
 When a talk is first submitted, the state is set to ``Submitted``.
-Once the talk has entered review, the state of the talk should be manually set
-to ``Under Consideration``.
+
+Once the talk has received its first review, the state of the talk will
+change to ``Under Consideration``.
+It can also be changed manually, if not using wafer's review system.
 
 While the talk is either ``Submitted`` or ``Under Consideration``, the
 submitter can withdraw the talk from consideration, which sets the state
