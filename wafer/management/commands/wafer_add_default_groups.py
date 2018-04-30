@@ -18,6 +18,11 @@ class Command(BaseCommand):
             ('talks', 'change_talk'), ('talks', 'view_all_talks'),
             ('talks', 'edit_private_notes'),
         ),
+        'Talk Reviewers': (
+            ('talks', 'view_all_talks'),
+            ('talks', 'edit_private_notes'),
+            ('talks', 'add_review'),
+        ),
         'Registration': (),
     }
 
