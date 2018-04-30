@@ -91,6 +91,10 @@ Wafer's settings
     When ``True``, users can register for the conference.
     (Note, this is not the same as signing up for an account on the website.)
 
+``WAFER_TALK_REVIEW_SCORES``
+    A tuple of 2 integers.
+    The range of values for talk reviews. Inclusive.
+
 ``WAFER_TALKS_OPEN``
     A boolean flag.
     When ``True``, users can submit talks.

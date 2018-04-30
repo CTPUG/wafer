@@ -235,7 +235,7 @@ class Talk(models.Model):
     @property
     def review_score(self):
         # Overridden in admin, to allow sorting
-        reviews = [review.total_score for review in self.reviews.all()]
+        reviews = [review.avg_score for review in self.reviews.all()]
         if not reviews:
             return None
         return sum(reviews) / len(reviews)
@@ -314,11 +314,11 @@ class Review(models.Model):
 
     def __str__(self):
         return u'Review of %s by %s (%s)' % (
-            self.reviewer, self.talk.title, self.total_score)
+            self.reviewer, self.talk.title, self.avg_score)
 
     @property
-    def total_score(self):
-        return self.scores.aggregate(total=models.Sum('value'))['total']
+    def avg_score(self):
+        return self.scores.aggregate(total=models.Avg('value'))['total']
 
     def is_current(self):
         def last_updated(obj):
@@ -347,9 +347,9 @@ class Score(models.Model):
                                related_name='scores')
     aspect = models.ForeignKey(ReviewAspect, on_delete=models.CASCADE)
 
-    value = models.IntegerField(default=1, validators=[
-        validators.MinValueValidator(0),
-        validators.MaxValueValidator(10)
+    value = models.IntegerField(default=0, validators=[
+        validators.MinValueValidator(settings.WAFER_TALK_REVIEW_SCORES[0]),
+        validators.MaxValueValidator(settings.WAFER_TALK_REVIEW_SCORES[1])
     ])
 
     def __str__(self):
