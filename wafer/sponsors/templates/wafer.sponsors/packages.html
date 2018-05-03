@@ -5,20 +5,23 @@
 <h1>{% trans 'Sponsorship Packages' %}</h1>
 <div class="wafer list">
     {% for package in sponsorshippackage_list %}
-    <section class="wafer wafer-sponsorship-package">
-    <div>
-        <h2>{{ package.name }} ({{ package.currency }} {{ package.price|floatformat:0 }})</h1>
+    <section class="wafer wafer-sponsorship-package
+                    wafer-sponsor-{{ package.name.lower }}">
+    <div class="card">
+      <div class="card-body">
+        <h2 class="card-title">
+          {% if package.symbol %}
+            {{ package.symbol }}
+          {% endif %}
+          {{ package.name }} ({{ package.currency }} {{ package.price|floatformat:0 }})
+        </h2>
         {% if package.number_available %}
-            <p>{% trans 'Total number available:' %} {{ package.number_available }}</p>
+          <p>{% trans 'Total number available:' %} {{ package.number_available }}</p>
         {% endif %}
         <p>{% trans 'Packages claimed:' %} {{ package.number_claimed }}</p>
-
-        {% if package.symbol %}
-            <p>Symbol shown in the sponsor list: {{ package.symbol }}</p>
-        {% endif %}
-
         <p>{{ package.short_description }}</p>
         {{ package.description.rendered|safe }}
+      </div>
     </div>
     </section>
     {% empty %}
