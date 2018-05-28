@@ -20,7 +20,11 @@
           <span class="badge badge-success" title="{% trans 'Provisionally Accepted' %}">{{ talk.status }}</span>
         {% endif %}
         {% reviewed_badge user talk %}
+        {% if talk.withdrawn %}
+        <del><a href="{{ talk.get_absolute_url }}">{{ talk.title }}</a></del>
+        {% else %}
         <a href="{{ talk.get_absolute_url }}">{{ talk.title }}</a>
+        {% endif %}
         by
         <span class="author">{{ talk.get_authors_display_name }}</span>
       </div>
