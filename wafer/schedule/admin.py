@@ -12,6 +12,7 @@ from reversion.admin import VersionAdmin
 
 from easy_select2 import Select2Multiple
 
+from wafer.compare.admin import CompareVersionAdmin
 from wafer.schedule.models import Day, Venue, Slot, ScheduleItem
 from wafer.talks.models import Talk, ACCEPTED, CANCELLED
 from wafer.pages.models import Page
@@ -367,7 +368,7 @@ class ScheduleItemAdminForm(forms.ModelForm):
         self.fields['page'].queryset = Page.objects.all()
 
 
-class ScheduleItemAdmin(VersionAdmin):
+class ScheduleItemAdmin(CompareVersionAdmin):
     form = ScheduleItemAdminForm
 
     change_list_template = 'admin/scheduleitem_list.html'
@@ -429,7 +430,7 @@ class SlotAdminAddForm(SlotAdminForm):
                                                 "this one"))
 
 
-class SlotAdmin(VersionAdmin):
+class SlotAdmin(CompareVersionAdmin):
     form = SlotAdminForm
 
     list_display = ('__str__', 'get_day', 'get_formatted_start_time',
