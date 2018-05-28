@@ -8,9 +8,11 @@ from django.contrib import messages
 from django.utils.encoding import force_text
 from django.utils.translation import ugettext as _
 from django import forms
+from reversion.admin import VersionAdmin
 
 from easy_select2 import Select2Multiple
 
+from wafer.compare.admin import CompareVersionAdmin
 from wafer.schedule.models import Day, Venue, Slot, ScheduleItem
 from wafer.talks.models import Talk, ACCEPTED, CANCELLED
 from wafer.pages.models import Page
@@ -366,7 +368,7 @@ class ScheduleItemAdminForm(forms.ModelForm):
         self.fields['page'].queryset = Page.objects.all()
 
 
-class ScheduleItemAdmin(admin.ModelAdmin):
+class ScheduleItemAdmin(CompareVersionAdmin):
     form = ScheduleItemAdminForm
 
     change_list_template = 'admin/scheduleitem_list.html'
@@ -428,7 +430,7 @@ class SlotAdminAddForm(SlotAdminForm):
                                                 "this one"))
 
 
-class SlotAdmin(admin.ModelAdmin):
+class SlotAdmin(CompareVersionAdmin):
     form = SlotAdminForm
 
     list_display = ('__str__', 'get_day', 'get_formatted_start_time',
@@ -486,7 +488,16 @@ class SlotAdmin(admin.ModelAdmin):
                 prev = new_slot
 
 
-admin.site.register(Day)
+# Register and setup reversion support for Days and Venues
+class DayAdmin(VersionAdmin):
+    pass
+
+
+class VenueAdmin(VersionAdmin):
+    pass
+
+
+admin.site.register(Day, DayAdmin)
 admin.site.register(Slot, SlotAdmin)
-admin.site.register(Venue)
+admin.site.register(Venue, VenueAdmin)
 admin.site.register(ScheduleItem, ScheduleItemAdmin)
