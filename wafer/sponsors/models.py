@@ -103,6 +103,14 @@ class Sponsor(models.Model):
             return package.symbol
         return u""
 
+    def images(self):
+        """Returns a dictionary of tagged images associated with this
+           sponsor."""
+        image_dict = {}
+        for item in self.files.all():
+            image_dict[item.tag_name] = item.tagged_file.item.url
+        return image_dict
+
 
 class TaggedFile(models.Model):
     """Tags for files associated with a given sponsor"""

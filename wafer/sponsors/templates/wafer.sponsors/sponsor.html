@@ -10,6 +10,13 @@
    {% endif %}
 </h1>
 <div class="sponsor-detail">
+  {% if object.images.main_logo %}
+    <div style="float: right; margin-left:5px;">
+      <a href="{{ object.url }}">
+        <img style="background: white; max-width:500px; width: 100%;" src="{{ object.images.main_logo }}">
+      </a>
+    </div>
+  {% endif %}
 {{ object.description.rendered|safe }}
 </div>
 </section>
