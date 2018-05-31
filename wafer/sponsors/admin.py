@@ -1,11 +1,17 @@
 from django.contrib import admin
 
-from wafer.sponsors.models import File, SponsorshipPackage, Sponsor
+from wafer.sponsors.models import (File, SponsorshipPackage, Sponsor,
+                                   TaggedFile)
 
 from reversion.admin import VersionAdmin
 
+
+class SponsorTaggedFileInline(admin.TabularInline):
+    model = TaggedFile
+
+
 class SponsorAdmin(VersionAdmin):
-    pass
+    inlines = (SponsorTaggedFileInline,)
 
 
 class SponsorshipPackageAdmin(VersionAdmin):

@@ -75,10 +75,6 @@ class Sponsor(models.Model):
                                       related_name="sponsors")
     description = MarkupField(
         help_text=_("Write some nice things about the sponsor."))
-    files = models.ManyToManyField(
-        File, related_name="sponsors", blank=True,
-        help_text=_("Images and other files for use in"
-                    " the description markdown field."))
     url = models.URLField(
         default="", blank=True,
         help_text=_("Url to link back to the sponsor if required"))
@@ -100,16 +96,20 @@ class Sponsor(models.Model):
         return symbols
 
     @property
-    def logo(self):
-        return self.files.get(name='logo').item
-
-    @property
     def symbol(self):
         """The symbol of the highest level package this sponsor has taken."""
         package = self.packages.first()
         if package:
             return package.symbol
         return u""
+
+
+class TaggedFile(models.Model):
+    """Tags for files associated with a given sponsor"""
+    tag_name = models.CharField(max_length=255, null=False)
+    tagged_file = models.ForeignKey(File, on_delete=models.CASCADE)
+    sponsor = models.ForeignKey(Sponsor, related_name="files",
+                                on_delete=models.CASCADE)
 
 
 def sponsor_menu(
