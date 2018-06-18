@@ -1,0 +1,21 @@
+{% load sponsors %}
+<div id="wafer-sponsors">
+    {% for package in packages %}
+    {% if package.sponsors.exists %}
+       {% for sponsor in package.sponsors.all %}
+         {% sponsor_tagged_image sponsor "footer logo" as logo_url %}
+         <a href="{{ sponsor.url }}">
+         {% if logo_url != '' %}
+           <img src="{{ logo_url }}"
+                alt="{{ sponsor.name }}"
+                style="max-width: 200px; max-height:100px;"
+                title="{{ sponsor.name }}">
+         {% else %}
+           <span class="nologo">{{ sponsor.name }}</span>
+         {% endif %}
+         </a>
+       {% endfor %}
+       <br>
+    {% endif %}
+    {% endfor %}
+</div>
