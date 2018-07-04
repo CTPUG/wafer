@@ -27,3 +27,16 @@ Files
 Additional files, such as images, can be uploaded so they can be referenced.
 These files are placed in ``MEDIA_ROOT/sponsors_files`` by default. This
 location needs to be writeable by the webserver for uploads to work.
+
+Using files in templates
+------------------------
+
+Uploaded files can be associated with a sponsor and a name in the admin
+interface which can be used with the ``ponsor_tagged_image`` templatetag
+in the templates.
+
+The default wafer sponsor templates expect each sponsor to have an image
+labelled ``main_logo`` for use in the sponsor list.
+
+Wafer also provides an example template block for adding sponsors as a
+footer to pages. This expects images labelled ``footer_logo``.
