@@ -3,7 +3,7 @@
     {% for package in packages %}
     {% if package.sponsors.exists %}
        {% for sponsor in package.sponsors.all %}
-         {% sponsor_tagged_image sponsor "footer logo" as logo_url %}
+         {% sponsor_tagged_image sponsor "footer_logo" as logo_url %}
          <a href="{{ sponsor.url }}">
          {% if logo_url != '' %}
            <img src="{{ logo_url }}"

@@ -22,7 +22,7 @@
              {% endif %}
              <small class="text-right">{{ sponsor.packages.first.name }}</small>
             </h2>
-            {% sponsor_tagged_image sponsor "main logo" as logo_url %}
+            {% sponsor_tagged_image sponsor "main_logo" as logo_url %}
             {% if logo_url != '' %}
               <div style="float: right; margin-left:5px;">
                 <a href="{{ sponsor.url }}">
