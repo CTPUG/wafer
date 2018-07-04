@@ -58,12 +58,25 @@ class ProfileView(BuildableDetailView):
             # cleanup directory
             self.unbuild_object(obj)
 
+    def get(self, *args, **kwargs):
+        try:
+            result = super(ProfileView, self).get(*args, **kwargs)
+        except Http404:
+            if not settings.WAFER_PUBLIC_ATTENDEE_LIST:
+                # We convert all 404's to 403's to prevent info leakage
+                # about which users actually exist and which are
+                # just private.
+                raise PermissionDenied()
+            # For public attendee lists, 404 is the right thing
+            raise
+        return result
+
     def get_object(self, *args, **kwargs):
         object_ = super(ProfileView, self).get_object(*args, **kwargs)
         if not settings.WAFER_PUBLIC_ATTENDEE_LIST:
             if (not self.can_edit(object_) and
                     not object_.userprofile.accepted_talks().exists()):
-                raise Http404()
+                raise PermissionDenied()
         return object_
 
     def get_context_data(self, **kwargs):
