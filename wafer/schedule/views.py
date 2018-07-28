@@ -6,6 +6,7 @@ from django.db.models import Q
 from django.views.generic import DetailView, TemplateView, View
 from django.contrib.sites.shortcuts import get_current_site
 from django.http import HttpResponse
+from django.utils import timezone
 
 from rest_framework import viewsets
 from rest_framework.permissions import IsAdminUser
@@ -21,8 +22,10 @@ from wafer.talks.models import Talk
 class ScheduleRow(object):
     """This is a helpful containter for the schedule view to keep sanity"""
     def __init__(self, schedule_day, slot):
+        tz = timezone.get_default_timezone()
         self.schedule_day = schedule_day
         self.slot = slot
+        self.start_time = timezone.make_aware(slot.get_start_datetime(), tz)
         self.items = {}
 
     def get_sorted_items(self):

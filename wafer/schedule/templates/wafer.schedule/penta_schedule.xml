@@ -26,9 +26,8 @@
                 {% if row_venue == venue and items.item %}
                   {# The event id is the ScheduleItem pk, which should be unique enough #}
                   <event id="{{ items.item.pk }}">
-                    {# Not sure what to do about timezones here #}
-                    <date>{{ schedule_day.day.date|date:"Y-m-d" }}T{{ row.slot.get_start_time|time:"H:i:s" }}+00:00</date>
-                    <start>{{ row.slot.get_start_time|time:"H:i" }}</start>
+                    <date>{{ row.start_time.isoformat }}</date>
+                    <start>{{ row.start_time|time:"H:i" }}</start>
                     {% with dur=items.item.get_duration %}
                       <duration>{{ dur.hours|stringformat:"02d" }}:{{ dur.minutes|stringformat:"02d" }}</duration>
                     {% endwith %}
