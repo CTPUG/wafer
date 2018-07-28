@@ -38,7 +38,11 @@
         <table cellspacing=1 cellpadding=0>
           {# We assume that the admin has created a valid timetable #}
           <tr>
-            <td colspan="{{ schedule_day.venues|length|add:1 }}" class="title">{{ schedule_day.day.date|date:"l (d b)" }}</td>
+            <td colspan="{{ schedule_day.venues|length|add:1 }}" class="title">
+              <a href="?day={{ schedule_day.day.date.isoformat }}">
+                {{ schedule_day.day.date|date:"l (d b)" }}
+              </a>
+            </td>
           </tr>
           <tr>
             <th>{% trans "Time" %}</th>
