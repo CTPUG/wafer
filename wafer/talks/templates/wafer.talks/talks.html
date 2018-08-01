@@ -4,34 +4,41 @@
 {% block title %}{% trans "Talks" %} - {{ WAFER_CONFERENCE_NAME }}{% endblock %}
 {% block content %}
 <section class="wafer wafer-talks">
+  {% regroup talk_list by talk_type.name as grouped_talks %}
+  {% for type, talks in grouped_talks %}
+  {% if type %}
+  <h1>{{ type }}</h1>
+  {% else %}
   <h1>{% trans 'Talks' %}</h1>
-  <div class="wafer list">
-    {% for talk in talk_list %}
-      <div>
-        {% if talk.submitted %}
-          <span class="badge badge-info" title="{% trans 'Submitted' %}">{{ talk.status }}</span>
-        {% elif talk.under_consideration %}
-          <span class="badge badge-info" title="{% trans 'Under consideration' %}">{{ talk.status }}</span>
-        {% elif talk.reject %}
-          <span class="badge badge-danger" title="{% trans 'Not accepted' %}">{{ talk.status }}</span>
-        {% elif talk.cancelled %}
-          <span class="badge badge-warning" title="{% trans 'Talk Cancelled' %}">{{ talk.status }}</span>
-        {% elif talk.provisional %}
-          <span class="badge badge-success" title="{% trans 'Provisionally Accepted' %}">{{ talk.status }}</span>
-        {% endif %}
-        {% reviewed_badge user talk %}
-        {% if talk.withdrawn %}
-        <del><a href="{{ talk.get_absolute_url }}">{{ talk.title }}</a></del>
-        {% else %}
-        <a href="{{ talk.get_absolute_url }}">{{ talk.title }}</a>
-        {% endif %}
-        by
-        <span class="author">{{ talk.get_authors_display_name }}</span>
-      </div>
-    {% empty %}
-      <p>No talks accepted yet.</p>
-    {% endfor %}
-  </div>
+  {% endif %}
+     <div class="wafer list">
+       {% for talk in talks %}
+         <div>
+           {% if talk.submitted %}
+             <span class="badge badge-info" title="{% trans 'Submitted' %}">{{ talk.status }}</span>
+           {% elif talk.under_consideration %}
+             <span class="badge badge-info" title="{% trans 'Under consideration' %}">{{ talk.status }}</span>
+           {% elif talk.reject %}
+             <span class="badge badge-danger" title="{% trans 'Not accepted' %}">{{ talk.status }}</span>
+           {% elif talk.cancelled %}
+             <span class="badge badge-warning" title="{% trans 'Talk Cancelled' %}">{{ talk.status }}</span>
+           {% elif talk.provisional %}
+             <span class="badge badge-success" title="{% trans 'Provisionally Accepted' %}">{{ talk.status }}</span>
+           {% endif %}
+           {% reviewed_badge user talk %}
+           {% if talk.withdrawn %}
+           <del><a href="{{ talk.get_absolute_url }}">{{ talk.title }}</a></del>
+           {% else %}
+           <a href="{{ talk.get_absolute_url }}">{{ talk.title }}</a>
+           {% endif %}
+           by
+           <span class="author">{{ talk.get_authors_display_name }}</span>
+         </div>
+       {% empty %}
+         <p>No talks accepted yet.</p>
+       {% endfor %}
+     </div>
+   {% endfor %}
 </section>
 {% if is_paginated %}
   <section class="wafer wafer-pagination">
