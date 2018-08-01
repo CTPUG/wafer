@@ -42,7 +42,7 @@ class UsersTalks(ListView):
     template_name = 'wafer.talks/talks.html'
     paginate_by = 25
 
-    @order_results_by('talk_id')
+    @order_results_by('talk_type', 'talk_id')
     def get_queryset(self):
         # self.request will be None when we come here via the static site
         # renderer
@@ -246,7 +246,7 @@ class TalksViewSet(viewsets.ModelViewSet, NestedViewSetMixin):
     # XXX: Do we want to allow authors to edit talks via the API?
     permission_classes = (DjangoModelPermissionsOrAnonReadOnly, )
 
-    @order_results_by('talk_id')
+    @order_results_by('talk_type', 'talk_id')
     def get_queryset(self):
         # We override the default implementation to only show accepted talks
         # to people who aren't part of the management group
