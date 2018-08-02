@@ -39,4 +39,5 @@ The default wafer sponsor templates expect each sponsor to have an image
 labelled ``main_logo`` for use in the sponsor list.
 
 Wafer also provides an example template block for adding sponsors as a
-footer to pages. This expects images labelled ``footer_logo``.
+footer to pages called ``sponsors_footer``. This expects images
+labelled ``footer_logo``.
