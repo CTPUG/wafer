@@ -1,5 +1,6 @@
 {% extends "wafer/base.html" %}
 {% load i18n %}
+{% load sponsors %}
 {% block content %}
 <section class="wafer wafer-sponsor">
 <h1>
@@ -10,6 +11,14 @@
    {% endif %}
 </h1>
 <div class="sponsor-detail">
+  {% sponsor_tagged_image object "main_logo" as logo_url %}
+  {% if logo_url != '' %}
+    <div style="float: right; margin-left:5px;">
+      <a href="{{ object.url }}">
+        <img style="background: white; max-width:400px; max-height:200px;" src="{{ logo_url }}">
+      </a>
+    </div>
+  {% endif %}
 {{ object.description.rendered|safe }}
 </div>
 </section>
