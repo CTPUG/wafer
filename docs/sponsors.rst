@@ -32,7 +32,7 @@ Using files in templates
 ------------------------
 
 Uploaded files can be associated with a sponsor and a name in the admin
-interface which can be used with the ``ponsor_tagged_image`` templatetag
+interface which can be used with the ``sponsor_tagged_image`` templatetag
 in the templates.
 
 The default wafer sponsor templates expect each sponsor to have an image
