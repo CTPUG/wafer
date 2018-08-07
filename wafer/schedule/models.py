@@ -39,6 +39,10 @@ class Venue(models.Model):
     days = models.ManyToManyField(Day, help_text=_("Days on which this venue"
                                                    " will be used."))
 
+    video = models.BooleanField(
+        default=False,
+        help_text=_("Venue has video coverage"))
+
     class Meta:
         ordering = ['order', 'name']
 
