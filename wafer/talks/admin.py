@@ -70,6 +70,7 @@ class TalkAdmin(CompareVersionAdmin):
     list_editable = ('status',)
     list_filter = ('status', 'talk_type', 'track', ScheduleListFilter,
                    DateModifiedFilter)
+    search_fields = ('title',)
     exclude = ('kv',)
 
     inlines = [
