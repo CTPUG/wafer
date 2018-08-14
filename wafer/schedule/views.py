@@ -159,6 +159,7 @@ class ScheduleView(BuildableTemplateView):
 class ScheduleXmlView(ScheduleView):
     template_name = 'wafer.schedule/penta_schedule.xml'
     content_type = 'application/xml'
+    build_path = 'schedule/pentabarf.xml'
 
     def get_context_data(self, **kwargs):
         """Allow adding a 'render_description' parameter"""
