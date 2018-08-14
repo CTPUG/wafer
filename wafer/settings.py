@@ -320,4 +320,6 @@ BAKERY_VIEWS = (
     'wafer.talks.views.TracksView',
     'wafer.talks.views.TalkTypesView',
     'wafer.talks.views.UsersTalks',
+    'wafer.users.views.UsersView',
+    'wafer.users.views.ProfileView',
 )

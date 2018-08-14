@@ -2,12 +2,13 @@ import logging
 
 from django.conf import settings
 from django.contrib.auth import get_user_model
+from django.contrib.auth.models import AnonymousUser
 from django.core.exceptions import PermissionDenied
 from django.http import Http404
 from django.urls import reverse
-from django.views.generic import DetailView, UpdateView
-from django.views.generic.list import ListView
+from django.views.generic import UpdateView
 
+from bakery.views import BuildableDetailView
 from rest_framework import viewsets
 from rest_framework.permissions import IsAdminUser
 
@@ -15,14 +16,16 @@ from wafer.talks.models import ACCEPTED
 from wafer.users.forms import UserForm, UserProfileForm
 from wafer.users.serializers import UserSerializer
 from wafer.users.models import UserProfile
+from wafer.utils import PaginatedBuildableListView
 
 log = logging.getLogger(__name__)
 
 
-class UsersView(ListView):
+class UsersView(PaginatedBuildableListView):
     template_name = 'wafer.users/users.html'
     model = get_user_model()
     paginate_by = 25
+    build_prefix = 'users'
 
     def get_queryset(self, *args, **kwargs):
         qs = super(UsersView, self).get_queryset(*args, **kwargs)
@@ -32,13 +35,28 @@ class UsersView(ListView):
         return qs
 
 
-class ProfileView(DetailView):
+class ProfileView(BuildableDetailView):
     template_name = 'wafer.users/profile.html'
     model = get_user_model()
     slug_field = 'username'
     slug_url_kwarg = 'username'
     # avoid a clash with the user object used by the menus
     context_object_name = 'profile_user'
+
+    def get_url(self, obj):
+        return reverse('wafer_user_profile', args=(obj.username,))
+
+    def build_object(self, obj):
+        """Override django-bakery to skip profiles that raise 404"""
+        try:
+            build_path = self.get_build_path(obj)
+            self.request = self.create_request(build_path)
+            self.request.user = AnonymousUser()
+            self.set_kwargs(obj)
+            self.build_file(build_path, self.get_content())
+        except Http404:
+            # cleanup directory
+            self.unbuild_object(obj)
 
     def get_object(self, *args, **kwargs):
         object_ = super(ProfileView, self).get_object(*args, **kwargs)
