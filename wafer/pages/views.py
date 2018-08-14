@@ -19,6 +19,14 @@ class ShowPage(BuildableDetailView):
     template_name = 'wafer.pages/page.html'
     model = Page
 
+    # Needed so django-bakery honours the exclude_from_static flag
+    def build_object(self, obj):
+        """Override django-bakery to skip pages marked exclude_from_static"""
+        if not obj.exclude_from_static:
+            super(ShowPage, self).build_object(obj)
+        # else we just ignore this page entirely
+        # This does create a directory, but that's usually what we want
+        # for container pages, so we leave it.
 
 class EditPage(UpdateView):
     template_name = 'wafer.pages/page_form.html'
