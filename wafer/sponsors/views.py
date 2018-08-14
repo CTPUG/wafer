@@ -1,6 +1,4 @@
-from django.views.generic.list import ListView
-from django.views.generic import DetailView
-
+from bakery.views import BuildableListView, BuildableDetailView
 from rest_framework import viewsets
 from rest_framework.permissions import DjangoModelPermissionsOrAnonReadOnly
 
@@ -8,22 +6,24 @@ from wafer.sponsors.models import Sponsor, SponsorshipPackage
 from wafer.sponsors.serializers import SponsorSerializer, PackageSerializer
 
 
-class ShowSponsors(ListView):
+class ShowSponsors(BuildableListView):
     template_name = 'wafer.sponsors/sponsors.html'
     model = Sponsor
+    build_path = 'sponsors/index.html'
 
     def get_queryset(self):
         return Sponsor.objects.all().order_by('packages', 'order', 'id')
 
 
-class SponsorView(DetailView):
+class SponsorView(BuildableDetailView):
     template_name = 'wafer.sponsors/sponsor.html'
     model = Sponsor
 
 
-class ShowPackages(ListView):
+class ShowPackages(BuildableListView):
     template_name = 'wafer.sponsors/packages.html'
     model = SponsorshipPackage
+    build_path = 'sponsors/packages/index.html'
 
 
 class SponsorViewSet(viewsets.ModelViewSet):
