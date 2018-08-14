@@ -87,6 +87,8 @@
           <span class="badge badge-success">{% trans 'Accepted' %}</span>
         {% elif object.cancelled %}
           <span class="badge badge-warning">{% trans 'Cancelled' %}</span>
+        {% elif object.withdrawn %}
+          <span class="badge badge-warning ">{% trans 'Withdrawn' %}</span>
         {% else %}
           <span class="badge badge-danger">{% trans 'Not accepted' %}</span>
         {% endif %}
