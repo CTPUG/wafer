@@ -7,8 +7,8 @@ Static Site Generation
 Usage
 =====
 
-The ``manage.py staticsitegen`` command will generate a static version
-of the site using django-medusa.
+The ``manage.py build`` command will generate a static version
+of the site using django-bakery.
 
 The static site will include pages, talks, sponsors and user details.
 
