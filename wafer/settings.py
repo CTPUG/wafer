@@ -147,7 +147,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'django.contrib.redirects',
     'reversion',
-    'django_medusa',
+    'bakery',
     'crispy_forms',
     'django_nose',
     'rest_framework',
@@ -297,9 +297,8 @@ WAFER_PUBLIC_ATTENDEE_LIST = True
 # Ticket registration with Quicket
 # WAFER_TICKET_SECRET = "i'm a shared secret"
 
-# django_medusa -- disk-based renderer
-MEDUSA_RENDERER_CLASS = "wafer.management.static.WaferDiskStaticSiteRenderer"
-MEDUSA_DEPLOY_DIR = os.path.join(project_root, 'static_mirror')
+# django-bakery -- disk-based renderer
+BUILD_DIR = os.path.join(project_root, 'static_mirror')
 
 MARKITUP_FILTER = ('markdown.markdown', {'safe_mode': True})
 JQUERY_URL = 'vendor/jquery/dist/jquery.min.js'
@@ -310,3 +309,6 @@ REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
     'PAGE_SIZE': 50
 }
+
+BAKERY_VIEWS = (
+)

@@ -15,7 +15,7 @@ REQUIRES = [
     'pyLibravatar',
     'pytz',
     'requests',
-    'django-medusa>=0.3.0',
+    'django-bakery>=0.12.0',
     'django-reversion>=2.0',
     'django-easy-select2',
     'django-markitup>=2.2.2',
