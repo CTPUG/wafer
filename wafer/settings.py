@@ -315,4 +315,9 @@ BAKERY_VIEWS = (
     'wafer.schedule.views.VenueView',
     'wafer.schedule.views.ScheduleView',
     'wafer.schedule.views.ScheduleXmlView',
+    'wafer.talks.views.TalkView',
+    'wafer.talks.views.Speakers',
+    'wafer.talks.views.TracksView',
+    'wafer.talks.views.TalkTypesView',
+    'wafer.talks.views.UsersTalks',
 )
