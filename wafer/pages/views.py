@@ -2,6 +2,7 @@ from django.http import Http404
 from django.core.exceptions import PermissionDenied
 from django.views.generic import DetailView, TemplateView, UpdateView
 
+from bakery.views import BuildableDetailView
 from reversion import revisions
 from reversion.models import Version
 from rest_framework import viewsets
@@ -14,7 +15,7 @@ from wafer.pages.serializers import PageSerializer
 from wafer.pages.forms import PageForm
 
 
-class ShowPage(DetailView):
+class ShowPage(BuildableDetailView):
     template_name = 'wafer.pages/page.html'
     model = Page
 

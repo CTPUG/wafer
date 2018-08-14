@@ -311,4 +311,5 @@ REST_FRAMEWORK = {
 }
 
 BAKERY_VIEWS = (
+    'wafer.pages.views.ShowPage',
 )
