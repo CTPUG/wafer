@@ -312,4 +312,6 @@ REST_FRAMEWORK = {
 
 BAKERY_VIEWS = (
     'wafer.pages.views.ShowPage',
+    'wafer.schedule.views.VenueView',
+    'wafer.schedule.views.ScheduleView',
 )

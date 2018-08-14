@@ -3,11 +3,12 @@ import datetime
 from icalendar import Calendar, Event
 
 from django.db.models import Q
-from django.views.generic import DetailView, TemplateView, View
+from django.views.generic import TemplateView, View
 from django.contrib.sites.shortcuts import get_current_site
 from django.http import HttpResponse
 from django.utils import timezone
 
+from bakery.views import BuildableDetailView, BuildableTemplateView
 from rest_framework import viewsets
 from rest_framework.permissions import IsAdminUser
 from wafer.pages.models import Page
@@ -48,7 +49,7 @@ class ScheduleDay(object):
         self.rows = []
 
 
-class VenueView(DetailView):
+class VenueView(BuildableDetailView):
     template_name = 'wafer.schedule/venue.html'
     model = Venue
 
@@ -125,8 +126,9 @@ def generate_schedule(today=None):
     return sorted(schedule_days.values(), key=lambda x: x.day.date)
 
 
-class ScheduleView(TemplateView):
+class ScheduleView(BuildableTemplateView):
     template_name = 'wafer.schedule/full_schedule.html'
+    build_path = 'schedule/index.html'
 
     def get_context_data(self, **kwargs):
         context = super(ScheduleView, self).get_context_data(**kwargs)
