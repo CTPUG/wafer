@@ -141,8 +141,8 @@ documentation for more details.
     Also, configuration for the conversion, such as allowing arbitrary
     HTML embedding.
 
-``MEDUSA_DEPLOY_DIR``
-    Used by `django-medusa`_.
+``BUILD_DIR``
+    Used by `django-bakery`_.
     The directory that static versions of the sites are rendered to.
 
 ``REGISTRATION_OPEN``
@@ -151,5 +151,5 @@ documentation for more details.
     When ``True``, user sign-up is permitted.
 
 .. _django-markitup: https://github.com/zsiciarz/django-markitup
-.. _django-medusa: https://github.com/mtigas/django-medusa/
+.. _django-bakery: https://github.com/datadesk/django-bakery
 .. _django-registration-redux: https://django-registration-redux.readthedocs.io/

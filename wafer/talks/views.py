@@ -1,15 +1,15 @@
 from django.conf import settings
 from django.contrib.auth.mixins import (
     LoginRequiredMixin, PermissionRequiredMixin)
+from django.contrib.auth.models import AnonymousUser
 from django.core.exceptions import PermissionDenied, ValidationError
 from django.db.models import Q
 from django.http import Http404
 from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy
-from django.views.generic import DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
-from django.views.generic.list import ListView
 
+from bakery.views import BuildableDetailView, BuildableListView
 from rest_framework import viewsets
 from rest_framework.permissions import (
     DjangoModelPermissions, DjangoModelPermissionsOrAnonReadOnly,
@@ -24,7 +24,7 @@ from wafer.talks.models import (
 from wafer.talks.forms import ReviewForm, get_talk_form_class
 from wafer.talks.serializers import TalkSerializer, TalkUrlSerializer
 from wafer.users.models import UserProfile
-from wafer.utils import order_results_by
+from wafer.utils import order_results_by, PaginatedBuildableListView
 
 
 class EditOwnTalksMixin(object):
@@ -38,8 +38,9 @@ class EditOwnTalksMixin(object):
             raise PermissionDenied
 
 
-class UsersTalks(ListView):
+class UsersTalks(PaginatedBuildableListView):
     template_name = 'wafer.talks/talks.html'
+    build_prefix = 'talks'
     paginate_by = 25
 
     @order_results_by('talk_type', 'talk_id')
@@ -52,9 +53,23 @@ class UsersTalks(ListView):
                                    Q(status=CANCELLED))
 
 
-class TalkView(DetailView):
+class TalkView(BuildableDetailView):
     template_name = 'wafer.talks/talk.html'
     model = Talk
+
+    # Needed so django-bakery only renders public talks
+    def build_object(self, obj):
+        """Override django-bakery to skip talks that raise 403"""
+        try:
+            super(TalkView, self).build_object(obj)
+        except PermissionDenied:
+            # We cleanup the directory created
+            self.unbuild_object(obj)
+
+    def create_request(self, path):
+        request = super(TalkView, self).create_request(path)
+        request.user = AnonymousUser()
+        return request
 
     def get_object(self, *args, **kwargs):
         '''Only talk owners can see talks, unless they've been accepted'''
@@ -213,9 +228,10 @@ class TalkReview(PermissionRequiredMixin, CreateView):
         return self.get_object().talk.get_absolute_url()
 
 
-class Speakers(ListView):
+class Speakers(BuildableListView):
     model = Talk
     template_name = 'wafer.talks/speakers.html'
+    build_path = 'talks/speakers/index.html'
 
     def _by_row(self, speakers, n):
         return [speakers[i:i + n] for i in range(0, len(speakers), n)]
@@ -229,14 +245,16 @@ class Speakers(ListView):
         return context
 
 
-class TracksView(ListView):
+class TracksView(BuildableListView):
     model = Track
     template_name = 'wafer.talks/talk_tracks.html'
+    build_path = 'talks/tracks/index.html'
 
 
-class TalkTypesView(ListView):
+class TalkTypesView(BuildableListView):
     model = TalkType
     template_name = 'wafer.talks/talk_types.html'
+    build_path = 'talks/types/index.html'
 
 
 class TalksViewSet(viewsets.ModelViewSet, NestedViewSetMixin):
