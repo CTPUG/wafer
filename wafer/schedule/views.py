@@ -315,6 +315,7 @@ class ScheduleEditView(TemplateView):
 
         public_talks = Talk.objects.filter(Q(status=ACCEPTED) |
                                            Q(status=CANCELLED))
+        public_talks = public_talks.order_by("talk_type", "talk_id")
         venues = Venue.objects.filter(days__in=[day])
         slots = Slot.objects.all().select_related(
             'day', 'previous_slot').prefetch_related(

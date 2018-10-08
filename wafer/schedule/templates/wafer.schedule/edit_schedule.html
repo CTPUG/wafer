@@ -72,7 +72,7 @@
       </tbody>
     </table>
   </div>
-  <div class="col-md-4">
+  <div class="col-md-4" id="wafer-edit-schedule-bucket">
     <h2>Bucket</h2>
 
     <div>
@@ -101,32 +101,50 @@
       <div class="tab-content">
         <div role="tabpanel" class="tab-pane row"
              id="unassignedTalks">
-          {% for talk in talks_unassigned %}
-            <span draggable="true" class="col-md-6 badge badge-success draggable"
-                  id="talk{{ talk.talk_id }}"
-                  data-toggle="tooltip" data-placement="left"
-                  title="{{ talk.title }}" data-type="talk" data-talk-id="{{ talk.talk_id }}">
-              {% if not talk.cancelled %}
-                {{ talk.title|truncatechars:24 }}
-              {% else %}
-                <del>{{ talk.title|truncatechars:12 }} (Cancelled)</del>
-              {% endif %}
-            </span>
+          {% regroup talks_unassigned by talk_type.name as grouped_talks %}
+          {% for type, talks in grouped_talks %}
+            {% if type %}
+               <span draggable="false" class="col-md-6 badge badge-secondary">
+                  {{ type }}
+               </span>
+            {% endif %}
+            {% for talk in talks %}
+              <span draggable="true" class="col-md-6 badge badge-success draggable"
+                    id="talk{{ talk.talk_id }}"
+                    data-toggle="tooltip" data-placement="left"
+                    title="{{ talk.title }}"
+                    data-type="talk" data-talk-id="{{ talk.talk_id }}">
+                {% if not talk.cancelled %}
+                  {{ talk.title|truncatechars:20 }} ({{ talk.track|truncatechars:10 }})
+                {% else %}
+                  <del>{{ talk.title|truncatechars:12 }} (Cancelled)</del>
+                {% endif %}
+              </span>
+            {% endfor %}
           {% endfor %}
         </div>
         <div role="tabpanel" class="tab-pane active row"
              id="allTalks">
-          {% for talk in talks_all %}
-            <span draggable="true" class="col-md-6 badge badge-warning draggable"
-                  id="talk{{ talk.talk_id }}"
-                  data-toggle="tooltip" data-placement="left"
-                  title="{{ talk.title }} (Cancelled)" data-type="talk" data-talk-id="{{ talk.talk_id }}">
-              {% if not talk.cancelled %}
-                {{ talk.title|truncatechars:24 }}
-              {% else %}
-                <del>{{ talk.title|truncatechars:12 }} (Cancelled)</del>
-              {% endif %}
+          {% regroup talks_all by talk_type.name as grouped_talks %}
+          {% for type, talks in grouped_talks %}
+            {% if type %}
+            <span draggable="false" class="col-md-6 badge badge-secondary">
+               {{ type }}
             </span>
+            {% endif %}
+            {% for talk in talks %}
+              <span draggable="true" class="col-md-6 badge badge-warning draggable"
+                    id="talk{{ talk.talk_id }}"
+                    data-toggle="tooltip" data-placement="left"
+                    title="{{ talk.title }}"
+                    data-type="talk" data-talk-id="{{ talk.talk_id }}">
+                {% if not talk.cancelled %}
+                  {{ talk.title|truncatechars:20 }} ({{ talk.track|truncatechars:10 }})
+                {% else %}
+                  <del>{{ talk.title|truncatechars:12 }} (Cancelled)</del>
+                {% endif %}
+              </span>
+            {% endfor %}
           {% endfor %}
         </div>
         <div role="tabpanel" class="tab-pane row" id="pages">

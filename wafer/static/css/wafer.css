@@ -40,3 +40,8 @@
 .droppable.over{
     border: 5px dashed #000;
 }
+
+/* Default to white background to make this more visually distinct */
+#wafer-edit-schedule-bucket {
+   background-color: white;
+}
