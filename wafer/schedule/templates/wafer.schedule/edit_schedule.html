@@ -112,9 +112,10 @@
               <span draggable="true" class="col-md-6 badge badge-success draggable"
                     id="talk{{ talk.talk_id }}"
                     data-toggle="tooltip" data-placement="left"
-                    title="{{ talk.title }}" data-type="talk" data-talk-id="{{ talk.talk_id }}">
+                    title="{{ talk.title }}"
+                    data-type="talk" data-talk-id="{{ talk.talk_id }}">
                 {% if not talk.cancelled %}
-                  {{ talk.title|truncatechars:24 }}
+                  {{ talk.title|truncatechars:20 }} ({{ talk.track|truncatechars:10 }})
                 {% else %}
                   <del>{{ talk.title|truncatechars:12 }} (Cancelled)</del>
                 {% endif %}
@@ -135,9 +136,10 @@
               <span draggable="true" class="col-md-6 badge badge-warning draggable"
                     id="talk{{ talk.talk_id }}"
                     data-toggle="tooltip" data-placement="left"
-                    title="{{ talk.title }} (Cancelled)" data-type="talk" data-talk-id="{{ talk.talk_id }}">
+                    title="{{ talk.title }}"
+                    data-type="talk" data-talk-id="{{ talk.talk_id }}">
                 {% if not talk.cancelled %}
-                  {{ talk.title|truncatechars:24 }}
+                  {{ talk.title|truncatechars:20 }} ({{ talk.track|truncatechars:10 }})
                 {% else %}
                   <del>{{ talk.title|truncatechars:12 }} (Cancelled)</del>
                 {% endif %}
