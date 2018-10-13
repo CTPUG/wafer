@@ -42,6 +42,7 @@ def registration_settings(request):
             'WAFER_HIDE_LOGIN',
             'WAFER_REGISTRATION_OPEN',
             'WAFER_REGISTRATION_MODE',
+            'WAFER_VIDEO_LICENSE',
     ):
         context[setting] = getattr(settings, setting, None)
     return context

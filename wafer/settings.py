@@ -278,6 +278,7 @@ WAFER_TALK_FORM = 'wafer.talks.forms.TalkForm'
 # Ask speakers for video release, and an email address of a reviewer
 WAFER_VIDEO = True
 WAFER_VIDEO_REVIEWER = True
+WAFER_VIDEO_LICENSE = 'CC-BY-SA'
 
 # Range of scores for talk reviews (inclusive)
 WAFER_TALK_REVIEW_SCORES = (-2, 2)

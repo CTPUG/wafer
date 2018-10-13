@@ -120,6 +120,10 @@ Wafer's settings
     email address of someone who will review the talk's video, once it
     is ready to publish.
 
+``WAFER_VIDEO_LICENSE``
+    The name of the license that the conference's videos will be
+    released under. Talk submitters will be asked to release their video
+    under this license.
 
 Third party settings
 ====================
