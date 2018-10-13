@@ -159,9 +159,9 @@ class Talk(models.Model):
         default=True,
         help_text=_(
             "By checking this, you are giving permission for the talk to be "
-            "videoed, and distributed by the conference, under a license of "
-            "their choice."
-        ))
+            "videoed, and distributed by the conference, under the "
+            '<a href="%s">%s license</a>.'
+        ) % (settings.WAFER_VIDEO_LICENSE_URL, settings.WAFER_VIDEO_LICENSE))
     video_reviewer = models.EmailField(
         null=True, blank=True,
         help_text=_(
