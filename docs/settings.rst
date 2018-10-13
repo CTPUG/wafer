@@ -125,6 +125,9 @@ Wafer's settings
     released under. Talk submitters will be asked to release their video
     under this license.
 
+``WAFER_VIDEO_LICENSE_URL``
+    Link to the full text of ``WAFER_VIDEO_LICENSE``.
+
 Third party settings
 ====================
 
