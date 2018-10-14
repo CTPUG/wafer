@@ -12,7 +12,7 @@ from bakery.views import BuildableDetailView, BuildableTemplateView
 from rest_framework import viewsets
 from rest_framework.permissions import IsAdminUser
 from wafer.pages.models import Page
-from wafer.schedule.models import Venue, Slot, Day
+from wafer.schedule.models import Venue, Slot, ScheduleChunk
 from wafer.schedule.admin import check_schedule, validate_schedule
 from wafer.schedule.models import ScheduleItem
 from wafer.schedule.serializers import ScheduleItemSerializer
@@ -22,16 +22,16 @@ from wafer.talks.models import Talk
 
 class ScheduleRow(object):
     """This is a helpful containter for the schedule view to keep sanity"""
-    def __init__(self, schedule_day, slot):
+    def __init__(self, schedule_chunk, slot):
         tz = timezone.get_default_timezone()
-        self.schedule_day = schedule_day
+        self.schedule_chunk = schedule_chunk
         self.slot = slot
-        self.start_time = timezone.make_aware(slot.get_start_datetime(), tz)
+        self.start_time = timezone.make_aware(slot.get_start_time(), tz)
         self.items = {}
 
     def get_sorted_items(self):
         sorted_items = []
-        for venue in self.schedule_day.venues:
+        for venue in self.schedule_chunk.venues:
             if venue in self.items:
                 sorted_items.append(self.items[venue])
         return sorted_items
@@ -41,11 +41,11 @@ class ScheduleRow(object):
         return '%s - %s' % (self.slot, self.get_sorted_items())
 
 
-class ScheduleDay(object):
-    """A helpful container for information a days in a schedule view."""
-    def __init__(self, day):
-        self.day = day
-        self.venues = list(day.venue_set.all())
+class ScheduleChunk(object):
+    """A helpful container for information about chunks in a schedule view."""
+    def __init__(self, chunk):
+        self.chunk = chunk
+        self.venues = list(chunk.venue_set.all())
         self.rows = []
 
 
@@ -54,9 +54,9 @@ class VenueView(BuildableDetailView):
     model = Venue
 
 
-def make_schedule_row(schedule_day, slot, seen_items):
+def make_schedule_row(schedule_chunk, slot, seen_items):
     """Create a row for the schedule table."""
-    row = ScheduleRow(schedule_day, slot)
+    row = ScheduleRow(schedule_chunk, slot)
     skip = {}
     expanding = {}
     all_items = list(slot.scheduleitem_set
@@ -80,7 +80,7 @@ def make_schedule_row(schedule_day, slot, seen_items):
     expanding_right = None
     skipping = 0
     skip_item = None
-    for venue in schedule_day.venues:
+    for venue in schedule_chunk.venues:
         if venue in skip:
             # We need to skip all the venues this item spans over
             skipping = 1
@@ -111,19 +111,19 @@ def make_schedule_row(schedule_day, slot, seen_items):
 def generate_schedule(today=None):
     """Helper function which creates an ordered list of schedule days"""
     # We create a list of slots and schedule items
-    schedule_days = {}
+    schedule_chunks = {}
     seen_items = {}
-    for slot in Slot.objects.all().order_by('end_time', 'start_time', 'day'):
-        day = slot.get_day()
-        if today and day != today:
+    for slot in Slot.objects.all().order_by('end_time', 'start_time', 'chunk'):
+        chunk = slot.get_chunk()
+        if today and chunk != today:
             # Restrict ourselves to only today
             continue
-        schedule_day = schedule_days.get(day)
-        if schedule_day is None:
-            schedule_day = schedule_days[day] = ScheduleDay(day)
-        row = make_schedule_row(schedule_day, slot, seen_items)
-        schedule_day.rows.append(row)
-    return sorted(schedule_days.values(), key=lambda x: x.day.date)
+        schedule_chunks = schedule_chunks.get(chunk)
+        if schedule_chunk is None:
+            schedule_chunk = schedule_chunks[chunk] = ScheduleChunk(chunk)
+        row = make_schedule_row(schedule_chunk, slot, seen_items)
+        schedule_chunk.rows.append(row)
+    return sorted(schedule_chunks.values(), key=lambda x: x.chunk.start_time)
 
 
 class ScheduleView(BuildableTemplateView):
@@ -146,13 +146,13 @@ class ScheduleView(BuildableTemplateView):
         schedule_day = dates.get(day, None)
         if schedule_day is not None:
             # Add next / prev day links
-            sorted_days = sorted(dates)
-            pos = sorted_days.index(day)
+            sorted_chunks = sorted(dates)
+            pos = sorted_chunks.index(day)
             if pos > 0:
-                context['prev_day'] = sorted_days[pos - 1]
-            if pos < len(sorted_days) - 1:
-                context['next_day'] = sorted_days[pos + 1]
-        context['schedule_days'] = generate_schedule(schedule_day)
+                context['prev_day'] = sorted_chunks[pos - 1]
+            if pos < len(sorted_chunks) - 1:
+                context['next_day'] = sorted_chunks[pos + 1]
+        context['schedule_chunks'] = generate_schedule(schedule_day)
         return context
 
 

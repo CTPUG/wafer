@@ -6,14 +6,14 @@ from django.http import HttpRequest
 
 from wafer.pages.models import Page
 from wafer.schedule.admin import (
-    SlotAdmin, SlotDayFilter, ScheduleItemDayFilter, SlotStartTimeFilter,
+    SlotAdmin, SlotChunkFilter, ScheduleItemChunkFilter, SlotStartTimeFilter,
     ScheduleItemStartTimeFilter, ScheduleItemVenueFilter,
     prefetch_schedule_items, prefetch_slots,
     find_overlapping_slots, validate_items,
     find_duplicate_schedule_items, find_clashes, find_invalid_venues,
     find_non_contiguous,
     check_schedule, validate_schedule)
-from wafer.schedule.models import Day, Venue, Slot, ScheduleItem
+from wafer.schedule.models import ScheduleChunk, Venue, Slot, ScheduleItem
 from wafer.talks.models import (Talk, ACCEPTED, REJECTED, CANCELLED,
                                 SUBMITTED, UNDER_CONSIDERATION)
 
@@ -34,8 +34,8 @@ def make_dummy_form(additional):
 class SlotAdminTests(TestCase):
 
     def setUp(self):
-        """Create some Venues and Days for use in the actual tests."""
-        self.day = Day.objects.create(date=D.date(2013, 9, 22))
+        """Create some Venues and ScheduleChunks for use in the actual tests."""
+        self.day = ScheduleChunk.objects.create(date=D.date(2013, 9, 22))
         self.admin = SlotAdmin(Slot, None)
 
     def test_save_model_single_new(self):
@@ -168,9 +168,9 @@ class SlotListFilterTest(TestCase):
 
     def setUp(self):
         """Create some data for use in the actual tests."""
-        self.day1 = Day.objects.create(date=D.date(2013, 9, 22))
-        self.day2 = Day.objects.create(date=D.date(2013, 9, 23))
-        self.day3 = Day.objects.create(date=D.date(2013, 9, 24))
+        self.day1 = ScheduleChunk.objects.create(date=D.date(2013, 9, 22))
+        self.day2 = ScheduleChunk.objects.create(date=D.date(2013, 9, 23))
+        self.day3 = ScheduleChunk.objects.create(date=D.date(2013, 9, 24))
 
         self.admin = SlotAdmin(Slot, None)
 
@@ -179,9 +179,9 @@ class SlotListFilterTest(TestCase):
         # We can get away with request None, since SimpleListFilter
         # doesn't use request in the bits we want to test
         if day:
-            return SlotDayFilter(None, {'day': str(day.pk)}, Slot, self.admin)
+            return SlotChunkFilter(None, {'day': str(day.pk)}, Slot, self.admin)
         else:
-            return SlotDayFilter(None, {'day': None}, Slot, self.admin)
+            return SlotChunkFilter(None, {'day': None}, Slot, self.admin)
 
     def _make_time_filter(self, time):
         """create a list filter for testing."""
@@ -233,7 +233,7 @@ class SlotListFilterTest(TestCase):
         slots[self.day2] = [Slot(day=self.day2, start_time=D.time(11, 0, 0),
                     end_time=D.time(12, 00, 0))]
 
-        # Day1 slots
+        # ScheduleChunk1 slots
         for x in range(12, 17):
             slots[self.day1].append(Slot(day=self.day1,
                                          start_time=D.time(x, 0, 0),
@@ -250,11 +250,11 @@ class SlotListFilterTest(TestCase):
         TestFilter = self._make_day_filter(None)
         self.assertEqual(list(TestFilter.queryset(None, Slot.objects.all())),
                          list(Slot.objects.all()))
-        # Test Day1
+        # Test ScheduleChunk1
         TestFilter = self._make_day_filter(self.day1)
         queries = set(TestFilter.queryset(None, Slot.objects.all()))
         self.assertEqual(queries, set(slots[self.day1]))
-        # Test Day2
+        # Test ScheduleChunk2
         TestFilter = self._make_day_filter(self.day2)
         queries = set(TestFilter.queryset(None, Slot.objects.all()))
         self.assertEqual(queries, set(slots[self.day2]))
@@ -288,7 +288,7 @@ class SlotListFilterTest(TestCase):
                     end_time=D.time(12, 00, 0))
         prev.save()
         slots[self.day2] = [prev]
-        # Day1 slots
+        # ScheduleChunk1 slots
         for x in range(12, 17):
             prev1 = slots[self.day1][-1]
             slots[self.day1].append(Slot(previous_slot=prev1,
@@ -304,11 +304,11 @@ class SlotListFilterTest(TestCase):
         TestFilter = self._make_day_filter(None)
         self.assertEqual(list(TestFilter.queryset(None, Slot.objects.all())),
                          list(Slot.objects.all()))
-        # Test Day1
+        # Test ScheduleChunk1
         TestFilter = self._make_day_filter(self.day1)
         queries = set(TestFilter.queryset(None, Slot.objects.all()))
         self.assertEqual(queries, set(slots[self.day1]))
-        # Test Day2
+        # Test ScheduleChunk2
         TestFilter = self._make_day_filter(self.day2)
         queries = set(TestFilter.queryset(None, Slot.objects.all()))
         self.assertEqual(queries, set(slots[self.day2]))
@@ -342,7 +342,7 @@ class SlotListFilterTest(TestCase):
                     end_time=D.time(12, 00, 0))
         prev.save()
         slots[self.day2] = [prev]
-        # Day1 slots
+        # ScheduleChunk1 slots
         for x in range(12, 20):
             prev1 = slots[self.day1][-1]
             if x % 2:
@@ -367,11 +367,11 @@ class SlotListFilterTest(TestCase):
         TestFilter = self._make_day_filter(None)
         self.assertEqual(list(TestFilter.queryset(None, Slot.objects.all())),
                          list(Slot.objects.all()))
-        # Test Day1
+        # Test ScheduleChunk1
         TestFilter = self._make_day_filter(self.day1)
         queries = set(TestFilter.queryset(None, Slot.objects.all()))
         self.assertEqual(queries, set(slots[self.day1]))
-        # Test Day2
+        # Test ScheduleChunk2
         TestFilter = self._make_day_filter(self.day2)
         queries = set(TestFilter.queryset(None, Slot.objects.all()))
         self.assertEqual(queries, set(slots[self.day2]))
@@ -386,7 +386,7 @@ class ValidationTests(TestCase):
 
     def test_slot(self):
         """Test detection of overlapping slots"""
-        day1 = Day.objects.create(date=D.date(2013, 9, 22))
+        day1 = ScheduleChunk.objects.create(date=D.date(2013, 9, 22))
         start1 = D.time(10, 0, 0)
         start2 = D.time(11, 0, 0)
         start3 = D.time(12, 0, 0)
@@ -446,7 +446,7 @@ class ValidationTests(TestCase):
 
     def test_clashes(self):
         """Test that we can detect clashes correctly"""
-        day1 = Day.objects.create(date=D.date(2013, 9, 22))
+        day1 = ScheduleChunk.objects.create(date=D.date(2013, 9, 22))
         venue1 = Venue.objects.create(order=1, name='Venue 1')
         venue2 = Venue.objects.create(order=2, name='Venue 2')
         venue1.days.add(day1)
@@ -512,7 +512,7 @@ class ValidationTests(TestCase):
     def test_validation(self):
         """Test that we detect validation errors correctly"""
         # Create a item with both a talk and a page assigned
-        day1 = Day.objects.create(date=D.date(2013, 9, 22))
+        day1 = ScheduleChunk.objects.create(date=D.date(2013, 9, 22))
         venue1 = Venue.objects.create(order=1, name='Venue 1')
         venue1.days.add(day1)
 
@@ -586,7 +586,7 @@ class ValidationTests(TestCase):
     def test_non_contiguous(self):
         """Test that we detect items with non contiguous slots"""
         # Create a item with a gap in the slots assigned to it
-        day1 = Day.objects.create(date=D.date(2013, 9, 22))
+        day1 = ScheduleChunk.objects.create(date=D.date(2013, 9, 22))
         venue1 = Venue.objects.create(order=1, name='Venue 1')
         venue1.days.add(day1)
 
@@ -638,7 +638,7 @@ class ValidationTests(TestCase):
         #       Venue 1  Venue 2
         # 10-11 Talk 1   Page 1
         # 11-12 Talk 1   Page 1
-        day1 = Day.objects.create(date=D.date(2013, 9, 22))
+        day1 = ScheduleChunk.objects.create(date=D.date(2013, 9, 22))
         venue1 = Venue.objects.create(order=1, name='Venue 1')
         venue2 = Venue.objects.create(order=2, name='Venue 2')
         venue1.days.add(day1)
@@ -693,8 +693,8 @@ class ValidationTests(TestCase):
     def test_venues(self):
         """Test that we detect venues violating the day constraints
            correctly."""
-        day1 = Day.objects.create(date=D.date(2013, 9, 22))
-        day2 = Day.objects.create(date=D.date(2013, 9, 23))
+        day1 = ScheduleChunk.objects.create(date=D.date(2013, 9, 22))
+        day2 = ScheduleChunk.objects.create(date=D.date(2013, 9, 23))
         venue1 = Venue.objects.create(order=1, name='Venue 1')
         venue2 = Venue.objects.create(order=2, name='Venue 2')
         venue1.days.add(day1)
@@ -756,7 +756,7 @@ class ValidationTests(TestCase):
            We also test check_schedule, since the logic of the two funcions
            is so similar it doesn't make sense to have a second test
            case for it."""
-        day1 = Day.objects.create(date=D.date(2013, 9, 22))
+        day1 = ScheduleChunk.objects.create(date=D.date(2013, 9, 22))
         venue1 = Venue.objects.create(order=1, name='Venue 1')
         venue1.days.add(day1)
         page = Page.objects.create(name="test page", slug="test")

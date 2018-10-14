@@ -8,7 +8,7 @@ from django.contrib.auth import get_user_model
 
 from wafer.talks.models import Talk, ACCEPTED
 from wafer.pages.models import Page
-from wafer.schedule.models import Day, Venue, Slot, ScheduleItem
+from wafer.schedule.models import ScheduleChunk, Venue, Slot, ScheduleItem
 from wafer.utils import QueryTracker
 
 
@@ -42,7 +42,7 @@ def make_venue(order=1, name='Venue 1'):
 
 def make_slot():
     """ Make a slot. """
-    day = Day.objects.create(date=D.date(2013, 9, 22))
+    day = ScheduleChunk.objects.create(date=D.date(2013, 9, 22))
     start = D.time(10, 0, 0)
     end = D.time(15, 0, 0)
     slot = Slot.objects.create(start_time=start, end_time=end,
@@ -74,7 +74,7 @@ class ScheduleViewTests(TestCase):
         # 10-11   Item1       Item4
         # 11-12   Item2       Item5
         # 12-13   Item3       Item6
-        day1 = Day.objects.create(date=D.date(2013, 9, 22))
+        day1 = ScheduleChunk.objects.create(date=D.date(2013, 9, 22))
 
         venue1 = Venue.objects.create(order=1, name='Venue 1')
         venue1.days.add(day1)
@@ -147,7 +147,7 @@ class ScheduleViewTests(TestCase):
         # 10-11   Item3       Item6
         # 11-12   Item2       Item5
         # 12-13   Item1       Item4
-        day1 = Day.objects.create(date=D.date(2013, 9, 22))
+        day1 = ScheduleChunk.objects.create(date=D.date(2013, 9, 22))
         venue1 = Venue.objects.create(order=1, name='Venue 1')
         venue1.days.add(day1)
         venue2 = Venue.objects.create(order=2, name='Venue 2')
@@ -219,13 +219,13 @@ class ScheduleViewTests(TestCase):
            check we get the expected results"""
         # Schedule is
         #         Venue 1     Venue 2
-        # Day1
+        # ScheduleChunk1
         # 10-11   Item1       Item4
         # 11-12   Item2       Item5
-        # Day2
+        # ScheduleChunk2
         # 12-13   Item3       Item6
-        day1 = Day.objects.create(date=D.date(2013, 9, 22))
-        day2 = Day.objects.create(date=D.date(2013, 9, 23))
+        day1 = ScheduleChunk.objects.create(date=D.date(2013, 9, 22))
+        day2 = ScheduleChunk.objects.create(date=D.date(2013, 9, 23))
         venue1 = Venue.objects.create(order=1, name='Venue 1')
         venue1.days.add(day1)
         venue1.days.add(day2)
@@ -290,8 +290,8 @@ class ScheduleViewTests(TestCase):
         """Create a multiple day table with 3 slots and 2 venues and
            check we get the expected results using the per-day views"""
         # This is the same schedule as test_multiple_days
-        day1 = Day.objects.create(date=D.date(2013, 9, 22))
-        day2 = Day.objects.create(date=D.date(2013, 9, 23))
+        day1 = ScheduleChunk.objects.create(date=D.date(2013, 9, 22))
+        day2 = ScheduleChunk.objects.create(date=D.date(2013, 9, 23))
         venue1 = Venue.objects.create(order=1, name='Venue 1')
         venue1.days.add(day1)
         venue1.days.add(day2)
@@ -388,15 +388,15 @@ class ScheduleViewTests(TestCase):
         """Create a multiple day table with 3 slots and 2 venues and
            check we get the expected results"""
         # Schedule is
-        # Day1
+        # ScheduleChunk1
         #         Venue 1
         # 10-11   Item1
         # 11-12   Item2
-        # Day2
+        # ScheduleChunk2
         #         Venue 2
         # 12-13   Item3
-        day1 = Day.objects.create(date=D.date(2013, 9, 22))
-        day2 = Day.objects.create(date=D.date(2013, 9, 23))
+        day1 = ScheduleChunk.objects.create(date=D.date(2013, 9, 22))
+        day2 = ScheduleChunk.objects.create(date=D.date(2013, 9, 23))
         venue1 = Venue.objects.create(order=1, name='Venue 1')
         venue1.days.add(day1)
         venue2 = Venue.objects.create(order=2, name='Venue 2')
@@ -462,7 +462,7 @@ class ScheduleViewTests(TestCase):
         # 12-13   Item2       --        Item8
         # 13-14   --          Item4 +   --
         # 14-15   Item3 +     Item5     --
-        day1 = Day.objects.create(date=D.date(2013, 9, 22))
+        day1 = ScheduleChunk.objects.create(date=D.date(2013, 9, 22))
         venue1 = Venue.objects.create(order=1, name='Venue 1')
         venue2 = Venue.objects.create(order=2, name='Venue 2')
         venue3 = Venue.objects.create(order=3, name='Venue 3')
@@ -585,7 +585,7 @@ class ScheduleViewTests(TestCase):
         # 12-13   Item2       Item7
         # 13-14   Item3         |
         # 14-15   Item4         |
-        day1 = Day.objects.create(date=D.date(2013, 9, 22))
+        day1 = ScheduleChunk.objects.create(date=D.date(2013, 9, 22))
         venue1 = Venue.objects.create(order=1, name='Venue 1')
         venue2 = Venue.objects.create(order=2, name='Venue 2')
         venue1.days.add(day1)
@@ -679,7 +679,7 @@ class ScheduleViewTests(TestCase):
         # 12-13     |         --        Item7
         # 13-14   Item2 +     --          |
         # 14-15   Item3 +     Item4+     --
-        day1 = Day.objects.create(date=D.date(2013, 9, 22))
+        day1 = ScheduleChunk.objects.create(date=D.date(2013, 9, 22))
         venue1 = Venue.objects.create(order=1, name='Venue 1')
         venue2 = Venue.objects.create(order=2, name='Venue 2')
         venue3 = Venue.objects.create(order=3, name='Venue 3')
@@ -786,8 +786,8 @@ class ScheduleViewTests(TestCase):
 class CurrentViewTests(TestCase):
     def test_current_view_simple(self):
         """Create a schedule and check that the current view looks sane."""
-        day1 = Day.objects.create(date=D.date(2013, 9, 22))
-        day2 = Day.objects.create(date=D.date(2013, 9, 23))
+        day1 = ScheduleChunk.objects.create(date=D.date(2013, 9, 22))
+        day2 = ScheduleChunk.objects.create(date=D.date(2013, 9, 23))
         venue1 = Venue.objects.create(order=1, name='Venue 1')
         venue2 = Venue.objects.create(order=2, name='Venue 2')
         venue1.days.add(day1)
@@ -901,7 +901,7 @@ class CurrentViewTests(TestCase):
         # 12-13     |         Item7     Item6
         # 13-14   Item8         |         |
         # 14-15   --          Item9     Item10
-        day1 = Day.objects.create(date=D.date(2013, 9, 22))
+        day1 = ScheduleChunk.objects.create(date=D.date(2013, 9, 22))
         venue1 = Venue.objects.create(order=1, name='Venue 1')
         venue2 = Venue.objects.create(order=2, name='Venue 2')
         venue3 = Venue.objects.create(order=3, name='Venue 3')
@@ -1008,7 +1008,7 @@ class CurrentViewTests(TestCase):
 
     def test_current_view_invalid(self):
         """Test that invalid schedules return a inactive current view."""
-        day1 = Day.objects.create(date=D.date(2013, 9, 22))
+        day1 = ScheduleChunk.objects.create(date=D.date(2013, 9, 22))
         venue1 = Venue.objects.create(order=1, name='Venue 1')
         venue1.days.add(day1)
         start1 = D.time(10, 0, 0)
@@ -1044,8 +1044,8 @@ class NonHTMLViewTests(TestCase):
 
     def setUp(self):
         # Create the schedule used for these tests
-        day1 = Day.objects.create(date=D.date(2013, 9, 22))
-        day2 = Day.objects.create(date=D.date(2013, 9, 23))
+        day1 = ScheduleChunk.objects.create(date=D.date(2013, 9, 22))
+        day2 = ScheduleChunk.objects.create(date=D.date(2013, 9, 23))
         venue1 = Venue.objects.create(order=1, name='Venue 1')
         venue2 = Venue.objects.create(order=2, name='Venue 2')
         venue1.days.add(day1)
