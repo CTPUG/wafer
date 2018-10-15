@@ -112,11 +112,11 @@ class SlotAdminTests(TestCase):
         slot2 = Slot.objects.filter(previous_slot=slot1).get()
         self.assertEqual(slot2.get_start_time(), slot1.end_time)
         self.assertEqual(slot2.end_time, D.datetime(2013, 9, 22, 12, 30, 0, tzinfo=timezone.utc))
-        self.assertEqual(slot2.day, slot.day)
+        self.assertEqual(slot2.chunk, slot.chunk)
         slot3 = Slot.objects.filter(previous_slot=slot2).get()
         self.assertEqual(slot3.get_start_time(), slot2.end_time)
         self.assertEqual(slot3.end_time, D.datetime(2013, 9, 22, 13, 00, 0, tzinfo=timezone.utc))
-        self.assertEqual(slot3.day, slot.day)
+        self.assertEqual(slot3.chunk, slot.chunk)
 
         # repeat checks with a different length of slot
         slot = Slot(chunk=self.chunk, previous_slot=slot3,
@@ -130,15 +130,15 @@ class SlotAdminTests(TestCase):
         slot2 = Slot.objects.filter(previous_slot=slot1).get()
         self.assertEqual(slot2.get_start_time(), slot1.end_time)
         self.assertEqual(slot2.end_time, D.datetime(2013, 9, 22, 17, 30, 0, tzinfo=timezone.utc))
-        self.assertEqual(slot2.day, slot.day)
+        self.assertEqual(slot2.chunk, slot.chunk)
         slot3 = Slot.objects.filter(previous_slot=slot2).get()
         self.assertEqual(slot3.get_start_time(), slot2.end_time)
         self.assertEqual(slot3.end_time, D.datetime(2013, 9, 22, 19, 00, 0, tzinfo=timezone.utc))
-        self.assertEqual(slot3.day, slot.day)
+        self.assertEqual(slot3.chunk, slot.chunk)
         slot4 = Slot.objects.filter(previous_slot=slot3).get()
         self.assertEqual(slot4.get_start_time(), slot3.end_time)
         self.assertEqual(slot4.end_time, D.datetime(2013, 9, 22, 20, 30, 0, tzinfo=timezone.utc))
-        self.assertEqual(slot4.day, slot.day)
+        self.assertEqual(slot4.chunk, slot.chunk)
 
     def test_save_model_prev_slot_additional(self):
         """Test save_model changing a new slot with some additional slots,
@@ -248,19 +248,19 @@ class SlotListFilterTest(TestCase):
         slots = {}
         slots[self.chunk1] = [Slot(chunk=self.chunk1, start_time=D.datetime(2013, 9, 22, 11, 0, 0, tzinfo=timezone.utc),
                     end_time=D.datetime(2013, 9, 22, 12, 00, 0, tzinfo=timezone.utc))]
-        slots[self.chunk2] = [Slot(chunk=self.chunk2, start_time=D.datetime(2013, 9, 22, 11, 0, 0, tzinfo=timezone.utc),
-                    end_time=D.datetime(2013, 9, 22, 12, 00, 0, tzinfo=timezone.utc))]
+        slots[self.chunk2] = [Slot(chunk=self.chunk2, start_time=D.datetime(2013, 9, 23, 11, 0, 0, tzinfo=timezone.utc),
+                    end_time=D.datetime(2013, 9, 23, 12, 00, 0, tzinfo=timezone.utc))]
 
         # ScheduleChunk1 slots
         for x in range(12, 17):
             slots[self.chunk1].append(Slot(chunk=self.chunk1,
-                                         start_time=D.datetime(x, 0, 0),
-                                         end_time=D.datetime(x+1, 0, 0)))
+                                         start_time=D.datetime(2013, 9, 22, x, 0, 0, tzinfo=timezone.utc),
+                                         end_time=D.datetime(2013, 9, 22, x+1, 0, 0, tzinfo=timezone.utc)))
             if x < 15:
                 # Fewer slots for day 2
                 slots[self.chunk2].append(Slot(chunk=self.chunk2,
-                                             start_time=D.datetime(x, 0, 0),
-                                             end_time=D.datetime(x+1, 0, 0)))
+                                             start_time=D.datetime(2013, 9, 23, x, 0, 0, tzinfo=timezone.utc),
+                                             end_time=D.datetime(2013, 9, 23, x+1, 0, 0, tzinfo=timezone.utc)))
         for d in slots:
             for s in slots[d]:
                 s.save()
@@ -310,13 +310,13 @@ class SlotListFilterTest(TestCase):
         for x in range(12, 17):
             prev1 = slots[self.chunk1][-1]
             slots[self.chunk1].append(Slot(previous_slot=prev1,
-                                         end_time=D.datetime(x+1, 0, 0)))
+                                         end_time=D.datetime(2013, 9, 22, x+1, 0, 0, tzinfo=timezone.utc)))
             slots[self.chunk1][-1].save()
             if x < 15:
                 prev2 = slots[self.chunk2][-1]
                 # Fewer slots for day 2
                 slots[self.chunk2].append(Slot(previous_slot=prev2,
-                                             end_time=D.datetime(x+1, 0, 0)))
+                                             end_time=D.datetime(2013, 9, 22, x+1, 0, 0, tzinfo=timezone.utc)))
                 slots[self.chunk2][-1].save()
         # Check Null filter
         TestFilter = self._make_day_filter(None)
@@ -365,21 +365,21 @@ class SlotListFilterTest(TestCase):
             prev1 = slots[self.chunk1][-1]
             if x % 2:
                 slots[self.chunk1].append(Slot(previous_slot=prev1,
-                                             end_time=D.datetime(x+1, 0, 0)))
+                                             end_time=D.datetime(2013, 9, 22, x+1, 0, 0, tzinfo=timezone.utc)))
             else:
                 slots[self.chunk1].append(Slot(chunk=self.chunk1,
-                                             start_time=D.datetime(x, 0, 0),
-                                             end_time=D.datetime(x+1, 0, 0)))
+                                             start_time=D.datetime(2013, 9, 22, x, 0, 0, tzinfo=timezone.utc),
+                                             end_time=D.datetime(2013, 9, 22, x+1, 0, 0, tzinfo=timezone.utc)))
 
             slots[self.chunk1][-1].save()
             prev2 = slots[self.chunk2][-1]
             if x % 5:
                 slots[self.chunk2].append(Slot(previous_slot=prev2,
-                                             end_time=D.datetime(x+1, 0, 0)))
+                                             end_time=D.datetime(2013, 9, 22, x+1, 0, 0, tzinfo=timezone.utc)))
             else:
                 slots[self.chunk2].append(Slot(chunk=self.chunk2,
-                                             start_time=D.datetime(x, 0, 0),
-                                             end_time=D.datetime(x+1, 0, 0)))
+                                             start_time=D.datetime(2013, 9, 22, x, 0, 0, tzinfo=timezone.utc),
+                                             end_time=D.datetime(2013, 9, 22, x+1, 0, 0, tzinfo=timezone.utc)))
             slots[self.chunk2][-1].save()
         # Check Null filter
         TestFilter = self._make_day_filter(None)

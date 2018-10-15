@@ -98,7 +98,7 @@ class Slot(models.Model):
             slot = u'Slot %s' % self.name
         else:
             slot = u'Slot'
-        if _is_single_day():
+        if self._is_single_day():
             day = self.end_time.date().strftime('%b %d (%a)')
             start = self.get_formatted_start_time()
             end = self.get_formatted_end_time()
@@ -108,7 +108,7 @@ class Slot(models.Model):
         end = self.get_formatted_end_date_time()
         return u"%s: %s - %s" % (slot, start, end)
 
-    def _is_single_day():
+    def _is_single_day(self):
         """Check if this slot crosses midnight"""
         return self.end_time.date() == self.get_start_time().date()
 

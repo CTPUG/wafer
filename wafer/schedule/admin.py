@@ -472,12 +472,12 @@ class SlotAdmin(CompareVersionAdmin):
             # "previous_slot" so tweaking start times is simple.
             prev = obj
             end = prev.end_time
-            start = prev.start_time
+            start = prev.get_start_time()
             slot_len = end - start
             for loop in range(form.cleaned_data['additional']):
                 end = end + slot_len
-                new_slot = Slot(day=prev.day, previous_slot=prev,
-                                end_time=end.time())
+                new_slot = Slot(chunk=prev.chunk, previous_slot=prev,
+                                end_time=end)
                 new_slot.save()
                 msgdict = {'obj': force_text(new_slot)}
                 msg = _("Additional slot %(obj)s added sucessfully") % msgdict

@@ -418,7 +418,7 @@ class ScheduleViewTests(TestCase):
         response = c.get('/schedule/?day=2013-09-23')
         [day] = response.context['schedule_chunks']
 
-        self.assertEqual(day.day, day2.day)
+        self.assertEqual(day.chunk, day2.chunk)
         self.assertEqual(day.venues, day2.venues)
         self.assertEqual(len(day.rows), len(day2.rows))
         # Repeat a bunch of tests from the full schedule
