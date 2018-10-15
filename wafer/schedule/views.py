@@ -23,10 +23,9 @@ from wafer.talks.models import Talk
 class ScheduleRow(object):
     """This is a helpful containter for the schedule view to keep sanity"""
     def __init__(self, schedule_chunk, slot):
-        tz = timezone.get_default_timezone()
         self.schedule_chunk = schedule_chunk
         self.slot = slot
-        self.start_time = timezone.make_aware(slot.get_start_time(), tz)
+        self.start_time = slot.get_start_time()
         self.items = {}
 
     def get_sorted_items(self):
@@ -41,7 +40,7 @@ class ScheduleRow(object):
         return '%s - %s' % (self.slot, self.get_sorted_items())
 
 
-class ScheduleChunk(object):
+class SchedulePage(object):
     """A helpful container for information about chunks in a schedule view."""
     def __init__(self, chunk):
         self.chunk = chunk
@@ -118,9 +117,9 @@ def generate_schedule(today=None):
         if today and chunk != today:
             # Restrict ourselves to only today
             continue
-        schedule_chunks = schedule_chunks.get(chunk)
+        schedule_chunk = schedule_chunks.get(chunk)
         if schedule_chunk is None:
-            schedule_chunk = schedule_chunks[chunk] = ScheduleChunk(chunk)
+            schedule_chunk = schedule_chunks[chunk] = SchedulePage(chunk)
         row = make_schedule_row(schedule_chunk, slot, seen_items)
         schedule_chunk.rows.append(row)
     return sorted(schedule_chunks.values(), key=lambda x: x.chunk.start_time)
@@ -140,8 +139,8 @@ class ScheduleView(BuildableTemplateView):
             return context
         context['active'] = True
         day = self.request.GET.get('day', None)
-        dates = dict([(x.date.strftime('%Y-%m-%d'), x) for x in
-                      Day.objects.all()])
+        dates = dict([(x.start_time.strftime('%Y-%m-%d'), x) for x in
+                      ScheduleChunk.objects.all()])
         # We choose to return the full schedule if given an invalid date
         schedule_day = dates.get(day, None)
         if schedule_day is not None:
@@ -177,8 +176,8 @@ class CurrentView(TemplateView):
     def _parse_today(self, day):
         if day is None:
             day = str(datetime.date.today())
-        dates = dict([(x.date.strftime('%Y-%m-%d'), x) for x in
-                      Day.objects.all()])
+        dates = dict([(x.start_time.strftime('%Y-%m-%d'), x) for x in
+                      ScheduleChunk.objects.all()])
         if day not in dates:
             return None
         return ScheduleDay(dates[day])
@@ -304,37 +303,37 @@ class ScheduleEditView(TemplateView):
             slot_context['venues'].append(venue_context)
         return slot_context
 
-    def get_context_data(self, day_id=None, **kwargs):
+    def get_context_data(self, chunk_id=None, **kwargs):
         context = super(ScheduleEditView, self).get_context_data(**kwargs)
 
-        days = Day.objects.all()
-        if day_id:
-            day = days.get(id=day_id)
+        chunks = ScheduleChunk.objects.all()
+        if chunk_id:
+            chunk = chunks.get(id=chunk_id)
         else:
-            day = days.first()
+            chunk = chunks.first()
 
         public_talks = Talk.objects.filter(Q(status=ACCEPTED) |
                                            Q(status=CANCELLED))
         public_talks = public_talks.order_by("talk_type", "talk_id")
-        venues = Venue.objects.filter(days__in=[day])
+        venues = Venue.objects.filter(chunks__in=[chunk])
         slots = Slot.objects.all().select_related(
-            'day', 'previous_slot').prefetch_related(
+            'chunk', 'previous_slot').prefetch_related(
             'scheduleitem_set', 'slot_set').order_by(
-                'end_time', 'start_time', 'day')
+                'end_time', 'start_time', 'chunk')
         aggregated_slots = []
 
         for slot in slots:
-            if day != slot.get_day():
+            if chunk != slot.get_chunk():
                 continue
             aggregated_slots.append(self._slot_context(slot, venues))
 
-        context['day'] = day
+        context['chunk'] = chunk
         context['venues'] = venues
         context['slots'] = aggregated_slots
         context['talks_all'] = public_talks
         context['talks_unassigned'] = public_talks.filter(scheduleitem=None)
         context['pages'] = Page.objects.all()
-        context['days'] = days
+        context['chunks'] = chunks
         context['validation_errors'] = validate_schedule()
         return context
 

@@ -129,7 +129,7 @@ class ScheduleViewTests(TestCase):
             response = c.get('/schedule/')
             self.assertTrue(len(tracker.queries) < 60)
 
-        [day1] = response.context['schedule_days']
+        [day1] = response.context['schedule_chunks']
 
         assert len(day1.rows) == 3
         assert day1.venues == [venue1, venue2]
@@ -208,7 +208,7 @@ class ScheduleViewTests(TestCase):
         c = Client()
         response = c.get('/schedule/')
 
-        [day1] = response.context['schedule_days']
+        [day1] = response.context['schedule_chunks']
 
         assert len(day1.rows) == 3
         assert day1.venues == [venue1, venue2]
@@ -296,7 +296,7 @@ class ScheduleViewTests(TestCase):
         c = Client()
         response = c.get('/schedule/')
 
-        [day1, day2] = response.context['schedule_days']
+        [day1, day2] = response.context['schedule_chunks']
 
         assert len(day1.rows) == 2
         assert day1.venues == [venue1, venue2]
@@ -374,7 +374,7 @@ class ScheduleViewTests(TestCase):
 
         response = c.get('/schedule/?day=2013-09-24')
 
-        [day1, day2] = response.context['schedule_days']
+        [day1, day2] = response.context['schedule_chunks']
 
         self.assertEqual(len(day1.rows), 2)
         self.assertEqual(day1.venues, [venue1, venue2])
@@ -401,7 +401,7 @@ class ScheduleViewTests(TestCase):
 
         # Test per-day schedule views
         response = c.get('/schedule/?day=2013-09-22')
-        [day] = response.context['schedule_days']
+        [day] = response.context['schedule_chunks']
 
         self.assertEqual(day.day, day1.day)
         self.assertEqual(day.venues, day1.venues)
@@ -416,7 +416,7 @@ class ScheduleViewTests(TestCase):
         self.assertEqual(day.rows[0].get_sorted_items()[0]['colspan'], 1)
 
         response = c.get('/schedule/?day=2013-09-23')
-        [day] = response.context['schedule_days']
+        [day] = response.context['schedule_chunks']
 
         self.assertEqual(day.day, day2.day)
         self.assertEqual(day.venues, day2.venues)
@@ -482,7 +482,7 @@ class ScheduleViewTests(TestCase):
         c = Client()
         response = c.get('/schedule/')
 
-        [day1, day2] = response.context['schedule_days']
+        [day1, day2] = response.context['schedule_chunks']
 
         assert len(day1.rows) == 2
         assert day1.venues == [venue1]
@@ -572,7 +572,7 @@ class ScheduleViewTests(TestCase):
         c = Client()
         response = c.get('/schedule/')
 
-        [day1] = response.context['schedule_days']
+        [day1] = response.context['schedule_chunks']
 
         assert len(day1.rows) == 5
         assert day1.venues == [venue1, venue2, venue3]
@@ -692,7 +692,7 @@ class ScheduleViewTests(TestCase):
         c = Client()
         response = c.get('/schedule/')
 
-        [day1] = response.context['schedule_days']
+        [day1] = response.context['schedule_chunks']
 
         assert len(day1.rows) == 5
         assert day1.venues == [venue1, venue2]
@@ -800,7 +800,7 @@ class ScheduleViewTests(TestCase):
         c = Client()
         response = c.get('/schedule/')
 
-        [day1] = response.context['schedule_days']
+        [day1] = response.context['schedule_chunks']
 
         assert len(day1.rows) == 5
         assert day1.venues == [venue1, venue2, venue3]

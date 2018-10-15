@@ -123,11 +123,11 @@ class Slot(models.Model):
         result['hours'], result['minutes'] = divmod(duration // 60, 60)
         return result
 
-    def get_day(self):
+    def get_chunk(self):
         if self.previous_slot:
-            return self.previous_slot.get_day()
-        return self.day
-    get_day.short_description = 'Day'
+            return self.previous_slot.get_chunk()
+        return self.chunk
+    get_chunk.short_description = 'Schedule Chunk'
 
     def clean(self):
         """Ensure we have start_time < end_time"""
