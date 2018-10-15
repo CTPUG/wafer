@@ -284,7 +284,7 @@ class BaseStartTimeFilter(admin.SimpleListFilter):
     parameter_name = 'start'
 
     def lookups(self, request, model_admin):
-        values = [slot.get_formatted_start_time() for slot in Slot.objects.all()]
+        values = [slot.get_formatted_start_date_time() for slot in Slot.objects.all()]
         # We order drop duplicates and order globally.
         values = sorted(set(values))
         # It's not great to use the string value as the admin key, but we
@@ -434,7 +434,7 @@ class SlotAdminAddForm(SlotAdminForm):
 class SlotAdmin(CompareVersionAdmin):
     form = SlotAdminForm
 
-    list_display = ('__str__', 'get_day', 'get_formatted_start_time',
+    list_display = ('__str__', 'get_chunk', 'get_formatted_start_date_time',
                     'end_time')
     list_editable = ('end_time',)
 
@@ -471,9 +471,8 @@ class SlotAdmin(CompareVersionAdmin):
             # created , and we specify them as a sequence using
             # "previous_slot" so tweaking start times is simple.
             prev = obj
-            end = datetime.datetime.combine(prev.get_day().date, prev.end_time)
-            start = datetime.datetime.combine(prev.get_day().date,
-                                              prev.get_start_time())
+            end = prev.end_time
+            start = prev.start_time
             slot_len = end - start
             for loop in range(form.cleaned_data['additional']):
                 end = end + slot_len

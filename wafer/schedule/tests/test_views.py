@@ -403,7 +403,7 @@ class ScheduleViewTests(TestCase):
         response = c.get('/schedule/?day=2013-09-22')
         [day] = response.context['schedule_chunks']
 
-        self.assertEqual(day.day, day1.day)
+        self.assertEqual(day.chunk, day1.chunk)
         self.assertEqual(day.venues, day1.venues)
         self.assertEqual(len(day.rows), len(day1.rows))
         # Repeat a bunch of tests from the full schedule
@@ -884,14 +884,14 @@ class CurrentViewTests(TestCase):
         start5 = D.datetime(2013, 9, 22, 14, 0, 0, tzinfo=timezone.utc)
 
         # During the first slot
-        cur1 = D.datetime(10, 30, 0)
+        cur1 = D.datetime(2013, 9, 22, 10, 30, 0, tzinfo=timezone.utc)
         # Middle of the day
-        cur2 = D.datetime(11, 30, 0)
-        cur3 = D.datetime(12, 30, 0)
+        cur2 = D.datetime(2013, 9, 22, 11, 30, 0, tzinfo=timezone.utc)
+        cur3 = D.datetime(2013, 9, 22, 12, 30, 0, tzinfo=timezone.utc)
         # During the last slot
-        cur4 = D.datetime(13, 30, 0)
+        cur4 = D.datetime(2013, 9, 22, 13, 30, 0, tzinfo=timezone.utc)
         # After the last slot
-        cur5 = D.datetime(15, 30, 0)
+        cur5 = D.datetime(2013, 9, 22, 15, 30, 0, tzinfo=timezone.utc)
 
         slots = []
 
@@ -913,7 +913,7 @@ class CurrentViewTests(TestCase):
 
         c = Client()
         response = c.get('/schedule/current/',
-                         {'day': day1.date.strftime('%Y-%m-%d'),
+                         {'day': day1.start_time.strftime('%Y-%m-%d'),
                           'time': cur1.strftime('%H:%M')})
         context = response.context
 
@@ -925,7 +925,7 @@ class CurrentViewTests(TestCase):
         assert context['slots'][1].items[venue1]['note'] == 'forthcoming'
 
         response = c.get('/schedule/current/',
-                         {'day': day1.date.strftime('%Y-%m-%d'),
+                         {'day': day1.start_time.strftime('%Y-%m-%d'),
                           'time': cur2.strftime('%H:%M')})
         context = response.context
         assert context['cur_slot'] == slots[1]
@@ -937,7 +937,7 @@ class CurrentViewTests(TestCase):
         assert context['slots'][2].items[venue1]['note'] == 'forthcoming'
 
         response = c.get('/schedule/current/',
-                         {'day': day1.date.strftime('%Y-%m-%d'),
+                         {'day': day1.start_time.strftime('%Y-%m-%d'),
                           'time': cur3.strftime('%H:%M')})
         context = response.context
         assert context['cur_slot'] == slots[2]
@@ -949,7 +949,7 @@ class CurrentViewTests(TestCase):
         assert context['slots'][2].items[venue1]['note'] == 'forthcoming'
 
         response = c.get('/schedule/current/',
-                         {'day': day1.date.strftime('%Y-%m-%d'),
+                         {'day': day1.start_time.strftime('%Y-%m-%d'),
                           'time': cur4.strftime('%H:%M')})
         context = response.context
         assert context['cur_slot'] == slots[3]
@@ -960,7 +960,7 @@ class CurrentViewTests(TestCase):
         assert context['slots'][1].items[venue1]['note'] == 'current'
 
         response = c.get('/schedule/current/',
-                         {'day': day1.date.strftime('%Y-%m-%d'),
+                         {'day': day1.start_time.strftime('%Y-%m-%d'),
                           'time': cur5.strftime('%H:%M')})
         context = response.context
         assert context['cur_slot'] is None
@@ -971,7 +971,7 @@ class CurrentViewTests(TestCase):
 
         # Check that next day is an empty current view
         response = c.get('/schedule/current/',
-                         {'day': day2.date.strftime('%Y-%m-%d'),
+                         {'day': day2.start_time.strftime('%Y-%m-%d'),
                           'time': cur3.strftime('%H:%M')})
         assert len(response.context['slots']) == 0
 
@@ -1036,16 +1036,16 @@ class CurrentViewTests(TestCase):
         items[9].slots.add(slot5)
 
         # During the first slot
-        cur1 = D.datetime(10, 30, 0)
+        cur1 = D.datetime(2013, 9, 22, 10, 30, 0, tzinfo=timezone.utc)
         # Middle of the day
-        cur2 = D.datetime(11, 30, 0)
-        cur3 = D.datetime(12, 30, 0)
+        cur2 = D.datetime(2013, 9, 22, 11, 30, 0, tzinfo=timezone.utc)
+        cur3 = D.datetime(2013, 9, 22, 12, 30, 0, tzinfo=timezone.utc)
         # During the last slot
-        cur4 = D.datetime(14, 30, 0)
+        cur4 = D.datetime(2013, 9, 22, 14, 30, 0, tzinfo=timezone.utc)
 
         c = Client()
         response = c.get('/schedule/current/',
-                         {'day': day1.date.strftime('%Y-%m-%d'),
+                         {'day': day1.start_time.strftime('%Y-%m-%d'),
                           'time': cur1.strftime('%H:%M')})
         context = response.context
         assert context['cur_slot'] == slot1
@@ -1056,7 +1056,7 @@ class CurrentViewTests(TestCase):
         assert context['slots'][0].items[venue2]['item'] is None
 
         response = c.get('/schedule/current/',
-                         {'day': day1.date.strftime('%Y-%m-%d'),
+                         {'day': day1.start_time.strftime('%Y-%m-%d'),
                           'time': cur2.strftime('%H:%M')})
         context = response.context
         assert context['cur_slot'] == slot2
@@ -1071,7 +1071,7 @@ class CurrentViewTests(TestCase):
         assert context['slots'][2].items[venue2]['rowspan'] == 1
 
         response = c.get('/schedule/current/',
-                         {'day': day1.date.strftime('%Y-%m-%d'),
+                         {'day': day1.start_time.strftime('%Y-%m-%d'),
                           'time': cur3.strftime('%H:%M')})
         context = response.context
         assert context['cur_slot'] == slot3
@@ -1084,7 +1084,7 @@ class CurrentViewTests(TestCase):
         assert context['slots'][1].items[venue2]['rowspan'] == 2
 
         response = c.get('/schedule/current/',
-                         {'day': day1.date.strftime('%Y-%m-%d'),
+                         {'day': day1.start_time.strftime('%Y-%m-%d'),
                           'time': cur4.strftime('%H:%M')})
         context = response.context
         assert context['cur_slot'] == slot5
@@ -1129,7 +1129,7 @@ class CurrentViewTests(TestCase):
 
         c = Client()
         response = c.get('/schedule/current/',
-                         {'day': day1.date.strftime('%Y-%m-%d'),
+                         {'day': day1.start_time.strftime('%Y-%m-%d'),
                           'time': cur1.strftime('%H:%M')})
         assert response.context['active'] is False
 

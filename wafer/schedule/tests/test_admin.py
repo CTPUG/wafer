@@ -3,6 +3,7 @@ import datetime as D
 from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.http import HttpRequest
+from django.utils import timezone
 
 from wafer.pages.models import Page
 from wafer.schedule.admin import (
@@ -35,13 +36,18 @@ class SlotAdminTests(TestCase):
 
     def setUp(self):
         """Create some Venues and ScheduleChunks for use in the actual tests."""
-        self.day = ScheduleChunk.objects.create(date=D.date(2013, 9, 22))
+        timezone.activate('UTC')
+        self.chunk = ScheduleChunk.objects.create(
+                start_time=D.datetime(2013, 9, 22, 9, 0, 0,
+                                      tzinfo=timezone.utc),
+                end_time=D.datetime(2013, 9, 22, 19, 0, 0,
+                                    tzinfo=timezone.utc))
         self.admin = SlotAdmin(Slot, None)
 
     def test_save_model_single_new(self):
         """Test save_model creating a new slot, but no additional slots"""
-        slot = Slot(day=self.day, start_time=D.time(11, 0, 0),
-                    end_time=D.time(11, 30, 0))
+        slot = Slot(chunk=self.chunk, start_time=D.datetime(2013, 9, 22, 11, 0, 0, tzinfo=timezone.utc),
+                    end_time=D.datetime(2013, 9, 22, 11, 30, 0, tzinfo=timezone.utc))
         # check that it's not saved in the database yet
         self.assertEqual(Slot.objects.count(), 0)
         request = HttpRequest()
@@ -49,13 +55,13 @@ class SlotAdminTests(TestCase):
         self.admin.save_model(request, slot, dummy, False)
         # check that it's now been saved in the database
         self.assertEqual(Slot.objects.count(), 1)
-        slot2 = Slot.objects.filter(start_time=D.time(11, 0, 0)).get()
+        slot2 = Slot.objects.filter(start_time=D.datetime(2013, 9, 22, 11, 0, 0, tzinfo=timezone.utc)).get()
         self.assertEqual(slot, slot2)
 
     def test_save_model_change_slot(self):
         """Test save_model changing a slot"""
-        slot = Slot(day=self.day, start_time=D.time(11, 0, 0),
-                    end_time=D.time(12, 30, 0))
+        slot = Slot(chunk=self.chunk, start_time=D.datetime(2013, 9, 22, 11, 0, 0, tzinfo=timezone.utc),
+                    end_time=D.datetime(2013, 9, 22, 12, 30, 0, tzinfo=timezone.utc))
         # end_time is chosen as 12:30 so it stays valid through all the
         # subsequent fiddling
         slot.save()
@@ -63,35 +69,35 @@ class SlotAdminTests(TestCase):
         self.assertEqual(Slot.objects.count(), 1)
         request = HttpRequest()
         dummy = make_dummy_form(0)
-        slot.start_time = D.time(12, 0, 0)
+        slot.start_time = D.datetime(2013, 9, 22, 12, 0, 0, tzinfo=timezone.utc)
         self.assertEqual(
-            Slot.objects.filter(start_time=D.time(11, 0, 0)).count(), 1)
+            Slot.objects.filter(start_time=D.datetime(2013, 9, 22, 11, 0, 0, tzinfo=timezone.utc)).count(), 1)
         self.admin.save_model(request, slot, dummy, True)
         # Check that the database has changed
         self.assertEqual(
-            Slot.objects.filter(start_time=D.time(11, 0, 0)).count(), 0)
+            Slot.objects.filter(start_time=D.datetime(2013, 9, 22, 11, 0, 0, tzinfo=timezone.utc)).count(), 0)
         self.assertEqual(Slot.objects.count(), 1)
-        slot2 = Slot.objects.filter(start_time=D.time(12, 0, 0)).get()
+        slot2 = Slot.objects.filter(start_time=D.datetime(2013, 9, 22, 12, 0, 0, tzinfo=timezone.utc)).get()
         self.assertEqual(slot, slot2)
 
         # Check that setting additional has no influence on the change path
         dummy = make_dummy_form(3)
-        slot.start_time = D.time(11, 0, 0)
+        slot.start_time = D.datetime(2013, 9, 22, 11, 0, 0, tzinfo=timezone.utc)
         self.assertEqual(
-            Slot.objects.filter(start_time=D.time(11, 0, 0)).count(), 0)
+            Slot.objects.filter(start_time=D.datetime(2013, 9, 22, 11, 0, 0, tzinfo=timezone.utc)).count(), 0)
         self.admin.save_model(request, slot, dummy, True)
         # Still only 1 object
         self.assertEqual(Slot.objects.count(), 1)
         # And it has been updated
         self.assertEqual(
-            Slot.objects.filter(start_time=D.time(12, 0, 0)).count(), 0)
+            Slot.objects.filter(start_time=D.datetime(2013, 9, 22, 12, 0, 0, tzinfo=timezone.utc)).count(), 0)
         self.assertEqual(
-            Slot.objects.filter(start_time=D.time(11, 0, 0)).count(), 1)
+            Slot.objects.filter(start_time=D.datetime(2013, 9, 22, 11, 0, 0, tzinfo=timezone.utc)).count(), 1)
 
     def test_save_model_new_additional(self):
         """Test save_model changing a new slot with some additional slots"""
-        slot = Slot(day=self.day, start_time=D.time(11, 0, 0),
-                    end_time=D.time(11, 30, 0))
+        slot = Slot(chunk=self.chunk, start_time=D.datetime(2013, 9, 22, 11, 0, 0, tzinfo=timezone.utc),
+                    end_time=D.datetime(2013, 9, 22, 11, 30, 0, tzinfo=timezone.utc))
         # check that it's not saved in the database
         self.assertEqual(Slot.objects.count(), 0)
         request = HttpRequest()
@@ -102,46 +108,46 @@ class SlotAdminTests(TestCase):
         # check the hierachy is created correctly
         slot1 = Slot.objects.filter(previous_slot=slot).get()
         self.assertEqual(slot1.get_start_time(), slot.end_time)
-        self.assertEqual(slot1.end_time, D.time(12, 0, 0))
+        self.assertEqual(slot1.end_time, D.datetime(2013, 9, 22, 12, 0, 0, tzinfo=timezone.utc))
         slot2 = Slot.objects.filter(previous_slot=slot1).get()
         self.assertEqual(slot2.get_start_time(), slot1.end_time)
-        self.assertEqual(slot2.end_time, D.time(12, 30, 0))
+        self.assertEqual(slot2.end_time, D.datetime(2013, 9, 22, 12, 30, 0, tzinfo=timezone.utc))
         self.assertEqual(slot2.day, slot.day)
         slot3 = Slot.objects.filter(previous_slot=slot2).get()
         self.assertEqual(slot3.get_start_time(), slot2.end_time)
-        self.assertEqual(slot3.end_time, D.time(13, 00, 0))
+        self.assertEqual(slot3.end_time, D.datetime(2013, 9, 22, 13, 00, 0, tzinfo=timezone.utc))
         self.assertEqual(slot3.day, slot.day)
 
         # repeat checks with a different length of slot
-        slot = Slot(day=self.day, previous_slot=slot3,
-                    end_time=D.time(14, 30, 0))
+        slot = Slot(chunk=self.chunk, previous_slot=slot3,
+                    end_time=D.datetime(2013, 9, 22, 14, 30, 0, tzinfo=timezone.utc))
         dummy = make_dummy_form(4)
         self.admin.save_model(request, slot, dummy, False)
         self.assertEqual(Slot.objects.count(), 9)
         slot1 = Slot.objects.filter(previous_slot=slot).get()
         self.assertEqual(slot1.get_start_time(), slot.end_time)
-        self.assertEqual(slot1.end_time, D.time(16, 0, 0))
+        self.assertEqual(slot1.end_time, D.datetime(2013, 9, 22, 16, 0, 0, tzinfo=timezone.utc))
         slot2 = Slot.objects.filter(previous_slot=slot1).get()
         self.assertEqual(slot2.get_start_time(), slot1.end_time)
-        self.assertEqual(slot2.end_time, D.time(17, 30, 0))
+        self.assertEqual(slot2.end_time, D.datetime(2013, 9, 22, 17, 30, 0, tzinfo=timezone.utc))
         self.assertEqual(slot2.day, slot.day)
         slot3 = Slot.objects.filter(previous_slot=slot2).get()
         self.assertEqual(slot3.get_start_time(), slot2.end_time)
-        self.assertEqual(slot3.end_time, D.time(19, 00, 0))
+        self.assertEqual(slot3.end_time, D.datetime(2013, 9, 22, 19, 00, 0, tzinfo=timezone.utc))
         self.assertEqual(slot3.day, slot.day)
         slot4 = Slot.objects.filter(previous_slot=slot3).get()
         self.assertEqual(slot4.get_start_time(), slot3.end_time)
-        self.assertEqual(slot4.end_time, D.time(20, 30, 0))
+        self.assertEqual(slot4.end_time, D.datetime(2013, 9, 22, 20, 30, 0, tzinfo=timezone.utc))
         self.assertEqual(slot4.day, slot.day)
 
     def test_save_model_prev_slot_additional(self):
         """Test save_model changing a new slot with some additional slots,
            starting from a slot specified via previous slot"""
-        prev_slot = Slot(day=self.day, start_time=D.time(11, 0, 0),
-                         end_time=D.time(11, 30, 0))
+        prev_slot = Slot(chunk=self.chunk, start_time=D.datetime(2013, 9, 22, 11, 0, 0, tzinfo=timezone.utc),
+                         end_time=D.datetime(2013, 9, 22, 11, 30, 0, tzinfo=timezone.utc))
         prev_slot.save()
         self.assertEqual(Slot.objects.count(), 1)
-        slot = Slot(previous_slot=prev_slot, end_time=D.time(12, 00, 0))
+        slot = Slot(previous_slot=prev_slot, end_time=D.datetime(2013, 9, 22, 12, 00, 0, tzinfo=timezone.utc))
         # Check that newly added slot isn't in the database
         self.assertEqual(Slot.objects.count(), 1)
         request = HttpRequest()
@@ -152,10 +158,10 @@ class SlotAdminTests(TestCase):
         # check the hierachy is created correctly
         slot1 = Slot.objects.filter(previous_slot=slot).get()
         self.assertEqual(slot1.get_start_time(), slot.end_time)
-        self.assertEqual(slot1.end_time, D.time(12, 30, 0))
+        self.assertEqual(slot1.end_time, D.datetime(2013, 9, 22, 12, 30, 0, tzinfo=timezone.utc))
         slot2 = Slot.objects.filter(previous_slot=slot1).get()
         self.assertEqual(slot2.get_start_time(), slot1.end_time)
-        self.assertEqual(slot2.end_time, D.time(13, 00, 0))
+        self.assertEqual(slot2.end_time, D.datetime(2013, 9, 22, 13, 00, 0, tzinfo=timezone.utc))
 
 
 class SlotListFilterTest(TestCase):
@@ -168,9 +174,21 @@ class SlotListFilterTest(TestCase):
 
     def setUp(self):
         """Create some data for use in the actual tests."""
-        self.day1 = ScheduleChunk.objects.create(date=D.date(2013, 9, 22))
-        self.day2 = ScheduleChunk.objects.create(date=D.date(2013, 9, 23))
-        self.day3 = ScheduleChunk.objects.create(date=D.date(2013, 9, 24))
+        self.chunk1 = ScheduleChunk.objects.create(
+                start_time=D.datetime(2013, 9, 22, 9, 0, 0,
+                                      tzinfo=timezone.utc),
+                end_time=D.datetime(2013, 9, 22, 19, 0, 0,
+                                    tzinfo=timezone.utc))
+        self.chunk2 = ScheduleChunk.objects.create(
+                start_time=D.datetime(2013, 9, 23, 9, 0, 0,
+                                      tzinfo=timezone.utc),
+                end_time=D.datetime(2013, 9, 23, 19, 0, 0,
+                                    tzinfo=timezone.utc))
+        self.chunk3 = ScheduleChunk.objects.create(
+                start_time=D.datetime(2013, 9, 24, 9, 0, 0,
+                                      tzinfo=timezone.utc),
+                end_time=D.datetime(2013, 9, 24, 19, 0, 0,
+                                    tzinfo=timezone.utc))
 
         self.admin = SlotAdmin(Slot, None)
 
@@ -192,26 +210,26 @@ class SlotListFilterTest(TestCase):
 
     def test_day_filter_lookups(self):
         """Test that filter lookups are sane."""
-        TestFilter = self._make_day_filter(self.day1)
+        TestFilter = self._make_day_filter(self.chunk1)
         # Check lookup details
         lookups = TestFilter.lookups(None, self.admin)
         self.assertEqual(len(lookups), 3)
-        self.assertEqual(lookups[0], ('%d' % self.day1.pk, str(self.day1)))
-        TestFilter = self._make_day_filter(self.day3)
+        self.assertEqual(lookups[0], ('%d' % self.chunk1.pk, str(self.chunk1)))
+        TestFilter = self._make_day_filter(self.chunk3)
         lookups2 = TestFilter.lookups(None, self.admin)
         self.assertEqual(lookups, lookups2)
 
     def test_time_filter_lookups(self):
         """Test that filter lookups are sane."""
         # Add some slots
-        slot1 = Slot(day=self.day1, start_time=D.time(11, 0, 0),
-                    end_time=D.time(12, 00, 0))
-        slot2 = Slot(day=self.day2, start_time=D.time(11, 0, 0),
-                    end_time=D.time(12, 00, 0))
-        slot3 = Slot(day=self.day1, start_time=D.time(12, 0, 0),
-                      end_time=D.time(13, 0, 0))
-        slot4 = Slot(day=self.day1, start_time=D.time(13, 0, 0),
-                      end_time=D.time(14, 0, 0))
+        slot1 = Slot(chunk=self.chunk1, start_time=D.datetime(2013, 9, 22, 11, 0, 0, tzinfo=timezone.utc),
+                    end_time=D.datetime(2013, 9, 22, 12, 00, 0, tzinfo=timezone.utc))
+        slot2 = Slot(chunk=self.chunk2, start_time=D.datetime(2013, 9, 22, 11, 0, 0, tzinfo=timezone.utc),
+                    end_time=D.datetime(2013, 9, 22, 12, 00, 0, tzinfo=timezone.utc))
+        slot3 = Slot(chunk=self.chunk1, start_time=D.datetime(2013, 9, 22, 12, 0, 0, tzinfo=timezone.utc),
+                      end_time=D.datetime(2013, 9, 22, 13, 0, 0, tzinfo=timezone.utc))
+        slot4 = Slot(chunk=self.chunk1, start_time=D.datetime(2013, 9, 22, 13, 0, 0, tzinfo=timezone.utc),
+                      end_time=D.datetime(2013, 9, 22, 14, 0, 0, tzinfo=timezone.utc))
         slot1.save()
         slot2.save()
         slot3.save()
@@ -228,21 +246,21 @@ class SlotListFilterTest(TestCase):
     def test_queryset_day_time(self):
         """Test queries with slots created purely by day + start_time"""
         slots = {}
-        slots[self.day1] = [Slot(day=self.day1, start_time=D.time(11, 0, 0),
-                    end_time=D.time(12, 00, 0))]
-        slots[self.day2] = [Slot(day=self.day2, start_time=D.time(11, 0, 0),
-                    end_time=D.time(12, 00, 0))]
+        slots[self.chunk1] = [Slot(chunk=self.chunk1, start_time=D.datetime(2013, 9, 22, 11, 0, 0, tzinfo=timezone.utc),
+                    end_time=D.datetime(2013, 9, 22, 12, 00, 0, tzinfo=timezone.utc))]
+        slots[self.chunk2] = [Slot(chunk=self.chunk2, start_time=D.datetime(2013, 9, 22, 11, 0, 0, tzinfo=timezone.utc),
+                    end_time=D.datetime(2013, 9, 22, 12, 00, 0, tzinfo=timezone.utc))]
 
         # ScheduleChunk1 slots
         for x in range(12, 17):
-            slots[self.day1].append(Slot(day=self.day1,
-                                         start_time=D.time(x, 0, 0),
-                                         end_time=D.time(x+1, 0, 0)))
+            slots[self.chunk1].append(Slot(chunk=self.chunk1,
+                                         start_time=D.datetime(x, 0, 0),
+                                         end_time=D.datetime(x+1, 0, 0)))
             if x < 15:
                 # Fewer slots for day 2
-                slots[self.day2].append(Slot(day=self.day2,
-                                             start_time=D.time(x, 0, 0),
-                                             end_time=D.time(x+1, 0, 0)))
+                slots[self.chunk2].append(Slot(chunk=self.chunk2,
+                                             start_time=D.datetime(x, 0, 0),
+                                             end_time=D.datetime(x+1, 0, 0)))
         for d in slots:
             for s in slots[d]:
                 s.save()
@@ -251,16 +269,16 @@ class SlotListFilterTest(TestCase):
         self.assertEqual(list(TestFilter.queryset(None, Slot.objects.all())),
                          list(Slot.objects.all()))
         # Test ScheduleChunk1
-        TestFilter = self._make_day_filter(self.day1)
+        TestFilter = self._make_day_filter(self.chunk1)
         queries = set(TestFilter.queryset(None, Slot.objects.all()))
-        self.assertEqual(queries, set(slots[self.day1]))
+        self.assertEqual(queries, set(slots[self.chunk1]))
         # Test ScheduleChunk2
-        TestFilter = self._make_day_filter(self.day2)
+        TestFilter = self._make_day_filter(self.chunk2)
         queries = set(TestFilter.queryset(None, Slot.objects.all()))
-        self.assertEqual(queries, set(slots[self.day2]))
+        self.assertEqual(queries, set(slots[self.chunk2]))
 
         # Check no match case
-        TestFilter = self._make_day_filter(self.day3)
+        TestFilter = self._make_day_filter(self.chunk3)
         queries = list(TestFilter.queryset(None, Slot.objects.all()))
         self.assertEqual(queries, [])
 
@@ -269,52 +287,52 @@ class SlotListFilterTest(TestCase):
         # Should be the first slot of each day
         queries = set(TestFilter.queryset(None, Slot.objects.all()))
         self.assertEqual(queries,
-                         set([slots[self.day1][0], slots[self.day2][0]]))
+                         set([slots[self.chunk1][0], slots[self.chunk2][0]]))
 
         TestFilter = self._make_time_filter('12:00')
         # Should be the second slot of each day
         queries = set(TestFilter.queryset(None, Slot.objects.all()))
         self.assertEqual(queries,
-                         set([slots[self.day1][1], slots[self.day2][1]]))
+                         set([slots[self.chunk1][1], slots[self.chunk2][1]]))
 
     def test_queryset_prev_slot(self):
         """Test lookup with a chain of previous slots."""
         slots = {}
-        prev = Slot(day=self.day1, start_time=D.time(11, 0, 0),
-                    end_time=D.time(12, 00, 0))
+        prev = Slot(chunk=self.chunk1, start_time=D.datetime(2013, 9, 22, 11, 0, 0, tzinfo=timezone.utc),
+                    end_time=D.datetime(2013, 9, 22, 12, 00, 0, tzinfo=timezone.utc))
         prev.save()
-        slots[self.day1] = [prev]
-        prev = Slot(day=self.day2, start_time=D.time(11, 0, 0),
-                    end_time=D.time(12, 00, 0))
+        slots[self.chunk1] = [prev]
+        prev = Slot(chunk=self.chunk2, start_time=D.datetime(2013, 9, 22, 11, 0, 0, tzinfo=timezone.utc),
+                    end_time=D.datetime(2013, 9, 22, 12, 00, 0, tzinfo=timezone.utc))
         prev.save()
-        slots[self.day2] = [prev]
+        slots[self.chunk2] = [prev]
         # ScheduleChunk1 slots
         for x in range(12, 17):
-            prev1 = slots[self.day1][-1]
-            slots[self.day1].append(Slot(previous_slot=prev1,
-                                         end_time=D.time(x+1, 0, 0)))
-            slots[self.day1][-1].save()
+            prev1 = slots[self.chunk1][-1]
+            slots[self.chunk1].append(Slot(previous_slot=prev1,
+                                         end_time=D.datetime(x+1, 0, 0)))
+            slots[self.chunk1][-1].save()
             if x < 15:
-                prev2 = slots[self.day2][-1]
+                prev2 = slots[self.chunk2][-1]
                 # Fewer slots for day 2
-                slots[self.day2].append(Slot(previous_slot=prev2,
-                                             end_time=D.time(x+1, 0, 0)))
-                slots[self.day2][-1].save()
+                slots[self.chunk2].append(Slot(previous_slot=prev2,
+                                             end_time=D.datetime(x+1, 0, 0)))
+                slots[self.chunk2][-1].save()
         # Check Null filter
         TestFilter = self._make_day_filter(None)
         self.assertEqual(list(TestFilter.queryset(None, Slot.objects.all())),
                          list(Slot.objects.all()))
         # Test ScheduleChunk1
-        TestFilter = self._make_day_filter(self.day1)
+        TestFilter = self._make_day_filter(self.chunk1)
         queries = set(TestFilter.queryset(None, Slot.objects.all()))
-        self.assertEqual(queries, set(slots[self.day1]))
+        self.assertEqual(queries, set(slots[self.chunk1]))
         # Test ScheduleChunk2
-        TestFilter = self._make_day_filter(self.day2)
+        TestFilter = self._make_day_filter(self.chunk2)
         queries = set(TestFilter.queryset(None, Slot.objects.all()))
-        self.assertEqual(queries, set(slots[self.day2]))
+        self.assertEqual(queries, set(slots[self.chunk2]))
 
         # Check no match case
-        TestFilter = self._make_day_filter(self.day3)
+        TestFilter = self._make_day_filter(self.chunk3)
         queries = list(TestFilter.queryset(None, Slot.objects.all()))
         self.assertEqual(queries, [])
 
@@ -323,61 +341,61 @@ class SlotListFilterTest(TestCase):
         # Should be the first slot of each day
         queries = set(TestFilter.queryset(None, Slot.objects.all()))
         self.assertEqual(queries,
-                         set([slots[self.day1][0], slots[self.day2][0]]))
+                         set([slots[self.chunk1][0], slots[self.chunk2][0]]))
 
         TestFilter = self._make_time_filter('12:00')
         # Should be the second slot of each day
         queries = set(TestFilter.queryset(None, Slot.objects.all()))
         self.assertEqual(queries,
-                         set([slots[self.day1][1], slots[self.day2][1]]))
+                         set([slots[self.chunk1][1], slots[self.chunk2][1]]))
 
     def test_queryset_mixed(self):
         """Test with a mix of day+time and previous slot cases."""
         slots = {}
-        prev = Slot(day=self.day1, start_time=D.time(11, 0, 0),
-                    end_time=D.time(12, 00, 0))
+        prev = Slot(chunk=self.chunk1, start_time=D.datetime(2013, 9, 22, 11, 0, 0, tzinfo=timezone.utc),
+                    end_time=D.datetime(2013, 9, 22, 12, 00, 0, tzinfo=timezone.utc))
         prev.save()
-        slots[self.day1] = [prev]
-        prev = Slot(day=self.day2, start_time=D.time(11, 0, 0),
-                    end_time=D.time(12, 00, 0))
+        slots[self.chunk1] = [prev]
+        prev = Slot(chunk=self.chunk2, start_time=D.datetime(2013, 9, 22, 11, 0, 0, tzinfo=timezone.utc),
+                    end_time=D.datetime(2013, 9, 22, 12, 00, 0, tzinfo=timezone.utc))
         prev.save()
-        slots[self.day2] = [prev]
+        slots[self.chunk2] = [prev]
         # ScheduleChunk1 slots
         for x in range(12, 20):
-            prev1 = slots[self.day1][-1]
+            prev1 = slots[self.chunk1][-1]
             if x % 2:
-                slots[self.day1].append(Slot(previous_slot=prev1,
-                                             end_time=D.time(x+1, 0, 0)))
+                slots[self.chunk1].append(Slot(previous_slot=prev1,
+                                             end_time=D.datetime(x+1, 0, 0)))
             else:
-                slots[self.day1].append(Slot(day=self.day1,
-                                             start_time=D.time(x, 0, 0),
-                                             end_time=D.time(x+1, 0, 0)))
+                slots[self.chunk1].append(Slot(chunk=self.chunk1,
+                                             start_time=D.datetime(x, 0, 0),
+                                             end_time=D.datetime(x+1, 0, 0)))
 
-            slots[self.day1][-1].save()
-            prev2 = slots[self.day2][-1]
+            slots[self.chunk1][-1].save()
+            prev2 = slots[self.chunk2][-1]
             if x % 5:
-                slots[self.day2].append(Slot(previous_slot=prev2,
-                                             end_time=D.time(x+1, 0, 0)))
+                slots[self.chunk2].append(Slot(previous_slot=prev2,
+                                             end_time=D.datetime(x+1, 0, 0)))
             else:
-                slots[self.day2].append(Slot(day=self.day2,
-                                             start_time=D.time(x, 0, 0),
-                                             end_time=D.time(x+1, 0, 0)))
-            slots[self.day2][-1].save()
+                slots[self.chunk2].append(Slot(chunk=self.chunk2,
+                                             start_time=D.datetime(x, 0, 0),
+                                             end_time=D.datetime(x+1, 0, 0)))
+            slots[self.chunk2][-1].save()
         # Check Null filter
         TestFilter = self._make_day_filter(None)
         self.assertEqual(list(TestFilter.queryset(None, Slot.objects.all())),
                          list(Slot.objects.all()))
         # Test ScheduleChunk1
-        TestFilter = self._make_day_filter(self.day1)
+        TestFilter = self._make_day_filter(self.chunk1)
         queries = set(TestFilter.queryset(None, Slot.objects.all()))
-        self.assertEqual(queries, set(slots[self.day1]))
+        self.assertEqual(queries, set(slots[self.chunk1]))
         # Test ScheduleChunk2
-        TestFilter = self._make_day_filter(self.day2)
+        TestFilter = self._make_day_filter(self.chunk2)
         queries = set(TestFilter.queryset(None, Slot.objects.all()))
-        self.assertEqual(queries, set(slots[self.day2]))
+        self.assertEqual(queries, set(slots[self.chunk2]))
 
         # Check no match case
-        TestFilter = self._make_day_filter(self.day3)
+        TestFilter = self._make_day_filter(self.chunk3)
         queries = list(TestFilter.queryset(None, Slot.objects.all()))
         self.assertEqual(queries, [])
 
@@ -386,20 +404,24 @@ class ValidationTests(TestCase):
 
     def test_slot(self):
         """Test detection of overlapping slots"""
-        day1 = ScheduleChunk.objects.create(date=D.date(2013, 9, 22))
-        start1 = D.time(10, 0, 0)
-        start2 = D.time(11, 0, 0)
-        start3 = D.time(12, 0, 0)
-        start35 = D.time(12, 30, 0)
-        start4 = D.time(13, 0, 0)
-        start45 = D.time(13, 30, 0)
-        start5 = D.time(14, 0, 0)
-        end = D.time(15, 0, 0)
+        day1 = ScheduleChunk.objects.create(
+                start_time=D.datetime(2013, 9, 22, 9, 0, 0,
+                                      tzinfo=timezone.utc),
+                end_time=D.datetime(2013, 9, 22, 19, 0, 0,
+                                    tzinfo=timezone.utc))
+        start1 = D.datetime(2013, 9, 22, 10, 0, 0, tzinfo=timezone.utc)
+        start2 = D.datetime(2013, 9, 22, 11, 0, 0, tzinfo=timezone.utc)
+        start3 = D.datetime(2013, 9, 22, 12, 0, 0, tzinfo=timezone.utc)
+        start35 = D.datetime(2013, 9, 22, 12, 30, 0, tzinfo=timezone.utc)
+        start4 = D.datetime(2013, 9, 22, 13, 0, 0, tzinfo=timezone.utc)
+        start45 = D.datetime(2013, 9, 22, 13, 30, 0, tzinfo=timezone.utc)
+        start5 = D.datetime(2013, 9, 22, 14, 0, 0, tzinfo=timezone.utc)
+        end = D.datetime(2013, 9, 22, 15, 0, 0, tzinfo=timezone.utc)
 
         # Test common start time
         slot1 = Slot.objects.create(start_time=start1, end_time=start2,
-                                    day=day1)
-        slot2 = Slot.objects.create(start_time=start1, end_time=end, day=day1)
+                                    chunk=day1)
+        slot2 = Slot.objects.create(start_time=start1, end_time=end, chunk=day1)
 
         all_slots = prefetch_slots()
         overlaps = find_overlapping_slots(all_slots)
@@ -410,11 +432,11 @@ class ValidationTests(TestCase):
 
         # Test interleaved slot
         slot3 = Slot.objects.create(start_time=start2, end_time=start3,
-                                    day=day1)
+                                    chunk=day1)
         slot4 = Slot.objects.create(start_time=start4, end_time=start5,
-                                    day=day1)
+                                    chunk=day1)
         slot5 = Slot.objects.create(start_time=start35, end_time=start45,
-                                    day=day1)
+                                    chunk=day1)
 
         all_slots = prefetch_slots()
         overlaps = find_overlapping_slots(all_slots)
@@ -446,20 +468,24 @@ class ValidationTests(TestCase):
 
     def test_clashes(self):
         """Test that we can detect clashes correctly"""
-        day1 = ScheduleChunk.objects.create(date=D.date(2013, 9, 22))
+        day1 = ScheduleChunk.objects.create(
+                start_time=D.datetime(2013, 9, 22, 9, 0, 0,
+                                      tzinfo=timezone.utc),
+                end_time=D.datetime(2013, 9, 22, 19, 0, 0,
+                                    tzinfo=timezone.utc))
         venue1 = Venue.objects.create(order=1, name='Venue 1')
         venue2 = Venue.objects.create(order=2, name='Venue 2')
-        venue1.days.add(day1)
-        venue2.days.add(day1)
+        venue1.chunks.add(day1)
+        venue2.chunks.add(day1)
 
-        start1 = D.time(10, 0, 0)
-        start2 = D.time(11, 0, 0)
-        end = D.time(12, 0, 0)
+        start1 = D.datetime(2013, 9, 22, 10, 0, 0, tzinfo=timezone.utc)
+        start2 = D.datetime(2013, 9, 22, 11, 0, 0, tzinfo=timezone.utc)
+        end = D.datetime(2013, 9, 22, 12, 0, 0, tzinfo=timezone.utc)
 
         slot1 = Slot.objects.create(start_time=start1, end_time=start2,
-                                    day=day1)
+                                    chunk=day1)
         slot2 = Slot.objects.create(start_time=start2, end_time=end,
-                                    day=day1)
+                                    chunk=day1)
 
         item1 = ScheduleItem.objects.create(venue=venue1, details="Item 1")
         item2 = ScheduleItem.objects.create(venue=venue1, details="Item 2")
@@ -512,18 +538,22 @@ class ValidationTests(TestCase):
     def test_validation(self):
         """Test that we detect validation errors correctly"""
         # Create a item with both a talk and a page assigned
-        day1 = ScheduleChunk.objects.create(date=D.date(2013, 9, 22))
+        day1 = ScheduleChunk.objects.create(
+                start_time=D.datetime(2013, 9, 22, 9, 0, 0,
+                                      tzinfo=timezone.utc),
+                end_time=D.datetime(2013, 9, 22, 19, 0, 0,
+                                    tzinfo=timezone.utc))
         venue1 = Venue.objects.create(order=1, name='Venue 1')
-        venue1.days.add(day1)
+        venue1.chunks.add(day1)
 
-        start1 = D.time(10, 0, 0)
-        start2 = D.time(11, 0, 0)
-        end = D.time(12, 0, 0)
+        start1 = D.datetime(2013, 9, 22, 10, 0, 0, tzinfo=timezone.utc)
+        start2 = D.datetime(2013, 9, 22, 11, 0, 0, tzinfo=timezone.utc)
+        end = D.datetime(2013, 9, 22, 12, 0, 0, tzinfo=timezone.utc)
 
         slot1 = Slot.objects.create(start_time=start1, end_time=start2,
-                                    day=day1)
+                                    chunk=day1)
         slot2 = Slot.objects.create(start_time=start1, end_time=end,
-                                    day=day1)
+                                    chunk=day1)
 
         user = get_user_model().objects.create_user('john', 'best@wafer.test',
                                                     'johnpassword')
@@ -586,21 +616,25 @@ class ValidationTests(TestCase):
     def test_non_contiguous(self):
         """Test that we detect items with non contiguous slots"""
         # Create a item with a gap in the slots assigned to it
-        day1 = ScheduleChunk.objects.create(date=D.date(2013, 9, 22))
+        day1 = ScheduleChunk.objects.create(
+                start_time=D.datetime(2013, 9, 22, 9, 0, 0,
+                                      tzinfo=timezone.utc),
+                end_time=D.datetime(2013, 9, 22, 19, 0, 0,
+                                    tzinfo=timezone.utc))
         venue1 = Venue.objects.create(order=1, name='Venue 1')
-        venue1.days.add(day1)
+        venue1.chunks.add(day1)
 
-        start1 = D.time(10, 0, 0)
-        start2 = D.time(11, 0, 0)
-        start3 = D.time(12, 0, 0)
-        end = D.time(13, 0, 0)
+        start1 = D.datetime(2013, 9, 22, 10, 0, 0, tzinfo=timezone.utc)
+        start2 = D.datetime(2013, 9, 22, 11, 0, 0, tzinfo=timezone.utc)
+        start3 = D.datetime(2013, 9, 22, 12, 0, 0, tzinfo=timezone.utc)
+        end = D.datetime(2013, 9, 22, 13, 0, 0, tzinfo=timezone.utc)
 
         slot1 = Slot.objects.create(start_time=start1, end_time=start2,
-                                    day=day1)
+                                    chunk=day1)
         slot2 = Slot.objects.create(start_time=start2, end_time=start3,
-                                    day=day1)
+                                    chunk=day1)
         slot3 = Slot.objects.create(start_time=start3, end_time=end,
-                                    day=day1)
+                                    chunk=day1)
 
         user = get_user_model().objects.create_user('john', 'best@wafer.test',
                                                     'johnpassword')
@@ -638,20 +672,24 @@ class ValidationTests(TestCase):
         #       Venue 1  Venue 2
         # 10-11 Talk 1   Page 1
         # 11-12 Talk 1   Page 1
-        day1 = ScheduleChunk.objects.create(date=D.date(2013, 9, 22))
+        day1 = ScheduleChunk.objects.create(
+                start_time=D.datetime(2013, 9, 22, 9, 0, 0,
+                                      tzinfo=timezone.utc),
+                end_time=D.datetime(2013, 9, 22, 19, 0, 0,
+                                    tzinfo=timezone.utc))
         venue1 = Venue.objects.create(order=1, name='Venue 1')
         venue2 = Venue.objects.create(order=2, name='Venue 2')
-        venue1.days.add(day1)
-        venue2.days.add(day1)
+        venue1.chunks.add(day1)
+        venue2.chunks.add(day1)
 
-        start1 = D.time(10, 0, 0)
-        start2 = D.time(11, 0, 0)
-        end = D.time(12, 0, 0)
+        start1 = D.datetime(2013, 9, 22, 10, 0, 0, tzinfo=timezone.utc)
+        start2 = D.datetime(2013, 9, 22, 11, 0, 0, tzinfo=timezone.utc)
+        end = D.datetime(2013, 9, 22, 12, 0, 0, tzinfo=timezone.utc)
 
         slot1 = Slot.objects.create(start_time=start1, end_time=start2,
-                                    day=day1)
+                                    chunk=day1)
         slot2 = Slot.objects.create(start_time=start1, end_time=end,
-                                    day=day1)
+                                    chunk=day1)
 
         user = get_user_model().objects.create_user('john', 'best@wafer.test',
                                                     'johnpassword')
@@ -693,18 +731,26 @@ class ValidationTests(TestCase):
     def test_venues(self):
         """Test that we detect venues violating the day constraints
            correctly."""
-        day1 = ScheduleChunk.objects.create(date=D.date(2013, 9, 22))
-        day2 = ScheduleChunk.objects.create(date=D.date(2013, 9, 23))
+        day1 = ScheduleChunk.objects.create(
+                start_time=D.datetime(2013, 9, 22, 9, 0, 0,
+                                      tzinfo=timezone.utc),
+                end_time=D.datetime(2013, 9, 22, 19, 0, 0,
+                                    tzinfo=timezone.utc))
+        day2 = ScheduleChunk.objects.create(
+                start_time=D.datetime(2013, 9, 23, 9, 0, 0,
+                                      tzinfo=timezone.utc),
+                end_time=D.datetime(2013, 9, 23, 19, 0, 0,
+                                    tzinfo=timezone.utc))
         venue1 = Venue.objects.create(order=1, name='Venue 1')
         venue2 = Venue.objects.create(order=2, name='Venue 2')
-        venue1.days.add(day1)
-        venue2.days.add(day2)
+        venue1.chunks.add(day1)
+        venue2.chunks.add(day2)
 
-        start1 = D.time(10, 0, 0)
-        start2 = D.time(11, 0, 0)
+        start1 = D.datetime(2013, 9, 22, 10, 0, 0, tzinfo=timezone.utc)
+        start2 = D.datetime(2013, 9, 22, 11, 0, 0, tzinfo=timezone.utc)
 
         slot1 = Slot.objects.create(start_time=start1, end_time=start2,
-                                    day=day1)
+                                    chunk=day1)
 
         page = Page.objects.create(name="test page", slug="test")
 
@@ -722,8 +768,10 @@ class ValidationTests(TestCase):
         assert venues[0][0] == venue2
         assert set(venues[0][1]) == set([item2])
 
-        slot2 = Slot.objects.create(start_time=start1, end_time=start2,
-                                    day=day2)
+        start1d2 = D.datetime(2013, 9, 23, 10, 0, 0, tzinfo=timezone.utc)
+        start2d2 = D.datetime(2013, 9, 23, 11, 0, 0, tzinfo=timezone.utc)
+        slot2 = Slot.objects.create(start_time=start1d2, end_time=start2d2,
+                                    chunk=day2)
         item3 = ScheduleItem.objects.create(venue=venue2, page_id=page.pk)
 
         item3.slots.add(slot2)
@@ -756,19 +804,23 @@ class ValidationTests(TestCase):
            We also test check_schedule, since the logic of the two funcions
            is so similar it doesn't make sense to have a second test
            case for it."""
-        day1 = ScheduleChunk.objects.create(date=D.date(2013, 9, 22))
+        day1 = ScheduleChunk.objects.create(
+                start_time=D.datetime(2013, 9, 22, 9, 0, 0,
+                                      tzinfo=timezone.utc),
+                end_time=D.datetime(2013, 9, 22, 19, 0, 0,
+                                    tzinfo=timezone.utc))
         venue1 = Venue.objects.create(order=1, name='Venue 1')
-        venue1.days.add(day1)
+        venue1.chunks.add(day1)
         page = Page.objects.create(name="test page", slug="test")
 
-        start1 = D.time(10, 0, 0)
-        start2 = D.time(11, 0, 0)
-        end = D.time(12, 0, 0)
+        start1 = D.datetime(2013, 9, 22, 10, 0, 0, tzinfo=timezone.utc)
+        start2 = D.datetime(2013, 9, 22, 11, 0, 0, tzinfo=timezone.utc)
+        end = D.datetime(2013, 9, 22, 12, 0, 0, tzinfo=timezone.utc)
 
         slot1 = Slot.objects.create(start_time=start1, end_time=start2,
-                                    day=day1)
+                                    chunk=day1)
         slot2 = Slot.objects.create(start_time=start2, end_time=end,
-                                    day=day1)
+                                    chunk=day1)
 
         item1 = ScheduleItem.objects.create(venue=venue1,
                                             page_id=page.pk,

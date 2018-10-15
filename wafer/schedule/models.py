@@ -98,9 +98,19 @@ class Slot(models.Model):
             slot = u'Slot %s' % self.name
         else:
             slot = u'Slot'
-        start = self.get_formatted_start_time()
-        end = self.get_formatted_end_time()
-        return u'%s: %s: %s - %s' % (slot, self.get_day(), start, end)
+        if _is_single_day():
+            day = self.end_time.date().strftime('%b %d (%a)')
+            start = self.get_formatted_start_time()
+            end = self.get_formatted_end_time()
+            return u"%s: %s: %s - %s" % (slot, day, start, end)
+        # Include day info in bounds
+        start = self.get_formatted_start_date_time()
+        end = self.get_formatted_end_date_time()
+        return u"%s: %s - %s" % (slot, start, end)
+
+    def _is_single_day():
+        """Check if this slot crosses midnight"""
+        return self.end_time.date() == self.get_start_time().date()
 
     def get_start_time(self):
         if self.previous_slot:
@@ -109,10 +119,16 @@ class Slot(models.Model):
 
     def get_formatted_start_time(self):
         return self.get_start_time().strftime('%H:%M')
-    get_formatted_start_time.short_description = 'Start Time'
+
+    def get_formatted_start_date_time(self):
+        return self.get_start_time().strftime('%b %d (%a): %H:%M')
+    get_formatted_start_date_time.short_description = 'Start Time'
 
     def get_formatted_end_time(self):
         return self.end_time.strftime('%H:%M')
+
+    def get_formatted_end_date_time(self):
+        return self.end_time.strftime('%b %d (%a): %H:%M')
 
     def get_duration(self):
         """Return the duration of the slot as hours and minutes.
@@ -233,9 +249,7 @@ class ScheduleItem(models.Model):
     def get_start_time(self):
         slots = list(self.slots.all())
         if slots:
-            start = slots[0].get_formatted_start_time()
-            day = slots[0].get_day()
-            return u'%s, %s' % (day, start)
+            return slots[0].get_formatted_start_date_time()
         else:
             return 'WARNING: No Time and Day Specified'
     get_start_time.short_description = 'Start Time'

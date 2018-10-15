@@ -180,7 +180,7 @@ class CurrentView(TemplateView):
                       ScheduleChunk.objects.all()])
         if day not in dates:
             return None
-        return ScheduleDay(dates[day])
+        return SchedulePage(dates[day])
 
     def _parse_time(self, time):
         now = datetime.datetime.now().time()
@@ -201,10 +201,10 @@ class CurrentView(TemplateView):
                 item['note'] = overlap_note
 
     def _current_slots(self, schedule_day, time):
-        today = schedule_day.day
+        today = schedule_day.chunk
         cur_slot, prev_slot, next_slot = None, None, None
         for slot in Slot.objects.all():
-            if slot.get_day() != today:
+            if slot.get_chunk() != today:
                 continue
             if slot.get_start_time() <= time and slot.end_time > time:
                 cur_slot = slot
