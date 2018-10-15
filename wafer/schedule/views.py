@@ -151,7 +151,7 @@ class ScheduleView(BuildableTemplateView):
                 context['prev_day'] = sorted_chunks[pos - 1]
             if pos < len(sorted_chunks) - 1:
                 context['next_day'] = sorted_chunks[pos + 1]
-        context['schedule_chunks'] = generate_schedule(schedule_day)
+        context['schedule_pages'] = generate_schedule(schedule_day)
         return context
 
 
@@ -255,7 +255,7 @@ class CurrentView(TemplateView):
         schedule_page = self._parse_today(self.request.GET.get('day', None))
         if schedule_page is None:
             return context
-        context['schedule_day'] = schedule_page
+        context['schedule_page'] = schedule_page
         # Allow current time to be overridden
         time = self._parse_time(self.request.GET.get('day', None), self.request.GET.get('time', None))
 

@@ -129,7 +129,7 @@ class ScheduleViewTests(TestCase):
             response = c.get('/schedule/')
             self.assertTrue(len(tracker.queries) < 60)
 
-        [day1] = response.context['schedule_chunks']
+        [day1] = response.context['schedule_pages']
 
         assert len(day1.rows) == 3
         assert day1.venues == [venue1, venue2]
@@ -208,7 +208,7 @@ class ScheduleViewTests(TestCase):
         c = Client()
         response = c.get('/schedule/')
 
-        [day1] = response.context['schedule_chunks']
+        [day1] = response.context['schedule_pages']
 
         assert len(day1.rows) == 3
         assert day1.venues == [venue1, venue2]
@@ -296,7 +296,7 @@ class ScheduleViewTests(TestCase):
         c = Client()
         response = c.get('/schedule/')
 
-        [day1, day2] = response.context['schedule_chunks']
+        [day1, day2] = response.context['schedule_pages']
 
         assert len(day1.rows) == 2
         assert day1.venues == [venue1, venue2]
@@ -374,7 +374,7 @@ class ScheduleViewTests(TestCase):
 
         response = c.get('/schedule/?day=2013-09-24')
 
-        [day1, day2] = response.context['schedule_chunks']
+        [day1, day2] = response.context['schedule_pages']
 
         self.assertEqual(len(day1.rows), 2)
         self.assertEqual(day1.venues, [venue1, venue2])
@@ -401,7 +401,7 @@ class ScheduleViewTests(TestCase):
 
         # Test per-day schedule views
         response = c.get('/schedule/?day=2013-09-22')
-        [day] = response.context['schedule_chunks']
+        [day] = response.context['schedule_pages']
 
         self.assertEqual(day.chunk, day1.chunk)
         self.assertEqual(day.venues, day1.venues)
@@ -416,7 +416,7 @@ class ScheduleViewTests(TestCase):
         self.assertEqual(day.rows[0].get_sorted_items()[0]['colspan'], 1)
 
         response = c.get('/schedule/?day=2013-09-23')
-        [day] = response.context['schedule_chunks']
+        [day] = response.context['schedule_pages']
 
         self.assertEqual(day.chunk, day2.chunk)
         self.assertEqual(day.venues, day2.venues)
@@ -482,7 +482,7 @@ class ScheduleViewTests(TestCase):
         c = Client()
         response = c.get('/schedule/')
 
-        [day1, day2] = response.context['schedule_chunks']
+        [day1, day2] = response.context['schedule_pages']
 
         assert len(day1.rows) == 2
         assert day1.venues == [venue1]
@@ -572,7 +572,7 @@ class ScheduleViewTests(TestCase):
         c = Client()
         response = c.get('/schedule/')
 
-        [day1] = response.context['schedule_chunks']
+        [day1] = response.context['schedule_pages']
 
         assert len(day1.rows) == 5
         assert day1.venues == [venue1, venue2, venue3]
@@ -692,7 +692,7 @@ class ScheduleViewTests(TestCase):
         c = Client()
         response = c.get('/schedule/')
 
-        [day1] = response.context['schedule_chunks']
+        [day1] = response.context['schedule_pages']
 
         assert len(day1.rows) == 5
         assert day1.venues == [venue1, venue2]
@@ -800,7 +800,7 @@ class ScheduleViewTests(TestCase):
         c = Client()
         response = c.get('/schedule/')
 
-        [day1] = response.context['schedule_chunks']
+        [day1] = response.context['schedule_pages']
 
         assert len(day1.rows) == 5
         assert day1.venues == [venue1, venue2, venue3]
@@ -918,7 +918,7 @@ class CurrentViewTests(TestCase):
         context = response.context
 
         assert context['cur_slot'] == slots[0]
-        assert len(context['schedule_day'].venues) == 2
+        assert len(context['schedule_page'].venues) == 2
         # Only cur and next slot
         assert len(context['slots']) == 2
         assert context['slots'][0].items[venue1]['note'] == 'current'
@@ -929,7 +929,7 @@ class CurrentViewTests(TestCase):
                           'time': cur2.strftime('%H:%M')})
         context = response.context
         assert context['cur_slot'] == slots[1]
-        assert len(context['schedule_day'].venues) == 2
+        assert len(context['schedule_page'].venues) == 2
         # prev, cur and next slot
         assert len(context['slots']) == 3
         assert context['slots'][0].items[venue1]['note'] == 'complete'
@@ -941,7 +941,7 @@ class CurrentViewTests(TestCase):
                           'time': cur3.strftime('%H:%M')})
         context = response.context
         assert context['cur_slot'] == slots[2]
-        assert len(context['schedule_day'].venues) == 2
+        assert len(context['schedule_page'].venues) == 2
         # prev and cur
         assert len(context['slots']) == 3
         assert context['slots'][0].items[venue1]['note'] == 'complete'
@@ -953,7 +953,7 @@ class CurrentViewTests(TestCase):
                           'time': cur4.strftime('%H:%M')})
         context = response.context
         assert context['cur_slot'] == slots[3]
-        assert len(context['schedule_day'].venues) == 2
+        assert len(context['schedule_page'].venues) == 2
         # preve and cur slot
         assert len(context['slots']) == 2
         assert context['slots'][0].items[venue1]['note'] == 'complete'
@@ -964,7 +964,7 @@ class CurrentViewTests(TestCase):
                           'time': cur5.strftime('%H:%M')})
         context = response.context
         assert context['cur_slot'] is None
-        assert len(context['schedule_day'].venues) == 2
+        assert len(context['schedule_page'].venues) == 2
         # prev slot only
         assert len(context['slots']) == 1
         assert context['slots'][0].items[venue1]['note'] == 'complete'
@@ -1049,7 +1049,7 @@ class CurrentViewTests(TestCase):
                           'time': cur1.strftime('%H:%M')})
         context = response.context
         assert context['cur_slot'] == slot1
-        assert len(context['schedule_day'].venues) == 3
+        assert len(context['schedule_page'].venues) == 3
         assert len(context['slots']) == 2
         assert context['slots'][0].items[venue1]['note'] == 'current'
         assert context['slots'][0].items[venue1]['colspan'] == 1

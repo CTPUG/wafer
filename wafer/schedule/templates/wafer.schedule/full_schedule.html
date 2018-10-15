@@ -15,7 +15,7 @@
     {% trans "Schedule" %}
   </h1>
   <div class="wafer_schedule">
-    {% if not schedule_days %}
+    {% if not schedule_pages %}
       {# Schedule is incomplete / invalid, so show nothing #}
       {% blocktrans %}
         <p>The final schedule has not been published yet.</p>
@@ -34,23 +34,23 @@
            {% endif %}
         </div>
       {% endif %}
-      {% for schedule_day in schedule_days %}
+      {% for page in schedule_pages %}
         <table cellspacing=1 cellpadding=0>
           {# We assume that the admin has created a valid timetable #}
           <tr>
-            <td colspan="{{ schedule_day.venues|length|add:1 }}" class="title">
-              <a href="?day={{ schedule_day.day.date.isoformat }}">
-                {{ schedule_day.day.date|date:"l (d b)" }}
+            <td colspan="{{ page.venues|length|add:1 }}" class="title">
+              <a href="?day={{ page.chunk.start_time.isoformat }}">
+                {{ page.chunk.start_time|date:"l (d b)" }}
               </a>
             </td>
           </tr>
           <tr>
             <th>{% trans "Time" %}</th>
-            {% for venue in schedule_day.venues %}
+            {% for venue in page.venues %}
               <th><a href="{{ venue.get_absolute_url }}">{{ venue.name }}</a></th>
             {% endfor %}
           </tr>
-          {% for row in schedule_day.rows %}
+          {% for row in page.rows %}
             <tr>
               <td class="scheduleslot">{{ row.slot.get_start_time|time:"H:i" }} - {{ row.slot.end_time|time:"H:i" }}</td>
               {% for item in row.get_sorted_items %}
