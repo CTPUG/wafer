@@ -284,7 +284,7 @@ class BaseStartTimeFilter(admin.SimpleListFilter):
     parameter_name = 'start'
 
     def lookups(self, request, model_admin):
-        values = [slot.get_formatted_start_date_time() for slot in Slot.objects.all()]
+        values = [slot.get_formatted_start_time() for slot in Slot.objects.all()]
         # We order drop duplicates and order globally.
         values = sorted(set(values))
         # It's not great to use the string value as the admin key, but we
@@ -302,10 +302,10 @@ class BaseStartTimeFilter(admin.SimpleListFilter):
             # We find all start times between base_time and max_time
             # or slots with the previous_slot end time in this range
             slots = Slot.objects.filter(
-                Q(start_time__gte=base_time.time(),
-                  start_time__lte=max_time.time()) |
-                Q(previous_slot__end_time__gte=base_time.time(),
-                  previous_slot__end_time__lte=max_time.time()))
+                Q(start_time__time__gte=base_time.time(),
+                  start_time__time__lte=max_time.time()) |
+                Q(previous_slot__end_time__time__gte=base_time.time(),
+                  previous_slot__end_time__time__lte=max_time.time()))
             # Return the queryset
             return slots
         return None

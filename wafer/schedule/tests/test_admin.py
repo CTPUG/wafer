@@ -192,14 +192,14 @@ class SlotListFilterTest(TestCase):
 
         self.admin = SlotAdmin(Slot, None)
 
-    def _make_day_filter(self, day):
+    def _make_chunk_filter(self, chunk):
         """create a list filter for testing."""
         # We can get away with request None, since SimpleListFilter
         # doesn't use request in the bits we want to test
-        if day:
-            return SlotChunkFilter(None, {'day': str(day.pk)}, Slot, self.admin)
+        if chunk:
+            return SlotChunkFilter(None, {'chunk': str(chunk.pk)}, Slot, self.admin)
         else:
-            return SlotChunkFilter(None, {'day': None}, Slot, self.admin)
+            return SlotChunkFilter(None, {'chunk': None}, Slot, self.admin)
 
     def _make_time_filter(self, time):
         """create a list filter for testing."""
@@ -210,12 +210,12 @@ class SlotListFilterTest(TestCase):
 
     def test_day_filter_lookups(self):
         """Test that filter lookups are sane."""
-        TestFilter = self._make_day_filter(self.chunk1)
+        TestFilter = self._make_chunk_filter(self.chunk1)
         # Check lookup details
         lookups = TestFilter.lookups(None, self.admin)
         self.assertEqual(len(lookups), 3)
         self.assertEqual(lookups[0], ('%d' % self.chunk1.pk, str(self.chunk1)))
-        TestFilter = self._make_day_filter(self.chunk3)
+        TestFilter = self._make_chunk_filter(self.chunk3)
         lookups2 = TestFilter.lookups(None, self.admin)
         self.assertEqual(lookups, lookups2)
 
@@ -224,8 +224,8 @@ class SlotListFilterTest(TestCase):
         # Add some slots
         slot1 = Slot(chunk=self.chunk1, start_time=D.datetime(2013, 9, 22, 11, 0, 0, tzinfo=timezone.utc),
                     end_time=D.datetime(2013, 9, 22, 12, 00, 0, tzinfo=timezone.utc))
-        slot2 = Slot(chunk=self.chunk2, start_time=D.datetime(2013, 9, 22, 11, 0, 0, tzinfo=timezone.utc),
-                    end_time=D.datetime(2013, 9, 22, 12, 00, 0, tzinfo=timezone.utc))
+        slot2 = Slot(chunk=self.chunk2, start_time=D.datetime(2013, 9, 23, 11, 0, 0, tzinfo=timezone.utc),
+                    end_time=D.datetime(2013, 9, 23, 12, 00, 0, tzinfo=timezone.utc))
         slot3 = Slot(chunk=self.chunk1, start_time=D.datetime(2013, 9, 22, 12, 0, 0, tzinfo=timezone.utc),
                       end_time=D.datetime(2013, 9, 22, 13, 0, 0, tzinfo=timezone.utc))
         slot4 = Slot(chunk=self.chunk1, start_time=D.datetime(2013, 9, 22, 13, 0, 0, tzinfo=timezone.utc),
@@ -237,6 +237,7 @@ class SlotListFilterTest(TestCase):
         TestFilter = self._make_time_filter('11:00')
         # Check lookup details
         lookups = list(TestFilter.lookups(None, self.admin))
+        print(lookups)
         self.assertEqual(len(lookups), 3)
         self.assertEqual(lookups[0], ('11:00', '11:00'))
         TestFilter = self._make_time_filter('12:00')
@@ -265,20 +266,20 @@ class SlotListFilterTest(TestCase):
             for s in slots[d]:
                 s.save()
         # Check Null filter
-        TestFilter = self._make_day_filter(None)
+        TestFilter = self._make_chunk_filter(None)
         self.assertEqual(list(TestFilter.queryset(None, Slot.objects.all())),
                          list(Slot.objects.all()))
         # Test ScheduleChunk1
-        TestFilter = self._make_day_filter(self.chunk1)
+        TestFilter = self._make_chunk_filter(self.chunk1)
         queries = set(TestFilter.queryset(None, Slot.objects.all()))
         self.assertEqual(queries, set(slots[self.chunk1]))
         # Test ScheduleChunk2
-        TestFilter = self._make_day_filter(self.chunk2)
+        TestFilter = self._make_chunk_filter(self.chunk2)
         queries = set(TestFilter.queryset(None, Slot.objects.all()))
         self.assertEqual(queries, set(slots[self.chunk2]))
 
         # Check no match case
-        TestFilter = self._make_day_filter(self.chunk3)
+        TestFilter = self._make_chunk_filter(self.chunk3)
         queries = list(TestFilter.queryset(None, Slot.objects.all()))
         self.assertEqual(queries, [])
 
@@ -302,8 +303,8 @@ class SlotListFilterTest(TestCase):
                     end_time=D.datetime(2013, 9, 22, 12, 00, 0, tzinfo=timezone.utc))
         prev.save()
         slots[self.chunk1] = [prev]
-        prev = Slot(chunk=self.chunk2, start_time=D.datetime(2013, 9, 22, 11, 0, 0, tzinfo=timezone.utc),
-                    end_time=D.datetime(2013, 9, 22, 12, 00, 0, tzinfo=timezone.utc))
+        prev = Slot(chunk=self.chunk2, start_time=D.datetime(2013, 9, 23, 11, 0, 0, tzinfo=timezone.utc),
+                    end_time=D.datetime(2013, 9, 23, 12, 00, 0, tzinfo=timezone.utc))
         prev.save()
         slots[self.chunk2] = [prev]
         # ScheduleChunk1 slots
@@ -319,20 +320,20 @@ class SlotListFilterTest(TestCase):
                                              end_time=D.datetime(2013, 9, 22, x+1, 0, 0, tzinfo=timezone.utc)))
                 slots[self.chunk2][-1].save()
         # Check Null filter
-        TestFilter = self._make_day_filter(None)
+        TestFilter = self._make_chunk_filter(None)
         self.assertEqual(list(TestFilter.queryset(None, Slot.objects.all())),
                          list(Slot.objects.all()))
         # Test ScheduleChunk1
-        TestFilter = self._make_day_filter(self.chunk1)
+        TestFilter = self._make_chunk_filter(self.chunk1)
         queries = set(TestFilter.queryset(None, Slot.objects.all()))
         self.assertEqual(queries, set(slots[self.chunk1]))
         # Test ScheduleChunk2
-        TestFilter = self._make_day_filter(self.chunk2)
+        TestFilter = self._make_chunk_filter(self.chunk2)
         queries = set(TestFilter.queryset(None, Slot.objects.all()))
         self.assertEqual(queries, set(slots[self.chunk2]))
 
         # Check no match case
-        TestFilter = self._make_day_filter(self.chunk3)
+        TestFilter = self._make_chunk_filter(self.chunk3)
         queries = list(TestFilter.queryset(None, Slot.objects.all()))
         self.assertEqual(queries, [])
 
@@ -356,8 +357,8 @@ class SlotListFilterTest(TestCase):
                     end_time=D.datetime(2013, 9, 22, 12, 00, 0, tzinfo=timezone.utc))
         prev.save()
         slots[self.chunk1] = [prev]
-        prev = Slot(chunk=self.chunk2, start_time=D.datetime(2013, 9, 22, 11, 0, 0, tzinfo=timezone.utc),
-                    end_time=D.datetime(2013, 9, 22, 12, 00, 0, tzinfo=timezone.utc))
+        prev = Slot(chunk=self.chunk2, start_time=D.datetime(2013, 9, 23, 11, 0, 0, tzinfo=timezone.utc),
+                    end_time=D.datetime(2013, 9, 23, 12, 00, 0, tzinfo=timezone.utc))
         prev.save()
         slots[self.chunk2] = [prev]
         # ScheduleChunk1 slots
@@ -375,27 +376,27 @@ class SlotListFilterTest(TestCase):
             prev2 = slots[self.chunk2][-1]
             if x % 5:
                 slots[self.chunk2].append(Slot(previous_slot=prev2,
-                                             end_time=D.datetime(2013, 9, 22, x+1, 0, 0, tzinfo=timezone.utc)))
+                                             end_time=D.datetime(2013, 9, 23, x+1, 0, 0, tzinfo=timezone.utc)))
             else:
                 slots[self.chunk2].append(Slot(chunk=self.chunk2,
-                                             start_time=D.datetime(2013, 9, 22, x, 0, 0, tzinfo=timezone.utc),
-                                             end_time=D.datetime(2013, 9, 22, x+1, 0, 0, tzinfo=timezone.utc)))
+                                             start_time=D.datetime(2013, 9, 23, x, 0, 0, tzinfo=timezone.utc),
+                                             end_time=D.datetime(2013, 9, 23, x+1, 0, 0, tzinfo=timezone.utc)))
             slots[self.chunk2][-1].save()
         # Check Null filter
-        TestFilter = self._make_day_filter(None)
+        TestFilter = self._make_chunk_filter(None)
         self.assertEqual(list(TestFilter.queryset(None, Slot.objects.all())),
                          list(Slot.objects.all()))
         # Test ScheduleChunk1
-        TestFilter = self._make_day_filter(self.chunk1)
+        TestFilter = self._make_chunk_filter(self.chunk1)
         queries = set(TestFilter.queryset(None, Slot.objects.all()))
         self.assertEqual(queries, set(slots[self.chunk1]))
         # Test ScheduleChunk2
-        TestFilter = self._make_day_filter(self.chunk2)
+        TestFilter = self._make_chunk_filter(self.chunk2)
         queries = set(TestFilter.queryset(None, Slot.objects.all()))
         self.assertEqual(queries, set(slots[self.chunk2]))
 
         # Check no match case
-        TestFilter = self._make_day_filter(self.chunk3)
+        TestFilter = self._make_chunk_filter(self.chunk3)
         queries = list(TestFilter.queryset(None, Slot.objects.all()))
         self.assertEqual(queries, [])
 
