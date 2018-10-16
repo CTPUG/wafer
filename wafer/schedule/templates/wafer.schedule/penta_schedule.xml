@@ -5,10 +5,10 @@
     <title>{{ WAFER_CONFERENCE_NAME }}</title>
       {% if schedule_pages %}
         {% with page=schedule_pages|first %}
-          <start>{{ page.chunk.start_time|date:"Y-m-d" }}</start>
+          <start>{{ page.block.start_time|date:"Y-m-d" }}</start>
         {% endwith %}
         {% with day=schedule_pages|last %}
-          <end>{{ page.chunk.end_time|date:"Y-m-d" }}</end>
+          <end>{{ page.block.end_time|date:"Y-m-d" }}</end>
         {% endwith %}
         <days>{{ schedule_pages|length }}</days>
       {% endif %}
@@ -16,7 +16,7 @@
     <timeslot_duration>00:15</timeslot_duration>
   </conference>
   {% for page in schedule_pages %}
-    <day date="{{ page.chunk.start_time|date:'Y-m-d' }}" index="{{ forloop.counter }}">
+    <day date="{{ page.block.start_time|date:'Y-m-d' }}" index="{{ forloop.counter }}">
       {% for venue in page.venues %}
         <room name="{{ venue.name }}">
           {% for row in page.rows %}

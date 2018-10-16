@@ -15,7 +15,7 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='ScheduleChunk',
+            name='ScheduleBlock',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('start_time', models.DateTimeField(blank=True, null=True)),
@@ -27,7 +27,7 @@ class Migration(migrations.Migration):
         ),
         migrations.AlterModelOptions(
             name='slot',
-            options={'ordering': ['chunk', 'end_time', 'start_time']},
+            options={'ordering': ['block', 'end_time', 'start_time']},
         ),
         migrations.RemoveField(
             model_name='slot',
@@ -57,12 +57,12 @@ class Migration(migrations.Migration):
         ),
         migrations.AddField(
             model_name='slot',
-            name='chunk',
-            field=models.ForeignKey(blank=True, help_text='Chunk for this slot (if no previous slot selected)', null=True, on_delete=django.db.models.deletion.PROTECT, to='schedule.ScheduleChunk'),
+            name='block',
+            field=models.ForeignKey(blank=True, help_text='Block for this slot (if no previous slot selected)', null=True, on_delete=django.db.models.deletion.PROTECT, to='schedule.ScheduleBlock'),
         ),
         migrations.AddField(
             model_name='venue',
-            name='chunks',
-            field=models.ManyToManyField(help_text='Chunks (days) on which this venue will be used.', to='schedule.ScheduleChunk'),
+            name='blocks',
+            field=models.ManyToManyField(help_text='Blocks (days) on which this venue will be used.', to='schedule.ScheduleBlock'),
         ),
     ]

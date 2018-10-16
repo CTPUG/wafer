@@ -13,7 +13,7 @@ from reversion.admin import VersionAdmin
 from easy_select2 import Select2Multiple
 
 from wafer.compare.admin import CompareVersionAdmin
-from wafer.schedule.models import ScheduleChunk, Venue, Slot, ScheduleItem
+from wafer.schedule.models import ScheduleBlock, Venue, Slot, ScheduleItem
 from wafer.talks.models import Talk, ACCEPTED, CANCELLED
 from wafer.pages.models import Page
 from wafer.utils import cache_result
@@ -33,8 +33,8 @@ def find_overlapping_slots(all_slots):
         for other_slot in all_slots:
             if other_slot.pk == slot.pk:
                 continue
-            if other_slot.get_chunk() != slot.get_chunk():
-                # different chunks, can't overlap
+            if other_slot.get_block() != slot.get_block():
+                # different blocks, can't overlap
                 continue
             # Overlap if the start_time or end_time is bounded by our times
             # start_time <= other.start_time < end_time
@@ -122,14 +122,14 @@ def find_clashes(all_items):
 
 def find_invalid_venues(all_items):
     """Find venues assigned slots that aren't on the allowed list
-       of chunks."""
+       of blocks."""
     venues = {}
     for item in all_items:
         valid = False
-        item_chunks = list(item.venue.chunks.all())
+        item_blocks = list(item.venue.blocks.all())
         for slot in item.slots.all():
-            for chunk in item_chunks:
-                if chunk == slot.get_chunk():
+            for block in item_blocks:
+                if block == slot.get_block():
                     valid = True
                     break
         if not valid:
@@ -145,7 +145,7 @@ def prefetch_schedule_items():
                 .select_related(
                     'talk', 'page', 'venue')
                 .prefetch_related(
-                    'slots', 'slots__previous_slot', 'slots__chunk')
+                    'slots', 'slots__previous_slot', 'slots__block')
                 .all())
 
 
@@ -224,25 +224,25 @@ def validate_schedule():
 
 # Useful filters for the admin forms
 
-class BaseChunkFilter(admin.SimpleListFilter):
-    # Common logic for filtering on Slots and ScheduleItem.slots by chunk 
+class BaseBlockFilter(admin.SimpleListFilter):
+    # Common logic for filtering on Slots and ScheduleItem.slots by block 
     # We need to do this as a filter, since we can't use sorting since
     # day is dynamic (either the model field or the previous_slot)
-    title = _('Chunk')
-    parameter_name = 'chunk'
+    title = _('Block')
+    parameter_name = 'block'
 
     def lookups(self, request, model_admin):
         # List filter wants the value to be a string, so we use
         # pk to avoid bouncing through strptime.
-        return [('%d' % chunk.pk, str(chunk)) for
-                chunk in ScheduleChunk.objects.all()]
+        return [('%d' % block.pk, str(block)) for
+                block in ScheduleBlock.objects.all()]
 
     def _get_slots(self):
         if self.value():
-            chunk_pk = int(self.value())
-            chunk = ScheduleChunk.objects.get(pk=chunk_pk)
-            # Find all slots that have the chunk explicitly set
-            slots = list(Slot.objects.filter(chunk=chunk))
+            block_pk = int(self.value())
+            block = ScheduleBlock.objects.get(pk=block_pk)
+            # Find all slots that have the block explicitly set
+            slots = list(Slot.objects.filter(block=block))
             all_slots = slots[:]
             # Recursively find slots with a previous_slot set to one of these
             while Slot.objects.filter(previous_slot__in=slots).exists():
@@ -250,30 +250,30 @@ class BaseChunkFilter(admin.SimpleListFilter):
                     previous_slot__in=slots).all())
                 all_slots.extend(slots)
             # Return the filtered list
-            return {'slots': all_slots, 'chunk': chunk}
+            return {'slots': all_slots, 'block': block}
         return None
 
 
-class SlotChunkFilter(BaseChunkFilter):
-    # Allow filtering slots by the chunk, to make editing slots easier
+class SlotBlockFilter(BaseBlockFilter):
+    # Allow filtering slots by the block, to make editing slots easier
 
     def queryset(self, request, queryset):
         query = self._get_slots()
         if query:
             return queryset.filter(Q(previous_slot__in=query['slots']) |
-                                   Q(chunk=query['chunk']))
+                                   Q(block=query['block']))
         # No value, so no filtering
         return queryset
 
 
-class ScheduleItemChunkFilter(BaseChunkFilter):
+class ScheduleItemBlockFilter(BaseBlockFilter):
     # Allow filtering scheduleitems by the day, to make editing easier
 
     def queryset(self, request, queryset):
         query = self._get_slots()
         if query:
             return queryset.filter(Q(slots__previous_slot__in=query['slots']) |
-                                   Q(slots__chunk=query['chunk']))
+                                   Q(slots__block=query['block']))
         # No value, so no filtering
         return queryset
 
@@ -377,7 +377,7 @@ class ScheduleItemAdmin(CompareVersionAdmin):
     list_display = ('get_start_time', 'venue', 'get_title', 'expand')
     list_editable = ('expand',)
 
-    list_filter = (ScheduleItemChunkFilter, ScheduleItemStartTimeFilter,
+    list_filter = (ScheduleItemBlockFilter, ScheduleItemStartTimeFilter,
                    ScheduleItemVenueFilter)
 
     # We stuff these validation results into the view, rather than
@@ -415,7 +415,7 @@ class SlotAdminForm(forms.ModelForm):
 
     class Meta:
         model = Slot
-        fields = ('name', 'previous_slot', 'chunk', 'start_time', 'end_time')
+        fields = ('name', 'previous_slot', 'block', 'start_time', 'end_time')
 
     class Media:
         js = ('js/scheduledatetime.js',)
@@ -434,13 +434,13 @@ class SlotAdminAddForm(SlotAdminForm):
 class SlotAdmin(CompareVersionAdmin):
     form = SlotAdminForm
 
-    list_display = ('__str__', 'get_chunk', 'get_formatted_start_date_time',
+    list_display = ('__str__', 'get_block', 'get_formatted_start_date_time',
                     'end_time')
     list_editable = ('end_time',)
 
     change_list_template = 'admin/slot_list.html'
 
-    list_filter = (SlotChunkFilter, SlotStartTimeFilter)
+    list_filter = (SlotBlockFilter, SlotStartTimeFilter)
 
     def changelist_view(self, request, extra_context=None):
         extra_context = extra_context or {}
@@ -476,7 +476,7 @@ class SlotAdmin(CompareVersionAdmin):
             slot_len = end - start
             for loop in range(form.cleaned_data['additional']):
                 end = end + slot_len
-                new_slot = Slot(chunk=prev.chunk, previous_slot=prev,
+                new_slot = Slot(block=prev.block, previous_slot=prev,
                                 end_time=end)
                 new_slot.save()
                 msgdict = {'obj': force_text(new_slot)}
@@ -488,8 +488,8 @@ class SlotAdmin(CompareVersionAdmin):
                 prev = new_slot
 
 
-# Register and setup reversion support for Chunks and Venues
-class ScheduleChunkAdmin(VersionAdmin):
+# Register and setup reversion support for Blocks and Venues
+class ScheduleBlockAdmin(VersionAdmin):
     pass
 
 
@@ -497,7 +497,7 @@ class VenueAdmin(VersionAdmin):
     pass
 
 
-admin.site.register(ScheduleChunk, ScheduleChunkAdmin)
+admin.site.register(ScheduleBlock, ScheduleBlockAdmin)
 admin.site.register(Slot, SlotAdmin)
 admin.site.register(Venue, VenueAdmin)
 admin.site.register(ScheduleItem, ScheduleItemAdmin)

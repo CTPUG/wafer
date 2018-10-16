@@ -3,33 +3,33 @@ from django.utils import timezone
 
 from django.test import TestCase
 
-from wafer.schedule.models import ScheduleChunk, Slot, ScheduleItem, Venue
+from wafer.schedule.models import ScheduleBlock, Slot, ScheduleItem, Venue
 from wafer.schedule.tests.test_views import make_pages, make_items
 
 
-class ChunkTests(TestCase):
+class BlockTests(TestCase):
 
     def setUp(self):
         """We run the tests in UTC, to be sane since we are using
            timezone aware dates."""
         timezone.activate('UTC')
 
-    def test_chunks_single_days(self):
+    def test_blocks_single_days(self):
         """Create some days and check the results."""
-        o1 = ScheduleChunk.objects.create(
+        o1 = ScheduleBlock.objects.create(
                 start_time=D.datetime(2013, 9, 22, 9, 0, 0,
                                       tzinfo=timezone.utc),
                 end_time=D.datetime(2013, 9, 22, 19, 0, 0,
                                     tzinfo=timezone.utc))
-        o2 = ScheduleChunk.objects.create(
+        o2 = ScheduleBlock.objects.create(
                 start_time=D.datetime(2013, 9, 23, 9, 0, 0,
                                       tzinfo=timezone.utc),
                 end_time=D.datetime(2013, 9, 23, 19, 0, 0,
                                     tzinfo=timezone.utc))
 
-        self.assertEqual(ScheduleChunk.objects.count(), 2)
+        self.assertEqual(ScheduleBlock.objects.count(), 2)
 
-        output = ["%s" % x for x in ScheduleChunk.objects.all()]
+        output = ["%s" % x for x in ScheduleBlock.objects.all()]
 
         self.assertEqual(output, ["Sep 22 (Sun)", "Sep 23 (Mon)"])
 
@@ -37,22 +37,22 @@ class ChunkTests(TestCase):
         o1.delete()
         o2.delete()
 
-    def test_chunks_multiple_days(self):
-        """Create 2 chunks that each cross midnight and check the results."""
-        ScheduleChunk.objects.create(
+    def test_blocks_multiple_days(self):
+        """Create 2 blocks that each cross midnight and check the results."""
+        ScheduleBlock.objects.create(
                 start_time=D.datetime(2013, 9, 22, 9, 0, 0,
                                       tzinfo=timezone.utc),
                 end_time=D.datetime(2013, 9, 23, 3, 0, 0,
                                     tzinfo=timezone.utc))
-        ScheduleChunk.objects.create(
+        ScheduleBlock.objects.create(
                 start_time=D.datetime(2013, 9, 23, 9, 0, 0,
                                       tzinfo=timezone.utc),
                 end_time=D.datetime(2013, 9, 24, 3, 0, 0,
                                     tzinfo=timezone.utc))
 
-        self.assertEqual(ScheduleChunk.objects.count(), 2)
+        self.assertEqual(ScheduleBlock.objects.count(), 2)
 
-        output = ["%s" % x for x in ScheduleChunk.objects.all()]
+        output = ["%s" % x for x in ScheduleBlock.objects.all()]
 
         self.assertEqual(output, ["Sep 22 (Sun) 09:00 - Sep 23 (Mon) 03:00",
                                   "Sep 23 (Mon) 09:00 - Sep 24 (Tue) 03:00"])
@@ -62,20 +62,20 @@ class LastUpdateTests(TestCase):
     def setUp(self):
         """Create some slots and schedule items"""
         timezone.activate('UTC')
-        day1 = ScheduleChunk.objects.create(
+        day1 = ScheduleBlock.objects.create(
                 start_time=D.datetime(2013, 9, 22, 9, 0, 0,
                                       tzinfo=timezone.utc),
                 end_time=D.datetime(2013, 9, 22, 19, 0, 0,
                                     tzinfo=timezone.utc))
-        day2 = ScheduleChunk.objects.create(
+        day2 = ScheduleBlock.objects.create(
                 start_time=D.datetime(2013, 9, 23, 9, 0, 0,
                                       tzinfo=timezone.utc),
                 end_time=D.datetime(2013, 9, 23, 19, 0, 0,
                                     tzinfo=timezone.utc))
         venue1 = Venue.objects.create(order=1, name='Venue 1')
         venue2 = Venue.objects.create(order=2, name='Venue 2')
-        venue1.chunks.add(day1)
-        venue2.chunks.add(day1)
+        venue1.blocks.add(day1)
+        venue2.blocks.add(day1)
 
         start1 = D.datetime(2013, 9, 23, 10, 0, 0,
                             tzinfo=timezone.utc)
@@ -89,13 +89,13 @@ class LastUpdateTests(TestCase):
                             tzinfo=timezone.utc)
         self.slots = []
         self.slots.append(Slot.objects.create(start_time=start1,
-                                              end_time=start2, chunk=day1))
+                                              end_time=start2, block=day1))
         self.slots.append(Slot.objects.create(start_time=start2,
-                                              end_time=start3, chunk=day1))
+                                              end_time=start3, block=day1))
         self.slots.append(Slot.objects.create(start_time=start3,
-                                              end_time=start4, chunk=day1))
+                                              end_time=start4, block=day1))
         self.slots.append(Slot.objects.create(start_time=start4,
-                                              end_time=start5, chunk=day1))
+                                              end_time=start5, block=day1))
 
         pages = make_pages(8)
         venues = [venue1, venue2] * 4

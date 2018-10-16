@@ -39,8 +39,8 @@
           {# We assume that the admin has created a valid timetable #}
           <tr>
             <td colspan="{{ page.venues|length|add:1 }}" class="title">
-              <a href="?day={{ page.chunk.start_time.isoformat }}">
-                {{ page.chunk.start_time|date:"l (d b)" }}
+              <a href="?day={{ page.block.start_time.isoformat }}">
+                {{ page.block.start_time|date:"l (d b)" }}
               </a>
             </td>
           </tr>

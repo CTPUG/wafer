@@ -9,7 +9,7 @@ from django.utils import timezone
 
 from wafer.talks.models import Talk, ACCEPTED
 from wafer.pages.models import Page
-from wafer.schedule.models import ScheduleChunk, Venue, Slot, ScheduleItem
+from wafer.schedule.models import ScheduleBlock, Venue, Slot, ScheduleItem
 from wafer.utils import QueryTracker
 
 
@@ -43,7 +43,7 @@ def make_venue(order=1, name='Venue 1'):
 
 def make_slot():
     """ Make a slot. """
-    day = ScheduleChunk.objects.create(
+    day = ScheduleBlock.objects.create(
             start_time=D.datetime(2013, 9, 22, 7, 0, 0,
                                   tzinfo=timezone.utc),
             end_time=D.datetime(2013, 9, 22, 19, 0, 0,
@@ -53,7 +53,7 @@ def make_slot():
                        tzinfo=timezone.utc)
     end = D.datetime(2013, 9, 22, 15, 0, 0, tzinfo=timezone.utc)
     slot = Slot.objects.create(start_time=start, end_time=end,
-                               chunk=day)
+                               block=day)
     return slot
 
 
@@ -85,7 +85,7 @@ class ScheduleViewTests(TestCase):
         # 10-11   Item1       Item4
         # 11-12   Item2       Item5
         # 12-13   Item3       Item6
-        day1 = ScheduleChunk.objects.create(
+        day1 = ScheduleBlock.objects.create(
             start_time=D.datetime(2013, 9, 22, 7, 0, 0,
                                   tzinfo=timezone.utc),
             end_time=D.datetime(2013, 9, 22, 19, 0, 0,
@@ -93,9 +93,9 @@ class ScheduleViewTests(TestCase):
             )
 
         venue1 = Venue.objects.create(order=1, name='Venue 1')
-        venue1.chunks.add(day1)
+        venue1.blocks.add(day1)
         venue2 = Venue.objects.create(order=2, name='Venue 2')
-        venue2.chunks.add(day1)
+        venue2.blocks.add(day1)
 
         start1 = D.datetime(2013, 9, 22, 10, 0, 0,
                             tzinfo=timezone.utc)
@@ -111,11 +111,11 @@ class ScheduleViewTests(TestCase):
         items = make_items(venues, pages)
 
         slot1 = Slot.objects.create(start_time=start1, end_time=start2,
-                                    chunk=day1)
+                                    block=day1)
         slot2 = Slot.objects.create(previous_slot=slot1, end_time=start3,
-                                    chunk=day1)
+                                    block=day1)
         slot3 = Slot.objects.create(previous_slot=slot2, end_time=end,
-                                    chunk=day1)
+                                    block=day1)
 
         items[0].slots.add(slot1)
         items[3].slots.add(slot1)
@@ -167,16 +167,16 @@ class ScheduleViewTests(TestCase):
         # 10-11   Item3       Item6
         # 11-12   Item2       Item5
         # 12-13   Item1       Item4
-        day1 = ScheduleChunk.objects.create(
+        day1 = ScheduleBlock.objects.create(
             start_time=D.datetime(2013, 9, 22, 7, 0, 0,
                                   tzinfo=timezone.utc),
             end_time=D.datetime(2013, 9, 22, 19, 0, 0,
                                   tzinfo=timezone.utc),
             )
         venue1 = Venue.objects.create(order=1, name='Venue 1')
-        venue1.chunks.add(day1)
+        venue1.blocks.add(day1)
         venue2 = Venue.objects.create(order=2, name='Venue 2')
-        venue2.chunks.add(day1)
+        venue2.blocks.add(day1)
 
         start1 = D.datetime(2013, 9, 22, 10, 0, 0, tzinfo=timezone.utc)
         start2 = D.datetime(2013, 9, 22, 11, 0, 0, tzinfo=timezone.utc)
@@ -190,11 +190,11 @@ class ScheduleViewTests(TestCase):
         # Create the slots not in date order either
 
         slot1 = Slot.objects.create(start_time=start1, end_time=start2,
-                                    chunk=day1)
+                                    block=day1)
         slot3 = Slot.objects.create(previous_slot=slot1, end_time=end,
-                                    chunk=day1)
+                                    block=day1)
         slot2 = Slot.objects.create(previous_slot=slot1, end_time=start3,
-                                    chunk=day1)
+                                    block=day1)
         slot3.previous_slot = slot2
         slot3.save()
 
@@ -244,29 +244,29 @@ class ScheduleViewTests(TestCase):
            check we get the expected results"""
         # Schedule is
         #         Venue 1     Venue 2
-        # ScheduleChunk1
+        # ScheduleBlock1
         # 10-11   Item1       Item4
         # 11-12   Item2       Item5
-        # ScheduleChunk2
+        # ScheduleBlock2
         # 12-13   Item3       Item6
-        day1 = ScheduleChunk.objects.create(
+        day1 = ScheduleBlock.objects.create(
             start_time=D.datetime(2013, 9, 22, 7, 0, 0,
                                   tzinfo=timezone.utc),
             end_time=D.datetime(2013, 9, 22, 19, 0, 0,
                                   tzinfo=timezone.utc),
             )
-        day2 = ScheduleChunk.objects.create(
+        day2 = ScheduleBlock.objects.create(
             start_time=D.datetime(2013, 9, 23, 7, 0, 0,
                                   tzinfo=timezone.utc),
             end_time=D.datetime(2013, 9, 23, 19, 0, 0,
                                 tzinfo=timezone.utc),
             )
         venue1 = Venue.objects.create(order=1, name='Venue 1')
-        venue1.chunks.add(day1)
-        venue1.chunks.add(day2)
+        venue1.blocks.add(day1)
+        venue1.blocks.add(day2)
         venue2 = Venue.objects.create(order=2, name='Venue 2')
-        venue2.chunks.add(day1)
-        venue2.chunks.add(day2)
+        venue2.blocks.add(day1)
+        venue2.blocks.add(day2)
 
         start1 = D.datetime(2013, 9, 22, 10, 0, 0, tzinfo=timezone.utc)
         start2 = D.datetime(2013, 9, 22, 11, 0, 0, tzinfo=timezone.utc)
@@ -280,11 +280,11 @@ class ScheduleViewTests(TestCase):
         items = make_items(venues, pages)
 
         slot1 = Slot.objects.create(start_time=start1, end_time=start2,
-                                    chunk=day1)
+                                    block=day1)
         slot2 = Slot.objects.create(start_time=start2, end_time=end1,
-                                    chunk=day1)
+                                    block=day1)
         slot3 = Slot.objects.create(start_time=start3, end_time=end2,
-                                    chunk=day2)
+                                    block=day2)
 
         items[0].slots.add(slot1)
         items[3].slots.add(slot1)
@@ -325,24 +325,24 @@ class ScheduleViewTests(TestCase):
         """Create a multiple day table with 3 slots and 2 venues and
            check we get the expected results using the per-day views"""
         # This is the same schedule as test_multiple_days
-        day1 = ScheduleChunk.objects.create(
+        day1 = ScheduleBlock.objects.create(
             start_time=D.datetime(2013, 9, 22, 7, 0, 0,
                                   tzinfo=timezone.utc),
             end_time=D.datetime(2013, 9, 22, 19, 0, 0,
                                   tzinfo=timezone.utc),
             )
-        day2 = ScheduleChunk.objects.create(
+        day2 = ScheduleBlock.objects.create(
             start_time=D.datetime(2013, 9, 23, 7, 0, 0,
                                   tzinfo=timezone.utc),
             end_time=D.datetime(2013, 9, 23, 19, 0, 0,
                                   tzinfo=timezone.utc),
             )
         venue1 = Venue.objects.create(order=1, name='Venue 1')
-        venue1.chunks.add(day1)
-        venue1.chunks.add(day2)
+        venue1.blocks.add(day1)
+        venue1.blocks.add(day2)
         venue2 = Venue.objects.create(order=2, name='Venue 2')
-        venue2.chunks.add(day1)
-        venue2.chunks.add(day2)
+        venue2.blocks.add(day1)
+        venue2.blocks.add(day2)
 
         start1 = D.datetime(2013, 9, 22, 10, 0, 0, tzinfo=timezone.utc)
         start2 = D.datetime(2013, 9, 22, 11, 0, 0, tzinfo=timezone.utc)
@@ -356,11 +356,11 @@ class ScheduleViewTests(TestCase):
         items = make_items(venues, pages)
 
         slot1 = Slot.objects.create(start_time=start1, end_time=start2,
-                                    chunk=day1)
+                                    block=day1)
         slot2 = Slot.objects.create(start_time=start2, end_time=end1,
-                                    chunk=day1)
+                                    block=day1)
         slot3 = Slot.objects.create(start_time=start3, end_time=end2,
-                                    chunk=day2)
+                                    block=day2)
 
         items[0].slots.add(slot1)
         items[3].slots.add(slot1)
@@ -403,7 +403,7 @@ class ScheduleViewTests(TestCase):
         response = c.get('/schedule/?day=2013-09-22')
         [day] = response.context['schedule_pages']
 
-        self.assertEqual(day.chunk, day1.chunk)
+        self.assertEqual(day.block, day1.block)
         self.assertEqual(day.venues, day1.venues)
         self.assertEqual(len(day.rows), len(day1.rows))
         # Repeat a bunch of tests from the full schedule
@@ -418,7 +418,7 @@ class ScheduleViewTests(TestCase):
         response = c.get('/schedule/?day=2013-09-23')
         [day] = response.context['schedule_pages']
 
-        self.assertEqual(day.chunk, day2.chunk)
+        self.assertEqual(day.block, day2.block)
         self.assertEqual(day.venues, day2.venues)
         self.assertEqual(len(day.rows), len(day2.rows))
         # Repeat a bunch of tests from the full schedule
@@ -433,29 +433,29 @@ class ScheduleViewTests(TestCase):
         """Create a multiple day table with 3 slots and 2 venues and
            check we get the expected results"""
         # Schedule is
-        # ScheduleChunk1
+        # ScheduleBlock1
         #         Venue 1
         # 10-11   Item1
         # 11-12   Item2
-        # ScheduleChunk2
+        # ScheduleBlock2
         #         Venue 2
         # 12-13   Item3
-        day1 = ScheduleChunk.objects.create(
+        day1 = ScheduleBlock.objects.create(
             start_time=D.datetime(2013, 9, 22, 7, 0, 0,
                                   tzinfo=timezone.utc),
             end_time=D.datetime(2013, 9, 22, 19, 0, 0,
                                   tzinfo=timezone.utc),
             )
-        day2 = ScheduleChunk.objects.create(
+        day2 = ScheduleBlock.objects.create(
             start_time=D.datetime(2013, 9, 23, 7, 0, 0,
                                   tzinfo=timezone.utc),
             end_time=D.datetime(2013, 9, 23, 19, 0, 0,
                                   tzinfo=timezone.utc),
             )
         venue1 = Venue.objects.create(order=1, name='Venue 1')
-        venue1.chunks.add(day1)
+        venue1.blocks.add(day1)
         venue2 = Venue.objects.create(order=2, name='Venue 2')
-        venue2.chunks.add(day2)
+        venue2.blocks.add(day2)
 
         start1 = D.datetime(2013, 9, 22, 10, 0, 0, tzinfo=timezone.utc)
         start2 = D.datetime(2013, 9, 22, 11, 0, 0, tzinfo=timezone.utc)
@@ -469,11 +469,11 @@ class ScheduleViewTests(TestCase):
         items = make_items(venues, pages)
 
         slot1 = Slot.objects.create(start_time=start1, end_time=start2,
-                                    chunk=day1)
+                                    block=day1)
         slot2 = Slot.objects.create(start_time=start2, end_time=end1,
-                                    chunk=day1)
+                                    block=day1)
         slot3 = Slot.objects.create(start_time=start3, end_time=end2,
-                                    chunk=day2)
+                                    block=day2)
 
         items[0].slots.add(slot1)
         items[1].slots.add(slot2)
@@ -517,7 +517,7 @@ class ScheduleViewTests(TestCase):
         # 12-13   Item2       --        Item8
         # 13-14   --          Item4 +   --
         # 14-15   Item3 +     Item5     --
-        day1 = ScheduleChunk.objects.create(
+        day1 = ScheduleBlock.objects.create(
             start_time=D.datetime(2013, 9, 22, 7, 0, 0,
                                   tzinfo=timezone.utc),
             end_time=D.datetime(2013, 9, 22, 19, 0, 0,
@@ -526,9 +526,9 @@ class ScheduleViewTests(TestCase):
         venue1 = Venue.objects.create(order=1, name='Venue 1')
         venue2 = Venue.objects.create(order=2, name='Venue 2')
         venue3 = Venue.objects.create(order=3, name='Venue 3')
-        venue1.chunks.add(day1)
-        venue2.chunks.add(day1)
-        venue3.chunks.add(day1)
+        venue1.blocks.add(day1)
+        venue2.blocks.add(day1)
+        venue3.blocks.add(day1)
 
         start1 = D.datetime(2013, 9, 22, 10, 0, 0, tzinfo=timezone.utc)
         start2 = D.datetime(2013, 9, 22, 11, 0, 0, tzinfo=timezone.utc)
@@ -539,19 +539,19 @@ class ScheduleViewTests(TestCase):
 
         # We create the slots out of order to tt
         slot1 = Slot.objects.create(start_time=start1, end_time=start2,
-                                    chunk=day1)
+                                    block=day1)
 
         slot4 = Slot.objects.create(start_time=start4, end_time=start5,
-                                    chunk=day1)
+                                    block=day1)
 
         slot2 = Slot.objects.create(start_time=start2, end_time=start3,
-                                    chunk=day1)
+                                    block=day1)
 
         slot3 = Slot.objects.create(start_time=start3, end_time=start4,
-                                    chunk=day1)
+                                    block=day1)
 
         slot5 = Slot.objects.create(start_time=start5, end_time=end,
-                                    chunk=day1)
+                                    block=day1)
 
         pages = make_pages(10)
         venues = [venue1, venue1, venue1, venue1, venue2, venue2,
@@ -645,7 +645,7 @@ class ScheduleViewTests(TestCase):
         # 12-13   Item2       Item7
         # 13-14   Item3         |
         # 14-15   Item4         |
-        day1 = ScheduleChunk.objects.create(
+        day1 = ScheduleBlock.objects.create(
             start_time=D.datetime(2013, 9, 22, 7, 0, 0,
                                   tzinfo=timezone.utc),
             end_time=D.datetime(2013, 9, 22, 19, 0, 0,
@@ -653,8 +653,8 @@ class ScheduleViewTests(TestCase):
             )
         venue1 = Venue.objects.create(order=1, name='Venue 1')
         venue2 = Venue.objects.create(order=2, name='Venue 2')
-        venue1.chunks.add(day1)
-        venue2.chunks.add(day1)
+        venue1.blocks.add(day1)
+        venue2.blocks.add(day1)
 
         start1 = D.datetime(2013, 9, 22, 10, 0, 0, tzinfo=timezone.utc)
         start2 = D.datetime(2013, 9, 22, 11, 0, 0, tzinfo=timezone.utc)
@@ -664,15 +664,15 @@ class ScheduleViewTests(TestCase):
         end = D.datetime(2013, 9, 22, 15, 0, 0, tzinfo=timezone.utc)
 
         slot1 = Slot.objects.create(start_time=start1, end_time=start2,
-                                    chunk=day1)
+                                    block=day1)
         slot2 = Slot.objects.create(start_time=start2, end_time=start3,
-                                    chunk=day1)
+                                    block=day1)
         slot3 = Slot.objects.create(start_time=start3, end_time=start4,
-                                    chunk=day1)
+                                    block=day1)
         slot4 = Slot.objects.create(start_time=start4, end_time=start5,
-                                    chunk=day1)
+                                    block=day1)
         slot5 = Slot.objects.create(start_time=start5, end_time=end,
-                                    chunk=day1)
+                                    block=day1)
 
         pages = make_pages(7)
         venues = [venue1, venue1, venue1, venue1, venue2, venue2, venue2]
@@ -744,7 +744,7 @@ class ScheduleViewTests(TestCase):
         # 12-13     |         --        Item7
         # 13-14   Item2 +     --          |
         # 14-15   Item3 +     Item4+     --
-        day1 = ScheduleChunk.objects.create(
+        day1 = ScheduleBlock.objects.create(
             start_time=D.datetime(2013, 9, 22, 7, 0, 0,
                                   tzinfo=timezone.utc),
             end_time=D.datetime(2013, 9, 22, 19, 0, 0,
@@ -753,9 +753,9 @@ class ScheduleViewTests(TestCase):
         venue1 = Venue.objects.create(order=1, name='Venue 1')
         venue2 = Venue.objects.create(order=2, name='Venue 2')
         venue3 = Venue.objects.create(order=3, name='Venue 3')
-        venue1.chunks.add(day1)
-        venue2.chunks.add(day1)
-        venue3.chunks.add(day1)
+        venue1.blocks.add(day1)
+        venue2.blocks.add(day1)
+        venue3.blocks.add(day1)
 
         start1 = D.datetime(2013, 9, 22, 10, 0, 0, tzinfo=timezone.utc)
         start2 = D.datetime(2013, 9, 22, 11, 0, 0, tzinfo=timezone.utc)
@@ -766,19 +766,19 @@ class ScheduleViewTests(TestCase):
 
         # We create the slots out of order to tt
         slot1 = Slot.objects.create(start_time=start1, end_time=start2,
-                                    chunk=day1)
+                                    block=day1)
 
         slot4 = Slot.objects.create(start_time=start4, end_time=start5,
-                                    chunk=day1)
+                                    block=day1)
 
         slot2 = Slot.objects.create(start_time=start2, end_time=start3,
-                                    chunk=day1)
+                                    block=day1)
 
         slot3 = Slot.objects.create(start_time=start3, end_time=start4,
-                                    chunk=day1)
+                                    block=day1)
 
         slot5 = Slot.objects.create(start_time=start5, end_time=end,
-                                    chunk=day1)
+                                    block=day1)
 
         pages = make_pages(10)
         venues = [venue1, venue1, venue1, venue1, venue2,
@@ -860,13 +860,13 @@ class CurrentViewTests(TestCase):
 
     def test_current_view_simple(self):
         """Create a schedule and check that the current view looks sane."""
-        day1 = ScheduleChunk.objects.create(
+        day1 = ScheduleBlock.objects.create(
             start_time=D.datetime(2013, 9, 22, 7, 0, 0,
                                   tzinfo=timezone.utc),
             end_time=D.datetime(2013, 9, 22, 19, 0, 0,
                                   tzinfo=timezone.utc),
             )
-        day2 = ScheduleChunk.objects.create(
+        day2 = ScheduleBlock.objects.create(
             start_time=D.datetime(2013, 9, 23, 7, 0, 0,
                                   tzinfo=timezone.utc),
             end_time=D.datetime(2013, 9, 23, 19, 0, 0,
@@ -874,8 +874,8 @@ class CurrentViewTests(TestCase):
             )
         venue1 = Venue.objects.create(order=1, name='Venue 1')
         venue2 = Venue.objects.create(order=2, name='Venue 2')
-        venue1.chunks.add(day1)
-        venue2.chunks.add(day1)
+        venue1.blocks.add(day1)
+        venue2.blocks.add(day1)
 
         start1 = D.datetime(2013, 9, 22, 10, 0, 0, tzinfo=timezone.utc)
         start2 = D.datetime(2013, 9, 22, 11, 0, 0, tzinfo=timezone.utc)
@@ -896,13 +896,13 @@ class CurrentViewTests(TestCase):
         slots = []
 
         slots.append(Slot.objects.create(start_time=start1, end_time=start2,
-                                         chunk=day1))
+                                         block=day1))
         slots.append(Slot.objects.create(start_time=start2, end_time=start3,
-                                         chunk=day1))
+                                         block=day1))
         slots.append(Slot.objects.create(start_time=start3, end_time=start4,
-                                         chunk=day1))
+                                         block=day1))
         slots.append(Slot.objects.create(start_time=start4, end_time=start5,
-                                         chunk=day1))
+                                         block=day1))
 
         pages = make_pages(8)
         venues = [venue1, venue2] * 4
@@ -985,7 +985,7 @@ class CurrentViewTests(TestCase):
         # 12-13     |         Item7     Item6
         # 13-14   Item8         |         |
         # 14-15   --          Item9     Item10
-        day1 = ScheduleChunk.objects.create(
+        day1 = ScheduleBlock.objects.create(
             start_time=D.datetime(2013, 9, 22, 7, 0, 0,
                                   tzinfo=timezone.utc),
             end_time=D.datetime(2013, 9, 22, 19, 0, 0,
@@ -994,9 +994,9 @@ class CurrentViewTests(TestCase):
         venue1 = Venue.objects.create(order=1, name='Venue 1')
         venue2 = Venue.objects.create(order=2, name='Venue 2')
         venue3 = Venue.objects.create(order=3, name='Venue 3')
-        venue1.chunks.add(day1)
-        venue2.chunks.add(day1)
-        venue3.chunks.add(day1)
+        venue1.blocks.add(day1)
+        venue2.blocks.add(day1)
+        venue3.blocks.add(day1)
 
         start1 = D.datetime(2013, 9, 22, 10, 0, 0, tzinfo=timezone.utc)
         start2 = D.datetime(2013, 9, 22, 11, 0, 0, tzinfo=timezone.utc)
@@ -1006,15 +1006,15 @@ class CurrentViewTests(TestCase):
         end = D.datetime(2013, 9, 22, 15, 0, 0, tzinfo=timezone.utc)
 
         slot1 = Slot.objects.create(start_time=start1, end_time=start2,
-                                    chunk=day1)
+                                    block=day1)
         slot2 = Slot.objects.create(start_time=start2, end_time=start3,
-                                    chunk=day1)
+                                    block=day1)
         slot3 = Slot.objects.create(start_time=start3, end_time=start4,
-                                    chunk=day1)
+                                    block=day1)
         slot4 = Slot.objects.create(start_time=start4, end_time=start5,
-                                    chunk=day1)
+                                    block=day1)
         slot5 = Slot.objects.create(start_time=start5, end_time=end,
-                                    chunk=day1)
+                                    block=day1)
 
         pages = make_pages(10)
         venues = [venue1, venue1, venue2, venue3, venue3, venue3,
@@ -1097,23 +1097,23 @@ class CurrentViewTests(TestCase):
 
     def test_current_view_invalid(self):
         """Test that invalid schedules return a inactive current view."""
-        day1 = ScheduleChunk.objects.create(
+        day1 = ScheduleBlock.objects.create(
             start_time=D.datetime(2013, 9, 22, 7, 0, 0,
                                   tzinfo=timezone.utc),
             end_time=D.datetime(2013, 9, 22, 19, 0, 0,
                                   tzinfo=timezone.utc),
             )
         venue1 = Venue.objects.create(order=1, name='Venue 1')
-        venue1.chunks.add(day1)
+        venue1.blocks.add(day1)
         start1 = D.datetime(2013, 9, 22, 10, 0, 0, tzinfo=timezone.utc)
         start2 = D.datetime(2013, 9, 22, 11, 0, 0, tzinfo=timezone.utc)
         end = D.datetime(2013, 9, 22, 12, 0, 0, tzinfo=timezone.utc)
         cur1 = D.datetime(2013, 9, 22, 10, 30, 0, tzinfo=timezone.utc)
 
         slot1 = Slot.objects.create(start_time=start1, end_time=start2,
-                                    chunk=day1)
+                                    block=day1)
         slot2 = Slot.objects.create(start_time=start1, end_time=end,
-                                    chunk=day1)
+                                    block=day1)
 
         user = get_user_model().objects.create_user('john', 'best@wafer.test',
                                                     'johnpassword')
@@ -1139,13 +1139,13 @@ class NonHTMLViewTests(TestCase):
     def setUp(self):
         # Create the schedule used for these tests
         timezone.activate('UTC')
-        day1 = ScheduleChunk.objects.create(
+        day1 = ScheduleBlock.objects.create(
             start_time=D.datetime(2013, 9, 22, 7, 0, 0,
                                   tzinfo=timezone.utc),
             end_time=D.datetime(2013, 9, 22, 19, 0, 0,
                                   tzinfo=timezone.utc),
             )
-        day2 = ScheduleChunk.objects.create(
+        day2 = ScheduleBlock.objects.create(
             start_time=D.datetime(2013, 9, 23, 7, 0, 0,
                                   tzinfo=timezone.utc),
             end_time=D.datetime(2013, 9, 23, 19, 0, 0,
@@ -1153,8 +1153,8 @@ class NonHTMLViewTests(TestCase):
             )
         venue1 = Venue.objects.create(order=1, name='Venue 1')
         venue2 = Venue.objects.create(order=2, name='Venue 2')
-        venue1.chunks.add(day1)
-        venue2.chunks.add(day1)
+        venue1.blocks.add(day1)
+        venue2.blocks.add(day1)
 
         start1 = D.datetime(2013, 9, 22, 10, 0, 0, tzinfo=timezone.utc)
         start2 = D.datetime(2013, 9, 22, 11, 0, 0, tzinfo=timezone.utc)
@@ -1165,13 +1165,13 @@ class NonHTMLViewTests(TestCase):
         slots = []
 
         slots.append(Slot.objects.create(start_time=start1, end_time=start2,
-                                         chunk=day1))
+                                         block=day1))
         slots.append(Slot.objects.create(start_time=start2, end_time=start3,
-                                         chunk=day1))
+                                         block=day1))
         slots.append(Slot.objects.create(start_time=start3, end_time=start4,
-                                         chunk=day1))
+                                         block=day1))
         slots.append(Slot.objects.create(start_time=start4, end_time=start5,
-                                         chunk=day1))
+                                         block=day1))
 
         pages = make_pages(8)
         venues = [venue1, venue2] * 4

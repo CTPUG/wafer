@@ -13,8 +13,8 @@ from wafer.talks.models import Talk
 
 
 @python_2_unicode_compatible
-class ScheduleChunk(models.Model):
-    """Chunks into which we'll break the schedule.
+class ScheduleBlock(models.Model):
+    """Blocks into which we'll break the schedule.
     
        Typically days, but can be shorter or longer depending on use
        case."""
@@ -44,8 +44,8 @@ class Venue(models.Model):
         help_text=_("Notes or directions that will be useful to"
                     " conference attendees"))
 
-    chunks = models.ManyToManyField(ScheduleChunk,
-        help_text=_("Chunks (days) on which this venue will be used."))
+    blocks = models.ManyToManyField(ScheduleBlock,
+        help_text=_("Blocks (days) on which this venue will be used."))
 
     video = models.BooleanField(
         default=False,
@@ -76,9 +76,9 @@ class Slot(models.Model):
                                                   "slot OR a day and start "
                                                   "time set)"))
 
-    chunk = models.ForeignKey(ScheduleChunk, null=True, blank=True,
+    block = models.ForeignKey(ScheduleBlock, null=True, blank=True,
                             on_delete=models.PROTECT,
-                            help_text=_("Chunk for this slot (if no "
+                            help_text=_("Block for this slot (if no "
                                         "previous slot selected)"))
 
     start_time = models.DateTimeField(
@@ -91,7 +91,7 @@ class Slot(models.Model):
                                         " panel"))
 
     class Meta:
-        ordering = ['chunk', 'end_time', 'start_time']
+        ordering = ['block', 'end_time', 'start_time']
 
     def __str__(self):
         if self.name:
@@ -139,11 +139,11 @@ class Slot(models.Model):
         result['hours'], result['minutes'] = divmod(duration // 60, 60)
         return result
 
-    def get_chunk(self):
+    def get_block(self):
         if self.previous_slot:
-            return self.previous_slot.get_chunk()
-        return self.chunk
-    get_chunk.short_description = 'Schedule Chunk'
+            return self.previous_slot.get_block()
+        return self.block
+    get_block.short_description = 'Schedule Block'
 
     def clean(self):
         """Ensure we have start_time < end_time"""
@@ -154,10 +154,10 @@ class Slot(models.Model):
             raise ValidationError("Start time must be before end time")
         # Slots should either have day + start_time, or a previous_slot, but
         # not both (since previous_slot overrides the others)
-        if (self.chunk or self.start_time) and self.previous_slot:
+        if (self.block or self.start_time) and self.previous_slot:
             raise ValidationError("Slots with a previous slot should not "
-                                  "have a chunk or start_time set")
-        # Validate that we are within the bounds of the chunk
+                                  "have a block or start_time set")
+        # Validate that we are within the bounds of the block
 
 
 @python_2_unicode_compatible
@@ -314,12 +314,12 @@ def update_schedule_items(*args, **kw):
             item.save(update_fields=['last_updated'])
 
 
-post_save.connect(invalidate_check_schedule, sender=ScheduleChunk)
+post_save.connect(invalidate_check_schedule, sender=ScheduleBlock)
 post_save.connect(invalidate_check_schedule, sender=Venue)
 post_save.connect(invalidate_check_schedule, sender=Slot)
 post_save.connect(invalidate_check_schedule, sender=ScheduleItem)
 
-post_delete.connect(invalidate_check_schedule, sender=ScheduleChunk)
+post_delete.connect(invalidate_check_schedule, sender=ScheduleBlock)
 post_delete.connect(invalidate_check_schedule, sender=Venue)
 post_delete.connect(invalidate_check_schedule, sender=Slot)
 post_delete.connect(invalidate_check_schedule, sender=ScheduleItem)

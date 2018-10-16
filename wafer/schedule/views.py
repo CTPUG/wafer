@@ -12,7 +12,7 @@ from bakery.views import BuildableDetailView, BuildableTemplateView
 from rest_framework import viewsets
 from rest_framework.permissions import IsAdminUser
 from wafer.pages.models import Page
-from wafer.schedule.models import Venue, Slot, ScheduleChunk
+from wafer.schedule.models import Venue, Slot, ScheduleBlock
 from wafer.schedule.admin import check_schedule, validate_schedule
 from wafer.schedule.models import ScheduleItem
 from wafer.schedule.serializers import ScheduleItemSerializer
@@ -41,10 +41,10 @@ class ScheduleRow(object):
 
 
 class SchedulePage(object):
-    """A helpful container for information about chunks in a schedule view."""
-    def __init__(self, chunk):
-        self.chunk = chunk
-        self.venues = list(chunk.venue_set.all())
+    """A helpful container for information about blocks in a schedule view."""
+    def __init__(self, block):
+        self.block = block
+        self.venues = list(block.venue_set.all())
         self.rows = []
 
 
@@ -112,17 +112,17 @@ def generate_schedule(today=None):
     # We create a list of slots and schedule items
     schedule_pages = {}
     seen_items = {}
-    for slot in Slot.objects.all().order_by('end_time', 'start_time', 'chunk'):
-        chunk = slot.get_chunk()
-        if today and chunk != today:
+    for slot in Slot.objects.all().order_by('end_time', 'start_time', 'block'):
+        block = slot.get_block()
+        if today and block != today:
             # Restrict ourselves to only today
             continue
-        schedule_page = schedule_pages.get(chunk)
+        schedule_page = schedule_pages.get(block)
         if schedule_page is None:
-            schedule_page = schedule_pages[chunk] = SchedulePage(chunk)
+            schedule_page = schedule_pages[block] = SchedulePage(block)
         row = make_schedule_row(schedule_page, slot, seen_items)
         schedule_page.rows.append(row)
-    return sorted(schedule_pages.values(), key=lambda x: x.chunk.start_time)
+    return sorted(schedule_pages.values(), key=lambda x: x.block.start_time)
 
 
 class ScheduleView(BuildableTemplateView):
@@ -140,17 +140,17 @@ class ScheduleView(BuildableTemplateView):
         context['active'] = True
         day = self.request.GET.get('day', None)
         dates = dict([(x.start_time.strftime('%Y-%m-%d'), x) for x in
-                      ScheduleChunk.objects.all()])
+                      ScheduleBlock.objects.all()])
         # We choose to return the full schedule if given an invalid date
         schedule_day = dates.get(day, None)
         if schedule_day is not None:
             # Add next / prev day links
-            sorted_chunks = sorted(dates)
-            pos = sorted_chunks.index(day)
+            sorted_blocks = sorted(dates)
+            pos = sorted_blocks.index(day)
             if pos > 0:
-                context['prev_day'] = sorted_chunks[pos - 1]
-            if pos < len(sorted_chunks) - 1:
-                context['next_day'] = sorted_chunks[pos + 1]
+                context['prev_day'] = sorted_blocks[pos - 1]
+            if pos < len(sorted_blocks) - 1:
+                context['next_day'] = sorted_blocks[pos + 1]
         context['schedule_pages'] = generate_schedule(schedule_day)
         return context
 
@@ -178,7 +178,7 @@ class CurrentView(TemplateView):
             day = datetime.date.today()
         else:
             day = datetime.datetime.strptime(day, '%Y-%m-%d').date()
-        for candidate in ScheduleChunk.objects.all():
+        for candidate in ScheduleBlock.objects.all():
             if candidate.start_time.date() <= day and candidate.end_time.date() >= day:
                 return SchedulePage(candidate)
         return None
@@ -207,7 +207,7 @@ class CurrentView(TemplateView):
     def _current_slots(self, schedule_page, search_time):
         cur_slot, prev_slot, next_slot = None, None, None
         for slot in Slot.objects.all():
-            if slot.start_time > schedule_page.chunk.end_time or slot.end_time < schedule_page.chunk.start_time:
+            if slot.start_time > schedule_page.block.end_time or slot.end_time < schedule_page.block.start_time:
                 continue
             if slot.get_start_time() <= search_time and slot.end_time > search_time:
                 cur_slot = slot
@@ -306,37 +306,37 @@ class ScheduleEditView(TemplateView):
             slot_context['venues'].append(venue_context)
         return slot_context
 
-    def get_context_data(self, chunk_id=None, **kwargs):
+    def get_context_data(self, block_id=None, **kwargs):
         context = super(ScheduleEditView, self).get_context_data(**kwargs)
 
-        chunks = ScheduleChunk.objects.all()
-        if chunk_id:
-            chunk = chunks.get(id=chunk_id)
+        blocks = ScheduleBlock.objects.all()
+        if block_id:
+            block = blocks.get(id=block_id)
         else:
-            chunk = chunks.first()
+            block = blocks.first()
 
         public_talks = Talk.objects.filter(Q(status=ACCEPTED) |
                                            Q(status=CANCELLED))
         public_talks = public_talks.order_by("talk_type", "talk_id")
-        venues = Venue.objects.filter(chunks__in=[chunk])
+        venues = Venue.objects.filter(blocks__in=[block])
         slots = Slot.objects.all().select_related(
-            'chunk', 'previous_slot').prefetch_related(
+            'block', 'previous_slot').prefetch_related(
             'scheduleitem_set', 'slot_set').order_by(
-                'end_time', 'start_time', 'chunk')
+                'end_time', 'start_time', 'block')
         aggregated_slots = []
 
         for slot in slots:
-            if chunk != slot.get_chunk():
+            if block != slot.get_block():
                 continue
             aggregated_slots.append(self._slot_context(slot, venues))
 
-        context['chunk'] = chunk
+        context['block'] = block
         context['venues'] = venues
         context['slots'] = aggregated_slots
         context['talks_all'] = public_talks
         context['talks_unassigned'] = public_talks.filter(scheduleitem=None)
         context['pages'] = Page.objects.all()
-        context['chunks'] = chunks
+        context['blocks'] = blocks
         context['validation_errors'] = validate_schedule()
         return context
 
