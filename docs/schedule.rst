@@ -2,29 +2,39 @@
 Schedule
 ========
 
-Specifying Days and Venues
+Specifying Block and Venues
 ==========================
 
-The first things that need to be specified are the days for the schedule and
+The first things that need to be specified are the blocks for the schedule and
 the venues available.
 
-Each venue is associated with a number of days of the conference. On days when
-a venue is not available, it will not appear in the schedule.
+Blocks are the parts that the schedule is divided into. Typically they
+correspond to days of the conference, but they can be longer or shorter
+depending on the needs. Each block can be rendered independently of the
+others, provided there are no errors in the schedule.
+
+Each block has a start and end date and time. These can be on different days,
+to allow for events that go past midnight.
+
+Each venue is associated with a number of blocks, and is assumed not
+to be available if it hasn't been assigned to the corresponding block in the
+schedule. At times  when a venue is not available, it will not appear in the
+schedule.
 
 Slots
 =====
 
 The fundamental unit of the schedule is a schedule slot. Each slot is assigned
-to a given day, and has a start and end time. The start time may be specified as
+to a given block, and has a start and end date and time. The start time may be specified as
 the end time of a different slot using the ``previous_slot``.
 
-Each slot has a name to make it easier to distinguish.
+The times of a slot must be within the times given for it's associated block.
+
+Each slot can have a name to make it easier to distinguish.
 
 Slots cannot overlap, but items can use multiple slots, so this can be
 emulated by breaking the slots down into small enough time intervals.
 
-The times are specified as absolute times, and are assumed to be
-in the correct timezone for the conference.
 
 Assigning items to slots
 ========================
@@ -42,10 +52,10 @@ be added to the information from the talk.
 Schedule views
 ==============
 
-The schedule can be restricted to a single day by specifying the ``day``
+The schedule can be restricted to a single block by specifying the ``day``
 parameter in the URL - e.g. ``https://localhost/schedule/?day=2014-10-23``. If
-the specified day is not one of the days in the schedule, the full schedule is
-shown.
+the specified day cannnot be matched to one of the blocks in the schedule, the
+full schedule is shown.
 
 The ``schedule/current`` view can be used to show events around the current time.
 The ``refresh`` parameter can be used to add a refresh header to the view - e.g
