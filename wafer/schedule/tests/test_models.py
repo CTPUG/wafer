@@ -88,6 +88,20 @@ class BlockTests(TestCase):
                 end_time=D.datetime(2013, 9, 23, 23, 0, 0,
                                     tzinfo=timezone.utc))
         self.assertRaises(ValidationError, block2.clean)
+        # Test included block
+        block2 = ScheduleBlock.objects.create(
+                start_time=D.datetime(2013, 9, 22, 3, 0, 0,
+                                      tzinfo=timezone.utc),
+                end_time=D.datetime(2013, 9, 22, 4, 0, 0,
+                                    tzinfo=timezone.utc))
+        self.assertRaises(ValidationError, block2.clean)
+        # Test surrounding block
+        block2 = ScheduleBlock.objects.create(
+                start_time=D.datetime(2013, 9, 22, 0, 15, 0,
+                                      tzinfo=timezone.utc),
+                end_time=D.datetime(2013, 9, 23, 4, 0, 0,
+                                    tzinfo=timezone.utc))
+        self.assertRaises(ValidationError, block2.clean)
 
 
 class SlotTests(TestCase):

@@ -12,6 +12,27 @@ from wafer.snippets.markdown_field import MarkdownTextField
 from wafer.talks.models import Talk
 
 
+# Validation Helpers
+def includes(obj1, obj2):
+    """Test if the times for obj1 are completely included in
+       the times for obj2"""
+    if (obj2.end_time > obj1.end_time and
+        obj2.get_start_time() < obj1.get_start_time()):
+        return True
+    return False
+
+def overlap(obj1, obj2):
+    """Test if obj1 and obj2 overlap on times"""
+    # obj1 and obj2 are either both ScheduleBlocks or both slots
+    if (obj2.get_start_time() >= obj1.get_start_time() and
+                    obj2.get_start_time() < obj1.end_time):
+        return True
+    elif (obj2.end_time <= obj1.end_time and
+                    obj2.end_time > obj1.get_start_time()):
+        return True
+    return includes(obj1, obj2)
+
+
 @python_2_unicode_compatible
 class ScheduleBlock(models.Model):
     """Blocks into which we'll break the schedule.
@@ -21,6 +42,13 @@ class ScheduleBlock(models.Model):
     start_time = models.DateTimeField(null=True, blank=True)
     end_time = models.DateTimeField(null=True, blank=True)
 
+    class Meta:
+        ordering = ['start_time']
+
+    def get_start_time(self):
+        """Helper method to ease validation checks."""
+        return self.start_time
+
     def __str__(self):
         if self.start_time.date() != self.end_time.date():
             return u'%s - %s' % (self.start_time.strftime('%b %d (%a) %H:%M'),
@@ -28,9 +56,14 @@ class ScheduleBlock(models.Model):
         # We default to a "day" view in this case
         return u'%s' % self.start_time.strftime('%b %d (%a)')
 
-    class Meta:
-        ordering = ['start_time']
-
+    def clean(self):
+        """Ensure Schedule blocks are sane."""
+        if self.start_time >= self.end_time:
+            raise ValidationError("Start time must be before end time")
+        # Validate that we don't overlap any existing blocks
+        for other_block in ScheduleBlock.objects.all():
+            if overlap(self, other_block):
+                raise ValidationError("Overlaps with %s" % other_block)
 
 @python_2_unicode_compatible
 class Venue(models.Model):
@@ -162,17 +195,7 @@ class Slot(models.Model):
         # This isn't very efficient, but OK because it's a once off
         # validation cost.
         for other_slot in Slot.objects.all():
-            overlap = False
-            if (other_slot.get_start_time() >= self.get_start_time() and
-                    other_slot.get_start_time() < self.end_time):
-                overlap = True
-            elif (other_slot.end_time <= self.end_time and
-                    other_slot.end_time > self.get_start_time()):
-                overlap = True
-            elif (other_slot.end_time > self.end_time and
-                    other_slot.get_start_time() < self.get_start_time()):
-                overlap = True
-            if overlap:
+            if overlap(self, other_slot):
                 raise ValidationError("Overlaps with %s" % other_slot)
 
 @python_2_unicode_compatible
