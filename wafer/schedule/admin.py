@@ -3,6 +3,8 @@ from collections import defaultdict
 
 from django.db.models import Q
 from django.conf.urls import url
+from django.core.exceptions import ValidationError
+
 from django.contrib import admin
 from django.contrib import messages
 from django.utils.encoding import force_text
@@ -478,14 +480,22 @@ class SlotAdmin(CompareVersionAdmin):
                 end = end + slot_len
                 new_slot = Slot(block=prev.block, previous_slot=prev,
                                 end_time=end)
-                new_slot.save()
-                msgdict = {'obj': force_text(new_slot)}
-                msg = _("Additional slot %(obj)s added sucessfully") % msgdict
-                if hasattr(request, '_messages'):
-                    # Don't add messages unless we have a suitable request
-                    # Needed during testing, and possibly in other cases
-                    self.message_user(request, msg, messages.SUCCESS)
-                prev = new_slot
+                # Make sure we're valid before adding to the database
+                try:
+                    new_slot.full_clean()
+                    new_slot.save()
+                    msgdict = {'obj': force_text(new_slot)}
+                    msg = _("Additional slot %(obj)s added sucessfully") % msgdict
+                    if hasattr(request, '_messages'):
+                        # Don't add messages unless we have a suitable request
+                        # Needed during testing, and possibly in other cases
+                        self.message_user(request, msg, messages.SUCCESS)
+                    prev = new_slot
+                except ValidationError as  err:
+                    msg = _("Failed to create new slot - %s" % err)
+                    if hasattr(request, '_messages'):
+                        self.message_user(request, msg, messages.FAILURE)
+                    break
 
 
 # Register and setup reversion support for Blocks and Venues
