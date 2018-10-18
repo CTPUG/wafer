@@ -10,7 +10,7 @@ from wafer.schedule.admin import (
     SlotAdmin, SlotBlockFilter, ScheduleItemBlockFilter, SlotStartTimeFilter,
     ScheduleItemStartTimeFilter, ScheduleItemVenueFilter,
     prefetch_schedule_items, prefetch_slots,
-    find_overlapping_slots, validate_items,
+    validate_items,
     find_duplicate_schedule_items, find_clashes, find_invalid_venues,
     find_non_contiguous,
     check_schedule, validate_schedule)
@@ -405,70 +405,6 @@ class SlotListFilterTest(TestCase):
 
 
 class ValidationTests(TestCase):
-
-    def test_slot(self):
-        """Test detection of overlapping slots"""
-        day1 = ScheduleBlock.objects.create(
-                start_time=D.datetime(2013, 9, 22, 9, 0, 0,
-                                      tzinfo=timezone.utc),
-                end_time=D.datetime(2013, 9, 22, 19, 0, 0,
-                                    tzinfo=timezone.utc))
-        start1 = D.datetime(2013, 9, 22, 10, 0, 0, tzinfo=timezone.utc)
-        start2 = D.datetime(2013, 9, 22, 11, 0, 0, tzinfo=timezone.utc)
-        start3 = D.datetime(2013, 9, 22, 12, 0, 0, tzinfo=timezone.utc)
-        start35 = D.datetime(2013, 9, 22, 12, 30, 0, tzinfo=timezone.utc)
-        start4 = D.datetime(2013, 9, 22, 13, 0, 0, tzinfo=timezone.utc)
-        start45 = D.datetime(2013, 9, 22, 13, 30, 0, tzinfo=timezone.utc)
-        start5 = D.datetime(2013, 9, 22, 14, 0, 0, tzinfo=timezone.utc)
-        end = D.datetime(2013, 9, 22, 15, 0, 0, tzinfo=timezone.utc)
-
-        # Test common start time
-        slot1 = Slot.objects.create(start_time=start1, end_time=start2,
-                                    block=day1)
-        slot2 = Slot.objects.create(start_time=start1, end_time=end, block=day1)
-
-        all_slots = prefetch_slots()
-        overlaps = find_overlapping_slots(all_slots)
-        assert overlaps == set([slot1, slot2])
-
-        slot2.start_time = start5
-        slot2.save()
-
-        # Test interleaved slot
-        slot3 = Slot.objects.create(start_time=start2, end_time=start3,
-                                    block=day1)
-        slot4 = Slot.objects.create(start_time=start4, end_time=start5,
-                                    block=day1)
-        slot5 = Slot.objects.create(start_time=start35, end_time=start45,
-                                    block=day1)
-
-        all_slots = prefetch_slots()
-        overlaps = find_overlapping_slots(all_slots)
-        assert overlaps == set([slot4, slot5])
-
-        # Test no overlap
-        slot5.start_time = start3
-        slot5.end_time = start4
-        slot5.save()
-        all_slots = prefetch_slots()
-        overlaps = find_overlapping_slots(all_slots)
-        assert len(overlaps) == 0
-
-        # Test common end time
-        slot5.end_time = start5
-        slot5.save()
-        all_slots = prefetch_slots()
-        overlaps = find_overlapping_slots(all_slots)
-        assert overlaps == set([slot4, slot5])
-
-        # Test overlap detect with previous slot set
-        slot5.start_time = None
-        slot5.end_time = start5
-        slot5.previous_slot = slot1
-        slot5.save()
-        all_slots = prefetch_slots()
-        overlaps = find_overlapping_slots(all_slots)
-        assert overlaps == set([slot3, slot4, slot5])
 
     def test_clashes(self):
         """Test that we can detect clashes correctly"""
