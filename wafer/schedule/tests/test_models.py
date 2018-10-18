@@ -1,5 +1,6 @@
 import datetime as D
 from django.utils import timezone
+from django.core.exceptions import ValidationError
 
 from django.test import TestCase
 
@@ -57,45 +58,208 @@ class BlockTests(TestCase):
         self.assertEqual(output, ["Sep 22 (Sun) 09:00 - Sep 23 (Mon) 03:00",
                                   "Sep 23 (Mon) 09:00 - Sep 24 (Tue) 03:00"])
 
+    def test_block_start_time_end_time_validation(self):
+        """Test our blocks have start_time < end_time."""
+        block1 = ScheduleBlock.objects.create(
+                start_time=D.datetime(2013, 9, 22, 11, 0, 0,
+                                      tzinfo=timezone.utc),
+                end_time=D.datetime(2013, 9, 22, 9, 0, 0,
+                                    tzinfo=timezone.utc))
+        self.assertRaises(ValidationError, block1.clean)
+        # Test across midnight
+        block2 = ScheduleBlock.objects.create(
+                start_time=D.datetime(2013, 9, 23, 1, 0, 0,
+                                      tzinfo=timezone.utc),
+                end_time=D.datetime(2013, 9, 22, 23, 0, 0,
+                                    tzinfo=timezone.utc))
+        self.assertRaises(ValidationError, block2.clean)
+
+    def test_block_overlaps(self):
+        """Test that we can't create overlapping blocks."""
+        block1 = ScheduleBlock.objects.create(
+                start_time=D.datetime(2013, 9, 22, 1, 0, 0,
+                                      tzinfo=timezone.utc),
+                end_time=D.datetime(2013, 9, 22, 19, 0, 0,
+                                    tzinfo=timezone.utc))
+        # Test across midnight
+        block2 = ScheduleBlock.objects.create(
+                start_time=D.datetime(2013, 9, 22, 11, 0, 0,
+                                      tzinfo=timezone.utc),
+                end_time=D.datetime(2013, 9, 23, 23, 0, 0,
+                                    tzinfo=timezone.utc))
+        self.assertRaises(ValidationError, block2.clean)
+
+
+class SlotTests(TestCase):
+
+    def test_simple(self):
+        """Test we can assign slots to a Block that spans only few hours."""
+        block1 = ScheduleBlock.objects.create(
+                start_time=D.datetime(2013, 9, 22, 9, 0, 0,
+                                      tzinfo=timezone.utc),
+                end_time=D.datetime(2013, 9, 22, 19, 0, 0,
+                                    tzinfo=timezone.utc))
+        slot1 = Slot(start_time=D.datetime(2013, 9, 22, 1, 0, 0,
+                                           tzinfo=timezone.utc),
+                     end_time=D.datetime(2013, 9, 22, 2, 20, 0,
+                                         tzinfo=timezone.utc),
+                     block=block1)
+        self.assertEqual(slot1.block, block1)
+        self.assertEqual(slot1.get_duration(), {'hours': 1,
+                                                'minutes': 20})
+        # Check end and start times
+        slot2 = Slot(start_time=D.datetime(2013, 9, 22, 0, 0, 0,
+                                           tzinfo=timezone.utc),
+                     end_time=D.datetime(2013, 9, 22, 1, 0, 0,
+                                         tzinfo=timezone.utc),
+                     block=block1)
+        slot3 = Slot(start_time=D.datetime(2013, 9, 22, 18, 30, 0,
+                                           tzinfo=timezone.utc),
+                     end_time=D.datetime(2013, 9, 22, 19, 0, 0,
+                                         tzinfo=timezone.utc),
+                     block=block1)
+        self.assertEqual(slot2.block, block1)
+        self.assertEqual(slot2.get_duration(), {'hours': 1,
+                                                'minutes':0})
+        self.assertEqual(slot3.block, block1)
+        self.assertEqual(slot3.get_duration(), {'hours': 0,
+                                                'minutes': 30})
+
+    def test_midnight(self):
+        """Test that we can assign slots that span midnight to a block
+           that spans midnight."""
+        block1 = ScheduleBlock.objects.create(
+                start_time=D.datetime(2013, 9, 22, 9, 0, 0,
+                                      tzinfo=timezone.utc),
+                end_time=D.datetime(2013, 9, 23, 8, 0, 0,
+                                    tzinfo=timezone.utc))
+        slot1 = Slot(start_time=D.datetime(2013, 9, 22, 23, 0, 0,
+                                           tzinfo=timezone.utc),
+                     end_time=D.datetime(2013, 9, 23, 1, 0, 0,
+                                         tzinfo=timezone.utc),
+                     block=block1)
+        self.assertEqual(slot1.block, block1)
+        self.assertEqual(slot1.get_duration(), {'hours': 2,
+                                                'minutes': 0})
+
+    def test_invalid_slot(self):
+        """Test that slots must have start time > end_time"""
+        # Same day
+        block1 = ScheduleBlock.objects.create(
+                start_time=D.datetime(2013, 9, 22, 9, 0, 0,
+                                      tzinfo=timezone.utc),
+                end_time=D.datetime(2013, 9, 22, 19, 0, 0,
+                                    tzinfo=timezone.utc))
+        slot1 = Slot(start_time=D.datetime(2013, 9, 22, 11, 0,
+                                           tzinfo=timezone.utc),
+                     end_time=D.datetime(2013, 9, 22, 10, 0, 0,
+                                         tzinfo=timezone.utc),
+                     block=block1)
+        self.assertRaises(ValidationError, slot1.clean)
+        block2 = ScheduleBlock.objects.create(
+                start_time=D.datetime(2013, 9, 24, 9, 0, 0,
+                                      tzinfo=timezone.utc),
+                end_time=D.datetime(2013, 9, 25, 19, 0, 0,
+                                    tzinfo=timezone.utc))
+        # Different day, 
+        slot2 = Slot(start_time=D.datetime(2013, 9, 25, 1, 0, 0,
+                                           tzinfo=timezone.utc),
+                     end_time=D.datetime(2013, 9, 24, 3, 0, 0,
+                                         tzinfo=timezone.utc),
+                     block=block2)
+        self.assertRaises(ValidationError, slot2.clean)
+
+    def test_overlapping_slots(self):
+        """Test that we can't create overlapping slots."""
+        block1 = ScheduleBlock.objects.create(
+                start_time=D.datetime(2013, 9, 26, 9, 0, 0,
+                                      tzinfo=timezone.utc),
+                end_time=D.datetime(2013, 9, 26, 19, 0, 0,
+                                    tzinfo=timezone.utc))
+        slot1 = Slot(start_time=D.datetime(2013, 9, 26, 10, 0,
+                                           tzinfo=timezone.utc),
+                     end_time=D.datetime(2013, 9, 26, 12, 0, 0,
+                                         tzinfo=timezone.utc),
+                     block=block1)
+        slot1.clean()
+        slot2 = Slot(start_time=D.datetime(2013, 9, 26, 11, 0, 0,
+                                           tzinfo=timezone.utc),
+                     end_time=D.datetime(2013, 9, 26, 13, 0, 0,
+                                         tzinfo=timezone.utc),
+                     block=block1)
+        self.assertRaises(ValidationError, slot2.clean)
+
+    def test_invalid_slot_block(self):
+        """Test that we can't create a slot outside the block's times"""
+        block1 = ScheduleBlock.objects.create(
+                start_time=D.datetime(2013, 9, 22, 9, 0, 0,
+                                      tzinfo=timezone.utc),
+                end_time=D.datetime(2013, 9, 22, 18, 0, 0,
+                                    tzinfo=timezone.utc))
+        # Totally after
+        slot1 = Slot(start_time=D.datetime(2013, 9, 22, 23, 0, 0,
+                                           tzinfo=timezone.utc),
+                     end_time=D.datetime(2013, 9, 23, 1, 0, 0,
+                                         tzinfo=timezone.utc),
+                     block=block1)
+        self.assertRaises(ValidationError, slot1.clean)
+        # Totally before
+        slot2 = Slot(start_time=D.datetime(2013, 9, 21, 23, 0, 0,
+                                           tzinfo=timezone.utc),
+                     end_time=D.datetime(2013, 9, 21, 1, 0, 0,
+                                         tzinfo=timezone.utc),
+                     block=block1)
+        self.assertRaises(ValidationError, slot2.clean)
+        # Overlaps the end
+        slot3 = Slot(start_time=D.datetime(2013, 9, 22, 17, 0, 0,
+                                           tzinfo=timezone.utc),
+                     end_time=D.datetime(2013, 9, 22, 19, 0, 0,
+                                         tzinfo=timezone.utc),
+                     block=block1)
+        self.assertRaises(ValidationError, slot3.clean)
+        # Overlaps the start
+        slot4 = Slot(start_time=D.datetime(2013, 9, 22, 7, 0, 0,
+                                           tzinfo=timezone.utc),
+                     end_time=D.datetime(2013, 9, 22, 10, 0, 0,
+                                         tzinfo=timezone.utc),
+                     block=block1)
+        self.assertRaises(ValidationError, slot4.clean)
+
+
 class LastUpdateTests(TestCase):
 
     def setUp(self):
         """Create some slots and schedule items"""
         timezone.activate('UTC')
-        day1 = ScheduleBlock.objects.create(
+        block1 = ScheduleBlock.objects.create(
                 start_time=D.datetime(2013, 9, 22, 9, 0, 0,
                                       tzinfo=timezone.utc),
                 end_time=D.datetime(2013, 9, 22, 19, 0, 0,
                                     tzinfo=timezone.utc))
-        day2 = ScheduleBlock.objects.create(
-                start_time=D.datetime(2013, 9, 23, 9, 0, 0,
-                                      tzinfo=timezone.utc),
-                end_time=D.datetime(2013, 9, 23, 19, 0, 0,
-                                    tzinfo=timezone.utc))
         venue1 = Venue.objects.create(order=1, name='Venue 1')
         venue2 = Venue.objects.create(order=2, name='Venue 2')
-        venue1.blocks.add(day1)
-        venue2.blocks.add(day1)
+        venue1.blocks.add(block1)
+        venue2.blocks.add(block1)
 
-        start1 = D.datetime(2013, 9, 23, 10, 0, 0,
+        start1 = D.datetime(2013, 9, 22, 10, 0, 0,
                             tzinfo=timezone.utc)
-        start2 = D.datetime(2013, 9, 23, 11, 0, 0, 
+        start2 = D.datetime(2013, 9, 22, 11, 0, 0, 
                             tzinfo=timezone.utc)
-        start3 = D.datetime(2013, 9, 23, 12, 0, 0,
+        start3 = D.datetime(2013, 9, 22, 12, 0, 0,
                             tzinfo=timezone.utc)
-        start4 = D.datetime(2013, 9, 23, 13, 0, 0,
+        start4 = D.datetime(2013, 9, 22, 13, 0, 0,
                             tzinfo=timezone.utc)
-        start5 = D.datetime(2013, 9, 23, 14, 0, 0,
+        start5 = D.datetime(2013, 9, 22, 14, 0, 0,
                             tzinfo=timezone.utc)
         self.slots = []
         self.slots.append(Slot.objects.create(start_time=start1,
-                                              end_time=start2, block=day1))
+                                              end_time=start2, block=block1))
         self.slots.append(Slot.objects.create(start_time=start2,
-                                              end_time=start3, block=day1))
+                                              end_time=start3, block=block1))
         self.slots.append(Slot.objects.create(start_time=start3,
-                                              end_time=start4, block=day1))
+                                              end_time=start4, block=block1))
         self.slots.append(Slot.objects.create(start_time=start4,
-                                              end_time=start5, block=day1))
+                                              end_time=start5, block=block1))
 
         pages = make_pages(8)
         venues = [venue1, venue2] * 4
