@@ -478,7 +478,7 @@ class SlotAdmin(CompareVersionAdmin):
             slot_len = end - start
             for loop in range(form.cleaned_data['additional']):
                 end = end + slot_len
-                new_slot = Slot(block=prev.block, previous_slot=prev,
+                new_slot = Slot(previous_slot=prev,
                                 end_time=end)
                 # Make sure we're valid before adding to the database
                 try:
@@ -495,6 +495,9 @@ class SlotAdmin(CompareVersionAdmin):
                     msg = _("Failed to create new slot - %s" % err)
                     if hasattr(request, '_messages'):
                         self.message_user(request, msg, messages.FAILURE)
+                    else:
+                        # Useful in testing
+                        raise
                     break
 
 

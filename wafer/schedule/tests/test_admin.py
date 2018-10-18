@@ -112,11 +112,13 @@ class SlotAdminTests(TestCase):
         slot2 = Slot.objects.filter(previous_slot=slot1).get()
         self.assertEqual(slot2.get_start_time(), slot1.end_time)
         self.assertEqual(slot2.end_time, D.datetime(2013, 9, 22, 12, 30, 0, tzinfo=timezone.utc))
-        self.assertEqual(slot2.block, slot.block)
+        self.assertEqual(slot2.get_block(), slot.block)
+        self.assertEqual(slot2.previous_slot, slot1)
         slot3 = Slot.objects.filter(previous_slot=slot2).get()
         self.assertEqual(slot3.get_start_time(), slot2.end_time)
         self.assertEqual(slot3.end_time, D.datetime(2013, 9, 22, 13, 00, 0, tzinfo=timezone.utc))
-        self.assertEqual(slot3.block, slot.block)
+        self.assertEqual(slot3.get_block(), slot.block)
+        self.assertEqual(slot3.previous_slot, slot2)
 
         # repeat checks with a different length of slot
         slot = Slot(block=self.block, previous_slot=slot3,
@@ -130,15 +132,16 @@ class SlotAdminTests(TestCase):
         slot2 = Slot.objects.filter(previous_slot=slot1).get()
         self.assertEqual(slot2.get_start_time(), slot1.end_time)
         self.assertEqual(slot2.end_time, D.datetime(2013, 9, 22, 17, 30, 0, tzinfo=timezone.utc))
-        self.assertEqual(slot2.block, slot.block)
+        self.assertEqual(slot2.get_block(), slot.block)
+        self.assertEqual(slot2.previous_slot, slot1)
         slot3 = Slot.objects.filter(previous_slot=slot2).get()
         self.assertEqual(slot3.get_start_time(), slot2.end_time)
         self.assertEqual(slot3.end_time, D.datetime(2013, 9, 22, 19, 00, 0, tzinfo=timezone.utc))
-        self.assertEqual(slot3.block, slot.block)
+        self.assertEqual(slot3.get_block(), slot.block)
         slot4 = Slot.objects.filter(previous_slot=slot3).get()
         self.assertEqual(slot4.get_start_time(), slot3.end_time)
         self.assertEqual(slot4.end_time, D.datetime(2013, 9, 22, 20, 30, 0, tzinfo=timezone.utc))
-        self.assertEqual(slot4.block, slot.block)
+        self.assertEqual(slot4.get_block(), slot.block)
 
     def test_save_model_prev_slot_additional(self):
         """Test save_model changing a new slot with some additional slots,
