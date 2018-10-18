@@ -158,7 +158,22 @@ class Slot(models.Model):
             raise ValidationError("Slots with a previous slot should not "
                                   "have a block or start_time set")
         # Validate that we are within the bounds of the block
-
+        # Validate that we don't overlap any existing slots
+        # This isn't very efficient, but OK because it's a once off
+        # validation cost.
+        for other_slot in Slot.objects.all():
+            overlap = False
+            if (other_slot.get_start_time() >= self.get_start_time() and
+                    other_slot.get_start_time() < self.end_time):
+                overlap = True
+            elif (other_slot.end_time <= self.end_time and
+                    other_slot.end_time > self.get_start_time()):
+                overlap = True
+            elif (other_slot.end_time > self.end_time and
+                    other_slot.get_start_time() < self.get_start_time()):
+                overlap = True
+            if overlap:
+                raise ValidationError("Overlaps with %s" % other_slot)
 
 @python_2_unicode_compatible
 class ScheduleItem(models.Model):
