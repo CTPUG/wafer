@@ -467,8 +467,18 @@ class SlotAdmin(CompareVersionAdmin):
 
 
 # Register and setup reversion support for Blocks and Venues
+class ScheduleBlockAdminForm(forms.ModelForm):
+    """Admin for blocks with better time display."""
+    class Meta:
+        model = ScheduleBlock
+        fields = ('start_time', 'end_time')
+
+    class Media:
+        js = ('js/scheduledatetime.js',)
+
+
 class ScheduleBlockAdmin(VersionAdmin):
-    pass
+    form = ScheduleBlockAdminForm
 
 
 class VenueAdmin(VersionAdmin):
