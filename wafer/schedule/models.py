@@ -62,6 +62,8 @@ class ScheduleBlock(models.Model):
             raise ValidationError("Start time must be before end time")
         # Validate that we don't overlap any existing blocks
         for other_block in ScheduleBlock.objects.all():
+            if other_block.pk == self.pk:
+                continue
             if overlap(self, other_block):
                 raise ValidationError("Overlaps with %s" % other_block)
 
@@ -199,6 +201,8 @@ class Slot(models.Model):
         # This isn't very efficient, but OK because it's a once off
         # validation cost.
         for other_slot in Slot.objects.all():
+            if other_slot.pk == self.pk:
+                continue
             if other_slot.get_block() != self.get_block():
                 # Different Schedule Blocks don't overlap
                 continue
