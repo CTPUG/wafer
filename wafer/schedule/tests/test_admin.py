@@ -40,7 +40,7 @@ class SlotAdminTests(TestCase):
         self.block = ScheduleBlock.objects.create(
                 start_time=D.datetime(2013, 9, 22, 9, 0, 0,
                                       tzinfo=timezone.utc),
-                end_time=D.datetime(2013, 9, 22, 19, 0, 0,
+                end_time=D.datetime(2013, 9, 22, 23, 0, 0,
                                     tzinfo=timezone.utc))
         self.admin = SlotAdmin(Slot, None)
 
