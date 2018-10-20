@@ -74,6 +74,29 @@ class BlockTests(TestCase):
                                     tzinfo=timezone.utc))
         self.assertRaises(ValidationError, block2.clean)
 
+    def test_changing_block(self):
+        """Test that we can't create overlapping blocks."""
+        block1 = ScheduleBlock.objects.create(
+                start_time=D.datetime(2013, 9, 27, 11, 0, 0,
+                                      tzinfo=timezone.utc),
+                end_time=D.datetime(2013, 9, 27, 19, 0, 0,
+                                    tzinfo=timezone.utc))
+        block1.clean()
+        block1.save()
+        # These should work
+        block1.start_time = D.datetime(2013, 9, 27, 9, 0, 0,
+                                       tzinfo=timezone.utc)
+        block1.clean()
+        block1.save()
+        block1.end_time = D.datetime(2013, 9, 27, 12, 0, 0,
+                                     tzinfo=timezone.utc)
+        block1.clean()
+        block1.save()
+        # This should fail
+        block1.start_time = D.datetime(2013, 9, 27, 15, 0, 0,
+                                       tzinfo=timezone.utc)
+        self.assertRaises(ValidationError, block1.clean)
+
     def test_block_overlaps(self):
         """Test that we can't create overlapping blocks."""
         block1 = ScheduleBlock.objects.create(
@@ -157,6 +180,37 @@ class SlotTests(TestCase):
         self.assertEqual(slot1.get_duration(), {'hours': 2,
                                                 'minutes': 0})
         block1.delete()
+
+    def test_changing_slots(self):
+        """Test that we can't create overlapping slots."""
+        block1 = ScheduleBlock.objects.create(
+                start_time=D.datetime(2013, 9, 26, 9, 0, 0,
+                                      tzinfo=timezone.utc),
+                end_time=D.datetime(2013, 9, 26, 19, 0, 0,
+                                    tzinfo=timezone.utc))
+        slot1 = Slot(start_time=D.datetime(2013, 9, 26, 10, 0,
+                                           tzinfo=timezone.utc),
+                     end_time=D.datetime(2013, 9, 26, 12, 0, 0,
+                                         tzinfo=timezone.utc),
+                     block=block1)
+        slot1.clean()
+        slot1.save()
+        # This should work
+        slot1.start_time = D.datetime(2013, 9, 26, 9, 0, 0,
+                                      tzinfo=timezone.utc)
+        slot1.clean()
+        slot1.save()
+        slot1.end_time = D.datetime(2013, 9, 26, 11, 0, 0,
+                                    tzinfo=timezone.utc)
+        slot1.clean()
+        slot1.save()
+        # This should fail
+        slot1.start_time = D.datetime(2013, 9, 26, 12, 0, 0,
+                                      tzinfo=timezone.utc)
+        self.assertRaises(ValidationError, slot1.clean)
+        slot1.delete()
+        block1.delete()
+
 
     def test_overlapping_slots(self):
         """Test that we can't create overlapping slots."""
