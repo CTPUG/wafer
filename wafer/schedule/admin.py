@@ -459,7 +459,7 @@ class SlotAdmin(CompareVersionAdmin):
                 except ValidationError as  err:
                     msg = _("Failed to create new slot - %s" % err)
                     if hasattr(request, '_messages'):
-                        self.message_user(request, msg, messages.FAILURE)
+                        self.message_user(request, msg, messages.ERROR)
                     else:
                         # Useful in testing
                         raise
