@@ -16,8 +16,8 @@ from wafer.talks.models import Talk
 def includes(obj1, obj2):
     """Test if the times for obj1 are completely included in
        the times for obj2"""
-    if (obj2.end_time > obj1.end_time and
-        obj2.get_start_time() < obj1.get_start_time()):
+    if (obj2.end_time >= obj1.end_time and
+        obj2.get_start_time() <= obj1.get_start_time()):
         return True
     return False
 
@@ -191,10 +191,17 @@ class Slot(models.Model):
             raise ValidationError("Slots with a previous slot should not "
                                   "have a block or start_time set")
         # Validate that we are within the bounds of the block
+        block = self.get_block()
+        if not includes(self, block):
+            raise ValidationError("Slot extends beyond the time limits of the"
+                                  " block")
         # Validate that we don't overlap any existing slots
         # This isn't very efficient, but OK because it's a once off
         # validation cost.
         for other_slot in Slot.objects.all():
+            if other_slot.get_block() != self.get_block():
+                # Different Schedule Blocks don't overlap
+                continue
             if overlap(self, other_slot):
                 raise ValidationError("Overlaps with %s" % other_slot)
 
