@@ -37,20 +37,28 @@ class Migration(migrations.Migration):
             model_name='venue',
             name='days',
         ),
-        migrations.AlterField(
+        migrations.RemoveField(
+            model_name='slot',
+            name='start_time',
+        ),
+        migrations.RemoveField(
+            model_name='slot',
+            name='end_time',
+        ),
+        migrations.AddField(
             model_name='slot',
             name='end_time',
             field=models.DateTimeField(help_text='Slot end time', null=True),
+        ),
+        migrations.AddField(
+            model_name='slot',
+            name='start_time',
+            field=models.DateTimeField(blank=True, help_text='Start time (if no previous slot selected)', null=True),
         ),
         migrations.AlterField(
             model_name='slot',
             name='previous_slot',
             field=models.ForeignKey(blank=True, help_text='Previous slot if applicable (slots should have either a previous slot OR a day and start time set)', null=True, on_delete=django.db.models.deletion.CASCADE, to='schedule.Slot'),
-        ),
-        migrations.AlterField(
-            model_name='slot',
-            name='start_time',
-            field=models.DateTimeField(blank=True, help_text='Start time (if no previous slot selected)', null=True),
         ),
         migrations.DeleteModel(
             name='Day',
