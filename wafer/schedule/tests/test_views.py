@@ -52,8 +52,7 @@ def make_slot():
     start = D.datetime(2013, 9, 22, 10, 0, 0,
                        tzinfo=timezone.utc)
     end = D.datetime(2013, 9, 22, 15, 0, 0, tzinfo=timezone.utc)
-    slot = Slot.objects.create(start_time=start, end_time=end,
-                               block=day)
+    slot = Slot.objects.create(start_time=start, end_time=end)
     return slot
 
 
@@ -110,12 +109,9 @@ class ScheduleViewTests(TestCase):
         venues = [venue1, venue1, venue1, venue2, venue2, venue2]
         items = make_items(venues, pages)
 
-        slot1 = Slot.objects.create(start_time=start1, end_time=start2,
-                                    block=day1)
-        slot2 = Slot.objects.create(previous_slot=slot1, end_time=start3,
-                                    block=day1)
-        slot3 = Slot.objects.create(previous_slot=slot2, end_time=end,
-                                    block=day1)
+        slot1 = Slot.objects.create(start_time=start1, end_time=start2)
+        slot2 = Slot.objects.create(previous_slot=slot1, end_time=start3)
+        slot3 = Slot.objects.create(previous_slot=slot2, end_time=end)
 
         items[0].slots.add(slot1)
         items[3].slots.add(slot1)
@@ -189,12 +185,9 @@ class ScheduleViewTests(TestCase):
 
         # Create the slots not in date order either
 
-        slot1 = Slot.objects.create(start_time=start1, end_time=start2,
-                                    block=day1)
-        slot3 = Slot.objects.create(previous_slot=slot1, end_time=end,
-                                    block=day1)
-        slot2 = Slot.objects.create(previous_slot=slot1, end_time=start3,
-                                    block=day1)
+        slot1 = Slot.objects.create(start_time=start1, end_time=start2)
+        slot3 = Slot.objects.create(previous_slot=slot1, end_time=end)
+        slot2 = Slot.objects.create(previous_slot=slot1, end_time=start3)
         slot3.previous_slot = slot2
         slot3.save()
 
@@ -279,12 +272,9 @@ class ScheduleViewTests(TestCase):
         venues = [venue1, venue1, venue1, venue2, venue2, venue2]
         items = make_items(venues, pages)
 
-        slot1 = Slot.objects.create(start_time=start1, end_time=start2,
-                                    block=day1)
-        slot2 = Slot.objects.create(start_time=start2, end_time=end1,
-                                    block=day1)
-        slot3 = Slot.objects.create(start_time=start3, end_time=end2,
-                                    block=day2)
+        slot1 = Slot.objects.create(start_time=start1, end_time=start2)
+        slot2 = Slot.objects.create(start_time=start2, end_time=end1)
+        slot3 = Slot.objects.create(start_time=start3, end_time=end2)
 
         items[0].slots.add(slot1)
         items[3].slots.add(slot1)
@@ -355,12 +345,9 @@ class ScheduleViewTests(TestCase):
         venues = [venue1, venue1, venue1, venue2, venue2, venue2]
         items = make_items(venues, pages)
 
-        slot1 = Slot.objects.create(start_time=start1, end_time=start2,
-                                    block=day1)
-        slot2 = Slot.objects.create(start_time=start2, end_time=end1,
-                                    block=day1)
-        slot3 = Slot.objects.create(start_time=start3, end_time=end2,
-                                    block=day2)
+        slot1 = Slot.objects.create(start_time=start1, end_time=start2)
+        slot2 = Slot.objects.create(start_time=start2, end_time=end1)
+        slot3 = Slot.objects.create(start_time=start3, end_time=end2)
 
         items[0].slots.add(slot1)
         items[3].slots.add(slot1)
@@ -468,12 +455,9 @@ class ScheduleViewTests(TestCase):
         venues = [venue1, venue1, venue2]
         items = make_items(venues, pages)
 
-        slot1 = Slot.objects.create(start_time=start1, end_time=start2,
-                                    block=day1)
-        slot2 = Slot.objects.create(start_time=start2, end_time=end1,
-                                    block=day1)
-        slot3 = Slot.objects.create(start_time=start3, end_time=end2,
-                                    block=day2)
+        slot1 = Slot.objects.create(start_time=start1, end_time=start2)
+        slot2 = Slot.objects.create(start_time=start2, end_time=end1)
+        slot3 = Slot.objects.create(start_time=start3, end_time=end2)
 
         items[0].slots.add(slot1)
         items[1].slots.add(slot2)
@@ -538,20 +522,15 @@ class ScheduleViewTests(TestCase):
         end = D.datetime(2013, 9, 22, 15, 0, 0, tzinfo=timezone.utc)
 
         # We create the slots out of order to tt
-        slot1 = Slot.objects.create(start_time=start1, end_time=start2,
-                                    block=day1)
+        slot1 = Slot.objects.create(start_time=start1, end_time=start2)
 
-        slot4 = Slot.objects.create(start_time=start4, end_time=start5,
-                                    block=day1)
+        slot4 = Slot.objects.create(start_time=start4, end_time=start5)
 
-        slot2 = Slot.objects.create(start_time=start2, end_time=start3,
-                                    block=day1)
+        slot2 = Slot.objects.create(start_time=start2, end_time=start3)
 
-        slot3 = Slot.objects.create(start_time=start3, end_time=start4,
-                                    block=day1)
+        slot3 = Slot.objects.create(start_time=start3, end_time=start4)
 
-        slot5 = Slot.objects.create(start_time=start5, end_time=end,
-                                    block=day1)
+        slot5 = Slot.objects.create(start_time=start5, end_time=end)
 
         pages = make_pages(10)
         venues = [venue1, venue1, venue1, venue1, venue2, venue2,
@@ -663,16 +642,11 @@ class ScheduleViewTests(TestCase):
         start5 = D.datetime(2013, 9, 22, 14, 0, 0, tzinfo=timezone.utc)
         end = D.datetime(2013, 9, 22, 15, 0, 0, tzinfo=timezone.utc)
 
-        slot1 = Slot.objects.create(start_time=start1, end_time=start2,
-                                    block=day1)
-        slot2 = Slot.objects.create(start_time=start2, end_time=start3,
-                                    block=day1)
-        slot3 = Slot.objects.create(start_time=start3, end_time=start4,
-                                    block=day1)
-        slot4 = Slot.objects.create(start_time=start4, end_time=start5,
-                                    block=day1)
-        slot5 = Slot.objects.create(start_time=start5, end_time=end,
-                                    block=day1)
+        slot1 = Slot.objects.create(start_time=start1, end_time=start2)
+        slot2 = Slot.objects.create(start_time=start2, end_time=start3)
+        slot3 = Slot.objects.create(start_time=start3, end_time=start4)
+        slot4 = Slot.objects.create(start_time=start4, end_time=start5)
+        slot5 = Slot.objects.create(start_time=start5, end_time=end)
 
         pages = make_pages(7)
         venues = [venue1, venue1, venue1, venue1, venue2, venue2, venue2]
@@ -765,20 +739,11 @@ class ScheduleViewTests(TestCase):
         end = D.datetime(2013, 9, 22, 15, 0, 0, tzinfo=timezone.utc)
 
         # We create the slots out of order to tt
-        slot1 = Slot.objects.create(start_time=start1, end_time=start2,
-                                    block=day1)
-
-        slot4 = Slot.objects.create(start_time=start4, end_time=start5,
-                                    block=day1)
-
-        slot2 = Slot.objects.create(start_time=start2, end_time=start3,
-                                    block=day1)
-
-        slot3 = Slot.objects.create(start_time=start3, end_time=start4,
-                                    block=day1)
-
-        slot5 = Slot.objects.create(start_time=start5, end_time=end,
-                                    block=day1)
+        slot1 = Slot.objects.create(start_time=start1, end_time=start2)
+        slot4 = Slot.objects.create(start_time=start4, end_time=start5)
+        slot2 = Slot.objects.create(start_time=start2, end_time=start3)
+        slot3 = Slot.objects.create(start_time=start3, end_time=start4)
+        slot5 = Slot.objects.create(start_time=start5, end_time=end)
 
         pages = make_pages(10)
         venues = [venue1, venue1, venue1, venue1, venue2,
@@ -895,14 +860,10 @@ class CurrentViewTests(TestCase):
 
         slots = []
 
-        slots.append(Slot.objects.create(start_time=start1, end_time=start2,
-                                         block=day1))
-        slots.append(Slot.objects.create(start_time=start2, end_time=start3,
-                                         block=day1))
-        slots.append(Slot.objects.create(start_time=start3, end_time=start4,
-                                         block=day1))
-        slots.append(Slot.objects.create(start_time=start4, end_time=start5,
-                                         block=day1))
+        slots.append(Slot.objects.create(start_time=start1, end_time=start2))
+        slots.append(Slot.objects.create(start_time=start2, end_time=start3))
+        slots.append(Slot.objects.create(start_time=start3, end_time=start4))
+        slots.append(Slot.objects.create(start_time=start4, end_time=start5))
 
         pages = make_pages(8)
         venues = [venue1, venue2] * 4
@@ -1005,16 +966,11 @@ class CurrentViewTests(TestCase):
         start5 = D.datetime(2013, 9, 22, 14, 0, 0, tzinfo=timezone.utc)
         end = D.datetime(2013, 9, 22, 15, 0, 0, tzinfo=timezone.utc)
 
-        slot1 = Slot.objects.create(start_time=start1, end_time=start2,
-                                    block=day1)
-        slot2 = Slot.objects.create(start_time=start2, end_time=start3,
-                                    block=day1)
-        slot3 = Slot.objects.create(start_time=start3, end_time=start4,
-                                    block=day1)
-        slot4 = Slot.objects.create(start_time=start4, end_time=start5,
-                                    block=day1)
-        slot5 = Slot.objects.create(start_time=start5, end_time=end,
-                                    block=day1)
+        slot1 = Slot.objects.create(start_time=start1, end_time=start2)
+        slot2 = Slot.objects.create(start_time=start2, end_time=start3)
+        slot3 = Slot.objects.create(start_time=start3, end_time=start4)
+        slot4 = Slot.objects.create(start_time=start4, end_time=start5)
+        slot5 = Slot.objects.create(start_time=start5, end_time=end)
 
         pages = make_pages(10)
         venues = [venue1, venue1, venue2, venue3, venue3, venue3,
@@ -1110,10 +1066,8 @@ class CurrentViewTests(TestCase):
         end = D.datetime(2013, 9, 22, 12, 0, 0, tzinfo=timezone.utc)
         cur1 = D.datetime(2013, 9, 22, 10, 30, 0, tzinfo=timezone.utc)
 
-        slot1 = Slot.objects.create(start_time=start1, end_time=start2,
-                                    block=day1)
-        slot2 = Slot.objects.create(start_time=start1, end_time=end,
-                                    block=day1)
+        slot1 = Slot.objects.create(start_time=start1, end_time=start2)
+        slot2 = Slot.objects.create(start_time=start1, end_time=end)
 
         user = get_user_model().objects.create_user('john', 'best@wafer.test',
                                                     'johnpassword')
@@ -1164,14 +1118,10 @@ class NonHTMLViewTests(TestCase):
 
         slots = []
 
-        slots.append(Slot.objects.create(start_time=start1, end_time=start2,
-                                         block=day1))
-        slots.append(Slot.objects.create(start_time=start2, end_time=start3,
-                                         block=day1))
-        slots.append(Slot.objects.create(start_time=start3, end_time=start4,
-                                         block=day1))
-        slots.append(Slot.objects.create(start_time=start4, end_time=start5,
-                                         block=day1))
+        slots.append(Slot.objects.create(start_time=start1, end_time=start2))
+        slots.append(Slot.objects.create(start_time=start2, end_time=start3))
+        slots.append(Slot.objects.create(start_time=start3, end_time=start4))
+        slots.append(Slot.objects.create(start_time=start4, end_time=start5))
 
         pages = make_pages(8)
         venues = [venue1, venue2] * 4

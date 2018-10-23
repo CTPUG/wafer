@@ -136,29 +136,26 @@ class SlotTests(TestCase):
                                       tzinfo=timezone.utc),
                 end_time=D.datetime(2013, 9, 22, 19, 0, 0,
                                     tzinfo=timezone.utc))
-        slot1 = Slot(start_time=D.datetime(2013, 9, 22, 1, 0, 0,
+        slot1 = Slot(start_time=D.datetime(2013, 9, 22, 9, 0, 0,
                                            tzinfo=timezone.utc),
-                     end_time=D.datetime(2013, 9, 22, 2, 20, 0,
-                                         tzinfo=timezone.utc),
-                     block=block1)
-        self.assertEqual(slot1.block, block1)
+                     end_time=D.datetime(2013, 9, 22, 10, 20, 0,
+                                         tzinfo=timezone.utc))
+        self.assertEqual(slot1.get_block(), block1)
         self.assertEqual(slot1.get_duration(), {'hours': 1,
                                                 'minutes': 20})
         # Check end and start times
-        slot2 = Slot(start_time=D.datetime(2013, 9, 22, 0, 0, 0,
+        slot2 = Slot(start_time=D.datetime(2013, 9, 22, 12, 0, 0,
                                            tzinfo=timezone.utc),
-                     end_time=D.datetime(2013, 9, 22, 1, 0, 0,
-                                         tzinfo=timezone.utc),
-                     block=block1)
+                     end_time=D.datetime(2013, 9, 22, 13, 0, 0,
+                                         tzinfo=timezone.utc))
         slot3 = Slot(start_time=D.datetime(2013, 9, 22, 18, 30, 0,
                                            tzinfo=timezone.utc),
                      end_time=D.datetime(2013, 9, 22, 19, 0, 0,
-                                         tzinfo=timezone.utc),
-                     block=block1)
-        self.assertEqual(slot2.block, block1)
+                                         tzinfo=timezone.utc))
+        self.assertEqual(slot2.get_block(), block1)
         self.assertEqual(slot2.get_duration(), {'hours': 1,
                                                 'minutes':0})
-        self.assertEqual(slot3.block, block1)
+        self.assertEqual(slot3.get_block(), block1)
         self.assertEqual(slot3.get_duration(), {'hours': 0,
                                                 'minutes': 30})
         block1.delete()
@@ -174,9 +171,8 @@ class SlotTests(TestCase):
         slot1 = Slot(start_time=D.datetime(2013, 9, 22, 23, 0, 0,
                                            tzinfo=timezone.utc),
                      end_time=D.datetime(2013, 9, 23, 1, 0, 0,
-                                         tzinfo=timezone.utc),
-                     block=block1)
-        self.assertEqual(slot1.block, block1)
+                                         tzinfo=timezone.utc))
+        self.assertEqual(slot1.get_block(), block1)
         self.assertEqual(slot1.get_duration(), {'hours': 2,
                                                 'minutes': 0})
         block1.delete()
@@ -191,8 +187,7 @@ class SlotTests(TestCase):
         slot1 = Slot(start_time=D.datetime(2013, 9, 26, 10, 0,
                                            tzinfo=timezone.utc),
                      end_time=D.datetime(2013, 9, 26, 12, 0, 0,
-                                         tzinfo=timezone.utc),
-                     block=block1)
+                                         tzinfo=timezone.utc))
         slot1.clean()
         slot1.save()
         # This should work
@@ -222,60 +217,52 @@ class SlotTests(TestCase):
         slot1 = Slot(start_time=D.datetime(2013, 9, 26, 10, 0,
                                            tzinfo=timezone.utc),
                      end_time=D.datetime(2013, 9, 26, 12, 0, 0,
-                                         tzinfo=timezone.utc),
-                     block=block1)
+                                         tzinfo=timezone.utc))
         slot1.clean()
         slot1.save()
         # Start time is in the middle of slot1
         slot2 = Slot(start_time=D.datetime(2013, 9, 26, 11, 0, 0,
                                            tzinfo=timezone.utc),
                      end_time=D.datetime(2013, 9, 26, 13, 0, 0,
-                                         tzinfo=timezone.utc),
-                     block=block1)
+                                         tzinfo=timezone.utc))
         self.assertRaises(ValidationError, slot2.clean)
         # End time is in the middle of slot2
         slot2 = Slot(start_time=D.datetime(2013, 9, 26, 9, 0, 0,
                                            tzinfo=timezone.utc),
                      end_time=D.datetime(2013, 9, 26, 11, 0, 0,
-                                         tzinfo=timezone.utc),
-                     block=block1)
+                                         tzinfo=timezone.utc))
         self.assertRaises(ValidationError, slot2.clean)
         # Slot 2 totally encloses slot 1
         slot2 = Slot(start_time=D.datetime(2013, 9, 26, 9, 0, 0,
                                            tzinfo=timezone.utc),
                      end_time=D.datetime(2013, 9, 26, 13, 0, 0,
-                                         tzinfo=timezone.utc),
-                     block=block1)
+                                         tzinfo=timezone.utc))
         self.assertRaises(ValidationError, slot2.clean)
         # Slot 2 totally included in slot 1
         slot2 = Slot(start_time=D.datetime(2013, 9, 26, 11, 30, 0,
                                            tzinfo=timezone.utc),
                      end_time=D.datetime(2013, 9, 26, 12, 30, 0,
-                                         tzinfo=timezone.utc),
-                     block=block1)
+                                         tzinfo=timezone.utc))
         self.assertRaises(ValidationError, slot2.clean)
         # Slot 2 has the same times as slot 1
         slot2 = Slot(start_time=D.datetime(2013, 9, 26, 11, 0, 0,
                                            tzinfo=timezone.utc),
                      end_time=D.datetime(2013, 9, 26, 13, 0, 0,
-                                         tzinfo=timezone.utc),
-                     block=block1)
+                                         tzinfo=timezone.utc))
         self.assertRaises(ValidationError, slot2.clean)
         # Check we don't raise errors on slots that touch as attended
         # slot 1 start time is slot 2's end time
         slot2 = Slot(start_time=D.datetime(2013, 9, 26, 9, 0, 0,
                                            tzinfo=timezone.utc),
                      end_time=D.datetime(2013, 9, 26, 10, 0, 0,
-                                         tzinfo=timezone.utc),
-                     block=block1)
+                                         tzinfo=timezone.utc))
         slot2.clean()
         slot2.save()
         # slot 1 end time is slot 2's start time
         slot3 = Slot(start_time=D.datetime(2013, 9, 26, 12, 0, 0,
                                            tzinfo=timezone.utc),
                      end_time=D.datetime(2013, 9, 26, 13, 0, 0,
-                                         tzinfo=timezone.utc),
-                     block=block1)
+                                         tzinfo=timezone.utc))
         slot3.clean()
 
         slot1.delete()
@@ -293,8 +280,7 @@ class SlotTests(TestCase):
         slot1 = Slot(start_time=D.datetime(2013, 9, 22, 11, 0,
                                            tzinfo=timezone.utc),
                      end_time=D.datetime(2013, 9, 22, 10, 0, 0,
-                                         tzinfo=timezone.utc),
-                     block=block1)
+                                         tzinfo=timezone.utc))
         self.assertRaises(ValidationError, slot1.clean)
         block2 = ScheduleBlock.objects.create(
                 start_time=D.datetime(2013, 9, 24, 9, 0, 0,
@@ -305,8 +291,7 @@ class SlotTests(TestCase):
         slot2 = Slot(start_time=D.datetime(2013, 9, 25, 1, 0, 0,
                                            tzinfo=timezone.utc),
                      end_time=D.datetime(2013, 9, 24, 3, 0, 0,
-                                         tzinfo=timezone.utc),
-                     block=block2)
+                                         tzinfo=timezone.utc))
         self.assertRaises(ValidationError, slot2.clean)
 
         block1.delete()
@@ -323,29 +308,25 @@ class SlotTests(TestCase):
         slot1 = Slot(start_time=D.datetime(2013, 9, 22, 23, 0, 0,
                                            tzinfo=timezone.utc),
                      end_time=D.datetime(2013, 9, 23, 1, 0, 0,
-                                         tzinfo=timezone.utc),
-                     block=block1)
+                                         tzinfo=timezone.utc))
         self.assertRaises(ValidationError, slot1.clean)
         # Totally before
         slot2 = Slot(start_time=D.datetime(2013, 9, 21, 23, 0, 0,
                                            tzinfo=timezone.utc),
                      end_time=D.datetime(2013, 9, 21, 1, 0, 0,
-                                         tzinfo=timezone.utc),
-                     block=block1)
+                                         tzinfo=timezone.utc))
         self.assertRaises(ValidationError, slot2.clean)
         # Overlaps the end
         slot3 = Slot(start_time=D.datetime(2013, 9, 22, 17, 0, 0,
                                            tzinfo=timezone.utc),
                      end_time=D.datetime(2013, 9, 22, 19, 0, 0,
-                                         tzinfo=timezone.utc),
-                     block=block1)
+                                         tzinfo=timezone.utc))
         self.assertRaises(ValidationError, slot3.clean)
         # Overlaps the start
         slot4 = Slot(start_time=D.datetime(2013, 9, 22, 7, 0, 0,
                                            tzinfo=timezone.utc),
                      end_time=D.datetime(2013, 9, 22, 10, 0, 0,
-                                         tzinfo=timezone.utc),
-                     block=block1)
+                                         tzinfo=timezone.utc))
         self.assertRaises(ValidationError, slot4.clean)
 
 
@@ -376,13 +357,13 @@ class LastUpdateTests(TestCase):
                             tzinfo=timezone.utc)
         self.slots = []
         self.slots.append(Slot.objects.create(start_time=start1,
-                                              end_time=start2, block=block1))
+                                              end_time=start2))
         self.slots.append(Slot.objects.create(start_time=start2,
-                                              end_time=start3, block=block1))
+                                              end_time=start3))
         self.slots.append(Slot.objects.create(start_time=start3,
-                                              end_time=start4, block=block1))
+                                              end_time=start4))
         self.slots.append(Slot.objects.create(start_time=start4,
-                                              end_time=start5, block=block1))
+                                              end_time=start5))
 
         pages = make_pages(8)
         venues = [venue1, venue2] * 4

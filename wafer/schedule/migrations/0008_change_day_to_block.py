@@ -27,7 +27,7 @@ class Migration(migrations.Migration):
         ),
         migrations.AlterModelOptions(
             name='slot',
-            options={'ordering': ['block', 'end_time', 'start_time']},
+            options={'ordering': ['end_time', 'start_time']},
         ),
         migrations.RemoveField(
             model_name='slot',
@@ -62,11 +62,6 @@ class Migration(migrations.Migration):
         ),
         migrations.DeleteModel(
             name='Day',
-        ),
-        migrations.AddField(
-            model_name='slot',
-            name='block',
-            field=models.ForeignKey(blank=True, help_text='Block for this slot (if no previous slot selected)', null=True, on_delete=django.db.models.deletion.PROTECT, to='schedule.ScheduleBlock'),
         ),
         migrations.AddField(
             model_name='venue',

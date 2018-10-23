@@ -112,7 +112,7 @@ def generate_schedule(today=None):
     # We create a list of slots and schedule items
     schedule_pages = {}
     seen_items = {}
-    for slot in Slot.objects.all().order_by('end_time', 'start_time', 'block'):
+    for slot in Slot.objects.all().order_by('end_time', 'start_time'):
         block = slot.get_block()
         if today and block != today:
             # Restrict ourselves to only today
@@ -320,9 +320,9 @@ class ScheduleEditView(TemplateView):
         public_talks = public_talks.order_by("talk_type", "talk_id")
         venues = Venue.objects.filter(blocks__in=[block])
         slots = Slot.objects.all().select_related(
-            'block', 'previous_slot').prefetch_related(
+            'previous_slot').prefetch_related(
             'scheduleitem_set', 'slot_set').order_by(
-                'end_time', 'start_time', 'block')
+                'end_time', 'start_time')
         aggregated_slots = []
 
         for slot in slots:

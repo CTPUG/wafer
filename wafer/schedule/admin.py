@@ -116,7 +116,7 @@ def prefetch_schedule_items():
                 .select_related(
                     'talk', 'page', 'venue')
                 .prefetch_related(
-                    'slots', 'slots__previous_slot', 'slots__block')
+                    'slots', 'slots__previous_slot')
                 .all())
 
 
@@ -208,16 +208,18 @@ class BaseBlockFilter(admin.SimpleListFilter):
         if self.value():
             block_pk = int(self.value())
             block = ScheduleBlock.objects.get(pk=block_pk)
-            # Find all slots that have the block explicitly set
-            slots = list(Slot.objects.filter(block=block))
-            all_slots = slots[:]
-            # Recursively find slots with a previous_slot set to one of these
+            # Find all slots with a start_time are in the given block
+            slots = list(Slot.objects.filter(
+                start_time__gte=block.start_time,
+                end_time__lte=block.end_time))
+            all_slots=slots[:]
+            # Extend with all the slots that have a previous slot
+            # Return the filtered list of slot ids
             while Slot.objects.filter(previous_slot__in=slots).exists():
                 slots = list(Slot.objects.filter(
                     previous_slot__in=slots).all())
                 all_slots.extend(slots)
-            # Return the filtered list
-            return {'slots': all_slots, 'block': block}
+            return [x.pk for x in all_slots]
         return None
 
 
@@ -225,10 +227,9 @@ class SlotBlockFilter(BaseBlockFilter):
     # Allow filtering slots by the block, to make editing slots easier
 
     def queryset(self, request, queryset):
-        query = self._get_slots()
-        if query:
-            return queryset.filter(Q(previous_slot__in=query['slots']) |
-                                   Q(block=query['block']))
+        slot_ids = self._get_slots()
+        if slot_ids is not None:
+            return queryset.filter(pk__in=slot_ids)
         # No value, so no filtering
         return queryset
 
@@ -237,10 +238,9 @@ class ScheduleItemBlockFilter(BaseBlockFilter):
     # Allow filtering scheduleitems by the day, to make editing easier
 
     def queryset(self, request, queryset):
-        query = self._get_slots()
-        if query:
-            return queryset.filter(Q(slots__previous_slot__in=query['slots']) |
-                                   Q(slots__block=query['block']))
+        slot_ids = self._get_slots()
+        if slot_ids is not None:
+            return queryset.filter(slots__pk__in=slot_ids)
         # No value, so no filtering
         return queryset
 
@@ -382,7 +382,7 @@ class SlotAdminForm(forms.ModelForm):
 
     class Meta:
         model = Slot
-        fields = ('name', 'previous_slot', 'block', 'start_time', 'end_time')
+        fields = ('name', 'previous_slot', 'start_time', 'end_time')
 
     class Media:
         js = ('js/scheduledatetime.js',)

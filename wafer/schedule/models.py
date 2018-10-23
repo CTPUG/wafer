@@ -111,11 +111,6 @@ class Slot(models.Model):
                                                   "slot OR a day and start "
                                                   "time set)"))
 
-    block = models.ForeignKey(ScheduleBlock, null=True, blank=True,
-                            on_delete=models.PROTECT,
-                            help_text=_("Block for this slot (if no "
-                                        "previous slot selected)"))
-
     start_time = models.DateTimeField(
         null=True, blank=True, help_text=_("Start time (if no"
                                            " previous slot selected)"))
@@ -126,7 +121,7 @@ class Slot(models.Model):
                                         " panel"))
 
     class Meta:
-        ordering = ['block', 'end_time', 'start_time']
+        ordering = ['end_time', 'start_time']
 
     def __str__(self):
         if self.name:
@@ -177,7 +172,14 @@ class Slot(models.Model):
     def get_block(self):
         if self.previous_slot:
             return self.previous_slot.get_block()
-        return self.block
+        blocks = ScheduleBlock.objects.filter(
+            start_time__lte=self.get_start_time(),
+            end_time__gte=self.end_time)
+        if blocks:
+            # We assume blocks don't overlap, so this is unique
+            return blocks.first()
+        return None
+
     get_block.short_description = 'Schedule Block'
 
     def clean(self):
@@ -189,14 +191,13 @@ class Slot(models.Model):
             raise ValidationError("Start time must be before end time")
         # Slots should either have day + start_time, or a previous_slot, but
         # not both (since previous_slot overrides the others)
-        if (self.block or self.start_time) and self.previous_slot:
+        if self.start_time and self.previous_slot:
             raise ValidationError("Slots with a previous slot should not "
-                                  "have a block or start_time set")
+                                  "have a start_time set")
         # Validate that we are within the bounds of the block
         block = self.get_block()
-        if not includes(self, block):
-            raise ValidationError("Slot extends beyond the time limits of the"
-                                  " block")
+        if not block:
+            raise ValidationError("Slot does not fall within any defined block")
         # Validate that we don't overlap any existing slots
         # This isn't very efficient, but OK because it's a once off
         # validation cost.
