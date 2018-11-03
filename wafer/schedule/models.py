@@ -108,8 +108,7 @@ class Slot(models.Model):
                                       help_text=_("Previous slot if "
                                                   "applicable (slots should "
                                                   "have either a previous "
-                                                  "slot OR a day and start "
-                                                  "time set)"))
+                                                  "slot OR a start time set)"))
 
     start_time = models.DateTimeField(
         null=True, blank=True, help_text=_("Start time (if no"
