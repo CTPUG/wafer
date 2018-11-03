@@ -41,8 +41,10 @@ class MarkdownTextField(TextField):
 
     def pre_save(self, model_instance, add):
         value = getattr(model_instance, self.attname)
-        html = markdown(value, safe_mode=self._markdown_safe)
-        setattr(model_instance, self._html_field, html)
+        # We skip the pre_save hook in migrations, to avoid 
+        if self._add_html_field:
+            html = markdown(value, safe_mode=self._markdown_safe)
+            setattr(model_instance, self._html_field, html)
         return value
 
     def deconstruct(self):
