@@ -330,13 +330,13 @@ class ScheduleEditView(TemplateView):
                 continue
             aggregated_slots.append(self._slot_context(slot, venues))
 
-        context['block'] = block
+        context['this_block'] = block
         context['venues'] = venues
         context['slots'] = aggregated_slots
         context['talks_all'] = public_talks
         context['talks_unassigned'] = public_talks.filter(scheduleitem=None)
         context['pages'] = Page.objects.all()
-        context['blocks'] = blocks
+        context['all_blocks'] = blocks
         context['validation_errors'] = validate_schedule()
         return context
 

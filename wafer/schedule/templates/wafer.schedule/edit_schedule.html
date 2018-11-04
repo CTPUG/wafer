@@ -16,12 +16,12 @@
     <div class="dropdown float-right">
       <button class="btn btn-secondary dropdown-toggle" type="button"
               data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-        {{ day.date }} (Day {{ day.id }})
+        {{ this_block }} (Block {{ this_block.id }})
       </button>
       <div class="dropdown-menu">
-        {% for day in days %}
-          <a class="dropdown-item" href="{% url 'admin:schedule_editor' day.id %}">
-            {{ day.date }} (Day {{ day.id }})
+        {% for sched_block in all_blocks %}
+          <a class="dropdown-item" href="{% url 'admin:schedule_editor' sched_block.id %}">
+            {{ sched_block }} (Block {{ sched_block.id }})
           </a>
         {% endfor %}
       </div>
