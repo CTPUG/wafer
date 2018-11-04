@@ -315,24 +315,24 @@ class ScheduleViewTests(TestCase):
         """Create a multiple day table with 3 slots and 2 venues and
            check we get the expected results using the per-day views"""
         # This is the same schedule as test_multiple_days
-        day1 = ScheduleBlock.objects.create(
+        block1 = ScheduleBlock.objects.create(
             start_time=D.datetime(2013, 9, 22, 7, 0, 0,
                                   tzinfo=timezone.utc),
             end_time=D.datetime(2013, 9, 22, 19, 0, 0,
                                   tzinfo=timezone.utc),
             )
-        day2 = ScheduleBlock.objects.create(
+        block2 = ScheduleBlock.objects.create(
             start_time=D.datetime(2013, 9, 23, 7, 0, 0,
                                   tzinfo=timezone.utc),
             end_time=D.datetime(2013, 9, 23, 19, 0, 0,
                                   tzinfo=timezone.utc),
             )
         venue1 = Venue.objects.create(order=1, name='Venue 1')
-        venue1.blocks.add(day1)
-        venue1.blocks.add(day2)
+        venue1.blocks.add(block1)
+        venue1.blocks.add(block2)
         venue2 = Venue.objects.create(order=2, name='Venue 2')
-        venue2.blocks.add(day1)
-        venue2.blocks.add(day2)
+        venue2.blocks.add(block1)
+        venue2.blocks.add(block2)
 
         start1 = D.datetime(2013, 9, 22, 10, 0, 0, tzinfo=timezone.utc)
         start2 = D.datetime(2013, 9, 22, 11, 0, 0, tzinfo=timezone.utc)
@@ -359,7 +359,7 @@ class ScheduleViewTests(TestCase):
         c = Client()
         # Check that a wrong day gives the full schedule
 
-        response = c.get('/schedule/?day=2013-09-24')
+        response = c.get('/schedule/?block=24')
 
         [day1, day2] = response.context['schedule_pages']
 
@@ -387,7 +387,7 @@ class ScheduleViewTests(TestCase):
         self.assertEqual(day2.rows[0].get_sorted_items()[1]['colspan'], 1)
 
         # Test per-day schedule views
-        response = c.get('/schedule/?day=2013-09-22')
+        response = c.get('/schedule/?block=%s' % block1.id)
         [day] = response.context['schedule_pages']
 
         self.assertEqual(day.block, day1.block)
@@ -402,7 +402,7 @@ class ScheduleViewTests(TestCase):
         self.assertEqual(day.rows[0].get_sorted_items()[0]['rowspan'], 1)
         self.assertEqual(day.rows[0].get_sorted_items()[0]['colspan'], 1)
 
-        response = c.get('/schedule/?day=2013-09-23')
+        response = c.get('/schedule/?block=%d' % block2.id)
         [day] = response.context['schedule_pages']
 
         self.assertEqual(day.block, day2.block)
