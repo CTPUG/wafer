@@ -140,7 +140,7 @@ class ScheduleView(BuildableTemplateView):
             return context
         context['active'] = True
         try:
-            block_id = int(self.request.GET.get('block', None))
+            block_id = int(self.request.GET.get('block', -1))
         except ValueError:
             block_id = -1
         blocks = ScheduleBlock.objects.all()
