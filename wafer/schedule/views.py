@@ -191,11 +191,13 @@ class CurrentView(TemplateView):
         return None
 
     def _parse_time(self, day, time):
-        now = datetime.datetime.now()
+        tz = timezone.get_default_timezone()
+        now = timezone.make_aware(datetime.datetime.now(), tz)
+        if day is None:
+            return now
         if time is None:
             return now
         try:
-            tz = timezone.get_default_timezone()
             full_time = datetime.datetime.combine(datetime.datetime.strptime(day, "%Y-%m-%d").date(),
                                                   datetime.datetime.strptime(time, '%H:%M').time())
             return timezone.make_aware(full_time, tz)
@@ -214,9 +216,11 @@ class CurrentView(TemplateView):
     def _current_slots(self, schedule_page, search_time):
         cur_slot, prev_slot, next_slot = None, None, None
         for slot in Slot.objects.all():
-            if slot.start_time > schedule_page.block.end_time or slot.end_time < schedule_page.block.start_time:
+            if (slot.get_start_time() > schedule_page.block.end_time or
+                    slot.end_time < schedule_page.block.start_time):
                 continue
-            if slot.get_start_time() <= search_time and slot.end_time > search_time:
+            if (slot.get_start_time() <= search_time and
+                    slot.end_time > search_time):
                 cur_slot = slot
             elif slot.end_time <= search_time:
                 if not prev_slot or prev_slot.end_time < slot.end_time:
