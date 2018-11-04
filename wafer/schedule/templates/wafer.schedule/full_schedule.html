@@ -21,16 +21,16 @@
         <p>The final schedule has not been published yet.</p>
       {% endblocktrans %}
     {% else %}
-      {% if next_day or prev_day %}
+      {% if next_block or prev_block %}
         <div class="clearfix d-print-none">
          {% url 'wafer_full_schedule' as schedule_url %}
-           {% if prev_day %}
-             <a href="{{ schedule_url }}?day={{ prev_day }}"
-                class="float-left btn btn-secondary btn-lg">{% trans "Previous Day" %}</a>
+           {% if prev_block %}
+             <a href="{{ schedule_url }}?block={{ prev_block.id }}"
+                class="float-left btn btn-secondary btn-lg">{% trans "Previous" %} &mdash; {{ prev_block }}</a>
            {% endif %}
-           {% if next_day %}
-             <a href="{{ schedule_url }}?day={{ next_day }}"
-                class="float-right btn btn-secondary btn-lg">{% trans "Next Day" %}</a>
+           {% if next_block %}
+             <a href="{{ schedule_url }}?block={{ next_block.id }}"
+                class="float-right btn btn-secondary btn-lg">{% trans "Next" %} &mdash; {{ next_block }}</a>
            {% endif %}
         </div>
       {% endif %}
@@ -39,7 +39,7 @@
           {# We assume that the admin has created a valid timetable #}
           <tr>
             <td colspan="{{ page.venues|length|add:1 }}" class="title">
-              <a href="?day={{ page.block.start_time.isoformat }}">
+              <a href="?block={{ page.block.id }}">
                 {{ page.block.start_time|date:"l (d b)" }}
               </a>
             </td>

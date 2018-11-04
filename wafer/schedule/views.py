@@ -5,6 +5,7 @@ from icalendar import Calendar, Event
 from django.db.models import Q
 from django.views.generic import TemplateView, View
 from django.contrib.sites.shortcuts import get_current_site
+from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponse
 from django.utils import timezone
 
@@ -107,15 +108,15 @@ def make_schedule_row(schedule_page, slot, seen_items):
     return row
 
 
-def generate_schedule(today=None):
+def generate_schedule(this_block=None):
     """Helper function which creates an ordered list of schedule days"""
     # We create a list of slots and schedule items
     schedule_pages = {}
     seen_items = {}
     for slot in Slot.objects.all().order_by('end_time', 'start_time'):
         block = slot.get_block()
-        if today and block != today:
-            # Restrict ourselves to only today
+        if this_block and block != this_block:
+            # Restrict ourselves to only given block
             continue
         schedule_page = schedule_pages.get(block)
         if schedule_page is None:
@@ -133,25 +134,31 @@ class ScheduleView(BuildableTemplateView):
         context = super(ScheduleView, self).get_context_data(**kwargs)
         # Check if the schedule is valid
         context['active'] = False
-        context['prev_day'] = None
-        context['next_day'] = None
+        context['prev_block'] = None
+        context['next_block'] = None
         if not check_schedule():
             return context
         context['active'] = True
-        day = self.request.GET.get('day', None)
-        dates = dict([(x.start_time.strftime('%Y-%m-%d'), x) for x in
-                      ScheduleBlock.objects.all()])
-        # We choose to return the full schedule if given an invalid date
-        schedule_day = dates.get(day, None)
-        if schedule_day is not None:
-            # Add next / prev day links
-            sorted_blocks = sorted(dates)
-            pos = sorted_blocks.index(day)
+        try:
+            block_id = int(self.request.GET.get('block', None))
+        except ValueError:
+            block_id = -1
+        blocks = ScheduleBlock.objects.all()
+        try:
+            this_block = blocks.get(id=block_id)
+        except ObjectDoesNotExist:
+            # We choose to return the full schedule if given an invalid block id
+            this_block = None
+        if this_block:
+            # Add next / prev blocks links
+            # blocks are sorted by time by default
+            blocks = list(blocks)
+            pos = blocks.index(this_block)
             if pos > 0:
-                context['prev_day'] = sorted_blocks[pos - 1]
-            if pos < len(sorted_blocks) - 1:
-                context['next_day'] = sorted_blocks[pos + 1]
-        context['schedule_pages'] = generate_schedule(schedule_day)
+                context['prev_block'] = blocks[pos - 1]
+            if pos < len(blocks) - 1:
+                context['next_block'] = blocks[pos + 1]
+        context['schedule_pages'] = generate_schedule(this_block)
         return context
 
 
