@@ -24,11 +24,9 @@ def includes(obj1, obj2):
 def overlap(obj1, obj2):
     """Test if obj1 and obj2 overlap on times"""
     # obj1 and obj2 are either both ScheduleBlocks or both slots
-    if (obj2.get_start_time() >= obj1.get_start_time() and
-                    obj2.get_start_time() < obj1.end_time):
+    if obj1.get_start_time() <= obj2.get_start_time() < obj1.end_time:
         return True
-    elif (obj2.end_time <= obj1.end_time and
-                    obj2.end_time > obj1.get_start_time()):
+    elif obj1.get_start_time() < obj2.end_time <= obj1.end_time:
         return True
     return includes(obj1, obj2)
 

@@ -219,8 +219,7 @@ class CurrentView(TemplateView):
             if (slot.get_start_time() > schedule_page.block.end_time or
                     slot.end_time < schedule_page.block.start_time):
                 continue
-            if (slot.get_start_time() <= search_time and
-                    slot.end_time > search_time):
+            if slot.get_start_time() <= search_time < slot.end_time:
                 cur_slot = slot
             elif slot.end_time <= search_time:
                 if not prev_slot or prev_slot.end_time < slot.end_time:
