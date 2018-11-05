@@ -75,7 +75,7 @@ class BlockTests(TestCase):
         self.assertRaises(ValidationError, block2.clean)
 
     def test_changing_block(self):
-        """Test that we can't create overlapping blocks."""
+        """Test that we can update block info and have correct validation behavior."""
         block1 = ScheduleBlock.objects.create(
                 start_time=D.datetime(2013, 9, 27, 11, 0, 0,
                                       tzinfo=timezone.utc),
@@ -104,6 +104,20 @@ class BlockTests(TestCase):
                                       tzinfo=timezone.utc),
                 end_time=D.datetime(2013, 9, 22, 19, 0, 0,
                                     tzinfo=timezone.utc))
+        # Test starting in the block
+        block2 = ScheduleBlock.objects.create(
+                start_time=D.datetime(2013, 9, 22, 11, 0, 0,
+                                      tzinfo=timezone.utc),
+                end_time=D.datetime(2013, 9, 22, 23, 0, 0,
+                                    tzinfo=timezone.utc))
+        self.assertRaises(ValidationError, block2.clean)
+        # Test ending in the block
+        block2 = ScheduleBlock.objects.create(
+                start_time=D.datetime(2013, 9, 22, 0, 30, 0,
+                                      tzinfo=timezone.utc),
+                end_time=D.datetime(2013, 9, 22, 11, 0, 0,
+                                    tzinfo=timezone.utc))
+        self.assertRaises(ValidationError, block2.clean)
         # Test across midnight
         block2 = ScheduleBlock.objects.create(
                 start_time=D.datetime(2013, 9, 22, 11, 0, 0,
@@ -178,7 +192,7 @@ class SlotTests(TestCase):
         block1.delete()
 
     def test_changing_slots(self):
-        """Test that we can't create overlapping slots."""
+        """Test that we can update slots and get the correct validation behaviour."""
         block1 = ScheduleBlock.objects.create(
                 start_time=D.datetime(2013, 9, 26, 9, 0, 0,
                                       tzinfo=timezone.utc),
@@ -250,7 +264,7 @@ class SlotTests(TestCase):
                      end_time=D.datetime(2013, 9, 26, 13, 0, 0,
                                          tzinfo=timezone.utc))
         self.assertRaises(ValidationError, slot2.clean)
-        # Check we don't raise errors on slots that touch as attended
+        # Check we don't raise errors on slots that touch as intended
         # slot 1 start time is slot 2's end time
         slot2 = Slot(start_time=D.datetime(2013, 9, 26, 9, 0, 0,
                                            tzinfo=timezone.utc),
@@ -373,6 +387,7 @@ class LastUpdateTests(TestCase):
             item.slots.add(self.slots[index // 2])
 
     def test_item_save(self):
+        """Test that the last update value is correctly updated on save."""
         last_updated = self.items[0].last_updated
         self.items[0].save()
         self.assertNotEqual(last_updated, self.items[0].last_updated)
