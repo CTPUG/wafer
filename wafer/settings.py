@@ -288,7 +288,8 @@ WAFER_TALK_REVIEW_SCORES = (-2, 2)
 WAFER_REGISTRATION_OPEN = True
 
 # WAFER_REGISTRATION_MODE can be 'ticket' for Quicket tickets, or 'custom' if
-# you implement your own registration system.
+# you implement your own registration system. If 'custom', then you *must*
+# define a URL named 'register' in your application so we can link to it.
 WAFER_REGISTRATION_MODE = 'ticket'
 # WAFER_USER_IS_REGISTERED should return a boolean, when passed a Django user.
 WAFER_USER_IS_REGISTERED = 'wafer.tickets.models.user_is_registered'
