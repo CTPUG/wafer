@@ -1,0 +1,12 @@
+/* -------------------------------------------------------------------
+ * Local additional styling for markitup widgets
+// ------------------------------------------------------------------*/
+.markItUp  {
+	width:99%;
+}
+.markItUpEditor {
+	width:85%;
+}
+.markItUpPreviewFrame	{
+	width:99.9%;
+}
