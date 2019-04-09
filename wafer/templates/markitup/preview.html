@@ -1,0 +1,12 @@
+{% extends "wafer/base.html" %}
+{% load i18n %}
+{% block content %}
+<div class="alert alert-warning" role="alert">
+   {% blocktrans %}
+   This is only a preview of the page. It has not yet been updated.
+   {% endblocktrans %}
+</div>
+<div>
+  {{ preview|safe }}
+</div>
+{% endblock %}
