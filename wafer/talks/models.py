@@ -235,7 +235,7 @@ class Talk(models.Model):
     @property
     def review_score(self):
         # Overridden in admin, to allow sorting
-        reviews = [review.avg_score for review in self.reviews.all()]
+        reviews = [review.avg_score for review in self.reviews.all() if review.avg_score]
         if not reviews:
             return None
         return sum(reviews) / len(reviews)
