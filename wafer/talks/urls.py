@@ -8,6 +8,7 @@ from wafer.talks.views import (
 
 router = routers.ExtendedSimpleRouter()
 
+# FIXME: Change base_name when we drop python 2 and move to drf-extensions 0.5
 talks_router = router.register(r'talks', TalksViewSet)
 talks_router.register(
     r'urls', TalkUrlsViewSet, base_name='talks-urls',
