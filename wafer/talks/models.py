@@ -314,7 +314,7 @@ class Review(models.Model):
 
     def __str__(self):
         return u'Review of %s by %s (%s)' % (
-            self.reviewer, self.talk.title, self.avg_score)
+            self.talk.title, self.reviewer, self.avg_score)
 
     @property
     def avg_score(self):
