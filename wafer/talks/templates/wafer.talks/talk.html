@@ -36,6 +36,19 @@
         <a href="{% url 'wafer_user_profile' username=author.username %}">{{ author.userprofile.display_name }}</a>
       {% endfor %}
     </p>
+    {% if user.is_staff or perms.talks.view_all_talks %}
+      {% for author in object.authors.all %}
+        <p class="bio">
+          {% blocktrans %}Bio{% endblocktrans %}{% if object.authors.count > 1 %} - {{ author.userprofile.display_name }}{% endif %}:
+          {% if author.userprofile.bio %}
+            {{ author.userprofile.bio }}
+          {% else %}
+            <em>{% blocktrans %}Not provided{% endblocktrans %}</em>
+          {% endif %}
+        </p>
+      {% endfor %}
+    {% endif %}
+
     {% if object.track %}
       <p>
         {% blocktrans with track=object.track.name %}
