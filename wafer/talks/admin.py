@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django import forms
 from django.db import models
+from django.db.models import Q
 from django.utils.translation import ugettext_lazy as _
 
 from reversion.admin import VersionAdmin
@@ -39,6 +40,25 @@ class ScheduleListFilter(admin.SimpleListFilter):
         return queryset
 
 
+class HasNotesFilter(admin.SimpleListFilter):
+    title = _('has notes')
+    parameter_name = 'has_notes'
+
+    def lookups(self, request, model_admin):
+        return (
+            ('yes', _('Yes')),
+            ('no', _('No')),
+        )
+
+    def queryset(self, request, queryset):
+        if self.value() == 'yes':
+            return queryset.filter(notes__isnull=False).exclude(notes='')
+        elif self.value() == 'no':
+            return queryset.filter(Q(notes__isnull=True) | Q(notes=''))
+        else:
+            return queryset
+
+
 class TalkUrlAdmin(VersionAdmin):
     list_display = ('description', 'talk', 'url')
 
@@ -69,7 +89,7 @@ class TalkAdmin(CompareVersionAdmin):
                     'review_count', 'review_score')
     list_editable = ('status',)
     list_filter = ('status', 'talk_type', 'track', ScheduleListFilter,
-                   DateModifiedFilter)
+                   DateModifiedFilter, HasNotesFilter,)
     search_fields = ('title',)
     exclude = ('kv',)
 
