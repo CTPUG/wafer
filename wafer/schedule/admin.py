@@ -212,13 +212,13 @@ def validate_schedule():
     all_items = prefetch_schedule_items()
     errors = []
     for validator, _type, msg in SCHEDULE_ITEM_VALIDATORS:
-        if validator(all_items):
-            errors.append(msg)
+        for item in validator(all_items):
+            errors.append('%s: %s' % (msg, item))
 
     all_slots = prefetch_slots()
     for validator, _type, msg in SLOT_VALIDATORS:
-        if validator(all_slots):
-            errors.append(msg)
+        for slot in validator(all_slots):
+            errors.append('%s: %s' % (msg, slot))
     return errors
 
 
