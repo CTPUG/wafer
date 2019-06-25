@@ -5,10 +5,13 @@
 <div class="row">
   <div class="col-md-12">
     {% if validation_errors %}
-      <div class="messages">
-        {% for validation_error in validation_errors %}
-          <div class="alert alert-danger">{{ validation_error }}</div>
-        {% endfor %}
+      <div class="messages alert alert-danger">
+        <p><strong>{% trans "Validation errors:" %}</strong></p>
+        <ul>
+          {% for validation_error in validation_errors %}
+            <li>{{ validation_error }}</li>
+          {% endfor %}
+        </ul>
       </div>
     {% endif %}
   </div>
