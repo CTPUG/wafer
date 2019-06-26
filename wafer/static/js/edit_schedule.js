@@ -75,6 +75,21 @@
         var newItem = document.querySelectorAll('[id=scheduleItemnull]')[0];
 
         newItem.id = 'scheduleItem' + scheduleItemId;
+
+        // Add a close button, since we've deleted it if one
+        // existed, and we're not going back through the template
+        var closeButton = document.createElement("BUTTON");
+        closeButton.id = "delete" + scheduleItemId;
+        closeButton.setAttribute("data-id", scheduleItemId);
+        closeButton.classList.add("close");
+        closeButton.setAttribute("aria-label", "Close");
+        var buttonSpan = document.createElement("span");
+        buttonSpan.setAttribute("aria-hidden", true);
+        buttonSpan.innerHTML = "&times;";
+
+        closeButton.appendChild(buttonSpan);
+        closeButton.addEventListener('click', handleClickDelete, false);
+        newItem.insertBefore(closeButton, newItem.childNodes[0]);
     }
 
 
