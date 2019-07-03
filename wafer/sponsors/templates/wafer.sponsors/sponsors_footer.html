@@ -1,5 +1,5 @@
 {% load sponsors %}
-<div id="wafer-sponsors">
+<div id="wafer-sponsors" class="container">
     {% for package in packages %}
     {% if package.sponsors.exists %}
        {% for sponsor in package.sponsors.all %}
