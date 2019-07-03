@@ -148,6 +148,11 @@ class ReviewForm(forms.Form):
 
         super(ReviewForm, self).__init__(*args, **kwargs)
 
+        review_range  =_("(Score range: %(min)d to %(max)d)") % {
+            'min': settings.WAFER_TALK_REVIEW_SCORES[0],
+            'max': settings.WAFER_TALK_REVIEW_SCORES[1]
+        }
+
         for aspect in ReviewAspect.objects.all():
             initial = None
             if self.instance:
@@ -155,9 +160,10 @@ class ReviewForm(forms.Form):
                     initial = self.instance.scores.get(aspect=aspect).value
                 except Score.DoesNotExist:
                     initial = None
+            # We can't use label_suffix because we're going through crispy
+            # forms, so we tack the range onto the label
             self.fields['aspect_{}'.format(aspect.pk)] = forms.IntegerField(
-                initial=initial, label=aspect.name,
-                min_value=settings.WAFER_TALK_REVIEW_SCORES[0],
+                initial=initial, label="%s %s" % (aspect.name, review_range),
                 max_value=settings.WAFER_TALK_REVIEW_SCORES[1])
 
         self.helper = FormHelper(self)
