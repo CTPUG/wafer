@@ -118,10 +118,15 @@ def sponsor_menu(
         packages_item=_("Sponsorship packages")):
     """Add sponsor menu links."""
     root_menu.add_menu(menu, label, items=[])
+    added_to_menu = set()
     for sponsor in (
             Sponsor.objects.all()
             .order_by('packages', 'order', 'id')
             .prefetch_related('packages')):
+        if sponsor in added_to_menu:
+            # We've already added this in a previous packaged
+            continue
+        added_to_menu.add(sponsor)
         symbols = sponsor.symbols()
         if symbols:
             item_name = u"» %s %s" % (sponsor.name, symbols)
