@@ -133,6 +133,28 @@ class SponsorMenuTests(TestCase):
             ])
         ])
 
+        # Test that changing the order field changes the ordering within the package
+        sponsor1.order = 2
+        sponsor3.order = 2
+        # Ensure menus are regenerated
+        sponsor1.save()
+        sponsor3.save()
+
+        menu = get_cached_menus()
+        self.assertEqual(menu.items, [
+            Menu.mk_menu(u"sponsors", u"Sponsors", items=[
+                Menu.mk_item(u"» Awesome6 Co *", sponsor6.get_absolute_url()),
+                Menu.mk_item(u"» Awesome1 Co *", sponsor1.get_absolute_url()),
+                Menu.mk_item(u"» Awesome5 Co +", sponsor5.get_absolute_url()),
+                Menu.mk_item(u"» Awesome3 Co +", sponsor3.get_absolute_url()),
+                Menu.mk_item(u"» Awesome2 Co -", sponsor2.get_absolute_url()),
+                Menu.mk_item(u"» Awesome4 Co -", sponsor4.get_absolute_url()),
+                Menu.mk_item(u"Our sponsors", reverse('wafer_sponsors')),
+                Menu.mk_item(u"Sponsorship packages", reverse(
+                    'wafer_sponsorship_packages')),
+            ])
+        ])
+
     def test_single_sponsor_multiple_packages(self):
         """Test that a sponsor in multiple packages only gets shown once, but with all the symbols"""
         gold_package = create_package(u"Gold", u"*", 500, 1)
