@@ -1,0 +1,58 @@
+  {% load i18n %}
+  <div class="wafer_schedule">
+    {% if not schedule_days %}
+      {# Schedule is incomplete / invalid, so show nothing #}
+      {% blocktrans %}
+        <p>The final schedule has not been published yet.</p>
+      {% endblocktrans %}
+    {% else %}
+      {% if next_day or prev_day %}
+        <div class="clearfix d-print-none">
+         {% url 'wafer_full_schedule' as schedule_url %}
+           {% if prev_day %}
+             <a href="{{ schedule_url }}?day={{ prev_day }}"
+                class="float-left btn btn-secondary btn-lg">{% trans "Previous Day" %}</a>
+           {% endif %}
+           {% if next_day %}
+             <a href="{{ schedule_url }}?day={{ next_day }}"
+                class="float-right btn btn-secondary btn-lg">{% trans "Next Day" %}</a>
+           {% endif %}
+        </div>
+      {% endif %}
+      {% for schedule_day in schedule_days %}
+        <table cellspacing=1 cellpadding=0>
+          {# We assume that the admin has created a valid timetable #}
+          <tr>
+            <td colspan="{{ schedule_day.venues|length|add:1 }}" class="title">
+              <a href="?day={{ schedule_day.day.date.isoformat }}">
+                {{ schedule_day.day.date|date:"l (d b)" }}
+              </a>
+            </td>
+          </tr>
+          <tr>
+            <th>{% trans "Time" %}</th>
+            {% for venue in schedule_day.venues %}
+              <th><a href="{{ venue.get_absolute_url }}">{{ venue.name }}</a></th>
+            {% endfor %}
+          </tr>
+          {% for row in schedule_day.rows %}
+            <tr>
+              <td class="scheduleslot">{{ row.slot.get_start_time|time:"H:i" }} - {{ row.slot.end_time|time:"H:i" }}</td>
+              {% for item in row.get_sorted_items %}
+                {% if item.item == "unavailable" %}
+                  {# Venue isn't available, so we add an empty table element with the 'unavailable' class #}
+                  <td colspan="{{ item.colspan }}" rowspan="{{ item.rowspan }}" class="unavailable"></td>
+                {% else %}
+                  {# Add item details #}
+                  <td colspan="{{ item.colspan }}" rowspan="{{ item.rowspan }}"
+                      class="{{ item.item.get_css_classes|join:' ' }}">
+                    {% include "wafer.schedule/schedule_item.html" with item=item.item %}
+                  </td>
+                {% endif %}
+              {% endfor %}
+            </tr>
+          {% endfor %}
+        </table>
+      {% endfor %}
+    {% endif %}
+  </div>

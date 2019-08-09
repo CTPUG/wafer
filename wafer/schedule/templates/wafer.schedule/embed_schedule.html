@@ -1,0 +1,25 @@
+{% load static from staticfiles %}
+{% load i18n %}
+<!DOCTYPE html>
+<html>
+<head>
+  <title>{% block title %}{% trans "Schedule" %} - {{ WAFER_CONFERENCE_NAME }}{% endblock %}</title>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="{% static 'vendor/bootstrap/dist/css/bootstrap.min.css' %}" rel="stylesheet">
+  <link href="{% static 'vendor/@fortawesome/fontawesome-free-webfonts/css/fontawesome.css' %}" rel="stylesheet">
+  <link href="{% static 'vendor/@fortawesome/fontawesome-free-webfonts/css/fa-solid.css' %}" rel="stylesheet">
+  <link href="{% static 'css/wafer.css' %}" rel="stylesheet">
+  {% block extra_head %}{% endblock %}
+</head>
+<body>
+{% block content %}
+<section class="wafer wafer-schedule">
+  {% block schedule_grid %}
+  {% include "wafer.schedule/static_schedule.html" %}
+  {% endblock %}
+</section>
+{% endblock %}
+</body>
+</html>

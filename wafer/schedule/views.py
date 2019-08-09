@@ -171,6 +171,10 @@ class ScheduleXmlView(ScheduleView):
         return context
 
 
+class ScheduleEmbedView(ScheduleView):
+    template_name = 'wafer.schedule/embed_schedule.html'
+
+
 class CurrentView(TemplateView):
     template_name = 'wafer.schedule/current.html'
 
