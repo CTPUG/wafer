@@ -1,0 +1,849 @@
+# Wafer Russian translation file
+# This file is distributed under the same license as the Wafer itself.
+# Andrej Shadura <andrew@shadura.me>, 2019.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Wafer\n"
+"POT-Creation-Date: 2019-08-09 14:16+0000\n"
+"PO-Revision-Date: 2019-08-09 17:04+0200\n"
+"Language: ru\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : 2);\n"
+"Last-Translator: Andrej Shadura\n"
+
+#, python-format
+msgid ""
+"\n"
+"                    %(name)s's profile\n"
+"                    "
+msgstr ""
+
+msgid ""
+"\n"
+"              <strong>WARNING:</strong>\n"
+"              Talk proposal submitted, but speaker hasn't registered to "
+"attend.\n"
+"            "
+msgstr ""
+"\n"
+"              <strong>ВНИМАНИЕ:</strong>\n"
+"              Talk proposal submitted, but speaker hasn't registered to "
+"attend.\n"
+"            "
+
+msgid ""
+"\n"
+"              Pictures provided by <a href=\"https://www.libravatar.org/"
+"\">libravatar</a>\n"
+"              (which falls back to <a href=\"https://secure.gravatar.com/"
+"\">Gravatar</a>).<br>\n"
+"              Change your picture there.\n"
+"            "
+msgstr ""
+
+msgid ""
+"\n"
+"              Registered\n"
+"            "
+msgstr ""
+
+msgid ""
+"\n"
+"             You've been logged out.\n"
+"         "
+msgstr ""
+
+msgid ""
+"\n"
+"            <h2>Talk Notes</h2>\n"
+"            <p>(The following is not visible to attendees.)</p>\n"
+"          "
+msgstr ""
+
+#, python-format
+msgid ""
+"\n"
+"            Duration:\n"
+"            %(hours)s:%(minutes)s\n"
+"          "
+msgstr ""
+
+#, python-format
+msgid ""
+"\n"
+"            Not registered? Please <a href=\"%(signup_url)s\">sign up</a>.\n"
+"            "
+msgstr ""
+"\n"
+"            Не зарегистрированы? Пожалуйста, <a href=\"%(signup_url)s"
+"\">зарегистрируйтесь здесь</a>.\n"
+"            "
+
+#, python-format
+msgid ""
+"\n"
+"            Room:\n"
+"            %(venue)s\n"
+"          "
+msgstr ""
+
+#, python-format
+msgid ""
+"\n"
+"            Time:\n"
+"            %(start_time)s\n"
+"          "
+msgstr ""
+
+msgid ""
+"\n"
+"          <h2>Private notes</h2>\n"
+"          <p>(The following is not visible to submitters or attendees.)</p>\n"
+"        "
+msgstr ""
+
+#, python-format
+msgid ""
+"\n"
+"          Track:\n"
+"          %(track)s\n"
+"        "
+msgstr ""
+
+msgid ""
+"\n"
+"        <p>Nothing happening right now.</p>\n"
+"      "
+msgstr ""
+
+#, python-format
+msgid ""
+"\n"
+"        <p>Submitted by <a href=\"%(corresponding_author_url)s\">"
+"%(corresponding_author_name)s</a>.</p>\n"
+"      "
+msgstr ""
+
+msgid ""
+"\n"
+"        <p>The final schedule has not been published yet.</p>\n"
+"      "
+msgstr ""
+
+msgid ""
+"\n"
+"        Speaker:\n"
+"      "
+msgid_plural ""
+"\n"
+"        Speakers:\n"
+"      "
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#, python-format
+msgid ""
+"\n"
+"        Type:\n"
+"        %(talk_type)s\n"
+"      "
+msgstr ""
+
+msgid ""
+"\n"
+"      <em>Talk submission is closed</em>\n"
+"    "
+msgstr ""
+
+msgid ""
+"\n"
+"      Once you have registered, claim your ticket here, to confirm your\n"
+"      registration.\n"
+"    "
+msgstr ""
+
+#, python-format
+msgid ""
+"\n"
+"    Thank you for registering for %(WAFER_CONFERENCE_NAME)s.\n"
+"    We have sent you an e-mail.\n"
+"    Please follow the instructions in it to complete your registration.\n"
+msgstr ""
+"\n"
+"    Спасибо за регистрацию на %(WAFER_CONFERENCE_NAME)s.\n"
+"    Мы послали вам e-mail.\n"
+"    Please follow the instructions in it to complete your registration.\n"
+
+#, python-format
+msgid ""
+"\n"
+"    We seem to have had some difficulty with our registration.\n"
+"    Please <a href=\"%(register_url)s\">try again</a>\n"
+"    or <a href=\"%(contact_url)s\">contact our admins</a>.\n"
+msgstr ""
+"\n"
+"    Похоже, с вашей регистрацией что-то не так.\n"
+"    Пожалуйста, <a href=\"%(register_url)s\">попробуйте снова</a>\n"
+"    или <a href=\"%(contact_url)s\">свяжитесь с нашими администраторами</"
+"a>.\n"
+
+#, python-format
+msgid ""
+"\n"
+"    You are about to withdraw the talk <a href=\"%(talk_url)s\">"
+"\"%(talk_title)s\"</a>.<br>\n"
+"    This cannot be undone without help from the site administrators.\n"
+"    "
+msgstr ""
+
+#, python-format
+msgid ""
+"\n"
+"    You are registered!\n"
+"    Please <a href=\"%(login_url)s\">log in</a>.\n"
+msgstr ""
+"\n"
+"    Вы зарегистрированы!\n"
+"    Пожалуйста, <a href=\"%(login_url)s\">войдите</a>.\n"
+
+msgid ""
+"\n"
+"   This is only a preview of the page. It has not yet been updated.\n"
+"   "
+msgstr ""
+
+#, python-format
+msgid ""
+"\n"
+"Activate your %(WAFER_CONFERENCE_NAME)s account [%(expiration_days)s days "
+"left]\n"
+msgstr ""
+
+msgid ""
+"\n"
+"Something went wrong while preparing the page that was requested.\n"
+msgstr ""
+
+msgid ""
+"\n"
+"The page you requested cannot be found.\n"
+msgstr ""
+
+#, python-format
+msgid "%(name)s"
+msgstr ""
+
+#, python-format
+msgid "(Score range: %(min)d to %(max)d)"
+msgstr ""
+
+msgid ""
+"<strong>You, as the talk submitter, will be the talk's corresponding author."
+"</strong>"
+msgstr ""
+
+msgid "A reviewer is required, if video is permitted."
+msgstr ""
+
+msgid "Accepted"
+msgstr ""
+
+msgid "Accepted Talks:"
+msgstr "Подтверждённые доклады:"
+
+msgid "Activation complete"
+msgstr "Ваш профиль подтверждён"
+
+msgid "Additional details (if required)"
+msgstr ""
+
+#, python-format
+msgid "Additional slot %(obj)s added sucessfully"
+msgstr ""
+
+msgid "Additional slots"
+msgstr ""
+
+msgid "Admin"
+msgstr ""
+
+msgid "Allocated to schedule"
+msgstr ""
+
+msgid "Amount to be sponsored."
+msgstr ""
+
+msgid ""
+"Any notes for the conference organisers?  These are not visible to the "
+"public."
+msgstr ""
+
+msgid "Bio"
+msgstr ""
+
+#, python-format
+msgid ""
+"By checking this, you are giving permission for the talk to be videoed, and "
+"distributed by the conference, under the <a href=\"%s\">%s license</a>."
+msgstr ""
+
+msgid "Cancelled"
+msgstr ""
+
+msgid "Cancelled Talks:"
+msgstr "Отменённые доклады:"
+
+msgid "Change Password"
+msgstr "Изменить пароль"
+
+msgid "Changing your mugshot"
+msgstr ""
+
+msgid ""
+"Choose a date from the list below to compare the current version to a "
+"previous version of this object."
+msgstr ""
+
+msgid "Circular reference in parent."
+msgstr ""
+
+msgid "Claim"
+msgstr ""
+
+msgid "Clashes"
+msgstr ""
+
+msgid "Clashes found in schedule."
+msgstr "В расписании есть конфликты."
+
+msgid "Comment"
+msgstr "Комментарий"
+
+msgid "Comments on the proposal (markdown)"
+msgstr ""
+
+#, python-format
+msgid "Compare %(name)s"
+msgstr "Сравнить %(name)s"
+
+msgid "Compare Versions"
+msgstr "Сравнить версии"
+
+msgid "Compare to Previous version"
+msgstr "Сравнить с предыдущей версией"
+
+msgid "Compare to next newer version"
+msgstr ""
+
+msgid "Compare to next older version"
+msgstr "Сравнить со следущей старшей версией"
+
+#, python-format
+msgid "Comparing current %(model)s with revision created %(date)s"
+msgstr ""
+
+msgid "Confirm Talk Withdrawal"
+msgstr ""
+
+msgid "Confirm Withdrawal"
+msgstr ""
+
+msgid "Create a Page called 'index'."
+msgstr ""
+
+msgid "Create this number of additional slots following this one"
+msgstr ""
+
+msgid "Currency symbol for the sponsorship amount."
+msgstr ""
+
+msgid "Custom css class for this schedule item"
+msgstr ""
+
+msgid "Date & Time this was last updated"
+msgstr ""
+
+msgid "Date/time"
+msgstr "Дата и время"
+
+msgid "Day"
+msgstr "День"
+
+msgid "Day for this slot (if no previous slot selected)"
+msgstr ""
+
+msgid "Days on which this venue will be used."
+msgstr ""
+
+msgid "Describe what the package gives the sponsor."
+msgstr ""
+
+msgid "Duplicate parent/slug combination."
+msgstr ""
+
+msgid "Duplicate schedule items found in schedule."
+msgstr ""
+
+msgid "Duplicates in the schedule"
+msgstr ""
+
+msgid "Edit"
+msgstr "Править"
+
+msgid "Edit Mugshot"
+msgstr ""
+
+msgid "Edit Page"
+msgstr "Править"
+
+msgid "Edit Profile"
+msgstr ""
+
+msgid "Edit Profile:"
+msgstr ""
+
+msgid "Edit Talk"
+msgstr ""
+
+msgid "Edit User"
+msgstr ""
+
+msgid "Edit User:"
+msgstr ""
+
+msgid ""
+"Email address of a person who will be allowed to review and approve your "
+"video details. Ideally, a second set of eyes who is not a busy conference "
+"presenter. But you can specify yourself, if you can't think of anyone else "
+"who would care."
+msgstr ""
+
+msgid "Errors in the schedule"
+msgstr ""
+
+msgid "Errors in the slots"
+msgstr ""
+
+msgid "Expand to neighbouring venues"
+msgstr ""
+
+#, python-format
+msgid "Follow @%(handle)s"
+msgstr ""
+
+#, python-format
+msgid "GitHub: %(username)s"
+msgstr ""
+
+msgid "Happening now"
+msgstr ""
+
+#, python-format
+msgid ""
+"Hi,\n"
+"\n"
+"TL;DR Click https://%(domain)s%(activation_url)s\n"
+"\n"
+"Thank you for signing up for %(WAFER_CONFERENCE_NAME)s.\n"
+"\n"
+"To verify your e-mail address, please follow the link above, and complete "
+"your\n"
+"registration process. You have %(expiration_days)s days left to do so.\n"
+"\n"
+"We hope to see you soon.\n"
+"\n"
+"Thanks,\n"
+"\n"
+"The %(WAFER_CONFERENCE_NAME)s website.\n"
+"\n"
+"-- \n"
+" %(WAFER_CONFERENCE_NAME)s\n"
+" http://%(domain)s%(index_url)s\n"
+msgstr ""
+"Привет!\n"
+"\n"
+"Чтобы подтвердить регистрацию, нажмите https://%(domain)s%(activation_url)s\n"
+"\n"
+"Спасибо за регистрацию на %(WAFER_CONFERENCE_NAME)s.\n"
+"\n"
+"Чтобы подтвердить адрес электронной почты, нужно пройти по\n"
+"ссылке выше и закончить процесс регистрации.  У вас %(expiration_days)s "
+"дней, чтобы её закончить.\n"
+"\n"
+"Надеемся скоро вас увидеть!\n"
+"\n"
+"Всего хорошего,\n"
+"\n"
+"Сайт конференции %(WAFER_CONFERENCE_NAME)s.\n"
+"\n"
+"-- \n"
+" %(WAFER_CONFERENCE_NAME)s\n"
+" http://%(domain)s%(index_url)s\n"
+
+msgid "History"
+msgstr "История"
+
+msgid "Home"
+msgstr "Начало"
+
+msgid "Identifier for use in the admin panel"
+msgstr ""
+
+msgid "Images and other files for use in the content markdown field."
+msgstr ""
+
+msgid "Images and other files for use in the description markdown field."
+msgstr ""
+
+msgid "In the last 30 days"
+msgstr "За последние 30 дней"
+
+msgid "In the last 7 days"
+msgstr "За последние 7 дней"
+
+msgid "Index page missing"
+msgstr ""
+
+msgid "Internal server error"
+msgstr ""
+
+msgid "Invalid schedule items found in schedule."
+msgstr ""
+
+msgid "Invalid venues found in schedule."
+msgstr ""
+
+msgid "Items in the schedule with non-contiguous slots"
+msgstr ""
+
+msgid "Last Modified"
+msgstr ""
+
+msgid "Last component of the page URL"
+msgstr ""
+
+msgid ""
+"Length of time (in seconds) to cache the page for dynamic page content. A "
+"negative value means this page is not dynamic and it will be not be "
+"regenerated until it is next edited."
+msgstr ""
+
+msgid "Log out"
+msgstr "Выйти"
+
+msgid "Logged out"
+msgstr ""
+
+msgid "Markdown contents for the page."
+msgstr ""
+
+msgid "Next Day"
+msgstr ""
+
+msgid "No"
+msgstr "Нет"
+
+msgid "No differences found"
+msgstr ""
+
+msgid "Non contiguous slots found in schedule."
+msgstr ""
+
+msgid "Not accepted"
+msgstr ""
+
+msgid "Not allocated"
+msgstr ""
+
+msgid "Not provided"
+msgstr ""
+
+msgid "Note space for the conference organisers (not visible to submitter)"
+msgstr ""
+
+msgid "Notes for the conference organisers"
+msgstr ""
+
+msgid "Notes or directions that will be useful to conference attendees"
+msgstr ""
+
+msgid "One sentence overview of the package."
+msgstr ""
+
+msgid "Oops, Registration failed"
+msgstr "Ух, регистрация не удалась"
+
+msgid ""
+"Optional symbol to display in the sponsors list next to sponsors who have "
+"sponsored at this list, (for example *)."
+msgstr ""
+
+msgid "Our sponsors"
+msgstr ""
+
+msgid "Overlapping slots"
+msgstr ""
+
+msgid "Overlapping slots found in schedule."
+msgstr ""
+
+msgid "Packages claimed:"
+msgstr ""
+
+msgid "Page not found"
+msgstr ""
+
+msgid ""
+"People associated with this page for display in the schedule (Session "
+"chairs, panelists, etc.)"
+msgstr ""
+
+msgid "Previous Day"
+msgstr ""
+
+msgid ""
+"Previous slot if applicable (slots should have either a previous slot OR a "
+"day and start time set)"
+msgstr ""
+
+msgid "Provisionally Accepted"
+msgstr ""
+
+msgid "Provisionally Accepted Talks:"
+msgstr "Условно-принятые доклады:"
+
+msgid "Register"
+msgstr "Зарегистрироваться"
+
+msgid "Register now!"
+msgstr "Зарегистрироваться!"
+
+msgid "Registration"
+msgstr "Регистрация"
+
+msgid "Registration almost complete"
+msgstr "Регистрация почти завершена"
+
+msgid "Registration is via Quicket."
+msgstr ""
+
+msgid "Review"
+msgstr ""
+
+msgid "Review Talk"
+msgstr ""
+
+msgid "Reviewed"
+msgstr ""
+
+msgid "Reviewed, but outdated (modified since last review)"
+msgstr ""
+
+msgid "Save"
+msgstr "Сохранить"
+
+msgid "Schedule"
+msgstr ""
+
+msgid "Schedule Editor"
+msgstr ""
+
+msgid "Shared/Social Log in and Sign up"
+msgstr "Войти или зарегистрироваться через социальные сети"
+
+msgid "Sign up"
+msgstr "Зарегистрироваться"
+
+msgid "Sign up / Log In"
+msgstr "Войти"
+
+msgid "Since yesterday"
+msgstr ""
+
+msgid "Site admin"
+msgstr "Администрирование"
+
+msgid "Slot end time"
+msgstr ""
+
+msgid "Speakers"
+msgstr ""
+
+msgid "Sponsors"
+msgstr ""
+
+msgid "Sponsorship Packages"
+msgstr ""
+
+msgid "Sponsorship packages"
+msgstr ""
+
+msgid "Start Time"
+msgstr "Время начала"
+
+msgid "Start time (if no previous slot selected)"
+msgstr ""
+
+msgid "Status:"
+msgstr ""
+
+msgid "Submit"
+msgstr "Отправить"
+
+msgid "Submit Talk Proposal"
+msgstr "Предложить презентацию"
+
+msgid "Submitted"
+msgstr ""
+
+msgid "Submitted or Under Consideration Talks:"
+msgstr ""
+
+msgid "Talk Cancelled"
+msgstr ""
+
+msgid "Talk Submission"
+msgstr ""
+
+msgid "Talk Types"
+msgstr ""
+
+msgid "Talks"
+msgstr ""
+
+msgid ""
+"The person submitting the talk (and who questions regarding the talk should "
+"be addressed to)."
+msgstr ""
+
+msgid "The speakers presenting the talk."
+msgstr ""
+
+msgid ""
+"There is no ticket with that barcode that's we're aware of being sold, yet. "
+"Please check it, and if correct, contact us."
+msgstr ""
+
+msgid ""
+"This object doesn't have a change history. It probably wasn't added via this "
+"admin site."
+msgstr ""
+"Данный объект не имеет истории изменений. Возможно, он был добавлен не через "
+"данный административный сайт."
+
+msgid "This ticket has already been claimed, by another user."
+msgstr ""
+
+msgid "Ticket claim"
+msgstr ""
+
+msgid "Ticket sales are not currently open"
+msgstr ""
+
+msgid "Time"
+msgstr ""
+
+msgid ""
+"To ensure attendee privacy, you will only be able to see yourself and "
+"authors that have been added to the talk by the conference organisers. If "
+"you will have other co-authors, add a note in the notes field, so the "
+"organisers can add them to your talk."
+msgstr ""
+
+msgid "Today"
+msgstr "Сегодня"
+
+msgid "Total number available:"
+msgstr ""
+
+msgid "Tracks"
+msgstr ""
+
+msgid "URLs"
+msgstr ""
+
+msgid "Unable to claim tickets. Maybe you already have one?"
+msgstr ""
+
+msgid "Under consideration"
+msgstr ""
+
+msgid "Update registration"
+msgstr "Обновить регистрацию"
+
+msgid "Url to link back to the sponsor if required"
+msgstr ""
+
+msgid "User"
+msgstr "Пользователь"
+
+msgid "Users"
+msgstr "Пользователи"
+
+msgid "Users:"
+msgstr "Пользователи:"
+
+msgid "Validation errors"
+msgstr ""
+
+msgid "Validation errors:"
+msgstr ""
+
+msgid "Venue"
+msgstr "Место"
+
+msgid "Venue has video coverage"
+msgstr "Ведётся видеозапись"
+
+msgid "Venues assigned on days they are not available"
+msgstr ""
+
+msgid "View on site"
+msgstr "Смотреть на сайте"
+
+msgid ""
+"Whether to exclude this page from the static version of the site (Container "
+"pages, etc.)"
+msgstr ""
+"Исключить эту страницу из статической версии сайта (страницы-контейнеры и т. "
+"д.)?"
+
+msgid "Whether to include in menus."
+msgstr "Включать в меню?"
+
+msgid "Withdraw Talk"
+msgstr ""
+
+msgid "Withdrawn"
+msgstr ""
+
+msgid "Write some nice things about the sponsor."
+msgstr ""
+
+msgid ""
+"Write two or three paragraphs describing your talk. Who is your audience? "
+"What will they get out of it? What will you cover?<br />You can use Markdown "
+"syntax."
+msgstr ""
+"Напишите два-три абзаца про вашу презентацию. Для кого она предназначена? "
+"Как она полезна слушателям? О чём будет рассказываться в презентации?<br /"
+">Можно использовать разметку Markdown."
+
+msgid "Yes"
+msgstr "Да"
+
+msgid "handle"
+msgstr ""
+
+msgid "has notes"
+msgstr ""
+
+msgid "in schedule"
+msgstr ""
+
+msgid "username"
+msgstr ""
