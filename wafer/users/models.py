@@ -5,6 +5,7 @@ from django.db.models import Q
 from django.db.models.signals import post_save
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.module_loading import import_string
+from django.utils.translation import ugettext_lazy as _
 from django.core.validators import RegexValidator
 
 from libravatar import libravatar_url
@@ -31,18 +32,20 @@ class UserProfile(models.Model):
 
     class Meta:
         ordering = ['id']
+        verbose_name = _('user profile')
+        verbose_name_plural = _('user profiles')
 
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     kv = models.ManyToManyField(KeyValue)
-    contact_number = models.CharField(max_length=16, null=True, blank=True)
-    bio = models.TextField(null=True, blank=True)
+    contact_number = models.CharField(_('contact number'), max_length=16, null=True, blank=True)
+    bio = models.TextField(_('bio'), null=True, blank=True)
 
-    homepage = models.CharField(max_length=256, null=True, blank=True)
+    homepage = models.CharField(_('homepage'), max_length=256, null=True, blank=True)
     # We should probably do social auth instead
     # And care about other code hosting sites...
-    twitter_handle = models.CharField(max_length=15, null=True, blank=True,
+    twitter_handle = models.CharField(_('Twitter handle'), max_length=15, null=True, blank=True,
                                       validators=[TwitterValidator])
-    github_username = models.CharField(max_length=32, null=True, blank=True)
+    github_username = models.CharField(_('GitHub username'), max_length=32, null=True, blank=True)
 
     def __str__(self):
         return u'%s' % self.user
