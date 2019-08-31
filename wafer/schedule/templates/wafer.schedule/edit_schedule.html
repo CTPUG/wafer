@@ -19,12 +19,12 @@
     <div class="dropdown float-right">
       <button class="btn btn-secondary dropdown-toggle" type="button"
               data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-        {{ day.date }} (Day {{ day.id }})
+        {{ day.date }} ({% trans 'Day' %} {{ day.id }})
       </button>
       <div class="dropdown-menu">
         {% for day in days %}
           <a class="dropdown-item" href="{% url 'admin:schedule_editor' day.id %}">
-            {{ day.date }} (Day {{ day.id }})
+            {{ day.date }} ({% trans 'Day' %} {{ day.id }})
           </a>
         {% endfor %}
       </div>
@@ -57,14 +57,14 @@
                   <button id="delete{{venue.scheduleitem_id}}"
                           data-id="{{ venue.scheduleitem_id }}"
                           type="button" class="close"
-                          aria-label="Close">
+                          aria-label="{% trans 'Close' %}">
                     <span aria-hidden="true">
                       &times;
                     </span>
                   </button>
                 {% endif %}
                 {% if venue.talk and venue.talk.cancelled %}
-                  <del>{{ venue.title }} (Cancelled)</del>
+                  <del>{{ venue.title }} ({% trans 'Cancelled' %})</del>
                 {% else %}
                   {{ venue.title }}
                 {% endif %}
@@ -76,7 +76,7 @@
     </table>
   </div>
   <div class="col-md-4" id="wafer-edit-schedule-bucket">
-    <h2>Bucket</h2>
+    <h2>{% trans 'Bucket' %}</h2>
 
     <div>
       <ul class="nav nav-tabs" role="tablist">
@@ -84,19 +84,19 @@
           <a href="#unassignedTalks"
              aria-controls="unassignedTalks" role="tab"
              data-toggle="tab">
-            Unassigned Talks
+            {% trans 'Unassigned Talks' %}
           </a>
         </li>
         <li role="presentation" class="active">
           <a href="#allTalks"
              aria-controls="allTalks" role="tab"
              data-toggle="tab">
-            All Talks
+            {% trans 'All Talks' %}
           </a>
         </li>
         <li role="presentation">
           <a href="#pages" aria-controls="pages" role="tab" data-toggle="tab">
-            Pages
+            {% trans 'Pages' %}
           </a>
         </li>
       </ul>
@@ -120,7 +120,7 @@
                 {% if not talk.cancelled %}
                   {{ talk.title|truncatechars:20 }} ({{ talk.track|truncatechars:10 }})
                 {% else %}
-                  <del>{{ talk.title|truncatechars:12 }} (Cancelled)</del>
+                  <del>{{ talk.title|truncatechars:12 }} ({% trans 'Cancelled' %})</del>
                 {% endif %}
               </span>
             {% endfor %}
@@ -144,7 +144,7 @@
                 {% if not talk.cancelled %}
                   {{ talk.title|truncatechars:20 }} ({{ talk.track|truncatechars:10 }})
                 {% else %}
-                  <del>{{ talk.title|truncatechars:12 }} (Cancelled)</del>
+                  <del>{{ talk.title|truncatechars:12 }} ({% trans 'Cancelled' %})</del>
                 {% endif %}
               </span>
             {% endfor %}
