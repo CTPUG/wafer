@@ -102,8 +102,8 @@ class TalkForm(forms.ModelForm):
 
         self.helper = FormHelper(self)
         self.helper.include_media = False
-        submit_button = Submit('submit', _('Submit'))
         instance = kwargs['instance']
+        submit_button = Submit('submit', _('Save') if instance else _('Submit'))
         if instance:
             self.helper.layout.append(
                 FormActions(
