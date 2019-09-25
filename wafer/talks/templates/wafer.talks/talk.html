@@ -34,6 +34,9 @@
       {% endblocktrans %}
       {% for author in object.authors.all %}
         <a href="{% url 'wafer_user_profile' username=author.username %}">{{ author.userprofile.display_name }}</a>
+          {% if not forloop.last %}
+            &amp;
+          {% endif %}
       {% endfor %}
     </p>
     {% if user.is_staff or perms.talks.view_all_talks %}
