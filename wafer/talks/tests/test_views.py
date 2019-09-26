@@ -441,7 +441,7 @@ class TalkSlugUrlTests(TestCase):
     def setUp(self):
         self.talk_a = create_talk('Test Talk 1', ACCEPTED, "author_a")
         # Unicode talk will generate empty slug - this should not crash
-        self.talk_b = create_talk('©£', ACCEPTED, "author_b")
+        self.talk_b = create_talk(u'\xa9\xa3', ACCEPTED, "author_b")
         self.client = Client()
 
     def test_slug_generation(self):
