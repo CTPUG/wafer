@@ -203,7 +203,11 @@ class ScheduleItem(models.Model):
             if self.talk.track:
                 yield self.talk.track.css_class()
 
-    get_css_classes.short_description = 'Talk Type & Track CSS classes'
+    def list_css_classes(self):
+        """Convert get_css_classes into a nice string for the admin interface"""
+        return ',  '.join(list(self.get_css_classes()))
+
+    list_css_classes.short_description = _('Talk Type & Track CSS classes')
 
     def get_desc(self):
         if self.details:
