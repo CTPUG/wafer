@@ -22,7 +22,11 @@
         <tr>
           <th>{% trans "Time" %}</th>
           {% for venue in schedule_day.venues %}
-            <th><a href="{{ venue.get_absolute_url }}">{{ venue.name }}</a></th>
+            <th
+              {% if venue.pk == highlight_venue_pk %}
+                class="schedule-highlight-venue"
+              {% endif %}
+            ><a href="{{ venue.get_absolute_url }}">{{ venue.name }}</a></th>
           {% endfor %}
         </tr>
         {% for row in slots %}
@@ -36,13 +40,18 @@
               {% if item.item == "unavailable" %}
                 <td colspan="{{ item.colspan }}" rowspan="{{ item.rowspan }}" class="unavailable"></td>
               {% else %}
-                {% if item.note == "complete" %}
-                  <td colspan="{{ item.colspan }}" rowspan="{{ item.rowspan }}" class="completed">
-                {% elif item.note == "current" %}
-                  <td colspan="{{ item.colspan }}" rowspan="{{ item.rowspan }}" class="current_active">
-                {% else %}
-                  <td colspan="{{ item.colspan }}" rowspan="{{ item.rowspan }}" class="future">
-                {% endif %}
+                <td colspan="{{ item.colspan }}" rowspan="{{ item.rowspan }}"
+                  {% if item.item.venue.pk == highlight_venue_pk %}
+                    class="schedule-highlight-venue"
+                  {% endif %}
+                  {% if item.note == "complete" %}
+                    class="completed"
+                  {% elif item.note == "current" %}
+                    class="current_active"
+                  {% else %}
+                    class="future"
+                  {% endif %}
+                >
                   {% include "wafer.schedule/schedule_item.html" with item=item.item %}
                 </td>
               {% endif %}
