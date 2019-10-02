@@ -1,5 +1,7 @@
 import datetime
 
+import logging
+
 from icalendar import Calendar, Event
 
 from django.db.models import Q
@@ -18,6 +20,9 @@ from wafer.schedule.models import ScheduleItem
 from wafer.schedule.serializers import ScheduleItemSerializer
 from wafer.talks.models import ACCEPTED, CANCELLED
 from wafer.talks.models import Talk
+
+
+logger = logging.getLogger(__name__)
 
 
 class ScheduleRow(object):
@@ -126,6 +131,18 @@ def generate_schedule(today=None):
     return sorted(schedule_days.values(), key=lambda x: x.day.date)
 
 
+def lookup_highlighted_venue(request):
+    venue_id = request.GET.get('highlight-venue', None)
+    if venue_id:
+        try:
+            if Venue.objects.get(pk=int(venue_id)):
+                print('Returning ', venue_id)
+                return int(venue_id)
+        except (ValueError, Venue.DoesNotExist):
+            logger.warn('Invalid venue id passed to schedule: %s' % venue_id)
+    return None
+
+
 class ScheduleView(BuildableTemplateView):
     template_name = 'wafer.schedule/full_schedule.html'
     build_path = 'schedule/index.html'
@@ -140,6 +157,9 @@ class ScheduleView(BuildableTemplateView):
             return context
         context['active'] = True
         day = self.request.GET.get('day', None)
+        highlight_venue = lookup_highlighted_venue(self.request)
+        if highlight_venue is not None:
+            context['highlight_venue_pk'] = highlight_venue
         dates = dict([(x.date.strftime('%Y-%m-%d'), x) for x in
                       Day.objects.all()])
         # We choose to return the full schedule if given an invalid date
@@ -256,6 +276,10 @@ class CurrentView(TemplateView):
         context['schedule_day'] = schedule_day
         # Allow current time to be overridden
         time = self._parse_time(self.request.GET.get('time', None))
+
+        highlight_venue = lookup_highlighted_venue(self.request)
+        if highlight_venue is not None:
+            context['highlight_venue_pk'] = highlight_venue
 
         cur_slot, current_rows = self._current_slots(schedule_day, time)
         context['cur_slot'] = cur_slot
