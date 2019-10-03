@@ -41,17 +41,24 @@
                 <td colspan="{{ item.colspan }}" rowspan="{{ item.rowspan }}" class="unavailable"></td>
               {% else %}
                 <td colspan="{{ item.colspan }}" rowspan="{{ item.rowspan }}"
-                  {% if item.item.venue.pk == highlight_venue_pk %}
-                    class="schedule-highlight-venue"
-                  {% endif %}
-                  {% if item.note == "complete" %}
-                    class="completed"
-                  {% elif item.note == "current" %}
-                    class="current_active"
+                  {% if highlight_venue_pk == item.venue.pk %}
+                    {% if item.note == "complete" %}
+                      class="completed schedule-highlight-venue"
+                    {% elif item.note == "current" %}
+                      class="current_active schedule-highlight-venue"
+                    {% else %}
+                      class="future schedule-highlight-venue"
+                    {% endif %}
                   {% else %}
-                    class="future"
+                    {% if item.note == "complete" %}
+                      class="completed"
+                    {% elif item.note == "current" %}
+                      class="current_active"
+                    {% else %}
+                      class="future"
+                    {% endif %}
                   {% endif %}
-                >
+                  >
                   {% include "wafer.schedule/schedule_item.html" with item=item.item %}
                 </td>
               {% endif %}
