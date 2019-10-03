@@ -880,17 +880,17 @@ class ScheduleViewTests(TestCase):
                                                  '</a></th>']), html=True)
 
         self.assertContains(response, '\n'.join([
-            '<td colspan="1" rowspan="1" class="schedule-highlight-venue" class="schedule">',
+            '<td colspan="1" rowspan="1" class="schedule schedule-highlight-venue">',
             '<a href="%s">' % items[0].get_url(),
             items[0].get_details(),
             '</a></td>']), html=True)
         self.assertContains(response, '\n'.join([
-            '<td colspan="1" rowspan="1" class="schedule-highlight-venue" class="schedule">',
+            '<td colspan="1" rowspan="1" class="schedule schedule-highlight-venue">',
             '<a href="%s">' % items[1].get_url(),
             items[1].get_details(),
             '</a></td>']), html=True)
         self.assertContains(response, '\n'.join([
-            '<td colspan="1" rowspan="1" class="schedule-highlight-venue" class="schedule">',
+            '<td colspan="1" rowspan="1" class="schedule schedule-highlight-venue">',
             '<a href="%s">' % items[2].get_url(),
             items[2].get_details(),
             '</a></td>']), html=True)
@@ -919,17 +919,17 @@ class ScheduleViewTests(TestCase):
                                                  venue2.name,
                                                  '</a></th>']), html=True)
         self.assertContains(response, '\n'.join([
-            '<td colspan="1" rowspan="1" class="schedule-highlight-venue" class="schedule">',
+            '<td colspan="1" rowspan="1" class="schedule schedule-highlight-venue">',
             '<a href="%s">' % items[3].get_url(),
             items[3].get_details(),
             '</a></td>']), html=True)
         self.assertContains(response, '\n'.join([
-            '<td colspan="1" rowspan="1" class="schedule-highlight-venue" class="schedule">',
+            '<td colspan="1" rowspan="1" class="schedule schedule-highlight-venue">',
             '<a href="%s">' % items[4].get_url(),
             items[4].get_details(),
             '</a></td>']), html=True)
         self.assertContains(response, '\n'.join([
-            '<td colspan="1" rowspan="1" class="schedule-highlight-venue" class="schedule">',
+            '<td colspan="1" rowspan="1" class="schedule schedule-highlight-venue">',
             '<a href="%s">' % items[5].get_url(),
             items[5].get_details(),
             '</a></td>']), html=True)
