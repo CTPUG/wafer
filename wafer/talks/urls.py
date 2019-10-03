@@ -19,7 +19,7 @@ urlpatterns = [
     url(r'^page/(?P<page>\d+)/$', UsersTalks.as_view(),
         name='wafer_users_talks_page'),
     url(r'^new/$', TalkCreate.as_view(), name='wafer_talk_submit'),
-    url(r'^(?P<pk>\d+)(?:-(?P<slug>[\w-]+))?/$', TalkView.as_view(),
+    url(r'^(?P<pk>\d+)(?:-(?P<slug>[\w-]*))?/$', TalkView.as_view(),
         name='wafer_talk'),
     url(r'^(?P<pk>\d+)/edit/$', TalkUpdate.as_view(),
         name='wafer_talk_edit'),
