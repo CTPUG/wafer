@@ -158,6 +158,7 @@ class ScheduleView(BuildableTemplateView):
         context['active'] = True
         day = self.request.GET.get('day', None)
         highlight_venue = lookup_highlighted_venue(self.request)
+        context['highlight_venue_pk'] = -1
         if highlight_venue is not None:
             context['highlight_venue_pk'] = highlight_venue
         dates = dict([(x.date.strftime('%Y-%m-%d'), x) for x in
@@ -278,6 +279,7 @@ class CurrentView(TemplateView):
         time = self._parse_time(self.request.GET.get('time', None))
 
         highlight_venue = lookup_highlighted_venue(self.request)
+        context['highlight_venue_pk'] = -1
         if highlight_venue is not None:
             context['highlight_venue_pk'] = highlight_venue
 
