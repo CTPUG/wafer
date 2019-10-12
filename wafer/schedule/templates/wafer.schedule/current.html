@@ -41,7 +41,7 @@
                 <td colspan="{{ item.colspan }}" rowspan="{{ item.rowspan }}" class="unavailable"></td>
               {% else %}
                 <td colspan="{{ item.colspan }}" rowspan="{{ item.rowspan }}"
-                  {% if highlight_venue_pk == item.venue.pk %}
+                  {% if item.item.venue.pk == highlight_venue_pk %}
                     {% if item.note == "complete" %}
                       class="completed schedule-highlight-venue"
                     {% elif item.note == "current" %}
