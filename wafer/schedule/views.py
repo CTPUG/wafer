@@ -136,7 +136,6 @@ def lookup_highlighted_venue(request):
     if venue_id:
         try:
             if Venue.objects.get(pk=int(venue_id)):
-                print('Returning ', venue_id)
                 return int(venue_id)
         except (ValueError, Venue.DoesNotExist):
             logger.warn('Invalid venue id passed to schedule: %s' % venue_id)
