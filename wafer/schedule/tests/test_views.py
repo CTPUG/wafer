@@ -842,6 +842,11 @@ class ScheduleViewTests(TestCase):
 
         c = Client()
 
+        # Check that we don't highlight anything if no venue is passed
+        response = c.get('/schedule/')
+        validate_schedule(response)
+
+        self.assertNotContains(response, b'class="schedule-highlight-venue"')
         # Check that an invalid venue gives the entire schedule with no
         # 'schedule-highlight-venue' class
         response = c.get('/schedule/?highlight-venue=aaaaa')
@@ -1167,6 +1172,189 @@ class CurrentViewTests(TestCase):
         # Items are truncated to 1 row
         assert context['slots'][0].items[venue2]['note'] == 'complete'
         assert context['slots'][0].items[venue2]['rowspan'] == 1
+
+    def test_current_view_highlight_venue(self):
+        """Test that the current view highlight's stuff correctly"""
+        day1 = Day.objects.create(date=D.date(2013, 9, 22))
+        venue1 = Venue.objects.create(order=1, name='Venue 1')
+        venue2 = Venue.objects.create(order=2, name='Venue 2')
+        venue3 = Venue.objects.create(order=3, name='Venue 3')
+        venue1.days.add(day1)
+        venue2.days.add(day1)
+        venue3.days.add(day1)
+
+        start1 = D.time(10, 0, 0)
+        start2 = D.time(11, 0, 0)
+        start3 = D.time(12, 0, 0)
+        start4 = D.time(13, 0, 0)
+        start5 = D.time(14, 0, 0)
+        end = D.time(15, 0, 0)
+
+        slot1 = Slot.objects.create(start_time=start1, end_time=start2,
+                                    day=day1)
+        slot2 = Slot.objects.create(start_time=start2, end_time=start3,
+                                    day=day1)
+        slot3 = Slot.objects.create(start_time=start3, end_time=start4,
+                                    day=day1)
+        slot4 = Slot.objects.create(start_time=start4, end_time=start5,
+                                    day=day1)
+        slot5 = Slot.objects.create(start_time=start5, end_time=end,
+                                    day=day1)
+
+        pages = make_pages(10)
+        venues = [venue1, venue1, venue2, venue3, venue3, venue3,
+                  venue2, venue1, venue2, venue3]
+        items = make_items(venues, pages)
+
+        items[0].slots.add(slot1)
+        items[4].slots.add(slot1)
+        items[1].slots.add(slot2)
+        items[1].slots.add(slot3)
+        items[2].slots.add(slot2)
+        items[3].slots.add(slot2)
+        items[5].slots.add(slot3)
+        items[5].slots.add(slot4)
+        items[6].slots.add(slot3)
+        items[6].slots.add(slot4)
+        items[7].slots.add(slot4)
+        items[8].slots.add(slot5)
+        items[9].slots.add(slot5)
+
+        # During the first slot
+        cur1 = D.time(10, 30, 0)
+        # Middle of the day
+        cur2 = D.time(11, 30, 0)
+        cur3 = D.time(12, 30, 0)
+        # During the last slot
+        cur4 = D.time(14, 30, 0)
+
+        def validate_current(response):
+            """Validate that the current view is still has the expected content"""
+            context = response.context
+            assert context['cur_slot'] == slot2
+            assert len(context['slots']) == 3
+            assert context['slots'][0].items[venue1]['note'] == 'complete'
+            assert context['slots'][1].items[venue1]['note'] == 'current'
+            assert context['slots'][1].items[venue1]['rowspan'] == 2
+            assert context['slots'][1].items[venue2]['note'] == 'current'
+            assert context['slots'][1].items[venue2]['rowspan'] == 1
+            # We truncate the rowspan for this event
+            assert context['slots'][2].items[venue2]['note'] == 'forthcoming'
+            assert context['slots'][2].items[venue2]['rowspan'] == 1
+
+        c = Client()
+        # Check that we don't highlight if not asked
+        response = c.get('/schedule/current/',
+                         {'day': day1.date.strftime('%Y-%m-%d'),
+                          'time': cur2.strftime('%H:%M')})
+        validate_current(response)
+        self.assertNotContains(response, b'schedule-highlight-venue')
+        # Check with invalid venue
+        response = c.get('/schedule/current/',
+                         {'day': day1.date.strftime('%Y-%m-%d'),
+                          'time': cur2.strftime('%H:%M'),
+                          'highlight-venue': 'aaaa'})
+        validate_current(response)
+        self.assertNotContains(response, b'schedule-highlight-venue')
+
+        # Check with venue 1
+        response = c.get('/schedule/current/',
+                         {'day': day1.date.strftime('%Y-%m-%d'),
+                          'time': cur2.strftime('%H:%M'),
+                          'highlight-venue': '%d' % venue1.pk})
+        validate_current(response)
+        self.assertContains(response, b'schedule-highlight-venue')
+        self.assertContains(response, '\n'.join(['<th class="schedule-highlight-venue">',
+                                                  '<a href="%s">' % venue1.get_absolute_url(),
+                                                  venue1.name,
+                                                   '</a></th>']), html=True)
+        self.assertContains(response, '\n'.join(['<th>',
+                                                  '<a href="%s">' % venue2.get_absolute_url(),
+                                                  venue2.name,
+                                                   '</a></th>']), html=True)
+        self.assertContains(response, '\n'.join(['<th>' 
+                                                  '<a href="%s">' % venue3.get_absolute_url(),
+                                                  venue3.name,
+                                                   '</a></th>']), html=True)
+        self.assertContains(response, '\n'.join([
+            '<td colspan="1" rowspan="1" class="completed schedule-highlight-venue">',
+            '<a href="%s">' % items[0].get_url(),
+            items[0].get_details(),
+            '</a></td>']), html=True)
+
+        self.assertContains(response, '\n'.join([
+            '<td colspan="1" rowspan="2" class="current_active schedule-highlight-venue">',
+            '<a href="%s">' % items[1].get_url(),
+            items[1].get_details(),
+            '</a></td>']), html=True)
+
+        self.assertContains(response, '\n'.join([
+            '<td colspan="1" rowspan="1" class="completed">',
+            '<a href="%s">' % items[4].get_url(),
+            items[4].get_details(),
+            '</a></td>']), html=True)
+
+        self.assertContains(response, '\n'.join([
+            '<td colspan="1" rowspan="1" class="current_active">',
+            '<a href="%s">' % items[3].get_url(),
+            items[3].get_details(),
+            '</a></td>']), html=True)
+
+        self.assertContains(response, '\n'.join([
+            '<td colspan="1" rowspan="1" class="future">',
+            '<a href="%s">' % items[5].get_url(),
+            items[5].get_details(),
+            '</a></td>']), html=True)
+
+        # Check with venue 3
+        response = c.get('/schedule/current/',
+                         {'day': day1.date.strftime('%Y-%m-%d'),
+                          'time': cur2.strftime('%H:%M'),
+                          'highlight-venue': '%d' % venue3.pk})
+        validate_current(response)
+        self.assertContains(response, b'schedule-highlight-venue')
+
+        self.assertContains(response, '\n'.join(['<th>',
+                                                  '<a href="%s">' % venue1.get_absolute_url(),
+                                                  venue1.name,
+                                                   '</a></th>']), html=True)
+        self.assertContains(response, '\n'.join(['<th>',
+                                                  '<a href="%s">' % venue2.get_absolute_url(),
+                                                  venue2.name,
+                                                   '</a></th>']), html=True)
+        self.assertContains(response, '\n'.join(['<th class="schedule-highlight-venue">',
+                                                  '<a href="%s">' % venue3.get_absolute_url(),
+                                                  venue3.name,
+                                                   '</a></th>']), html=True)
+        self.assertContains(response, '\n'.join([
+            '<td colspan="1" rowspan="1" class="completed">',
+            '<a href="%s">' % items[0].get_url(),
+            items[0].get_details(),
+            '</a></td>']), html=True)
+
+        self.assertContains(response, '\n'.join([
+            '<td colspan="1" rowspan="2" class="current_active">',
+            '<a href="%s">' % items[1].get_url(),
+            items[1].get_details(),
+            '</a></td>']), html=True)
+
+        self.assertContains(response, '\n'.join([
+            '<td colspan="1" rowspan="1" class="completed schedule-highlight-venue">',
+            '<a href="%s">' % items[4].get_url(),
+            items[4].get_details(),
+            '</a></td>']), html=True)
+
+        self.assertContains(response, '\n'.join([
+            '<td colspan="1" rowspan="1" class="current_active schedule-highlight-venue">',
+            '<a href="%s">' % items[3].get_url(),
+            items[3].get_details(),
+            '</a></td>']), html=True)
+
+        self.assertContains(response, '\n'.join([
+            '<td colspan="1" rowspan="1" class="future schedule-highlight-venue">',
+            '<a href="%s">' % items[5].get_url(),
+            items[5].get_details(),
+            '</a></td>']), html=True)
 
     def test_current_view_invalid(self):
         """Test that invalid schedules return a inactive current view."""
