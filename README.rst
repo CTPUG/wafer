@@ -112,29 +112,3 @@ Features
 
 * Talk submissions, review and acceptance.
 * Generate a static version of the site for archival.
-
-
-TODO
-====
-
-* Make the code easier to use for other conferences (split out theming, etc.).
-* Improve the talk submission management module:
-
-  * Better display of accepted talks.
-
-* Make various messages easier to customise.
-* Improve admin support for the schedule:
-
-  * Show table of slots in admin interface.
-  * Improve handling of moving talks around.
-
-* Support for adding news (and other templated pages) via Django admin.
-* Maybe add some cool visualizations with d3:
-
-  * Number of people signed up in various categories.
-  * Places remaining.
-  * Sponsorship slots remaining.
-  * Days until various deadlines.
-
-* Other improvements
-* Add many tests
