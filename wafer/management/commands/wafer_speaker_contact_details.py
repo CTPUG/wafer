@@ -31,7 +31,7 @@ class Command(BaseCommand):
                           person.talks.filter(status=ACCEPTED)]
                 if not titles:
                     continue
-            row = [x.encode("utf-8")
+            row = [x
                    for x in (person.userprofile.display_name(), person.email,
                    person.userprofile.contact_number or 'NO CONTACT INFO',
                    ';'.join(titles))]

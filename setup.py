@@ -7,8 +7,8 @@ REQUIRES = [
     'django-crispy-forms',
     'django-nose',
     'django-registration-redux',
-    'djangorestframework < 3.8.0',
-    'drf-extensions',
+    'djangorestframework',
+    'drf-extensions<0.5',
     'jsonfield',
     'pillow',
     'diff-match-patch',
@@ -50,7 +50,7 @@ with open('README.rst', 'r') as f:
 
 setup(
     name="wafer",
-    version="0.7.4a",
+    version="0.7.7a",
     url='http://github.com/CTPUG/wafer',
     license='ISC',
     description="A wafer-thin Django library for running small conferences.",

@@ -1,5 +1,7 @@
 import datetime
 
+import logging
+
 from icalendar import Calendar, Event
 
 from django.db.models import Q
@@ -19,6 +21,9 @@ from wafer.schedule.models import ScheduleItem
 from wafer.schedule.serializers import ScheduleItemSerializer
 from wafer.talks.models import ACCEPTED, CANCELLED
 from wafer.talks.models import Talk
+
+
+logger = logging.getLogger(__name__)
 
 
 class ScheduleRow(object):
@@ -126,6 +131,17 @@ def generate_schedule(this_block=None):
     return sorted(schedule_pages.values(), key=lambda x: x.block.start_time)
 
 
+def lookup_highlighted_venue(request):
+    venue_id = request.GET.get('highlight-venue', None)
+    if venue_id:
+        try:
+            if Venue.objects.get(pk=int(venue_id)):
+                return int(venue_id)
+        except (ValueError, Venue.DoesNotExist):
+            logger.warn('Invalid venue id passed to schedule: %s' % venue_id)
+    return None
+
+
 class ScheduleView(BuildableTemplateView):
     template_name = 'wafer.schedule/full_schedule.html'
     build_path = 'schedule/index.html'
@@ -149,6 +165,10 @@ class ScheduleView(BuildableTemplateView):
         except ObjectDoesNotExist:
             # We choose to return the full schedule if given an invalid block id
             this_block = None
+        highlight_venue = lookup_highlighted_venue(self.request)
+        context['highlight_venue_pk'] = -1
+        if highlight_venue is not None:
+            context['highlight_venue_pk'] = highlight_venue
         if this_block:
             # Add next / prev blocks links
             # blocks are sorted by time by default
@@ -268,6 +288,11 @@ class CurrentView(TemplateView):
         context['schedule_page'] = schedule_page
         # Allow current time to be overridden
         time = self._parse_time(self.request.GET.get('day', None), self.request.GET.get('time', None))
+
+        highlight_venue = lookup_highlighted_venue(self.request)
+        context['highlight_venue_pk'] = -1
+        if highlight_venue is not None:
+            context['highlight_venue_pk'] = highlight_venue
 
         cur_slot, current_rows = self._current_slots(schedule_page, time)
         context['cur_slot'] = cur_slot

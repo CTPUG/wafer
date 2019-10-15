@@ -144,11 +144,8 @@ class Slot(models.Model):
         return self.start_time
 
     def get_formatted_start_time(self):
-        return self.get_start_time().strftime('%H:%M')
-
-    def get_formatted_start_date_time(self):
         return self.get_start_time().strftime('%b %d (%a): %H:%M')
-    get_formatted_start_date_time.short_description = 'Start Time'
+    get_formatted_start_time.short_description = _('Start Time')
 
     def get_formatted_end_time(self):
         return self.end_time.strftime('%H:%M')
@@ -176,7 +173,7 @@ class Slot(models.Model):
             return blocks.first()
         return None
 
-    get_block.short_description = 'Schedule Block'
+    get_block.short_description = _('Schedule Block')
 
     def clean(self):
         """Ensure we have start_time < end_time"""
@@ -262,7 +259,11 @@ class ScheduleItem(models.Model):
             if self.talk.track:
                 yield self.talk.track.css_class()
 
-    get_css_classes.short_description = 'Talk Type & Track CSS classes'
+    def list_css_classes(self):
+        """Convert get_css_classes into a nice string for the admin interface"""
+        return ',  '.join(list(self.get_css_classes()))
+
+    list_css_classes.short_description = _('Talk Type & Track CSS classes')
 
     def get_desc(self):
         if self.details:
@@ -298,7 +299,7 @@ class ScheduleItem(models.Model):
             return slots[0].get_formatted_start_date_time()
         else:
             return 'WARNING: No Time and Day Specified'
-    get_start_time.short_description = 'Start Time'
+    get_start_time.short_description = _('Start Time')
 
     def __str__(self):
         return u'%s in %s at %s' % (self.get_desc(), self.venue,

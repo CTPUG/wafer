@@ -436,6 +436,49 @@ class SpeakerTests(TestCase):
         self.check_n_speakers(7, [(0, 4), (4, 7)])
 
 
+class TalkSlugUrlTests(TestCase):
+    """Check that we can lookup a talk via correct and incorrect slugs"""
+    def setUp(self):
+        self.talk_a = create_talk('Test Talk 1', ACCEPTED, "author_a")
+        # Unicode talk will generate empty slug - this should not crash
+        self.talk_b = create_talk(u'\xa9\xa3', ACCEPTED, "author_b")
+        self.client = Client()
+
+    def test_slug_generation(self):
+        self.assertEqual(self.talk_a.slug, 'test-talk-1')
+        self.assertEqual(self.talk_b.slug, '')
+
+    def test_non_unicode_slug_lookups(self):
+        response = self.client.get('/talks/%d-test-talk-1/' % self.talk_a.pk)
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, '%s' % self.talk_a.title)
+
+        response = self.client.get('/talks/%d-bogus-slug/' % self.talk_a.pk)
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.url, '/talks/%d-test-talk-1/' % self.talk_a.pk)
+
+        response = self.client.get('/talks/%d-/' % self.talk_a.pk)
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.url, '/talks/%d-test-talk-1/' % self.talk_a.pk)
+
+        response = self.client.get('/talks/%d/' % self.talk_a.pk)
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.url, '/talks/%d-test-talk-1/' % self.talk_a.pk)
+
+    def test_unicode_slug_lookups(self):
+        response = self.client.get('/talks/%d-/' % self.talk_b.pk)
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, '%s' % self.talk_b.title)
+
+        response = self.client.get('/talks/%d-bogus-slug/' % self.talk_b.pk)
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.url, '/talks/%d-/' % self.talk_b.pk)
+
+        response = self.client.get('/talks/%d/' % self.talk_b.pk)
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.url, '/talks/%d-/' % self.talk_b.pk)
+
+
 class TalkViewSetPermissionTests(TestCase):
 
     def setUp(self):

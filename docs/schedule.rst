@@ -57,6 +57,12 @@ parameter in the URL - e.g. ``https://localhost/schedule/?day=2014-10-23``. If
 the specified day cannnot be matched to one of the blocks in the schedule, the
 full schedule is shown.
 
+By passing using the ``highlight-venue`` parameter in the url, all items in a
+specific venue will have the ``schedule-highlight-venue`` class, which can
+be used to style these differently - e.g.
+``https://localhost/schedule/?highlight-venue=3`` will annotate all items
+occuring in the venue with the id 3. Invalid ids will be ignored.
+
 The ``schedule/current`` view can be used to show events around the current time.
 The ``refresh`` parameter can be used to add a refresh header to the view - e.g
 ``https://localhost/schedule/current/?refresh=60`` will refresh every 60 seconds.

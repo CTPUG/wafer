@@ -2,6 +2,34 @@
     'use strict';
     /*global document, this, $ */
 
+    function eventPath(mouseEvent) {
+        // Return the path for the mouse event
+        // composedPath is the official standard, but new, so not supported everywhere
+        if ('composedPath' in mouseEvent) return mouseEvent.composedPath();
+        // path is the original chrome version
+        if ('path' in mouseEvent) return mouseEvent.path;
+        // More-or-less correct fallback from stackoverflow
+        // https://stackoverflow.com/questions/39245488/event-path-undefined-with-firefox-and-vue-js
+        // Needed because IE and Edge don't suppport either of the above
+        // This implementation is fragile, but should be good enough for what we need
+        var path = [];
+        var el = mouseEvent.target;
+        while (el) {
+            path.push(el);
+            if (el.tagName === 'HTML') {
+                path.push(document);
+                path.push(window);
+                return path;
+            }
+            el = el.parentElement;
+        }
+        return path;
+    };
+
+    function isButton(element) {
+        return element.tagName.toUpperCase() == 'BUTTON';
+    };
+
     var handleDragStart = function (e) {
         e.target.style.opacity = '0.4';  // this / e.target is the source node.
         e.target.classList.add('label-danger');
@@ -47,6 +75,21 @@
         var newItem = document.querySelectorAll('[id=scheduleItemnull]')[0];
 
         newItem.id = 'scheduleItem' + scheduleItemId;
+
+        // Add a close button, since we've deleted it if one
+        // existed, and we're not going back through the template
+        var closeButton = document.createElement("BUTTON");
+        closeButton.id = "delete" + scheduleItemId;
+        closeButton.setAttribute("data-id", scheduleItemId);
+        closeButton.classList.add("close");
+        closeButton.setAttribute("aria-label", "Close");
+        var buttonSpan = document.createElement("span");
+        buttonSpan.setAttribute("aria-hidden", true);
+        buttonSpan.innerHTML = "&times;";
+
+        closeButton.appendChild(buttonSpan);
+        closeButton.addEventListener('click', handleClickDelete, false);
+        newItem.insertBefore(closeButton, newItem.childNodes[0]);
     }
 
 
@@ -111,8 +154,17 @@
     }
 
     function handleClickDelete(mouseEvent) {
-        var closeButton = mouseEvent.path[1];
-        var scheduleItemCell = mouseEvent.path[2];
+        var path = eventPath(mouseEvent);
+        var offset = 0;
+        // composedPath and path start at different points, so
+        // we need to see where closeButton is in the list
+        if (isButton(path[0])) {
+            offset = 0;
+        } else {
+            offset = 1;
+        }
+        var closeButton = path[offset];
+        var scheduleItemCell = path[offset + 1];
 
         var scheduleItemId = closeButton.getAttribute('data-id');
 

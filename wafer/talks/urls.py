@@ -8,6 +8,7 @@ from wafer.talks.views import (
 
 router = routers.ExtendedSimpleRouter()
 
+# FIXME: Change base_name when we drop python 2 and move to drf-extensions 0.5
 talks_router = router.register(r'talks', TalksViewSet)
 talks_router.register(
     r'urls', TalkUrlsViewSet, base_name='talks-urls',
@@ -18,7 +19,7 @@ urlpatterns = [
     url(r'^page/(?P<page>\d+)/$', UsersTalks.as_view(),
         name='wafer_users_talks_page'),
     url(r'^new/$', TalkCreate.as_view(), name='wafer_talk_submit'),
-    url(r'^(?P<pk>\d+)(?:-(?P<slug>[\w-]+))?/$', TalkView.as_view(),
+    url(r'^(?P<pk>\d+)(?:-(?P<slug>[\w-]*))?/$', TalkView.as_view(),
         name='wafer_talk'),
     url(r'^(?P<pk>\d+)/edit/$', TalkUpdate.as_view(),
         name='wafer_talk_edit'),

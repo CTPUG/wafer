@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth import get_user_model
+from django.utils.translation import ugettext_lazy as _
 
 from wafer.users.models import UserProfile
 
@@ -10,7 +11,8 @@ from wafer.users.models import UserProfile
 class UserProfileInline(admin.StackedInline):
     model = UserProfile
     can_delete = False
-    verbose_name_plural = 'profile'
+    verbose_name = _('profile')
+    verbose_name_plural = _('profiles')
     exclude = ('kv',)
 
 
