@@ -144,8 +144,11 @@ class Slot(models.Model):
         return self.start_time
 
     def get_formatted_start_time(self):
+        return self.get_start_time().strftime('%H:%M')
+
+    def get_formatted_start_date_time(self):
         return self.get_start_time().strftime('%b %d (%a): %H:%M')
-    get_formatted_start_time.short_description = _('Start Time')
+    get_formatted_start_date_time.short_description = _('Start Date & Time')
 
     def get_formatted_end_time(self):
         return self.end_time.strftime('%H:%M')
