@@ -7,6 +7,7 @@ from icalendar import Calendar, Event
 from django.db.models import Q
 from django.views.generic import TemplateView, View
 from django.contrib.sites.shortcuts import get_current_site
+from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponse
 from django.utils import timezone
 
@@ -14,7 +15,7 @@ from bakery.views import BuildableDetailView, BuildableTemplateView
 from rest_framework import viewsets
 from rest_framework.permissions import IsAdminUser
 from wafer.pages.models import Page
-from wafer.schedule.models import Venue, Slot, Day
+from wafer.schedule.models import Venue, Slot, ScheduleBlock
 from wafer.schedule.admin import check_schedule, validate_schedule
 from wafer.schedule.models import ScheduleItem
 from wafer.schedule.serializers import ScheduleItemSerializer
@@ -27,16 +28,15 @@ logger = logging.getLogger(__name__)
 
 class ScheduleRow(object):
     """This is a helpful containter for the schedule view to keep sanity"""
-    def __init__(self, schedule_day, slot):
-        tz = timezone.get_default_timezone()
-        self.schedule_day = schedule_day
+    def __init__(self, schedule_page, slot):
+        self.schedule_page = schedule_page
         self.slot = slot
-        self.start_time = timezone.make_aware(slot.get_start_datetime(), tz)
+        self.start_time = slot.get_start_time()
         self.items = {}
 
     def get_sorted_items(self):
         sorted_items = []
-        for venue in self.schedule_day.venues:
+        for venue in self.schedule_page.venues:
             if venue in self.items:
                 sorted_items.append(self.items[venue])
         return sorted_items
@@ -46,11 +46,11 @@ class ScheduleRow(object):
         return '%s - %s' % (self.slot, self.get_sorted_items())
 
 
-class ScheduleDay(object):
-    """A helpful container for information a days in a schedule view."""
-    def __init__(self, day):
-        self.day = day
-        self.venues = list(day.venue_set.all())
+class SchedulePage(object):
+    """A helpful container for information about blocks in a schedule view."""
+    def __init__(self, block):
+        self.block = block
+        self.venues = list(block.venue_set.all())
         self.rows = []
 
 
@@ -59,9 +59,9 @@ class VenueView(BuildableDetailView):
     model = Venue
 
 
-def make_schedule_row(schedule_day, slot, seen_items):
+def make_schedule_row(schedule_page, slot, seen_items):
     """Create a row for the schedule table."""
-    row = ScheduleRow(schedule_day, slot)
+    row = ScheduleRow(schedule_page, slot)
     skip = {}
     expanding = {}
     all_items = list(slot.scheduleitem_set
@@ -85,7 +85,7 @@ def make_schedule_row(schedule_day, slot, seen_items):
     expanding_right = None
     skipping = 0
     skip_item = None
-    for venue in schedule_day.venues:
+    for venue in schedule_page.venues:
         if venue in skip:
             # We need to skip all the venues this item spans over
             skipping = 1
@@ -113,22 +113,22 @@ def make_schedule_row(schedule_day, slot, seen_items):
     return row
 
 
-def generate_schedule(today=None):
+def generate_schedule(this_block=None):
     """Helper function which creates an ordered list of schedule days"""
     # We create a list of slots and schedule items
-    schedule_days = {}
+    schedule_pages = {}
     seen_items = {}
-    for slot in Slot.objects.all().order_by('end_time', 'start_time', 'day'):
-        day = slot.get_day()
-        if today and day != today:
-            # Restrict ourselves to only today
+    for slot in Slot.objects.all().order_by('end_time', 'start_time'):
+        block = slot.get_block()
+        if this_block and block != this_block:
+            # Restrict ourselves to only given block
             continue
-        schedule_day = schedule_days.get(day)
-        if schedule_day is None:
-            schedule_day = schedule_days[day] = ScheduleDay(day)
-        row = make_schedule_row(schedule_day, slot, seen_items)
-        schedule_day.rows.append(row)
-    return sorted(schedule_days.values(), key=lambda x: x.day.date)
+        schedule_page = schedule_pages.get(block)
+        if schedule_page is None:
+            schedule_page = schedule_pages[block] = SchedulePage(block)
+        row = make_schedule_row(schedule_page, slot, seen_items)
+        schedule_page.rows.append(row)
+    return sorted(schedule_pages.values(), key=lambda x: x.block.start_time)
 
 
 def lookup_highlighted_venue(request):
@@ -150,29 +150,35 @@ class ScheduleView(BuildableTemplateView):
         context = super(ScheduleView, self).get_context_data(**kwargs)
         # Check if the schedule is valid
         context['active'] = False
-        context['prev_day'] = None
-        context['next_day'] = None
+        context['prev_block'] = None
+        context['next_block'] = None
         if not check_schedule():
             return context
         context['active'] = True
-        day = self.request.GET.get('day', None)
+        try:
+            block_id = int(self.request.GET.get('block', -1))
+        except ValueError:
+            block_id = -1
+        blocks = ScheduleBlock.objects.all()
+        try:
+            this_block = blocks.get(id=block_id)
+        except ObjectDoesNotExist:
+            # We choose to return the full schedule if given an invalid block id
+            this_block = None
         highlight_venue = lookup_highlighted_venue(self.request)
         context['highlight_venue_pk'] = -1
         if highlight_venue is not None:
             context['highlight_venue_pk'] = highlight_venue
-        dates = dict([(x.date.strftime('%Y-%m-%d'), x) for x in
-                      Day.objects.all()])
-        # We choose to return the full schedule if given an invalid date
-        schedule_day = dates.get(day, None)
-        if schedule_day is not None:
-            # Add next / prev day links
-            sorted_days = sorted(dates)
-            pos = sorted_days.index(day)
+        if this_block:
+            # Add next / prev blocks links
+            # blocks are sorted by time by default
+            blocks = list(blocks)
+            pos = blocks.index(this_block)
             if pos > 0:
-                context['prev_day'] = sorted_days[pos - 1]
-            if pos < len(sorted_days) - 1:
-                context['next_day'] = sorted_days[pos + 1]
-        context['schedule_days'] = generate_schedule(schedule_day)
+                context['prev_block'] = blocks[pos - 1]
+            if pos < len(blocks) - 1:
+                context['next_block'] = blocks[pos + 1]
+        context['schedule_pages'] = generate_schedule(this_block)
         return context
 
 
@@ -196,19 +202,25 @@ class CurrentView(TemplateView):
 
     def _parse_today(self, day):
         if day is None:
-            day = str(datetime.date.today())
-        dates = dict([(x.date.strftime('%Y-%m-%d'), x) for x in
-                      Day.objects.all()])
-        if day not in dates:
-            return None
-        return ScheduleDay(dates[day])
+            day = datetime.date.today()
+        else:
+            day = datetime.datetime.strptime(day, '%Y-%m-%d').date()
+        for candidate in ScheduleBlock.objects.all():
+            if candidate.start_time.date() <= day and candidate.end_time.date() >= day:
+                return SchedulePage(candidate)
+        return None
 
-    def _parse_time(self, time):
-        now = datetime.datetime.now().time()
+    def _parse_time(self, day, time):
+        tz = timezone.get_default_timezone()
+        now = timezone.make_aware(datetime.datetime.now(), tz)
+        if day is None:
+            return now
         if time is None:
             return now
         try:
-            return datetime.datetime.strptime(time, '%H:%M').time()
+            full_time = datetime.datetime.combine(datetime.datetime.strptime(day, "%Y-%m-%d").date(),
+                                                  datetime.datetime.strptime(time, '%H:%M').time())
+            return timezone.make_aware(full_time, tz)
         except ValueError:
             pass
         return now
@@ -221,30 +233,30 @@ class CurrentView(TemplateView):
                 # Must overlap with current slot
                 item['note'] = overlap_note
 
-    def _current_slots(self, schedule_day, time):
-        today = schedule_day.day
+    def _current_slots(self, schedule_page, search_time):
         cur_slot, prev_slot, next_slot = None, None, None
         for slot in Slot.objects.all():
-            if slot.get_day() != today:
+            if (slot.get_start_time() > schedule_page.block.end_time or
+                    slot.end_time < schedule_page.block.start_time):
                 continue
-            if slot.get_start_time() <= time and slot.end_time > time:
+            if slot.get_start_time() <= search_time < slot.end_time:
                 cur_slot = slot
-            elif slot.end_time <= time:
+            elif slot.end_time <= search_time:
                 if not prev_slot or prev_slot.end_time < slot.end_time:
                     prev_slot = slot
-            elif slot.get_start_time() >= time:
+            elif slot.get_start_time() >= search_time:
                 if not next_slot or next_slot.end_time > slot.end_time:
                     next_slot = slot
         cur_rows = self._current_rows(
-            schedule_day, cur_slot, prev_slot, next_slot)
+            schedule_page, cur_slot, prev_slot, next_slot)
         return cur_slot, cur_rows
 
-    def _current_rows(self, schedule_day, cur_slot, prev_slot, next_slot):
+    def _current_rows(self, schedule_page, cur_slot, prev_slot, next_slot):
         seen_items = {}
         rows = []
         for slot in (prev_slot, cur_slot, next_slot):
             if slot:
-                row = make_schedule_row(schedule_day, slot, seen_items)
+                row = make_schedule_row(schedule_page, slot, seen_items)
             else:
                 row = None
             rows.append(row)
@@ -270,19 +282,19 @@ class CurrentView(TemplateView):
         # Allow refresh time to be overridden
         context['refresh'] = self.request.GET.get('refresh', None)
         # If there are no items scheduled for today, return an empty slots list
-        schedule_day = self._parse_today(self.request.GET.get('day', None))
-        if schedule_day is None:
+        schedule_page = self._parse_today(self.request.GET.get('day', None))
+        if schedule_page is None:
             return context
-        context['schedule_day'] = schedule_day
+        context['schedule_page'] = schedule_page
         # Allow current time to be overridden
-        time = self._parse_time(self.request.GET.get('time', None))
+        time = self._parse_time(self.request.GET.get('day', None), self.request.GET.get('time', None))
 
         highlight_venue = lookup_highlighted_venue(self.request)
         context['highlight_venue_pk'] = -1
         if highlight_venue is not None:
             context['highlight_venue_pk'] = highlight_venue
 
-        cur_slot, current_rows = self._current_slots(schedule_day, time)
+        cur_slot, current_rows = self._current_slots(schedule_page, time)
         context['cur_slot'] = cur_slot
         context['slots'].extend(current_rows)
 
@@ -329,37 +341,37 @@ class ScheduleEditView(TemplateView):
             slot_context['venues'].append(venue_context)
         return slot_context
 
-    def get_context_data(self, day_id=None, **kwargs):
+    def get_context_data(self, block_id=None, **kwargs):
         context = super(ScheduleEditView, self).get_context_data(**kwargs)
 
-        days = Day.objects.all()
-        if day_id:
-            day = days.get(id=day_id)
+        blocks = ScheduleBlock.objects.all()
+        if block_id:
+            block = blocks.get(id=block_id)
         else:
-            day = days.first()
+            block = blocks.first()
 
         public_talks = Talk.objects.filter(Q(status=ACCEPTED) |
                                            Q(status=CANCELLED))
         public_talks = public_talks.order_by("talk_type", "talk_id")
-        venues = Venue.objects.filter(days__in=[day])
+        venues = Venue.objects.filter(blocks__in=[block])
         slots = Slot.objects.all().select_related(
-            'day', 'previous_slot').prefetch_related(
+            'previous_slot').prefetch_related(
             'scheduleitem_set', 'slot_set').order_by(
-                'end_time', 'start_time', 'day')
+                'end_time', 'start_time')
         aggregated_slots = []
 
         for slot in slots:
-            if day != slot.get_day():
+            if block != slot.get_block():
                 continue
             aggregated_slots.append(self._slot_context(slot, venues))
 
-        context['day'] = day
+        context['this_block'] = block
         context['venues'] = venues
         context['slots'] = aggregated_slots
         context['talks_all'] = public_talks
         context['talks_unassigned'] = public_talks.filter(scheduleitem=None)
         context['pages'] = Page.objects.all()
-        context['days'] = days
+        context['all_blocks'] = blocks
         context['validation_errors'] = validate_schedule()
         return context
 

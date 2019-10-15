@@ -12,17 +12,57 @@ from wafer.snippets.markdown_field import MarkdownTextField
 from wafer.talks.models import Talk
 
 
-@python_2_unicode_compatible
-class Day(models.Model):
-    """Days on which the conference will be held."""
-    date = models.DateField(null=True, blank=True)
+# Validation Helpers
+def includes(obj1, obj2):
+    """Test if the times for obj1 are completely included in
+       the times for obj2"""
+    if (obj2.end_time >= obj1.end_time and
+        obj2.get_start_time() <= obj1.get_start_time()):
+        return True
+    return False
 
-    def __str__(self):
-        return u'%s' % self.date.strftime('%b %d (%a)')
+def overlap(obj1, obj2):
+    """Test if obj1 and obj2 overlap on times"""
+    # obj1 and obj2 are either both ScheduleBlocks or both slots
+    # We have already validated that start_time < end_time for both objects
+    if obj2.end_time <= obj1.get_start_time() or obj1.end_time <= obj2.get_start_time():
+        return False
+    return True
+
+
+@python_2_unicode_compatible
+class ScheduleBlock(models.Model):
+    """Blocks into which we'll break the schedule.
+    
+       Typically days, but can be shorter or longer depending on use
+       case."""
+    start_time = models.DateTimeField(null=True, blank=True)
+    end_time = models.DateTimeField(null=True, blank=True)
 
     class Meta:
-        ordering = ['date']
+        ordering = ['start_time']
 
+    def get_start_time(self):
+        """Helper method to ease validation checks."""
+        return self.start_time
+
+    def __str__(self):
+        if self.start_time.date() != self.end_time.date():
+            return u'%s - %s' % (self.start_time.strftime('%b %d (%a) %H:%M'),
+                                 self.end_time.strftime('%b %d (%a) %H:%M'))
+        # We default to a "day" view in this case
+        return u'%s' % self.start_time.strftime('%b %d (%a)')
+
+    def clean(self):
+        """Ensure Schedule blocks are sane."""
+        if self.start_time >= self.end_time:
+            raise ValidationError("Start time must be before end time")
+        # Validate that we don't overlap any existing blocks
+        for other_block in ScheduleBlock.objects.all():
+            if other_block.pk == self.pk:
+                continue
+            if overlap(self, other_block):
+                raise ValidationError("Overlaps with %s" % other_block)
 
 @python_2_unicode_compatible
 class Venue(models.Model):
@@ -36,8 +76,8 @@ class Venue(models.Model):
         help_text=_("Notes or directions that will be useful to"
                     " conference attendees"))
 
-    days = models.ManyToManyField(Day, help_text=_("Days on which this venue"
-                                                   " will be used."))
+    blocks = models.ManyToManyField(ScheduleBlock,
+        help_text=_("Blocks (days) on which this venue will be used."))
 
     video = models.BooleanField(
         default=False,
@@ -65,34 +105,38 @@ class Slot(models.Model):
                                       help_text=_("Previous slot if "
                                                   "applicable (slots should "
                                                   "have either a previous "
-                                                  "slot OR a day and start "
-                                                  "time set)"))
+                                                  "slot OR a start time set)"))
 
-    day = models.ForeignKey(Day, null=True, blank=True,
-                            on_delete=models.PROTECT,
-                            help_text=_("Day for this slot (if no "
-                                        "previous slot selected)"))
-
-    start_time = models.TimeField(null=True, blank=True,
-                                  help_text=_("Start time (if no"
-                                              " previous slot selected)"))
-    end_time = models.TimeField(null=True, help_text=_("Slot end time"))
+    start_time = models.DateTimeField(
+        null=True, blank=True, help_text=_("Start time (if no"
+                                           " previous slot selected)"))
+    end_time = models.DateTimeField(null=True, help_text=_("Slot end time"))
 
     name = models.CharField(max_length=1024, null=True, blank=True,
                             help_text=_("Identifier for use in the admin"
                                         " panel"))
 
     class Meta:
-        ordering = ['day', 'end_time', 'start_time']
+        ordering = ['end_time', 'start_time']
 
     def __str__(self):
         if self.name:
             slot = u'Slot %s' % self.name
         else:
             slot = u'Slot'
-        start = self.get_formatted_start_time()
-        end = self.get_formatted_end_time()
-        return u'%s: %s: %s - %s' % (slot, self.get_day(), start, end)
+        if self._is_single_day():
+            day = self.end_time.date().strftime('%b %d (%a)')
+            start = self.get_formatted_start_time()
+            end = self.get_formatted_end_time()
+            return u"%s: %s: %s - %s" % (slot, day, start, end)
+        # Include day info in bounds
+        start = self.get_formatted_start_date_time()
+        end = self.get_formatted_end_date_time()
+        return u"%s: %s - %s" % (slot, start, end)
+
+    def _is_single_day(self):
+        """Check if this slot crosses midnight"""
+        return self.end_time.date() == self.get_start_time().date()
 
     def get_start_time(self):
         if self.previous_slot:
@@ -101,37 +145,38 @@ class Slot(models.Model):
 
     def get_formatted_start_time(self):
         return self.get_start_time().strftime('%H:%M')
-    get_formatted_start_time.short_description = _('Start Time')
+
+    def get_formatted_start_date_time(self):
+        return self.get_start_time().strftime('%b %d (%a): %H:%M')
+    get_formatted_start_date_time.short_description = _('Start Date & Time')
 
     def get_formatted_end_time(self):
         return self.end_time.strftime('%H:%M')
+
+    def get_formatted_end_date_time(self):
+        return self.end_time.strftime('%b %d (%a): %H:%M')
 
     def get_duration(self):
         """Return the duration of the slot as hours and minutes.
 
            Used for the pentabarf export, which needs it in this format."""
-        start = datetime.datetime.combine(self.get_day().date,
-                                          self.get_start_time())
-        end = datetime.datetime.combine(self.get_day().date,
-                                        self.end_time)
-        duration = (end - start).total_seconds()
+        duration = (self.end_time - self.get_start_time()).total_seconds()
         result = {}
         result['hours'], result['minutes'] = divmod(duration // 60, 60)
         return result
 
-    def get_start_datetime(self):
-        return datetime.datetime.combine(self.get_day().date,
-                                         self.get_start_time())
-
-    def get_end_datetime(self):
-        return datetime.datetime.combine(self.get_day().date,
-                                         self.end_time)
-
-    def get_day(self):
+    def get_block(self):
         if self.previous_slot:
-            return self.previous_slot.get_day()
-        return self.day
-    get_day.short_description = _('Day')
+            return self.previous_slot.get_block()
+        blocks = ScheduleBlock.objects.filter(
+            start_time__lte=self.get_start_time(),
+            end_time__gte=self.end_time)
+        if blocks:
+            # We assume blocks don't overlap, so this is unique
+            return blocks.first()
+        return None
+
+    get_block.short_description = _('Schedule Block')
 
     def clean(self):
         """Ensure we have start_time < end_time"""
@@ -142,10 +187,24 @@ class Slot(models.Model):
             raise ValidationError("Start time must be before end time")
         # Slots should either have day + start_time, or a previous_slot, but
         # not both (since previous_slot overrides the others)
-        if (self.day or self.start_time) and self.previous_slot:
+        if self.start_time and self.previous_slot:
             raise ValidationError("Slots with a previous slot should not "
-                                  "have a day or start_time set")
-
+                                  "have a start_time set")
+        # Validate that we are within the bounds of the block
+        block = self.get_block()
+        if not block:
+            raise ValidationError("Slot does not fall within any defined block")
+        # Validate that we don't overlap any existing slots
+        # This isn't very efficient, but OK because it's a once off
+        # validation cost.
+        for other_slot in Slot.objects.all():
+            if other_slot.pk == self.pk:
+                continue
+            if other_slot.get_block() != self.get_block():
+                # Different Schedule Blocks don't overlap
+                continue
+            if overlap(self, other_slot):
+                raise ValidationError("Overlaps with %s" % other_slot)
 
 @python_2_unicode_compatible
 class ScheduleItem(models.Model):
@@ -233,16 +292,14 @@ class ScheduleItem(models.Model):
     def get_start_datetime(self):
         slots = list(self.slots.all())
         if slots:
-            return slots[0].get_start_datetime()
+            return slots[0].get_start_time()
         else:
             return None
 
     def get_start_time(self):
         slots = list(self.slots.all())
         if slots:
-            start = slots[0].get_formatted_start_time()
-            day = slots[0].get_day()
-            return u'%s, %s' % (day, start)
+            return slots[0].get_formatted_start_date_time()
         else:
             return 'WARNING: No Time and Day Specified'
     get_start_time.short_description = _('Start Time')
@@ -307,12 +364,12 @@ def update_schedule_items(*args, **kw):
             item.save(update_fields=['last_updated'])
 
 
-post_save.connect(invalidate_check_schedule, sender=Day)
+post_save.connect(invalidate_check_schedule, sender=ScheduleBlock)
 post_save.connect(invalidate_check_schedule, sender=Venue)
 post_save.connect(invalidate_check_schedule, sender=Slot)
 post_save.connect(invalidate_check_schedule, sender=ScheduleItem)
 
-post_delete.connect(invalidate_check_schedule, sender=Day)
+post_delete.connect(invalidate_check_schedule, sender=ScheduleBlock)
 post_delete.connect(invalidate_check_schedule, sender=Venue)
 post_delete.connect(invalidate_check_schedule, sender=Slot)
 post_delete.connect(invalidate_check_schedule, sender=ScheduleItem)

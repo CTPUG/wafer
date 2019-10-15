@@ -15,38 +15,38 @@
     {% trans "Schedule" %}
   </h1>
   <div class="wafer_schedule">
-    {% if not schedule_days %}
+    {% if not schedule_pages %}
       {# Schedule is incomplete / invalid, so show nothing #}
       {% blocktrans %}
         <p>The final schedule has not been published yet.</p>
       {% endblocktrans %}
     {% else %}
-      {% if next_day or prev_day %}
+      {% if next_block or prev_block %}
         <div class="clearfix d-print-none">
          {% url 'wafer_full_schedule' as schedule_url %}
-           {% if prev_day %}
-             <a href="{{ schedule_url }}?day={{ prev_day }}"
-                class="float-left btn btn-secondary btn-lg">{% trans "Previous Day" %}</a>
+           {% if prev_block %}
+             <a href="{{ schedule_url }}?block={{ prev_block.id }}"
+                class="float-left btn btn-secondary btn-lg">{% trans "Previous" %} &mdash; {{ prev_block }}</a>
            {% endif %}
-           {% if next_day %}
-             <a href="{{ schedule_url }}?day={{ next_day }}"
-                class="float-right btn btn-secondary btn-lg">{% trans "Next Day" %}</a>
+           {% if next_block %}
+             <a href="{{ schedule_url }}?block={{ next_block.id }}"
+                class="float-right btn btn-secondary btn-lg">{% trans "Next" %} &mdash; {{ next_block }}</a>
            {% endif %}
         </div>
       {% endif %}
-      {% for schedule_day in schedule_days %}
+      {% for page in schedule_pages %}
         <table cellspacing=1 cellpadding=0>
           {# We assume that the admin has created a valid timetable #}
           <tr>
-            <td colspan="{{ schedule_day.venues|length|add:1 }}" class="title">
-              <a href="?day={{ schedule_day.day.date.isoformat }}">
-                {{ schedule_day.day.date|date:"l (d b)" }}
+            <td colspan="{{ page.venues|length|add:1 }}" class="title">
+              <a href="?block={{ page.block.id }}">
+                {{ page.block.start_time|date:"l (d b)" }}
               </a>
             </td>
           </tr>
           <tr>
             <th>{% trans "Time" %}</th>
-            {% for venue in schedule_day.venues %}
+            {% for venue in page.venues %}
               <th
                 {% if venue.pk == highlight_venue_pk %}
                   class="schedule-highlight-venue"
@@ -55,7 +55,7 @@
               <a href="{{ venue.get_absolute_url }}">{{ venue.name }}</a></th>
             {% endfor %}
           </tr>
-          {% for row in schedule_day.rows %}
+          {% for row in page.rows %}
             <tr>
               <td class="scheduleslot">{{ row.slot.get_start_time|time:"H:i" }} - {{ row.slot.end_time|time:"H:i" }}</td>
               {% for item in row.get_sorted_items %}

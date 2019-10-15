@@ -3,6 +3,8 @@ from collections import defaultdict
 
 from django.db.models import Q
 from django.conf.urls import url
+from django.core.exceptions import ValidationError
+
 from django.contrib import admin
 from django.contrib import messages
 from django.utils.encoding import force_text
@@ -13,42 +15,11 @@ from reversion.admin import VersionAdmin
 from easy_select2 import Select2Multiple
 
 from wafer.compare.admin import CompareVersionAdmin
-from wafer.schedule.models import Day, Venue, Slot, ScheduleItem
+from wafer.schedule.models import ScheduleBlock, Venue, Slot, ScheduleItem
 from wafer.talks.models import Talk, ACCEPTED, CANCELLED
 from wafer.pages.models import Page
 from wafer.utils import cache_result
 
-
-# These are functions to simplify testing
-# Slot validation
-def find_overlapping_slots(all_slots):
-    """Find any slots that overlap"""
-    overlaps = set([])
-    for slot in all_slots:
-        # Because slots are ordered, we can be more efficient than this
-        # N^2 loop, but this is simple and, since the number of slots
-        # should be low, this should be "fast enough"
-        start = slot.get_start_time()
-        end = slot.end_time
-        for other_slot in all_slots:
-            if other_slot.pk == slot.pk:
-                continue
-            if other_slot.get_day() != slot.get_day():
-                # different days, can't overlap
-                continue
-            # Overlap if the start_time or end_time is bounded by our times
-            # start_time <= other.start_time < end_time
-            # or
-            # start_time < other.end_time <= end_time
-            other_start = other_slot.get_start_time()
-            other_end = other_slot.end_time
-            if start <= other_start and other_start < end:
-                overlaps.add(slot)
-                overlaps.add(other_slot)
-            elif start < other_end and other_end <= end:
-                overlaps.add(slot)
-                overlaps.add(other_slot)
-    return overlaps
 
 
 # Schedule item validators
@@ -122,14 +93,14 @@ def find_clashes(all_items):
 
 def find_invalid_venues(all_items):
     """Find venues assigned slots that aren't on the allowed list
-       of days."""
+       of blocks."""
     venues = {}
     for item in all_items:
         valid = False
-        item_days = list(item.venue.days.all())
+        item_blocks = list(item.venue.blocks.all())
         for slot in item.slots.all():
-            for day in item_days:
-                if day == slot.get_day():
+            for block in item_blocks:
+                if block == slot.get_block():
                     valid = True
                     break
         if not valid:
@@ -145,7 +116,7 @@ def prefetch_schedule_items():
                 .select_related(
                     'talk', 'page', 'venue')
                 .prefetch_related(
-                    'slots', 'slots__previous_slot', 'slots__day')
+                    'slots', 'slots__previous_slot')
                 .all())
 
 
@@ -170,10 +141,6 @@ def register_schedule_item_validator(function, err_type, msg):
 
 
 # Register our validators
-register_slot_validator(
-        find_overlapping_slots, 'overlaps',
-        _('Overlapping slots found in schedule.'))
-
 register_schedule_item_validator(
         find_clashes, 'clashes',
         _('Clashes found in schedule.'))
@@ -224,55 +191,56 @@ def validate_schedule():
 
 # Useful filters for the admin forms
 
-class BaseDayFilter(admin.SimpleListFilter):
-    # Common logic for filtering on Slots and ScheduleItem.slots by Day
+class BaseBlockFilter(admin.SimpleListFilter):
+    # Common logic for filtering on Slots and ScheduleItem.slots by block 
     # We need to do this as a filter, since we can't use sorting since
     # day is dynamic (either the model field or the previous_slot)
-    title = _('Day')
-    parameter_name = 'day'
+    title = _('Block')
+    parameter_name = 'block'
 
     def lookups(self, request, model_admin):
         # List filter wants the value to be a string, so we use
         # pk to avoid bouncing through strptime.
-        return [('%d' % day.pk, str(day)) for day in Day.objects.all()]
+        return [('%d' % block.pk, str(block)) for
+                block in ScheduleBlock.objects.all()]
 
     def _get_slots(self):
         if self.value():
-            day_pk = int(self.value())
-            day = Day.objects.get(pk=day_pk)
-            # Find all slots that have the day explicitly set
-            slots = list(Slot.objects.filter(day=day))
-            all_slots = slots[:]
-            # Recursively find slots with a previous_slot set to one of these
+            block_pk = int(self.value())
+            block = ScheduleBlock.objects.get(pk=block_pk)
+            # Find all slots with a start_time are in the given block
+            slots = list(Slot.objects.filter(
+                start_time__gte=block.start_time,
+                end_time__lte=block.end_time))
+            all_slots=slots[:]
+            # Extend with all the slots that have a previous slot
+            # Return the filtered list of slot ids
             while Slot.objects.filter(previous_slot__in=slots).exists():
                 slots = list(Slot.objects.filter(
                     previous_slot__in=slots).all())
                 all_slots.extend(slots)
-            # Return the filtered list
-            return {'slots': all_slots, 'day': day}
+            return [x.pk for x in all_slots]
         return None
 
 
-class SlotDayFilter(BaseDayFilter):
-    # Allow filtering slots by the day, to make editing slots easier
+class SlotBlockFilter(BaseBlockFilter):
+    # Allow filtering slots by the block, to make editing slots easier
 
     def queryset(self, request, queryset):
-        query = self._get_slots()
-        if query:
-            return queryset.filter(Q(previous_slot__in=query['slots']) |
-                                   Q(day=query['day']))
+        slot_ids = self._get_slots()
+        if slot_ids is not None:
+            return queryset.filter(pk__in=slot_ids)
         # No value, so no filtering
         return queryset
 
 
-class ScheduleItemDayFilter(BaseDayFilter):
+class ScheduleItemBlockFilter(BaseBlockFilter):
     # Allow filtering scheduleitems by the day, to make editing easier
 
     def queryset(self, request, queryset):
-        query = self._get_slots()
-        if query:
-            return queryset.filter(Q(slots__previous_slot__in=query['slots']) |
-                                   Q(slots__day=query['day']))
+        slot_ids = self._get_slots()
+        if slot_ids is not None:
+            return queryset.filter(slots__pk__in=slot_ids)
         # No value, so no filtering
         return queryset
 
@@ -301,10 +269,10 @@ class BaseStartTimeFilter(admin.SimpleListFilter):
             # We find all start times between base_time and max_time
             # or slots with the previous_slot end time in this range
             slots = Slot.objects.filter(
-                Q(start_time__gte=base_time.time(),
-                  start_time__lte=max_time.time()) |
-                Q(previous_slot__end_time__gte=base_time.time(),
-                  previous_slot__end_time__lte=max_time.time()))
+                Q(start_time__time__gte=base_time.time(),
+                  start_time__time__lte=max_time.time()) |
+                Q(previous_slot__end_time__time__gte=base_time.time(),
+                  previous_slot__end_time__time__lte=max_time.time()))
             # Return the queryset
             return slots
         return None
@@ -376,7 +344,7 @@ class ScheduleItemAdmin(CompareVersionAdmin):
     list_display = ('get_start_time', 'venue', 'get_title', 'expand')
     list_editable = ('expand',)
 
-    list_filter = (ScheduleItemDayFilter, ScheduleItemStartTimeFilter,
+    list_filter = (ScheduleItemBlockFilter, ScheduleItemStartTimeFilter,
                    ScheduleItemVenueFilter)
 
     # We stuff these validation results into the view, rather than
@@ -404,7 +372,7 @@ class ScheduleItemAdmin(CompareVersionAdmin):
             ScheduleEditView.as_view())
         my_urls = [
             url(r'^edit/$', admin_schedule_edit_view, name='schedule_editor'),
-            url(r'^edit/(?P<day_id>[0-9]+)$', admin_schedule_edit_view,
+            url(r'^edit/(?P<block_id>[0-9]+)$', admin_schedule_edit_view,
                 name='schedule_editor'),
         ]
         return my_urls + urls
@@ -414,7 +382,7 @@ class SlotAdminForm(forms.ModelForm):
 
     class Meta:
         model = Slot
-        fields = ('name', 'previous_slot', 'day', 'start_time', 'end_time')
+        fields = ('name', 'previous_slot', 'start_time', 'end_time')
 
     class Media:
         js = ('js/scheduledatetime.js',)
@@ -433,13 +401,13 @@ class SlotAdminAddForm(SlotAdminForm):
 class SlotAdmin(CompareVersionAdmin):
     form = SlotAdminForm
 
-    list_display = ('__str__', 'get_day', 'get_formatted_start_time',
+    list_display = ('__str__', 'get_block', 'get_formatted_start_date_time',
                     'end_time')
     list_editable = ('end_time',)
 
     change_list_template = 'admin/slot_list.html'
 
-    list_filter = (SlotDayFilter, SlotStartTimeFilter)
+    list_filter = (SlotBlockFilter, SlotStartTimeFilter)
 
     def changelist_view(self, request, extra_context=None):
         extra_context = extra_context or {}
@@ -470,34 +438,54 @@ class SlotAdmin(CompareVersionAdmin):
             # created , and we specify them as a sequence using
             # "previous_slot" so tweaking start times is simple.
             prev = obj
-            end = datetime.datetime.combine(prev.get_day().date, prev.end_time)
-            start = datetime.datetime.combine(prev.get_day().date,
-                                              prev.get_start_time())
+            end = prev.end_time
+            start = prev.get_start_time()
             slot_len = end - start
             for loop in range(form.cleaned_data['additional']):
                 end = end + slot_len
-                new_slot = Slot(day=prev.day, previous_slot=prev,
-                                end_time=end.time())
-                new_slot.save()
-                msgdict = {'obj': force_text(new_slot)}
-                msg = _("Additional slot %(obj)s added sucessfully") % msgdict
-                if hasattr(request, '_messages'):
-                    # Don't add messages unless we have a suitable request
-                    # Needed during testing, and possibly in other cases
-                    self.message_user(request, msg, messages.SUCCESS)
-                prev = new_slot
+                new_slot = Slot(previous_slot=prev,
+                                end_time=end)
+                # Make sure we're valid before adding to the database
+                try:
+                    new_slot.full_clean()
+                    new_slot.save()
+                    msgdict = {'obj': force_text(new_slot)}
+                    msg = _("Additional slot %(obj)s added sucessfully") % msgdict
+                    if hasattr(request, '_messages'):
+                        # Don't add messages unless we have a suitable request
+                        # Needed during testing, and possibly in other cases
+                        self.message_user(request, msg, messages.SUCCESS)
+                    prev = new_slot
+                except ValidationError as  err:
+                    msg = _("Failed to create new slot - %s" % err)
+                    if hasattr(request, '_messages'):
+                        self.message_user(request, msg, messages.ERROR)
+                    else:
+                        # Useful in testing
+                        raise
+                    break
 
 
-# Register and setup reversion support for Days and Venues
-class DayAdmin(VersionAdmin):
-    pass
+# Register and setup reversion support for Blocks and Venues
+class ScheduleBlockAdminForm(forms.ModelForm):
+    """Admin for blocks with better time display."""
+    class Meta:
+        model = ScheduleBlock
+        fields = ('start_time', 'end_time')
+
+    class Media:
+        js = ('js/scheduledatetime.js',)
+
+
+class ScheduleBlockAdmin(VersionAdmin):
+    form = ScheduleBlockAdminForm
 
 
 class VenueAdmin(VersionAdmin):
     pass
 
 
-admin.site.register(Day, DayAdmin)
+admin.site.register(ScheduleBlock, ScheduleBlockAdmin)
 admin.site.register(Slot, SlotAdmin)
 admin.site.register(Venue, VenueAdmin)
 admin.site.register(ScheduleItem, ScheduleItemAdmin)

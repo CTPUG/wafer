@@ -17,11 +17,11 @@
     {% else %}
       <table cellspacing=1 cellpadding=0>
         <tr>
-          <td colspan="{{ schedule_day.venues|length|add:1 }}" class="title">{{ schedule_day.day.date|date:"l (d b)" }}</td>
+          <td colspan="{{ schedule_page.venues|length|add:1 }}" class="title">{{ schedule_page.day.date|date:"l (d b)" }}</td>
         </tr>
         <tr>
           <th>{% trans "Time" %}</th>
-          {% for venue in schedule_day.venues %}
+          {% for venue in schedule_page.venues %}
             <th
               {% if venue.pk == highlight_venue_pk %}
                 class="schedule-highlight-venue"

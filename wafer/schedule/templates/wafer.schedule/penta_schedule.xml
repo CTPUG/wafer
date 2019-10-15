@@ -3,23 +3,23 @@
 <schedule>
   <conference>
     <title>{{ WAFER_CONFERENCE_NAME }}</title>
-      {% if schedule_days %}
-        {% with day=schedule_days|first %}
-          <start>{{ day.day.date|date:"Y-m-d" }}</start>
+      {% if schedule_pages %}
+        {% with page=schedule_pages|first %}
+          <start>{{ page.block.start_time|date:"Y-m-d" }}</start>
         {% endwith %}
-        {% with day=schedule_days|last %}
-          <end>{{ day.day.date|date:"Y-m-d" }}</end>
+        {% with day=schedule_pages|last %}
+          <end>{{ page.block.end_time|date:"Y-m-d" }}</end>
         {% endwith %}
-        <days>{{ schedule_days|length }}</days>
+        <days>{{ schedule_pages|length }}</days>
       {% endif %}
     <day_change>00:00</day_change>
     <timeslot_duration>00:15</timeslot_duration>
   </conference>
-  {% for schedule_day in schedule_days %}
-    <day date="{{ schedule_day.day.date|date:'Y-m-d' }}" index="{{ forloop.counter }}">
-      {% for venue in schedule_day.venues %}
+  {% for page in schedule_pages %}
+    <day date="{{ page.block.start_time|date:'Y-m-d' }}" index="{{ forloop.counter }}">
+      {% for venue in page.venues %}
         <room name="{{ venue.name }}">
-          {% for row in schedule_day.rows %}
+          {% for row in page.rows %}
             {% if venue in row.items %}
               {# this is more than a little horrible, but will do for testing #}
               {% for row_venue, items in row.items.items %}
