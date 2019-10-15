@@ -820,32 +820,37 @@ class ScheduleViewTests(TestCase):
     def test_highlight_venue_view(self):
         """Test that the highlight-venue option works"""
         # This is the same schedule as test_multiple_days
-        day1 = Day.objects.create(date=D.date(2013, 9, 22))
-        day2 = Day.objects.create(date=D.date(2013, 9, 23))
+        day1 = ScheduleBlock.objects.create(start_time=D.datetime(2013, 9, 22, 1, 0, 0, 
+                                                                  tzinfo=timezone.utc),
+                                            end_time=D.datetime(2013, 9, 22, 23, 0, 0,
+                                                                tzinfo=timezone.utc),
+                                            )
+        day2 = ScheduleBlock.objects.create(start_time=D.datetime(2013, 9, 23, 1, 0, 0, 
+                                                                  tzinfo=timezone.utc),
+                                            end_time=D.datetime(2013, 9, 23, 23, 0, 0,
+                                                                tzinfo=timezone.utc),
+                                            )
         venue1 = Venue.objects.create(order=1, name='Venue 1')
-        venue1.days.add(day1)
-        venue1.days.add(day2)
+        venue1.blocks.add(day1)
+        venue1.blocks.add(day2)
         venue2 = Venue.objects.create(order=2, name='Venue 2')
-        venue2.days.add(day1)
-        venue2.days.add(day2)
+        venue2.blocks.add(day1)
+        venue2.blocks.add(day2)
 
-        start1 = D.time(10, 0, 0)
-        start2 = D.time(11, 0, 0)
-        end1 = D.time(12, 0, 0)
+        start1 = D.datetime(2013, 9, 22, 10, 0, 0, tzinfo=timezone.utc)
+        start2 = D.datetime(2013, 9, 22, 11, 0, 0, tzinfo=timezone.utc)
+        end1 = D.datetime(2013, 9, 22, 12, 0, 0, tzinfo=timezone.utc)
 
-        start3 = D.time(12, 0, 0)
-        end2 = D.time(13, 0, 0)
+        start3 = D.datetime(2013, 9, 23, 12, 0, 0, tzinfo=timezone.utc)
+        end2 = D.datetime(2013, 9, 23, 13, 0, 0, tzinfo=timezone.utc)
 
         pages = make_pages(6)
         venues = [venue1, venue1, venue1, venue2, venue2, venue2]
         items = make_items(venues, pages)
 
-        slot1 = Slot.objects.create(start_time=start1, end_time=start2,
-                                    day=day1)
-        slot2 = Slot.objects.create(start_time=start2, end_time=end1,
-                                    day=day1)
-        slot3 = Slot.objects.create(start_time=start3, end_time=end2,
-                                    day=day2)
+        slot1 = Slot.objects.create(start_time=start1, end_time=start2)
+        slot2 = Slot.objects.create(start_time=start2, end_time=end1)
+        slot3 = Slot.objects.create(start_time=start3, end_time=end2)
 
         items[0].slots.add(slot1)
         items[3].slots.add(slot1)
@@ -857,7 +862,7 @@ class ScheduleViewTests(TestCase):
         def validate_schedule(response):
             """Helper to ensure we aren't changing the schedule contents
                with the different parameters."""
-            [day1, day2] = response.context['schedule_days']
+            [day1, day2] = response.context['schedule_pages']
 
             self.assertEqual(len(day1.rows), 2)
             self.assertEqual(day1.venues, [venue1, venue2])
@@ -893,7 +898,7 @@ class ScheduleViewTests(TestCase):
         validate_schedule(response)
         self.assertNotContains(response, b'class="schedule-highlight-venue"')
         # Subset of the schedule checks, to make sure we look sane
-        [day1, day2] = response.context['schedule_days']
+        [day1, day2] = response.context['schedule_pages']
 
         self.assertEqual(len(day1.rows), 2)
         self.assertEqual(day1.venues, [venue1, venue2])
@@ -1220,31 +1225,30 @@ class CurrentViewTests(TestCase):
 
     def test_current_view_highlight_venue(self):
         """Test that the current view highlight's stuff correctly"""
-        day1 = Day.objects.create(date=D.date(2013, 9, 22))
+        day1 = ScheduleBlock.objects.create(start_time=D.datetime(2013, 9, 22, 7, 0, 0,
+                                                                  tzinfo=timezone.utc),
+                                            end_time=D.datetime(2013, 9, 22, 19, 0, 0,
+                                                                tzinfo=timezone.utc),
+                                            )
         venue1 = Venue.objects.create(order=1, name='Venue 1')
         venue2 = Venue.objects.create(order=2, name='Venue 2')
         venue3 = Venue.objects.create(order=3, name='Venue 3')
-        venue1.days.add(day1)
-        venue2.days.add(day1)
-        venue3.days.add(day1)
+        venue1.blocks.add(day1)
+        venue2.blocks.add(day1)
+        venue3.blocks.add(day1)
 
-        start1 = D.time(10, 0, 0)
-        start2 = D.time(11, 0, 0)
-        start3 = D.time(12, 0, 0)
-        start4 = D.time(13, 0, 0)
-        start5 = D.time(14, 0, 0)
-        end = D.time(15, 0, 0)
+        start1 = D.datetime(2013, 9, 22, 10, 0, 0, tzinfo=timezone.utc)
+        start2 = D.datetime(2013, 9, 22, 11, 0, 0, tzinfo=timezone.utc)
+        start3 = D.datetime(2013, 9, 22, 12, 0, 0, tzinfo=timezone.utc)
+        start4 = D.datetime(2013, 9, 22, 13, 0, 0, tzinfo=timezone.utc)
+        start5 = D.datetime(2013, 9, 22, 14, 0, 0, tzinfo=timezone.utc)
+        end = D.datetime(2013, 9, 22, 15, 0, 0, tzinfo=timezone.utc)
 
-        slot1 = Slot.objects.create(start_time=start1, end_time=start2,
-                                    day=day1)
-        slot2 = Slot.objects.create(start_time=start2, end_time=start3,
-                                    day=day1)
-        slot3 = Slot.objects.create(start_time=start3, end_time=start4,
-                                    day=day1)
-        slot4 = Slot.objects.create(start_time=start4, end_time=start5,
-                                    day=day1)
-        slot5 = Slot.objects.create(start_time=start5, end_time=end,
-                                    day=day1)
+        slot1 = Slot.objects.create(start_time=start1, end_time=start2)
+        slot2 = Slot.objects.create(start_time=start2, end_time=start3)
+        slot3 = Slot.objects.create(start_time=start3, end_time=start4)
+        slot4 = Slot.objects.create(start_time=start4, end_time=start5)
+        slot5 = Slot.objects.create(start_time=start5, end_time=end)
 
         pages = make_pages(10)
         venues = [venue1, venue1, venue2, venue3, venue3, venue3,
@@ -1290,13 +1294,13 @@ class CurrentViewTests(TestCase):
         c = Client()
         # Check that we don't highlight if not asked
         response = c.get('/schedule/current/',
-                         {'day': day1.date.strftime('%Y-%m-%d'),
+                         {'day': day1.start_time.strftime('%Y-%m-%d'),
                           'time': cur2.strftime('%H:%M')})
         validate_current(response)
         self.assertNotContains(response, b'schedule-highlight-venue')
         # Check with invalid venue
         response = c.get('/schedule/current/',
-                         {'day': day1.date.strftime('%Y-%m-%d'),
+                         {'day': day1.start_time.strftime('%Y-%m-%d'),
                           'time': cur2.strftime('%H:%M'),
                           'highlight-venue': 'aaaa'})
         validate_current(response)
@@ -1304,7 +1308,7 @@ class CurrentViewTests(TestCase):
 
         # Check with venue 1
         response = c.get('/schedule/current/',
-                         {'day': day1.date.strftime('%Y-%m-%d'),
+                         {'day': day1.start_time.strftime('%Y-%m-%d'),
                           'time': cur2.strftime('%H:%M'),
                           'highlight-venue': '%d' % venue1.pk})
         validate_current(response)
@@ -1353,7 +1357,7 @@ class CurrentViewTests(TestCase):
 
         # Check with venue 3
         response = c.get('/schedule/current/',
-                         {'day': day1.date.strftime('%Y-%m-%d'),
+                         {'day': day1.start_time.strftime('%Y-%m-%d'),
                           'time': cur2.strftime('%H:%M'),
                           'highlight-venue': '%d' % venue3.pk})
         validate_current(response)
