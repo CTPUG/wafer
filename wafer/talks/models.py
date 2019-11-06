@@ -277,6 +277,13 @@ class Talk(models.Model):
     has_url.boolean = True
 
     @property
+    def is_late_submission(self):
+        if self.talk_type and self.talk_type.submission_deadline:
+            return self.submission_time > self.talk_type.submission_deadline
+        else:
+            return False
+
+    @property
     def review_score(self):
         # Overridden in admin, to allow sorting
         reviews = [review.avg_score for review in self.reviews.all() if review.avg_score]

@@ -89,3 +89,43 @@ def test_corresponding_author_details():
     speaker.save()
 
     assert talk.get_authors_display_name() == 'jeff & Bob Robert'
+
+
+def test_is_late_submission_no_talk_type():
+    from wafer.talks.models import Talk
+
+    assert not Talk().is_late_submission
+
+
+def test_is_late_submission_no_deadline():
+    from django.utils.timezone import now
+    from wafer.talks.models import Talk, TalkType
+
+    talk_type = TalkType()
+    talk = Talk(submission_time=now(), talk_type=talk_type)
+
+    assert not talk.is_late_submission
+
+
+def test_is_late_submission_not_late():
+    from django.utils.timezone import datetime, utc
+    from wafer.talks.models import Talk, TalkType
+
+    deadline = datetime(2019, 11, 1, 0, 0, 0, 0, utc)
+    before_deadline = datetime(2019, 10, 15, 0, 0, 0, 0, utc)
+
+    talk_type = TalkType(submission_deadline=deadline)
+    not_late = Talk(talk_type=talk_type, submission_time=before_deadline)
+    assert not not_late.is_late_submission
+
+
+def test_is_late_submission_late():
+    from django.utils.timezone import datetime, utc
+    from wafer.talks.models import Talk, TalkType
+
+    deadline = datetime(2019, 11, 1, 0, 0, 0, 0, utc)
+    after_deadline = datetime(2019, 11, 2, 0, 0, 0, 0, utc)
+
+    talk_type = TalkType(submission_deadline=deadline)
+    late = Talk(talk_type=talk_type, submission_time=after_deadline)
+    assert late.is_late_submission

@@ -14,6 +14,9 @@
     <div class="wafer list">
       {% for talk in talks %}
         <div>
+          {% if not talk.cancelled and not talk.accepted and talk.is_late_submission %}
+            <span class="badge badge-warning" title="{% trans 'Late submission' %}">L</span>
+          {% endif %}
           {% if talk.submitted %}
             <span class="badge badge-info" title="{% trans 'Submitted' %}">{{ talk.status }}</span>
           {% elif talk.under_consideration %}

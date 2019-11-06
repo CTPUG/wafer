@@ -92,6 +92,15 @@
   {% if user.is_staff or perms.talks.view_all_talks %}
     <div>
       <p>
+        {% trans 'Submission:' %}
+        {{ object.submission_time }}
+        {% if object.is_late_submission %}
+        <span class="badge badge-warning ">{% blocktrans %}Late submission{% endblocktrans %}</span>
+        {% endif %}
+      </p>
+    </div>
+    <div>
+      <p>
         {% trans 'Status:' %}
         {% if object.submitted %}
           <span class="badge badge-info">{% trans 'Submitted' %}</span>
