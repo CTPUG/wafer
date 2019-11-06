@@ -189,6 +189,8 @@ class Talk(models.Model):
 
     kv = models.ManyToManyField(KeyValue)
 
+    submission_time = models.DateTimeField(auto_now_add=True)
+
     @property
     def slug(self):
         return slugify(self.title)
