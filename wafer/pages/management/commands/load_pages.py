@@ -47,7 +47,7 @@ class Command(BaseCommand):
                 if line == '---\n':
                     break
                 front_matter.append(line)
-            meta = yaml.load(''.join(front_matter))
+            meta = yaml.safe_load(''.join(front_matter))
             contents = ''.join(f)
         return meta, contents
 
