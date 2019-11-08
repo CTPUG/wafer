@@ -118,8 +118,7 @@ class TalkCreate(LoginRequiredMixin, CreateView):
         can_submit = getattr(settings, 'WAFER_TALKS_OPEN', True)
         if can_submit and TalkType.objects.exists():
             # Check for all talk types being disabled
-            can_submit = TalkType.objects.filter(
-                disable_submission=False).count() > 0
+            can_submit = TalkType.objects.open_for_submission().count() > 0
         context['can_submit'] = can_submit
         return context
 

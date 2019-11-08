@@ -6,6 +6,7 @@ from django.urls import reverse
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.functional import lazy
 from django.utils.translation import ugettext, ugettext_lazy as _
+from django.utils.timezone import datetime, now
 
 import reversion
 from markitup.fields import MarkupField
@@ -47,6 +48,19 @@ def authors_help():
     ))
     return ' '.join(text)
 
+class TalkTypeManager(models.Manager):
+
+    def open_for_submission(self):
+        Q = models.Q
+        return self.filter(
+            Q(disable_submission=False) &
+            (
+                Q(submission_deadline__isnull=True) |
+                Q(submission_deadline__gt=now()) |
+                Q(accept_late_submissions=True)
+            )
+        )
+
 
 @python_2_unicode_compatible
 class TalkType(models.Model):
@@ -58,6 +72,19 @@ class TalkType(models.Model):
         _('disable submission'),
         default=False,
         help_text="Don't allow users to submit talks of this type.")
+    submission_deadline = models.DateTimeField(
+        _('submission deadline'),
+        null=True,
+        blank=True,
+        help_text=_("Deadline for submitting talks of this type")
+    )
+    accept_late_submissions = models.BooleanField(
+        _('accept late submissions'),
+        default=False,
+        help_text=_("Whether submissions after the deadline should be accepted")
+    )
+
+    objects = TalkTypeManager()
 
     def __str__(self):
         return u'%s' % (self.name,)
