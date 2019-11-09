@@ -14,6 +14,7 @@ Contents:
    menus
    static
    settings
+   multisite
 
 
 Indices and tables

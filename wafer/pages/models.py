@@ -3,7 +3,7 @@ import logging
 from django.conf import settings
 from django.core.cache import caches
 from django.core.exceptions import ValidationError, NON_FIELD_ERRORS
-from django.db import models
+from wafer.sites import models
 from django.db.models.signals import post_save
 from django.urls import reverse
 from django.utils.encoding import python_2_unicode_compatible

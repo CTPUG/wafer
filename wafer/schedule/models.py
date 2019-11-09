@@ -1,7 +1,7 @@
 import datetime
 
 from django.core.exceptions import ValidationError
-from django.db import models
+from wafer.sites import models
 from django.db.models.signals import post_save, post_delete
 from django.urls import reverse
 from django.utils.encoding import python_2_unicode_compatible

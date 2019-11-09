@@ -19,6 +19,7 @@ REQUIRES = [
     'django-reversion>=2.0',
     'django-easy-select2',
     'django-markitup>=2.2.2',
+    'django-multisite',
     'markdown>=2.5',
     'icalendar>=4.0',
 ]

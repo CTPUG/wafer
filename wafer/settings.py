@@ -95,7 +95,6 @@ SECRET_KEY = '8iysa30^no&oi5kv$k1w)#gsxzrylr-h6%)loz71expnbf7z%)'
 
 TEMPLATES = [
     {
-        'APP_DIRS': True,
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': (
             # Put strings here, like "/home/html/django_templates" or
@@ -115,7 +114,11 @@ TEMPLATES = [
                 'wafer.context_processors.navigation_info',
                 'wafer.context_processors.menu_info',
                 'wafer.context_processors.registration_settings'
-            )
+            ),
+            'loaders': (
+                'multisite.template.loaders.filesystem.Loader',
+                'django.template.loaders.app_directories.Loader',
+            ),
         }
     },
 ]
@@ -143,6 +146,7 @@ INSTALLED_APPS = (
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.sites',
+    'multisite',
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.redirects',

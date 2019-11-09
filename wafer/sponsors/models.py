@@ -3,7 +3,7 @@
 import logging
 
 from django.core.validators import MinValueValidator
-from django.db import models
+from wafer.sites import models
 from django.db.models.signals import post_save
 from django.urls import reverse
 from django.utils.encoding import python_2_unicode_compatible
