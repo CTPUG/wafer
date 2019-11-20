@@ -119,8 +119,9 @@ class TalkAdmin(CompareVersionAdmin):
 
 
 class TalkTypeAdmin(VersionAdmin):
-    list_display = ('name', 'order', 'disable_submission', 'css_class')
+    list_display = ('name', 'order', 'disable_submission', 'css_class', 'submission_deadline', 'accept_late_submissions')
     readonly_fields = ('css_class',)
+    list_editable = ('submission_deadline', 'accept_late_submissions')
 
 
 class TrackAdmin(VersionAdmin):

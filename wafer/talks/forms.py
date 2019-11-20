@@ -46,12 +46,9 @@ class TalkCategorisationField(forms.ModelChoiceField):
             if initial:
                 # Ensure the current selection is in the query_set, regardless
                 # of whether it's been disabled since then
-                self.queryset = self.queryset.filter(
-                    Q(disable_submission=False) |
-                    Q(pk=initial))
+                self.queryset = model.objects.open_for_submission() | model.objects.filter(pk=initial)
             else:
-                self.queryset = self.queryset.filter(
-                    disable_submission=False)
+                self.queryset = model.objects.open_for_submission()
 
     def label_from_instance(self, obj):
         return u'%s: %s' % (obj.name, obj.description)
