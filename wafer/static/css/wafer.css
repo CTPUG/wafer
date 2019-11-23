@@ -20,6 +20,11 @@
 	display: none;
 }
 
+ul.profile-links li {
+   list-style: none;
+   margin-bottom: 0.25em;
+}
+
 .wafer-visible {
 }
 
