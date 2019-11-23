@@ -5,7 +5,7 @@
 from django.test import TestCase
 from django.urls import reverse
 
-from wafer.menu import get_cached_menus, Menu
+from wafer.menu import get_cached_menus, refresh_menu_cache, Menu
 from wafer.sponsors.models import SponsorshipPackage, Sponsor
 
 
@@ -88,6 +88,11 @@ class SponsorTests(TestCase):
 
 
 class SponsorMenuTests(TestCase):
+
+    def test_no_sponsorship_packages(self):
+        refresh_menu_cache()
+        menu = get_cached_menus()
+        self.assertEqual(menu.items, [])
 
     def test_cached_menu(self):
         """Test that the default sponsor menu is generated correctly when
