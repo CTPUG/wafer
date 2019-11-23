@@ -47,4 +47,4 @@ install:
    - pip install "$DJANGO"
    - pip install -r requirements.txt -r requirements-dev.txt
 # command to run tests
-script: NOSE_WITH_COVERAGE=1 python manage.py test
+script: NOSE_WITH_COVERAGE=1 NOSE_COVER_PACKAGE=wafer python manage.py test
