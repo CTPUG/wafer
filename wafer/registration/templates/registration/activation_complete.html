@@ -4,7 +4,7 @@
 <h1>{% trans 'Activation complete' %}</h1>
 <p>
 {% url 'auth_login' as login_url %}
-{% blocktrans %}
+{% blocktrans trimmed %}
     You are registered!
     Please <a href="{{ login_url }}">log in</a>.
 {% endblocktrans %}

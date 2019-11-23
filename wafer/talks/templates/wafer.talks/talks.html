@@ -34,7 +34,7 @@
           {% else %}
           <a href="{{ talk.get_absolute_url }}">{{ talk.title }}</a>
           {% endif %}
-          {% blocktrans with authors=talk.get_authors_display_name %}
+          {% blocktrans trimmed with authors=talk.get_authors_display_name %}
           by <span class="author">{{ authors }}</span>
           {% endblocktrans %}
         </div>
