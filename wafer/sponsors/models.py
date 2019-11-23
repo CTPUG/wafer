@@ -117,6 +117,8 @@ def sponsor_menu(
         sponsors_item=_("Our sponsors"),
         packages_item=_("Sponsorship packages")):
     """Add sponsor menu links."""
+    if not SponsorshipPackage.objects.exists():
+        return
     root_menu.add_menu(menu, label, items=[])
     added_to_menu = set()
     for sponsor in (
