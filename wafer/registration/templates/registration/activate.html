@@ -5,7 +5,7 @@
 <p>
 {% url 'registration_register' as register_url %}
 {% url 'wafer_page' 'contact' as contact_url %}
-{% blocktrans %}
+{% blocktrans trimmed %}
     We seem to have had some difficulty with our registration.
     Please <a href="{{ register_url }}">try again</a>
     or <a href="{{ contact_url }}">contact our admins</a>.

@@ -55,7 +55,7 @@
                 </a>
                 <ul class="dropdown-menu dropdown-menu-right">
                   <li><a class="dropdown-item" href="{% url 'wafer_user_profile' username=user.username %}">
-                    {% blocktrans with name=user.userprofile.display_name %}
+                    {% blocktrans trimmed with name=user.userprofile.display_name %}
                     {{ name }}'s profile
                     {% endblocktrans %}
                   </a></li>

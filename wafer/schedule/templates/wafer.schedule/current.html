@@ -7,11 +7,11 @@
   <div class="wafer_schedule">
     {% if not active %}
       {# Schedule is incomplete / invalid, so show nothing #}
-      {% blocktrans %}
+      {% blocktrans trimmed %}
         <p>The final schedule has not been published yet.</p>
       {% endblocktrans %}
     {% elif not slots %}
-      {% blocktrans %}
+      {% blocktrans trimmed %}
         <p>Nothing happening right now.</p>
       {% endblocktrans %}
     {% else %}

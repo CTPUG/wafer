@@ -15,7 +15,7 @@
         <div class="col-md-6">
             <h2>{% trans 'Sign up' %}</h2>
             {% url 'registration_register' as signup_url %}
-            {% blocktrans %}
+            {% blocktrans trimmed %}
             Not registered? Please <a href="{{signup_url}}">sign up</a>.
             {% endblocktrans %}
             {% if WAFER_SSO %}

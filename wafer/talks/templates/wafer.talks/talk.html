@@ -27,7 +27,7 @@
   </h1>
   <div>
     <p>
-      {% blocktrans count counter=object.authors.count %}
+      {% blocktrans trimmed count counter=object.authors.count %}
         Speaker:
       {% plural %}
         Speakers:
@@ -42,11 +42,11 @@
     {% if user.is_staff or perms.talks.view_all_talks %}
       {% for author in object.authors.all %}
         <p class="bio">
-          {% blocktrans %}Bio{% endblocktrans %}{% if object.authors.count > 1 %} - {{ author.userprofile.display_name }}{% endif %}:
+          {% blocktrans trimmed %}Bio{% endblocktrans %}{% if object.authors.count > 1 %} - {{ author.userprofile.display_name }}{% endif %}:
           {% if author.userprofile.bio %}
             {{ author.userprofile.bio }}
           {% else %}
-            <em>{% blocktrans %}Not provided{% endblocktrans %}</em>
+            <em>{% blocktrans trimmed %}Not provided{% endblocktrans %}</em>
           {% endif %}
         </p>
       {% endfor %}
@@ -54,14 +54,14 @@
 
     {% if object.track %}
       <p>
-        {% blocktrans with track=object.track.name %}
+        {% blocktrans trimmed with track=object.track.name %}
           Track:
           {{ track }}
         {% endblocktrans %}
       </p>
     {% endif %}
     <p>
-      {% blocktrans with talk_type=object.talk_type.name|default:_('Talk') %}
+      {% blocktrans trimmed with talk_type=object.talk_type.name|default:_('Talk') %}
         Type:
         {{ talk_type }}
       {% endblocktrans %}
@@ -69,19 +69,19 @@
     {% if object.get_in_schedule %}
       {% for schedule in object.scheduleitem_set.all %}
         <p>
-          {% blocktrans with venue=schedule.venue %}
+          {% blocktrans trimmed with venue=schedule.venue %}
             Room:
             {{ venue }}
           {% endblocktrans %}
         </p>
         <p>
-          {% blocktrans with start_time=schedule.get_start_time %}
+          {% blocktrans trimmed with start_time=schedule.get_start_time %}
             Time:
             {{ start_time }}
           {% endblocktrans %}
         </p>
         <p>
-          {% blocktrans with hours=schedule.get_duration.hours|stringformat:"d" minutes=schedule.get_duration.minutes|stringformat:"02d" %}
+          {% blocktrans trimmed with hours=schedule.get_duration.hours|stringformat:"d" minutes=schedule.get_duration.minutes|stringformat:"02d" %}
             Duration:
             {{ hours }}:{{ minutes }}
           {% endblocktrans %}
@@ -95,7 +95,7 @@
         {% trans 'Submission:' %}
         {{ object.submission_time }}
         {% if object.is_late_submission %}
-        <span class="badge badge-warning ">{% blocktrans %}Late submission{% endblocktrans %}</span>
+        <span class="badge badge-warning ">{% blocktrans trimmed %}Late submission{% endblocktrans %}</span>
         {% endif %}
       </p>
     </div>
@@ -127,7 +127,7 @@
     {% if talk.notes %}
       <div id="notes" class="card mb-3">
         <div class="card-header">
-          {% blocktrans %}
+          {% blocktrans trimmed %}
             <h2>Talk Notes</h2>
             <p>(The following is not visible to attendees.)</p>
           {% endblocktrans %}
@@ -143,7 +143,7 @@
   {% if perms.talks.edit_private_notes and object.private_notes %}
     <div id="private_notes" class="card mb-3">
       <div class="card-header">
-        {% blocktrans %}
+        {% blocktrans trimmed %}
           <h2>Private notes</h2>
           <p>(The following is not visible to submitters or attendees.)</p>
         {% endblocktrans %}
