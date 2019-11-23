@@ -5,12 +5,12 @@
 <div>
   {{ page.cached_render|safe }}
   {% if perms.pages.change_page %}
-    <div class="clearfix d-print-none">
-      <a href="{{ page.get_absolute_url }}?compare"
-         class="float-right btn btn-secondary btn-lg"
-         >{% trans 'Compare to Previous version' %}</a>
+    <div class="page-controls clearfix d-print-none">
       <a href="{{ page.get_absolute_url }}?edit"
-         class="float-right btn btn-secondary btn-lg">{% trans 'Edit' %}</a>
+         class="btn btn-secondary">{% trans 'Edit' %}</a>
+      <a href="{{ page.get_absolute_url }}?compare"
+         class="btn btn-secondary"
+         >{% trans 'Compare to Previous version' %}</a>
     </div>
   {% endif %}
 </div>
