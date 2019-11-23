@@ -1,3 +1,8 @@
+#main {
+   padding-top: 1em;
+}
+
+
 #profile-avatar {
 	position: relative;
 }
@@ -13,6 +18,11 @@
 
 #profile-avatar .popover-contents {
 	display: none;
+}
+
+ul.profile-links li {
+   list-style: none;
+   margin-bottom: 0.25em;
 }
 
 .wafer-visible {
