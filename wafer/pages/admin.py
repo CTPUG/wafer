@@ -8,6 +8,7 @@ from wafer.compare.admin import CompareVersionAdmin, DateModifiedFilter
 class PageAdmin(CompareVersionAdmin):
     prepopulated_fields = {"slug": ("name",)}
     list_display = ('name', 'slug', 'get_absolute_url',
+                    'include_in_menu', 'menu_order',
                     'cache_time', 'get_people_display_names',
                     'get_in_schedule')
 
