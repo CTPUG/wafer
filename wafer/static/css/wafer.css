@@ -25,6 +25,16 @@ ul.profile-links li {
    margin-bottom: 0.25em;
 }
 
+.page-controls {
+   border-top: 1px solid #bab6bd;
+   padding-top: 1em;
+   text-align: right;
+}
+
+.page-controls .btn {
+	margin-left: 0.25em;
+}
+
 .wafer-visible {
 }
 

@@ -73,6 +73,9 @@ The front matter can contain a couple of flags:
     ``load_pages`` command.
 ``include_in_menu``
     If set to ``true``, the page will be added to the menu structure.
+``menu_order``
+    If set to a number, controls the order in which pages are listed in the
+    menu. Pages with lower values come first.
 ``exclude_from_static``
     If set to ``true``, the page will not be archived to static HTML by
     :ref:`staticsitegen <staticsitegen>`.
