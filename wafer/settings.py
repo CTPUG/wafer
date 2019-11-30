@@ -24,7 +24,6 @@ DATABASES = {
 if os.environ.get('TESTDB', None) == 'postgres':
     DATABASES['default'].update({
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'USER': 'postgres',
         'NAME': 'wafer',
         })
 
