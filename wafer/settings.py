@@ -165,9 +165,6 @@ INSTALLED_APPS = (
 
 TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
 
-# A sample logging configuration. The only tangible logging
-# performed by this configuration is to send an email to
-# the site admins on every HTTP 500 error when DEBUG=False.
 # See http://docs.djangoproject.com/en/dev/topics/logging for
 # more details on how to customize your logging configuration.
 LOGGING = {
@@ -178,16 +175,28 @@ LOGGING = {
             '()': 'django.utils.log.RequireDebugFalse'
         }
     },
+    'formatters': {
+        'console_formatter': {
+            'class': 'logging.Formatter',
+            "format": "[%(asctime)s] [%(process)d] [%(levelname)s] %(message)s",
+            "datefmt": "%Y-%m-%d %H:%M:%S %z",
+        },
+    },
     'handlers': {
         'mail_admins': {
             'level': 'ERROR',
             'filters': ['require_debug_false'],
             'class': 'django.utils.log.AdminEmailHandler'
+        },
+        'console': {
+            'level': 'ERROR',
+            'class': 'logging.StreamHandler',
+            'formatter': 'console_formatter',
         }
     },
     'loggers': {
         'django.request': {
-            'handlers': ['mail_admins'],
+            'handlers': ['mail_admins', 'console'],
             'level': 'ERROR',
             'propagate': True,
         },
