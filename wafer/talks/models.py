@@ -6,7 +6,7 @@ from django.urls import reverse
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.functional import lazy
 from django.utils.translation import ugettext, ugettext_lazy as _
-from django.utils.timezone import datetime, now
+from django.utils.timezone import now
 
 import reversion
 from markitup.fields import MarkupField
