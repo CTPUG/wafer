@@ -16,7 +16,7 @@ REQUIRES = [
     'pytz',
     'requests',
     'django-bakery>=0.12.0',
-    'django-reversion>=2.0',
+    'django-reversion>=2.0,<3.0.5',
     'django-easy-select2',
     'django-markitup>=2.2.2',
     'markdown>=2.5',
