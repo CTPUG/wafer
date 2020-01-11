@@ -169,10 +169,11 @@ class Talk(models.Model):
     notes = models.TextField(
         _("notes"),
         null=True, blank=True,
-        help_text=_("Any notes for the conference, e.g. why you are in a good "
-                    "position to present on this topic, if it is not "
-                    "clear from your bio already. "
-                    "These are not visible to the public."))
+        help_text=_(
+            "Any notes for the conference? Such as additional background on "
+            "the topic or presenters that isn't going to be published "
+            "publicly, special requirements for the event, or thoughts on "
+            "scheduling. These are not visible to the public."))
 
     private_notes = models.TextField(
         _("private notes"),
