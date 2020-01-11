@@ -7,7 +7,7 @@ REQUIRES = [
     'django-crispy-forms',
     'django-nose',
     'django-registration-redux',
-    'djangorestframework',
+    'djangorestframework<3.11',
     'drf-extensions<0.5',
     'jsonfield',
     'pillow',
