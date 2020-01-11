@@ -20,6 +20,25 @@
       <em>Talk submission is closed</em>
     {% endblocktrans %}
   {% else %}
+    {% if form.user.userprofile.bio %}
+      <div>
+        <label for="bio" class="col-form-label">
+          {% trans "Your Biography" %}
+          <a href="{% url 'wafer_user_edit_profile' form.user %}">{% trans "Edit" %}</a>
+        </label>
+        <div id="bio" class="card card-body">
+          {{ form.user.userprofile.bio|linebreaks }}
+        </div>
+      </div>
+    {% else %}
+      <div class="alert alert-primary">
+        {% blocktrans trimmed %}
+          Please
+          <a href="{% url 'wafer_user_edit_profile' form.user %}">add a speaker biography</a>
+          before submitting a talk.
+        {% endblocktrans %}
+      </div>
+    {% endif %}
     {% crispy form %}
   {% endif %}
 </section>
