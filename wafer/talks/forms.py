@@ -3,7 +3,6 @@ import copy
 from django import forms
 from django.conf import settings
 from django.core.exceptions import FieldDoesNotExist
-from django.db.models import Q
 from django.urls import reverse
 from django.utils.module_loading import import_string
 from django.utils.translation import ugettext as _

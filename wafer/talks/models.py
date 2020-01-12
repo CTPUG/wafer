@@ -6,7 +6,7 @@ from django.urls import reverse
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.functional import lazy
 from django.utils.translation import ugettext, ugettext_lazy as _
-from django.utils.timezone import datetime, now
+from django.utils.timezone import now
 
 import reversion
 from markitup.fields import MarkupField
@@ -169,8 +169,11 @@ class Talk(models.Model):
     notes = models.TextField(
         _("notes"),
         null=True, blank=True,
-        help_text=_("Any notes for the conference organisers?  "
-                    "These are not visible to the public."))
+        help_text=_(
+            "Any notes for the conference? Such as additional background on "
+            "the topic or presenters that isn't going to be published "
+            "publicly, special requirements for the event, or thoughts on "
+            "scheduling. These are not visible to the public."))
 
     private_notes = models.TextField(
         _("private notes"),
