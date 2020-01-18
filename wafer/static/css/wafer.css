@@ -20,6 +20,10 @@
     display: none;
 }
 
+ul.profile-links {
+    padding-left: 0px;
+}
+
 ul.profile-links li {
     list-style: none;
     margin-bottom: 0.25em;
