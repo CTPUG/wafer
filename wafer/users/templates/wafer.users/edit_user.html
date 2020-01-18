@@ -4,7 +4,7 @@
 {% block content %}
 <h1>{% trans 'Edit Account' %}</h1>
 {% if profile_user == user and profile_user.has_usable_password %}
-  <ul>
+  <ul class="profile-links">
     <li>
       <a href="{% url 'auth_password_change' %}" class="btn btn-secondary">
         {% trans 'Change Password' %}
