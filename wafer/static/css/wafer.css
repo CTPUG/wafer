@@ -69,3 +69,7 @@ ul.profile-links li {
 #wafer-edit-schedule-bucket {
     background-color: white;
 }
+
+label.requiredField {
+    font-weight: bold;
+}
