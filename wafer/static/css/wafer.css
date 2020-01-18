@@ -1,59 +1,59 @@
 #main {
-   padding-top: 1em;
+    padding-top: 1em;
 }
 
 
 #profile-avatar {
-	position: relative;
+    position: relative;
 }
 
 #profile-avatar img {
-	position: relative;
-	margin-bottom: 10px;
+    position: relative;
+    margin-bottom: 10px;
 }
 
 #profile-avatar .popover {
-	width: 20em;
+    width: 20em;
 }
 
 #profile-avatar .popover-contents {
-	display: none;
+    display: none;
 }
 
 ul.profile-links li {
-   list-style: none;
-   margin-bottom: 0.25em;
+    list-style: none;
+    margin-bottom: 0.25em;
 }
 
 .page-controls {
-   border-top: 1px solid #bab6bd;
-   padding-top: 1em;
-   text-align: right;
+    border-top: 1px solid #bab6bd;
+    padding-top: 1em;
+    text-align: right;
 }
 
 .page-controls .btn {
-	margin-left: 0.25em;
+    margin-left: 0.25em;
 }
 
 .wafer-visible {
 }
 
 .wafer-invisible {
-	display: none;
+    display: none;
 }
 
 [draggable] {
-	-moz-user-select: none;
-	-khtml-user-select: none;
-	-webkit-user-select: none;
-	user-select: none;
-	/* Required to make elements draggable in old WebKit */
-	-khtml-user-drag: element;
-	-webkit-user-drag: element;
+    -moz-user-select: none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
+    /* Required to make elements draggable in old WebKit */
+    -khtml-user-drag: element;
+    -webkit-user-drag: element;
 }
 
 .draggable {
-	cursor: move;
+    cursor: move;
     padding: 5px;
 }
 
@@ -63,5 +63,5 @@ ul.profile-links li {
 
 /* Default to white background to make this more visually distinct */
 #wafer-edit-schedule-bucket {
-   background-color: white;
+    background-color: white;
 }
