@@ -28,7 +28,7 @@
       <div class="col-md-10">
         {% if can_edit %}
           <ul class="float-right btn-group btn-group-vertical profile-links">
-            <li><a href="{% url 'wafer_user_edit' object.username %}" class="btn btn-secondary">{% trans 'Edit User' %}</a></li>
+            <li><a href="{% url 'wafer_user_edit' object.username %}" class="btn btn-secondary">{% trans 'Edit Account' %}</a></li>
             <li><a href="{% url 'wafer_user_edit_profile' object.username %}" class="btn btn-secondary">{% trans 'Edit Profile' %}</a></li>
             {% if WAFER_REGISTRATION_OPEN %}
               {% if WAFER_REGISTRATION_MODE == 'ticket' and not profile.is_registered  %}
