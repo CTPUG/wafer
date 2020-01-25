@@ -38,7 +38,7 @@
                 {% url 'register' as register_url %}
               {% endif %}
               {% if register_url %}
-                <li><a href="{{ register_url }}" class="btn btn-secondary">{% if profile.is_registered %}{% trans 'Update registration' %}{% else %}{% trans 'Register' %}{% endif %}</a></li>
+                <li><a href="{{ register_url }}" class="btn btn-secondary">{% if profile.is_registered %}{% trans 'Update registration' context "conference" %}{% else %}{% trans 'Register' context "conference" %}{% endif %}</a></li>
               {% endif %}
             {% endif %}
             {% if WAFER_TALKS_OPEN %}
