@@ -5,8 +5,16 @@
 <p>
 {% url 'auth_login' as login_url %}
 {% blocktrans trimmed %}
-    You are registered!
+    Your account is now activated!
     Please <a href="{{ login_url }}">log in</a>.
+{% endblocktrans %}
+</p>
+<p>
+{% blocktrans trimmed %}
+    Note that registration for the conference is a separate step.
+{% endblocktrans %}
+{% blocktrans trimmed %}
+    You can now log in and start the conference registration process.
 {% endblocktrans %}
 </p>
 {% endblock %}

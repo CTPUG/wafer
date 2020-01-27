@@ -8,8 +8,8 @@ TL;DR Click https://{{ domain }}{{ activation_url }}
 
 Thank you for signing up for {{ WAFER_CONFERENCE_NAME }}.
 
-To verify your e-mail address, please follow the link above, and complete your
-registration process. You have {{ expiration_days }} days left to do so.
+To verify your e-mail address, please follow the link above to activate your
+account. You have {{ expiration_days }} days left to do so.
 
 We hope to see you soon.
 
