@@ -35,7 +35,25 @@ class UsersView(PaginatedBuildableListView):
         return qs
 
 
-class ProfileView(BuildableDetailView):
+class Hide404Mixin(object):
+    """Generic handling for user objects.
+
+       To prevent information leakage, we turn all 404's into
+       403's when the attendee list isn't public."""
+    def get(self, *args, **kwargs):
+        try:
+            result = super(Hide404Mixin, self).get(*args, **kwargs)
+        except Http404:
+            if not settings.WAFER_PUBLIC_ATTENDEE_LIST:
+                # We convert all 404's to 403's to prevent info leakage
+                # about which users actually exist and which are
+                # just private.
+                raise PermissionDenied()
+            # For public attendee lists, 404 is the right thing
+            raise
+        return result
+
+class ProfileView(Hide404Mixin, BuildableDetailView):
     template_name = 'wafer.users/profile.html'
     model = get_user_model()
     slug_field = 'username'
@@ -63,7 +81,7 @@ class ProfileView(BuildableDetailView):
         if not settings.WAFER_PUBLIC_ATTENDEE_LIST:
             if (not self.can_edit(object_) and
                     not object_.userprofile.accepted_talks().exists()):
-                raise Http404()
+                raise PermissionDenied()
         return object_
 
     def get_context_data(self, **kwargs):
@@ -78,7 +96,8 @@ class ProfileView(BuildableDetailView):
 
 
 # TODO: Combine these
-class EditOneselfMixin(object):
+class EditOneselfMixin(Hide404Mixin):
+    """Extend the behaviour with edit permission checks."""
     def get_object(self, *args, **kwargs):
         object_ = super(EditOneselfMixin, self).get_object(*args, **kwargs)
         self.verify_edit_permission(object_)
