@@ -1,3 +1,5 @@
+from glob import glob
+import subprocess
 import sys
 
 from setuptools import find_packages, setup
@@ -48,6 +50,16 @@ else:
 with open('README.rst', 'r') as f:
     long_description = f.read()
 
+
+def compile_translations():
+    try:
+        subprocess.check_call(['./manage.py', 'compilemessages'])
+    except subprocess.CalledProcessError:
+        print("WARNING: cannot compile translations.")
+        pass
+    return glob('wafer/locale/*/LC_MESSAGES/django.mo')
+
+
 setup(
     name="wafer",
     version="0.7.8a",
@@ -61,6 +73,7 @@ setup(
     include_package_data=True,
     install_requires=REQUIRES,
     dependency_links=SOURCES,
+    data_files=compile_translations(),
     setup_requires=[
         # Add setuptools-git, so we get correct behaviour for
         # include_package_data
