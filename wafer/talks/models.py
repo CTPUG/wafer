@@ -5,6 +5,7 @@ from django.template.defaultfilters import slugify
 from django.urls import reverse
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.functional import lazy
+from django.utils.text import format_lazy
 from django.utils.translation import ugettext, ugettext_lazy as _
 from django.utils.timezone import now
 
@@ -200,11 +201,14 @@ class Talk(models.Model):
     video = models.BooleanField(
         default=True,
         verbose_name=_("video"),
-        help_text=_(
+        help_text=format_lazy(_(
             "By checking this, you are giving permission for the talk to be "
             "videoed, and distributed by the conference, under the "
-            '<a href="%s">%s license</a>.'
-        ) % (settings.WAFER_VIDEO_LICENSE_URL, settings.WAFER_VIDEO_LICENSE))
+            '<a href="{license_url}">{license_name} license</a>.'),
+            license_url=settings.WAFER_VIDEO_LICENSE_URL,
+            license_name=settings.WAFER_VIDEO_LICENSE,
+        ),
+    )
     video_reviewer = models.EmailField(
         null=True, blank=True,
         verbose_name=_("video reviewer"),
