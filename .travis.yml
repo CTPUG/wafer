@@ -6,11 +6,18 @@ python:
    - "3.5"
    - "3.6"
    - "3.7"
+   - "3.8"
 env:
    - DJANGO='django>=1.11.0,<1.12.0' TESTDB=sqlite
    - DJANGO='django>=1.11.0,<1.12.0' TESTDB=postgres
    - DJANGO='django>=2.0,<2.1.0' TESTDB=sqlite
    - DJANGO='django>=2.0,<2.1.0' TESTDB=postgres
+   - DJANGO='django>=2.1,<2.2.0' TESTDB=sqlite
+   - DJANGO='django>=2.1,<2.2.0' TESTDB=postgres
+   - DJANGO='django>=2.2,<3.0' TESTDB=sqlite
+   - DJANGO='django>=2.2,<3.0' TESTDB=postgres
+   - DJANGO='django>=3.0,<3.1.0' TESTDB=sqlite
+   - DJANGO='django>=3.0,<3.1.0' TESTDB=postgres
    - DJANGO='https://github.com/django/django/archive/master.tar.gz' TESTDB=sqlite
    - DJANGO='https://github.com/django/django/archive/master.tar.gz' TESTDB=postgres
 
@@ -22,13 +29,43 @@ matrix:
       - python: "2.7"
         env: DJANGO='django>=2.0,<2.1.0' TESTDB=postgres
       - python: "2.7"
+        env: DJANGO='django>=2.1,<2.2.0' TESTDB=sqlite
+      - python: "2.7"
+        env: DJANGO='django>=2.1,<2.2.0' TESTDB=postgres
+      - python: "2.7"
+        env: DJANGO='django>=2.2,<3.0' TESTDB=sqlite
+      - python: "2.7"
+        env: DJANGO='django>=2.2,<3.0' TESTDB=postgres
+      - python: "2.7"
+        env: DJANGO='django>=3.0,<3.1.0' TESTDB=sqlite
+      - python: "2.7"
+        env: DJANGO='django>=3.0,<3.1.0' TESTDB=postgres
+      - python: "2.7"
         env: DJANGO='https://github.com/django/django/archive/master.tar.gz' TESTDB=sqlite
       - python: "2.7"
         env: DJANGO='https://github.com/django/django/archive/master.tar.gz' TESTDB=postgres
+      - python: "3.8"
+        env: DJANGO='django>=1.11.0,<1.12.0' TESTDB=sqlite
+      - python: "3.7"
+        env: DJANGO='django>=1.11.0,<1.12.0' TESTDB=postgres
+      - python: "3.8"
+        env: DJANGO='django>=2.0,<2.1.0' TESTDB=sqlite
+      - python: "3.7"
+        env: DJANGO='django>=2.0,<2.1.0' TESTDB=postgres
+      - python: "3.8"
+        env: DJANGO='django>=2.1,<2.2.0' TESTDB=sqlite
+      - python: "3.7"
+        env: DJANGO='django>=2.1,<2.2.0' TESTDB=postgres
 
    allow_failures:
       - env: DJANGO='django>=2.0,<2.1.0' TESTDB=sqlite
       - env: DJANGO='django>=2.0,<2.1.0' TESTDB=postgres
+      - env: DJANGO='django>=2.1,<2.2.0' TESTDB=sqlite
+      - env: DJANGO='django>=2.1,<2.2.0' TESTDB=postgres
+      - env: DJANGO='django>=2.2,<3.0' TESTDB=sqlite
+      - env: DJANGO='django>=2.2,<3.0' TESTDB=postgres
+      - env: DJANGO='django>=3.0,<3.1.0' TESTDB=sqlite
+      - env: DJANGO='django>=3.0,<3.1.0' TESTDB=postgres
       - env: DJANGO='https://github.com/django/django/archive/master.tar.gz' TESTDB=postgres
       - env: DJANGO='https://github.com/django/django/archive/master.tar.gz' TESTDB=sqlite
 
