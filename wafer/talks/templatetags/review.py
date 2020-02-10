@@ -11,7 +11,7 @@ def reviewed_badge(user, talk):
     }
 
     review = None
-    if user and not user.is_anonymous():
+    if user and not user.is_anonymous:
         review = talk.reviews.filter(reviewer=user).first()
 
     if review:
