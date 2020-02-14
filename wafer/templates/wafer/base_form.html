@@ -1,6 +1,7 @@
 {% extends "wafer/base.html" %}
 {% load i18n %}
 {% load crispy_forms_tags %}
+{% load static from staticfiles %}
 {% block extra_head %}
   {{ form.media.css }}
 {% endblock %}
@@ -8,5 +9,8 @@
   {% crispy form %}
 {% endblock %}
 {% block extra_foot %}
+  {# this is needed for easy_select2 fields to work outside of the admin app #}
+  <script type="text/javascript" src="{% static 'admin/js/jquery.init.js' %}">
+  </script>
   {{ form.media.js }}
 {% endblock %}
