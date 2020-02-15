@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: wafer\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-02-01 11:57+0000\n"
-"PO-Revision-Date: 2020-02-01 12:59+0100\n"
+"PO-Revision-Date: 2020-02-15 11:33-0300\n"
 "Last-Translator: Allythy <allythy@protonmail.com>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
@@ -203,7 +203,7 @@ msgstr "Editar página"
 #: wafer/registration/templates/registration/login.html:16
 #: wafer/registration/templates/registration/registration_form.html:6
 msgid "Sign up"
-msgstr "Se inscrever"
+msgstr "Criar conta"
 
 #: wafer/registration/forms.py:25
 #: wafer/registration/templates/registration/login.html:11
@@ -304,11 +304,11 @@ msgstr ""
 #: wafer/registration/templates/registration/login.html:18
 #, python-format
 msgid "Not registered? Please <a href=\"%(signup_url)s\">sign up</a>."
-msgstr "Não registrado. Por favor, <a href=\"%(signup_url)s\">inscreva-se</a>."
+msgstr "Não registrado. Por favor, <a href=\"%(signup_url)s\">crie uma conta</a>."
 
 #: wafer/registration/templates/registration/login.html:22
 msgid "Shared/Social Log in and Sign up"
-msgstr "Compartilhado/Social Faça login e cadastre-se"
+msgstr "Login ou nova conta compartilhada/via rede social"
 
 #: wafer/registration/templates/registration/logout.html:7
 msgid "Logged out"
@@ -742,7 +742,7 @@ msgstr "Tipo de palestra"
 
 #: wafer/talks/models.py:96
 msgid "talk types"
-msgstr "Tipos de plestras"
+msgstr "Tipos de palestras"
 
 #: wafer/talks/models.py:105 wafer/talks/models.py:130
 msgid "CSS class name"
@@ -750,11 +750,11 @@ msgstr "Nome da classe CSS"
 
 #: wafer/talks/models.py:120 wafer/talks/models.py:159
 msgid "track"
-msgstr "Faixa"
+msgstr "trilha"
 
 #: wafer/talks/models.py:121
 msgid "tracks"
-msgstr "Faixas"
+msgstr "trilhas"
 
 #: wafer/talks/models.py:142 wafer/talks/models.py:365
 msgid "talk"
@@ -806,9 +806,9 @@ msgid ""
 "What will they get out of it? What will you cover?<br />You can use Markdown "
 "syntax."
 msgstr ""
-"Escrever dois ou tres paragrafos descrevendo sua plestra. quem é seu público?"
-"o que eles vão ganhar com isso? o que você vai cobrir?<br /> Você pode usar "
-"markdownsintaxe."
+"Escreva dois ou três parágrafos descrevendo sua palestra. Quem é seu público alvo?"
+"O que eles vão ganhar com a palestra? O que você vai cobrir?<br /> Você pode usar "
+"a sintaxe Markdown."
 
 #: wafer/talks/models.py:171 wafer/talks/models.py:372
 msgid "notes"
@@ -822,7 +822,7 @@ msgid ""
 "public."
 msgstr ""
 "Alguma observação para a conferência? Por exemplo, mais informações sobre "
-"oassunto ou sobre os(as) palestrantes que não sejam públicas, necessidades "
+"o assunto ou sobre os(as) palestrantes que não sejam públicas, necessidades "
 "especials para a atividade, ou solicitações sobre o agendamento da "
 "atividade. Estas informações não são serão mostradas ao público."
 
@@ -1188,7 +1188,7 @@ msgstr "Administrador do site"
 
 #: wafer/templates/wafer/nav.html:76
 msgid "Sign up / Log In"
-msgstr "Inscrever-se / Entrar"
+msgstr "Criar conta / Entrar"
 
 #: wafer/tickets/forms.py:18
 msgid "Claim"
