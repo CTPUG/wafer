@@ -11,7 +11,7 @@ REQUIRES = [
     'django-registration-redux',
     'djangorestframework<3.11',
     'drf-extensions<0.5',
-    'jsonfield',
+    'jsonfield<3.0.0',
     'pillow',
     'diff-match-patch',
     'pyLibravatar',
