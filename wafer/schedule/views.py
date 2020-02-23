@@ -1,4 +1,5 @@
 import datetime
+import os
 
 import logging
 
@@ -10,8 +11,9 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponse
 from django.utils import timezone
+from django.conf import settings
 
-from bakery.views import BuildableDetailView, BuildableTemplateView
+from bakery.views import BuildableDetailView, BuildableTemplateView, BuildableMixin
 from rest_framework import viewsets
 from rest_framework.permissions import IsAdminUser
 from wafer.pages.models import Page
@@ -376,7 +378,8 @@ class ScheduleEditView(TemplateView):
         return context
 
 
-class ICalView(View):
+class ICalView(View, BuildableMixin):
+    build_path = 'schedule/schedule.ics'
 
     def get(self, request):
         """Create a iCal file from the schedule"""
@@ -402,3 +405,21 @@ class ICalView(View):
         response = HttpResponse(calendar.to_ical(), content_type="text/calendar")
         response['Content-Disposition'] = 'attachment; filename=schedule.ics'
         return response
+
+    def get_content(self):
+        """Return just the iCal data for bakery"""
+        response = self.get(self.request)
+        return response.content
+
+    @property
+    def build_method(self):
+        return self.build
+
+    def build(self):
+        logger.debug("Building iCal schedule in %s" % (
+            self.build_path,
+        ))
+        self.request = self.create_request(self.build_path)
+        path = os.path.join(settings.BUILD_DIR, self.build_path)
+        self.prep_directory(self.build_path)
+        self.build_file(path, self.get_content())
