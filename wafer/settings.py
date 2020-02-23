@@ -313,6 +313,7 @@ BAKERY_VIEWS = (
     'wafer.schedule.views.VenueView',
     'wafer.schedule.views.ScheduleView',
     'wafer.schedule.views.ScheduleXmlView',
+    'wafer.schedule.views.ICalView',
     'wafer.sponsors.views.ShowSponsors',
     'wafer.sponsors.views.ShowPackages',
     'wafer.sponsors.views.SponsorView',
