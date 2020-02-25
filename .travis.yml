@@ -66,8 +66,6 @@ matrix:
         env: DJANGO='django>=2.1,<2.2.0' TESTDB=postgres
 
    allow_failures:
-      - env: DJANGO='django>=2.0,<2.1.0' TESTDB=sqlite
-      - env: DJANGO='django>=2.0,<2.1.0' TESTDB=postgres
       - env: DJANGO='django>=2.1,<2.2.0' TESTDB=sqlite
       - env: DJANGO='django>=2.1,<2.2.0' TESTDB=postgres
       - env: DJANGO='django>=2.2,<3.0' TESTDB=sqlite
