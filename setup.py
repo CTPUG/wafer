@@ -23,10 +23,12 @@ REQUIRES = [
     'markdown>=2.5',
     'icalendar>=4.0',
     'py3dns',
+    'django-markitup@https://github.com/CTPUG/django-markitup/archive/5ada7c55112e1562ab22e4a15524596e3f43b28b.zip',
 ]
 #    'django-markitup>=4.0.0',
 
-SOURCES = ['https://github.com/CTPUG/django-markitup/commit/5ada7c55112e1562ab22e4a15524596e3f43b28b']
+SOURCES = []
+
 
 with open('README.rst', 'r') as f:
     long_description = f.read()
