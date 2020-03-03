@@ -6,7 +6,6 @@ from django.core.validators import MinValueValidator
 from django.db import models
 from django.db.models.signals import post_save
 from django.urls import reverse
-from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
 
 from markitup.fields import MarkupField
@@ -16,7 +15,6 @@ from wafer.menu import menu_logger, refresh_menu_cache
 logger = logging.getLogger(__name__)
 
 
-@python_2_unicode_compatible
 class File(models.Model):
     """A file for use in sponsor and sponshorship package descriptions."""
     name = models.CharField(max_length=255)
@@ -27,7 +25,6 @@ class File(models.Model):
         return u'%s (%s)' % (self.name, self.item.url)
 
 
-@python_2_unicode_compatible
 class SponsorshipPackage(models.Model):
     """A description of a sponsorship package."""
     order = models.IntegerField(default=1)
@@ -66,7 +63,6 @@ class SponsorshipPackage(models.Model):
         return self.sponsors.count()
 
 
-@python_2_unicode_compatible
 class Sponsor(models.Model):
     """A conference sponsor."""
     order = models.IntegerField(default=1)
