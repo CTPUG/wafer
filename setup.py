@@ -20,32 +20,13 @@ REQUIRES = [
     'django-bakery>=0.12.0',
     'django-reversion',
     'django-easy-select2',
-    'django-markitup>=2.2.2',
     'markdown>=2.5',
     'icalendar>=4.0',
-]
-
-SOURCES = []
-
-REQUIRES2 = [
-    'pydns',
-    'backports.csv',
-]
-
-SOURCES2 = []
-
-REQUIRES3 = [
     'py3dns',
 ]
+#    'django-markitup>=4.0.0',
 
-SOURCES3 = []
-
-if sys.version_info < (3, 0):
-    REQUIRES += REQUIRES2
-    SOURCES += SOURCES2
-else:
-    REQUIRES += REQUIRES3
-    SOURCES += SOURCES3
+SOURCES = ['https://github.com/CTPUG/django-markitup/commit/5ada7c55112e1562ab22e4a15524596e3f43b28b']
 
 with open('README.rst', 'r') as f:
     long_description = f.read()
