@@ -6,7 +6,7 @@ from setuptools import find_packages, setup
 
 REQUIRES = [
     'Django>=1.11',
-    'django-crispy-forms',
+    'django-crispy-forms<1.9.0',
     'django-nose',
     'django-registration-redux',
     'djangorestframework<3.11',
