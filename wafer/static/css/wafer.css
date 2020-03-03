@@ -73,3 +73,15 @@ ul.profile-links li {
 label.requiredField {
     font-weight: bold;
 }
+
+.wafer_schedule table {
+  border: 1px solid #cccccf;
+  border-collapse: collapse;
+  margin-bottom: 2em;
+}
+
+.wafer_schedule td, .wafer_schedule th {
+  padding: 10px;
+  border: 1px solid #cccccf;
+  vertical-align: top;
+}
