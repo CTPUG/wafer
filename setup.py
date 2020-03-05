@@ -6,7 +6,7 @@ from setuptools import find_packages, setup
 
 REQUIRES = [
     'Django>=1.11',
-    'django-crispy-forms',
+    'django-crispy-forms<1.9.0',
     'django-nose',
     'django-registration-redux',
     'djangorestframework',
@@ -45,7 +45,7 @@ def compile_translations():
 
 setup(
     name="wafer",
-    version="0.7.8a",
+    version="0.8.1a",
     url='http://github.com/CTPUG/wafer',
     license='ISC',
     description="A wafer-thin Django library for running small conferences.",

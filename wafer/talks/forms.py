@@ -29,6 +29,16 @@ def has_field(model, field_name):
         return False
 
 
+class TalkCategorisationWidget(forms.Select):
+
+    class Media:
+        js = ('wafer/talks/talk-categorization.js',)
+
+    def __init__(self, *args, **kwargs):
+        super(TalkCategorisationWidget, self).__init__(*args, **kwargs)
+        self.attrs["class"] = "talk-categorization"
+
+
 class TalkCategorisationField(forms.ModelChoiceField):
     """The categories that talks can be placed into.
     These are always required, if there are any registered.
@@ -36,6 +46,7 @@ class TalkCategorisationField(forms.ModelChoiceField):
     def __init__(self, model, initial=None, empty_label=None, *args, **kwargs):
         super(TalkCategorisationField, self).__init__(
             initial=initial,
+            widget=TalkCategorisationWidget(),
             queryset=model.objects.all(),
             empty_label=None,
             required=True,
