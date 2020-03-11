@@ -325,3 +325,8 @@ BAKERY_VIEWS = (
     'wafer.users.views.UsersView',
     'wafer.users.views.ProfileView',
 )
+
+try:
+    from wafer.localsettings import *
+except LoadError:
+    pass
