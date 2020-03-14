@@ -146,7 +146,7 @@ INSTALLED_APPS = (
     'crispy_forms',
     'django_nose',
     'rest_framework',
-    'easy_select2',
+    'django_select2',
     'wafer',
     'wafer.kv',
     'wafer.registration',
