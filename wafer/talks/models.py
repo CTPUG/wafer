@@ -27,6 +27,8 @@ WITHDRAWN = 'W'
 
 
 # Utility functions used in the forms
+# We define this here, rather than in the users model, to avoid import
+# loops as we need to import talks into users
 def render_author(author):
     return '%s (%s)' % (author.userprofile.display_name(), author)
 

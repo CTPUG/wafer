@@ -5,21 +5,10 @@ from django.db.models import Q
 from django.utils.translation import ugettext_lazy as _
 
 from reversion.admin import VersionAdmin
-from easy_select2 import select2_modelform_meta
 
 from wafer.compare.admin import CompareVersionAdmin, DateModifiedFilter
 from wafer.talks.models import (
-    Review, ReviewAspect, Score, Talk, TalkType, TalkUrl, Track, render_author)
-
-
-class AdminTalkForm(forms.ModelForm):
-
-    Meta = select2_modelform_meta(Talk)
-
-    def __init__(self, *args, **kwargs):
-        super(AdminTalkForm, self).__init__(*args, **kwargs)
-        self.fields['authors'].label_from_instance = render_author
-        self.fields['corresponding_author'].label_from_instance = render_author
+    Review, ReviewAspect, Score, Talk, TalkType, TalkUrl, Track)
 
 
 class ScheduleListFilter(admin.SimpleListFilter):
@@ -91,13 +80,13 @@ class TalkAdmin(CompareVersionAdmin):
     list_filter = ('status', 'talk_type', 'track', ScheduleListFilter,
                    DateModifiedFilter, HasNotesFilter,)
     search_fields = ('title',)
+    autocomplete_fields = ('authors', 'corresponding_author')
     exclude = ('kv',)
 
     inlines = [
         TalkUrlInline,
         ReviewInline,
     ]
-    form = AdminTalkForm
 
     def get_queryset(self, request):
         qs = super(TalkAdmin, self).get_queryset(request)
