@@ -406,6 +406,9 @@ class SlotAdmin(CompareVersionAdmin):
 
     list_filter = (SlotBlockFilter, SlotStartTimeFilter)
 
+    class Media:
+        js = ('js/scheduledatetime.js',)
+
     def changelist_view(self, request, extra_context=None):
         extra_context = extra_context or {}
         # Find issues with the slots
