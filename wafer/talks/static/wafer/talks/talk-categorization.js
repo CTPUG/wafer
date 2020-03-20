@@ -1,4 +1,4 @@
-var $ = (jQuery || django.jQuery)
+var $ = (jQuery)
 
 $(document).ready(function() {
 
