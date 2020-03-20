@@ -45,7 +45,7 @@ def compile_translations():
 
 setup(
     name="wafer",
-    version="0.8.1a",
+    version="0.8.2a",
     url='http://github.com/CTPUG/wafer',
     license='ISC',
     description="A wafer-thin Django library for running small conferences.",

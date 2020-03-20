@@ -32,7 +32,6 @@ Supported Django versions
 
 Wafer supports Django 2+ and Django 3.0.
 
-
 Installation
 ============
 
