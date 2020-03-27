@@ -20,7 +20,7 @@ REQUIRES = [
     'django-bakery>=0.12.0',
     'django-reversion>=2.0,<3.0.5',
     'django-easy-select2',
-    'django-markitup>=2.2.2',
+    'django-markitup>=3.7',
     'markdown>=2.5',
     'icalendar>=4.0',
 ]
