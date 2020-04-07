@@ -6,7 +6,6 @@ from django.core.exceptions import ValidationError, NON_FIELD_ERRORS
 from django.db import models
 from django.db.models.signals import post_save
 from django.urls import reverse
-from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
 
 from markitup.fields import MarkupField, render_func
@@ -16,7 +15,6 @@ from wafer.menu import MenuError, refresh_menu_cache
 logger = logging.getLogger(__name__)
 
 
-@python_2_unicode_compatible
 class File(models.Model):
     """A file for use in page markup."""
     name = models.CharField(max_length=255)
@@ -27,7 +25,6 @@ class File(models.Model):
         return u'%s (%s)' % (self.name, self.item.url)
 
 
-@python_2_unicode_compatible
 class Page(models.Model):
     """An extra page for the site."""
     name = models.CharField(max_length=255)

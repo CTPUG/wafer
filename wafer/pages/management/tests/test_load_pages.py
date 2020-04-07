@@ -1,12 +1,12 @@
 # Test load_pages management commands
 
 import os
+from io import StringIO
 import shutil
 import tempfile
 
 from django.core.management import call_command
 from django.test import TestCase
-from django.utils.six import StringIO
 
 from wafer.pages.models import Page
 

@@ -6,46 +6,28 @@ from setuptools import find_packages, setup
 
 REQUIRES = [
     'Django>=1.11',
-    'django-crispy-forms<1.9.0',
+    'django-crispy-forms',
     'django-nose',
     'django-registration-redux',
-    'djangorestframework<3.11',
-    'drf-extensions<0.5',
-    'jsonfield<3.0.0',
+    'djangorestframework',
+    'drf-extensions',
+    'jsonfield',
     'pillow',
     'diff-match-patch',
     'pyLibravatar',
     'pytz',
     'requests',
     'django-bakery>=0.12.0',
-    'django-reversion>=2.0,<3.0.5',
+    'django-reversion',
     'django-easy-select2',
-    'django-markitup>=3.7',
     'markdown>=2.5',
     'icalendar>=4.0',
+    'py3dns',
+    'django-markitup>=4.0.0',
 ]
 
 SOURCES = []
 
-REQUIRES2 = [
-    'pydns',
-    'backports.csv',
-]
-
-SOURCES2 = []
-
-REQUIRES3 = [
-    'py3dns',
-]
-
-SOURCES3 = []
-
-if sys.version_info < (3, 0):
-    REQUIRES += REQUIRES2
-    SOURCES += SOURCES2
-else:
-    REQUIRES += REQUIRES3
-    SOURCES += SOURCES3
 
 with open('README.rst', 'r') as f:
     long_description = f.read()
@@ -67,6 +49,7 @@ setup(
     license='ISC',
     description="A wafer-thin Django library for running small conferences.",
     long_description=long_description,
+    long_description_content_type="text/x-rst",
     author='CTPUG',
     author_email='ctpug@googlegroups.com',
     packages=find_packages(),
