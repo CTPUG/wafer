@@ -299,7 +299,7 @@ WAFER_PUBLIC_ATTENDEE_LIST = True
 BUILD_DIR = os.path.join(project_root, 'static_mirror')
 
 MARKITUP_FILTER = ('markdown.markdown', {'safe_mode': True})
-JQUERY_URL = 'vendor/jquery/dist/jquery.min.js'
+JQUERY_URL = None
 SELECT2_USE_BUNDLED_JQUERY = False
 
 REST_FRAMEWORK = {
