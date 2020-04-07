@@ -49,6 +49,7 @@ setup(
     license='ISC',
     description="A wafer-thin Django library for running small conferences.",
     long_description=long_description,
+    long_description_content_type="text/x-rst",
     author='CTPUG',
     author_email='ctpug@googlegroups.com',
     packages=find_packages(),
