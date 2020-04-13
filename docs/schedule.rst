@@ -3,7 +3,7 @@ Schedule
 ========
 
 Specifying Block and Venues
-==========================
+===========================
 
 The first things that need to be specified are the blocks for the schedule and
 the venues available.
