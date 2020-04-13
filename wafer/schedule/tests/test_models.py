@@ -220,7 +220,6 @@ class SlotTests(TestCase):
         slot1.delete()
         block1.delete()
 
-
     def test_overlapping_slots(self):
         """Test that we can't create overlapping slots."""
         block1 = ScheduleBlock.objects.create(
