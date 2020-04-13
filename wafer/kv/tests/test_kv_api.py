@@ -173,7 +173,6 @@ class KeyValueAPITests(TestCase):
         response = self.client.post('/kv/api/kv/', data, format='json')
         self.assertEqual(response.status_code, 400)
 
-
     def test_group_2_actions(self):
         # Same tests as above, but with group_2 and a different ordering
         # of users belonging to 1 or both groups

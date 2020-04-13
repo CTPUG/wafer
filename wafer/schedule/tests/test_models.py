@@ -168,7 +168,7 @@ class SlotTests(TestCase):
                                          tzinfo=timezone.utc))
         self.assertEqual(slot2.get_block(), block1)
         self.assertEqual(slot2.get_duration(), {'hours': 1,
-                                                'minutes':0})
+                                                'minutes': 0})
         self.assertEqual(slot3.get_block(), block1)
         self.assertEqual(slot3.get_duration(), {'hours': 0,
                                                 'minutes': 30})

@@ -74,7 +74,7 @@ class Venue(models.Model):
                     " conference attendees"))
 
     blocks = models.ManyToManyField(ScheduleBlock,
-        help_text=_("Blocks (days) on which this venue will be used."))
+                                    help_text=_("Blocks (days) on which this venue will be used."))
 
     video = models.BooleanField(
         default=False,
@@ -201,6 +201,7 @@ class Slot(models.Model):
                 continue
             if overlap(self, other_slot):
                 raise ValidationError("Overlaps with %s" % other_slot)
+
 
 class ScheduleItem(models.Model):
 

@@ -1,5 +1,6 @@
 from rest_framework.permissions import BasePermission
 
+
 class KeyValueGroupPermission(BasePermission):
     """Restrict access to a given key / value pair to members of the
        corresponding group."""
