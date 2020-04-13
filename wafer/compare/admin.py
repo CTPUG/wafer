@@ -47,7 +47,6 @@ class DateModifiedFilter(SimpleListFilter):
         return queryset.filter(pk__in=[x.object_id for x in revisions])
 
 
-
 def get_date(revision):
     return revision.revision.date_created.strftime("%Y-%m-%d %H:%M:%S")
 
@@ -87,14 +86,14 @@ def make_diff(current, revision):
             # so new entries containing any of the marker words
             # don't show up as differences
             diffs = [(dmp.DIFF_DELETE, old_val), (dmp.DIFF_INSERT, cur_val)]
-            patch =  dmp.diff_prettyHtml(diffs)
+            patch = dmp.diff_prettyHtml(diffs)
         elif isinstance(cur_val, Markup):
             # we roll our own diff here, so we can compare of the raw
             # markdown, rather than the rendered result.
             if cur_val.raw == old_val.raw:
                 continue
             diffs = dmp.diff_main(old_val.raw, cur_val.raw)
-            patch =  dmp.diff_prettyHtml(diffs)
+            patch = dmp.diff_prettyHtml(diffs)
         elif cur_val == old_val:
             continue
         else:
@@ -116,15 +115,15 @@ class CompareVersionAdmin(VersionAdmin):
     change_form_template = "admin/wafer.compare/change_form.html"
 
     def get_urls(self):
-         urls = super(CompareVersionAdmin, self).get_urls()
-         opts = self.model._meta
-         compare_urls = [
-               url("^([^/]+)/([^/]+)/compare/$", self.admin_site.admin_view(self.compare_view),
-                   name='%s_%s_compare' % (opts.app_label, opts.model_name)),
-               url("^([^/]+)/comparelist/$", self.admin_site.admin_view(self.comparelist_view),
-                   name='%s_%s_comparelist' % (opts.app_label, opts.model_name)),
-         ]
-         return compare_urls + urls
+        urls = super(CompareVersionAdmin, self).get_urls()
+        opts = self.model._meta
+        compare_urls = [
+              url("^([^/]+)/([^/]+)/compare/$", self.admin_site.admin_view(self.compare_view),
+                  name='%s_%s_compare' % (opts.app_label, opts.model_name)),
+              url("^([^/]+)/comparelist/$", self.admin_site.admin_view(self.comparelist_view),
+                  name='%s_%s_comparelist' % (opts.app_label, opts.model_name)),
+        ]
+        return compare_urls + urls
 
     def compare_view(self, request, object_id, version_id, extra_context=None):
         """Actually compare two versions."""
@@ -140,11 +139,11 @@ class CompareVersionAdmin(VersionAdmin):
         context = {
             "title": _("Comparing current %(model)s with revision created %(date)s") % {
                 'model': current,
-                'date' : get_date(revision),
+                'date': get_date(revision),
                 },
             "opts": opts,
             "compare_list_url": reverse("%s:%s_%s_comparelist" % (self.admin_site.name, opts.app_label, opts.model_name),
-                                                                  args=(quote(object_id),)),
+                                        args=(quote(object_id),)),
             "diff_list": the_diff,
         }
 
