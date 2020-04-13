@@ -55,8 +55,5 @@ class MarkdownTextField(TextField):
         kwargs['html_field_suffix'] = self._html_field_suffix
         return name, path, args, kwargs
 
-    def __unicode__(self):
-        return unicode(self.attname)
-
     def __str__(self):
         return self.attname
