@@ -4,5 +4,5 @@ from django.apps import AppConfig
 
 
 class RegistrationConfig(AppConfig):
-   label = 'wafer.registration'
-   name = 'wafer.registration'
+    label = 'wafer.registration'
+    name = 'wafer.registration'

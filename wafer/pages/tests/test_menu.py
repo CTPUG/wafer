@@ -27,4 +27,3 @@ class PageMenusTests(TestCase):
             Menu.mk_item("About", about.get_absolute_url()),
             Menu.mk_item("Schedule", schedule.get_absolute_url()),
         ])
-

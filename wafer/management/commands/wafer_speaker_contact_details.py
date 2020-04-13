@@ -33,8 +33,8 @@ class Command(BaseCommand):
                     continue
             row = [x
                    for x in (person.userprofile.display_name(), person.email,
-                   person.userprofile.contact_number or 'NO CONTACT INFO',
-                   ';'.join(titles))]
+                             person.userprofile.contact_number or 'NO CONTACT INFO',
+                             ';'.join(titles))]
             csv_file.writerow(row)
 
     def handle(self, *args, **options):

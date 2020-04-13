@@ -168,7 +168,7 @@ class SlotTests(TestCase):
                                          tzinfo=timezone.utc))
         self.assertEqual(slot2.get_block(), block1)
         self.assertEqual(slot2.get_duration(), {'hours': 1,
-                                                'minutes':0})
+                                                'minutes': 0})
         self.assertEqual(slot3.get_block(), block1)
         self.assertEqual(slot3.get_duration(), {'hours': 0,
                                                 'minutes': 30})
@@ -219,7 +219,6 @@ class SlotTests(TestCase):
         self.assertRaises(ValidationError, slot1.clean)
         slot1.delete()
         block1.delete()
-
 
     def test_overlapping_slots(self):
         """Test that we can't create overlapping slots."""
@@ -301,7 +300,7 @@ class SlotTests(TestCase):
                                       tzinfo=timezone.utc),
                 end_time=D.datetime(2013, 9, 25, 19, 0, 0,
                                     tzinfo=timezone.utc))
-        # Different day, 
+        # Different day,
         slot2 = Slot(start_time=D.datetime(2013, 9, 25, 1, 0, 0,
                                            tzinfo=timezone.utc),
                      end_time=D.datetime(2013, 9, 24, 3, 0, 0,
@@ -361,7 +360,7 @@ class LastUpdateTests(TestCase):
 
         start1 = D.datetime(2013, 9, 22, 10, 0, 0,
                             tzinfo=timezone.utc)
-        start2 = D.datetime(2013, 9, 22, 11, 0, 0, 
+        start2 = D.datetime(2013, 9, 22, 11, 0, 0,
                             tzinfo=timezone.utc)
         start3 = D.datetime(2013, 9, 22, 12, 0, 0,
                             tzinfo=timezone.utc)

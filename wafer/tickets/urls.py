@@ -7,4 +7,3 @@ urlpatterns = [
     url(r'^zapier_guest_hook/$', zapier_guest_hook),
     url(r'^zapier_cancel_hook/$', zapier_cancel_hook),
 ]
-

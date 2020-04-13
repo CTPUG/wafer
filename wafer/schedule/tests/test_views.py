@@ -47,7 +47,7 @@ def make_slot():
             start_time=D.datetime(2013, 9, 22, 7, 0, 0,
                                   tzinfo=timezone.utc),
             end_time=D.datetime(2013, 9, 22, 19, 0, 0,
-                                  tzinfo=timezone.utc),
+                                tzinfo=timezone.utc),
             )
     start = D.datetime(2013, 9, 22, 10, 0, 0,
                        tzinfo=timezone.utc)
@@ -88,7 +88,7 @@ class ScheduleViewTests(TestCase):
             start_time=D.datetime(2013, 9, 22, 7, 0, 0,
                                   tzinfo=timezone.utc),
             end_time=D.datetime(2013, 9, 22, 19, 0, 0,
-                                  tzinfo=timezone.utc),
+                                tzinfo=timezone.utc),
             )
 
         venue1 = Venue.objects.create(order=1, name='Venue 1')
@@ -167,7 +167,7 @@ class ScheduleViewTests(TestCase):
             start_time=D.datetime(2013, 9, 22, 7, 0, 0,
                                   tzinfo=timezone.utc),
             end_time=D.datetime(2013, 9, 22, 19, 0, 0,
-                                  tzinfo=timezone.utc),
+                                tzinfo=timezone.utc),
             )
         venue1 = Venue.objects.create(order=1, name='Venue 1')
         venue1.blocks.add(day1)
@@ -246,7 +246,7 @@ class ScheduleViewTests(TestCase):
             start_time=D.datetime(2013, 9, 22, 7, 0, 0,
                                   tzinfo=timezone.utc),
             end_time=D.datetime(2013, 9, 22, 19, 0, 0,
-                                  tzinfo=timezone.utc),
+                                tzinfo=timezone.utc),
             )
         day2 = ScheduleBlock.objects.create(
             start_time=D.datetime(2013, 9, 23, 7, 0, 0,
@@ -319,13 +319,13 @@ class ScheduleViewTests(TestCase):
             start_time=D.datetime(2013, 9, 22, 7, 0, 0,
                                   tzinfo=timezone.utc),
             end_time=D.datetime(2013, 9, 22, 19, 0, 0,
-                                  tzinfo=timezone.utc),
+                                tzinfo=timezone.utc),
             )
         block2 = ScheduleBlock.objects.create(
             start_time=D.datetime(2013, 9, 23, 7, 0, 0,
                                   tzinfo=timezone.utc),
             end_time=D.datetime(2013, 9, 23, 19, 0, 0,
-                                  tzinfo=timezone.utc),
+                                tzinfo=timezone.utc),
             )
         venue1 = Venue.objects.create(order=1, name='Venue 1')
         venue1.blocks.add(block1)
@@ -431,13 +431,13 @@ class ScheduleViewTests(TestCase):
             start_time=D.datetime(2013, 9, 22, 7, 0, 0,
                                   tzinfo=timezone.utc),
             end_time=D.datetime(2013, 9, 22, 19, 0, 0,
-                                  tzinfo=timezone.utc),
+                                tzinfo=timezone.utc),
             )
         day2 = ScheduleBlock.objects.create(
             start_time=D.datetime(2013, 9, 23, 7, 0, 0,
                                   tzinfo=timezone.utc),
             end_time=D.datetime(2013, 9, 23, 19, 0, 0,
-                                  tzinfo=timezone.utc),
+                                tzinfo=timezone.utc),
             )
         venue1 = Venue.objects.create(order=1, name='Venue 1')
         venue1.blocks.add(day1)
@@ -505,7 +505,7 @@ class ScheduleViewTests(TestCase):
             start_time=D.datetime(2013, 9, 22, 7, 0, 0,
                                   tzinfo=timezone.utc),
             end_time=D.datetime(2013, 9, 22, 19, 0, 0,
-                                  tzinfo=timezone.utc),
+                                tzinfo=timezone.utc),
             )
         venue1 = Venue.objects.create(order=1, name='Venue 1')
         venue2 = Venue.objects.create(order=2, name='Venue 2')
@@ -628,7 +628,7 @@ class ScheduleViewTests(TestCase):
             start_time=D.datetime(2013, 9, 22, 7, 0, 0,
                                   tzinfo=timezone.utc),
             end_time=D.datetime(2013, 9, 22, 19, 0, 0,
-                                  tzinfo=timezone.utc),
+                                tzinfo=timezone.utc),
             )
         venue1 = Venue.objects.create(order=1, name='Venue 1')
         venue2 = Venue.objects.create(order=2, name='Venue 2')
@@ -722,7 +722,7 @@ class ScheduleViewTests(TestCase):
             start_time=D.datetime(2013, 9, 22, 7, 0, 0,
                                   tzinfo=timezone.utc),
             end_time=D.datetime(2013, 9, 22, 19, 0, 0,
-                                  tzinfo=timezone.utc),
+                                tzinfo=timezone.utc),
             )
         venue1 = Venue.objects.create(order=1, name='Venue 1')
         venue2 = Venue.objects.create(order=2, name='Venue 2')
@@ -820,12 +820,12 @@ class ScheduleViewTests(TestCase):
     def test_highlight_venue_view(self):
         """Test that the highlight-venue option works"""
         # This is the same schedule as test_multiple_days
-        day1 = ScheduleBlock.objects.create(start_time=D.datetime(2013, 9, 22, 1, 0, 0, 
+        day1 = ScheduleBlock.objects.create(start_time=D.datetime(2013, 9, 22, 1, 0, 0,
                                                                   tzinfo=timezone.utc),
                                             end_time=D.datetime(2013, 9, 22, 23, 0, 0,
                                                                 tzinfo=timezone.utc),
                                             )
-        day2 = ScheduleBlock.objects.create(start_time=D.datetime(2013, 9, 23, 1, 0, 0, 
+        day2 = ScheduleBlock.objects.create(start_time=D.datetime(2013, 9, 23, 1, 0, 0,
                                                                   tzinfo=timezone.utc),
                                             end_time=D.datetime(2013, 9, 23, 23, 0, 0,
                                                                 tzinfo=timezone.utc),
@@ -1001,13 +1001,13 @@ class CurrentViewTests(TestCase):
             start_time=D.datetime(2013, 9, 22, 7, 0, 0,
                                   tzinfo=timezone.utc),
             end_time=D.datetime(2013, 9, 22, 19, 0, 0,
-                                  tzinfo=timezone.utc),
+                                tzinfo=timezone.utc),
             )
         day2 = ScheduleBlock.objects.create(
             start_time=D.datetime(2013, 9, 23, 7, 0, 0,
                                   tzinfo=timezone.utc),
             end_time=D.datetime(2013, 9, 23, 19, 0, 0,
-                                  tzinfo=timezone.utc),
+                                tzinfo=timezone.utc),
             )
         venue1 = Venue.objects.create(order=1, name='Venue 1')
         venue2 = Venue.objects.create(order=2, name='Venue 2')
@@ -1122,7 +1122,7 @@ class CurrentViewTests(TestCase):
             start_time=D.datetime(2013, 9, 22, 7, 0, 0,
                                   tzinfo=timezone.utc),
             end_time=D.datetime(2013, 9, 22, 19, 0, 0,
-                                  tzinfo=timezone.utc),
+                                tzinfo=timezone.utc),
             )
         venue1 = Venue.objects.create(order=1, name='Venue 1')
         venue2 = Venue.objects.create(order=2, name='Venue 2')
@@ -1314,17 +1314,17 @@ class CurrentViewTests(TestCase):
         validate_current(response)
         self.assertContains(response, b'schedule-highlight-venue')
         self.assertContains(response, '\n'.join(['<th class="schedule-highlight-venue">',
-                                                  '<a href="%s">' % venue1.get_absolute_url(),
-                                                  venue1.name,
-                                                   '</a></th>']), html=True)
+                                                 '<a href="%s">' % venue1.get_absolute_url(),
+                                                 venue1.name,
+                                                 '</a></th>']), html=True)
         self.assertContains(response, '\n'.join(['<th>',
-                                                  '<a href="%s">' % venue2.get_absolute_url(),
-                                                  venue2.name,
-                                                   '</a></th>']), html=True)
-        self.assertContains(response, '\n'.join(['<th>' 
-                                                  '<a href="%s">' % venue3.get_absolute_url(),
-                                                  venue3.name,
-                                                   '</a></th>']), html=True)
+                                                 '<a href="%s">' % venue2.get_absolute_url(),
+                                                 venue2.name,
+                                                 '</a></th>']), html=True)
+        self.assertContains(response, '\n'.join(['<th>',
+                                                 '<a href="%s">' % venue3.get_absolute_url(),
+                                                 venue3.name,
+                                                 '</a></th>']), html=True)
         self.assertContains(response, '\n'.join([
             '<td colspan="1" rowspan="1" class="completed schedule-highlight-venue">',
             '<a href="%s">' % items[0].get_url(),
@@ -1364,17 +1364,17 @@ class CurrentViewTests(TestCase):
         self.assertContains(response, b'schedule-highlight-venue')
 
         self.assertContains(response, '\n'.join(['<th>',
-                                                  '<a href="%s">' % venue1.get_absolute_url(),
-                                                  venue1.name,
-                                                   '</a></th>']), html=True)
+                                                 '<a href="%s">' % venue1.get_absolute_url(),
+                                                 venue1.name,
+                                                 '</a></th>']), html=True)
         self.assertContains(response, '\n'.join(['<th>',
-                                                  '<a href="%s">' % venue2.get_absolute_url(),
-                                                  venue2.name,
-                                                   '</a></th>']), html=True)
+                                                 '<a href="%s">' % venue2.get_absolute_url(),
+                                                 venue2.name,
+                                                 '</a></th>']), html=True)
         self.assertContains(response, '\n'.join(['<th class="schedule-highlight-venue">',
-                                                  '<a href="%s">' % venue3.get_absolute_url(),
-                                                  venue3.name,
-                                                   '</a></th>']), html=True)
+                                                 '<a href="%s">' % venue3.get_absolute_url(),
+                                                 venue3.name,
+                                                 '</a></th>']), html=True)
         self.assertContains(response, '\n'.join([
             '<td colspan="1" rowspan="1" class="completed">',
             '<a href="%s">' % items[0].get_url(),
@@ -1411,7 +1411,7 @@ class CurrentViewTests(TestCase):
             start_time=D.datetime(2013, 9, 22, 7, 0, 0,
                                   tzinfo=timezone.utc),
             end_time=D.datetime(2013, 9, 22, 19, 0, 0,
-                                  tzinfo=timezone.utc),
+                                tzinfo=timezone.utc),
             )
         venue1 = Venue.objects.create(order=1, name='Venue 1')
         venue1.blocks.add(day1)
@@ -1451,13 +1451,13 @@ class NonHTMLViewTests(TestCase):
             start_time=D.datetime(2013, 9, 22, 7, 0, 0,
                                   tzinfo=timezone.utc),
             end_time=D.datetime(2013, 9, 22, 19, 0, 0,
-                                  tzinfo=timezone.utc),
+                                tzinfo=timezone.utc),
             )
         day2 = ScheduleBlock.objects.create(
             start_time=D.datetime(2013, 9, 23, 7, 0, 0,
                                   tzinfo=timezone.utc),
             end_time=D.datetime(2013, 9, 23, 19, 0, 0,
-                                  tzinfo=timezone.utc),
+                                tzinfo=timezone.utc),
             )
         venue1 = Venue.objects.create(order=1, name='Venue 1')
         venue2 = Venue.objects.create(order=2, name='Venue 2')

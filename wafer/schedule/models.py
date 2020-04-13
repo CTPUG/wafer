@@ -1,5 +1,3 @@
-import datetime
-
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models.signals import post_save, post_delete
@@ -20,6 +18,7 @@ def includes(obj1, obj2):
         return True
     return False
 
+
 def overlap(obj1, obj2):
     """Test if obj1 and obj2 overlap on times"""
     # obj1 and obj2 are either both ScheduleBlocks or both slots
@@ -31,7 +30,7 @@ def overlap(obj1, obj2):
 
 class ScheduleBlock(models.Model):
     """Blocks into which we'll break the schedule.
-    
+
        Typically days, but can be shorter or longer depending on use
        case."""
     start_time = models.DateTimeField(null=True, blank=True)
@@ -62,6 +61,7 @@ class ScheduleBlock(models.Model):
             if overlap(self, other_block):
                 raise ValidationError("Overlaps with %s" % other_block)
 
+
 class Venue(models.Model):
     """Information about a venue for conference events"""
     order = models.IntegerField(default=1)
@@ -74,7 +74,7 @@ class Venue(models.Model):
                     " conference attendees"))
 
     blocks = models.ManyToManyField(ScheduleBlock,
-        help_text=_("Blocks (days) on which this venue will be used."))
+                                    help_text=_("Blocks (days) on which this venue will be used."))
 
     video = models.BooleanField(
         default=False,
@@ -201,6 +201,7 @@ class Slot(models.Model):
                 continue
             if overlap(self, other_slot):
                 raise ValidationError("Overlaps with %s" % other_slot)
+
 
 class ScheduleItem(models.Model):
 

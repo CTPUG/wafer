@@ -11,7 +11,7 @@ router.register(r'pages', PageViewSet)
 
 urlpatterns = [
     url(r'^api/', include(router.urls)),
-    url('^index(?:\.html)?/?$', RedirectView.as_view(
+    url(r'^index(?:\.html)?/?$', RedirectView.as_view(
         url=get_script_prefix(), permanent=True, query_string=True)),
     url(r'^(?:(.+)/)?$', slug, name='wafer_page'),
 ]
