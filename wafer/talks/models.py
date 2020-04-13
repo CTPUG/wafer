@@ -400,6 +400,7 @@ class ReviewAspect(models.Model):
         verbose_name = _('review aspect')
         verbose_name_plural = _('review aspects')
 
+
 @reversion.register()
 class Score(models.Model):
     review = models.ForeignKey(Review, on_delete=models.CASCADE,
