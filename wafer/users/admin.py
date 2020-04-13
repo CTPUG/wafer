@@ -19,7 +19,7 @@ class AuthorAutocompleteView(AutocompleteJsonView):
         """Override request to change the response object"""
         response = super().get(request, args, kwargs)
         # This isn't very efficient, but we don't want to duplicate
-        # the specialised logic in AutocompleteJJsonView either
+        # the specialised logic in AutocompleteJsonView either
         data = json.loads(response.content)
         if 'results' not in data:
             return response
