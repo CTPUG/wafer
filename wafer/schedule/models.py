@@ -1,5 +1,3 @@
-import datetime
-
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models.signals import post_save, post_delete
@@ -19,6 +17,7 @@ def includes(obj1, obj2):
         obj2.get_start_time() <= obj1.get_start_time()):
         return True
     return False
+
 
 def overlap(obj1, obj2):
     """Test if obj1 and obj2 overlap on times"""
@@ -61,6 +60,7 @@ class ScheduleBlock(models.Model):
                 continue
             if overlap(self, other_block):
                 raise ValidationError("Overlaps with %s" % other_block)
+
 
 class Venue(models.Model):
     """Information about a venue for conference events"""
