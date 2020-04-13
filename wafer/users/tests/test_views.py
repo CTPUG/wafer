@@ -22,7 +22,7 @@ class UserProfileTests(TestCase):
 
     def test_not_logged_in_private_userlist(self):
         """We should get 403 for both existing and non-existant users.
-        
+
            We can see the user with the accepted talk."""
         with self.settings(WAFER_PUBLIC_ATTENDEE_LIST=False):
             response = self.client.get('/users/test1/')
@@ -48,7 +48,7 @@ class UserProfileTests(TestCase):
     def test_logged_in_private_userlist(self):
         """We can see and edit our own profile, but get 403's for existing and
            non-existing users.
-           
+
            We can see the user with an accepted talk, but not edit."""
         self.client.login(username='test1', password="test_password")
         with self.settings(WAFER_PUBLIC_ATTENDEE_LIST=False):

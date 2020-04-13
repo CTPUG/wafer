@@ -192,7 +192,7 @@ def validate_schedule():
 # Useful filters for the admin forms
 
 class BaseBlockFilter(admin.SimpleListFilter):
-    # Common logic for filtering on Slots and ScheduleItem.slots by block 
+    # Common logic for filtering on Slots and ScheduleItem.slots by block
     # We need to do this as a filter, since we can't use sorting since
     # day is dynamic (either the model field or the previous_slot)
     title = _('Block')

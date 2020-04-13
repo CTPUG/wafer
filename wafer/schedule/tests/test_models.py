@@ -301,7 +301,7 @@ class SlotTests(TestCase):
                                       tzinfo=timezone.utc),
                 end_time=D.datetime(2013, 9, 25, 19, 0, 0,
                                     tzinfo=timezone.utc))
-        # Different day, 
+        # Different day,
         slot2 = Slot(start_time=D.datetime(2013, 9, 25, 1, 0, 0,
                                            tzinfo=timezone.utc),
                      end_time=D.datetime(2013, 9, 24, 3, 0, 0,
@@ -361,7 +361,7 @@ class LastUpdateTests(TestCase):
 
         start1 = D.datetime(2013, 9, 22, 10, 0, 0,
                             tzinfo=timezone.utc)
-        start2 = D.datetime(2013, 9, 22, 11, 0, 0, 
+        start2 = D.datetime(2013, 9, 22, 11, 0, 0,
                             tzinfo=timezone.utc)
         start3 = D.datetime(2013, 9, 22, 12, 0, 0,
                             tzinfo=timezone.utc)

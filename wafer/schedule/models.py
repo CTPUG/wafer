@@ -31,7 +31,7 @@ def overlap(obj1, obj2):
 
 class ScheduleBlock(models.Model):
     """Blocks into which we'll break the schedule.
-    
+
        Typically days, but can be shorter or longer depending on use
        case."""
     start_time = models.DateTimeField(null=True, blank=True)

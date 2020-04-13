@@ -820,12 +820,12 @@ class ScheduleViewTests(TestCase):
     def test_highlight_venue_view(self):
         """Test that the highlight-venue option works"""
         # This is the same schedule as test_multiple_days
-        day1 = ScheduleBlock.objects.create(start_time=D.datetime(2013, 9, 22, 1, 0, 0, 
+        day1 = ScheduleBlock.objects.create(start_time=D.datetime(2013, 9, 22, 1, 0, 0,
                                                                   tzinfo=timezone.utc),
                                             end_time=D.datetime(2013, 9, 22, 23, 0, 0,
                                                                 tzinfo=timezone.utc),
                                             )
-        day2 = ScheduleBlock.objects.create(start_time=D.datetime(2013, 9, 23, 1, 0, 0, 
+        day2 = ScheduleBlock.objects.create(start_time=D.datetime(2013, 9, 23, 1, 0, 0,
                                                                   tzinfo=timezone.utc),
                                             end_time=D.datetime(2013, 9, 23, 23, 0, 0,
                                                                 tzinfo=timezone.utc),
@@ -1321,7 +1321,7 @@ class CurrentViewTests(TestCase):
                                                   '<a href="%s">' % venue2.get_absolute_url(),
                                                   venue2.name,
                                                    '</a></th>']), html=True)
-        self.assertContains(response, '\n'.join(['<th>' 
+        self.assertContains(response, '\n'.join(['<th>',
                                                   '<a href="%s">' % venue3.get_absolute_url(),
                                                   venue3.name,
                                                    '</a></th>']), html=True)
