@@ -4,7 +4,6 @@ from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models.signals import post_save, post_delete
 from django.urls import reverse
-from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
 
 from wafer.pages.models import Page
@@ -30,7 +29,6 @@ def overlap(obj1, obj2):
     return True
 
 
-@python_2_unicode_compatible
 class ScheduleBlock(models.Model):
     """Blocks into which we'll break the schedule.
 
@@ -64,7 +62,6 @@ class ScheduleBlock(models.Model):
             if overlap(self, other_block):
                 raise ValidationError("Overlaps with %s" % other_block)
 
-@python_2_unicode_compatible
 class Venue(models.Model):
     """Information about a venue for conference events"""
     order = models.IntegerField(default=1)
@@ -93,7 +90,6 @@ class Venue(models.Model):
         return reverse('wafer_venue', args=(self.pk,))
 
 
-@python_2_unicode_compatible
 class Slot(models.Model):
 
     # XXX: We're trading flexibility for ease of implementation here.
@@ -206,7 +202,6 @@ class Slot(models.Model):
             if overlap(self, other_slot):
                 raise ValidationError("Overlaps with %s" % other_slot)
 
-@python_2_unicode_compatible
 class ScheduleItem(models.Model):
 
     venue = models.ForeignKey(Venue,

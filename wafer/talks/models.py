@@ -3,7 +3,6 @@ from django.core import validators
 from django.db import models
 from django.template.defaultfilters import slugify
 from django.urls import reverse
-from django.utils.encoding import python_2_unicode_compatible
 from django.utils.functional import lazy
 from django.utils.text import format_lazy
 from django.utils.translation import ugettext, ugettext_lazy as _
@@ -65,7 +64,6 @@ class TalkTypeManager(models.Manager):
         )
 
 
-@python_2_unicode_compatible
 class TalkType(models.Model):
     """A type of talk."""
     name = models.CharField(_('name'), max_length=255)
@@ -107,7 +105,6 @@ class TalkType(models.Model):
     css_class.short_description = _('CSS class name')
 
 
-@python_2_unicode_compatible
 class Track(models.Model):
     """A conference track."""
     name = models.CharField(_('name'), max_length=255)
@@ -133,7 +130,6 @@ class Track(models.Model):
 
 
 @reversion.register(follow=('urls',))
-@python_2_unicode_compatible
 class Talk(models.Model):
 
     class Meta:
@@ -361,7 +357,6 @@ class TalkUrl(models.Model):
 
 
 @reversion.register(follow=('scores',))
-@python_2_unicode_compatible
 class Review(models.Model):
     talk = models.ForeignKey(Talk, on_delete=models.CASCADE,
                              verbose_name=_('talk'),
@@ -397,7 +392,6 @@ class Review(models.Model):
         verbose_name_plural = _('reviews')
 
 
-@python_2_unicode_compatible
 class ReviewAspect(models.Model):
     name = models.CharField(_('name'), max_length=255)
 
@@ -409,7 +403,6 @@ class ReviewAspect(models.Model):
         verbose_name_plural = _('review aspects')
 
 @reversion.register()
-@python_2_unicode_compatible
 class Score(models.Model):
     review = models.ForeignKey(Review, on_delete=models.CASCADE,
                                related_name='scores')

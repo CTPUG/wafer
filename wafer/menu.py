@@ -4,7 +4,6 @@ import copy
 from django.core.cache import cache
 from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
-from django.utils import six
 
 CACHE_KEY = "WAFER_MENU_CACHE"
 
@@ -46,7 +45,7 @@ def maybe_obj(str_or_obj):
 
     Otherwise import the dotted name and return that.
     """
-    if not isinstance(str_or_obj, six.string_types):
+    if not isinstance(str_or_obj, str):
         return str_or_obj
     parts = str_or_obj.split(".")
     mod, modname = None, None

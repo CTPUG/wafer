@@ -1,7 +1,7 @@
 {% extends 'wafer/base_form.html' %}
 {% load crispy_forms_tags %}
 {% load i18n %}
-{% load static from staticfiles %}
+{% load static %}
 {% block extra_head %}
 {{ block.super }}
 <link href="{% static 'css/markitup_styling.css' %}" type="text/css" media="screen" rel="stylesheet" />
@@ -11,8 +11,4 @@
 <h1>{% trans "Edit Page" %}</h1>
 {% crispy form %}
 </section>
-{% endblock %}
-{% block extra_foot %}
-{{ block.super }}
-<script type="text/javascript" src="{% static 'js/markitup.js' %}"></script>
 {% endblock %}
