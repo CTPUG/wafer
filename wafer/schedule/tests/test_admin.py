@@ -209,7 +209,7 @@ class SlotListFilterTest(TestCase):
         if time:
             return SlotStartTimeFilter(None, {'start': time}, Slot, self.admin)
         else:
-            return SlotStarTimeFilter(None, {'start': None}, Slot, self.admin)
+            return SlotStartTimeFilter(None, {'start': None}, Slot, self.admin)
 
     def test_day_filter_lookups(self):
         """Test that filter lookups are sane."""
@@ -226,13 +226,13 @@ class SlotListFilterTest(TestCase):
         """Test that filter lookups are sane."""
         # Add some slots
         slot1 = Slot(start_time=D.datetime(2013, 9, 22, 11, 0, 0, tzinfo=timezone.utc),
-                    end_time=D.datetime(2013, 9, 22, 12, 00, 0, tzinfo=timezone.utc))
+                     end_time=D.datetime(2013, 9, 22, 12, 00, 0, tzinfo=timezone.utc))
         slot2 = Slot(start_time=D.datetime(2013, 9, 23, 11, 0, 0, tzinfo=timezone.utc),
-                    end_time=D.datetime(2013, 9, 23, 12, 00, 0, tzinfo=timezone.utc))
+                     end_time=D.datetime(2013, 9, 23, 12, 00, 0, tzinfo=timezone.utc))
         slot3 = Slot(start_time=D.datetime(2013, 9, 22, 12, 0, 0, tzinfo=timezone.utc),
-                      end_time=D.datetime(2013, 9, 22, 13, 0, 0, tzinfo=timezone.utc))
+                     end_time=D.datetime(2013, 9, 22, 13, 0, 0, tzinfo=timezone.utc))
         slot4 = Slot(start_time=D.datetime(2013, 9, 22, 13, 0, 0, tzinfo=timezone.utc),
-                      end_time=D.datetime(2013, 9, 22, 14, 0, 0, tzinfo=timezone.utc))
+                     end_time=D.datetime(2013, 9, 22, 14, 0, 0, tzinfo=timezone.utc))
         slot1.save()
         slot2.save()
         slot3.save()
@@ -251,9 +251,9 @@ class SlotListFilterTest(TestCase):
         """Test queries with slots created purely by day + start_time"""
         slots = {}
         slots[self.block1] = [Slot(start_time=D.datetime(2013, 9, 22, 11, 0, 0, tzinfo=timezone.utc),
-                    end_time=D.datetime(2013, 9, 22, 12, 00, 0, tzinfo=timezone.utc))]
+                                   end_time=D.datetime(2013, 9, 22, 12, 00, 0, tzinfo=timezone.utc))]
         slots[self.block2] = [Slot(start_time=D.datetime(2013, 9, 23, 11, 0, 0, tzinfo=timezone.utc),
-                    end_time=D.datetime(2013, 9, 23, 12, 00, 0, tzinfo=timezone.utc))]
+                                   end_time=D.datetime(2013, 9, 23, 12, 00, 0, tzinfo=timezone.utc))]
 
         # ScheduleBlock1 slots
         for x in range(12, 17):
@@ -314,13 +314,13 @@ class SlotListFilterTest(TestCase):
         for x in range(12, 17):
             prev1 = slots[self.block1][-1]
             slots[self.block1].append(Slot(previous_slot=prev1,
-                                         end_time=D.datetime(2013, 9, 22, x+1, 0, 0, tzinfo=timezone.utc)))
+                                           end_time=D.datetime(2013, 9, 22, x+1, 0, 0, tzinfo=timezone.utc)))
             slots[self.block1][-1].save()
             if x < 15:
                 prev2 = slots[self.block2][-1]
                 # Fewer slots for day 2
                 slots[self.block2].append(Slot(previous_slot=prev2,
-                                             end_time=D.datetime(2013, 9, 22, x+1, 0, 0, tzinfo=timezone.utc)))
+                                               end_time=D.datetime(2013, 9, 22, x+1, 0, 0, tzinfo=timezone.utc)))
                 slots[self.block2][-1].save()
         # Check Null filter
         TestFilter = self._make_block_filter(None)
@@ -369,7 +369,7 @@ class SlotListFilterTest(TestCase):
             prev1 = slots[self.block1][-1]
             if x % 2:
                 slots[self.block1].append(Slot(previous_slot=prev1,
-                                             end_time=D.datetime(2013, 9, 22, x+1, 0, 0, tzinfo=timezone.utc)))
+                                               end_time=D.datetime(2013, 9, 22, x+1, 0, 0, tzinfo=timezone.utc)))
             else:
                 slots[self.block1].append(Slot(start_time=D.datetime(2013, 9, 22, x, 0, 0, tzinfo=timezone.utc),
                                                end_time=D.datetime(2013, 9, 22, x+1, 0, 0, tzinfo=timezone.utc)))
@@ -378,7 +378,7 @@ class SlotListFilterTest(TestCase):
             prev2 = slots[self.block2][-1]
             if x % 5:
                 slots[self.block2].append(Slot(previous_slot=prev2,
-                                             end_time=D.datetime(2013, 9, 23, x+1, 0, 0, tzinfo=timezone.utc)))
+                                               end_time=D.datetime(2013, 9, 23, x+1, 0, 0, tzinfo=timezone.utc)))
             else:
                 slots[self.block2].append(Slot(start_time=D.datetime(2013, 9, 23, x, 0, 0, tzinfo=timezone.utc),
                                                end_time=D.datetime(2013, 9, 23, x+1, 0, 0, tzinfo=timezone.utc)))

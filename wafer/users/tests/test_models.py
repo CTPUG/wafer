@@ -5,9 +5,6 @@
 from django.contrib.auth import get_user_model
 from django.test import TestCase
 
-import sys
-PY2 = sys.version_info[0] == 2
-
 
 class UserModelTestCase(TestCase):
 
@@ -17,7 +14,4 @@ class UserModelTestCase(TestCase):
         user = create('test', 'test@example.com', 'test_pass')
         self.assertEqual(str(user.userprofile), 'test')
         user = create(u'tést', 'test@example.com', 'test_pass')
-        if PY2:
-            self.assertEqual(unicode(user.userprofile), u'tést')
-        else:
-            self.assertEqual(str(user.userprofile), u'tést')
+        self.assertEqual(str(user.userprofile), u'tést')

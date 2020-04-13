@@ -19,7 +19,6 @@ from wafer.pages.models import Page
 from wafer.utils import cache_result
 
 
-
 # Schedule item validators
 def find_non_contiguous(all_items):
     """Find any items that have slots that aren't contiguous"""
@@ -210,7 +209,7 @@ class BaseBlockFilter(admin.SimpleListFilter):
             slots = list(Slot.objects.filter(
                 start_time__gte=block.start_time,
                 end_time__lte=block.end_time))
-            all_slots=slots[:]
+            all_slots = slots[:]
             # Extend with all the slots that have a previous slot
             # Return the filtered list of slot ids
             while Slot.objects.filter(previous_slot__in=slots).exists():
@@ -454,7 +453,7 @@ class SlotAdmin(CompareVersionAdmin):
                         # Needed during testing, and possibly in other cases
                         self.message_user(request, msg, messages.SUCCESS)
                     prev = new_slot
-                except ValidationError as  err:
+                except ValidationError as err:
                     msg = _("Failed to create new slot - %s" % err)
                     if hasattr(request, '_messages'):
                         self.message_user(request, msg, messages.ERROR)

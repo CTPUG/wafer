@@ -3,6 +3,7 @@ from django.utils import timezone
 
 from wafer.talks.models import TalkType
 
+
 def test_open_by_default():
     talk_type = TalkType.objects.create()
     assert talk_type in TalkType.objects.open_for_submission()

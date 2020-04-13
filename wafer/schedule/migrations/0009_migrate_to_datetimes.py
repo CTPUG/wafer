@@ -12,7 +12,7 @@ from django.db import migrations
 from django.utils import timezone
 
 def convert_day_to_schedule_block(apps, schema_editor):
-    """For each Day, create a schedule block with the 
+    """For each Day, create a schedule block with the
        time block running from 0:00 to 23:59:59."""
     Day = apps.get_model('schedule', 'Day')
     ScheduleBlock = apps.get_model('schedule', 'ScheduleBlock')

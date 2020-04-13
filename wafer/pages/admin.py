@@ -15,6 +15,5 @@ class PageAdmin(CompareVersionAdmin):
     list_filter = (DateModifiedFilter,)
 
 
-
 admin.site.register(Page, PageAdmin)
 admin.site.register(File)

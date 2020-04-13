@@ -12,13 +12,13 @@ def sponsors():
         'packages': SponsorshipPackage.objects.all().prefetch_related('files'),
     }
 
+
 @register.inclusion_tag('wafer.sponsors/sponsors_footer.html')
 def sponsors_footer():
     return {
         'sponsors': Sponsor.objects.all().order_by('packages', 'order', 'id'),
         'packages': SponsorshipPackage.objects.all().prefetch_related('files'),
     }
-
 
 
 @register.simple_tag()

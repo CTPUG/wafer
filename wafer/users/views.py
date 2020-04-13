@@ -53,6 +53,7 @@ class Hide404Mixin(object):
             raise
         return result
 
+
 class ProfileView(Hide404Mixin, BuildableDetailView):
     template_name = 'wafer.users/profile.html'
     model = get_user_model()

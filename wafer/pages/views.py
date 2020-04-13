@@ -28,6 +28,7 @@ class ShowPage(BuildableDetailView):
         # This does create a directory, but that's usually what we want
         # for container pages, so we leave it.
 
+
 class EditPage(UpdateView):
     template_name = 'wafer.pages/page_form.html'
     model = Page

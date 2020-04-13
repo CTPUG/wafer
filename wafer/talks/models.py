@@ -50,6 +50,7 @@ def authors_help():
     ))
     return ' '.join(text)
 
+
 class TalkTypeManager(models.Manager):
 
     def open_for_submission(self):
@@ -68,7 +69,7 @@ class TalkType(models.Model):
     """A type of talk."""
     name = models.CharField(_('name'), max_length=255)
     description = models.TextField(_('description'), max_length=1024)
-    order = models.IntegerField(_('order'),default=1)
+    order = models.IntegerField(_('order'), default=1)
     disable_submission = models.BooleanField(
         _('disable submission'),
         default=False,
@@ -401,6 +402,7 @@ class ReviewAspect(models.Model):
     class Meta:
         verbose_name = _('review aspect')
         verbose_name_plural = _('review aspects')
+
 
 @reversion.register()
 class Score(models.Model):

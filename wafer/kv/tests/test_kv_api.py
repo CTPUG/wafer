@@ -5,7 +5,6 @@ from django.contrib.auth.models import Group
 from django.test import Client, TestCase
 from rest_framework.test import APIClient
 from wafer.kv.models import KeyValue
-import json
 
 
 def get_group(group):
@@ -173,7 +172,6 @@ class KeyValueAPITests(TestCase):
                 'group': get_group("group_1").pk}
         response = self.client.post('/kv/api/kv/', data, format='json')
         self.assertEqual(response.status_code, 400)
-
 
     def test_group_2_actions(self):
         # Same tests as above, but with group_2 and a different ordering

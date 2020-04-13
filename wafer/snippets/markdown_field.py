@@ -41,7 +41,7 @@ class MarkdownTextField(TextField):
 
     def pre_save(self, model_instance, add):
         value = getattr(model_instance, self.attname)
-        # We skip the pre_save hook in migrations, to avoid 
+        # We skip the pre_save hook in migrations, to avoid
         if self._add_html_field:
             html = markdown(value, safe_mode=self._markdown_safe)
             setattr(model_instance, self._html_field, html)
@@ -54,9 +54,6 @@ class MarkdownTextField(TextField):
         kwargs['allow_html'] = self._markdown_safe
         kwargs['html_field_suffix'] = self._html_field_suffix
         return name, path, args, kwargs
-
-    def __unicode__(self):
-        return unicode(self.attname)
 
     def __str__(self):
         return self.attname

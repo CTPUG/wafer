@@ -168,7 +168,7 @@ class SlotTests(TestCase):
                                          tzinfo=timezone.utc))
         self.assertEqual(slot2.get_block(), block1)
         self.assertEqual(slot2.get_duration(), {'hours': 1,
-                                                'minutes':0})
+                                                'minutes': 0})
         self.assertEqual(slot3.get_block(), block1)
         self.assertEqual(slot3.get_duration(), {'hours': 0,
                                                 'minutes': 30})
@@ -219,7 +219,6 @@ class SlotTests(TestCase):
         self.assertRaises(ValidationError, slot1.clean)
         slot1.delete()
         block1.delete()
-
 
     def test_overlapping_slots(self):
         """Test that we can't create overlapping slots."""

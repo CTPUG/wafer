@@ -155,7 +155,7 @@ class ReviewForm(forms.Form):
 
         super(ReviewForm, self).__init__(*args, **kwargs)
 
-        review_range  =_("(Score range: %(min)d to %(max)d)") % {
+        review_range = _("(Score range: %(min)d to %(max)d)") % {
             'min': settings.WAFER_TALK_REVIEW_SCORES[0],
             'max': settings.WAFER_TALK_REVIEW_SCORES[1]
         }
