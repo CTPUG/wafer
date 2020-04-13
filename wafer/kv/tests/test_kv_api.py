@@ -5,7 +5,6 @@ from django.contrib.auth.models import Group
 from django.test import Client, TestCase
 from rest_framework.test import APIClient
 from wafer.kv.models import KeyValue
-import json
 
 
 def get_group(group):
