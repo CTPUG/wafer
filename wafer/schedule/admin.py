@@ -12,8 +12,6 @@ from django.utils.translation import ugettext as _
 from django import forms
 from reversion.admin import VersionAdmin
 
-from easy_select2 import Select2Multiple
-
 from wafer.compare.admin import CompareVersionAdmin
 from wafer.schedule.models import ScheduleBlock, Venue, Slot, ScheduleItem
 from wafer.talks.models import Talk, ACCEPTED, CANCELLED
@@ -323,9 +321,6 @@ class ScheduleItemAdminForm(forms.ModelForm):
         readonly_fields = ('last_updated',)
         fields = ('slots', 'venue', 'talk', 'page', 'details', 'notes',
                   'css_class', 'expand')
-        widgets = {
-            'slots': Select2Multiple(),
-        }
 
     def __init__(self, *args, **kwargs):
         super(ScheduleItemAdminForm, self).__init__(*args, **kwargs)
@@ -345,6 +340,7 @@ class ScheduleItemAdmin(CompareVersionAdmin):
 
     list_filter = (ScheduleItemBlockFilter, ScheduleItemStartTimeFilter,
                    ScheduleItemVenueFilter)
+    autocomplete_fields = ('slots',)
 
     # We stuff these validation results into the view, rather than
     # enforcing conditions on the actual model, since it can be hard
@@ -405,6 +401,8 @@ class SlotAdmin(CompareVersionAdmin):
     list_editable = ('end_time',)
 
     change_list_template = 'admin/slot_list.html'
+
+    search_fields = ('name', 'start_time', 'end_time')
 
     list_filter = (SlotBlockFilter, SlotStartTimeFilter)
 

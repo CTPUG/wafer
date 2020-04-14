@@ -10,7 +10,7 @@ from django.utils.translation import ugettext as _
 from crispy_forms.bootstrap import FormActions
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit, HTML
-from easy_select2.widgets import Select2Multiple
+from django_select2.forms import Select2MultipleWidget
 from markitup.widgets import MarkItUpWidget
 
 from wafer.talks.models import (
@@ -136,7 +136,7 @@ class TalkForm(forms.ModelForm):
         widgets = {
             'abstract': MarkItUpWidget(),
             'notes': forms.Textarea(attrs={'class': 'input-xxlarge'}),
-            'authors': Select2Multiple(),
+            'authors': Select2MultipleWidget,
         }
 
 
