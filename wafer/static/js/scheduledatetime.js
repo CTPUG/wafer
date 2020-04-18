@@ -7,7 +7,6 @@
 // unfornately not something we can easily pass in
 
 document.addEventListener("DOMContentLoaded", function() {
-   console.log(window.DateTimeShortcuts);
    // These are for the single admin pages
    window.DateTimeShortcuts.clockHours.end_time_1 = [];
    window.DateTimeShortcuts.clockHours.start_time_1 = [];
@@ -19,7 +18,6 @@ document.addEventListener("DOMContentLoaded", function() {
    // This is for the inline options - we define 30, which is hopefully sane
    for (let inline = 0; inline < 30; inline++) {
       let name = 'form-' + inline + '-end_time_1';
-      console.log('computed name: ' + name);
       window.DateTimeShortcuts.clockHours[name] = [];
       for (let hour = 8; hour <= 20; hour++) {
           let verbose_name = new Date(1970, 1, 1, hour, 0, 0).strftime('%H:%M');
