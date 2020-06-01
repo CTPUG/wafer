@@ -27,7 +27,7 @@ def sso(user, desired_username, name, email, profile_fields=None):
     Then log the user in, and return it.
     """
     if not user:
-        if not settings.REGISTRATION_OPEN:
+        if not getattr(settings, 'REGISTRATION_OPEN', True):
             raise SSOError('Account registration is closed')
         user = _create_desired_user(desired_username)
         _configure_user(user, name, email, profile_fields)
