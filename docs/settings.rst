@@ -26,10 +26,6 @@ Wafer's settings
     The name of the Django cache backend that wafer can use.
     Defaults to ``'wafer_cache'``.
 
-``WAFER_DEBIAN_NM_API_KEY``
-    The API Key for ``nm.debian.org``'s API, used by Debian SSO.
-    Used when ``WAFER_SSO`` contains ``'debian'``.
-
 ``WAFER_DYNAMIC_MENUS``
     A list of functions to call to generate additional menus.
 
@@ -43,6 +39,21 @@ Wafer's settings
     Used when ``WAFER_SSO`` contains ``'github'``.
     If you set this up, they'll provide you with one.
 
+``WAFER_GITLAB_CLIENT_ID``
+    The client ID for GitLab SSO.
+    Used when ``WAFER_SSO`` contains ``'gitlab'``.
+    If you set this up, they'll provide you with one.
+
+``WAFER_GITLAB_CLIENT_SECRET``
+    The secret for GitLab SSO.
+    Used when ``WAFER_SSO`` contains ``'gitlab'``.
+    If you set this up, they'll provide you with one.
+
+``WAFER_GITLAB_HOSTNAME``
+    The hostname of the GitLab instance used for SSO.
+    Defaults to ``gitlab.com``.
+    Used when ``WAFER_SSO`` contains ``'gitlab'``.
+
 ``WAFER_HIDE_LOGIN``
     A boolean flag.
     When ``True``, the login link in the menu is hidden.
@@ -50,7 +61,7 @@ Wafer's settings
 
 ``WAFER_SSO``
     A list of SSO mechanisms in use.
-    Possible options are: ``'debian'``, ``'github'``.
+    Possible options are: ``'github'``, ``'gitlab'``.
 
 ``WAFER_TALK_FORM``
     The form used for talk/event submission.

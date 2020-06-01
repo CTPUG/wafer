@@ -242,23 +242,17 @@ WAFER_DYNAMIC_MENUS = (
 # Enabled SSO mechanims:
 WAFER_SSO = (
     # 'github',
-    # 'debian',
+    # 'gitlab',
 )
 
 # Log in with GitHub:
 # WAFER_GITHUB_CLIENT_ID = 'register on github'
 # WAFER_GITHUB_CLIENT_SECRET = 'to get these secrets'
 
-# Log in with Debian SSO:
-# Requires some Apache config:
-# SSLCACertificateFile /srv/sso.debian.org/etc/debsso.crt
-# SSLCARevocationCheck chain
-# SSLCARevocationFile /srv/sso.debian.org/etc/debsso.crl
-# <Location /accounts/debian-login/>
-#     SSLOptions +StdEnvVars
-#     SSLVerifyClient optional
-# </Location>
-# WAFER_DEBIAN_NM_API_KEY = 'obtain one from https://nm.debian.org/apikeys/'
+# Log in with GitLab:
+# WAFER_GITLAB_HOSTNAME = 'gitlab.com'
+# WAFER_GITLAB_CLIENT_ID = 'register on github'
+# WAFER_GITLAB_CLIENT_SECRET = 'to get these secrets'
 
 # Set this to true to disable the login button on the navigation toolbar
 WAFER_HIDE_LOGIN = False

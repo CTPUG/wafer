@@ -24,8 +24,8 @@
                 {% if 'github' in WAFER_SSO %}
                 <li><a href="{% wafer_sso_url 'github' %}">GitHub</a></li>
                 {% endif %}
-                {% if 'debian' in WAFER_SSO %}
-                <li><a href="{% wafer_sso_url 'debian' %}">Debian SSO</a></li>
+                {% if 'gitlab' in WAFER_SSO %}
+                <li><a href="{% wafer_sso_url 'gitlab' %}">GitLab</a></li>
                 {% endif %}
             </ul>
             {% endif %}

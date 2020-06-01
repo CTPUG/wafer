@@ -133,50 +133,51 @@ def github_sso(code):
     return user
 
 
-def debian_sso(meta):
-    authentication_status = meta.get('SSL_CLIENT_VERIFY', None)
-    if authentication_status != "SUCCESS":
-        raise SSOError('Requires authentication via Client Certificate. '
-                       'Obtain one from https://sso.debian.org/')
+def gitlab_sso(code, redirect_uri):
+    host = getattr(settings, 'WAFER_GITLAB_HOSTNAME', 'gitlab.com')
+    r = requests.post(
+        'https://{}/oauth/token'.format(host),
+        data={
+            'client_id': settings.WAFER_GITLAB_CLIENT_ID,
+            'client_secret': settings.WAFER_GITLAB_CLIENT_SECRET,
+            'code': code,
+            'redirect_uri': redirect_uri,
+            'grant_type': 'authorization_code',
+        })
+    if r.status_code != 200:
+        log.warning('Response %s from %s', r.status_code, host)
+        raise SSOError('Invalid code')
+    token = r.json()['access_token']
+    auth_headers = {'Authorization': 'Bearer {}'.format(token)}
 
-    email = meta['SSL_CLIENT_S_DN_CN']
+    r = requests.get(
+        'https://{}/api/v4/user'.format(host), headers=auth_headers)
+    if r.status_code != 200:
+        log.warning('Response %s from GitLab API', r.status_code)
+        raise SSOError('Failed response from GitLab')
+    gl = r.json()
+
+    try:
+        username = gl['username']
+        name = gl['name'].partition(' ')[::2]
+        email = gl['email']
+    except KeyError as e:
+        log.warning('Error creating account from gitlab information: %s', e)
+        raise SSOError('GitLab profile missing required content')
+
     group = Group.objects.get_by_natural_key('Registration')
-
     user = None
     for kv in KeyValue.objects.filter(
-            group=group, key='debian_sso_email', value=email,
+            group=group, key='gitlab_sso_account_id', value=gl['id'],
             userprofile__isnull=False):
         if kv.userprofile_set.count() > 1:
-            message = 'Multiple accounts have Debian SSOed with address %s'
-            log.warning(message, email)
-            raise SSOError(message % email)
+            message = 'Multiple accounts have GitLab SSOed for User ID %s'
+            log.warning(message, gl['id'])
+            raise SSOError(message % gl['id'])
         user = kv.userprofile_set.first().user
         break
 
-    username = email.split('@', 1)[0]
-    name = ('Unknown User', username)
-    if not user:
-        r = requests.get('https://nm.debian.org/api/people',
-                         params={'uid': username},
-                         headers={'Api-Key': settings.WAFER_DEBIAN_NM_API_KEY})
-        if r.status_code != 200:
-            log.warning('Response %s from nm.debian.org', r.status_code)
-            raise SSOError('Failed to query nm.debian.org')
-        if 'r' not in r.json():
-            log.warning('Error parsing nm.debian.org response: %r', r.json())
-            raise SSOError('Failed to parse nm.debian.org respnose')
-        # The API performs substring queries, so we need to find the correct
-        # entry in the response.
-        for person in r.json()['r']:
-            if person['uid'] == username:
-                first_name = person['cn']
-                if person['mn']:
-                    first_name += u' ' + person['mn']
-                last_name = person['sn']
-                name = (first_name, last_name)
-                break
-
     user = sso(user=user, desired_username=username, name=name, email=email)
-    user.userprofile.kv.get_or_create(group=group, key='debian_sso_email',
-                                      defaults={'value': email})
+    user.userprofile.kv.get_or_create(group=group, key='gitlab_sso_account_id',
+                                      defaults={'value': gl['id']})
     return user
