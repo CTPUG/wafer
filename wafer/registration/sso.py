@@ -29,6 +29,11 @@ def sso(user, desired_username, name, email, profile_fields=None):
     if not user:
         if not settings.REGISTRATION_OPEN:
             raise SSOError('Account registration is closed')
+
+        if get_user_model().objects.filter(email=email).exists():
+            raise SSOError(
+                "An account already exists for {} that doesn't use SSO. "
+                "Refusing to create a second account.".format(email))
         user = _create_desired_user(desired_username)
         _configure_user(user, name, email, profile_fields)
 
