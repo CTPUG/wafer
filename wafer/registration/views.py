@@ -7,7 +7,7 @@ from django.urls import reverse
 from django.utils.crypto import constant_time_compare, get_random_string
 from django.utils.http import urlencode
 
-from wafer.registration.sso import SSOError, debian_sso, github_sso
+from wafer.registration.sso import SSOError, github_sso, gitlab_sso
 
 
 def redirect_profile(request):
@@ -54,12 +54,31 @@ def github_login(request):
     return redirect_profile(request)
 
 
-def debian_login(request):
-    if 'debian' not in settings.WAFER_SSO:
+def gitlab_login(request):
+    if 'gitlab' not in settings.WAFER_SSO:
         raise Http404()
 
+    redirect_uri = request.build_absolute_uri(reverse(gitlab_login))
+    if 'code' not in request.GET:
+        oauth_state = get_random_string(length=32)
+        request.session['oauth_state'] = oauth_state
+        return HttpResponseRedirect(
+            'https://{}/oauth/authorize?'.format(
+                getattr(settings, 'WAFER_GITLAB_HOSTNAME', 'gitlab.com'))
+            + urlencode({
+                'client_id': settings.WAFER_GITLAB_CLIENT_ID,
+                'redirect_uri': redirect_uri,
+                'response_type': 'code',
+                'scope': 'read_user',
+                'state': oauth_state,
+            }))
+
     try:
-        user = debian_sso(request.META)
+        oauth_state = request.session.pop('oauth_state', '')
+        if not constant_time_compare(request.GET['state'], oauth_state):
+            raise SSOError('Incorrect state')
+
+        user = gitlab_sso(request.GET['code'], redirect_uri)
     except SSOError as e:
         messages.error(request, u'%s' % e)
         return HttpResponseRedirect(reverse('auth_login'))
