@@ -74,17 +74,21 @@ def _configure_user(user, name, email, profile_fields):
 
 
 def github_sso(code):
-    r = requests.post('https://github.com/login/oauth/access_token', data={
-        'client_id': settings.WAFER_GITHUB_CLIENT_ID,
-        'client_secret': settings.WAFER_GITHUB_CLIENT_SECRET,
-        'code': code,
-    })
+    r = requests.post(
+        'https://github.com/login/oauth/access_token', data={
+            'client_id': settings.WAFER_GITHUB_CLIENT_ID,
+            'client_secret': settings.WAFER_GITHUB_CLIENT_SECRET,
+            'code': code,
+        }, headers={
+            'Accept': 'application/json',
+        })
     if r.status_code != 200:
         log.warning('Response %s from api.github.com', r.status_code)
         raise SSOError('Invalid code')
-    token = r.content
+    token = r.json()['access_token']
+    auth_headers = {'Authorization': 'token {}'.format(token)}
 
-    r = requests.get('https://api.github.com/user?%s' % token)
+    r = requests.get('https://api.github.com/user', headers=auth_headers)
     if r.status_code != 200:
         log.warning('Response %s from api.github.com', r.status_code)
         raise SSOError('Failed response from GitHub')
@@ -99,7 +103,8 @@ def github_sso(code):
 
     email = gh.get('email', None)
     if not email:  # No public e-mail address
-        r = requests.get('https://api.github.com/user/emails?%s' % token)
+        r = requests.get(
+            'https://api.github.com/user/emails', headers=auth_headers)
         if r.status_code != 200:
             log.warning('Response %s from api.github.com', r.status_code)
             raise SSOError('Failed response from GitHub')
