@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: wafer\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-02-01 11:57+0000\n"
-"PO-Revision-Date: 2020-02-15 11:33-0300\n"
+"PO-Revision-Date: 2020-06-10 11:05-0300\n"
 "Last-Translator: Allythy <allythy@protonmail.com>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
@@ -1184,7 +1184,7 @@ msgstr "Sair"
 
 #: wafer/templates/wafer/nav.html:67
 msgid "Site admin"
-msgstr "Administrador do site"
+msgstr "Administração do site"
 
 #: wafer/templates/wafer/nav.html:76
 msgid "Sign up / Log In"
@@ -1306,9 +1306,9 @@ msgid ""
 "(which falls back to <a href=\"https://secure.gravatar.com/\">Gravatar</a>)."
 "<br> Change your picture there."
 msgstr ""
-"Imagens fornecidas por <a href=\"https://www.libravatar.org/\">libravatar</"
-"a> (que volta para <a href=\"https://secure.gravatar.com/\">Gravatar</a>)."
-"<br> Altere sua foto para lá."
+"Imagens fornecidas pelo <a href=\"https://www.libravatar.org/\">libravatar</"
+"a> (ou então pelo <a href=\"https://secure.gravatar.com/\">Gravatar</a>)."
+"<br> Altere sua foto por um dos dois."
 
 #: wafer/users/templates/wafer.users/profile.html:32
 msgid "Edit Profile"
@@ -1377,6 +1377,3 @@ msgstr "Usuários"
 #: wafer/users/templates/wafer.users/users.html:5
 msgid "Users:"
 msgstr "Usuários:"
-
-#~ msgid "You can now do it after logging in."
-#~ msgstr "Você pode fazê-lo depois de fazer login."
