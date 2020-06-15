@@ -17,7 +17,9 @@
         <div id="diff">
           {{ diff | safe }}
         </div>
+      </section>
     {% empty %}
+      <section>
         <div id="diff">
           <p>{% trans 'No differences found' %}</p>
         </div>
