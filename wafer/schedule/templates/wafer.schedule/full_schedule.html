@@ -6,7 +6,7 @@
   {% if user.is_authenticated and user.is_staff %}
     <div class="float-right d-print-none">
       <a class="btn btn-secondary"
-          href="{% url 'admin:schedule_editor' %}">
+         href="{% url 'admin:schedule_editor' %}">
         {% trans "Edit schedule" %}
       </a>
     </div>
@@ -23,15 +23,15 @@
     {% else %}
       {% if next_block or prev_block %}
         <div class="clearfix d-print-none">
-         {% url 'wafer_full_schedule' as schedule_url %}
-           {% if prev_block %}
-             <a href="{{ schedule_url }}?block={{ prev_block.id }}"
-                class="float-left btn btn-secondary btn-lg">{% trans "Previous" %} &mdash; {{ prev_block }}</a>
-           {% endif %}
-           {% if next_block %}
-             <a href="{{ schedule_url }}?block={{ next_block.id }}"
-                class="float-right btn btn-secondary btn-lg">{% trans "Next" %} &mdash; {{ next_block }}</a>
-           {% endif %}
+          {% url 'wafer_full_schedule' as schedule_url %}
+          {% if prev_block %}
+            <a href="{{ schedule_url }}?block={{ prev_block.id }}"
+               class="float-left btn btn-secondary btn-lg">{% trans "Previous" %} &mdash; {{ prev_block }}</a>
+          {% endif %}
+          {% if next_block %}
+            <a href="{{ schedule_url }}?block={{ next_block.id }}"
+               class="float-right btn btn-secondary btn-lg">{% trans "Next" %} &mdash; {{ next_block }}</a>
+          {% endif %}
         </div>
       {% endif %}
       {% for page in schedule_pages %}

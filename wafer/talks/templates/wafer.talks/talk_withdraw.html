@@ -4,9 +4,9 @@
 <section class="wafer wafer-talk-withdrawal">
   <h1>{% trans "Confirm Talk Withdrawal" %}</h1>
   <div class="alert alert-danger">
-   {% blocktrans trimmed with talk_title=object.title talk_url=object.get_absolute_url %}
-    You are about to withdraw the talk <a href="{{ talk_url }}">"{{ talk_title }}"</a>.<br>
-    This cannot be undone without help from the site administrators.
+    {% blocktrans trimmed with talk_title=object.title talk_url=object.get_absolute_url %}
+      You are about to withdraw the talk <a href="{{ talk_url }}">"{{ talk_title }}"</a>.<br>
+      This cannot be undone without help from the site administrators.
     {% endblocktrans %}
   </div>
   <form action="" method="post">

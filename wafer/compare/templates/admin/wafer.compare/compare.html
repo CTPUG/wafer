@@ -2,25 +2,21 @@
 {% load i18n l10n admin_urls %}
 
 {% block breadcrumbs %}
-    <div class="breadcrumbs">
-       <a class="breadcrumb-item" href="{{ compare_list_url }}">{% trans "Compare" %}</a> &rsaquo;
-        {% blocktrans with opts.verbose_name_plural|escape as name %}{{name}}{% endblocktrans %}
-    </div>
+<div class="breadcrumbs">
+  <a class="breadcrumb-item" href="{{ compare_list_url }}">{% trans "Compare" %}</a> &rsaquo;
+  {% blocktrans with opts.verbose_name_plural|escape as name %}{{name}}{% endblocktrans %}
+</div>
 {% endblock %}
-
 
 {% block content %}
-
 {% for field, diff in diff_list %}
-<h2 id="fieldname">{{ field }}</h2>
-<div id="diff">
-   {{ diff | safe }}
-</div>
-{% empty %}
-<div id="diff">
-   <p>{% trans 'No differences found' %}</p>
-</div>
+  <h2 id="fieldname">{{ field }}</h2>
+  <div id="diff">
+    {{ diff | safe }}
+  </div>
+  {% empty %}
+  <div id="diff">
+    <p>{% trans 'No differences found' %}</p>
+  </div>
 {% endfor %}
-
 {% endblock %}
-
