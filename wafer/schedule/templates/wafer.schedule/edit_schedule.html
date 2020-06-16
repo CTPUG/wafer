@@ -24,7 +24,7 @@
       <div class="dropdown-menu">
         {% for sched_block in all_blocks %}
           <a class="dropdown-item" href="{% url 'admin:schedule_editor' sched_block.id %}">
-             {{ sched_block }} {% trans "(Block" %} {{ sched_block.id }})
+            {{ sched_block }} {% trans "(Block" %} {{ sched_block.id }})
           </a>
         {% endfor %}
       </div>
@@ -107,9 +107,9 @@
           {% regroup talks_unassigned by talk_type.name as grouped_talks %}
           {% for type, talks in grouped_talks %}
             {% if type %}
-               <span draggable="false" class="col-md-6 badge badge-secondary">
-                  {{ type }}
-               </span>
+              <span draggable="false" class="col-md-6 badge badge-secondary">
+                {{ type }}
+              </span>
             {% endif %}
             {% for talk in talks %}
               <span draggable="true" class="col-md-6 badge badge-success draggable"
@@ -132,7 +132,7 @@
           {% for type, talks in grouped_talks %}
             {% if type %}
             <span draggable="false" class="col-md-6 badge badge-secondary">
-               {{ type }}
+              {{ type }}
             </span>
             {% endif %}
             {% for talk in talks %}

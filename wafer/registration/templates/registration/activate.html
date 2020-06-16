@@ -3,12 +3,12 @@
 {% block content %}
 <h1>{% trans 'Oops, account activation failed' %}</h1>
 <p>
-{% url 'registration_register' as register_url %}
-{% url 'wafer_page' 'contact' as contact_url %}
-{% blocktrans trimmed %}
+  {% url 'registration_register' as register_url %}
+  {% url 'wafer_page' 'contact' as contact_url %}
+  {% blocktrans trimmed %}
     We seem to have had some difficulty with activating your account.
     Please <a href="{{ register_url }}">try again</a>
     or <a href="{{ contact_url }}">contact our admins</a>.
-{% endblocktrans %}
+  {% endblocktrans %}
 </p>
 {% endblock %}

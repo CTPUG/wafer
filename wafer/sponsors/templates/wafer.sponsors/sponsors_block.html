@@ -1,25 +1,25 @@
 {% load sponsors %}
 <div id="wafer-sponsors" class="container">
-    {% for package in packages %}
+  {% for package in packages %}
     {% if package.sponsors.exists %}
-        <div>
-            <div class="package">{{ package.name }}</div>
-            <ul>
-                {% for sponsor in package.sponsors.all %}
-                    <li>
-                        {% sponsor_tagged_image sponsor "main_logo" as logo_url %}
-                        {% if logo_url != '' %}
-                            <img src="{{ logo_url }}"
-                                 alt="{{ sponsor.name }}"
-                                 style="background: white; max-width: 400px; max-height:200px;"
-                                 title="{{ sponsor.name }}">
-                        {% else %}
-                            <span class="nologo">{{ sponsor.name }}</span>
-                        {% endif %}
-                    </li>
-                {% endfor %}
-            </ul>
-        </div>
+      <div>
+        <div class="package">{{ package.name }}</div>
+        <ul>
+          {% for sponsor in package.sponsors.all %}
+            <li>
+              {% sponsor_tagged_image sponsor "main_logo" as logo_url %}
+              {% if logo_url != '' %}
+                <img src="{{ logo_url }}"
+                     alt="{{ sponsor.name }}"
+                     style="background: white; max-width: 400px; max-height:200px;"
+                     title="{{ sponsor.name }}">
+              {% else %}
+                <span class="nologo">{{ sponsor.name }}</span>
+              {% endif %}
+            </li>
+          {% endfor %}
+        </ul>
+      </div>
     {% endif %}
-    {% endfor %}
+  {% endfor %}
 </div>

@@ -30,12 +30,12 @@
           {% endif %}
           {% reviewed_badge user talk %}
           {% if talk.withdrawn %}
-          <del><a href="{{ talk.get_absolute_url }}">{{ talk.title }}</a></del>
+            <del><a href="{{ talk.get_absolute_url }}">{{ talk.title }}</a></del>
           {% else %}
-          <a href="{{ talk.get_absolute_url }}">{{ talk.title }}</a>
+            <a href="{{ talk.get_absolute_url }}">{{ talk.title }}</a>
           {% endif %}
           {% blocktrans trimmed with authors=talk.get_authors_display_name %}
-          by <span class="author">{{ authors }}</span>
+            by <span class="author">{{ authors }}</span>
           {% endblocktrans %}
         </div>
       {% empty %}

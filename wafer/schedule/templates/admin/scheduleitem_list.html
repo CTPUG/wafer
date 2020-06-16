@@ -3,64 +3,64 @@
 {# This plugs our extra validation information into the end of the content
    block #}
 {% block content %}
-    {{ block.super }}
-    <div class="validation_info">
-       {% if errors %}
-       <div name="errors">
-          <h2>{% trans "Errors in the schedule" %}</h2>
-          {% block displayerrors %}
-          {% if errors.clashes %}
-          <h3>{% trans "Clashes" %}</h3>
-          <ul>
-             {% for pos, items in errors.clashes %}
-             <li>{{ pos.0 }} at {{ items.0.get_start_time }} --
-                 {% for item in items %}
-                 <b>{{ item.get_desc|escape }}</b>,
-                 {% endfor %}
-             </li>
-             {% endfor %}
-          </ul>
-          {% endif %}
-          {% if errors.validation %}
-          <h3>{% trans "Validation errors" %}</h3>
-          <ul>
-             {% for item in errors.validation %}
-             <li>{{ item }}</li>
-             {% endfor %}
-          </ul>
-          {% endif %}
-          {% if errors.non_contiguous %}
-          <h3>{% trans "Items in the schedule with non-contiguous slots" %}</h3>
-          <ul>
-             {% for item in errors.non_contiguous %}
-             <li>{{ item }}</li>
-             {% endfor %}
-          </ul>
-          {% endif %}
-          {% if errors.duplicates %}
-          <h3>{% trans "Duplicates in the schedule" %}</h3>
-          <ul>
-             {% for item in errors.duplicates %}
-             <li>{{ item }}</li>
-             {% endfor %}
-          </ul>
-          {% endif %}
-          {% if errors.venues %}
-          <h3>{% trans "Venues assigned on days they are not available" %}</h3>
-          <ul>
-             {% for venue, items in errors.venues %}
-             <li>{{ venue }} at {{ items.0.get_start_time }} --
-                 {% for item in items %}
-                 <b>{{ item.get_desc|escape }}</b>,
-                 {% endfor %}
-             </li>
-             {% endfor %}
-          </ul>
-          {% endif %}
-          {% endblock %}
-       </div>
-       {% endif %}
-    </div>
+{{ block.super }}
+<div class="validation_info">
+  {% if errors %}
+  <div name="errors">
+    <h2>{% trans "Errors in the schedule" %}</h2>
+    {% block displayerrors %}
+      {% if errors.clashes %}
+        <h3>{% trans "Clashes" %}</h3>
+        <ul>
+          {% for pos, items in errors.clashes %}
+            <li>{{ pos.0 }} at {{ items.0.get_start_time }} --
+              {% for item in items %}
+                <b>{{ item.get_desc|escape }}</b>,
+              {% endfor %}
+            </li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+      {% if errors.validation %}
+        <h3>{% trans "Validation errors" %}</h3>
+        <ul>
+          {% for item in errors.validation %}
+            <li>{{ item }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+      {% if errors.non_contiguous %}
+        <h3>{% trans "Items in the schedule with non-contiguous slots" %}</h3>
+        <ul>
+          {% for item in errors.non_contiguous %}
+            <li>{{ item }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+      {% if errors.duplicates %}
+        <h3>{% trans "Duplicates in the schedule" %}</h3>
+        <ul>
+          {% for item in errors.duplicates %}
+            <li>{{ item }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+      {% if errors.venues %}
+        <h3>{% trans "Venues assigned on days they are not available" %}</h3>
+        <ul>
+          {% for venue, items in errors.venues %}
+            <li>{{ venue }} at {{ items.0.get_start_time }} --
+              {% for item in items %}
+                <b>{{ item.get_desc|escape }}</b>,
+              {% endfor %}
+            </li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    {% endblock %}
+  </div>
+{% endif %}
+</div>
 {% endblock %}
 
 {% block object-tools-items %}

@@ -3,18 +3,18 @@
 {% block content %}
 <h1>{% trans 'Activation complete' %}</h1>
 <p>
-{% url 'auth_login' as login_url %}
-{% blocktrans trimmed %}
+  {% url 'auth_login' as login_url %}
+  {% blocktrans trimmed %}
     Your account is now activated!
     Please <a href="{{ login_url }}">log in</a>.
-{% endblocktrans %}
-</p>
-<p>
-{% blocktrans trimmed %}
+  {% endblocktrans %}
+  </p>
+  <p>
+  {% blocktrans trimmed %}
     Note that registration for the conference is a separate step.
-{% endblocktrans %}
-{% blocktrans trimmed %}
+  {% endblocktrans %}
+  {% blocktrans trimmed %}
     You can now log in and start the conference registration process.
-{% endblocktrans %}
+  {% endblocktrans %}
 </p>
 {% endblock %}
