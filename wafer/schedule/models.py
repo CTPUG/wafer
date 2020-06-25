@@ -3,6 +3,7 @@ from django.db import models
 from django.db.models.signals import post_save, post_delete
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
+from django.utils.timezone import localtime
 
 from wafer.pages.models import Page
 from wafer.snippets.markdown_field import MarkdownTextField
@@ -45,10 +46,10 @@ class ScheduleBlock(models.Model):
 
     def __str__(self):
         if self.start_time.date() != self.end_time.date():
-            return u'%s - %s' % (self.start_time.strftime('%b %d (%a) %H:%M'),
-                                 self.end_time.strftime('%b %d (%a) %H:%M'))
+            return u'%s - %s' % (localtime(self.start_time).strftime('%b %d (%a) %H:%M'),
+                                 localtime(self.end_time).strftime('%b %d (%a) %H:%M'))
         # We default to a "day" view in this case
-        return u'%s' % self.start_time.strftime('%b %d (%a)')
+        return u'%s' % localtime(self.start_time).strftime('%b %d (%a)')
 
     def clean(self):
         """Ensure Schedule blocks are sane."""
@@ -140,17 +141,17 @@ class Slot(models.Model):
         return self.start_time
 
     def get_formatted_start_time(self):
-        return self.get_start_time().strftime('%H:%M')
+        return localtime(self.get_start_time()).strftime('%H:%M')
 
     def get_formatted_start_date_time(self):
-        return self.get_start_time().strftime('%b %d (%a): %H:%M')
+        return localtime(self.get_start_time()).strftime('%b %d (%a): %H:%M')
     get_formatted_start_date_time.short_description = _('Start Date & Time')
 
     def get_formatted_end_time(self):
-        return self.end_time.strftime('%H:%M')
+        return localtime(self.end_time).strftime('%H:%M')
 
     def get_formatted_end_date_time(self):
-        return self.end_time.strftime('%b %d (%a): %H:%M')
+        return localtime(self.end_time).strftime('%b %d (%a): %H:%M')
 
     def get_duration(self):
         """Return the duration of the slot as hours and minutes.
