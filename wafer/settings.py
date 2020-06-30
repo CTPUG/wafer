@@ -261,6 +261,9 @@ WAFER_HIDE_LOGIN = False
 # Set this to False to disable talk submissions
 WAFER_TALKS_OPEN = True
 
+# Talk submissions are visible to all attendees
+WAFER_TALKS_ALL_VISIBLE = False
+
 # The form used for talk submission
 WAFER_TALK_FORM = 'wafer.talks.forms.TalkForm'
 

@@ -325,10 +325,14 @@ class Talk(models.Model):
             return True
         if self.accepted or self.cancelled:
             return True
+        if user.is_authenticated and getattr(settings, 'WAFER_TALKS_ALL_VISIBLE', False):
+            return True
         return False
 
     @classmethod
     def can_view_all(cls, user):
+        if user.is_authenticated and getattr(settings, 'WAFER_TALKS_ALL_VISIBLE', False):
+            return True
         return user.has_perm('talks.view_all_talks')
 
     def can_edit(self, user):
