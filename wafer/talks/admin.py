@@ -9,6 +9,15 @@ from reversion.admin import VersionAdmin
 from wafer.compare.admin import CompareVersionAdmin, DateModifiedFilter
 from wafer.talks.models import (
     Review, ReviewAspect, Score, Talk, TalkType, TalkUrl, Track)
+from wafer.talks.models import (
+    SUBMITTED,
+    WITHDRAWN,
+    CANCELLED,
+    UNDER_CONSIDERATION,
+    REJECTED,
+    PROVISIONAL,
+    ACCEPTED,
+)
 
 
 class ScheduleListFilter(admin.SimpleListFilter):
@@ -71,6 +80,37 @@ class ReviewInline(admin.TabularInline):
         return False
 
 
+def mark_talks(value, fname):
+    def f(modeladmin, request, queryset):
+        for talk in queryset:
+            talk.status = value
+            talk.save()
+    f.__name__ = "mark_{fname}".format(fname=fname)
+    return f
+
+
+mark_submitted = mark_talks(SUBMITTED, "submitted")
+mark_submitted.short_description = _("Mark selected talks as Submitted")
+
+mark_withdrawn = mark_talks(WITHDRAWN, "withdrawn")
+mark_withdrawn.short_description = _("Mark selected talks as Withdrawn")
+
+mark_cancelled = mark_talks(CANCELLED, "cancelled")
+mark_cancelled.short_description = _("Mark selected talks as Cancelled")
+
+mark_under_consideration = mark_talks(UNDER_CONSIDERATION, "under_consideration")
+mark_under_consideration.short_description = _("Mark selected talks as Under consideration")
+
+mark_not_accepted = mark_talks(REJECTED, "not_accepted")
+mark_not_accepted.short_description = _("Mark selected talks as Not Accepted")
+
+mark_provisional = mark_talks(PROVISIONAL, "provisional")
+mark_provisional.short_description = _("Mark selected talks as Provisionally Accepted")
+
+mark_accepted = mark_talks(ACCEPTED, "accepted")
+mark_accepted.short_description = _("Mark selected talks as Accepted")
+
+
 class TalkAdmin(CompareVersionAdmin):
     list_display = ('title', 'get_corresponding_author_name',
                     'get_corresponding_author_contact', 'talk_type',
@@ -86,6 +126,16 @@ class TalkAdmin(CompareVersionAdmin):
     inlines = [
         TalkUrlInline,
         ReviewInline,
+    ]
+
+    actions = [
+        mark_submitted,
+        mark_withdrawn,
+        mark_cancelled,
+        mark_under_consideration,
+        mark_not_accepted,
+        mark_provisional,
+        mark_accepted,
     ]
 
     def get_queryset(self, request):
