@@ -14,6 +14,9 @@ class Command(BaseCommand):
             ('pages', 'change_page'), ('pages', 'add_file'),
             ('pages', 'delete_file'), ('pages', 'change_file'),
         ),
+        'Page Content Editors': (
+            ('pages', 'change_page'),
+        ),
         'Talk Mentors': (
             ('talks', 'change_talk'), ('talks', 'view_all_talks'),
             ('talks', 'edit_private_notes'),
@@ -22,6 +25,9 @@ class Command(BaseCommand):
             ('talks', 'view_all_talks'),
             ('talks', 'edit_private_notes'),
             ('talks', 'add_review'),
+        ),
+        'View All Talks': (
+            ('talks', 'view_all_talks'),
         ),
         'Registration': (),
     }

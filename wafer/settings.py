@@ -319,3 +319,6 @@ BAKERY_VIEWS = (
     'wafer.users.views.UsersView',
     'wafer.users.views.ProfileView',
 )
+
+# Groups to which new users should be automatically added.
+WAFER_DEFAULT_GROUPS = ()

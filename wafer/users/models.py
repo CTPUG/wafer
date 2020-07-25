@@ -1,11 +1,16 @@
+import logging
+
+logger = logging.getLogger(__name__)
+
 from django.conf import settings
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
 from django.db import models
 from django.db.models import Q
 from django.db.models.signals import post_save
 from django.utils.module_loading import import_string
 from django.utils.translation import ugettext_lazy as _
 from django.core.validators import RegexValidator
+from django.core.exceptions import ObjectDoesNotExist
 
 from libravatar import libravatar_url
 try:
@@ -99,4 +104,18 @@ def create_user_profile(sender, instance, created, raw=False, **kwargs):
         UserProfile.objects.create(user=instance)
 
 
+def add_default_groups(sender, instance, created, raw=False, **kwargs):
+    """Add the user to the configured set of default groups"""
+    if raw:
+        return
+    if created:
+        for grp_name in settings.WAFER_DEFAULT_GROUPS:
+            try:
+                group = Group.objects.get_by_natural_key(grp_name)
+                instance.groups.add(group)
+            except ObjectDoesNotExist:
+                logger.warn("Specified default group %s not found" % grp_name)
+
+
 post_save.connect(create_user_profile, sender=User)
+post_save.connect(add_default_groups, sender=User)
