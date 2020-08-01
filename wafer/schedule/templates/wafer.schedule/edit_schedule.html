@@ -106,7 +106,7 @@
       <div class="tab-content">
         <div role="tabpanel" class="tab-pane active row"
              id="unassignedTalks">
-          {% regroup talks_unassigned by talk_type.name as grouped_talks %}
+          {% regroup talks_all by talk_type.name as grouped_talks %}
           {% for type, talks in grouped_talks %}
             {% if type %}
               <div draggable="false" class="badge badge-secondary">
@@ -119,6 +119,9 @@
                     id="talk{{ talk.talk_id }}"
                     data-toggle="tooltip" data-placement="left"
                     title="{{ talk.title }}"
+                    {% if talk not in talks_unassigned %}
+                      hidden
+                    {% endif %}
                     data-type="talk" data-talk-id="{{ talk.talk_id }}">
                 {% if not talk.cancelled %}
                   {{ talk.title }}
@@ -142,7 +145,7 @@
             {% endif %}
             {% for talk in talks %}
               <div draggable="true" class="badge badge-warning draggable"
-                    id="talk{{ talk.talk_id }}"
+                    class="talk{{ talk.talk_id }}"
                     data-toggle="tooltip" data-placement="left"
                     title="{{ talk.title }}"
                     data-type="talk" data-talk-id="{{ talk.talk_id }}">

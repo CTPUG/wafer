@@ -129,6 +129,11 @@
         e.target.classList.remove('info');
         var typeClass = scheduleItemType === 'talk' ? 'table-success' : 'table-info';
         e.target.classList.add(typeClass);
+        if (scheduleItemType == 'talk') {
+            e.target.setAttribute('data-talk-id', talkId);
+            var unassigned = document.getElementById("talk" + talkId);
+            unassigned.hidden = true;
+        }
 
         var ajaxData = {
             talk: talkId,
@@ -173,6 +178,7 @@
         scheduleItemCell.classList.remove('table-info');
         scheduleItemCell.classList.remove('table-success');
         scheduleItemCell.removeAttribute('data-scheduleitem-id');
+        var talkId = scheduleItemCell.getAttribute('data-talk-id');
         scheduleItemCell.removeAttribute('data-talk-id');
         scheduleItemCell.removeAttribute('data-page-id');
         scheduleItemCell.removeAttribute('data-type');
@@ -180,6 +186,11 @@
         closeButton.removeAttribute('data-id');
         closeButton.classList.add('hide');
         scheduleItemCell.innerHTML = '';
+
+        if (talkId) {
+            var unassigned = document.getElementById('talk' + talkId);
+            unassigned.hidden = false;
+        }
 
         $.ajax(
             {
