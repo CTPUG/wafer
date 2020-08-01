@@ -127,7 +127,7 @@
 
         e.target.classList.remove('success');
         e.target.classList.remove('info');
-        var typeClass = scheduleItemType === 'talk' ? 'success' : 'info';
+        var typeClass = scheduleItemType === 'talk' ? 'table-success' : 'table-info';
         e.target.classList.add(typeClass);
 
         var ajaxData = {
@@ -170,8 +170,8 @@
 
         scheduleItemCell.removeAttribute('id');
         scheduleItemCell.classList.remove('draggable');
-        scheduleItemCell.classList.remove('info');
-        scheduleItemCell.classList.remove('success');
+        scheduleItemCell.classList.remove('table-info');
+        scheduleItemCell.classList.remove('table-success');
         scheduleItemCell.removeAttribute('data-scheduleitem-id');
         scheduleItemCell.removeAttribute('data-talk-id');
         scheduleItemCell.removeAttribute('data-page-id');
