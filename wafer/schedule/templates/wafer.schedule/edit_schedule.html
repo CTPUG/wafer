@@ -50,7 +50,8 @@
             {% for venue in slot.venues %}
               <td id="scheduleItem{{ venue.scheduleitem_id }}" data-venue="{{ venue.id }}" data-slot="{{ slot.id }}"
                   class="table-{% if venue.talk %}success{% elif venue.page %}info{% endif %} droppable {% if venue.talk or venue.page %}draggable{% endif %}"
-                  data-scheduleitem-id="{{ venue.scheduleitem_id }}" data-talk-id="{{ venue.talk.id }}"
+                  data-scheduleitem-id="{{ venue.scheduleitem_id }}"
+                  data-talk-id="{{ venue.talk.talk_id }}"
                   data-page-id="{{ venue.page.id }}"
                   data-type="{% if venue.talk %}talk{% elif venue.page %}page{% endif %}">
                 {% if venue.scheduleitem_id %}
