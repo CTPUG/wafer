@@ -70,6 +70,14 @@ ul.profile-links li {
     background-color: white;
 }
 
+#wafer-edit-schedule-bucket li {
+    margin: 0px 10px 10px 0px;
+}
+
+#wafer-edit-schedule-bucket .nav-tabs a.active {
+  font-weight: bold;
+}
+
 #wafer-edit-schedule-bucket .badge {
     width: 100%;
     margin-bottom: 5px;

@@ -80,14 +80,15 @@
 
     <div>
       <ul class="nav nav-tabs" role="tablist">
-        <li role="presentation" class="">
+        <li role="presentation">
           <a href="#unassignedTalks"
+             class="active"
              aria-controls="unassignedTalks" role="tab"
              data-toggle="tab">
             {% trans 'Unassigned Talks' %}
           </a>
         </li>
-        <li role="presentation" class="active">
+        <li role="presentation">
           <a href="#allTalks"
              aria-controls="allTalks" role="tab"
              data-toggle="tab">
@@ -102,7 +103,7 @@
       </ul>
 
       <div class="tab-content">
-        <div role="tabpanel" class="tab-pane row"
+        <div role="tabpanel" class="tab-pane active row"
              id="unassignedTalks">
           {% regroup talks_unassigned by talk_type.name as grouped_talks %}
           {% for type, talks in grouped_talks %}
@@ -129,7 +130,7 @@
             {% endfor %}
           {% endfor %}
         </div>
-        <div role="tabpanel" class="tab-pane active row"
+        <div role="tabpanel" class="tab-pane row"
              id="allTalks">
           {% regroup talks_all by talk_type.name as grouped_talks %}
           {% for type, talks in grouped_talks %}
