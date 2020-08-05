@@ -105,8 +105,7 @@
                       {% else %}
                         <description/>
                       {% endif %}
-                      <released>True</released>
-                      <license>{{ WAFER_VIDEO_LICENSE }}</license>
+                      <released>False</released>
                     {% endif %}
                     <conf_url>{{ items.item.get_url }}</conf_url>
                     {# It's useful to have the full url available in the xml file. The pentabarf.xml format isn't that well #}
