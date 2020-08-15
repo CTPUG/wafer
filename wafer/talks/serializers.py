@@ -13,7 +13,7 @@ class TalkUrlSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = TalkUrl
-        fields = ('id', 'description', 'url', 'talk')
+        fields = ('id', 'description', 'url', 'talk', 'public')
         read_only_fields = ('id',)
 
 

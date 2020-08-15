@@ -573,7 +573,7 @@ class TalkViewSetTests(TestCase):
         def mk_url(talk_url):
             return {
                 'id': talk_url.id, 'description': talk_url.description,
-                'url': talk_url.url,
+                'url': talk_url.url, 'public': talk_url.public,
             }
         return {
             'talk_id': talk.talk_id, 'talk_type': talk.talk_type,
@@ -703,7 +703,7 @@ class TalkUrlsViewSetTests(TestCase):
     def mk_result(self, talk_url):
         return {
             'id': talk_url.id, 'description': talk_url.description,
-            'url': talk_url.url,
+            'url': talk_url.url, 'public': talk_url.public,
         }
 
     def test_list_talk_urls(self):
@@ -741,6 +741,7 @@ class TalkUrlsViewSetTests(TestCase):
             '/talks/api/talks/%d/urls/' % talk.talk_id, data={
                 'description': u'slides',
                 'url': u'http://www.example.com/video',
+                'public': True,
             }, format="json")
         [talk_url] = talk.urls.all()
         self.assertEqual(response.data, self.mk_result(talk_url))
@@ -755,6 +756,7 @@ class TalkUrlsViewSetTests(TestCase):
             '/talks/api/talks/%d/urls/%d/' % (talk.talk_id, url.id), data={
                 'description': u'slides',
                 'url': u'http://www.example.com/video',
+                'public': True,
             }, format="json")
         [talk_url] = talk.urls.all()
         self.assertEqual(response.data, self.mk_result(talk_url))
