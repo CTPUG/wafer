@@ -256,7 +256,7 @@ class TalkTypesView(BuildableListView):
     build_path = 'talks/types/index.html'
 
 
-class TalksViewSet(viewsets.ModelViewSet, NestedViewSetMixin):
+class TalksViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
     """API endpoint that allows talks to be viewed or edited."""
     queryset = Talk.objects.none()  # Needed for the REST Permissions
     serializer_class = TalkSerializer
@@ -291,7 +291,7 @@ class TalkExistsPermission(BasePermission):
         return True
 
 
-class TalkUrlsViewSet(viewsets.ModelViewSet, NestedViewSetMixin):
+class TalkUrlsViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
     """API endpoint that allows talks to be viewed or edited."""
     queryset = TalkUrl.objects.all().order_by('id')
     serializer_class = TalkUrlSerializer
