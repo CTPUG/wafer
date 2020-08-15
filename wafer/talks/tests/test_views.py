@@ -717,6 +717,16 @@ class TalkUrlsViewSetTests(TestCase):
             self.mk_result(url_a), self.mk_result(url_b),
         ])
 
+    def test_list_talk_urls_nested_filtering(self):
+        talk_a = create_talk("Talk", ACCEPTED, "author")
+        talk_b = create_talk("Talk 2", ACCEPTED, "author 2")
+        url_a = TalkUrl.objects.create(
+            talk=talk_a, url="http://a.example.com/", description="video")
+        url_b = TalkUrl.objects.create(
+            talk=talk_b, url="http://b.example.com/", description="slides")
+        response = self.client.get('/talks/api/talks/%d/urls/' % talk_a.talk_id)
+        self.assertEqual(response.data['results'], [self.mk_result(url_a)])
+
     def test_retrieve_talk_url(self):
         talk = create_talk("Talk A", ACCEPTED, "author_a")
         url = TalkUrl.objects.create(
