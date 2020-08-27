@@ -352,7 +352,7 @@ class TalkUrl(models.Model):
        user, but exist for use by the conference organisers."""
 
     description = models.CharField(max_length=256)
-    url = models.URLField()
+    url = models.URLField(max_length=1024)
     talk = models.ForeignKey(Talk, related_name='urls',
                              on_delete=models.CASCADE)
 
