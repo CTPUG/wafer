@@ -2,30 +2,14 @@
 
 import mock
 
-from django.contrib.auth import get_user_model
-from django.contrib.auth.models import Permission
 from django.test import Client, TestCase
 from django.urls import reverse
 
 from wafer.tests.api_utils import SortedResultsClient
+from wafer.tests.utils import create_user
 from wafer.talks.models import (
     Talk, TalkUrl, ACCEPTED, REJECTED, SUBMITTED, UNDER_CONSIDERATION,
     CANCELLED, PROVISIONAL)
-
-
-def create_user(username, superuser=False, perms=()):
-    if superuser:
-        create = get_user_model().objects.create_superuser
-    else:
-        create = get_user_model().objects.create_user
-    user = create(
-        username, '%s@example.com' % username, '%s_password' % username)
-    for codename in perms:
-        perm = Permission.objects.get(codename=codename)
-        user.user_permissions.add(perm)
-    if perms:
-        user = get_user_model().objects.get(pk=user.pk)
-    return user
 
 
 def create_talk(title, status, username):
@@ -512,7 +496,7 @@ class TalkViewSetPermissionTests(TestCase):
         self.assertEqual(response.status_code, 404)
 
     def test_super_user_gets_everything(self):
-        create_user('super', True)
+        create_user('super', superuser=True)
         self.client.login(username='super', password='super_password')
         response = self.client.get('/talks/api/talks/')
         self.assertEqual(response.data['count'], 3)
@@ -565,7 +549,7 @@ class TalkViewSetPermissionTests(TestCase):
 class TalkViewSetTests(TestCase):
 
     def setUp(self):
-        create_user('super', True)
+        create_user('super', superuser=True)
         self.client = SortedResultsClient(sort_key="title")
         self.client.login(username='super', password='super_password')
 
@@ -685,7 +669,7 @@ class TalkUrlsViewSetPermissionTests(TestCase):
         self.assert_missing_talk_urls_code(403)
 
     def test_super_user_gets_all_talk_urls(self):
-        create_user('super', True)
+        create_user('super', superuser=True)
         self.client.login(username='super', password='super_password')
         self.assert_urls_accessible(self.talk_a)
         self.assert_urls_accessible(self.talk_s)
@@ -696,7 +680,7 @@ class TalkUrlsViewSetPermissionTests(TestCase):
 class TalkUrlsViewSetTests(TestCase):
 
     def setUp(self):
-        create_user('super', True)
+        create_user('super', superuser=True)
         self.client = SortedResultsClient(sort_key="url")
         self.client.login(username='super', password='super_password')
 
