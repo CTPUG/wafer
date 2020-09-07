@@ -191,3 +191,114 @@ class TicketTypesViewSetTests(TestCase):
         self.assertEqual(response.data, None)
         self.assertEqual(response.status_code, 204)
         self.assertEqual(ticket_type, ticket_type_2)
+
+
+class TicketsViewSetTests(TestCase):
+    def setUp(self):
+        create_user("super", superuser=True)
+        self.client = SortedResultsClient(sort_key="barcode")
+        self.client.login(username="super", password="super_password")
+
+    def mk_result(self, ticket):
+        return {
+            "barcode": ticket.barcode,
+            "email": ticket.email,
+            "type": ticket.type.id,
+            "user": None,
+        }
+
+    def test_list_tickets(self):
+        ticket_type = TicketType.objects.create(name="Test Type 1")
+        ticket_1 = Ticket.objects.create(
+            barcode=1, email="a@example.com", type=ticket_type)
+        ticket_2 = Ticket.objects.create(
+            barcode=2, email="b@example.com", type=ticket_type)
+        response = self.client.get("/tickets/api/tickets/")
+        self.assertEqual(
+            response.data["results"], [
+                self.mk_result(ticket_1),
+                self.mk_result(ticket_2),
+            ]
+        )
+
+    def test_retrieve_ticket(self):
+        ticket_type = TicketType.objects.create(name="Test Type 1")
+        ticket = Ticket.objects.create(
+            barcode=1, email="a@example.com", type=ticket_type)
+        response = self.client.get(
+            "/tickets/api/tickets/%d/" % (ticket.barcode,)
+        )
+        self.assertEqual(response.data, self.mk_result(ticket))
+
+    def test_create_ticket(self):
+        ticket_type = TicketType.objects.create(name="Test Type 1")
+        response = self.client.post(
+            "/tickets/api/tickets/",
+            data={
+                "barcode": 123,
+                "email": "joe@example.com",
+                "type": ticket_type.id,
+                "user": None,
+            },
+            format="json",
+        )
+        self.assertEqual(response.status_code, 201)
+        [ticket] = Ticket.objects.all()
+        self.assertEqual(response.data, self.mk_result(ticket))
+        self.assertEqual(ticket.barcode, 123)
+        self.assertEqual(ticket.email, "joe@example.com")
+        self.assertEqual(ticket.type, ticket_type)
+        self.assertEqual(ticket.user, None)
+
+    def test_update_ticket(self):
+        ticket_type_1 = TicketType.objects.create(name="Test Type 1")
+        ticket_type_2 = TicketType.objects.create(name="Test Type 1")
+        ticket = Ticket.objects.create(
+            barcode=123, email="a@example.com", type=ticket_type_1)
+        response = self.client.put(
+            "/tickets/api/tickets/%d/" % (ticket.barcode,),
+            data={
+                "email": "b@example.com",
+                "type": ticket_type_2.id,
+                "user": None,
+            },
+            format="json",
+        )
+        [ticket] = Ticket.objects.all()
+        self.assertEqual(ticket.barcode, 123)
+        self.assertEqual(response.data, self.mk_result(ticket))
+        self.assertEqual(ticket.email, "b@example.com")
+        self.assertEqual(ticket.type, ticket_type_2)
+        self.assertEqual(ticket.user, None)
+
+    def test_patch_ticket(self):
+        ticket_type = TicketType.objects.create(name="Test Type 1")
+        ticket = Ticket.objects.create(
+            barcode=123, email="a@example.com", type=ticket_type)
+        response = self.client.patch(
+            "/tickets/api/tickets/%d/" % (ticket.barcode,),
+            data={
+                "email": "b@example.com",
+            },
+            format="json",
+        )
+        [ticket] = Ticket.objects.all()
+        self.assertEqual(ticket.barcode, 123)
+        self.assertEqual(response.data, self.mk_result(ticket))
+        self.assertEqual(ticket.email, "b@example.com")
+        self.assertEqual(ticket.type, ticket_type)
+        self.assertEqual(ticket.user, None)
+
+    def test_delete_ticket(self):
+        ticket_type = TicketType.objects.create(name="Test Type 1")
+        ticket_1 = Ticket.objects.create(
+            barcode=123, email="a@example.com", type=ticket_type)
+        ticket_2 = Ticket.objects.create(
+            barcode=456, email="b@example.com", type=ticket_type)
+        response = self.client.delete(
+            "/tickets/api/tickets/%d/" % (ticket_1.barcode,),
+        )
+        [ticket] = Ticket.objects.all()
+        self.assertEqual(response.data, None)
+        self.assertEqual(response.status_code, 204)
+        self.assertEqual(ticket, ticket_2)

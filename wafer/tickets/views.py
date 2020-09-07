@@ -153,6 +153,6 @@ class TicketTypesViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
 class TicketsViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
     '''API endpoint that allows tickets to be viewed or edited.'''
 
-    queryset = Ticket.objects.all().order_by("id")
+    queryset = Ticket.objects.all().order_by("barcode")
     serializer_class = TicketSerializer
     permission_classes = (DjangoModelPermissions,)
