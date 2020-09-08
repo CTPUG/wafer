@@ -7,10 +7,12 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  {% block wafer_css %}
   <link href="{% static 'vendor/bootstrap/dist/css/bootstrap.min.css' %}" rel="stylesheet">
   <link href="{% static 'vendor/@fortawesome/fontawesome-free-webfonts/css/fontawesome.css' %}" rel="stylesheet">
   <link href="{% static 'vendor/@fortawesome/fontawesome-free-webfonts/css/fa-solid.css' %}" rel="stylesheet">
   <link href="{% static 'css/wafer.css' %}" rel="stylesheet">
+  {% endblock %}
   {% block extra_head %}{% endblock %}
 </head>
 <body>
@@ -34,9 +36,11 @@
     {% endblock %}
   </div>
   {% sponsors %}
+  {% block wafer_js %}
   <script src="{% static 'vendor/jquery/dist/jquery.min.js' %}"></script>
   <script src="{% static 'vendor/popper.js/dist/umd/popper.min.js' %}"></script>
   <script src="{% static 'vendor/bootstrap/dist/js/bootstrap.min.js' %}"></script>
+  {% endblock %}
   {% block extra_foot %}{% endblock %}
 </body>
 </html>
