@@ -59,14 +59,14 @@
                     {{ name }}'s profile
                     {% endblocktrans %}
                   </a></li>
-                  <li><a class="dropdown-item" href="{% url 'auth_logout' %}">
-                    {% trans 'Log out' %}
-                  </a></li>
                   {% if user.is_staff %}
                   <li><a class="dropdown-item" href="{% url 'admin:index' %}">
                     {% trans 'Site admin' %}
                   </a></li>
                   {% endif %}
+                  <li><a class="dropdown-item" href="{% url 'auth_logout' %}">
+                    {% trans 'Log out' %}
+                  </a></li>
                 </ul>
               </li>
             {% endblock navauthenticated %}
