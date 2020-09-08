@@ -250,6 +250,22 @@ class TicketsViewSetTests(TestCase):
         self.assertEqual(ticket.type, ticket_type)
         self.assertEqual(ticket.user, None)
 
+    def test_create_ticket_without_barcode(self):
+        ticket_type = TicketType.objects.create(name="Test Type 1")
+        response = self.client.post(
+            "/tickets/api/tickets/",
+            data={
+                "email": "joe@example.com",
+                "type": ticket_type.id,
+                "user": None,
+            },
+            format="json",
+        )
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.json(), [
+            "barcode required during ticket creation"])
+        self.assertEqual(Ticket.objects.count(), 0)
+
     def test_update_ticket(self):
         ticket_type_1 = TicketType.objects.create(name="Test Type 1")
         ticket_type_2 = TicketType.objects.create(name="Test Type 1")
