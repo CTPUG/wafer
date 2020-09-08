@@ -11,8 +11,16 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 from django.views.generic.edit import FormView
 
+from rest_framework import viewsets
+from rest_framework.permissions import (
+    DjangoModelPermissions,
+    DjangoModelPermissionsOrAnonReadOnly,
+)
+from rest_framework_extensions.mixins import NestedViewSetMixin
+
 from wafer.tickets.models import Ticket, TicketType
 from wafer.tickets.forms import TicketForm
+from wafer.tickets.serializers import TicketSerializer, TicketTypeSerializer
 
 log = logging.getLogger(__name__)
 
@@ -132,3 +140,19 @@ def import_ticket(ticket_barcode, ticket_type, email):
         log.info('Ticket registered: %s and linked to user', ticket)
     else:
         log.info('Ticket registered: %s. Unclaimed', ticket)
+
+
+class TicketTypesViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
+    '''API endpoint that allows ticket types to be viewed or edited.'''
+
+    queryset = TicketType.objects.all().order_by("id")
+    serializer_class = TicketTypeSerializer
+    permission_classes = (DjangoModelPermissions,)
+
+
+class TicketsViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
+    '''API endpoint that allows tickets to be viewed or edited.'''
+
+    queryset = Ticket.objects.all().order_by("barcode")
+    serializer_class = TicketSerializer
+    permission_classes = (DjangoModelPermissions,)
