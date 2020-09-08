@@ -147,7 +147,7 @@ class TicketTypesViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
 
     queryset = TicketType.objects.all().order_by("id")
     serializer_class = TicketTypeSerializer
-    permission_classes = (DjangoModelPermissions, DjangoModelPermissionsOrAnonReadOnly)
+    permission_classes = (DjangoModelPermissions,)
 
 
 class TicketsViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
