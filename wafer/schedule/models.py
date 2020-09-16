@@ -200,7 +200,21 @@ class Slot(models.Model):
             if other_slot.get_block() != self.get_block():
                 # Different Schedule Blocks don't overlap
                 continue
-            if overlap(self, other_slot):
+            if other_slot.previous_slot == self:
+                # Only need to check against other_slot end_time
+                # since our end_time is the other_slot's start_time
+                if self.end_time >= other_slot.end_time:
+                    raise ValidationError("Overlaps with %s" % other_slot)
+                if self.get_start_time() >= other_slot.end_time:
+                    raise ValidationError("Overlaps with %s" % other_slot)
+            elif self.previous_slot == other_slot:
+                # We only need to test against our end time, since
+                # our start time is the end time of the other_slot
+                if other_slot.end_time >= self.end_time:
+                    raise ValidationError("Overlaps with %s" % other_slot)
+                if other_slot.get_start_time() >= self.end_time:
+                    raise ValidationError("Overlaps with %s" % other_slot)
+            elif overlap(self, other_slot):
                 raise ValidationError("Overlaps with %s" % other_slot)
 
 
