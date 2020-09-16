@@ -282,6 +282,40 @@ class SlotTests(TestCase):
         slot2.delete()
         block1.delete()
 
+    def test_previous_overlaps(self):
+        """Test that we handle overlap checks involving editing
+           previous slots correctly."""
+
+        block1 = ScheduleBlock.objects.create(
+                start_time=D.datetime(2013, 9, 26, 9, 0, 0,
+                                      tzinfo=timezone.utc),
+                end_time=D.datetime(2013, 9, 26, 19, 0, 0,
+                                    tzinfo=timezone.utc))
+        slot1 = Slot(start_time=D.datetime(2013, 9, 26, 10, 0,
+                                           tzinfo=timezone.utc),
+                     end_time=D.datetime(2013, 9, 26, 12, 0, 0,
+                                         tzinfo=timezone.utc))
+        slot1.clean()
+        slot1.save()
+        slot2 = Slot(previous_slot=slot1,
+                     end_time=D.datetime(2013, 9, 26, 13, 0, 0,
+                                         tzinfo=timezone.utc))
+        slot2.clean()
+        slot2.save()
+
+        # Check that updating slot1's end_time to 12:30 works as expected
+        slot1.end_time = D.datetime(2013, 9, 26, 12, 30, 0, tzinfo=timezone.utc)
+        slot1.clean()
+        slot1.save()
+
+        self.assertEqual(slot2.get_start_time(),
+                         D.datetime(2013, 9, 26, 12, 30, 0,
+                                    tzinfo=timezone.utc))
+
+        # Check that updating slot1's end_time to 13:30 fails, though
+        slot1.end_time = D.datetime(2013, 9, 26, 13, 30, 0, tzinfo=timezone.utc)
+        self.assertRaises(ValidationError, slot1.clean)
+
     def test_invalid_slot(self):
         """Test that slots must have start time > end_time"""
         # Same day
