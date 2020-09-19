@@ -159,7 +159,9 @@
     <h3 id="urls_title">{% trans "URLs" %}</h3>
     <ul class="list-group" id="urls">
       {% for talkurl in talk.urls.all %}
-        <li class="list-group-item"><a href="{{ talkurl.url }}">{{ talkurl.description }}</a></li>
+        {% if talkurl.public %}
+          <li class="list-group-item"><a href="{{ talkurl.url }}">{{ talkurl.description }}</a></li>
+        {% endif %}
       {% endfor %}
     </ul>
   {% endif %}

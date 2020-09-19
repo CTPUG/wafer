@@ -557,7 +557,7 @@ class TalkViewSetTests(TestCase):
         def mk_url(talk_url):
             return {
                 'id': talk_url.id, 'description': talk_url.description,
-                'url': talk_url.url,
+                'url': talk_url.url, 'public': talk_url.public,
             }
         return {
             'talk_id': talk.talk_id, 'talk_type': talk.talk_type,
@@ -566,7 +566,7 @@ class TalkViewSetTests(TestCase):
             'corresponding_author': talk.corresponding_author.id,
             'authors': [talk.corresponding_author.id],
             'kv': [],
-            'urls': [mk_url(url) for url in talk.urls.all()]
+            'urls': [mk_url(url) for url in talk.urls.all() if url.public]
         }
 
     def test_list_talks(self):
@@ -578,6 +578,17 @@ class TalkViewSetTests(TestCase):
         ])
 
     def test_retrieve_talk(self):
+        talk = create_talk("Talk A", ACCEPTED, "author_a")
+        talk.abstract = "Abstract Talk A"
+        talk.save()
+        TalkUrl.objects.create(
+            talk=talk, url="http://example.com/", description="video",
+            public=True)
+        response = self.client.get(
+            '/talks/api/talks/%d/' % talk.talk_id)
+        self.assertEqual(response.data, self.mk_result(talk))
+
+    def test_retrieve_talk_with_private_url(self):
         talk = create_talk("Talk A", ACCEPTED, "author_a")
         talk.abstract = "Abstract Talk A"
         talk.save()
@@ -687,7 +698,7 @@ class TalkUrlsViewSetTests(TestCase):
     def mk_result(self, talk_url):
         return {
             'id': talk_url.id, 'description': talk_url.description,
-            'url': talk_url.url,
+            'url': talk_url.url, 'public': talk_url.public,
         }
 
     def test_list_talk_urls(self):
@@ -725,6 +736,7 @@ class TalkUrlsViewSetTests(TestCase):
             '/talks/api/talks/%d/urls/' % talk.talk_id, data={
                 'description': u'slides',
                 'url': u'http://www.example.com/video',
+                'public': True,
             }, format="json")
         [talk_url] = talk.urls.all()
         self.assertEqual(response.data, self.mk_result(talk_url))
@@ -739,6 +751,7 @@ class TalkUrlsViewSetTests(TestCase):
             '/talks/api/talks/%d/urls/%d/' % (talk.talk_id, url.id), data={
                 'description': u'slides',
                 'url': u'http://www.example.com/video',
+                'public': True,
             }, format="json")
         [talk_url] = talk.urls.all()
         self.assertEqual(response.data, self.mk_result(talk_url))

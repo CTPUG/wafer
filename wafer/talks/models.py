@@ -346,15 +346,18 @@ class Talk(models.Model):
 
 @reversion.register()
 class TalkUrl(models.Model):
-    """An url to stuff relevant to the talk - videos, slides, etc.
+    """ A means for attaching relevant URLs to the talk (e.g. videos, slides).
 
-       Note that these are explicitly not intended to be exposed to the
-       user, but exist for use by the conference organisers."""
+        These URL associations are explicitly not intended to be edited by the
+        author of the talk, but rather by the conference organizers.
 
+        URLs with public set to False are not publicly visible.
+    """
     description = models.CharField(max_length=256)
     url = models.URLField(max_length=1024)
     talk = models.ForeignKey(Talk, related_name='urls',
                              on_delete=models.CASCADE)
+    public = models.BooleanField(default=True)
 
 
 @reversion.register(follow=('scores',))

@@ -13,8 +13,19 @@ class TalkUrlSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = TalkUrl
-        fields = ('id', 'description', 'url', 'talk')
+        fields = ('id', 'description', 'url', 'talk', 'public')
         read_only_fields = ('id',)
+
+
+class PublicTalkUrlListSerializer(serializers.ListSerializer):
+    def to_representation(self, data):
+        data = data.exclude(public=False)
+        return super().to_representation(data)
+
+
+class PublicTalkUrlSerializer(TalkUrlSerializer):
+    class Meta(TalkUrlSerializer.Meta):
+        list_serializer_class = PublicTalkUrlListSerializer
 
 
 class MarkdownSerializer(serializers.CharField):
@@ -31,7 +42,7 @@ class TalkSerializer(serializers.ModelSerializer):
 
     abstract = MarkdownSerializer()
 
-    urls = TalkUrlSerializer(many=True, read_only=True)
+    urls = PublicTalkUrlSerializer(many=True, read_only=True)
 
     class Meta:
         model = Talk
