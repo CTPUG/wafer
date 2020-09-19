@@ -6,7 +6,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('talks', '0018_talk_type_submission_details'),
+        ('talks', '0019_talkurl_length'),
     ]
 
     operations = [
