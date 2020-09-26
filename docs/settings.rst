@@ -102,6 +102,18 @@ Wafer's settings
     When ``True``, users can register for the conference.
     (Note, this is not the same as signing up for an account on the website.)
 
+``WAFER_SCHEDULE_ITEM_VALIDATORS``
+    List of strings.
+    Defines which schedule item validators to use when managing the schedule.
+    By default, all existing validators are enabled:
+
+    * `clashes`: checks for events at the same time and place.
+    * `duplicates`: checks that each event is schedule only once.
+    * `validation`: checks for errors in the schedule.
+    * `non_contiguous`: checks that slots for an event are contiguous.
+    * `venues`: checks that all events are not schedule on a venue that is not
+      available at that time.
+
 ``WAFER_TALK_REVIEW_SCORES``
     A tuple of 2 integers.
     The range of values for talk reviews. Inclusive.

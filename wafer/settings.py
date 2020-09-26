@@ -322,3 +322,12 @@ BAKERY_VIEWS = (
 
 # Groups to which new users should be automatically added.
 WAFER_DEFAULT_GROUPS = ()
+
+# Schedule validators to use
+WAFER_SCHEDULE_ITEM_VALIDATORS = [
+    'clashes',
+    'duplicates',
+    'validation',
+    'non_contiguous',
+    'venues',
+]

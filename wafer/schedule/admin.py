@@ -2,6 +2,7 @@ import datetime
 from collections import defaultdict
 
 from django.db.models import Q
+from django.conf import settings
 from django.conf.urls import url
 from django.core.exceptions import ValidationError
 
@@ -133,6 +134,8 @@ def register_slot_validator(function, err_type, msg):
 
 
 def register_schedule_item_validator(function, err_type, msg):
+    if err_type not in settings.WAFER_SCHEDULE_ITEM_VALIDATORS:
+        return
     global SCHEDULE_ITEM_VALIDATORS
     SCHEDULE_ITEM_VALIDATORS.append((function, err_type, msg))
 
