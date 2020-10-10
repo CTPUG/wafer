@@ -465,6 +465,7 @@ class JsonDataView(View, BuildableMixin):
                 sched_event['authors'] = []
 
             sched_event['url'] = item.get_url()
+            data.append(sched_event)
 
         response = HttpResponse(json.dumps(data, sort_keys=True), content_type="application/json")
         response['Content-Disposition'] = 'attachment; filename=schedule.json'
