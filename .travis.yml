@@ -2,7 +2,6 @@ language: python
 sudo: false
 dist: xenial
 python:
-   - "3.5"
    - "3.6"
    - "3.7"
    - "3.8"
@@ -20,14 +19,6 @@ env:
 
 matrix:
    exclude:
-      - python: "3.5"
-        env: DJANGO='django>=3.0,<3.1.0' TESTDB=sqlite
-      - python: "3.5"
-        env: DJANGO='django>=3.0,<3.1.0' TESTDB=postgres
-      - python: "3.5"
-        env: DJANGO='https://github.com/django/django/archive/master.tar.gz' TESTDB=sqlite
-      - python: "3.5"
-        env: DJANGO='https://github.com/django/django/archive/master.tar.gz' TESTDB=postgres
       - python: "3.8"
         env: DJANGO='django>=2.0,<2.1.0' TESTDB=sqlite
       - python: "3.8"
