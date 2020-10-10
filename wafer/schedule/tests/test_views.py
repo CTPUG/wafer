@@ -1604,6 +1604,7 @@ class JsonViewTests(TestCase):
         response = c.get('/schedule/schedule.json')
         self.assertEqual(response.status_code, 200)
         data = json.loads(response.content.decode('utf8'))
+        self.assertTrue('version' in data)
         self.assertEqual(len(data['events']), 8)
         self.assertEqual(len(data['venues']), 2)
         # Check that venues have the expected fields

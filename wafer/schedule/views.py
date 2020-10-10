@@ -430,6 +430,10 @@ class ICalView(View, BuildableMixin):
 class JsonDataView(View, BuildableMixin):
     build_path = "schedule/schedule.json"
 
+    # Version of the json export, so tools can hopefully track changes
+    # sanely
+    FORMAT_VERSION = "0.1"
+
     def get(self, request):
         """Create a json data blob from the schedule"""
         # This is mainly to be consumed by video processes, so we
@@ -444,6 +448,7 @@ class JsonDataView(View, BuildableMixin):
         data = {
            'conference name': site.name,
            'domain': site.domain,
+           'version': self.FORMAT_VERSION,
         }
 
         data['venues'] = []
