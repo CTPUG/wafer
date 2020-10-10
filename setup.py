@@ -6,10 +6,6 @@ from setuptools import find_packages, setup
 
 REQUIRES = [
     'Django>=2.0, <3.0',
-    'psycopg2-binary',
-    'mdx_outline',
-    'mdx_attr_cols',
-    'mdx_variables',
     'django-crispy-forms',
     'django-nose',
     'django-registration-redux',
