@@ -5,7 +5,7 @@ import sys
 from setuptools import find_packages, setup
 
 REQUIRES = [
-    'Django>=1.11',
+    'Django>=2.0, <3.0',
     'django-crispy-forms',
     'django-nose',
     'django-registration-redux',
@@ -38,7 +38,6 @@ def compile_translations():
         subprocess.check_call(['./manage.py', 'compilemessages'])
     except subprocess.CalledProcessError:
         print("WARNING: cannot compile translations.")
-        pass
     return glob('wafer/locale/*/LC_MESSAGES/django.mo')
 
 
