@@ -1524,6 +1524,27 @@ class NonHTMLViewTests(TestCase):
         # Check that we have the page slug in the ical event
         self.assertTrue('/test0/' in event['url'])
 
+    def test_json_view_unauth(self):
+        """Test that unauthenticated access to the json view fails"""
+        c = Client()
+        response = c.get('/schedule/schedule.json')
+        self.assertEqual(response.status_code, 403)
+
+    def test_json_view_user(self):
+        """Test that ordinary users access the json view fails"""
+        c = create_client('john', False)
+        response = c.get('/schedule/schedule.json')
+        self.assertEqual(response.status_code, 403)
+
+    def test_json_view_admin(self):
+        """Test that admin users can access the json view"""
+        c = create_client('james', True)
+        c = Client()
+        response = c.get('/schedule/schedule.json')
+        self.assertEqual(response.status_code, 200)
+        print(response)
+        self.assetTrue(True, False)
+
 
 class ScheduleItemViewSetTests(TestCase):
 
