@@ -1521,6 +1521,8 @@ class NonHTMLViewTests(TestCase):
         event = calendar.walk(name='VEVENT')[0]
         self.assertEqual(event['dtstart'].params['value'], 'DATE-TIME')
         self.assertEqual(event['dtstart'].dt, D.datetime(2013, 9, 22, 10, 0, 0, tzinfo=timezone.utc))
+        # Check that we have the page slug in the ical event
+        self.assertTrue('/test0/' in event['url'])
 
 
 class ScheduleItemViewSetTests(TestCase):

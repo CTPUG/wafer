@@ -401,6 +401,7 @@ class ICalView(View, BuildableMixin):
             sched_event.add('duration', datetime.timedelta(minutes=item.get_duration_minutes()))
             sched_event.add('class', 'PUBLIC')
             sched_event.add('uid', '%s@%s' % (item.pk, site.domain))
+            sched_event.add('url', item.get_url())
             calendar.add_component(sched_event)
         response = HttpResponse(calendar.to_ical(), content_type="text/calendar")
         response['Content-Disposition'] = 'attachment; filename=schedule.ics'
