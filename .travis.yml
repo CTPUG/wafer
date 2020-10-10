@@ -5,7 +5,7 @@ python:
    - "3.6"
    - "3.7"
    - "3.8"
-   - "3.9"
+   - "3.9-dev"
 env:
    - DJANGO='django>=2.0,<2.1.0' TESTDB=sqlite
    - DJANGO='django>=2.0,<2.1.0' TESTDB=postgres
@@ -28,13 +28,13 @@ matrix:
         env: DJANGO='django>=2.1,<2.2.0' TESTDB=sqlite
       - python: "3.8"
         env: DJANGO='django>=2.1,<2.2.0' TESTDB=postgres
-      - python: "3.9"
+      - python: "3.9-dev"
         env: DJANGO='django>=2.0,<2.1.0' TESTDB=sqlite
-      - python: "3.9"
+      - python: "3.9-dev"
         env: DJANGO='django>=2.0,<2.1.0' TESTDB=postgres
-      - python: "3.9"
+      - python: "3.9-dev"
         env: DJANGO='django>=2.1,<2.2.0' TESTDB=sqlite
-      - python: "3.9"
+      - python: "3.9-dev"
         env: DJANGO='django>=2.1,<2.2.0' TESTDB=postgres
 
    allow_failures:
