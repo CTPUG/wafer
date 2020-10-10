@@ -15,8 +15,6 @@ env:
    - DJANGO='django>=2.2,<3.0' TESTDB=postgres
    - DJANGO='django>=3.0,<3.1.0' TESTDB=sqlite
    - DJANGO='django>=3.0,<3.1.0' TESTDB=postgres
-   - DJANGO='django>=3.1,<3.2.0' TESTDB=sqlite
-   - DJANGO='django>=3.1,<3.2.0' TESTDB=postgres
    - DJANGO='https://github.com/django/django/archive/master.tar.gz' TESTDB=sqlite
    - DJANGO='https://github.com/django/django/archive/master.tar.gz' TESTDB=postgres
 
