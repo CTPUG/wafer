@@ -86,6 +86,12 @@ class TalkType(models.Model):
         help_text=_("Whether submissions after the deadline should be accepted")
     )
 
+    show_speakers = models.BooleanField(
+        _('Show authors in speakers list'),
+        default=True,
+        help_text=_("Whether to show the authors for this talk type in the speakers list")
+    )
+
     objects = TalkTypeManager()
 
     def __str__(self):
