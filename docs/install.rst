@@ -25,6 +25,20 @@ Basic Dev install
 #. If you don't have one yet, create a superuser with
    ``manage.py createsuperuser``.
 
+#. Wafer uses npm to manage front-end dependencies
+
+   * Make sure you have a recent version of Node.js installed that
+     includes ``npm``.
+
+   * Run ``npm install`` to install all dependencies, which also copies
+     them to ``wafer/static/vendor``.
+
+#. Wafer uses the Django caching infrastructure in several places, so
+   the cache table needs to be created using ``manage.py createcachetable``.
+
+#. Create the default 'Page Editors', 'Talk Mentors', and 'Talk
+   Reviewers' groups using ``manage.py wafer_add_default_groups``.
+
 #. Log in and configure the Site:
 
    * The domain will be used as the base for emails sent during
@@ -36,12 +50,6 @@ Basic Dev install
      so the registration emails will use an 'https' prefix. If this
      is not the case, override the ``wafer/registration/activation_email.txt``
      template.
-
-#. Wafer uses the Django caching infrastructure in several places, so
-   the cache table needs to be created using ``manage.py createcachetable``.
-
-#. Create the default 'Page Editors', 'Talk Mentors', and 'Talk
-   Reviewers' groups using ``manage.py wafer_add_default_groups``.
 
 #. Ensure the permissions on the ``MEDIA_ROOT`` directory are correctly
    set so the webserver can create new files there. This location is

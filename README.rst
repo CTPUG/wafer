@@ -11,7 +11,7 @@ wafer
 .. |wafer-docs-badge| image:: https://readthedocs.org/projects/wafer/badge/?version=latest
     :alt:  Wafer documentation
     :scale: 100%
-    :target: http://wafer.readthedocs.org/
+    :target: https://wafer.readthedocs.org/
 
 A wafer-thin web application for running small conferences. Built using Django.
 
@@ -25,7 +25,7 @@ Documentation
 
 Available on `readthedocs.org`_.
 
-.. _readthedocs.org: http://wafer.readthedocs.org/
+.. _readthedocs.org: https://wafer.readthedocs.org/
 
 Supported Django versions
 =========================
@@ -67,37 +67,31 @@ Installation
    If you add extensions to ``MARKITUP_FILTER``, be
    sure to install the appropriate python packages as well.
 
-7. Log in and configure the Site:
+7. Wafer uses the Django caching infrastructure in several places, so
+   the cache table needs to be created using ``manage.py createcachetable``.
+
+8. Create the default 'Page Editors' and 'Talk Mentors' groups using
+   ``manage.py wafer_add_default_groups``.
+
+9. Log in and configure the Site:
 
    * The domain will be used as the base for e-mails sent during
      registration.
 
    * The name will be the conference's name.
 
-8. Wafer uses the Django caching infrastructure in several places, so
-   the cache table needs to be created using ``manage.py createcachetable``.
-
-9. Create the default 'Page Editors' and 'Talk Mentors' groups using
-   ``manage.py wafer_add_default_groups``.
-
 10. Have a fun conference.
 
-Installing Bootstrap
-====================
+Running wafer
+=============
 
-The default templates and css files require jquery and bootstrap to work.
+To run a local server for development and testing, use the standard Django
+``manage.py runserver``, after doing the installation.
 
-wafer provides a bower.json file to simplify the installation process. This
-requires a working nodejs installation.
+For running the server in production, please see the `Django documentation`_
+on the various possible approaches.
 
-1. Install bower
-   ``npm install bower``
-
-2. Use bower to install appropriate versions of bootstrap and jquery
-   ``$(npm bin)/bower install``
-
-3. Move files to the correct location
-   ``manage.py collectstatic``
+.. _Django documentation: https://docs.djangoproject.com/en/3.0/howto/deployment/
 
 Features
 ========
