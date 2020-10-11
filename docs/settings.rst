@@ -18,13 +18,14 @@ Wafer's settings
     pages from.
     Should be an absolute path with a trailing ``/``.
 
-``TALKS_OPEN``
-    Controls whether talk submissions are accepted.
-    Set to ``False`` to close talk submissions.
-
 ``WAFER_CACHE``
     The name of the Django cache backend that wafer can use.
     Defaults to ``'wafer_cache'``.
+
+``WAFER_DEFAULT_GROUPS``
+    A list of groups that any new user is automatically added to.
+    This can be used to tweak the default permissions available
+    to website users by creating groups with the required access.
 
 ``WAFER_DYNAMIC_MENUS``
     A list of functions to call to generate additional menus.
@@ -58,15 +59,6 @@ Wafer's settings
     A boolean flag.
     When ``True``, the login link in the menu is hidden.
     This is useful to set, before making a site static.
-
-``WAFER_SSO``
-    A list of SSO mechanisms in use.
-    Possible options are: ``'github'``, ``'gitlab'``.
-
-``WAFER_TALK_FORM``
-    The form used for talk/event submission.
-    There is a reasonable default form, but this can be changed to
-    customise the submission process.
 
 ``WAFER_MENUS``
     Static menu structure for the site.
@@ -102,6 +94,15 @@ Wafer's settings
     When ``True``, users can register for the conference.
     (Note, this is not the same as signing up for an account on the website.)
 
+``WAFER_SSO``
+    A list of SSO mechanisms in use.
+    Possible options are: ``'github'``, ``'gitlab'``.
+
+``WAFER_TALK_FORM``
+    The form used for talk/event submission.
+    There is a reasonable default form, but this can be changed to
+    customise the submission process.
+
 ``WAFER_TALK_REVIEW_SCORES``
     A tuple of 2 integers.
     The range of values for talk reviews. Inclusive.
@@ -125,12 +126,6 @@ Wafer's settings
     When ``True``, the default talk submission form will ask for a video
     release from the submitter.
 
-``WAFER_VIDEO_REVIEWER``
-    A boolean flag.
-    When ``True``, the default talk submission form will ask for the
-    email address of someone who will review the talk's video, once it
-    is ready to publish.
-
 ``WAFER_VIDEO_LICENSE``
     The name of the license that the conference's videos will be
     released under. Talk submitters will be asked to release their video
@@ -138,6 +133,12 @@ Wafer's settings
 
 ``WAFER_VIDEO_LICENSE_URL``
     Link to the full text of ``WAFER_VIDEO_LICENSE``.
+
+``WAFER_VIDEO_REVIEWER``
+    A boolean flag.
+    When ``True``, the default talk submission form will ask for the
+    email address of someone who will review the talk's video, once it
+    is ready to publish.
 
 Third party settings
 ====================
