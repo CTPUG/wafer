@@ -1525,6 +1525,109 @@ class NonHTMLViewTests(TestCase):
         self.assertTrue('/test0/' in event['url'])
 
 
+class JsonViewTests(TestCase):
+
+    def setUp(self):
+        # Create the schedule used for these tests
+        timezone.activate('UTC')
+        day1 = ScheduleBlock.objects.create(
+            start_time=D.datetime(2013, 9, 22, 7, 0, 0,
+                                  tzinfo=timezone.utc),
+            end_time=D.datetime(2013, 9, 22, 19, 0, 0,
+                                tzinfo=timezone.utc),
+            )
+        day2 = ScheduleBlock.objects.create(
+            start_time=D.datetime(2013, 9, 23, 7, 0, 0,
+                                  tzinfo=timezone.utc),
+            end_time=D.datetime(2013, 9, 23, 19, 0, 0,
+                                tzinfo=timezone.utc),
+            )
+        venue1 = Venue.objects.create(order=1, name='Venue 1')
+        venue2 = Venue.objects.create(order=2, name='Venue 2')
+        venue1.blocks.add(day1)
+        venue2.blocks.add(day1)
+
+        start1 = D.datetime(2013, 9, 22, 10, 0, 0, tzinfo=timezone.utc)
+        start2 = D.datetime(2013, 9, 22, 11, 0, 0, tzinfo=timezone.utc)
+        start3 = D.datetime(2013, 9, 22, 12, 0, 0, tzinfo=timezone.utc)
+        start4 = D.datetime(2013, 9, 22, 13, 0, 0, tzinfo=timezone.utc)
+        start5 = D.datetime(2013, 9, 22, 14, 0, 0, tzinfo=timezone.utc)
+
+        slots = []
+
+        slots.append(Slot.objects.create(start_time=start1, end_time=start2))
+        slots.append(Slot.objects.create(start_time=start2, end_time=start3))
+        slots.append(Slot.objects.create(start_time=start3, end_time=start4))
+        slots.append(Slot.objects.create(start_time=start4, end_time=start5))
+
+        pages = make_pages(6)
+        venues = [venue1, venue2] * 3
+        items = make_items(venues, pages)
+
+        for index, item in enumerate(items):
+            item.slots.add(slots[(index + 1) // 2])
+
+        user = get_user_model().objects.create_user('jimbob', 'best@wafer.test',
+                                                    'johnpassword')
+
+        talk1 = Talk.objects.create(title="Test talk", status=ACCEPTED,
+                                    corresponding_author_id=user.id)
+        talk1.authors.add(user)
+
+        talk2 = Talk.objects.create(title="Test 2 talk", status=ACCEPTED,
+                                    corresponding_author_id=user.id)
+        talk2.authors.add(user)
+
+        item1 = ScheduleItem.objects.create(venue=venue1,
+                                            talk_id=talk1.pk)
+
+        item2 = ScheduleItem.objects.create(venue=venue2,
+                                            talk_id=talk2.pk)
+        item1.slots.add(slots[0])
+        item2.slots.add(slots[3])
+
+    def test_json_view_unauth(self):
+        """Test that unauthenticated access to the json view fails"""
+        c = Client()
+        response = c.get('/schedule/schedule.json')
+        self.assertEqual(response.status_code, 403)
+
+    def test_json_view_user(self):
+        """Test that ordinary users access the json view fails"""
+        c = create_client('john', False)
+        response = c.get('/schedule/schedule.json')
+        self.assertEqual(response.status_code, 403)
+
+    def test_json_view_admin(self):
+        """Test that admin users can access the json view"""
+        c = create_client('super', True)
+        response = c.get('/schedule/schedule.json')
+        self.assertEqual(response.status_code, 200)
+        data = json.loads(response.content.decode('utf8'))
+        self.assertTrue('version' in data)
+        self.assertEqual(len(data['events']), 8)
+        self.assertEqual(len(data['venues']), 2)
+        # Check that venues have the expected fields
+        self.assertTrue('name' in data['venues'][0])
+        self.assertTrue('id' in data['venues'][0])
+        # Check that events have the expected fields
+        self.assertTrue('license' in data['events'][0])
+        self.assertTrue('room_id' in data['events'][0])
+        self.assertTrue('id' in data['events'][0])
+        self.assertTrue('track' in data['events'][0])
+        self.assertTrue('duration' in data['events'][0])
+
+        # Events are ordered by creation order currently, because of how
+        # we construct the json file, so events[0] is a page and events[6]
+        # is a talk with the same start time
+        self.assertEqual(data['events'][0]['start_time'], data['events'][6]['start_time'])
+        self.assertEqual(len(data['events'][0]['authors']), 0)
+        self.assertEqual(len(data['events'][6]['authors']), 1)
+        # events[7] is talk2
+        self.assertNotEqual(data['events'][0]['start_time'], data['events'][7]['start_time'])
+        self.assertEqual(len(data['events'][7]['authors']), 1)
+
+
 class ScheduleItemViewSetTests(TestCase):
 
     def setUp(self):

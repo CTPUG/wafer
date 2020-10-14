@@ -5,11 +5,13 @@ import logging
 
 from icalendar import Calendar, Event
 
+import json
+
 from django.db.models import Q
 from django.views.generic import TemplateView, View
 from django.contrib.sites.shortcuts import get_current_site
-from django.core.exceptions import ObjectDoesNotExist
-from django.http import HttpResponse
+from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
+from django.http import HttpResponse, JsonResponse
 from django.utils import timezone
 from django.conf import settings
 
@@ -17,9 +19,8 @@ from bakery.views import BuildableDetailView, BuildableTemplateView, BuildableMi
 from rest_framework import viewsets
 from rest_framework.permissions import IsAdminUser
 from wafer.pages.models import Page
-from wafer.schedule.models import Venue, Slot, ScheduleBlock
+from wafer.schedule.models import Venue, Slot, ScheduleBlock, ScheduleItem
 from wafer.schedule.admin import check_schedule, validate_schedule
-from wafer.schedule.models import ScheduleItem
 from wafer.schedule.serializers import ScheduleItemSerializer
 from wafer.talks.models import ACCEPTED, CANCELLED
 from wafer.talks.models import Talk
@@ -424,3 +425,83 @@ class ICalView(View, BuildableMixin):
         path = os.path.join(settings.BUILD_DIR, self.build_path)
         self.prep_directory(self.build_path)
         self.build_file(path, self.get_content())
+
+
+class JsonDataView(View, BuildableMixin):
+    build_path = "schedule/schedule.json"
+
+    # Version of the json export, so tools can hopefully track changes
+    # sanely
+    FORMAT_VERSION = "0.1"
+
+    def get(self, request):
+        """Create a json data blob from the schedule"""
+        # This is mainly to be consumed by video processes, so we
+        # mainly keep the naming conventions from pentabarf for historical compatibility
+        #
+        # We restrict this to only people with permission to view profile details, since
+        # there are already other public views of the schedule for unauthenticated consumers
+        if not request.user.is_staff:
+            raise PermissionDenied
+        site = get_current_site(request)
+
+        data = {
+           'conference name': site.name,
+           'domain': site.domain,
+           'version': self.FORMAT_VERSION,
+        }
+
+        data['venues'] = []
+
+        data['events'] = []
+
+        for venue in Venue.objects.all():
+            venue_data = {}
+            venue_data['id'] = venue.pk
+            venue_data['name'] = venue.name
+            venue_data['has_video'] = venue.video
+            venue_data['details'] = venue.notes
+            data['venues'].append(venue_data)
+
+        for item in ScheduleItem.objects.all():
+            sched_event = {}
+            sched_event['id'] = item.pk
+            sched_event['start_time'] = item.get_start_datetime().isoformat()
+            sched_event['duration'] = item.get_duration_minutes()
+            sched_event['room_id'] = item.venue.pk
+            sched_event['title'] = item.get_title()
+            sched_event['url'] = item.get_url()
+            authors = []
+            if item.talk is not None:
+                if item.talk.track:
+                    sched_event['track'] = item.talk.track
+                else:
+                    sched_event['track'] = 'No Track'
+                # We're not rendering anything, so this is presumably 'safe'
+                sched_event['description'] = item.talk.abstract.raw
+                sched_event['video_allowed'] = item.talk.video
+                for person in item.talk.authors.all():
+                    authors.append(person)
+            else:
+                # Presumably a page, which may not have an author or description
+                sched_event['track'] = 'No Track'
+                # More complex logic is probably needed here
+                sched_event['video_allowed'] = True
+                sched_event['description'] = item.page.content.raw
+                for person in item.page.people.all():
+                    authors.append(person)
+            sched_event['authors'] = []
+            for person in authors:
+                person_data = {
+                    'name': person.userprofile.display_name(),
+                    'email': person.email
+                }
+                if person.userprofile.twitter_handle:
+                    person_data['twitter'] = person.userprofile.twitter_handle
+                sched_event['authors'].append(person_data)
+            sched_event['license'] = settings.WAFER_VIDEO_LICENSE
+            sched_event['license_url'] = settings.WAFER_VIDEO_LICENSE_URL
+            data['events'].append(sched_event)
+
+        response = JsonResponse(data, json_dumps_params={'sort_keys': True})
+        return response
