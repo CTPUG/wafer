@@ -19,11 +19,10 @@ class Command(BaseCommand):
             reviewer = talk.video_reviewer
             if not reviewer:
                 reviewer = 'NO REVIEWER'
-            row = [x.encode("utf-8") for x in (
-                    talk.title,
-                    talk.get_authors_display_name(),
-                    reviewer,
-                  )]
+            row = [talk.title,
+                   talk.get_authors_display_name(),
+                   reviewer,
+                  ]
             csv_file.writerow(row)
 
     def handle(self, *args, **options):
