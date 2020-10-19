@@ -21,6 +21,7 @@ class Command(BaseCommand):
                 reviewer = 'NO REVIEWER'
             row = [x.encode("utf-8") for x in (
                     talk.title,
+                    talk.get_authors_display_name(),
                     reviewer,
                   )]
             csv_file.writerow(row)
