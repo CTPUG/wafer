@@ -1495,6 +1495,15 @@ class NonHTMLViewTests(TestCase):
         self.assertEqual(parsed[0].tag, 'conference')
         self.assertEqual(parsed[1].tag, 'day')
 
+        # Various tools expect 'start' and 'end' values, so
+        # check we have those
+        conf = parsed[0]
+        self.assertEqual('title', conf[0].tag)
+        self.assertEqual('start', conf[1].tag)
+        self.assertEqual('end', conf[2].tag)
+        self.assertEqual('2013-09-22', conf[1].text)
+        self.assertEqual('2013-09-23', conf[2].text)
+
         day = parsed[1]
         self.assertIn(('date', '2013-09-22'), day.items())
         self.assertEqual(day[0].tag, 'room')
