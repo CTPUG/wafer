@@ -1469,6 +1469,8 @@ class NonHTMLViewTests(TestCase):
         start3 = D.datetime(2013, 9, 22, 12, 0, 0, tzinfo=timezone.utc)
         start4 = D.datetime(2013, 9, 22, 13, 0, 0, tzinfo=timezone.utc)
         start5 = D.datetime(2013, 9, 22, 14, 0, 0, tzinfo=timezone.utc)
+        start6 = D.datetime(2013, 9, 23, 14, 0, 0, tzinfo=timezone.utc)
+        end6 = D.datetime(2013, 9, 23, 15, 0, 0, tzinfo=timezone.utc)
 
         slots = []
 
@@ -1476,6 +1478,7 @@ class NonHTMLViewTests(TestCase):
         slots.append(Slot.objects.create(start_time=start2, end_time=start3))
         slots.append(Slot.objects.create(start_time=start3, end_time=start4))
         slots.append(Slot.objects.create(start_time=start4, end_time=start5))
+        slots.append(Slot.objects.create(start_time=start6, end_time=end6))
 
         pages = make_pages(8)
         venues = [venue1, venue2] * 4
