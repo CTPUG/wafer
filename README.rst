@@ -105,3 +105,10 @@ Features
 
 * Talk submissions, review and acceptance.
 * Generate a static version of the site for archival.
+
+Translation
+===========
+
+Translations for wafer are managed at `weblate.org`_
+
+.. _weblate.org: https://hosted.weblate.org/projects/wafer/
