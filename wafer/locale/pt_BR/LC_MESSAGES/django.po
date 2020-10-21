@@ -519,8 +519,8 @@ msgstr "Erros de validação"
 
 #: wafer/schedule/templates/wafer.schedule/edit_schedule.html:22
 #: wafer/schedule/templates/wafer.schedule/edit_schedule.html:27
-msgid "(Block"
-msgstr "Bloco"
+msgid "(Block %(block_id)s)"
+msgstr "(Bloco %(block_id)s)"
 
 #: wafer/schedule/templates/wafer.schedule/edit_schedule.html:32
 msgid "Schedule Editor"
@@ -951,8 +951,8 @@ msgstr "Comentários sobre a proposta (markdown)"
 
 #: wafer/talks/models.py:375
 #, python-format
-msgid "Review of %s by %s (%s)"
-msgstr "Revisão de %s por %s (%s)"
+msgid "Review of %(title)s by %(reviewer)s (%(average_score)s)"
+msgstr "Revisão de %(title)s por %(reviewer)s (%(average_score)s)"
 
 #: wafer/talks/models.py:392
 msgid "review"
@@ -972,8 +972,8 @@ msgstr "aspectos da revisão"
 
 #: wafer/talks/models.py:420
 #, python-format
-msgid "Review of %s by %s on %s: %i"
-msgstr "Revisão de %s por %s em %s: %i"
+msgid "Review of %(title)s by %(reviewer)s on %(aspect)s: %(score)i"
+msgstr "Revisão de %(title)s por %(reviewer)s em %(aspect)s: %(score)i"
 
 #: wafer/talks/models.py:425
 msgid "score"
