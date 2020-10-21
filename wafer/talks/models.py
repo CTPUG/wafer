@@ -375,8 +375,10 @@ class Review(models.Model):
         help_text=_("Comments on the proposal (markdown)"))
 
     def __str__(self):
-        return _(u'Review of %s by %s (%s)') % (
-            self.talk.title, self.reviewer, self.avg_score)
+        return _(u'Review of %(title)s by %(reviewer)s (%(average_score)s)') % {
+                'title': self.talk.title,
+                'reviewer': self.reviewer,
+                'average_score': self.avg_score}
 
     @property
     def avg_score(self):
@@ -420,8 +422,11 @@ class Score(models.Model):
 
     def __str__(self):
         review = self.review
-        return _(u'Review of %s by %s on %s: %i') % (
-            review.reviewer, review.talk.title, self.aspect.name, self.value)
+        return _(u'Review of %(title)s by %(reviewer)s on %(aspect)s: %(score)i') % {
+                'title': review.talk.title,
+                'reviewer': review.reviewer,
+                'aspect': self.aspect.name,
+                'score': self.value}
 
     class Meta:
         unique_together = (('review', 'aspect'),)
