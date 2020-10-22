@@ -698,7 +698,7 @@ msgid "Review Talk"
 msgstr ""
 
 #, python-format
-msgid "Review of %s by %s (%s)"
+msgid "Review of %(title)s by %(reviewer)s (%(average_score)s)"
 msgstr ""
 
 msgid "Reviewed"
