@@ -9,8 +9,9 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 4.2-dev\n"
 "Reviewed-By: Antonio Terceiro <terceiro@debian.org>\n"
-"Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
 #: wafer/compare/admin.py:22
 msgid "Last Modified"
@@ -106,11 +107,11 @@ msgstr "Último compomente da URl na página"
 
 #: wafer/pages/models.py:35
 msgid "Markdown contents for the page."
-msgstr "Conteúdo de marcação para a página"
+msgstr "Conteúdo de marcação para a página."
 
 #: wafer/pages/models.py:37
 msgid "Whether to include in menus."
-msgstr "Se deve incluir nos menus"
+msgstr "Se deve incluir nos menus."
 
 #: wafer/pages/models.py:40
 msgid "Ordering in the menu (smaller numbers come first)"
@@ -126,7 +127,7 @@ msgstr ""
 
 #: wafer/pages/models.py:50
 msgid "Images and other files for use in the content markdown field."
-msgstr "Imagens e outros arquivos para usar no campo de marcação do conteúdo"
+msgstr "Imagens e outros arquivos para usar no campo de marcação do conteúdo."
 
 #: wafer/pages/models.py:56
 msgid ""
@@ -144,15 +145,15 @@ msgid ""
 msgstr ""
 "Durção de tempo (em segundos) para armazenar a página para o conteúdo "
 "dinâmico da páginaUm valor negativo significa que essa página não é dinâmica "
-"e nem seráregeneração até a próxima edição"
+"e nem seráregeneração até a próxima edição."
 
 #: wafer/pages/models.py:137
 msgid "Circular reference in parent."
-msgstr "Referência circular no principal"
+msgstr "Referência circular no principal."
 
 #: wafer/pages/models.py:153
 msgid "Duplicate parent/slug combination."
-msgstr "Duplicação parent/slug combinação"
+msgstr "Duplicação parent/slug combinação."
 
 #: wafer/pages/templates/wafer.pages/page.html:10
 #: wafer/talks/templates/wafer.talks/talk.html:18
@@ -234,8 +235,8 @@ msgstr "Ativação completa"
 msgid ""
 "Your account is now activated! Please <a href=\"%(login_url)s\">log in</a>."
 msgstr ""
-"Sua conta foi ativade! Por favor, faça o <a href=\"%(login_url)s\">log in</"
-"a>."
+"Sua conta foi ativade! Por favor, <a href=\"%(login_url)s\">inicia "
+"sessão</a>."
 
 #: wafer/registration/templates/registration/activation_complete.html:13
 #: wafer/registration/templates/registration/registration_complete.html:13
@@ -245,7 +246,7 @@ msgstr "Note que a inscrição para a conferência é um passo separado."
 #: wafer/registration/templates/registration/activation_complete.html:16
 msgid "You can now log in and start the conference registration process."
 msgstr ""
-"Agora você pode fazer login e iniciar o processo de inscrição na conferência"
+"Agora você pode fazer login e iniciar o processo de inscrição na conferência."
 
 #: wafer/registration/templates/registration/activation_email.txt:5
 #, python-format
@@ -276,7 +277,7 @@ msgstr ""
 "\n"
 "Obrigada por criar uma conta para o(a) %(WAFER_CONFERENCE_NAME)s.\n"
 "\n"
-"Pra verificar seu endereço de email, por favor siga o link abaixo para  "
+"Pra verificar seu endereço de e-mail, por favor siga o link abaixo para "
 "ativar a sua conta\n"
 "Você tem %(expiration_days)s restantes para fazer isso.\n"
 "\n"
@@ -284,7 +285,7 @@ msgstr ""
 "\n"
 "Obrigado(a),\n"
 "\n"
-"A %(WAFER_CONFERENCE_NAME)s website.\n"
+"O sítio %(WAFER_CONFERENCE_NAME)s.\n"
 "\n"
 "-- \n"
 " %(WAFER_CONFERENCE_NAME)s\n"
@@ -317,7 +318,7 @@ msgstr "Desconectado"
 
 #: wafer/registration/templates/registration/logout.html:9
 msgid "You've been logged out."
-msgstr "Você se desconectou"
+msgstr "Você se desconectou."
 
 #: wafer/registration/templates/registration/registration_complete.html:4
 msgid "Account creation almost complete"
@@ -331,8 +332,8 @@ msgid ""
 "account."
 msgstr ""
 "Obrigada por criar uma conta no(a) %(WAFER_CONFERENCE_NAME)s. Nós enviamos "
-"um um email para você . Por favor, siga as instruções para completar seu "
-"registro"
+"um correio eletrônico para você . Por favor, siga as instruções para "
+"completar seu registro."
 
 #: wafer/registration/templates/registration/registration_complete.html:16
 msgid "You can register after your account is activated."
@@ -340,15 +341,15 @@ msgstr "Você pode se inscrever depois de ativar a sua conta."
 
 #: wafer/schedule/admin.py:143
 msgid "Clashes found in schedule."
-msgstr "Conflitos encontrados na programação"
+msgstr "Conflitos encontrados na programação."
 
 #: wafer/schedule/admin.py:146
 msgid "Duplicate schedule items found in schedule."
-msgstr "Itens duplicados achados na programação"
+msgstr "Itens duplicados achados na programação."
 
 #: wafer/schedule/admin.py:149
 msgid "Invalid schedule items found in schedule."
-msgstr "Itens inválidos achados na programação"
+msgstr "Itens inválidos achados na programação."
 
 #: wafer/schedule/admin.py:152
 msgid "Non contiguous slots found in schedule."
@@ -356,7 +357,7 @@ msgstr "Slots não contíguos encontrados na programação."
 
 #: wafer/schedule/admin.py:155
 msgid "Invalid venues found in schedule."
-msgstr "Locais inválidos encontrados na programação"
+msgstr "Locais inválidos encontrados na programação."
 
 #: wafer/schedule/admin.py:195
 msgid "Block"
@@ -395,7 +396,7 @@ msgstr ""
 
 #: wafer/schedule/models.py:78
 msgid "Blocks (days) on which this venue will be used."
-msgstr "Blocos (dias) em cada local que será usado"
+msgstr "Blocos (dias) em cada local que será usado."
 
 #: wafer/schedule/models.py:82
 msgid "Venue has video coverage"
@@ -515,7 +516,7 @@ msgstr "Última atualização"
 
 #: wafer/schedule/templates/wafer.schedule/edit_schedule.html:9
 msgid "Validation errors:"
-msgstr "Erros de validação"
+msgstr "Erros de validação:"
 
 #: wafer/schedule/templates/wafer.schedule/edit_schedule.html:22
 #: wafer/schedule/templates/wafer.schedule/edit_schedule.html:27
@@ -568,23 +569,23 @@ msgstr "Proximo"
 
 #: wafer/sponsors/models.py:36
 msgid "Currency symbol for the sponsorship amount."
-msgstr "Símbolo de moeda para o valor do patrocínio"
+msgstr "Símbolo de moeda para o valor do patrocínio."
 
 #: wafer/sponsors/models.py:39
 msgid "Amount to be sponsored."
-msgstr "Valor a ser patrocinado"
+msgstr "Valor a ser patrocinado."
 
 #: wafer/sponsors/models.py:41
 msgid "One sentence overview of the package."
-msgstr "Visão geral de uma frase do pacote"
+msgstr "Visão geral de uma frase do pacote."
 
 #: wafer/sponsors/models.py:43
 msgid "Describe what the package gives the sponsor."
-msgstr "Descrever o que o pacote oferece ao patrocinador"
+msgstr "Descrever o que o pacote oferece ao patrocinador."
 
 #: wafer/sponsors/models.py:46
 msgid "Images and other files for use in the description markdown field."
-msgstr "Imagens e outros arquivos para uso na descrição do campo"
+msgstr "Imagens e outros arquivos para uso na descrição do campo."
 
 #: wafer/sponsors/models.py:52
 msgid ""
@@ -596,7 +597,7 @@ msgstr ""
 
 #: wafer/sponsors/models.py:73
 msgid "Write some nice things about the sponsor."
-msgstr "Eescreva coisas boas sobre o patrocinador"
+msgstr "Eescreva coisas boas sobre o patrocinador."
 
 #: wafer/sponsors/models.py:76
 msgid "Url to link back to the sponsor if required"
@@ -622,19 +623,19 @@ msgstr "Pacotes de patrocínio"
 
 #: wafer/sponsors/templates/wafer.sponsors/packages.html:19
 msgid "Total number available:"
-msgstr "Número total disponível"
+msgstr "Número total disponível:"
 
 #: wafer/sponsors/templates/wafer.sponsors/packages.html:21
 msgid "Packages claimed:"
-msgstr "Pacotes reivindicados"
+msgstr "Pacotes reivindicados:"
 
 #: wafer/sponsors/templates/wafer.sponsors/packages.html:28
 msgid "No sponsorship packages available yet."
-msgstr "Nenhum pacotes de patrocínios disponpiveis ainda"
+msgstr "Nenhum pacotes de patrocínios disponpiveis ainda."
 
 #: wafer/sponsors/templates/wafer.sponsors/sponsors.html:39
 msgid "No sponsors yet."
-msgstr "Ainda não há patrocinadoresr"
+msgstr "Ainda não há patrocinadoresr."
 
 #: wafer/talks/admin.py:24
 msgid "in schedule"
@@ -702,7 +703,7 @@ msgstr "Retirar Palestra"
 
 #: wafer/talks/forms.py:129
 msgid "A reviewer is required, if video is permitted."
-msgstr "Um revisor é necessário, se o vídeo é permitido"
+msgstr "Um revisor é necessário, se o vídeo é permitido."
 
 #: wafer/talks/forms.py:158
 #, python-format
@@ -711,7 +712,7 @@ msgstr "(Faixa de pontuação: %(min)d para %(max)d)"
 
 #: wafer/talks/models.py:38
 msgid "The speakers presenting the talk."
-msgstr "Os oradores que apresentam a palestra"
+msgstr "Os oradores que apresentam a palestra."
 
 #: wafer/talks/models.py:41
 msgid ""
@@ -755,7 +756,7 @@ msgstr "Prazo de submissão"
 
 #: wafer/talks/models.py:81
 msgid "Deadline for submitting talks of this type"
-msgstr "Prazo para envio de palestras desse tipo "
+msgstr "Prazo para envio de palestras desse tipo"
 
 #: wafer/talks/models.py:84
 msgid "accept late submissions"
@@ -1063,7 +1064,7 @@ msgstr "Submissão atrasada"
 
 #: wafer/talks/templates/wafer.talks/talk.html:104
 msgid "Status:"
-msgstr "Situação"
+msgstr "Situação:"
 
 #: wafer/talks/templates/wafer.talks/talk.html:130
 msgid "<h2>Talk Notes</h2> <p>(The following is not visible to attendees.)</p>"
@@ -1188,7 +1189,7 @@ msgstr "Erro interno do servidor"
 
 #: wafer/templates/500.html:5
 msgid "Something went wrong while preparing the page that was requested."
-msgstr "Ocorreu um erro ao preparar a página solicitada"
+msgstr "Ocorreu um erro ao preparar a página solicitada."
 
 #: wafer/templates/markitup/preview.html:5
 msgid "This is only a preview of the page. It has not yet been updated."
@@ -1235,7 +1236,7 @@ msgstr ""
 
 #: wafer/tickets/forms.py:30
 msgid "This ticket has already been claimed, by another user."
-msgstr "Este bilhete já foi pedido por outro usuário"
+msgstr "Este bilhete já foi pedido por outro usuário."
 
 #: wafer/tickets/templates/wafer.tickets/claim.html:6
 msgid "Ticket sales are not currently open"
@@ -1263,7 +1264,7 @@ msgid ""
 "registration."
 msgstr ""
 "Depois de se registrar, solicite seu ingresso aqui, para confirmar seu "
-"registro"
+"registro."
 
 #: wafer/users/admin.py:39
 msgid "profile"
