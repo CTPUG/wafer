@@ -34,8 +34,8 @@ before_install:
    - if [ "$TESTDB" = "postgres" ]; then pip install -q psycopg2 ; fi
 # command to install dependencies,
 install:
-   # Install the right version of Django first
-   - pip install "$DJANGO"
    - pip install -r requirements.txt -r requirements-dev.txt
+   # Install the right version of Django after we've installed wafer's version
+   - pip install "$DJANGO"
 # command to run tests
 script: NOSE_WITH_COVERAGE=1 NOSE_COVER_PACKAGE=wafer python manage.py test
