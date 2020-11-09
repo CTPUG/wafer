@@ -399,7 +399,7 @@ class SpeakerTests(TestCase):
         response = self.client.get(
             reverse('wafer_talks_speakers'))
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.context["speaker_rows"], [
+        self.assertEqual(response.context["speaker_rows"][None], [
             profiles[start:end] for start, end in expected_rows
         ])
 
