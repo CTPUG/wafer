@@ -248,7 +248,7 @@ class Speakers(BuildableListView):
         bytype = groupby(speakers, lambda x: x.talk_type)
         context['speaker_rows'] = {}
         for talk_type, type_speakers in bytype:
-            context["speaker_rows"][talk_type] = self._by_row(type_speakers, 4)
+            context["speaker_rows"][talk_type] = self._by_row(list(type_speakers), 4)
         return context
 
 
