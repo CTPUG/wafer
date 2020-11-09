@@ -8,11 +8,17 @@ from django.urls import reverse
 from wafer.tests.api_utils import SortedResultsClient
 from wafer.tests.utils import create_user
 from wafer.talks.models import (
-    Talk, TalkUrl, ACCEPTED, REJECTED, SUBMITTED, UNDER_CONSIDERATION,
-    CANCELLED, PROVISIONAL)
+    Talk, TalkUrl, TalkType, ACCEPTED, REJECTED, SUBMITTED,
+    UNDER_CONSIDERATION, CANCELLED, PROVISIONAL)
 
 
-def create_talk(title, status, username):
+def create_talk_type(name):
+    """Create a talk type"""
+    return TalkType.objects.create(name=name)
+
+
+
+def create_talk(title, status, username, talk_type=None):
     user = create_user(username)
     talk = Talk.objects.create(
         title=title, status=status, corresponding_author_id=user.id)
@@ -20,6 +26,9 @@ def create_talk(title, status, username):
     talk.notes = "Some notes for talk %s" % title
     talk.private_notes = "Some private notes for talk %s" % title
     talk.save()
+    if talk_type:
+        talk.talk_type = talk_type
+        talk.save()
     return talk
 
 
@@ -360,6 +369,9 @@ class SpeakerTests(TestCase):
         self.talk_s = create_talk("Talk S", SUBMITTED, "author_s")
         self.client = Client()
 
+        self.talk_type1 = create_talk_type('Talk')
+        self.talk_type2 = create_talk_type('Keynote')
+
     @mock.patch('wafer.users.models.UserProfile.avatar_url', mock_avatar_url)
     def test_view_one_speaker(self):
         img = self.talk_a.corresponding_author.userprofile.avatar_url()
@@ -370,7 +382,7 @@ class SpeakerTests(TestCase):
         self.assertContains(response, "\n".join([
             '<section class="wafer wafer-speakers">',
             '<h1>Speakers</h1>'
-            '<div class="container">'
+            '<div class="container speakers-list">'
             '  <div class="row">',
             '    <div class="col-md-3">',
             '      <div class="wafer-speakers-logo">',
@@ -418,6 +430,105 @@ class SpeakerTests(TestCase):
     @mock.patch('wafer.users.models.UserProfile.avatar_url', mock_avatar_url)
     def test_view_seven_speakers(self):
         self.check_n_speakers(7, [(0, 4), (4, 7)])
+
+    @mock.patch('wafer.users.models.UserProfile.avatar_url', mock_avatar_url)
+    def test_multiple_types(self):
+        talk_d = create_talk('Talk D', ACCEPTED, 'author_d', self.talk_type1)
+        talk_e = create_talk('Talk E', ACCEPTED, 'author_e', self.talk_type1)
+        keynote_f = create_talk('Talk F', ACCEPTED, 'author_f', self.talk_type2)
+
+        user_d = talk_d.corresponding_author
+        user_e = talk_e.corresponding_author
+        user_f = keynote_f.corresponding_author
+
+        img_d = user_d.userprofile.avatar_url()
+        img_e = user_e.userprofile.avatar_url()
+        img_f = user_f.userprofile.avatar_url()
+
+        keynote_f.authors.add(user_e)
+        keynote_f.save()
+
+        response = self.client.get(
+            reverse('wafer_talks_speakers'))
+        self.assertEqual(response.status_code, 200)
+        # by_row means we're expecting a list of lists
+        self.assertEqual(response.context["speaker_rows"]['Talk'],
+                         [[user_d.userprofile, user_e.userprofile]])
+        self.assertEqual(response.context["speaker_rows"]['Keynote'],
+                         [[user_f.userprofile, user_e.userprofile]])
+
+        # Because of how assertHTMLEquals works, we can't combine these
+        # unless we include the surrounding <section>, which becomes
+        # unwieldy
+        self.assertContains(response, "\n".join([
+            '<h1>Talk Speakers</h1>',
+        ]), html=True)
+
+        self.assertContains(response, "\n".join([
+            '<div class="container talk-speakers-list">',
+            '  <div class="row">',
+            '    <div class="col-md-3">',
+            '      <div class="wafer-speakers-logo">',
+            '        <a href="/users/%s/">' % user_d.username,
+            '          <img class="thumbnail mx-auto" src="%s">' % img_d,
+            '        </a>',
+            '      </div>',
+            '      <div class="wafer-speakers-name">',
+            '        <a href="/users/%s/">' % user_d.username,
+            '          author_d',
+            '        </a>',
+            '      </div>',
+            '    </div>',
+            '    <div class="col-md-3">',
+            '      <div class="wafer-speakers-logo">',
+            '        <a href="/users/%s/">' % user_e.username,
+            '          <img class="thumbnail mx-auto" src="%s">' % img_e,
+            '        </a>',
+            '      </div>',
+            '      <div class="wafer-speakers-name">',
+            '        <a href="/users/%s/">' % user_e.username,
+            '          author_e',
+            '        </a>',
+            '      </div>',
+            '    </div>',
+            '  </div>',
+            '</div>',
+        ]), html=True)
+
+        self.assertContains(response, "\n".join([
+            '<h1>Keynote Speakers</h1>',
+        ]), html=True)
+
+        self.assertContains(response, "\n".join([
+            '<div class="container keynote-speakers-list">',
+            '  <div class="row">',
+            '    <div class="col-md-3">',
+            '      <div class="wafer-speakers-logo">',
+            '        <a href="/users/%s/">' % user_f.username,
+            '          <img class="thumbnail mx-auto" src="%s">' % img_f,
+            '        </a>',
+            '      </div>',
+            '      <div class="wafer-speakers-name">',
+            '        <a href="/users/%s/">' % user_f.username,
+            '          author_f',
+            '        </a>',
+            '      </div>',
+            '    </div>',
+            '    <div class="col-md-3">',
+            '      <div class="wafer-speakers-logo">',
+            '        <a href="/users/%s/">' % user_e.username,
+            '          <img class="thumbnail mx-auto" src="%s">' % img_e,
+            '        </a>',
+            '      </div>',
+            '      <div class="wafer-speakers-name">',
+            '        <a href="/users/%s/">' % user_e.username,
+            '          author_e',
+            '        </a>',
+            '      </div>',
+            '    </div>',
+            '  </div>',
+            '</div>',
+        ]), html=True)
 
 
 class TalkSlugUrlTests(TestCase):
