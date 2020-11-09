@@ -1,9 +1,11 @@
+from itertools import groupby
+
 from django.conf import settings
 from django.contrib.auth.mixins import (
     LoginRequiredMixin, PermissionRequiredMixin)
 from django.contrib.auth.models import AnonymousUser
 from django.core.exceptions import PermissionDenied, ValidationError
-from django.db.models import Q
+from django.db.models import Q, F
 from django.http import Http404
 from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy
@@ -239,8 +241,14 @@ class Speakers(BuildableListView):
         context = super(Speakers, self).get_context_data(**kwargs)
         speakers = UserProfile.objects.filter(
             user__talks__status='A').distinct().prefetch_related(
-                'user').order_by('user__first_name', 'user__last_name')
-        context["speaker_rows"] = self._by_row(speakers, 4)
+            'user').order_by('user__talks__talk_type__name',
+                             'user__first_name',
+                             'user__last_name').annotate(
+            talk_type=F('user__talks__talk_type__name'))
+        bytype = groupby(speakers, lambda x: x.talk_type)
+        context['speaker_rows'] = {}
+        for talk_type, type_speakers in bytype:
+            context["speaker_rows"][talk_type] = self._by_row(type_speakers, 4)
         return context
 
 
