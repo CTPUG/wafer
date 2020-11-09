@@ -10,9 +10,9 @@
       <h1>{% blocktrans %}{{ talk_type }} Speakers{% endblocktrans %}</h1>
     {% endif %}
     {% if talk_type is None %}
-      <div class="container" class="speakers-list">
+      <div class="container speakers-list">
     {% else %}
-      <div class="container" class="{{talk_type|slugify}-speakers-list">
+      <div class="container {{talk_type|slugify}}-speakers-list">
     {% endif %}
       {% for row in type_rows %}
         <div class="row">
