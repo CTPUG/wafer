@@ -455,7 +455,7 @@ class SpeakerTests(TestCase):
         self.assertEqual(response.context["speaker_rows"]['Talk'],
                          [[user_d.userprofile, user_e.userprofile]])
         self.assertEqual(response.context["speaker_rows"]['Keynote'],
-                         [[user_f.userprofile, user_e.userprofile]])
+                         [[user_e.userprofile, user_f.userprofile]])
 
         # Because of how assertHTMLEquals works, we can't combine these
         # unless we include the surrounding <section>, which becomes
@@ -504,18 +504,6 @@ class SpeakerTests(TestCase):
             '  <div class="row">',
             '    <div class="col-md-3">',
             '      <div class="wafer-speakers-logo">',
-            '        <a href="/users/%s/">' % user_f.username,
-            '          <img class="thumbnail mx-auto" src="%s">' % img_f,
-            '        </a>',
-            '      </div>',
-            '      <div class="wafer-speakers-name">',
-            '        <a href="/users/%s/">' % user_f.username,
-            '          author_f',
-            '        </a>',
-            '      </div>',
-            '    </div>',
-            '    <div class="col-md-3">',
-            '      <div class="wafer-speakers-logo">',
             '        <a href="/users/%s/">' % user_e.username,
             '          <img class="thumbnail mx-auto" src="%s">' % img_e,
             '        </a>',
@@ -523,6 +511,18 @@ class SpeakerTests(TestCase):
             '      <div class="wafer-speakers-name">',
             '        <a href="/users/%s/">' % user_e.username,
             '          author_e',
+            '        </a>',
+            '      </div>',
+            '    </div>',
+            '    <div class="col-md-3">',
+            '      <div class="wafer-speakers-logo">',
+            '        <a href="/users/%s/">' % user_f.username,
+            '          <img class="thumbnail mx-auto" src="%s">' % img_f,
+            '        </a>',
+            '      </div>',
+            '      <div class="wafer-speakers-name">',
+            '        <a href="/users/%s/">' % user_f.username,
+            '          author_f',
             '        </a>',
             '      </div>',
             '    </div>',

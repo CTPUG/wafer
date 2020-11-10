@@ -243,7 +243,8 @@ class Speakers(BuildableListView):
             user__talks__status='A').distinct().prefetch_related(
             'user').order_by('user__talks__talk_type',
                              'user__first_name',
-                             'user__last_name').annotate(
+                             'user__last_name',
+                             'user__username').annotate(
             talk_type=F('user__talks__talk_type__name'))
         bytype = groupby(speakers, lambda x: x.talk_type)
         context['speaker_rows'] = {}
