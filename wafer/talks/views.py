@@ -241,7 +241,7 @@ class Speakers(BuildableListView):
         context = super(Speakers, self).get_context_data(**kwargs)
         speakers = UserProfile.objects.filter(
             user__talks__status='A').distinct().prefetch_related(
-            'user').order_by('user__talks__talk_type__name',
+            'user').order_by('user__talks__talk_type',
                              'user__first_name',
                              'user__last_name').annotate(
             talk_type=F('user__talks__talk_type__name'))
