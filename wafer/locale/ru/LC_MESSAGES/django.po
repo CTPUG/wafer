@@ -6,14 +6,17 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Wafer\n"
 "POT-Creation-Date: 2019-08-09 14:16+0000\n"
-"PO-Revision-Date: 2019-08-31 18:48+0200\n"
+"PO-Revision-Date: 2020-11-11 14:28+0000\n"
+"Last-Translator: Andrej Shadura <andrew.shadura@collabora.co.uk>\n"
+"Language-Team: Russian <https://hosted.weblate.org/projects/wafer/wafer/ru/>"
+"\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.2-dev\n"
+"X-Generator: Weblate 4.4-dev\n"
 
 #, python-format
 msgid ""
@@ -171,13 +174,16 @@ msgid_plural ""
 "\n"
 "        Speakers:\n"
 "      "
-msgstr[0] "\n"
+msgstr[0] ""
+"\n"
 "        Докладчик:\n"
 "      "
-msgstr[1] "\n"
-"        Докладчика:\n"
+msgstr[1] ""
+"\n"
+"        Докладчики:\n"
 "      "
-msgstr[2] "\n"
+msgstr[2] ""
+"\n"
 "        Докладчики:\n"
 "      "
 
@@ -306,7 +312,7 @@ msgid "Activation complete"
 msgstr "Ваш профиль подтверждён"
 
 msgid "Additional details (if required)"
-msgstr ""
+msgstr "Дополнительная информация (если необходима)"
 
 #, python-format
 msgid "Additional slot %(obj)s added sucessfully"
@@ -387,23 +393,23 @@ msgid "Compare to Previous version"
 msgstr "Сравнить с предыдущей версией"
 
 msgid "Compare to next newer version"
-msgstr ""
+msgstr "Сравнить со следующей версией"
 
 msgid "Compare to next older version"
-msgstr "Сравнить со следущей старшей версией"
+msgstr "Сравнить со следующей старшей версией"
 
 #, python-format
 msgid "Comparing current %(model)s with revision created %(date)s"
 msgstr ""
 
 msgid "Confirm Talk Withdrawal"
-msgstr ""
+msgstr "Подтверждение отмены доклада"
 
 msgid "Confirm Withdrawal"
-msgstr ""
+msgstr "Отменить доклад"
 
 msgid "Contact Details"
-msgstr ""
+msgstr "Контакты"
 
 msgid "Corresponding Author"
 msgstr ""
@@ -415,13 +421,13 @@ msgid "Create this number of additional slots following this one"
 msgstr "Создать дополнительные слоты после этого"
 
 msgid "Currency symbol for the sponsorship amount."
-msgstr ""
+msgstr "Знак денежной единицы для спонсорского взноса."
 
 msgid "Custom css class for this schedule item"
 msgstr "Пользовательский класс CSS для этого элемента программы"
 
 msgid "Date & Time this was last updated"
-msgstr ""
+msgstr "Дата и время последнего обновления"
 
 msgid "Date/time"
 msgstr "Дата и время"
@@ -433,19 +439,19 @@ msgid "Day for this slot (if no previous slot selected)"
 msgstr "День для этого слота (если предыдущий слот не выбран)"
 
 msgid "Days on which this venue will be used."
-msgstr ""
+msgstr "Дни, когда этот зал будет использоваться."
 
 msgid "Describe what the package gives the sponsor."
-msgstr ""
+msgstr "Опишите спонсорский пакет."
 
 msgid "Duplicate parent/slug combination."
 msgstr ""
 
 msgid "Duplicate schedule items found in schedule."
-msgstr ""
+msgstr "В программе найдены повторяющиеся доклады."
 
 msgid "Duplicates in the schedule"
-msgstr ""
+msgstr "Дубликаты в программе"
 
 msgid "Edit"
 msgstr "Править"
@@ -547,13 +553,13 @@ msgid "Home"
 msgstr "Начало"
 
 msgid "Identifier for use in the admin panel"
-msgstr ""
+msgstr "Идентификатор для панели администрирования"
 
 msgid "Images and other files for use in the content markdown field."
-msgstr ""
+msgstr "Изображения и прочие файлы для использования в основном тексте."
 
 msgid "Images and other files for use in the description markdown field."
-msgstr ""
+msgstr "Изображения и прочие файлы для использования в описании."
 
 msgid "In the last 30 days"
 msgstr "За последние 30 дней"
@@ -568,10 +574,10 @@ msgid "Internal server error"
 msgstr "Ошибка сервера"
 
 msgid "Invalid schedule items found in schedule."
-msgstr ""
+msgstr "В программе найдены проблемные записи."
 
 msgid "Invalid venues found in schedule."
-msgstr ""
+msgstr "В программе найдены проблемные залы."
 
 msgid "Items in the schedule with non-contiguous slots"
 msgstr ""
@@ -595,7 +601,7 @@ msgid "Log out"
 msgstr "Выйти"
 
 msgid "Logged out"
-msgstr ""
+msgstr "Вы вышли"
 
 msgid "Markdown contents for the page."
 msgstr ""
@@ -651,7 +657,7 @@ msgid "Overlapping slots"
 msgstr "Перекрывающиеся слоты"
 
 msgid "Overlapping slots found in schedule."
-msgstr ""
+msgstr "В программе найдены перекрывающиеся слоты."
 
 msgid "Packages claimed:"
 msgstr ""
@@ -728,7 +734,7 @@ msgid "Sign up / Log In"
 msgstr "Войти"
 
 msgid "Since yesterday"
-msgstr ""
+msgstr "Со вчерашнего дня"
 
 msgid "Site admin"
 msgstr "Администрирование"
@@ -793,6 +799,8 @@ msgid ""
 "There is no ticket with that barcode that's we're aware of being sold, yet. "
 "Please check it, and if correct, contact us."
 msgstr ""
+"Этот штрих-код не подходит ни к одному из билетов. Уверены, что он "
+"правильный? Свяжитесь с нами."
 
 msgid ""
 "This object doesn't have a change history. It probably wasn't added via this "
@@ -802,13 +810,13 @@ msgstr ""
 "данный административный сайт."
 
 msgid "This ticket has already been claimed, by another user."
-msgstr ""
+msgstr "Этот билет уже выдали кому-то ещё."
 
 msgid "Ticket claim"
-msgstr ""
+msgstr "Выдача билета"
 
 msgid "Ticket sales are not currently open"
-msgstr "Продажа билетов не начата"
+msgstr "Продажа билетов ещё не началась"
 
 msgid "Time"
 msgstr "Время"
@@ -824,7 +832,7 @@ msgid "Today"
 msgstr "Сегодня"
 
 msgid "Total number available:"
-msgstr ""
+msgstr "Всего доступно:"
 
 msgid "Tracks"
 msgstr "Секции"
@@ -833,7 +841,7 @@ msgid "URLs"
 msgstr ""
 
 msgid "Unable to claim tickets. Maybe you already have one?"
-msgstr ""
+msgstr "Не удалось выдать билет. Может, он у Вас уже есть?"
 
 msgid "Under consideration"
 msgstr "На рассмотрении"
@@ -842,7 +850,7 @@ msgid "Update registration"
 msgstr "Обновить регистрацию"
 
 msgid "Url to link back to the sponsor if required"
-msgstr ""
+msgstr "Ссылка на спонсора (если требуется)"
 
 msgid "User"
 msgstr "Пользователь"
@@ -860,7 +868,7 @@ msgid "Validation errors:"
 msgstr ""
 
 msgid "Venue"
-msgstr "Место"
+msgstr "Зал"
 
 msgid "Venue has video coverage"
 msgstr "Ведётся видеозапись"
@@ -888,7 +896,7 @@ msgid "Withdrawn"
 msgstr "Отменён автором"
 
 msgid "Write some nice things about the sponsor."
-msgstr ""
+msgstr "Что-нибудь про то, какой спонсор замечательный."
 
 msgid ""
 "Write two or three paragraphs describing your talk. Who is your audience? "
@@ -918,10 +926,10 @@ msgid "handle"
 msgstr ""
 
 msgid "has notes"
-msgstr ""
+msgstr "есть заметки"
 
 msgid "in schedule"
-msgstr ""
+msgstr "в программе"
 
 msgid "name"
 msgstr "название"
@@ -987,4 +995,4 @@ msgid "GitHub username"
 msgstr "GitHub-профиль"
 
 msgid "username"
-msgstr ""
+msgstr "имя пользователя"
