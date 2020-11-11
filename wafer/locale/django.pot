@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-11-10 19:33+0000\n"
+"POT-Creation-Date: 2020-11-11 14:41+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -99,7 +99,7 @@ msgstr ""
 #: wafer/compare/templates/admin/wafer.compare/compare_list.html:51
 msgid ""
 "This object doesn't have a change history. It probably wasn't added via this "
-"admin site.\""
+"admin site."
 msgstr ""
 
 #: wafer/pages/models.py:31
