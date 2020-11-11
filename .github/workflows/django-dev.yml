@@ -1,0 +1,70 @@
+name: Django CI with Django Dev
+
+on: [push, pull_request]
+
+jobs:
+  allowed-failure-django-dev-postgres:
+
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres
+        env:
+          POSTGRES_PASSWORD: postgres
+        # Set health checks to wait until postgres has started
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    strategy:
+      fail-fast: false
+      max-parallel: 4
+      matrix:
+        python-version: [3.6, 3.7, 3.8, 3.9]
+        django-version: ['django~=3.1.0', 'https://github.com/django/django/archive/master.tar.gz']
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ matrix.python-version }}
+    - name: Install Dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install psycopg2
+        pip install -r requirements.txt -r requirements-dev.txt
+        pip install {{ matrix.django-version }}
+    - name: Run Tests
+      env:
+        TESTDB: postgres
+      run: |
+        NOSE_WITH_COVERAGE=1 NOSE_COVER_PACKAGE=wafer python manage.py test
+
+  allowed-failure-django-dev-sqlite:
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      max-parallel: 4
+      matrix:
+        python-version: [3.6, 3.7, 3.8, 3.9]
+        django-version: ['django~=3.1.0', 'https://github.com/django/django/archive/master.tar.gz']
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ matrix.python-version }}
+    - name: Install Dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install {{ matrix.django-version }}
+        pip install -r requirements.txt -r requirements-dev.txt
+        pip install https://github.com/django/django/archive/master.tar.gz
+    - name: Run Tests
+      run: |
+        NOSE_WITH_COVERAGE=1 NOSE_COVER_PACKAGE=wafer python manage.py test
