@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: wafer\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-07-11 15:28+0000\n"
+"POT-Creation-Date: 2020-11-11 14:41+0000\n"
 "PO-Revision-Date: 2020-07-11 12:32-0300\n"
 "Last-Translator: Allythy <allythy@protonmail.com>\n"
 "Language: \n"
@@ -96,7 +96,7 @@ msgstr "Comentário"
 #: wafer/compare/templates/admin/wafer.compare/compare_list.html:51
 msgid ""
 "This object doesn't have a change history. It probably wasn't added via this "
-"admin site.\""
+"admin site."
 msgstr ""
 "Este objeto não tem um histórico de alterações. Provavelmente não foi "
 "adicionado por meio da administração do site."
@@ -363,7 +363,7 @@ msgstr "Locais inválidos encontrados na programação."
 msgid "Block"
 msgstr "Bloco"
 
-#: wafer/schedule/admin.py:247 wafer/schedule/models.py:302
+#: wafer/schedule/admin.py:247 wafer/schedule/models.py:316
 msgid "Start Time"
 msgstr "Hora de início"
 
@@ -430,27 +430,27 @@ msgstr "Data e hora de início"
 msgid "Schedule Block"
 msgstr "Bloco de agendamento"
 
-#: wafer/schedule/models.py:221
+#: wafer/schedule/models.py:235
 msgid "Additional details (if required)"
 msgstr "Detalhes adicionais (se necessário)"
 
-#: wafer/schedule/models.py:225
+#: wafer/schedule/models.py:239
 msgid "Notes for the conference organisers"
 msgstr "Notas para os organizadores da conferência"
 
-#: wafer/schedule/models.py:229
+#: wafer/schedule/models.py:243
 msgid "Custom css class for this schedule item"
 msgstr "Classe CSS personalizada para esse item de programação"
 
-#: wafer/schedule/models.py:233
+#: wafer/schedule/models.py:247
 msgid "Expand to neighbouring venues"
 msgstr "Expandir para locais vizinhos"
 
-#: wafer/schedule/models.py:237
+#: wafer/schedule/models.py:251
 msgid "Date & Time this was last updated"
 msgstr "Data e hora da última atualização"
 
-#: wafer/schedule/models.py:266
+#: wafer/schedule/models.py:280
 msgid "Talk Type & Track CSS classes"
 msgstr "Tipo de Palestra e Rastreador de classe CSS"
 
@@ -514,43 +514,44 @@ msgstr "Hora"
 msgid "Last updated"
 msgstr "Última atualização"
 
-#: wafer/schedule/templates/wafer.schedule/edit_schedule.html:9
+#: wafer/schedule/templates/wafer.schedule/edit_schedule.html:10
 msgid "Validation errors:"
 msgstr "Erros de validação:"
 
-#: wafer/schedule/templates/wafer.schedule/edit_schedule.html:22
-#: wafer/schedule/templates/wafer.schedule/edit_schedule.html:27
+#: wafer/schedule/templates/wafer.schedule/edit_schedule.html:23
+#: wafer/schedule/templates/wafer.schedule/edit_schedule.html:28
+#, python-format
 msgid "(Block %(block_id)s)"
 msgstr "(Bloco %(block_id)s)"
 
-#: wafer/schedule/templates/wafer.schedule/edit_schedule.html:32
+#: wafer/schedule/templates/wafer.schedule/edit_schedule.html:33
 msgid "Schedule Editor"
 msgstr "Editar programação"
 
-#: wafer/schedule/templates/wafer.schedule/edit_schedule.html:60
+#: wafer/schedule/templates/wafer.schedule/edit_schedule.html:62
 msgid "Close"
 msgstr "Fechar"
 
-#: wafer/schedule/templates/wafer.schedule/edit_schedule.html:67
-#: wafer/schedule/templates/wafer.schedule/edit_schedule.html:123
-#: wafer/schedule/templates/wafer.schedule/edit_schedule.html:147
+#: wafer/schedule/templates/wafer.schedule/edit_schedule.html:69
+#: wafer/schedule/templates/wafer.schedule/edit_schedule.html:132
+#: wafer/schedule/templates/wafer.schedule/edit_schedule.html:158
 #: wafer/talks/models.py:147 wafer/talks/templates/wafer.talks/talk.html:114
 msgid "Cancelled"
 msgstr "Cancelada"
 
-#: wafer/schedule/templates/wafer.schedule/edit_schedule.html:79
+#: wafer/schedule/templates/wafer.schedule/edit_schedule.html:81
 msgid "Bucket"
 msgstr "Espaço"
 
-#: wafer/schedule/templates/wafer.schedule/edit_schedule.html:87
+#: wafer/schedule/templates/wafer.schedule/edit_schedule.html:90
 msgid "Unassigned Talks"
 msgstr "Palestra não atribuídas"
 
-#: wafer/schedule/templates/wafer.schedule/edit_schedule.html:94
+#: wafer/schedule/templates/wafer.schedule/edit_schedule.html:97
 msgid "All Talks"
 msgstr "Todas as palestra"
 
-#: wafer/schedule/templates/wafer.schedule/edit_schedule.html:99
+#: wafer/schedule/templates/wafer.schedule/edit_schedule.html:102
 msgid "Pages"
 msgstr "Páginas"
 
@@ -734,7 +735,7 @@ msgstr ""
 "<strong>Você, como apresentador da palestra, será o autor correspondente da "
 "palestra</strong>"
 
-#: wafer/talks/models.py:70 wafer/talks/models.py:111 wafer/talks/models.py:397
+#: wafer/talks/models.py:70 wafer/talks/models.py:111 wafer/talks/models.py:402
 msgid "name"
 msgstr "Nome"
 
@@ -786,7 +787,7 @@ msgstr "trilha"
 msgid "tracks"
 msgstr "trilhas"
 
-#: wafer/talks/models.py:141 wafer/talks/models.py:363
+#: wafer/talks/models.py:141 wafer/talks/models.py:366
 msgid "talk"
 msgstr "Palestra"
 
@@ -840,7 +841,7 @@ msgstr ""
 "alvo?O que eles vão ganhar com a palestra? O que você vai cobrir?<br /> Você "
 "pode usar a sintaxe Markdown."
 
-#: wafer/talks/models.py:170 wafer/talks/models.py:370
+#: wafer/talks/models.py:170 wafer/talks/models.py:373
 msgid "notes"
 msgstr "notas"
 
@@ -942,45 +943,45 @@ msgstr "Adicionado à programação"
 msgid "Has URL"
 msgstr "Tem URL"
 
-#: wafer/talks/models.py:366
+#: wafer/talks/models.py:369
 msgid "reviewer"
 msgstr "revisor"
 
-#: wafer/talks/models.py:372
+#: wafer/talks/models.py:375
 msgid "Comments on the proposal (markdown)"
 msgstr "Comentários sobre a proposta (markdown)"
 
-#: wafer/talks/models.py:375
+#: wafer/talks/models.py:378
 #, python-format
 msgid "Review of %(title)s by %(reviewer)s (%(average_score)s)"
 msgstr "Revisão de %(title)s por %(reviewer)s (%(average_score)s)"
 
-#: wafer/talks/models.py:392
+#: wafer/talks/models.py:397
 msgid "review"
 msgstr "revisar"
 
-#: wafer/talks/models.py:393
+#: wafer/talks/models.py:398
 msgid "reviews"
 msgstr "revisões"
 
-#: wafer/talks/models.py:403
+#: wafer/talks/models.py:408
 msgid "review aspect"
 msgstr "aspecto da revisão"
 
-#: wafer/talks/models.py:404
+#: wafer/talks/models.py:409
 msgid "review aspects"
 msgstr "aspectos da revisão"
 
-#: wafer/talks/models.py:420
+#: wafer/talks/models.py:425
 #, python-format
 msgid "Review of %(title)s by %(reviewer)s on %(aspect)s: %(score)i"
 msgstr "Revisão de %(title)s por %(reviewer)s em %(aspect)s: %(score)i"
 
-#: wafer/talks/models.py:425
+#: wafer/talks/models.py:433
 msgid "score"
 msgstr "Pontuação"
 
-#: wafer/talks/models.py:426
+#: wafer/talks/models.py:434
 msgid "scores"
 msgstr "pontuações"
 
@@ -997,16 +998,21 @@ msgid "Reviewed, but outdated (modified since last review)"
 msgstr "Revisada, mas desatualizado (modificado desde a última revisão)"
 
 #: wafer/talks/templates/wafer.talks/speakers.html:3
-#: wafer/talks/templates/wafer.talks/speakers.html:6
+#: wafer/talks/templates/wafer.talks/speakers.html:8
 msgid "Speakers"
 msgstr "Palestrantes"
+
+#: wafer/talks/templates/wafer.talks/speakers.html:10
+#, fuzzy, python-format
+msgid "%(talk_type)s Speakers"
+msgstr "Tipo: %(talk_type)s"
 
 #: wafer/talks/templates/wafer.talks/talk.html:21
 msgid "Admin"
 msgstr "Administrar"
 
 #: wafer/talks/templates/wafer.talks/talk.html:25
-#: wafer/talks/templates/wafer.talks/talk.html:169
+#: wafer/talks/templates/wafer.talks/talk.html:171
 msgid "Review"
 msgstr "Revisão"
 
@@ -1209,13 +1215,13 @@ msgstr "Crie uma página chamada 'index'."
 msgid "%(name)s's profile"
 msgstr "Perfil do(a) %(name)s"
 
-#: wafer/templates/wafer/nav.html:63
-msgid "Log out"
-msgstr "Sair"
-
-#: wafer/templates/wafer/nav.html:67
+#: wafer/templates/wafer/nav.html:64
 msgid "Site admin"
 msgstr "Administração do site"
+
+#: wafer/templates/wafer/nav.html:68
+msgid "Log out"
+msgstr "Sair"
 
 #: wafer/templates/wafer/nav.html:76
 msgid "Sign up / Log In"
@@ -1282,31 +1288,31 @@ msgstr "perfil"
 msgid "username"
 msgstr "nome do usuário"
 
-#: wafer/users/models.py:33
+#: wafer/users/models.py:38
 msgid "user profile"
 msgstr "perfil de usuário"
 
-#: wafer/users/models.py:34
+#: wafer/users/models.py:39
 msgid "user profiles"
 msgstr "perfis de usuário"
 
-#: wafer/users/models.py:38
+#: wafer/users/models.py:43
 msgid "contact number"
 msgstr "número de contato"
 
-#: wafer/users/models.py:39
+#: wafer/users/models.py:44
 msgid "bio"
 msgstr "bio"
 
-#: wafer/users/models.py:41
+#: wafer/users/models.py:46
 msgid "homepage"
 msgstr "página web"
 
-#: wafer/users/models.py:44
+#: wafer/users/models.py:49
 msgid "Twitter handle"
 msgstr "Perfil no Twitter"
 
-#: wafer/users/models.py:46
+#: wafer/users/models.py:51
 msgid "GitHub username"
 msgstr "Nome de usuário do GitHub"
 
