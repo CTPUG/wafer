@@ -433,6 +433,7 @@ class SpeakerTests(TestCase):
 
     @mock.patch('wafer.users.models.UserProfile.avatar_url', mock_avatar_url)
     def test_multiple_types(self):
+        """Test the view for multiple talk types"""
         talk_d = create_talk('Talk D', ACCEPTED, 'author_d', self.talk_type1)
         talk_e = create_talk('Talk E', ACCEPTED, 'author_e', self.talk_type1)
         keynote_f = create_talk('Talk F', ACCEPTED, 'author_f', self.talk_type2)
@@ -529,6 +530,25 @@ class SpeakerTests(TestCase):
             '  </div>',
             '</div>',
         ]), html=True)
+
+    def test_exluding_types(self):
+        """Test that the show_speakers flag excludes the speakers from the list."""
+        hidden = create_talk_type('Hidden')
+        talk_d = create_talk('Talk D', ACCEPTED, 'author_d', hidden)
+
+        response = self.client.get(
+            reverse('wafer_talks_speakers'))
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('Hidden', response.context["speaker_rows"])
+
+        # Hide the talk type
+        hidden.show_speakers = False
+        hidden.save()
+
+        response = self.client.get(
+            reverse('wafer_talks_speakers'))
+        self.assertEqual(response.status_code, 200)
+        self.assertNotIn('Hidden', response.context["speaker_rows"])
 
 
 class TalkSlugUrlTests(TestCase):
