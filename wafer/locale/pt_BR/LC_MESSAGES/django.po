@@ -1004,6 +1004,7 @@ msgstr "Palestrantes"
 
 #: wafer/talks/templates/wafer.talks/speakers.html:10
 #, fuzzy, python-format
+#| msgid "Type: %(talk_type)s"
 msgid "%(talk_type)s Speakers"
 msgstr "Tipo: %(talk_type)s"
 
