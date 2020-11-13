@@ -8,15 +8,17 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-11-11 14:41+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2020-11-14 18:28+0000\n"
+"Last-Translator: Andrej Shadura <andrew.shadura@collabora.co.uk>\n"
+"Language-Team: Belarusian <https://hosted.weblate.org/projects/wafer/wafer/"
+"be/>\n"
 "Language: be\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Generator: Weblate 4.4-dev\n"
 
 #: wafer/compare/admin.py:22
 msgid "Last Modified"
@@ -24,19 +26,20 @@ msgstr ""
 
 #: wafer/compare/admin.py:27
 msgid "Today"
-msgstr ""
+msgstr "Сёння"
 
 #: wafer/compare/admin.py:28
 msgid "Since yesterday"
-msgstr ""
+msgstr "З учора"
 
 #: wafer/compare/admin.py:29
+#, fuzzy
 msgid "In the last 7 days"
-msgstr ""
+msgstr "За апошнія 7 дзён"
 
 #: wafer/compare/admin.py:30
 msgid "In the last 30 days"
-msgstr ""
+msgstr "За апошнія 30 дзён"
 
 #: wafer/compare/admin.py:140
 #, python-format
@@ -45,74 +48,79 @@ msgstr ""
 
 #: wafer/compare/templates/admin/wafer.compare/change_form.html:6
 msgid "History"
-msgstr ""
+msgstr "Гісторыя"
 
 #: wafer/compare/templates/admin/wafer.compare/change_form.html:9
 msgid "Compare Versions"
-msgstr ""
+msgstr "Параўнаць версіі"
 
 #: wafer/compare/templates/admin/wafer.compare/change_form.html:13
 msgid "View on site"
-msgstr ""
+msgstr "Праглядзець на сайце"
 
 #: wafer/compare/templates/admin/wafer.compare/compare.html:6
 msgid "Compare"
-msgstr ""
+msgstr "Параўнаць"
 
 #: wafer/compare/templates/admin/wafer.compare/compare.html:7
 #, python-format
 msgid "%(name)s"
-msgstr ""
+msgstr "%(name)s"
 
 #: wafer/compare/templates/admin/wafer.compare/compare.html:19
 #: wafer/pages/templates/wafer.pages/page_compare.html:24
 msgid "No differences found"
-msgstr ""
+msgstr "Адрозненні не знойдзеныя"
 
 #: wafer/compare/templates/admin/wafer.compare/compare_list.html:6
 msgid "Home"
-msgstr ""
+msgstr "Галоўная"
 
 #: wafer/compare/templates/admin/wafer.compare/compare_list.html:10
 #, python-format
 msgid "Compare %(name)s"
-msgstr ""
+msgstr "Параўнаць %(name)s"
 
 #: wafer/compare/templates/admin/wafer.compare/compare_list.html:17
 msgid ""
 "Choose a date from the list below to compare the current version to a "
 "previous version of this object."
 msgstr ""
+"Выберыце дату з спісу ніжэй, каб параўнаць гэтую версію з папярэдняй версіяй "
+"аб'екта."
 
 #: wafer/compare/templates/admin/wafer.compare/compare_list.html:27
 msgid "Date/time"
-msgstr ""
+msgstr "Дата і час"
 
 #: wafer/compare/templates/admin/wafer.compare/compare_list.html:28
 msgid "User"
-msgstr ""
+msgstr "Карыстальнік"
 
 #: wafer/compare/templates/admin/wafer.compare/compare_list.html:29
 msgid "Comment"
-msgstr ""
+msgstr "Каментар"
 
 #: wafer/compare/templates/admin/wafer.compare/compare_list.html:51
 msgid ""
 "This object doesn't have a change history. It probably wasn't added via this "
 "admin site."
 msgstr ""
+"Гэты аб'ект не мае гісторыі змен. Магчыма, ён не быў дададзены праз гэты "
+"адміністрацыйны сайт."
 
 #: wafer/pages/models.py:31
+#, fuzzy
 msgid "Last component of the page URL"
-msgstr ""
+msgstr "Апошні кампанент URL старонкі"
 
 #: wafer/pages/models.py:35
 msgid "Markdown contents for the page."
-msgstr ""
+msgstr "Тэкст старонкі ў фармаце Markdown."
 
 #: wafer/pages/models.py:37
 msgid "Whether to include in menus."
-msgstr ""
+msgstr "Уключаць у меню?"
 
 #: wafer/pages/models.py:40
 msgid "Ordering in the menu (smaller numbers come first)"
@@ -123,10 +131,12 @@ msgid ""
 "Whether to exclude this page from the static version of the site (Container "
 "pages, etc.)"
 msgstr ""
+"Выключыць гэтую старонку са статычнай версіі сайта (старонкі-кантэйнеры і г."
+"д.)?"
 
 #: wafer/pages/models.py:50
 msgid "Images and other files for use in the content markdown field."
-msgstr ""
+msgstr "Выявы і іншыя файлы для выкарыстання ў асноўным тэксце."
 
 #: wafer/pages/models.py:56
 msgid ""
@@ -154,60 +164,62 @@ msgstr ""
 #: wafer/talks/templates/wafer.talks/talk_form.html:28
 #: wafer/users/templates/wafer.users/profile.html:164
 msgid "Edit"
-msgstr ""
+msgstr "Рэдагаваць"
 
 #: wafer/pages/templates/wafer.pages/page.html:13
 msgid "Compare to Previous version"
-msgstr ""
+msgstr "Параўнаць з папярэдняй версіяй"
 
 #: wafer/pages/templates/wafer.pages/page_compare.html:6
 msgid "Comparing Page"
-msgstr ""
+msgstr "Параўнанне старонкі"
 
 #: wafer/pages/templates/wafer.pages/page_compare.html:8
 #, python-format
 msgid "Last Saved: %(cur_date)s by %(cur_author)s"
-msgstr ""
+msgstr "Апошняе захаванне: %(cur_date)s %(cur_author)s"
 
 #: wafer/pages/templates/wafer.pages/page_compare.html:11
 #, python-format
 msgid "Comparing to version saved: %(prev_date)s by %(prev_author)s"
-msgstr ""
+msgstr "У параўнанні з захаванай версіяй: %(prev_date)s %(prev_author)s"
 
 #: wafer/pages/templates/wafer.pages/page_compare.html:33
 msgid "Compare to next older version"
-msgstr ""
+msgstr "Параўнаць з наступнай старэйшай версіяй"
 
 #: wafer/pages/templates/wafer.pages/page_compare.html:37
 msgid "Return to Page"
-msgstr ""
+msgstr "Вярнуцца на старонку"
 
 #: wafer/pages/templates/wafer.pages/page_compare.html:41
 msgid "Compare to next newer version"
-msgstr ""
+msgstr "Параўнаць з наступнай версіяй"
 
 #: wafer/pages/templates/wafer.pages/page_compare.html:46
+#, fuzzy
 msgid "No previous versions to compare to"
-msgstr ""
+msgstr "Няма папярэдніх версій для параўнання"
 
 #: wafer/pages/templates/wafer.pages/page_form.html:11
 msgid "Edit Page"
-msgstr ""
+msgstr "Рэдагаваць"
 
 #: wafer/registration/forms.py:15
 #: wafer/registration/templates/registration/login.html:16
 #: wafer/registration/templates/registration/registration_form.html:6
+#, fuzzy
 msgid "Sign up"
-msgstr ""
+msgstr "Зарэгістравацца"
 
 #: wafer/registration/forms.py:25
 #: wafer/registration/templates/registration/login.html:11
 msgid "Log in"
-msgstr ""
+msgstr "Увайсці"
 
 #: wafer/registration/templates/registration/activate.html:4
 msgid "Oops, account activation failed"
-msgstr ""
+msgstr "На жаль, актывацыя не атрымалася"
 
 #: wafer/registration/templates/registration/activate.html:8
 #, python-format
@@ -216,25 +228,30 @@ msgid ""
 "href=\"%(register_url)s\">try again</a> or <a href=\"%(contact_url)s"
 "\">contact our admins</a>."
 msgstr ""
+"Ваш уліковы запіс не атрымліваецца актываваць. Калі ласка, <a href=\""
+"%(register_url)s\">паспрабуйце яшчэ раз</a> альбо <a href=\"%(contact_url)s\""
+">звяжыцеся з нашымі адміністратарамі</a>."
 
 #: wafer/registration/templates/registration/activation_complete.html:4
 msgid "Activation complete"
-msgstr ""
+msgstr "Ваш профіль пацверджаны"
 
 #: wafer/registration/templates/registration/activation_complete.html:7
 #, python-format
 msgid ""
 "Your account is now activated! Please <a href=\"%(login_url)s\">log in</a>."
 msgstr ""
+"Ваш уліковы запіс цяпер актыўны. Калі ласка, <a href=\"%(login_url)s\""
+">увайдзіце</a>."
 
 #: wafer/registration/templates/registration/activation_complete.html:13
 #: wafer/registration/templates/registration/registration_complete.html:13
 msgid "Note that registration for the conference is a separate step."
-msgstr ""
+msgstr "Звярніце ўвагу, што рэгістрацыя на канферэнцыю — асобны этап."
 
 #: wafer/registration/templates/registration/activation_complete.html:16
 msgid "You can now log in and start the conference registration process."
-msgstr ""
+msgstr "Цяпер вы можаце ўвайсці і пачаць рэгістрацыю на канферэнцыю."
 
 #: wafer/registration/templates/registration/activation_email.txt:5
 #, python-format
@@ -259,6 +276,25 @@ msgid ""
 " %(WAFER_CONFERENCE_NAME)s\n"
 " http://%(domain)s%(index_url)s\n"
 msgstr ""
+"Прывітанне!\n"
+"\n"
+"Адным словам, націсніце сюды: https://%(domain)s%(activation_url)s\n"
+"\n"
+"Дзякуем за рэгістрацыю на %(WAFER_CONFERENCE_NAME)s.\n"
+"\n"
+"Каб пацвердзіць свой адрас электроннай пошты, перайдзіце па спасылцы вышэй і "
+"актывуйце свой профіль. У вас засталося %(expiration_days)s дзён, каб гэта "
+"зрабіць.\n"
+"\n"
+"Мы спадзяёмся ўбачыць вас у бліжэйшы час.\n"
+"\n"
+"Дзякуй,\n"
+"\n"
+"Вэб-сайт %(WAFER_CONFERENCE_NAME)s.\n"
+"\n"
+"-- \n"
+" %(WAFER_CONFERENCE_NAME)s\n"
+" http://%(domain)s %(index_url)s\n"
 
 #: wafer/registration/templates/registration/activation_email_subject.txt:2
 #, python-format
@@ -267,27 +303,32 @@ msgid ""
 "Activate your %(WAFER_CONFERENCE_NAME)s account [%(expiration_days)s days "
 "left]\n"
 msgstr ""
+"\n"
+"Актывуйце свой уліковы запіс %(WAFER_CONFERENCE_NAME)s [Засталося "
+"%(expiration_days)s дзён]\n"
 
 #: wafer/registration/templates/registration/login.html:18
 #, python-format
 msgid "Not registered? Please <a href=\"%(signup_url)s\">sign up</a>."
 msgstr ""
+"Не зарэгістраваныя? Калі ласка, <a href=\"%(signup_url)s\">зарэгіструйцеся "
+"тут</a>."
 
 #: wafer/registration/templates/registration/login.html:22
 msgid "Shared/Social Log in and Sign up"
-msgstr ""
+msgstr "Увайсці ці зарэгістравацца праз сацыяльныя сеткі"
 
 #: wafer/registration/templates/registration/logout.html:7
 msgid "Logged out"
-msgstr ""
+msgstr "Вы выйшлі"
 
 #: wafer/registration/templates/registration/logout.html:9
 msgid "You've been logged out."
-msgstr ""
+msgstr "Вы выйшлі з сістэмы."
 
 #: wafer/registration/templates/registration/registration_complete.html:4
 msgid "Account creation almost complete"
-msgstr ""
+msgstr "Рэгістрацыя амаль што закончаная"
 
 #: wafer/registration/templates/registration/registration_complete.html:6
 #, python-format
@@ -296,26 +337,30 @@ msgid ""
 "sent you an e-mail. Please follow the instructions in it to activate your "
 "account."
 msgstr ""
+"Дзякуем за стварэнне ўліковага запісу на %(WAFER_CONFERENCE_NAME)s. Мы "
+"адаслалі вам e-mail. Калі ласка, прытрымлівайцеся інструкцый у ім, каб "
+"актываваць свой профіль."
 
 #: wafer/registration/templates/registration/registration_complete.html:16
+#, fuzzy
 msgid "You can register after your account is activated."
-msgstr ""
+msgstr "Вы можаце зарэгістравацца пасля актывацыі вашага ўліковага запісу."
 
 #: wafer/schedule/admin.py:143
 msgid "Clashes found in schedule."
-msgstr ""
+msgstr "У праграме знойдзеныя канфлікты."
 
 #: wafer/schedule/admin.py:146
 msgid "Duplicate schedule items found in schedule."
-msgstr ""
+msgstr "У праграме знойдзеныя дублікаты."
 
 #: wafer/schedule/admin.py:149
 msgid "Invalid schedule items found in schedule."
-msgstr ""
+msgstr "У праграме знойдзеныя праблемныя запісы."
 
 #: wafer/schedule/admin.py:152
 msgid "Non contiguous slots found in schedule."
-msgstr ""
+msgstr "У праграме знойдзеныя несумежныя слоты."
 
 #: wafer/schedule/admin.py:155
 msgid "Invalid venues found in schedule."
@@ -323,45 +368,46 @@ msgstr ""
 
 #: wafer/schedule/admin.py:195
 msgid "Block"
-msgstr ""
+msgstr "Блок"
 
 #: wafer/schedule/admin.py:247 wafer/schedule/models.py:316
 msgid "Start Time"
-msgstr ""
+msgstr "Час пачатку"
 
 #: wafer/schedule/admin.py:303
 msgid "Venue"
-msgstr ""
+msgstr "Зала"
 
 #: wafer/schedule/admin.py:390
+#, fuzzy
 msgid "Additional slots"
-msgstr ""
+msgstr "Дадатковыя слоты"
 
 #: wafer/schedule/admin.py:391
 msgid "Create this number of additional slots following this one"
-msgstr ""
+msgstr "Стварыць дадатковыя слотаў за гэтым"
 
 #: wafer/schedule/admin.py:453
 #, python-format
 msgid "Additional slot %(obj)s added sucessfully"
-msgstr ""
+msgstr "Дадатковы слот %(obj)s дададзены"
 
 #: wafer/schedule/admin.py:460
 #, python-format
 msgid "Failed to create new slot - %s"
-msgstr ""
+msgstr "Не атрымалася стварыць новы слот — %s"
 
 #: wafer/schedule/models.py:74
 msgid "Notes or directions that will be useful to conference attendees"
-msgstr ""
+msgstr "Нататкі ці ўказанні, якія будуць карысныя ўдзельнікам канферэнцыі"
 
 #: wafer/schedule/models.py:78
 msgid "Blocks (days) on which this venue will be used."
-msgstr ""
+msgstr "Блокі (дні), у якія будзе выкарыстоўвацца гэтая зала."
 
 #: wafer/schedule/models.py:82
 msgid "Venue has video coverage"
-msgstr ""
+msgstr "Вядзецца відэазапіс"
 
 #: wafer/schedule/models.py:102
 msgid ""
@@ -383,19 +429,21 @@ msgstr ""
 
 #: wafer/schedule/models.py:148
 msgid "Start Date & Time"
-msgstr ""
+msgstr "Дата і час пачатку"
 
 #: wafer/schedule/models.py:176
 msgid "Schedule Block"
-msgstr ""
+msgstr "Блок праграмы"
 
 #: wafer/schedule/models.py:235
+#, fuzzy
 msgid "Additional details (if required)"
-msgstr ""
+msgstr "Дадатковыя звесткі (пры неабходнасці)"
 
 #: wafer/schedule/models.py:239
+#, fuzzy
 msgid "Notes for the conference organisers"
-msgstr ""
+msgstr "Нататкі для арганізатараў канферэнцыі"
 
 #: wafer/schedule/models.py:243
 msgid "Custom css class for this schedule item"
@@ -406,8 +454,9 @@ msgid "Expand to neighbouring venues"
 msgstr ""
 
 #: wafer/schedule/models.py:251
+#, fuzzy
 msgid "Date & Time this was last updated"
-msgstr ""
+msgstr "Дата і час апошняга абнаўлення"
 
 #: wafer/schedule/models.py:280
 msgid "Talk Type & Track CSS classes"
@@ -415,15 +464,15 @@ msgstr ""
 
 #: wafer/schedule/templates/admin/scheduleitem_list.html:10
 msgid "Errors in the schedule"
-msgstr ""
+msgstr "Памылкі ў праграме канферэнцыі"
 
 #: wafer/schedule/templates/admin/scheduleitem_list.html:13
 msgid "Clashes"
-msgstr ""
+msgstr "Канфлікты"
 
 #: wafer/schedule/templates/admin/scheduleitem_list.html:25
 msgid "Validation errors"
-msgstr ""
+msgstr "Памылкі валідацыі"
 
 #: wafer/schedule/templates/admin/scheduleitem_list.html:33
 msgid "Items in the schedule with non-contiguous slots"
@@ -431,7 +480,7 @@ msgstr ""
 
 #: wafer/schedule/templates/admin/scheduleitem_list.html:41
 msgid "Duplicates in the schedule"
-msgstr ""
+msgstr "Дублікаты ў праграме"
 
 #: wafer/schedule/templates/admin/scheduleitem_list.html:49
 msgid "Venues assigned on days they are not available"
@@ -440,11 +489,12 @@ msgstr ""
 #: wafer/schedule/templates/admin/scheduleitem_list.html:70
 #: wafer/schedule/templates/wafer.schedule/full_schedule.html:10
 msgid "Edit schedule"
-msgstr ""
+msgstr "Змяніць праграму"
 
 #: wafer/schedule/templates/admin/slot_list.html:10
+#, fuzzy
 msgid "Errors in the slots"
-msgstr ""
+msgstr "Памылкі ў слотах"
 
 #: wafer/schedule/templates/admin/slot_list.html:13
 msgid "Overlapping slots"
@@ -453,50 +503,51 @@ msgstr ""
 #: wafer/schedule/templates/wafer.schedule/current.html:3
 #: wafer/schedule/templates/wafer.schedule/current.html:6
 msgid "Happening now"
-msgstr ""
+msgstr "Што адбываецца зараз"
 
 #: wafer/schedule/templates/wafer.schedule/current.html:10
 #: wafer/schedule/templates/wafer.schedule/full_schedule.html:20
 msgid "<p>The final schedule has not been published yet.</p>"
-msgstr ""
+msgstr "<p>Канчатковая праграма яшчэ не была апублікаваная.</p>"
 
 #: wafer/schedule/templates/wafer.schedule/current.html:14
 msgid "<p>Nothing happening right now.</p>"
-msgstr ""
+msgstr "<p>Зараз нічога не адбываецца.</p>"
 
 #: wafer/schedule/templates/wafer.schedule/current.html:23
 #: wafer/schedule/templates/wafer.schedule/full_schedule.html:48
 msgid "Time"
-msgstr ""
+msgstr "Час"
 
 #: wafer/schedule/templates/wafer.schedule/current.html:71
+#, fuzzy
 msgid "Last updated"
-msgstr ""
+msgstr "Апошняе абнаўленне"
 
 #: wafer/schedule/templates/wafer.schedule/edit_schedule.html:10
 msgid "Validation errors:"
-msgstr ""
+msgstr "Памылкі валідацыі:"
 
 #: wafer/schedule/templates/wafer.schedule/edit_schedule.html:23
 #: wafer/schedule/templates/wafer.schedule/edit_schedule.html:28
-#, python-format
+#, fuzzy, python-format
 msgid "(Block %(block_id)s)"
-msgstr ""
+msgstr "(Блок %(block_id)s)"
 
 #: wafer/schedule/templates/wafer.schedule/edit_schedule.html:33
 msgid "Schedule Editor"
-msgstr ""
+msgstr "Рэдактар праграмы"
 
 #: wafer/schedule/templates/wafer.schedule/edit_schedule.html:62
 msgid "Close"
-msgstr ""
+msgstr "Закрыць"
 
 #: wafer/schedule/templates/wafer.schedule/edit_schedule.html:69
 #: wafer/schedule/templates/wafer.schedule/edit_schedule.html:132
 #: wafer/schedule/templates/wafer.schedule/edit_schedule.html:158
 #: wafer/talks/models.py:147 wafer/talks/templates/wafer.talks/talk.html:114
 msgid "Cancelled"
-msgstr ""
+msgstr "Адменены"
 
 #: wafer/schedule/templates/wafer.schedule/edit_schedule.html:81
 msgid "Bucket"
@@ -504,44 +555,44 @@ msgstr ""
 
 #: wafer/schedule/templates/wafer.schedule/edit_schedule.html:90
 msgid "Unassigned Talks"
-msgstr ""
+msgstr "Непрызначаныя даклады"
 
 #: wafer/schedule/templates/wafer.schedule/edit_schedule.html:97
 msgid "All Talks"
-msgstr ""
+msgstr "Усе даклады"
 
 #: wafer/schedule/templates/wafer.schedule/edit_schedule.html:102
 msgid "Pages"
-msgstr ""
+msgstr "Старонкі"
 
 #: wafer/schedule/templates/wafer.schedule/full_schedule.html:3
 #: wafer/schedule/templates/wafer.schedule/full_schedule.html:15
 msgid "Schedule"
-msgstr ""
+msgstr "Праграма"
 
 #: wafer/schedule/templates/wafer.schedule/full_schedule.html:29
 msgid "Previous"
-msgstr ""
+msgstr "Папярэдні"
 
 #: wafer/schedule/templates/wafer.schedule/full_schedule.html:33
 msgid "Next"
-msgstr ""
+msgstr "Наступны"
 
 #: wafer/sponsors/models.py:36
 msgid "Currency symbol for the sponsorship amount."
-msgstr ""
+msgstr "Сімвал валюты для сумы спонсарства."
 
 #: wafer/sponsors/models.py:39
 msgid "Amount to be sponsored."
-msgstr ""
+msgstr "Сума для спонсарства."
 
 #: wafer/sponsors/models.py:41
 msgid "One sentence overview of the package."
-msgstr ""
+msgstr "Агляд прапановы адным сказам."
 
 #: wafer/sponsors/models.py:43
 msgid "Describe what the package gives the sponsor."
-msgstr ""
+msgstr "Апішыце, што пакет дае спонсару."
 
 #: wafer/sponsors/models.py:46
 msgid "Images and other files for use in the description markdown field."
@@ -555,49 +606,51 @@ msgstr ""
 
 #: wafer/sponsors/models.py:73
 msgid "Write some nice things about the sponsor."
-msgstr ""
+msgstr "Напішыце нешта добрае пра спонсара."
 
 #: wafer/sponsors/models.py:76
 msgid "Url to link back to the sponsor if required"
-msgstr ""
+msgstr "Спасылка на спонсара (калі трэба)"
 
 #: wafer/sponsors/models.py:112
 #: wafer/sponsors/templates/wafer.sponsors/sponsors.html:4
 #: wafer/sponsors/templates/wafer.sponsors/sponsors.html:7
 msgid "Sponsors"
-msgstr ""
+msgstr "Спонсары"
 
 #: wafer/sponsors/models.py:113
 msgid "Our sponsors"
-msgstr ""
+msgstr "Нашы спонсары"
 
 #: wafer/sponsors/models.py:114
 msgid "Sponsorship packages"
-msgstr ""
+msgstr "Спонсарскія пакеты"
 
 #: wafer/sponsors/templates/wafer.sponsors/packages.html:5
 msgid "Sponsorship Packages"
-msgstr ""
+msgstr "Спонсарскія пакеты"
 
 #: wafer/sponsors/templates/wafer.sponsors/packages.html:19
 msgid "Total number available:"
-msgstr ""
+msgstr "Агулам даступна:"
 
 #: wafer/sponsors/templates/wafer.sponsors/packages.html:21
 msgid "Packages claimed:"
 msgstr ""
 
 #: wafer/sponsors/templates/wafer.sponsors/packages.html:28
+#, fuzzy
 msgid "No sponsorship packages available yet."
-msgstr ""
+msgstr "Пакуль спонсарскіх пакетаў няма."
 
 #: wafer/sponsors/templates/wafer.sponsors/sponsors.html:39
+#, fuzzy
 msgid "No sponsors yet."
-msgstr ""
+msgstr "Спонсараў пакуль няма."
 
 #: wafer/talks/admin.py:24
 msgid "in schedule"
-msgstr ""
+msgstr "у праграме"
 
 #: wafer/talks/admin.py:29
 msgid "Allocated to schedule"
@@ -608,36 +661,37 @@ msgid "Not allocated"
 msgstr ""
 
 #: wafer/talks/admin.py:42
+#, fuzzy
 msgid "has notes"
-msgstr ""
+msgstr "мае нататкі"
 
 #: wafer/talks/admin.py:47
 msgid "Yes"
-msgstr ""
+msgstr "Так"
 
 #: wafer/talks/admin.py:48
 msgid "No"
-msgstr ""
+msgstr "Не"
 
 #: wafer/talks/admin.py:93
 msgid "Mark selected talks as Submitted"
-msgstr ""
+msgstr "Адзначыць выбраныя даклады як «Дасланыя»"
 
 #: wafer/talks/admin.py:96
 msgid "Mark selected talks as Withdrawn"
-msgstr ""
+msgstr "Адзначыць выбраныя даклады як «Адкліканыя»"
 
 #: wafer/talks/admin.py:99
 msgid "Mark selected talks as Cancelled"
-msgstr ""
+msgstr "Адзначыць выбраныя даклады як «Адмененыя»"
 
 #: wafer/talks/admin.py:102
 msgid "Mark selected talks as Under consideration"
-msgstr ""
+msgstr "Адзначыць выбраныя даклады як «Разглядаюцца»"
 
 #: wafer/talks/admin.py:105
 msgid "Mark selected talks as Not Accepted"
-msgstr ""
+msgstr "Адзначыць выбраныя даклады як «Не прынятыя»"
 
 #: wafer/talks/admin.py:108
 msgid "Mark selected talks as Provisionally Accepted"
