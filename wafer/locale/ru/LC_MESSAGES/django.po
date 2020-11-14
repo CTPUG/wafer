@@ -7,8 +7,8 @@ msgstr ""
 "Project-Id-Version: Wafer\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-11-12 10:12+0000\n"
-"PO-Revision-Date: 2020-11-14 18:28+0000\n"
-"Last-Translator: Andrej Shadura <andrew.shadura@collabora.co.uk>\n"
+"PO-Revision-Date: 2020-11-15 23:28+0000\n"
+"Last-Translator: Anatoli Babenia <anatoli@rainforce.org>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/wafer/wafer/ru/>"
 "\n"
 "Language: ru\n"
@@ -42,7 +42,7 @@ msgstr "За последние 30 дней"
 #: wafer/compare/admin.py:140
 #, python-format
 msgid "Comparing current %(model)s with revision created %(date)s"
-msgstr ""
+msgstr "Сравнение текущей %(model)s с ревизией от %(date)s"
 
 #: wafer/compare/templates/admin/wafer.compare/change_form.html:6
 msgid "History"
