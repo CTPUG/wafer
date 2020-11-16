@@ -8,137 +8,159 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-11-11 14:41+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2020-11-17 06:28+0000\n"
+"Last-Translator: Abraham Raji <avronr@tuta.io>\n"
+"Language-Team: Malayalam <https://hosted.weblate.org/projects/wafer/wafer/ml/"
+">\n"
 "Language: ml\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.4-dev\n"
 
 #: wafer/compare/admin.py:22
 msgid "Last Modified"
-msgstr ""
+msgstr "അവസാനമായി പരിഷ്‌ക്കരിച്ചതു"
 
 #: wafer/compare/admin.py:27
 msgid "Today"
-msgstr ""
+msgstr "ഇന്ന്"
 
 #: wafer/compare/admin.py:28
 msgid "Since yesterday"
-msgstr ""
+msgstr "ഇന്നലെ മുതൽ"
 
 #: wafer/compare/admin.py:29
 msgid "In the last 7 days"
-msgstr ""
+msgstr "കഴിഞ്ഞ 7 ദിവസത്തിനുള്ളിൽ"
 
 #: wafer/compare/admin.py:30
 msgid "In the last 30 days"
-msgstr ""
+msgstr "കഴിഞ്ഞ 30 ദിവസത്തിനുള്ളിൽ"
 
 #: wafer/compare/admin.py:140
-#, python-format
+#, fuzzy, python-format
 msgid "Comparing current %(model)s with revision created %(date)s"
 msgstr ""
+"നിലവിലെ %(model)s-നെ %(date)s-ന് സൃഷ്ടിച്ച പുനരവലോകനവുമായി താരതമ്യം "
+"ചെയ്യുന്നു"
 
 #: wafer/compare/templates/admin/wafer.compare/change_form.html:6
 msgid "History"
-msgstr ""
+msgstr "ചരിത്രം"
 
 #: wafer/compare/templates/admin/wafer.compare/change_form.html:9
 msgid "Compare Versions"
-msgstr ""
+msgstr "പതിപ്പുകൾ താരതമ്യം ചെയ്യുക"
 
 #: wafer/compare/templates/admin/wafer.compare/change_form.html:13
 msgid "View on site"
-msgstr ""
+msgstr "സൈറ്റിൽ കാണുക"
 
 #: wafer/compare/templates/admin/wafer.compare/compare.html:6
 msgid "Compare"
-msgstr ""
+msgstr "താരതമ്യം ചെയ്യുക"
 
 #: wafer/compare/templates/admin/wafer.compare/compare.html:7
-#, python-format
+#, fuzzy, python-format
 msgid "%(name)s"
-msgstr ""
+msgstr "%(name)s"
 
 #: wafer/compare/templates/admin/wafer.compare/compare.html:19
 #: wafer/pages/templates/wafer.pages/page_compare.html:24
 msgid "No differences found"
-msgstr ""
+msgstr "വ്യത്യാസങ്ങളൊന്നും കണ്ടെത്തിയില്ല"
 
 #: wafer/compare/templates/admin/wafer.compare/compare_list.html:6
+#, fuzzy
 msgid "Home"
-msgstr ""
+msgstr "ഹോം"
 
 #: wafer/compare/templates/admin/wafer.compare/compare_list.html:10
-#, python-format
+#, fuzzy, python-format
 msgid "Compare %(name)s"
-msgstr ""
+msgstr "%(name)s താരതമ്യം ചെയ്യുക"
 
 #: wafer/compare/templates/admin/wafer.compare/compare_list.html:17
 msgid ""
 "Choose a date from the list below to compare the current version to a "
 "previous version of this object."
 msgstr ""
+"നിലവിലെ പതിപ്പിനെ ഈ ഒബ്‌ജക്റ്റിന്റെ മുമ്പത്തെ പതിപ്പുമായി താരതമ്യം ചെയ്യാൻ "
+"താഴെയുള്ള പട്ടികയിൽ നിന്ന് ഒരു തീയതി തിരഞ്ഞെടുക്കുക."
 
 #: wafer/compare/templates/admin/wafer.compare/compare_list.html:27
 msgid "Date/time"
-msgstr ""
+msgstr "തീയതി/സമയം"
 
 #: wafer/compare/templates/admin/wafer.compare/compare_list.html:28
 msgid "User"
-msgstr ""
+msgstr "യൂസർ"
 
 #: wafer/compare/templates/admin/wafer.compare/compare_list.html:29
+#, fuzzy
 msgid "Comment"
-msgstr ""
+msgstr "അഭിപ്രായമിടുക"
 
 #: wafer/compare/templates/admin/wafer.compare/compare_list.html:51
 msgid ""
 "This object doesn't have a change history. It probably wasn't added via this "
 "admin site."
 msgstr ""
+"ഈ ഒബ്‌ജക്റ്റിന് ഒരു മാറ്റ ചരിത്രം ഇല്ല. ഇത് മിക്കവാറും ഈ അഡ്‌മിൻ സൈറ്റിലൂടെ "
+"ചേർത്തിട്ടുള്ളതല്ല."
 
 #: wafer/pages/models.py:31
 msgid "Last component of the page URL"
-msgstr ""
+msgstr "പേജ് URL- ന്റെ അവസാന ഘടകം"
 
 #: wafer/pages/models.py:35
 msgid "Markdown contents for the page."
-msgstr ""
+msgstr "പേജിനായുള്ള മാർക്ക്ഡൗൺ കണ്ടേന്റ്."
 
 #: wafer/pages/models.py:37
+#, fuzzy
 msgid "Whether to include in menus."
-msgstr ""
+msgstr "മെനുകളിൽ ഉൾപ്പെടുത്തണമോ എന്നു."
 
 #: wafer/pages/models.py:40
 msgid "Ordering in the menu (smaller numbers come first)"
-msgstr ""
+msgstr "മെനുവിലെ ക്രമം (ചെറിയ സംഖ്യകൾ ആദ്യം വരുന്നു)"
 
 #: wafer/pages/models.py:45
 msgid ""
 "Whether to exclude this page from the static version of the site (Container "
 "pages, etc.)"
 msgstr ""
+"സൈറ്റിന്റെ സ്റ്റാറ്റിക് പതിപ്പിൽ നിന്ന് ഈ പേജ് ഒഴിവാക്കണോ (കണ്ടെയ്നർ, പേജുകൾ "
+"മുതലായവ)"
 
 #: wafer/pages/models.py:50
+#, fuzzy
 msgid "Images and other files for use in the content markdown field."
 msgstr ""
+"കണ്ടേന്റ് മാർക്ക്ഡൗൺ മേഖലയിൽ ഉപയോഗിക്കുന്നതിനുള്ള ചിത്രങ്ങളും മറ്റ് ഫയലുകളും."
 
 #: wafer/pages/models.py:56
+#, fuzzy
 msgid ""
 "People associated with this page for display in the schedule (Session "
 "chairs, panelists, etc.)"
 msgstr ""
+"ഷെഡ്യൂളിൽ പ്രദർശിപ്പിക്കുന്നതിനായി ഈ പേജുമായി ബന്ധപ്പെട്ട ആളുകൾ (session "
+"chairs, പാനലിസ്റ്റുകൾ മുതലായവർ)"
 
 #: wafer/pages/models.py:61
+#, fuzzy
 msgid ""
 "Length of time (in seconds) to cache the page for dynamic page content. A "
 "negative value means this page is not dynamic and it will be not be "
 "regenerated until it is next edited."
 msgstr ""
+"ഡൈനാമിക്ക് പേജ് ഉള്ളടക്കത്തിനായി പേജ് കാഷെ ചെയ്യുന്നതിനുള്ള സമയ ദൈർഘ്യം "
+"(സെക്കൻഡിൽ). ഒരു നെഗറ്റീവ് മൂല്യം എന്നതിനർത്ഥം ഈ പേജ് ഡൈനാമിക്ക്ല്ലെന്നും "
+"അടുത്ത എഡിറ്റുചെയ്യുന്നതുവരെ ഇത് വീണ്ടും സൃഷ്ടിക്കപ്പെടില്ല."
 
 #: wafer/pages/models.py:137
 msgid "Circular reference in parent."
@@ -146,67 +168,74 @@ msgstr ""
 
 #: wafer/pages/models.py:153
 msgid "Duplicate parent/slug combination."
-msgstr ""
+msgstr "ഒരേ പോലെയുള്ള പാരെന്റ്/സ്ലഗ് കോമ്പിനേഷൻ."
 
 #: wafer/pages/templates/wafer.pages/page.html:10
 #: wafer/talks/templates/wafer.talks/talk.html:18
 #: wafer/talks/templates/wafer.talks/talk_form.html:28
 #: wafer/users/templates/wafer.users/profile.html:164
 msgid "Edit"
-msgstr ""
+msgstr "എഡിറ്റുചെയ്യുക"
 
 #: wafer/pages/templates/wafer.pages/page.html:13
 msgid "Compare to Previous version"
-msgstr ""
+msgstr "മുമ്പത്തെ പതിപ്പുമായി താരതമ്യം ചെയ്യുക"
 
 #: wafer/pages/templates/wafer.pages/page_compare.html:6
+#, fuzzy
 msgid "Comparing Page"
-msgstr ""
+msgstr "പേജ് താരതമ്യം ചെയ്യുന്നു"
 
 #: wafer/pages/templates/wafer.pages/page_compare.html:8
-#, python-format
+#, fuzzy, python-format
 msgid "Last Saved: %(cur_date)s by %(cur_author)s"
-msgstr ""
+msgstr "അവസാനം സംരക്ഷിച്ചത്: %(cur_date)s by %(cur_author)s"
 
 #: wafer/pages/templates/wafer.pages/page_compare.html:11
-#, python-format
+#, fuzzy, python-format
 msgid "Comparing to version saved: %(prev_date)s by %(prev_author)s"
 msgstr ""
+"സംരക്ഷിച്ച പതിപ്പുമായി താരതമ്യം ചെയ്യുന്നത്: %(prev_date)s by %(prev_author)s"
 
 #: wafer/pages/templates/wafer.pages/page_compare.html:33
+#, fuzzy
 msgid "Compare to next older version"
-msgstr ""
+msgstr "അടുത്ത പഴയ പതിപ്പുമായി താരതമ്യം ചെയ്യുക"
 
 #: wafer/pages/templates/wafer.pages/page_compare.html:37
+#, fuzzy
 msgid "Return to Page"
-msgstr ""
+msgstr "പേജിലേക്ക് മടങ്ങുക"
 
 #: wafer/pages/templates/wafer.pages/page_compare.html:41
 msgid "Compare to next newer version"
-msgstr ""
+msgstr "അടുത്ത പുതിയ പതിപ്പുമായി താരതമ്യം ചെയ്യുക"
 
 #: wafer/pages/templates/wafer.pages/page_compare.html:46
 msgid "No previous versions to compare to"
-msgstr ""
+msgstr "താരതമ്യം ചെയ്യാൻ മുമ്പത്തെ പതിപ്പുകളൊന്നുമില്ല"
 
 #: wafer/pages/templates/wafer.pages/page_form.html:11
+#, fuzzy
 msgid "Edit Page"
-msgstr ""
+msgstr "പേജ് എഡിറ്റുചെയ്യുക"
 
 #: wafer/registration/forms.py:15
 #: wafer/registration/templates/registration/login.html:16
 #: wafer/registration/templates/registration/registration_form.html:6
+#, fuzzy
 msgid "Sign up"
-msgstr ""
+msgstr "സൈൻ അപ്പ് ചെയ്യുക"
 
 #: wafer/registration/forms.py:25
 #: wafer/registration/templates/registration/login.html:11
 msgid "Log in"
-msgstr ""
+msgstr "ലോഗിൻ"
 
 #: wafer/registration/templates/registration/activate.html:4
+#, fuzzy
 msgid "Oops, account activation failed"
-msgstr ""
+msgstr "ക്ഷമിക്കണം, അക്കൗണ്ട് സജീവമാക്കൽ പരാജയപ്പെട്ടു"
 
 #: wafer/registration/templates/registration/activate.html:8
 #, python-format
@@ -215,25 +244,35 @@ msgid ""
 "href=\"%(register_url)s\">try again</a> or <a href=\"%(contact_url)s"
 "\">contact our admins</a>."
 msgstr ""
+"നിങ്ങളുടെ അക്കൗണ്ട് സജീവമാക്കുന്നതിൽ ഞങ്ങൾക്ക് ചില ബുദ്ധിമുട്ടുകൾ നേരിടുന്നു"
+". ദയവായി <a href=\"%(register_url)s\">വീണ്ടും ശ്രമിക്കുക</a> അല്ലെങ്കിൽ "
+"ഞങ്ങളുടെ <a href=\"%(contact_url)s\">അഡ്മിൻമാരുമായി ബന്ധപ്പെടുക</a>."
 
 #: wafer/registration/templates/registration/activation_complete.html:4
+#, fuzzy
 msgid "Activation complete"
-msgstr ""
+msgstr "സജീവമാക്കൽ പൂർത്തിയായി"
 
 #: wafer/registration/templates/registration/activation_complete.html:7
-#, python-format
+#, fuzzy, python-format
 msgid ""
 "Your account is now activated! Please <a href=\"%(login_url)s\">log in</a>."
 msgstr ""
+"നിങ്ങളുടെ അക്കൗണ്ട് ഇപ്പോൾ സജീവമാക്കി! ദയവായി <a href=\"%(login_url)s\""
+">ലോഗിൻ</a>"
 
 #: wafer/registration/templates/registration/activation_complete.html:13
 #: wafer/registration/templates/registration/registration_complete.html:13
+#, fuzzy
 msgid "Note that registration for the conference is a separate step."
-msgstr ""
+msgstr "കോൺഫറൻസിനുള്ള രജിസ്ട്രേഷൻ മറ്റൊരു ഘട്ടമാണെന്ന് ശ്രദ്ധിക്കുക."
 
 #: wafer/registration/templates/registration/activation_complete.html:16
+#, fuzzy
 msgid "You can now log in and start the conference registration process."
 msgstr ""
+"നിങ്ങൾക്ക് ഇപ്പോൾ ലോഗിൻ ചെയ്ത് കോൺഫറൻസ് രജിസ്ട്രേഷൻ പ്രക്രിയ ആരംഭിക്കാൻ "
+"കഴിയും."
 
 #: wafer/registration/templates/registration/activation_email.txt:5
 #, python-format
@@ -258,19 +297,43 @@ msgid ""
 " %(WAFER_CONFERENCE_NAME)s\n"
 " http://%(domain)s%(index_url)s\n"
 msgstr ""
+"നമസ്‌കാരം\n"
+"\n"
+"ചുരുക്കത്തിൽ: https://%(domain)s%(activation_url)s ക്ലിക്കുചെയ്യുക\n"
+"\n"
+"%(WAFER_CONFERENCE_NAME)s -നാ‍യി സൈൻ അപ്പ് ചെയ്തതിന് നന്ദി.\n"
+"\n"
+"നിങ്ങളുടെ ഇ-മെയിൽ വിലാസം പരിശോധിച്ചുകൊണ്ട് അക്കണ്ട് സജീവമാക്കുന്നതിന് \n"
+"മുകളിലുള്ള ലിങ്ക് പിന്തുടരുക. അങ്ങനെ ചെയ്യാൻ നിങ്ങൾക്ക് %(expiration_days)s "
+"ശേഷിക്കുന്നു.\n"
+"\n"
+"നിങ്ങളെ ഉടൻ കാണാമെന്ന് ഞങ്ങൾ പ്രതീക്ഷിക്കുന്നു.\n"
+"\n"
+"നന്ദി,\n"
+"\n"
+"%(WAFER_CONFERENCE_NAME)s ന്റെ വെബ്‌സൈറ്റ്.\n"
+"\n"
+"--\n"
+"%(WAFER_CONFERENCE_NAME)s\n"
+"https://%(domain)s%(index_url)s\n"
 
 #: wafer/registration/templates/registration/activation_email_subject.txt:2
-#, python-format
+#, fuzzy, python-format
 msgid ""
 "\n"
 "Activate your %(WAFER_CONFERENCE_NAME)s account [%(expiration_days)s days "
 "left]\n"
 msgstr ""
+"\n"
+"നിങ്ങളുടെ %(WAFER_CONFERENCE_NAME)s അക്കൗണ്ട് സജീവമാക്കുക [%(expiration_days)"
+"s ദിവസം ശേഷിക്കുന്നു]\n"
 
 #: wafer/registration/templates/registration/login.html:18
-#, python-format
+#, fuzzy, python-format
 msgid "Not registered? Please <a href=\"%(signup_url)s\">sign up</a>."
 msgstr ""
+"രജിസ്റ്റർ ചെയ്തിട്ടില്ല? ദയവായി <a href=\"%(signup_url)s\">സൈൻ അപ്പ് "
+"ചെയ്യുക</a>."
 
 #: wafer/registration/templates/registration/login.html:22
 msgid "Shared/Social Log in and Sign up"
