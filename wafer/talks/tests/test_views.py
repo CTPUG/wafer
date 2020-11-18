@@ -566,8 +566,9 @@ class SpeakerTests(TestCase):
         response = self.client.get(
             reverse('wafer_talks_speakers'))
         types = list(response.context['speaker_rows'])
-        # 'None' talk type is first in the list
-        self.assertEqual(types.index('Test 1'), 1)
+        # 'None' talk type may be first or last, depending on the database
+        # so we check the relative order of the talk types
+        self.assertLess(types.index('Test 1'), types.index('Test 2'))
 
         # Move 'Test 1' to the end of the list
         test1.order = 5
@@ -575,7 +576,7 @@ class SpeakerTests(TestCase):
         response = self.client.get(
             reverse('wafer_talks_speakers'))
         types = list(response.context['speaker_rows'])
-        self.assertEqual(types.index('Test 1'), 2)
+        self.assertGreater(types.index('Test 1'), types.index('Test 2'))
 
 
 class TalkSlugUrlTests(TestCase):
