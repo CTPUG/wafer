@@ -26,7 +26,8 @@ jobs:
       max-parallel: 4
       matrix:
         python-version: [3.6, 3.7, 3.8, 3.9]
-        django-version: ['2.2.0', '3.0.0']
+        django-version: ['2.2.0', '3.0.0', '3.1.0', 'https://github.com/django/django/archive/master.tar.gz']
+    name: Postgres: Python ${{ matrix.python-version }}, Django ${{ matrix.django-version }}
     steps:
     - uses: actions/checkout@v2
     - name: Set up Python ${{ matrix.python-version }}
@@ -34,12 +35,21 @@ jobs:
       with:
         python-version: ${{ matrix.python-version }}
     - name: Install Dependencies
+      continue-on-error: ${{ matrix.django-version == '3.1.0' || matrix.django-version == 'https://github.com/django/django/archive/master.tar.gz' }}
       run: |
         python -m pip install --upgrade pip
         pip install psycopg2
         pip install -r requirements.txt -r requirements-dev.txt
+    - name: Install Django Release
+      run: |
         pip install django~=${{ matrix.django-version }}
+      if: matrix.django-version != 'https://github.com/django/django/archive/master.tar.gz'
+    - name: Install Django Master
+      run: |
+        pip install ${{ matrix.django-version }}
+      if: matrix.django-version == 'https://github.com/django/django/archive/master.tar.gz'
     - name: Run Tests
+      continue-on-error: ${{ matrix.django-version == '3.1.0' || matrix.django-version == 'https://github.com/django/django/archive/master.tar.gz' }}
       env:
         TESTDB: postgres
       run: |
@@ -53,7 +63,8 @@ jobs:
       max-parallel: 4
       matrix:
         python-version: [3.6, 3.7, 3.8, 3.9]
-        django-version: ['2.2.0', '3.0.0']
+        django-version: ['2.2.0', '3.0.0', '3.1.0', 'https://github.com/django/django/archive/master.tar.gz']
+    name: SQLite: Python ${{ matrix.python-version }}, Django ${{ matrix.django-version }}
     steps:
     - uses: actions/checkout@v2
     - name: Set up Python ${{ matrix.python-version }}
@@ -61,84 +72,20 @@ jobs:
       with:
         python-version: ${{ matrix.python-version }}
     - name: Install Dependencies
+      continue-on-error: ${{ matrix.django-version == '3.1.0' || matrix.django-version == 'https://github.com/django/django/archive/master.tar.gz' }}
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt -r requirements-dev.txt
         pip install django~=${{ matrix.django-version }}
-    - name: Run Tests
+    - name: Install Django Release
       run: |
-        NOSE_WITH_COVERAGE=1 NOSE_COVER_PACKAGE=wafer python manage.py test
-
-  # We don't support django 3.1 because some of our dependencies don't, so
-  # we track the status as an allowed failure
-  # Django master is something we want to track for future breakages, but
-  # is never required to succeed.
-  allowed-failure-postgres:
-
-    runs-on: ubuntu-latest
-
-    services:
-      postgres:
-        image: postgres
-        env:
-          POSTGRES_PASSWORD: postgres
-        # Set health checks to wait until postgres has started
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-        ports:
-          # Maps tcp port 5432 on service container to the host
-          - 5432:5432
-
-    strategy:
-      max-parallel: 4
-      matrix:
-        python-version: [3.6, 3.7, 3.8, 3.9]
-        django-version: ['django~=3.1.0', 'https://github.com/django/django/archive/master.tar.gz']
-    steps:
-    - uses: actions/checkout@v2
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v2
-      with:
-        python-version: ${{ matrix.python-version }}
-    - name: Install Dependencies
-      continue-on-error: true
+        pip install django~=${{ matrix.django-version }}
+      if: matrix.django-version != 'https://github.com/django/django/archive/master.tar.gz'
+    - name: Install Django Master
       run: |
-        python -m pip install --upgrade pip
-        pip install psycopg2
-        pip install -r requirements.txt -r requirements-dev.txt
         pip install ${{ matrix.django-version }}
+      if: matrix.django-version == 'https://github.com/django/django/archive/master.tar.gz'
     - name: Run Tests
-      continue-on-error: true
-      env:
-        TESTDB: postgres
-      run: |
-        NOSE_WITH_COVERAGE=1 NOSE_COVER_PACKAGE=wafer python manage.py test
-
-  allowed-failure-sqlite:
-
-    runs-on: ubuntu-latest
-
-    strategy:
-      max-parallel: 4
-      matrix:
-        python-version: [3.6, 3.7, 3.8, 3.9]
-        django-version: ['django~=3.1.0', 'https://github.com/django/django/archive/master.tar.gz']
-    steps:
-    - uses: actions/checkout@v2
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v2
-      with:
-        python-version: ${{ matrix.python-version }}
-    - name: Install Dependencies
-      continue-on-error: true
-      run: |
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt -r requirements-dev.txt
-        pip install ${{ matrix.django-version }}
-    - name: Run Tests
-      continue-on-error: true
+      continue-on-error: ${{ matrix.django-version == '3.1.0' || matrix.django-version == 'https://github.com/django/django/archive/master.tar.gz' }}
       run: |
         NOSE_WITH_COVERAGE=1 NOSE_COVER_PACKAGE=wafer python manage.py test
