@@ -22,7 +22,7 @@ jobs:
           # Maps tcp port 5432 on service container to the host
           - 5432:5432
 
-    name: Postgres - Python ${{ matrix.python-version }}, Django ${{ matrix.django-version }}
+    name: Postgres - Python ${{ matrix.python-version }}, Django ${{ matrix.django-version }} (Allowed Failures - ${{ matrix.django-version == '3.1.0' || matrix.django-version == 'https://github.com/django/django/archive/master.tar.gz' }} )
     strategy:
       max-parallel: 4
       matrix:
@@ -59,7 +59,7 @@ jobs:
 
     runs-on: ubuntu-latest
 
-    name: SQLite - Python ${{ matrix.python-version }}, Django ${{ matrix.django-version }}
+    name: SQLite - Python ${{ matrix.python-version }}, Django ${{ matrix.django-version }} (Allowed Failures - ${{ matrix.django-version == '3.1.0' || matrix.django-version == 'https://github.com/django/django/archive/master.tar.gz' }} )
     strategy:
       max-parallel: 4
       matrix:
