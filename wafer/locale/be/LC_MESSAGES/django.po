@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-11-11 14:41+0000\n"
-"PO-Revision-Date: 2020-11-14 18:28+0000\n"
+"PO-Revision-Date: 2020-11-20 22:28+0000\n"
 "Last-Translator: Andrej Shadura <andrew.shadura@collabora.co.uk>\n"
 "Language-Team: Belarusian <https://hosted.weblate.org/projects/wafer/wafer/"
 "be/>\n"
@@ -22,7 +22,7 @@ msgstr ""
 
 #: wafer/compare/admin.py:22
 msgid "Last Modified"
-msgstr ""
+msgstr "Апошняя змена"
 
 #: wafer/compare/admin.py:27
 msgid "Today"
@@ -33,7 +33,6 @@ msgid "Since yesterday"
 msgstr "З учора"
 
 #: wafer/compare/admin.py:29
-#, fuzzy
 msgid "In the last 7 days"
 msgstr "За апошнія 7 дзён"
 
@@ -44,7 +43,7 @@ msgstr "За апошнія 30 дзён"
 #: wafer/compare/admin.py:140
 #, python-format
 msgid "Comparing current %(model)s with revision created %(date)s"
-msgstr ""
+msgstr "Параўнанне цяперашняй %(model)s з версіяй ад %(date)s"
 
 #: wafer/compare/templates/admin/wafer.compare/change_form.html:6
 msgid "History"
@@ -110,7 +109,6 @@ msgstr ""
 "адміністрацыйны сайт."
 
 #: wafer/pages/models.py:31
-#, fuzzy
 msgid "Last component of the page URL"
 msgstr "Апошні кампанент URL старонкі"
 
@@ -124,7 +122,7 @@ msgstr "Уключаць у меню?"
 
 #: wafer/pages/models.py:40
 msgid "Ordering in the menu (smaller numbers come first)"
-msgstr ""
+msgstr "Парадкавы нумар у меню (паводле ўзрастання)"
 
 #: wafer/pages/models.py:45
 msgid ""
@@ -143,6 +141,8 @@ msgid ""
 "People associated with this page for display in the schedule (Session "
 "chairs, panelists, etc.)"
 msgstr ""
+"Людзі, звязаныя з гэтай старонкай для адлюстравання ў праграме (вядучыя, "
+"дакладчыкі і г.д.)"
 
 #: wafer/pages/models.py:61
 msgid ""
@@ -150,10 +150,13 @@ msgid ""
 "negative value means this page is not dynamic and it will be not be "
 "regenerated until it is next edited."
 msgstr ""
+"Час (у секундах) для кэшавання дынамічнага змесціва старонкі. Адмоўны лік "
+"азначае, што гэтая старонка не з'яўляецца дынамічнай, і яна не будзе "
+"абноўленая да наступнага рэдагавання."
 
 #: wafer/pages/models.py:137
 msgid "Circular reference in parent."
-msgstr ""
+msgstr "Цыклічная спасылка ў бацькоўскай старонцы."
 
 #: wafer/pages/models.py:153
 msgid "Duplicate parent/slug combination."
@@ -197,9 +200,8 @@ msgid "Compare to next newer version"
 msgstr "Параўнаць з наступнай версіяй"
 
 #: wafer/pages/templates/wafer.pages/page_compare.html:46
-#, fuzzy
 msgid "No previous versions to compare to"
-msgstr "Няма папярэдніх версій для параўнання"
+msgstr "Старонка яшчэ не рэдагавалася"
 
 #: wafer/pages/templates/wafer.pages/page_form.html:11
 msgid "Edit Page"
@@ -208,7 +210,6 @@ msgstr "Рэдагаваць"
 #: wafer/registration/forms.py:15
 #: wafer/registration/templates/registration/login.html:16
 #: wafer/registration/templates/registration/registration_form.html:6
-#, fuzzy
 msgid "Sign up"
 msgstr "Зарэгістравацца"
 
@@ -342,7 +343,6 @@ msgstr ""
 "актываваць свой профіль."
 
 #: wafer/registration/templates/registration/registration_complete.html:16
-#, fuzzy
 msgid "You can register after your account is activated."
 msgstr "Вы можаце зарэгістравацца пасля актывацыі вашага ўліковага запісу."
 
@@ -379,7 +379,6 @@ msgid "Venue"
 msgstr "Зала"
 
 #: wafer/schedule/admin.py:390
-#, fuzzy
 msgid "Additional slots"
 msgstr "Дадатковыя слоты"
 
