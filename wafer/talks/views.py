@@ -245,11 +245,16 @@ class Speakers(BuildableListView):
                              'user__first_name',
                              'user__last_name',
                              'user__username').annotate(
-            talk_type=F('user__talks__talk_type__name'))
+            talk_type=F('user__talks__talk_type__name'),
+            show_speakers=F('user__talks__talk_type__show_speakers'))
         bytype = groupby(speakers, lambda x: x.talk_type)
         context['speaker_rows'] = {}
         for talk_type, type_speakers in bytype:
-            context["speaker_rows"][talk_type] = self._by_row(list(type_speakers), 4)
+            type_speakers = list(type_speakers)
+            # We explicitly check for False, as no talk type will give us None for
+            # show_speakers and we want to default to including that
+            if type_speakers and type_speakers[0].show_speakers is not False:
+                context["speaker_rows"][talk_type] = self._by_row(type_speakers, 4)
         return context
 
 

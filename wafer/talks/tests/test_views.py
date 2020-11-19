@@ -433,6 +433,7 @@ class SpeakerTests(TestCase):
 
     @mock.patch('wafer.users.models.UserProfile.avatar_url', mock_avatar_url)
     def test_multiple_types(self):
+        """Test the view for multiple talk types"""
         talk_d = create_talk('Talk D', ACCEPTED, 'author_d', self.talk_type1)
         talk_e = create_talk('Talk E', ACCEPTED, 'author_e', self.talk_type1)
         keynote_f = create_talk('Talk F', ACCEPTED, 'author_f', self.talk_type2)
@@ -529,6 +530,53 @@ class SpeakerTests(TestCase):
             '  </div>',
             '</div>',
         ]), html=True)
+
+    def test_exluding_types(self):
+        """Test that the show_speakers flag excludes the speakers from the list."""
+        hidden = create_talk_type('Hidden')
+        talk_d = create_talk('Talk D', ACCEPTED, 'author_d', hidden)
+
+        response = self.client.get(
+            reverse('wafer_talks_speakers'))
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('Hidden', response.context["speaker_rows"])
+
+        # Hide the talk type
+        hidden.show_speakers = False
+        hidden.save()
+
+        response = self.client.get(
+            reverse('wafer_talks_speakers'))
+        self.assertEqual(response.status_code, 200)
+        self.assertNotIn('Hidden', response.context["speaker_rows"])
+
+    def test_ordering_types(self):
+        """Test that we order the speakers according to the talk type correctly"""
+        test1 = create_talk_type('Test 1')
+        test2 = create_talk_type('Test 2')
+
+        # 'Test 1' is at the start of the list
+        test1.order = 1
+        test1.save()
+        test2.order = 2
+        test2.save()
+
+        talk_d = create_talk('Talk D', ACCEPTED, 'author_d', test1)
+        talk_e = create_talk('Talk D', ACCEPTED, 'author_e', test2)
+        response = self.client.get(
+            reverse('wafer_talks_speakers'))
+        types = list(response.context['speaker_rows'])
+        # 'None' talk type may be first or last, depending on the database
+        # so we check the relative order of the talk types
+        self.assertLess(types.index('Test 1'), types.index('Test 2'))
+
+        # Move 'Test 1' to the end of the list
+        test1.order = 5
+        test1.save()
+        response = self.client.get(
+            reverse('wafer_talks_speakers'))
+        types = list(response.context['speaker_rows'])
+        self.assertGreater(types.index('Test 1'), types.index('Test 2'))
 
 
 class TalkSlugUrlTests(TestCase):
