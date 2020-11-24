@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-11-11 14:41+0000\n"
-"PO-Revision-Date: 2020-11-17 06:28+0000\n"
+"PO-Revision-Date: 2020-11-25 07:28+0000\n"
 "Last-Translator: Abraham Raji <avronr@tuta.io>\n"
 "Language-Team: Malayalam <https://hosted.weblate.org/projects/wafer/wafer/ml/"
 ">\n"
@@ -40,7 +40,7 @@ msgid "In the last 30 days"
 msgstr "കഴിഞ്ഞ 30 ദിവസത്തിനുള്ളിൽ"
 
 #: wafer/compare/admin.py:140
-#, fuzzy, python-format
+#, python-format
 msgid "Comparing current %(model)s with revision created %(date)s"
 msgstr ""
 "നിലവിലെ %(model)s-നെ %(date)s-ന് സൃഷ്ടിച്ച പുനരവലോകനവുമായി താരതമ്യം "
@@ -63,7 +63,7 @@ msgid "Compare"
 msgstr "താരതമ്യം ചെയ്യുക"
 
 #: wafer/compare/templates/admin/wafer.compare/compare.html:7
-#, fuzzy, python-format
+#, python-format
 msgid "%(name)s"
 msgstr "%(name)s"
 
@@ -73,12 +73,11 @@ msgid "No differences found"
 msgstr "വ്യത്യാസങ്ങളൊന്നും കണ്ടെത്തിയില്ല"
 
 #: wafer/compare/templates/admin/wafer.compare/compare_list.html:6
-#, fuzzy
 msgid "Home"
 msgstr "ഹോം"
 
 #: wafer/compare/templates/admin/wafer.compare/compare_list.html:10
-#, fuzzy, python-format
+#, python-format
 msgid "Compare %(name)s"
 msgstr "%(name)s താരതമ്യം ചെയ്യുക"
 
@@ -99,7 +98,6 @@ msgid "User"
 msgstr "യൂസർ"
 
 #: wafer/compare/templates/admin/wafer.compare/compare_list.html:29
-#, fuzzy
 msgid "Comment"
 msgstr "അഭിപ്രായമിടുക"
 
@@ -120,7 +118,6 @@ msgid "Markdown contents for the page."
 msgstr "പേജിനായുള്ള മാർക്ക്ഡൗൺ കണ്ടേന്റ്."
 
 #: wafer/pages/models.py:37
-#, fuzzy
 msgid "Whether to include in menus."
 msgstr "മെനുകളിൽ ഉൾപ്പെടുത്തണമോ എന്നു."
 
@@ -137,13 +134,11 @@ msgstr ""
 "മുതലായവ)"
 
 #: wafer/pages/models.py:50
-#, fuzzy
 msgid "Images and other files for use in the content markdown field."
 msgstr ""
 "കണ്ടേന്റ് മാർക്ക്ഡൗൺ മേഖലയിൽ ഉപയോഗിക്കുന്നതിനുള്ള ചിത്രങ്ങളും മറ്റ് ഫയലുകളും."
 
 #: wafer/pages/models.py:56
-#, fuzzy
 msgid ""
 "People associated with this page for display in the schedule (Session "
 "chairs, panelists, etc.)"
@@ -152,7 +147,6 @@ msgstr ""
 "chairs, പാനലിസ്റ്റുകൾ മുതലായവർ)"
 
 #: wafer/pages/models.py:61
-#, fuzzy
 msgid ""
 "Length of time (in seconds) to cache the page for dynamic page content. A "
 "negative value means this page is not dynamic and it will be not be "
@@ -182,28 +176,25 @@ msgid "Compare to Previous version"
 msgstr "മുമ്പത്തെ പതിപ്പുമായി താരതമ്യം ചെയ്യുക"
 
 #: wafer/pages/templates/wafer.pages/page_compare.html:6
-#, fuzzy
 msgid "Comparing Page"
 msgstr "പേജ് താരതമ്യം ചെയ്യുന്നു"
 
 #: wafer/pages/templates/wafer.pages/page_compare.html:8
-#, fuzzy, python-format
+#, python-format
 msgid "Last Saved: %(cur_date)s by %(cur_author)s"
-msgstr "അവസാനം സംരക്ഷിച്ചത്: %(cur_date)s by %(cur_author)s"
+msgstr "അവസാനം സംരക്ഷിച്ചത്: %(cur_date)s , %(cur_author)s"
 
 #: wafer/pages/templates/wafer.pages/page_compare.html:11
-#, fuzzy, python-format
+#, python-format
 msgid "Comparing to version saved: %(prev_date)s by %(prev_author)s"
 msgstr ""
 "സംരക്ഷിച്ച പതിപ്പുമായി താരതമ്യം ചെയ്യുന്നത്: %(prev_date)s by %(prev_author)s"
 
 #: wafer/pages/templates/wafer.pages/page_compare.html:33
-#, fuzzy
 msgid "Compare to next older version"
 msgstr "അടുത്ത പഴയ പതിപ്പുമായി താരതമ്യം ചെയ്യുക"
 
 #: wafer/pages/templates/wafer.pages/page_compare.html:37
-#, fuzzy
 msgid "Return to Page"
 msgstr "പേജിലേക്ക് മടങ്ങുക"
 
@@ -216,14 +207,12 @@ msgid "No previous versions to compare to"
 msgstr "താരതമ്യം ചെയ്യാൻ മുമ്പത്തെ പതിപ്പുകളൊന്നുമില്ല"
 
 #: wafer/pages/templates/wafer.pages/page_form.html:11
-#, fuzzy
 msgid "Edit Page"
 msgstr "പേജ് എഡിറ്റുചെയ്യുക"
 
 #: wafer/registration/forms.py:15
 #: wafer/registration/templates/registration/login.html:16
 #: wafer/registration/templates/registration/registration_form.html:6
-#, fuzzy
 msgid "Sign up"
 msgstr "സൈൻ അപ്പ് ചെയ്യുക"
 
@@ -233,7 +222,6 @@ msgid "Log in"
 msgstr "ലോഗിൻ"
 
 #: wafer/registration/templates/registration/activate.html:4
-#, fuzzy
 msgid "Oops, account activation failed"
 msgstr "ക്ഷമിക്കണം, അക്കൗണ്ട് സജീവമാക്കൽ പരാജയപ്പെട്ടു"
 
@@ -249,26 +237,23 @@ msgstr ""
 "ഞങ്ങളുടെ <a href=\"%(contact_url)s\">അഡ്മിൻമാരുമായി ബന്ധപ്പെടുക</a>."
 
 #: wafer/registration/templates/registration/activation_complete.html:4
-#, fuzzy
 msgid "Activation complete"
 msgstr "സജീവമാക്കൽ പൂർത്തിയായി"
 
 #: wafer/registration/templates/registration/activation_complete.html:7
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "Your account is now activated! Please <a href=\"%(login_url)s\">log in</a>."
 msgstr ""
 "നിങ്ങളുടെ അക്കൗണ്ട് ഇപ്പോൾ സജീവമാക്കി! ദയവായി <a href=\"%(login_url)s\""
-">ലോഗിൻ</a>"
+">ലോഗിൻ</a> ചെയ്യുക."
 
 #: wafer/registration/templates/registration/activation_complete.html:13
 #: wafer/registration/templates/registration/registration_complete.html:13
-#, fuzzy
 msgid "Note that registration for the conference is a separate step."
 msgstr "കോൺഫറൻസിനുള്ള രജിസ്ട്രേഷൻ മറ്റൊരു ഘട്ടമാണെന്ന് ശ്രദ്ധിക്കുക."
 
 #: wafer/registration/templates/registration/activation_complete.html:16
-#, fuzzy
 msgid "You can now log in and start the conference registration process."
 msgstr ""
 "നിങ്ങൾക്ക് ഇപ്പോൾ ലോഗിൻ ചെയ്ത് കോൺഫറൻസ് രജിസ്ട്രേഷൻ പ്രക്രിയ ആരംഭിക്കാൻ "
@@ -318,7 +303,7 @@ msgstr ""
 "https://%(domain)s%(index_url)s\n"
 
 #: wafer/registration/templates/registration/activation_email_subject.txt:2
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "\n"
 "Activate your %(WAFER_CONFERENCE_NAME)s account [%(expiration_days)s days "
@@ -329,27 +314,27 @@ msgstr ""
 "s ദിവസം ശേഷിക്കുന്നു]\n"
 
 #: wafer/registration/templates/registration/login.html:18
-#, fuzzy, python-format
+#, python-format
 msgid "Not registered? Please <a href=\"%(signup_url)s\">sign up</a>."
 msgstr ""
-"രജിസ്റ്റർ ചെയ്തിട്ടില്ല? ദയവായി <a href=\"%(signup_url)s\">സൈൻ അപ്പ് "
-"ചെയ്യുക</a>."
+"രജിസ്റ്റർ ചെയ്തിട്ടില്ല? ദയവായി <a href=\"%(signup_url)s\">സൈൻ അപ്പ് </a> "
+"ചെയ്യുക."
 
 #: wafer/registration/templates/registration/login.html:22
 msgid "Shared/Social Log in and Sign up"
-msgstr ""
+msgstr "ഷേർഡ് / സോഷ്യൽ ലോഗിനും സൈൻ അപ്പും"
 
 #: wafer/registration/templates/registration/logout.html:7
 msgid "Logged out"
-msgstr ""
+msgstr "വിജയകരമായി ലോഗ് ഔട്ട് ചെയ്‌തു"
 
 #: wafer/registration/templates/registration/logout.html:9
 msgid "You've been logged out."
-msgstr ""
+msgstr "നിങ്ങൾ ലോഗ് ഔട്ട് ചെയ്‌തു."
 
 #: wafer/registration/templates/registration/registration_complete.html:4
 msgid "Account creation almost complete"
-msgstr ""
+msgstr "അക്കൗണ്ട് സൃഷ്‌ടിക്കൽ ഏകദേശം പൂർത്തിയായി"
 
 #: wafer/registration/templates/registration/registration_complete.html:6
 #, python-format
@@ -358,381 +343,392 @@ msgid ""
 "sent you an e-mail. Please follow the instructions in it to activate your "
 "account."
 msgstr ""
+"%(WAFER_CONFERENCE_NAME)s-നായി ഒരു അക്കൗണ്ട് സൃഷ്ടിച്ചതിന് നന്ദി. ഞങ്ങൾ "
+"നിങ്ങൾക്ക് ഒരു ഇ-മെയിൽ അയച്ചിട്ടുണ്ട്. നിങ്ങളുടെ അക്കൗണ്ട് സജീവമാക്കുന്നതിന് "
+"ദയവായി അതിലെ നിർദ്ദേശങ്ങൾ പാലിക്കുക."
 
 #: wafer/registration/templates/registration/registration_complete.html:16
 msgid "You can register after your account is activated."
 msgstr ""
+"നിങ്ങളുടെ അക്കൗണ്ട് സജീവമാക്കിയ ശേഷം നിങ്ങൾക്ക് രജിസ്റ്റർ ചെയ്യാൻ കഴിയും."
 
 #: wafer/schedule/admin.py:143
 msgid "Clashes found in schedule."
-msgstr ""
+msgstr "ഷെഡ്യൂളിലെ ഇവന്റുകളുടെ സമയങ്ങളിൽ‌ പ്രശ്‌നങ്ങൾ‌ കണ്ടെത്തി."
 
 #: wafer/schedule/admin.py:146
 msgid "Duplicate schedule items found in schedule."
-msgstr ""
+msgstr "ഷെഡ്യൂളിൽ തനിപ്പകർപ്പ് ഷെഡ്യൂൾ ഇനങ്ങൾ കണ്ടെത്തി."
 
 #: wafer/schedule/admin.py:149
 msgid "Invalid schedule items found in schedule."
-msgstr ""
+msgstr "ഷെഡ്യൂളിൽ അസാധുവായ ഷെഡ്യൂൾ ഇനങ്ങൾ."
 
 #: wafer/schedule/admin.py:152
 msgid "Non contiguous slots found in schedule."
-msgstr ""
+msgstr "ഷെഡ്യൂളിൽ കാണാത്ത സ്ലോട്ടുകൾ കണ്ടെത്തി."
 
 #: wafer/schedule/admin.py:155
 msgid "Invalid venues found in schedule."
-msgstr ""
+msgstr "ഷെഡ്യൂളിൽ അസാധുവായ വേദികൾ കണ്ടെത്തി."
 
 #: wafer/schedule/admin.py:195
 msgid "Block"
-msgstr ""
+msgstr "സമയം"
 
 #: wafer/schedule/admin.py:247 wafer/schedule/models.py:316
 msgid "Start Time"
-msgstr ""
+msgstr "ആരംഭിക്കുന്ന സമയം"
 
 #: wafer/schedule/admin.py:303
 msgid "Venue"
-msgstr ""
+msgstr "വേദി"
 
 #: wafer/schedule/admin.py:390
 msgid "Additional slots"
-msgstr ""
+msgstr "അധിക സ്ലോട്ടുകൾ"
 
 #: wafer/schedule/admin.py:391
 msgid "Create this number of additional slots following this one"
-msgstr ""
+msgstr "ഇതിനുശേഷം ഇത്രേം കൂടുതൽ സ്ലോട്ടുകൾ കൂടെ സൃഷ്ടിക്കുക"
 
 #: wafer/schedule/admin.py:453
 #, python-format
 msgid "Additional slot %(obj)s added sucessfully"
-msgstr ""
+msgstr "അധിക സ്ലോട്ട് %(obj)s വിജയകരമായി ചേർത്തു"
 
 #: wafer/schedule/admin.py:460
 #, python-format
 msgid "Failed to create new slot - %s"
-msgstr ""
+msgstr "%s എന്ന പുതിയ സ്ലോട്ട് സൃഷ്ടിക്കുന്നതിൽ പരാജയപ്പെട്ടു"
 
 #: wafer/schedule/models.py:74
 msgid "Notes or directions that will be useful to conference attendees"
 msgstr ""
+"കോൺഫറൻസിൽ പങ്കെടുക്കുന്നവർക്ക് ഉപയോഗപ്രദമാകുന്ന കുറിപ്പുകളോ നിർദ്ദേശങ്ങളോ"
 
 #: wafer/schedule/models.py:78
 msgid "Blocks (days) on which this venue will be used."
-msgstr ""
+msgstr "ഈ വേദി ഉപയോഗിക്കുന്ന സമയങ്ങൾ (ദിവസങ്ങൾ)."
 
 #: wafer/schedule/models.py:82
 msgid "Venue has video coverage"
-msgstr ""
+msgstr "വേദിയിൽ വീഡിയോ കവറേജ് ഉണ്ട്"
 
 #: wafer/schedule/models.py:102
 msgid ""
 "Previous slot if applicable (slots should have either a previous slot OR a "
 "start time set)"
 msgstr ""
+"ബാധകമെങ്കിൽ മുമ്പത്തെ സ്ലോട്ട് (സ്ലോട്ടുകൾക്ക് മുമ്പത്തെ സ്ലോട്ട് അല്ലെങ്കിൽ "
+"സജ്ജമാക്കിയ ആരംഭ സമയം ഉണ്ടായിരിക്കണം)"
 
 #: wafer/schedule/models.py:108
 msgid "Start time (if no previous slot selected)"
-msgstr ""
+msgstr "ആരംഭ സമയം (മുമ്പത്തെ സ്ലോട്ട് ഒന്നും തിരഞ്ഞെടുത്തിട്ടില്ലെങ്കിൽ)"
 
 #: wafer/schedule/models.py:110
 msgid "Slot end time"
-msgstr ""
+msgstr "സ്ലോട്ട് അവസാനിക്കുന്ന സമയം"
 
 #: wafer/schedule/models.py:113
 msgid "Identifier for use in the admin panel"
-msgstr ""
+msgstr "അഡ്‌മിൻ പാനലിൽ ഉപയോഗിക്കുന്നതിനുള്ള ഐഡന്റിഫയർ"
 
 #: wafer/schedule/models.py:148
 msgid "Start Date & Time"
-msgstr ""
+msgstr "ആരംഭിക്കുന്ന തീയതിയും സമയവും"
 
 #: wafer/schedule/models.py:176
 msgid "Schedule Block"
-msgstr ""
+msgstr "ഷെഡ്യൂൾ ബ്ലോക്ക്"
 
 #: wafer/schedule/models.py:235
 msgid "Additional details (if required)"
-msgstr ""
+msgstr "അധിക വിശദാംശങ്ങൾ (ആവശ്യമെങ്കിൽ)"
 
 #: wafer/schedule/models.py:239
 msgid "Notes for the conference organisers"
-msgstr ""
+msgstr "കോൺഫറൻസ് സംഘാടകർക്കുള്ള കുറിപ്പുകൾ"
 
 #: wafer/schedule/models.py:243
 msgid "Custom css class for this schedule item"
-msgstr ""
+msgstr "ഈ ഷെഡ്യൂൾ ഇനത്തിനായുള്ള ഇഷ്‌ടാനുസൃത CSS ക്ലാസ്"
 
 #: wafer/schedule/models.py:247
 msgid "Expand to neighbouring venues"
-msgstr ""
+msgstr "അയൽ വേദികളിലേക്ക് വികസിപ്പിക്കുക"
 
 #: wafer/schedule/models.py:251
 msgid "Date & Time this was last updated"
-msgstr ""
+msgstr "തീയതിയും സമയവും ഇത് അവസാനമായി അപ്‌ഡേറ്റുചെയ്‌തത്"
 
 #: wafer/schedule/models.py:280
 msgid "Talk Type & Track CSS classes"
-msgstr ""
+msgstr "ടോക്ക് തരം & ട്രാക്ക് CSS ക്ലാസുകൾ"
 
 #: wafer/schedule/templates/admin/scheduleitem_list.html:10
 msgid "Errors in the schedule"
-msgstr ""
+msgstr "ഷെഡ്യൂളിലെ പിശകുകൾ"
 
 #: wafer/schedule/templates/admin/scheduleitem_list.html:13
 msgid "Clashes"
-msgstr ""
+msgstr "ഏറ്റുമുട്ടലുകൾ"
 
 #: wafer/schedule/templates/admin/scheduleitem_list.html:25
 msgid "Validation errors"
-msgstr ""
+msgstr "മൂല്യനിർണ്ണയ പിശകുകൾ"
 
 #: wafer/schedule/templates/admin/scheduleitem_list.html:33
 msgid "Items in the schedule with non-contiguous slots"
-msgstr ""
+msgstr "തുടർച്ചയായ സ്ലോട്ടുകളുള്ള ഷെഡ്യൂളിലെ ഇനങ്ങൾ"
 
 #: wafer/schedule/templates/admin/scheduleitem_list.html:41
 msgid "Duplicates in the schedule"
-msgstr ""
+msgstr "ഷെഡ്യൂളിലെ തനിപ്പകർപ്പുകൾ"
 
 #: wafer/schedule/templates/admin/scheduleitem_list.html:49
 msgid "Venues assigned on days they are not available"
-msgstr ""
+msgstr "അവ ലഭ്യമല്ലാത്ത ദിവസങ്ങളിൽ നിയുക്തമാക്കിയ വേദികൾ"
 
 #: wafer/schedule/templates/admin/scheduleitem_list.html:70
 #: wafer/schedule/templates/wafer.schedule/full_schedule.html:10
 msgid "Edit schedule"
-msgstr ""
+msgstr "ഷെഡ്യൂൾ എഡിറ്റുചെയ്യുക"
 
 #: wafer/schedule/templates/admin/slot_list.html:10
 msgid "Errors in the slots"
-msgstr ""
+msgstr "സ്ലോട്ടുകളിലെ പിശകുകൾ"
 
 #: wafer/schedule/templates/admin/slot_list.html:13
 msgid "Overlapping slots"
-msgstr ""
+msgstr "ഓവർലാപ്പിംഗ് സ്ലോട്ടുകൾ"
 
 #: wafer/schedule/templates/wafer.schedule/current.html:3
 #: wafer/schedule/templates/wafer.schedule/current.html:6
 msgid "Happening now"
-msgstr ""
+msgstr "ഇപ്പോൾ നടക്കുന്നു"
 
 #: wafer/schedule/templates/wafer.schedule/current.html:10
 #: wafer/schedule/templates/wafer.schedule/full_schedule.html:20
 msgid "<p>The final schedule has not been published yet.</p>"
-msgstr ""
+msgstr "<p>അവസാന ഷെഡ്യൂൾ ഇതുവരെ പ്രസിദ്ധീകരിച്ചിട്ടില്ല.</p>"
 
 #: wafer/schedule/templates/wafer.schedule/current.html:14
 msgid "<p>Nothing happening right now.</p>"
-msgstr ""
+msgstr "<p>ഇപ്പോൾ ഒന്നും സനടക്കുന്നില്ല.</p>"
 
 #: wafer/schedule/templates/wafer.schedule/current.html:23
 #: wafer/schedule/templates/wafer.schedule/full_schedule.html:48
 msgid "Time"
-msgstr ""
+msgstr "സമയം"
 
 #: wafer/schedule/templates/wafer.schedule/current.html:71
 msgid "Last updated"
-msgstr ""
+msgstr "അവസാനമായി പുതുക്കിയത്"
 
 #: wafer/schedule/templates/wafer.schedule/edit_schedule.html:10
 msgid "Validation errors:"
-msgstr ""
+msgstr "മൂല്യനിർണ്ണയ പിശകുകൾ:"
 
 #: wafer/schedule/templates/wafer.schedule/edit_schedule.html:23
 #: wafer/schedule/templates/wafer.schedule/edit_schedule.html:28
 #, python-format
 msgid "(Block %(block_id)s)"
-msgstr ""
+msgstr "(ബ്ലോക്ക്%(block_id)s)"
 
 #: wafer/schedule/templates/wafer.schedule/edit_schedule.html:33
 msgid "Schedule Editor"
-msgstr ""
+msgstr "ഷെഡ്യൂൾ എഡിറ്റർ"
 
 #: wafer/schedule/templates/wafer.schedule/edit_schedule.html:62
 msgid "Close"
-msgstr ""
+msgstr "അടയ്ക്കുക"
 
 #: wafer/schedule/templates/wafer.schedule/edit_schedule.html:69
 #: wafer/schedule/templates/wafer.schedule/edit_schedule.html:132
 #: wafer/schedule/templates/wafer.schedule/edit_schedule.html:158
 #: wafer/talks/models.py:147 wafer/talks/templates/wafer.talks/talk.html:114
 msgid "Cancelled"
-msgstr ""
+msgstr "റദ്ദാക്കി"
 
 #: wafer/schedule/templates/wafer.schedule/edit_schedule.html:81
 msgid "Bucket"
-msgstr ""
+msgstr "ബക്കറ്റ്"
 
 #: wafer/schedule/templates/wafer.schedule/edit_schedule.html:90
 msgid "Unassigned Talks"
-msgstr ""
+msgstr "നിയുക്തമാക്കാത്ത ടൊകുക്കൾ"
 
 #: wafer/schedule/templates/wafer.schedule/edit_schedule.html:97
 msgid "All Talks"
-msgstr ""
+msgstr "എല്ലാ ടൊകുക്കളും"
 
 #: wafer/schedule/templates/wafer.schedule/edit_schedule.html:102
 msgid "Pages"
-msgstr ""
+msgstr "പേജുകൾ"
 
 #: wafer/schedule/templates/wafer.schedule/full_schedule.html:3
 #: wafer/schedule/templates/wafer.schedule/full_schedule.html:15
 msgid "Schedule"
-msgstr ""
+msgstr "ഷെഡ്യൂൾ"
 
 #: wafer/schedule/templates/wafer.schedule/full_schedule.html:29
 msgid "Previous"
-msgstr ""
+msgstr "മുമ്പത്തെ"
 
 #: wafer/schedule/templates/wafer.schedule/full_schedule.html:33
 msgid "Next"
-msgstr ""
+msgstr "അടുത്തത്"
 
 #: wafer/sponsors/models.py:36
 msgid "Currency symbol for the sponsorship amount."
-msgstr ""
+msgstr "സ്പോൺസർഷിപ്പ് തുകയ്ക്കുള്ള കറൻസി ചിഹ്നം."
 
 #: wafer/sponsors/models.py:39
 msgid "Amount to be sponsored."
-msgstr ""
+msgstr "സ്പോൺസർ ചെയ്യേണ്ട തുക."
 
 #: wafer/sponsors/models.py:41
 msgid "One sentence overview of the package."
-msgstr ""
+msgstr "പാക്കേജിന്റെ ഒരു വാക്യ അവലോകനം."
 
 #: wafer/sponsors/models.py:43
 msgid "Describe what the package gives the sponsor."
-msgstr ""
+msgstr "പാക്കേജ് സ്പോൺസറിന് നൽകുന്നതെന്താണെന്ന് വിവരിക്കുക."
 
 #: wafer/sponsors/models.py:46
 msgid "Images and other files for use in the description markdown field."
 msgstr ""
+"വിവരണത്തിനുള്ള മാർക്ക്ഡൗൺ ഫീൽഡിൽ ഉപയോഗിക്കുന്നതിനുള്ള ചിത്രങ്ങളും മറ്റ് "
+"ഫയലുകളും."
 
 #: wafer/sponsors/models.py:52
 msgid ""
 "Optional symbol to display in the sponsors list next to sponsors who have "
 "sponsored at this list, (for example *)."
 msgstr ""
+"ഈ ലിസ്റ്റിൽ സ്പോൺസർ ചെയ്ത സ്പോൺസർമാരുടെ അടുത്തുള്ള സ്പോൺസർ പട്ടികയിൽ "
+"പ്രദർശിപ്പിക്കുന്നതിനുള്ള ഓപ്ഷണൽ ചിഹ്നം, (ഉദാഹരണത്തിന് *)."
 
 #: wafer/sponsors/models.py:73
 msgid "Write some nice things about the sponsor."
-msgstr ""
+msgstr "സ്പോൺസറെക്കുറിച്ച് ചില നല്ല കാര്യങ്ങൾ എഴുതുക."
 
 #: wafer/sponsors/models.py:76
 msgid "Url to link back to the sponsor if required"
-msgstr ""
+msgstr "ആവശ്യമെങ്കിൽ സ്പോൺസറുമായി ലിങ്കുചെയ്യുന്നതിന് url"
 
 #: wafer/sponsors/models.py:112
 #: wafer/sponsors/templates/wafer.sponsors/sponsors.html:4
 #: wafer/sponsors/templates/wafer.sponsors/sponsors.html:7
 msgid "Sponsors"
-msgstr ""
+msgstr "സ്പോൺസർമാർ"
 
 #: wafer/sponsors/models.py:113
 msgid "Our sponsors"
-msgstr ""
+msgstr "ഞങ്ങളുടെ സ്പോൺസർമാർ"
 
 #: wafer/sponsors/models.py:114
 msgid "Sponsorship packages"
-msgstr ""
+msgstr "സ്പോൺസർഷിപ്പ് പാക്കേജുകൾ"
 
 #: wafer/sponsors/templates/wafer.sponsors/packages.html:5
 msgid "Sponsorship Packages"
-msgstr ""
+msgstr "സ്പോൺസർഷിപ്പ് പാക്കേജുകൾ"
 
 #: wafer/sponsors/templates/wafer.sponsors/packages.html:19
 msgid "Total number available:"
-msgstr ""
+msgstr "ലഭ്യമായ മൊത്തം എണ്ണം:"
 
 #: wafer/sponsors/templates/wafer.sponsors/packages.html:21
 msgid "Packages claimed:"
-msgstr ""
+msgstr "പാക്കേജുകൾ ക്ലെയിം ചെയ്തു:"
 
 #: wafer/sponsors/templates/wafer.sponsors/packages.html:28
 msgid "No sponsorship packages available yet."
-msgstr ""
+msgstr "സ്പോൺസർഷിപ്പ് പാക്കേജുകളൊന്നും ഇതുവരെ ലഭ്യമല്ല."
 
 #: wafer/sponsors/templates/wafer.sponsors/sponsors.html:39
 msgid "No sponsors yet."
-msgstr ""
+msgstr "ഇതുവരെ സ്പോൺസർമാരില്ല."
 
 #: wafer/talks/admin.py:24
 msgid "in schedule"
-msgstr ""
+msgstr "ഷെഡ്യൂളിൽ"
 
 #: wafer/talks/admin.py:29
 msgid "Allocated to schedule"
-msgstr ""
+msgstr "ഷെഡ്യൂളിൽ ഉൾപ്പെടുത്തിയിരിക്കുന്നു"
 
 #: wafer/talks/admin.py:30
 msgid "Not allocated"
-msgstr ""
+msgstr "ഷെഡ്യൂളിൽ ഉൾപ്പെടുത്തിയിട്ടില്ല"
 
 #: wafer/talks/admin.py:42
 msgid "has notes"
-msgstr ""
+msgstr "കുറിപ്പുകളുണ്ട്"
 
 #: wafer/talks/admin.py:47
 msgid "Yes"
-msgstr ""
+msgstr "അതെ"
 
 #: wafer/talks/admin.py:48
 msgid "No"
-msgstr ""
+msgstr "ഇല്ല"
 
 #: wafer/talks/admin.py:93
 msgid "Mark selected talks as Submitted"
-msgstr ""
+msgstr "തിരഞ്ഞെടുത്ത ടൊകുക്കൾ സമർപ്പിച്ചതായി അടയാളപ്പെടുത്തുക"
 
 #: wafer/talks/admin.py:96
 msgid "Mark selected talks as Withdrawn"
-msgstr ""
+msgstr "തിരഞ്ഞെടുത്ത ടൊകുക്കൾ പിൻവലിച്ചതായി അടയാളപ്പെടുത്തുക"
 
 #: wafer/talks/admin.py:99
 msgid "Mark selected talks as Cancelled"
-msgstr ""
+msgstr "തിരഞ്ഞെടുത്ത ടൊകുക്കൾ റദ്ദാക്കിയതായി അടയാളപ്പെടുത്തുക"
 
 #: wafer/talks/admin.py:102
 msgid "Mark selected talks as Under consideration"
-msgstr ""
+msgstr "തിരഞ്ഞെടുത്ത ടൊകുക്കൾ പരിഗണനയിലാണെന്ന് അടയാളപ്പെടുത്തുക"
 
 #: wafer/talks/admin.py:105
 msgid "Mark selected talks as Not Accepted"
-msgstr ""
+msgstr "തിരഞ്ഞെടുത്ത ടൊകുക്കൾ അംഗീകരിച്ചില്ലെന്ന് അടയാളപ്പെടുത്തുക"
 
 #: wafer/talks/admin.py:108
 msgid "Mark selected talks as Provisionally Accepted"
-msgstr ""
+msgstr "തിരഞ്ഞെടുത്ത ടൊകുക്കൾ താൽക്കാലികമായി അംഗീകരിച്ചതായി അടയാളപ്പെടുത്തുക"
 
 #: wafer/talks/admin.py:111
 msgid "Mark selected talks as Accepted"
-msgstr ""
+msgstr "തിരഞ്ഞെടുത്ത ടൊകുക്കൾ സ്വീകരിച്ചതായി അടയാളപ്പെടുത്തുക"
 
 #: wafer/talks/forms.py:113 wafer/users/forms.py:21 wafer/users/forms.py:43
 msgid "Save"
-msgstr ""
+msgstr "സംരക്ഷിക്കുക"
 
 #: wafer/talks/forms.py:113 wafer/talks/forms.py:180
 msgid "Submit"
-msgstr ""
+msgstr "സമർപ്പിക്കുക"
 
 #: wafer/talks/forms.py:120
 msgid "Withdraw Talk"
-msgstr ""
+msgstr "ടോക് പിൻവലിക്കുക"
 
 #: wafer/talks/forms.py:129
 msgid "A reviewer is required, if video is permitted."
-msgstr ""
+msgstr "വീഡിയോ അനുവദനീയമാണെങ്കിൽ ഒരു അവലോകകൻ ആവശ്യമാണ്."
 
 #: wafer/talks/forms.py:158
 #, python-format
 msgid "(Score range: %(min)d to %(max)d)"
-msgstr ""
+msgstr "(സ്കോർ ശ്രേണി: %(min)d തൊട്ടു %(max)d)"
 
 #: wafer/talks/models.py:38
 msgid "The speakers presenting the talk."
-msgstr ""
+msgstr "പ്രസംഗം അവതരിപ്പിക്കുന്ന പ്രഭാഷകർ."
 
 #: wafer/talks/models.py:41
 msgid ""
@@ -741,91 +737,97 @@ msgid ""
 "you will have other co-authors, add a note in the notes field, so the "
 "organisers can add them to your talk."
 msgstr ""
+"പങ്കെടുക്കുന്നയാളുടെ സ്വകാര്യത ഉറപ്പാക്കുന്നതിന്, നിങ്ങളെയും കോൺഫറൻസ് സംഘാ"
+"ടകർ സംഭാഷണത്തിൽ ചേർത്ത രചയിതാക്കളെയും മാത്രമേ നിങ്ങൾക്ക് കാണാൻ കഴിയൂ. "
+"നിങ്ങൾക്ക് മറ്റ് സഹ-രചയിതാക്കൾ ഉണ്ടെങ്കിൽ, കുറിപ്പുകൾ ഫീൽഡിൽ ഒരു കുറിപ്പ് "
+"ചേർക്കുക, അതിനാൽ സംഘാടകർക്ക് അവ നിങ്ങളുടെ സംഭാഷണത്തിലേക്ക് ചേർക്കാൻ കഴിയും."
 
 #: wafer/talks/models.py:48
 msgid ""
 "<strong>You, as the talk submitter, will be the talk's corresponding author."
 "</strong>"
 msgstr ""
+"<strong>ടോക്ക് സമർപ്പിക്കുന്നയാൾ എന്ന നിലയിൽ നിങ്ങൾ സംഭാഷണത്തിന്റെ "
+"രചയിതാവാകും.</strong>"
 
 #: wafer/talks/models.py:70 wafer/talks/models.py:111 wafer/talks/models.py:402
 msgid "name"
-msgstr ""
+msgstr "പേര്"
 
 #: wafer/talks/models.py:71 wafer/talks/models.py:112
 msgid "description"
-msgstr ""
+msgstr "വിവരണം"
 
 #: wafer/talks/models.py:72 wafer/talks/models.py:113
 msgid "order"
-msgstr ""
+msgstr "ഓർഡർ"
 
 #: wafer/talks/models.py:74
 msgid "disable submission"
-msgstr ""
+msgstr "സമർപ്പിക്കൽ അപ്രാപ്തമാക്കുക"
 
 #: wafer/talks/models.py:78
 msgid "submission deadline"
-msgstr ""
+msgstr "സമർപ്പിക്കാനുള്ള സമയപരിധി"
 
 #: wafer/talks/models.py:81
 msgid "Deadline for submitting talks of this type"
-msgstr ""
+msgstr "ഇത്തരത്തിലുള്ള സംഭാഷണങ്ങൾ സമർപ്പിക്കുന്നതിനുള്ള അവസാന തീയതി"
 
 #: wafer/talks/models.py:84
 msgid "accept late submissions"
-msgstr ""
+msgstr "വൈകി സമർപ്പിച്ചവ സ്വീകരിക്കുക"
 
 #: wafer/talks/models.py:86
 msgid "Whether submissions after the deadline should be accepted"
-msgstr ""
+msgstr "സമയപരിധിക്ക് ശേഷമുള്ള സമർപ്പിക്കലുകൾ സ്വീകരിക്കണമോ"
 
 #: wafer/talks/models.py:96 wafer/talks/models.py:156
 msgid "talk type"
-msgstr ""
+msgstr "ടോക്ക് തരം"
 
 #: wafer/talks/models.py:97
 msgid "talk types"
-msgstr ""
+msgstr "ടോക്ക് തരങ്ങൾ"
 
 #: wafer/talks/models.py:106 wafer/talks/models.py:130
 msgid "CSS class name"
-msgstr ""
+msgstr "CSS ക്ലാസിന്റെ പേര്"
 
 #: wafer/talks/models.py:120 wafer/talks/models.py:158
 msgid "track"
-msgstr ""
+msgstr "ട്രാക്ക്"
 
 #: wafer/talks/models.py:121
 msgid "tracks"
-msgstr ""
+msgstr "ട്രാക്കുകൾ"
 
 #: wafer/talks/models.py:141 wafer/talks/models.py:366
 msgid "talk"
-msgstr ""
+msgstr "ടോക്ക്"
 
 #: wafer/talks/models.py:142
 msgid "talks"
-msgstr ""
+msgstr "ടോക്കുകൾ"
 
 #: wafer/talks/models.py:145 wafer/talks/templates/wafer.talks/talk.html:112
 msgid "Accepted"
-msgstr ""
+msgstr "സ്വീകരിച്ചു"
 
 #: wafer/talks/models.py:146 wafer/talks/templates/wafer.talks/talk.html:118
 #: wafer/talks/templates/wafer.talks/talks.html:25
 msgid "Not accepted"
-msgstr ""
+msgstr "സ്വീകരിച്ചില്ല"
 
 #: wafer/talks/models.py:148 wafer/talks/templates/wafer.talks/talk.html:108
 #: wafer/talks/templates/wafer.talks/talks.html:23
 msgid "Under consideration"
-msgstr ""
+msgstr "പരിഗണനയിലാണ്"
 
 #: wafer/talks/models.py:149 wafer/talks/templates/wafer.talks/talk.html:106
 #: wafer/talks/templates/wafer.talks/talks.html:21
 msgid "Submitted"
-msgstr ""
+msgstr "സമർപ്പിച്ചു"
 
 #: wafer/talks/models.py:150 wafer/talks/templates/wafer.talks/talk.html:110
 #: wafer/talks/templates/wafer.talks/talks.html:29
