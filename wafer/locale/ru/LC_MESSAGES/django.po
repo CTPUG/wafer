@@ -6,11 +6,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Wafer\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-11-12 10:12+0000\n"
+"POT-Creation-Date: 2020-11-25 14:05+0000\n"
 "PO-Revision-Date: 2020-11-20 22:28+0000\n"
 "Last-Translator: Andrej Shadura <andrew.shadura@collabora.co.uk>\n"
-"Language-Team: Russian <https://hosted.weblate.org/projects/wafer/wafer/ru/>"
-"\n"
+"Language-Team: Russian <https://hosted.weblate.org/projects/wafer/wafer/ru/"
+">\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -228,9 +228,9 @@ msgid ""
 "href=\"%(register_url)s\">try again</a> or <a href=\"%(contact_url)s"
 "\">contact our admins</a>."
 msgstr ""
-"Похоже, с вашей регистрацией что-то не так. Пожалуйста, <a href=\""
-"%(register_url)s\">попробуйте снова</a> или <a href=\"%(contact_url)s\""
-">свяжитесь с нашими администраторами</a>."
+"Похоже, с вашей регистрацией что-то не так. Пожалуйста, <a href="
+"\"%(register_url)s\">попробуйте снова</a> или <a href=\"%(contact_url)s"
+"\">свяжитесь с нашими администраторами</a>."
 
 #: wafer/registration/templates/registration/activation_complete.html:4
 msgid "Activation complete"
@@ -240,7 +240,8 @@ msgstr "Ваш профиль подтверждён"
 #, python-format
 msgid ""
 "Your account is now activated! Please <a href=\"%(login_url)s\">log in</a>."
-msgstr "Вы зарегистрированы! Пожалуйста, <a href=\"%(login_url)s\">войдите</a>."
+msgstr ""
+"Вы зарегистрированы! Пожалуйста, <a href=\"%(login_url)s\">войдите</a>."
 
 #: wafer/registration/templates/registration/activation_complete.html:13
 #: wafer/registration/templates/registration/registration_complete.html:13
@@ -310,8 +311,8 @@ msgstr ""
 #, python-format
 msgid "Not registered? Please <a href=\"%(signup_url)s\">sign up</a>."
 msgstr ""
-"Не зарегистрированы? Пожалуйста, <a href=\"%(signup_url)s\""
-">зарегистрируйтесь здесь</a>."
+"Не зарегистрированы? Пожалуйста, <a href=\"%(signup_url)s"
+"\">зарегистрируйтесь здесь</a>."
 
 #: wafer/registration/templates/registration/login.html:22
 msgid "Shared/Social Log in and Sign up"
@@ -538,7 +539,7 @@ msgstr "Закрыть"
 #: wafer/schedule/templates/wafer.schedule/edit_schedule.html:69
 #: wafer/schedule/templates/wafer.schedule/edit_schedule.html:132
 #: wafer/schedule/templates/wafer.schedule/edit_schedule.html:158
-#: wafer/talks/models.py:147 wafer/talks/templates/wafer.talks/talk.html:114
+#: wafer/talks/models.py:153 wafer/talks/templates/wafer.talks/talk.html:114
 msgid "Cancelled"
 msgstr "Отменён"
 
@@ -592,9 +593,13 @@ msgid "Images and other files for use in the description markdown field."
 msgstr "Изображения и прочие файлы для использования в описании."
 
 #: wafer/sponsors/models.py:52
+#, fuzzy
+#| msgid ""
+#| "Optional symbol to display in the sponsors list next to sponsors who have "
+#| "sponsored at this list, (for example *)."
 msgid ""
 "Optional symbol to display in the sponsors list next to sponsors who have "
-"sponsored at this list, (for example *)."
+"taken this package, (for example *)."
 msgstr ""
 "Необязательный символ для отображения в списке спонсоров рядом со "
 "спонсорами, которые выбрали этот пакет (например, *)."
@@ -737,15 +742,15 @@ msgid ""
 msgstr ""
 "<strong>Т.к. вы подаёте доклад, вы будете его автором для переписки</strong>"
 
-#: wafer/talks/models.py:70 wafer/talks/models.py:111 wafer/talks/models.py:402
+#: wafer/talks/models.py:70 wafer/talks/models.py:117 wafer/talks/models.py:408
 msgid "name"
 msgstr "название"
 
-#: wafer/talks/models.py:71 wafer/talks/models.py:112
+#: wafer/talks/models.py:71 wafer/talks/models.py:118
 msgid "description"
 msgstr "описание"
 
-#: wafer/talks/models.py:72 wafer/talks/models.py:113
+#: wafer/talks/models.py:72 wafer/talks/models.py:119
 msgid "order"
 msgstr "порядок"
 
@@ -769,71 +774,79 @@ msgstr "принимать поздние заявки"
 msgid "Whether submissions after the deadline should be accepted"
 msgstr "Принимать доклады после последнего срока подачи?"
 
-#: wafer/talks/models.py:96 wafer/talks/models.py:156
+#: wafer/talks/models.py:90
+msgid "Show authors in speakers list"
+msgstr ""
+
+#: wafer/talks/models.py:92
+msgid "Whether to show the authors for this talk type in the speakers list"
+msgstr ""
+
+#: wafer/talks/models.py:102 wafer/talks/models.py:162
 msgid "talk type"
 msgstr "тип доклада"
 
-#: wafer/talks/models.py:97
+#: wafer/talks/models.py:103
 msgid "talk types"
 msgstr "типы докладов"
 
-#: wafer/talks/models.py:106 wafer/talks/models.py:130
+#: wafer/talks/models.py:112 wafer/talks/models.py:136
 msgid "CSS class name"
 msgstr "Имя CSS-класса"
 
-#: wafer/talks/models.py:120 wafer/talks/models.py:158
+#: wafer/talks/models.py:126 wafer/talks/models.py:164
 msgid "track"
 msgstr "секция"
 
-#: wafer/talks/models.py:121
+#: wafer/talks/models.py:127
 msgid "tracks"
 msgstr "секции"
 
-#: wafer/talks/models.py:141 wafer/talks/models.py:366
+#: wafer/talks/models.py:147 wafer/talks/models.py:372
 msgid "talk"
 msgstr "доклад"
 
-#: wafer/talks/models.py:142
+#: wafer/talks/models.py:148
 msgid "talks"
 msgstr "доклады"
 
-#: wafer/talks/models.py:145 wafer/talks/templates/wafer.talks/talk.html:112
+#: wafer/talks/models.py:151 wafer/talks/templates/wafer.talks/talk.html:112
 msgid "Accepted"
 msgstr "Принят"
 
-#: wafer/talks/models.py:146 wafer/talks/templates/wafer.talks/talk.html:118
+#: wafer/talks/models.py:152 wafer/talks/templates/wafer.talks/talk.html:118
 #: wafer/talks/templates/wafer.talks/talks.html:25
 msgid "Not accepted"
 msgstr "Не принят"
 
-#: wafer/talks/models.py:148 wafer/talks/templates/wafer.talks/talk.html:108
+#: wafer/talks/models.py:154 wafer/talks/templates/wafer.talks/talk.html:108
 #: wafer/talks/templates/wafer.talks/talks.html:23
 msgid "Under consideration"
 msgstr "На рассмотрении"
 
-#: wafer/talks/models.py:149 wafer/talks/templates/wafer.talks/talk.html:106
+#: wafer/talks/models.py:155 wafer/talks/templates/wafer.talks/talk.html:106
 #: wafer/talks/templates/wafer.talks/talks.html:21
 msgid "Submitted"
 msgstr "Подан"
 
-#: wafer/talks/models.py:150 wafer/talks/templates/wafer.talks/talk.html:110
+#: wafer/talks/models.py:156 wafer/talks/templates/wafer.talks/talk.html:110
 #: wafer/talks/templates/wafer.talks/talks.html:29
 msgid "Provisionally Accepted"
 msgstr "Условно принят"
 
-#: wafer/talks/models.py:151 wafer/talks/templates/wafer.talks/talk.html:116
+#: wafer/talks/models.py:157 wafer/talks/templates/wafer.talks/talk.html:116
 msgid "Withdrawn"
 msgstr "Отменён автором"
 
-#: wafer/talks/models.py:160
+#: wafer/talks/models.py:166
 msgid "title"
 msgstr "тема"
 
-#: wafer/talks/models.py:163
+#: wafer/talks/models.py:169
 msgid "abstract"
 msgstr "тезисы"
 
-#: wafer/talks/models.py:164
+#: wafer/talks/models.py:170
 msgid ""
 "Write two or three paragraphs describing your talk. Who is your audience? "
 "What will they get out of it? What will you cover?<br />You can use Markdown "
@@ -843,11 +856,11 @@ msgstr ""
 "Как она полезна слушателям? О чём будет рассказываться в презентации?<br /"
 ">Можно использовать разметку Markdown."
 
-#: wafer/talks/models.py:170 wafer/talks/models.py:373
+#: wafer/talks/models.py:176 wafer/talks/models.py:379
 msgid "notes"
 msgstr "заметки"
 
-#: wafer/talks/models.py:173
+#: wafer/talks/models.py:179
 msgid ""
 "Any notes for the conference? Such as additional background on the topic or "
 "presenters that isn't going to be published publicly, special requirements "
@@ -859,38 +872,38 @@ msgstr ""
 "насчёт размещения в программе. Содержимое этого поля видно только "
 "организаторам."
 
-#: wafer/talks/models.py:179
+#: wafer/talks/models.py:185
 msgid "private notes"
 msgstr "скрытые заметки"
 
-#: wafer/talks/models.py:181
+#: wafer/talks/models.py:187
 msgid "Note space for the conference organisers (not visible to submitter)"
 msgstr "Место для заметок организаторов конференции (не видно отправителю)"
 
-#: wafer/talks/models.py:184
+#: wafer/talks/models.py:190
 msgid "status"
 msgstr "статус"
 
-#: wafer/talks/models.py:190
+#: wafer/talks/models.py:196
 msgid "corresponding author"
 msgstr "автор для переписки"
 
-#: wafer/talks/models.py:192
+#: wafer/talks/models.py:198
 msgid ""
 "The person submitting the talk (and who questions regarding the talk should "
 "be addressed to)."
 msgstr ""
 "Участник, подающий доклад (который будет отвечать на все вопросы о докладе)."
 
-#: wafer/talks/models.py:197
+#: wafer/talks/models.py:203
 msgid "authors"
 msgstr "авторы"
 
-#: wafer/talks/models.py:202
+#: wafer/talks/models.py:208
 msgid "video"
 msgstr "видеозапись"
 
-#: wafer/talks/models.py:204
+#: wafer/talks/models.py:210
 #, python-brace-format
 msgid ""
 "By checking this, you are giving permission for the talk to be videoed, and "
@@ -898,14 +911,14 @@ msgid ""
 "\"{license_url}\">{license_name} license</a>."
 msgstr ""
 "Установив этот флажок, вы даете разрешение на запись вашего доклада, а также "
-"дальнейшее распространение видеозаписи под <a href=\"{license_url}\""
-">лицензией {license_name}</a>."
+"дальнейшее распространение видеозаписи под <a href="
+"\"{license_url}\">лицензией {license_name}</a>."
 
-#: wafer/talks/models.py:213
+#: wafer/talks/models.py:219
 msgid "video reviewer"
 msgstr "видеорецензент"
 
-#: wafer/talks/models.py:215
+#: wafer/talks/models.py:221
 msgid ""
 "Email address of a person who will be allowed to review and approve your "
 "video details. Ideally, a second set of eyes who is not a busy conference "
@@ -917,70 +930,70 @@ msgstr ""
 "не докладывает на конференции. Но можно указать и себя, если не знаете, кому "
 "ещё бы это было интересно."
 
-#: wafer/talks/models.py:247
+#: wafer/talks/models.py:253
 msgid "NO CONTACT INFO"
 msgstr "НЕТ КОНТАКТНОЙ ИНФОРМАЦИИ"
 
-#: wafer/talks/models.py:249
+#: wafer/talks/models.py:255
 msgid "Contact Details"
 msgstr "Контакты"
 
-#: wafer/talks/models.py:255
+#: wafer/talks/models.py:261
 msgid "Corresponding Author"
 msgstr "Автор-корреспондент"
 
-#: wafer/talks/models.py:266
+#: wafer/talks/models.py:272
 #, python-format
 msgid "%s, et al."
 msgstr "%s и др."
 
-#: wafer/talks/models.py:273
+#: wafer/talks/models.py:279
 msgid "Added to schedule"
 msgstr "В программе"
 
-#: wafer/talks/models.py:282
+#: wafer/talks/models.py:288
 msgid "Has URL"
 msgstr "Есть ссылки"
 
-#: wafer/talks/models.py:369
+#: wafer/talks/models.py:375
 msgid "reviewer"
 msgstr "рецензент"
 
-#: wafer/talks/models.py:375
+#: wafer/talks/models.py:381
 msgid "Comments on the proposal (markdown)"
 msgstr "Замечания по докладу (Markdown)"
 
-#: wafer/talks/models.py:378
+#: wafer/talks/models.py:384
 #, python-format
 msgid "Review of %(title)s by %(reviewer)s (%(average_score)s)"
 msgstr "Рецензия на %(title)s от %(reviewer)s (%(average_score)s)"
 
-#: wafer/talks/models.py:397
+#: wafer/talks/models.py:403
 msgid "review"
 msgstr "рецензия"
 
-#: wafer/talks/models.py:398
+#: wafer/talks/models.py:404
 msgid "reviews"
 msgstr "рецензии"
 
-#: wafer/talks/models.py:408
+#: wafer/talks/models.py:414
 msgid "review aspect"
 msgstr "аспект рецензии"
 
-#: wafer/talks/models.py:409
+#: wafer/talks/models.py:415
 msgid "review aspects"
 msgstr "аспекты рецензий"
 
-#: wafer/talks/models.py:425
+#: wafer/talks/models.py:431
 #, python-format
 msgid "Review of %(title)s by %(reviewer)s on %(aspect)s: %(score)i"
 msgstr "Рецензия на %(title)s от %(reviewer)s: %(aspect)s: %(score)i"
 
-#: wafer/talks/models.py:433
+#: wafer/talks/models.py:439
 msgid "score"
 msgstr "оценка"
 
-#: wafer/talks/models.py:434
+#: wafer/talks/models.py:440
 msgid "scores"
 msgstr "оценки"
 
@@ -1096,8 +1109,8 @@ msgid ""
 "<p>Submitted by <a href=\"%(corresponding_author_url)s\">"
 "%(corresponding_author_name)s</a>.</p>"
 msgstr ""
-"<p>Подал доклад: <a href=\"%(corresponding_author_url)s\""
-">%(corresponding_author_name)s</a>.</p>"
+"<p>Подал доклад: <a href=\"%(corresponding_author_url)s\">"
+"%(corresponding_author_name)s</a>.</p>"
 
 #: wafer/talks/templates/wafer.talks/talk_form.html:16
 msgid "Talk Submission"
@@ -1339,10 +1352,10 @@ msgid ""
 "(which falls back to <a href=\"https://secure.gravatar.com/\">Gravatar</a>)."
 "<br> Change your picture there."
 msgstr ""
-"Фотографии предоставлены сервисом <a href=\"https://www.libravatar.org/\""
-">libravatar</a> (который также берёт их с <a href=\"https://secure.gravatar."
-"com/\">Gravatar</a>).<br> Изменить фотографию можно на одном из этих "
-"сервисов."
+"Фотографии предоставлены сервисом <a href=\"https://www.libravatar.org/"
+"\">libravatar</a> (который также берёт их с <a href=\"https://secure."
+"gravatar.com/\">Gravatar</a>).<br> Изменить фотографию можно на одном из "
+"этих сервисов."
 
 #: wafer/users/templates/wafer.users/profile.html:32
 msgid "Edit Profile"
