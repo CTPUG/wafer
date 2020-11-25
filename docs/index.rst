@@ -14,6 +14,7 @@ Contents:
    menus
    static
    settings
+   translations
 
 
 Indices and tables
