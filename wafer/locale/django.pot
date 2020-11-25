@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-11-11 14:41+0000\n"
+"POT-Creation-Date: 2020-11-25 14:05+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -494,7 +494,7 @@ msgstr ""
 #: wafer/schedule/templates/wafer.schedule/edit_schedule.html:69
 #: wafer/schedule/templates/wafer.schedule/edit_schedule.html:132
 #: wafer/schedule/templates/wafer.schedule/edit_schedule.html:158
-#: wafer/talks/models.py:147 wafer/talks/templates/wafer.talks/talk.html:114
+#: wafer/talks/models.py:153 wafer/talks/templates/wafer.talks/talk.html:114
 msgid "Cancelled"
 msgstr ""
 
@@ -550,7 +550,7 @@ msgstr ""
 #: wafer/sponsors/models.py:52
 msgid ""
 "Optional symbol to display in the sponsors list next to sponsors who have "
-"sponsored at this list, (for example *)."
+"taken this package, (for example *)."
 msgstr ""
 
 #: wafer/sponsors/models.py:73
@@ -686,15 +686,15 @@ msgid ""
 "</strong>"
 msgstr ""
 
-#: wafer/talks/models.py:70 wafer/talks/models.py:111 wafer/talks/models.py:402
+#: wafer/talks/models.py:70 wafer/talks/models.py:117 wafer/talks/models.py:408
 msgid "name"
 msgstr ""
 
-#: wafer/talks/models.py:71 wafer/talks/models.py:112
+#: wafer/talks/models.py:71 wafer/talks/models.py:118
 msgid "description"
 msgstr ""
 
-#: wafer/talks/models.py:72 wafer/talks/models.py:113
+#: wafer/talks/models.py:72 wafer/talks/models.py:119
 msgid "order"
 msgstr ""
 
@@ -718,82 +718,90 @@ msgstr ""
 msgid "Whether submissions after the deadline should be accepted"
 msgstr ""
 
-#: wafer/talks/models.py:96 wafer/talks/models.py:156
+#: wafer/talks/models.py:90
+msgid "Show authors in speakers list"
+msgstr ""
+
+#: wafer/talks/models.py:92
+msgid "Whether to show the authors for this talk type in the speakers list"
+msgstr ""
+
+#: wafer/talks/models.py:102 wafer/talks/models.py:162
 msgid "talk type"
 msgstr ""
 
-#: wafer/talks/models.py:97
+#: wafer/talks/models.py:103
 msgid "talk types"
 msgstr ""
 
-#: wafer/talks/models.py:106 wafer/talks/models.py:130
+#: wafer/talks/models.py:112 wafer/talks/models.py:136
 msgid "CSS class name"
 msgstr ""
 
-#: wafer/talks/models.py:120 wafer/talks/models.py:158
+#: wafer/talks/models.py:126 wafer/talks/models.py:164
 msgid "track"
 msgstr ""
 
-#: wafer/talks/models.py:121
+#: wafer/talks/models.py:127
 msgid "tracks"
 msgstr ""
 
-#: wafer/talks/models.py:141 wafer/talks/models.py:366
+#: wafer/talks/models.py:147 wafer/talks/models.py:372
 msgid "talk"
 msgstr ""
 
-#: wafer/talks/models.py:142
+#: wafer/talks/models.py:148
 msgid "talks"
 msgstr ""
 
-#: wafer/talks/models.py:145 wafer/talks/templates/wafer.talks/talk.html:112
+#: wafer/talks/models.py:151 wafer/talks/templates/wafer.talks/talk.html:112
 msgid "Accepted"
 msgstr ""
 
-#: wafer/talks/models.py:146 wafer/talks/templates/wafer.talks/talk.html:118
+#: wafer/talks/models.py:152 wafer/talks/templates/wafer.talks/talk.html:118
 #: wafer/talks/templates/wafer.talks/talks.html:25
 msgid "Not accepted"
 msgstr ""
 
-#: wafer/talks/models.py:148 wafer/talks/templates/wafer.talks/talk.html:108
+#: wafer/talks/models.py:154 wafer/talks/templates/wafer.talks/talk.html:108
 #: wafer/talks/templates/wafer.talks/talks.html:23
 msgid "Under consideration"
 msgstr ""
 
-#: wafer/talks/models.py:149 wafer/talks/templates/wafer.talks/talk.html:106
+#: wafer/talks/models.py:155 wafer/talks/templates/wafer.talks/talk.html:106
 #: wafer/talks/templates/wafer.talks/talks.html:21
 msgid "Submitted"
 msgstr ""
 
-#: wafer/talks/models.py:150 wafer/talks/templates/wafer.talks/talk.html:110
+#: wafer/talks/models.py:156 wafer/talks/templates/wafer.talks/talk.html:110
 #: wafer/talks/templates/wafer.talks/talks.html:29
 msgid "Provisionally Accepted"
 msgstr ""
 
-#: wafer/talks/models.py:151 wafer/talks/templates/wafer.talks/talk.html:116
+#: wafer/talks/models.py:157 wafer/talks/templates/wafer.talks/talk.html:116
 msgid "Withdrawn"
 msgstr ""
 
-#: wafer/talks/models.py:160
+#: wafer/talks/models.py:166
 msgid "title"
 msgstr ""
 
-#: wafer/talks/models.py:163
+#: wafer/talks/models.py:169
 msgid "abstract"
 msgstr ""
 
-#: wafer/talks/models.py:164
+#: wafer/talks/models.py:170
 msgid ""
 "Write two or three paragraphs describing your talk. Who is your audience? "
 "What will they get out of it? What will you cover?<br />You can use Markdown "
 "syntax."
 msgstr ""
 
-#: wafer/talks/models.py:170 wafer/talks/models.py:373
+#: wafer/talks/models.py:176 wafer/talks/models.py:379
 msgid "notes"
 msgstr ""
 
-#: wafer/talks/models.py:173
+#: wafer/talks/models.py:179
 msgid ""
 "Any notes for the conference? Such as additional background on the topic or "
 "presenters that isn't going to be published publicly, special requirements "
@@ -801,37 +809,37 @@ msgid ""
 "public."
 msgstr ""
 
-#: wafer/talks/models.py:179
+#: wafer/talks/models.py:185
 msgid "private notes"
 msgstr ""
 
-#: wafer/talks/models.py:181
+#: wafer/talks/models.py:187
 msgid "Note space for the conference organisers (not visible to submitter)"
 msgstr ""
 
-#: wafer/talks/models.py:184
+#: wafer/talks/models.py:190
 msgid "status"
 msgstr ""
 
-#: wafer/talks/models.py:190
+#: wafer/talks/models.py:196
 msgid "corresponding author"
 msgstr ""
 
-#: wafer/talks/models.py:192
+#: wafer/talks/models.py:198
 msgid ""
 "The person submitting the talk (and who questions regarding the talk should "
 "be addressed to)."
 msgstr ""
 
-#: wafer/talks/models.py:197
+#: wafer/talks/models.py:203
 msgid "authors"
 msgstr ""
 
-#: wafer/talks/models.py:202
+#: wafer/talks/models.py:208
 msgid "video"
 msgstr ""
 
-#: wafer/talks/models.py:204
+#: wafer/talks/models.py:210
 #, python-brace-format
 msgid ""
 "By checking this, you are giving permission for the talk to be videoed, and "
@@ -839,11 +847,11 @@ msgid ""
 "\"{license_url}\">{license_name} license</a>."
 msgstr ""
 
-#: wafer/talks/models.py:213
+#: wafer/talks/models.py:219
 msgid "video reviewer"
 msgstr ""
 
-#: wafer/talks/models.py:215
+#: wafer/talks/models.py:221
 msgid ""
 "Email address of a person who will be allowed to review and approve your "
 "video details. Ideally, a second set of eyes who is not a busy conference "
@@ -851,70 +859,70 @@ msgid ""
 "who would care."
 msgstr ""
 
-#: wafer/talks/models.py:247
+#: wafer/talks/models.py:253
 msgid "NO CONTACT INFO"
 msgstr ""
 
-#: wafer/talks/models.py:249
+#: wafer/talks/models.py:255
 msgid "Contact Details"
 msgstr ""
 
-#: wafer/talks/models.py:255
+#: wafer/talks/models.py:261
 msgid "Corresponding Author"
 msgstr ""
 
-#: wafer/talks/models.py:266
+#: wafer/talks/models.py:272
 #, python-format
 msgid "%s, et al."
 msgstr ""
 
-#: wafer/talks/models.py:273
+#: wafer/talks/models.py:279
 msgid "Added to schedule"
 msgstr ""
 
-#: wafer/talks/models.py:282
+#: wafer/talks/models.py:288
 msgid "Has URL"
 msgstr ""
 
-#: wafer/talks/models.py:369
+#: wafer/talks/models.py:375
 msgid "reviewer"
 msgstr ""
 
-#: wafer/talks/models.py:375
+#: wafer/talks/models.py:381
 msgid "Comments on the proposal (markdown)"
 msgstr ""
 
-#: wafer/talks/models.py:378
+#: wafer/talks/models.py:384
 #, python-format
 msgid "Review of %(title)s by %(reviewer)s (%(average_score)s)"
 msgstr ""
 
-#: wafer/talks/models.py:397
+#: wafer/talks/models.py:403
 msgid "review"
 msgstr ""
 
-#: wafer/talks/models.py:398
+#: wafer/talks/models.py:404
 msgid "reviews"
 msgstr ""
 
-#: wafer/talks/models.py:408
+#: wafer/talks/models.py:414
 msgid "review aspect"
 msgstr ""
 
-#: wafer/talks/models.py:409
+#: wafer/talks/models.py:415
 msgid "review aspects"
 msgstr ""
 
-#: wafer/talks/models.py:425
+#: wafer/talks/models.py:431
 #, python-format
 msgid "Review of %(title)s by %(reviewer)s on %(aspect)s: %(score)i"
 msgstr ""
 
-#: wafer/talks/models.py:433
+#: wafer/talks/models.py:439
 msgid "score"
 msgstr ""
 
-#: wafer/talks/models.py:434
+#: wafer/talks/models.py:440
 msgid "scores"
 msgstr ""
 
