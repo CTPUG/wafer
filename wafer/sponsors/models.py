@@ -50,7 +50,7 @@ class SponsorshipPackage(models.Model):
     symbol = models.CharField(
         max_length=1, blank=True,
         help_text=_("Optional symbol to display in the sponsors list "
-                    "next to sponsors who have sponsored at this list, "
+                    "next to sponsors who have taken this package, "
                     "(for example *)."))
 
     class Meta:
