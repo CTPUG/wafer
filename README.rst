@@ -1,7 +1,7 @@
 wafer
 =====
 
-|wafer-ci-badge| |wafer-docs-badge|
+|wafer-ci-badge| |wafer-docs-badge| |wafer-weblate-badge|
 
 .. |wafer-ci-badge| image:: https://travis-ci.org/CTPUG/wafer.png?branch=master
     :alt: Travis CI build status
@@ -9,9 +9,14 @@ wafer
     :target: https://travis-ci.org/CTPUG/wafer
 
 .. |wafer-docs-badge| image:: https://readthedocs.org/projects/wafer/badge/?version=latest
-    :alt:  Wafer documentation
+    :alt: Wafer documentation
     :scale: 100%
     :target: https://wafer.readthedocs.org/
+
+.. |wafer-weblate-badge| image:: https://hosted.weblate.org/widgets/wafer/-/svg-badge.png
+    :alt: Translation status
+    :scale: 100%
+    :target: https://hosted.weblate.org/engage/wafer/
 
 A wafer-thin web application for running small conferences. Built using Django.
 
