@@ -73,7 +73,7 @@ class Sponsor(models.Model):
         help_text=_("Write some nice things about the sponsor."))
     url = models.URLField(
         default="", blank=True,
-        help_text=_("Url to link back to the sponsor if required"))
+        help_text=_("URL to link back to the sponsor if required"))
 
     class Meta:
         ordering = ['order', 'name', 'id']
