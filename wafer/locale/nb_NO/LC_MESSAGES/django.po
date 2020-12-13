@@ -8,55 +8,57 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-11-25 14:05+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2020-12-13 17:29+0000\n"
+"Last-Translator: Allan Nordhøy <epost@anotheragency.no>\n"
+"Language-Team: Norwegian Bokmål <https://hosted.weblate.org/projects/wafer/"
+"wafer/nb_NO/>\n"
 "Language: nb_NO\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.4-dev\n"
 
 #: wafer/compare/admin.py:22
 msgid "Last Modified"
-msgstr ""
+msgstr "Sist endret"
 
 #: wafer/compare/admin.py:27
 msgid "Today"
-msgstr ""
+msgstr "I dag"
 
 #: wafer/compare/admin.py:28
 msgid "Since yesterday"
-msgstr ""
+msgstr "Siden i går"
 
 #: wafer/compare/admin.py:29
 msgid "In the last 7 days"
-msgstr ""
+msgstr "De siste 7 dagene"
 
 #: wafer/compare/admin.py:30
 msgid "In the last 30 days"
-msgstr ""
+msgstr "De siste 30 dagene"
 
 #: wafer/compare/admin.py:140
 #, python-format
 msgid "Comparing current %(model)s with revision created %(date)s"
-msgstr ""
+msgstr "Sammenligner nåværende %(model)s mer versjonen opprettet %(date)s"
 
 #: wafer/compare/templates/admin/wafer.compare/change_form.html:6
 msgid "History"
-msgstr ""
+msgstr "Historikk"
 
 #: wafer/compare/templates/admin/wafer.compare/change_form.html:9
 msgid "Compare Versions"
-msgstr ""
+msgstr "Sammenlign versjoner"
 
 #: wafer/compare/templates/admin/wafer.compare/change_form.html:13
 msgid "View on site"
-msgstr ""
+msgstr "Vis på siden"
 
 #: wafer/compare/templates/admin/wafer.compare/compare.html:6
 msgid "Compare"
-msgstr ""
+msgstr "Sammenlign"
 
 #: wafer/compare/templates/admin/wafer.compare/compare.html:7
 #, python-format
@@ -66,16 +68,16 @@ msgstr ""
 #: wafer/compare/templates/admin/wafer.compare/compare.html:19
 #: wafer/pages/templates/wafer.pages/page_compare.html:24
 msgid "No differences found"
-msgstr ""
+msgstr "Ingen forksjeller"
 
 #: wafer/compare/templates/admin/wafer.compare/compare_list.html:6
 msgid "Home"
-msgstr ""
+msgstr "Hjem"
 
 #: wafer/compare/templates/admin/wafer.compare/compare_list.html:10
 #, python-format
 msgid "Compare %(name)s"
-msgstr ""
+msgstr "Sammenlign %(name)s"
 
 #: wafer/compare/templates/admin/wafer.compare/compare_list.html:17
 msgid ""
@@ -85,15 +87,15 @@ msgstr ""
 
 #: wafer/compare/templates/admin/wafer.compare/compare_list.html:27
 msgid "Date/time"
-msgstr ""
+msgstr "Dato/tid"
 
 #: wafer/compare/templates/admin/wafer.compare/compare_list.html:28
 msgid "User"
-msgstr ""
+msgstr "Bruker"
 
 #: wafer/compare/templates/admin/wafer.compare/compare_list.html:29
 msgid "Comment"
-msgstr ""
+msgstr "Kommentar"
 
 #: wafer/compare/templates/admin/wafer.compare/compare_list.html:51
 msgid ""
@@ -153,60 +155,63 @@ msgstr ""
 #: wafer/talks/templates/wafer.talks/talk_form.html:28
 #: wafer/users/templates/wafer.users/profile.html:164
 msgid "Edit"
-msgstr ""
+msgstr "Rediger"
 
 #: wafer/pages/templates/wafer.pages/page.html:13
+#, fuzzy
 msgid "Compare to Previous version"
-msgstr ""
+msgstr "Sammenlign med forrige versjon"
 
 #: wafer/pages/templates/wafer.pages/page_compare.html:6
 msgid "Comparing Page"
-msgstr ""
+msgstr "Sammenligner side"
 
 #: wafer/pages/templates/wafer.pages/page_compare.html:8
 #, python-format
 msgid "Last Saved: %(cur_date)s by %(cur_author)s"
-msgstr ""
+msgstr "Sist lagret: %(cur_date)s av %(cur_author)s"
 
 #: wafer/pages/templates/wafer.pages/page_compare.html:11
 #, python-format
 msgid "Comparing to version saved: %(prev_date)s by %(prev_author)s"
-msgstr ""
+msgstr "Sammenligner med versjon lagret: %(prev_date)s av %(prev_author)s"
 
 #: wafer/pages/templates/wafer.pages/page_compare.html:33
+#, fuzzy
 msgid "Compare to next older version"
-msgstr ""
+msgstr "Sammenlign med eldre versjon"
 
 #: wafer/pages/templates/wafer.pages/page_compare.html:37
 msgid "Return to Page"
-msgstr ""
+msgstr "Gå tilbake titl side"
 
 #: wafer/pages/templates/wafer.pages/page_compare.html:41
+#, fuzzy
 msgid "Compare to next newer version"
-msgstr ""
+msgstr "Sammenlign med nyere versjon"
 
 #: wafer/pages/templates/wafer.pages/page_compare.html:46
 msgid "No previous versions to compare to"
-msgstr ""
+msgstr "Ingen tidligere versjoner å sammenligne med"
 
 #: wafer/pages/templates/wafer.pages/page_form.html:11
 msgid "Edit Page"
-msgstr ""
+msgstr "Rediger side"
 
 #: wafer/registration/forms.py:15
 #: wafer/registration/templates/registration/login.html:16
 #: wafer/registration/templates/registration/registration_form.html:6
 msgid "Sign up"
-msgstr ""
+msgstr "Registrering"
 
 #: wafer/registration/forms.py:25
 #: wafer/registration/templates/registration/login.html:11
 msgid "Log in"
-msgstr ""
+msgstr "Logg inn"
 
 #: wafer/registration/templates/registration/activate.html:4
 msgid "Oops, account activation failed"
-msgstr ""
+msgstr "Kunne ikke aktivere konto"
 
 #: wafer/registration/templates/registration/activate.html:8
 #, python-format
@@ -218,13 +223,14 @@ msgstr ""
 
 #: wafer/registration/templates/registration/activation_complete.html:4
 msgid "Activation complete"
-msgstr ""
+msgstr "Aktivering fullført"
 
 #: wafer/registration/templates/registration/activation_complete.html:7
 #, python-format
 msgid ""
 "Your account is now activated! Please <a href=\"%(login_url)s\">log in</a>."
 msgstr ""
+"Din konto er aktivert og du kan nå <a href=\"%(login_url)s\">logge inn</a>."
 
 #: wafer/registration/templates/registration/activation_complete.html:13
 #: wafer/registration/templates/registration/registration_complete.html:13
@@ -233,7 +239,7 @@ msgstr ""
 
 #: wafer/registration/templates/registration/activation_complete.html:16
 msgid "You can now log in and start the conference registration process."
-msgstr ""
+msgstr "Du kan nå logge inn og starte konferanseregistreringsprosessen."
 
 #: wafer/registration/templates/registration/activation_email.txt:5
 #, python-format
@@ -266,27 +272,30 @@ msgid ""
 "Activate your %(WAFER_CONFERENCE_NAME)s account [%(expiration_days)s days "
 "left]\n"
 msgstr ""
+"\n"
+"Aktiver din %(WAFER_CONFERENCE_NAME)-konto [%(expiration_days)s dager igjen]"
+"\n"
 
 #: wafer/registration/templates/registration/login.html:18
 #, python-format
 msgid "Not registered? Please <a href=\"%(signup_url)s\">sign up</a>."
-msgstr ""
+msgstr "Ikke registrert enda? <a href=\"%(signup_url)s\">Registrer deg</a>."
 
 #: wafer/registration/templates/registration/login.html:22
 msgid "Shared/Social Log in and Sign up"
-msgstr ""
+msgstr "Delt/sosial innlogging og registrering"
 
 #: wafer/registration/templates/registration/logout.html:7
 msgid "Logged out"
-msgstr ""
+msgstr "Utlogget"
 
 #: wafer/registration/templates/registration/logout.html:9
 msgid "You've been logged out."
-msgstr ""
+msgstr "Du har logget ut."
 
 #: wafer/registration/templates/registration/registration_complete.html:4
 msgid "Account creation almost complete"
-msgstr ""
+msgstr "Kontoopprettelse nesten fullført"
 
 #: wafer/registration/templates/registration/registration_complete.html:6
 #, python-format
@@ -326,7 +335,7 @@ msgstr ""
 
 #: wafer/schedule/admin.py:247 wafer/schedule/models.py:316
 msgid "Start Time"
-msgstr ""
+msgstr "Starttid"
 
 #: wafer/schedule/admin.py:303
 msgid "Venue"
@@ -382,7 +391,7 @@ msgstr ""
 
 #: wafer/schedule/models.py:148
 msgid "Start Date & Time"
-msgstr ""
+msgstr "Startdato og tid"
 
 #: wafer/schedule/models.py:176
 msgid "Schedule Block"
@@ -394,7 +403,7 @@ msgstr ""
 
 #: wafer/schedule/models.py:239
 msgid "Notes for the conference organisers"
-msgstr ""
+msgstr "Merknad for konferanseorganisatorer"
 
 #: wafer/schedule/models.py:243
 msgid "Custom css class for this schedule item"
@@ -422,7 +431,7 @@ msgstr ""
 
 #: wafer/schedule/templates/admin/scheduleitem_list.html:25
 msgid "Validation errors"
-msgstr ""
+msgstr "Bekreftelsesfeil"
 
 #: wafer/schedule/templates/admin/scheduleitem_list.html:33
 msgid "Items in the schedule with non-contiguous slots"
@@ -451,8 +460,9 @@ msgstr ""
 
 #: wafer/schedule/templates/wafer.schedule/current.html:3
 #: wafer/schedule/templates/wafer.schedule/current.html:6
+#, fuzzy
 msgid "Happening now"
-msgstr ""
+msgstr "Skjer nå"
 
 #: wafer/schedule/templates/wafer.schedule/current.html:10
 #: wafer/schedule/templates/wafer.schedule/full_schedule.html:20
@@ -466,15 +476,15 @@ msgstr ""
 #: wafer/schedule/templates/wafer.schedule/current.html:23
 #: wafer/schedule/templates/wafer.schedule/full_schedule.html:48
 msgid "Time"
-msgstr ""
+msgstr "Tid"
 
 #: wafer/schedule/templates/wafer.schedule/current.html:71
 msgid "Last updated"
-msgstr ""
+msgstr "Sist oppdatert"
 
 #: wafer/schedule/templates/wafer.schedule/edit_schedule.html:10
 msgid "Validation errors:"
-msgstr ""
+msgstr "Bekreftelsesfeil:"
 
 #: wafer/schedule/templates/wafer.schedule/edit_schedule.html:23
 #: wafer/schedule/templates/wafer.schedule/edit_schedule.html:28
@@ -488,14 +498,14 @@ msgstr ""
 
 #: wafer/schedule/templates/wafer.schedule/edit_schedule.html:62
 msgid "Close"
-msgstr ""
+msgstr "Lukk"
 
 #: wafer/schedule/templates/wafer.schedule/edit_schedule.html:69
 #: wafer/schedule/templates/wafer.schedule/edit_schedule.html:132
 #: wafer/schedule/templates/wafer.schedule/edit_schedule.html:158
 #: wafer/talks/models.py:153 wafer/talks/templates/wafer.talks/talk.html:114
 msgid "Cancelled"
-msgstr ""
+msgstr "Avlyst"
 
 #: wafer/schedule/templates/wafer.schedule/edit_schedule.html:81
 msgid "Bucket"
@@ -503,15 +513,15 @@ msgstr ""
 
 #: wafer/schedule/templates/wafer.schedule/edit_schedule.html:90
 msgid "Unassigned Talks"
-msgstr ""
+msgstr "Utildelte presentasjoner"
 
 #: wafer/schedule/templates/wafer.schedule/edit_schedule.html:97
 msgid "All Talks"
-msgstr ""
+msgstr "Alle presentasjoner"
 
 #: wafer/schedule/templates/wafer.schedule/edit_schedule.html:102
 msgid "Pages"
-msgstr ""
+msgstr "Sider"
 
 #: wafer/schedule/templates/wafer.schedule/full_schedule.html:3
 #: wafer/schedule/templates/wafer.schedule/full_schedule.html:15
@@ -520,11 +530,11 @@ msgstr ""
 
 #: wafer/schedule/templates/wafer.schedule/full_schedule.html:29
 msgid "Previous"
-msgstr ""
+msgstr "Forrige"
 
 #: wafer/schedule/templates/wafer.schedule/full_schedule.html:33
 msgid "Next"
-msgstr ""
+msgstr "Neste"
 
 #: wafer/sponsors/models.py:36
 msgid "Currency symbol for the sponsorship amount."
@@ -540,7 +550,7 @@ msgstr ""
 
 #: wafer/sponsors/models.py:43
 msgid "Describe what the package gives the sponsor."
-msgstr ""
+msgstr "Beskriv hva pakken gir sponsoren."
 
 #: wafer/sponsors/models.py:46
 msgid "Images and other files for use in the description markdown field."
@@ -564,11 +574,11 @@ msgstr ""
 #: wafer/sponsors/templates/wafer.sponsors/sponsors.html:4
 #: wafer/sponsors/templates/wafer.sponsors/sponsors.html:7
 msgid "Sponsors"
-msgstr ""
+msgstr "Sponsorer"
 
 #: wafer/sponsors/models.py:113
 msgid "Our sponsors"
-msgstr ""
+msgstr "Våre sponsorer"
 
 #: wafer/sponsors/models.py:114
 msgid "Sponsorship packages"
@@ -612,11 +622,11 @@ msgstr ""
 
 #: wafer/talks/admin.py:47
 msgid "Yes"
-msgstr ""
+msgstr "Ja"
 
 #: wafer/talks/admin.py:48
 msgid "No"
-msgstr ""
+msgstr "Nei"
 
 #: wafer/talks/admin.py:93
 msgid "Mark selected talks as Submitted"
@@ -648,11 +658,11 @@ msgstr ""
 
 #: wafer/talks/forms.py:113 wafer/users/forms.py:21 wafer/users/forms.py:43
 msgid "Save"
-msgstr ""
+msgstr "Lagre"
 
 #: wafer/talks/forms.py:113 wafer/talks/forms.py:180
 msgid "Submit"
-msgstr ""
+msgstr "Send inn"
 
 #: wafer/talks/forms.py:120
 msgid "Withdraw Talk"
@@ -727,15 +737,15 @@ msgstr ""
 
 #: wafer/talks/models.py:102 wafer/talks/models.py:162
 msgid "talk type"
-msgstr ""
+msgstr "presentasjonstype"
 
 #: wafer/talks/models.py:103
 msgid "talk types"
-msgstr ""
+msgstr "presentasjonstyper"
 
 #: wafer/talks/models.py:112 wafer/talks/models.py:136
 msgid "CSS class name"
-msgstr ""
+msgstr "CSS-klassenavn"
 
 #: wafer/talks/models.py:126 wafer/talks/models.py:164
 msgid "track"
@@ -747,20 +757,20 @@ msgstr ""
 
 #: wafer/talks/models.py:147 wafer/talks/models.py:372
 msgid "talk"
-msgstr ""
+msgstr "presentasjon"
 
 #: wafer/talks/models.py:148
 msgid "talks"
-msgstr ""
+msgstr "presentasjoner"
 
 #: wafer/talks/models.py:151 wafer/talks/templates/wafer.talks/talk.html:112
 msgid "Accepted"
-msgstr ""
+msgstr "Godtatt"
 
 #: wafer/talks/models.py:152 wafer/talks/templates/wafer.talks/talk.html:118
 #: wafer/talks/templates/wafer.talks/talks.html:25
 msgid "Not accepted"
-msgstr ""
+msgstr "Ikke godtatt"
 
 #: wafer/talks/models.py:154 wafer/talks/templates/wafer.talks/talk.html:108
 #: wafer/talks/templates/wafer.talks/talks.html:23
@@ -770,7 +780,7 @@ msgstr ""
 #: wafer/talks/models.py:155 wafer/talks/templates/wafer.talks/talk.html:106
 #: wafer/talks/templates/wafer.talks/talks.html:21
 msgid "Submitted"
-msgstr ""
+msgstr "Innsendt"
 
 #: wafer/talks/models.py:156 wafer/talks/templates/wafer.talks/talk.html:110
 #: wafer/talks/templates/wafer.talks/talks.html:29
@@ -779,11 +789,11 @@ msgstr ""
 
 #: wafer/talks/models.py:157 wafer/talks/templates/wafer.talks/talk.html:116
 msgid "Withdrawn"
-msgstr ""
+msgstr "Trukket tilbake"
 
 #: wafer/talks/models.py:166
 msgid "title"
-msgstr ""
+msgstr "tittel"
 
 #: wafer/talks/models.py:169
 msgid "abstract"
@@ -818,7 +828,7 @@ msgstr ""
 
 #: wafer/talks/models.py:190
 msgid "status"
-msgstr ""
+msgstr "status"
 
 #: wafer/talks/models.py:196
 msgid "corresponding author"
@@ -836,7 +846,7 @@ msgstr ""
 
 #: wafer/talks/models.py:208
 msgid "video"
-msgstr ""
+msgstr "video"
 
 #: wafer/talks/models.py:210
 #, python-brace-format
@@ -859,12 +869,13 @@ msgid ""
 msgstr ""
 
 #: wafer/talks/models.py:253
+#, fuzzy
 msgid "NO CONTACT INFO"
-msgstr ""
+msgstr "Ingen kontaktinfo"
 
 #: wafer/talks/models.py:255
 msgid "Contact Details"
-msgstr ""
+msgstr "Kontaktdetaljer"
 
 #: wafer/talks/models.py:261
 msgid "Corresponding Author"
@@ -881,7 +892,7 @@ msgstr ""
 
 #: wafer/talks/models.py:288
 msgid "Has URL"
-msgstr ""
+msgstr "Har nettadresse"
 
 #: wafer/talks/models.py:375
 msgid "reviewer"
@@ -919,11 +930,11 @@ msgstr ""
 
 #: wafer/talks/models.py:439
 msgid "score"
-msgstr ""
+msgstr "poengsum"
 
 #: wafer/talks/models.py:440
 msgid "scores"
-msgstr ""
+msgstr "poengsummer"
 
 #: wafer/talks/templates/wafer.talks/review_talk.html:7
 msgid "Review Talk"
@@ -1010,7 +1021,7 @@ msgstr ""
 
 #: wafer/talks/templates/wafer.talks/talk.html:104
 msgid "Status:"
-msgstr ""
+msgstr "Status:"
 
 #: wafer/talks/templates/wafer.talks/talk.html:130
 msgid "<h2>Talk Notes</h2> <p>(The following is not visible to attendees.)</p>"
@@ -1024,11 +1035,11 @@ msgstr ""
 
 #: wafer/talks/templates/wafer.talks/talk.html:159
 msgid "URLs"
-msgstr ""
+msgstr "Nettadresser"
 
 #: wafer/talks/templates/wafer.talks/talk_form.html:8
 msgid "Edit Talk"
-msgstr ""
+msgstr "Rediger presentasjon"
 
 #: wafer/talks/templates/wafer.talks/talk_form.html:11
 #, python-format
@@ -1036,6 +1047,8 @@ msgid ""
 "<p>Submitted by <a href=\"%(corresponding_author_url)s\">"
 "%(corresponding_author_name)s</a>.</p>"
 msgstr ""
+"<p>Innsendt av <a href=\"%(corresponding_author_url)s\""
+">%(corresponding_author_name)s</a>.</p>"
 
 #: wafer/talks/templates/wafer.talks/talk_form.html:16
 msgid "Talk Submission"
@@ -1047,7 +1060,7 @@ msgstr ""
 
 #: wafer/talks/templates/wafer.talks/talk_form.html:27
 msgid "Your Biography"
-msgstr ""
+msgstr "Din biografi"
 
 #: wafer/talks/templates/wafer.talks/talk_form.html:36
 #, python-format
@@ -1088,16 +1101,16 @@ msgstr ""
 #: wafer/talks/templates/wafer.talks/talks.html:4
 #: wafer/talks/templates/wafer.talks/talks.html:12
 msgid "Talks"
-msgstr ""
+msgstr "Presentasjoner"
 
 #: wafer/talks/templates/wafer.talks/talks.html:27
 msgid "Talk Cancelled"
-msgstr ""
+msgstr "Presentasjon avlyst"
 
 #: wafer/talks/templates/wafer.talks/talks.html:37
 #, python-format
 msgid "by <span class=\"author\">%(authors)s</span>"
-msgstr ""
+msgstr "av <span class=\"author\">%(authors)s</span>"
 
 #: wafer/talks/templates/wafer.talks/talks.html:42
 msgid "No talks accepted yet."
@@ -1113,15 +1126,15 @@ msgstr ""
 
 #: wafer/templates/404.html:4
 msgid "Page not found"
-msgstr ""
+msgstr "Fant ikke siden"
 
 #: wafer/templates/404.html:5
 msgid "The page you requested cannot be found."
-msgstr ""
+msgstr "Finner ikke siden du forespurte."
 
 #: wafer/templates/500.html:4
 msgid "Internal server error"
-msgstr ""
+msgstr "Intern tjenerfeil"
 
 #: wafer/templates/500.html:5
 msgid "Something went wrong while preparing the page that was requested."
@@ -1142,7 +1155,7 @@ msgstr ""
 #: wafer/templates/wafer/nav.html:58
 #, python-format
 msgid "%(name)s's profile"
-msgstr ""
+msgstr "%(name)ss profil"
 
 #: wafer/templates/wafer/nav.html:64
 msgid "Site admin"
@@ -1150,7 +1163,7 @@ msgstr ""
 
 #: wafer/templates/wafer/nav.html:68
 msgid "Log out"
-msgstr ""
+msgstr "Logg ut"
 
 #: wafer/templates/wafer/nav.html:76
 msgid "Sign up / Log In"
@@ -1180,7 +1193,7 @@ msgstr ""
 
 #: wafer/tickets/templates/wafer.tickets/claim.html:11
 msgid "Registration"
-msgstr ""
+msgstr "Registrering"
 
 #: wafer/tickets/templates/wafer.tickets/claim.html:12
 msgid "Registration is via Quicket."
@@ -1198,11 +1211,11 @@ msgstr ""
 
 #: wafer/users/admin.py:39
 msgid "profile"
-msgstr ""
+msgstr "profil"
 
 #: wafer/users/admin.py:40
 msgid "profiles"
-msgstr ""
+msgstr "profiler"
 
 #: wafer/users/forms.py:40
 msgid "handle"
@@ -1210,27 +1223,27 @@ msgstr ""
 
 #: wafer/users/forms.py:42
 msgid "username"
-msgstr ""
+msgstr "brukernavn"
 
 #: wafer/users/models.py:38
 msgid "user profile"
-msgstr ""
+msgstr "brukerprofil"
 
 #: wafer/users/models.py:39
 msgid "user profiles"
-msgstr ""
+msgstr "brukerprofiler"
 
 #: wafer/users/models.py:43
 msgid "contact number"
-msgstr ""
+msgstr "kontaktnummer"
 
 #: wafer/users/models.py:44
 msgid "bio"
-msgstr ""
+msgstr "biografi"
 
 #: wafer/users/models.py:46
 msgid "homepage"
-msgstr ""
+msgstr "hjemmeside"
 
 #: wafer/users/models.py:49
 msgid "Twitter handle"
@@ -1238,28 +1251,28 @@ msgstr ""
 
 #: wafer/users/models.py:51
 msgid "GitHub username"
-msgstr ""
+msgstr "GitHub-brukernavn"
 
 #: wafer/users/templates/wafer.users/edit_profile.html:5
 msgid "Edit Profile:"
-msgstr ""
+msgstr "Rediger profil:"
 
 #: wafer/users/templates/wafer.users/edit_user.html:5
 #: wafer/users/templates/wafer.users/profile.html:31
 msgid "Edit Account"
-msgstr ""
+msgstr "Rediger konto"
 
 #: wafer/users/templates/wafer.users/edit_user.html:10
 msgid "Change Password"
-msgstr ""
+msgstr "Endre passord"
 
 #: wafer/users/templates/wafer.users/profile.html:17
 msgid "Changing your mugshot"
-msgstr ""
+msgstr "Rediger av bildet ditt"
 
 #: wafer/users/templates/wafer.users/profile.html:18
 msgid "Edit Mugshot"
-msgstr ""
+msgstr "Rediger bildet ditt"
 
 #: wafer/users/templates/wafer.users/profile.html:20
 msgid ""
@@ -1270,35 +1283,35 @@ msgstr ""
 
 #: wafer/users/templates/wafer.users/profile.html:32
 msgid "Edit Profile"
-msgstr ""
+msgstr "Rediger profil"
 
 #: wafer/users/templates/wafer.users/profile.html:41
 msgctxt "conference"
 msgid "Update registration"
-msgstr ""
+msgstr "Oppdater registrering"
 
 #: wafer/users/templates/wafer.users/profile.html:41
 msgctxt "conference"
 msgid "Register"
-msgstr ""
+msgstr "Registrer"
 
 #: wafer/users/templates/wafer.users/profile.html:45
 msgid "Submit Talk Proposal"
-msgstr ""
+msgstr "Send inn presentasjonsforespørsel"
 
 #: wafer/users/templates/wafer.users/profile.html:62
 #, python-format
 msgid "Follow @%(handle)s"
-msgstr ""
+msgstr "Følg @"
 
 #: wafer/users/templates/wafer.users/profile.html:69
 #, python-format
 msgid "GitHub: %(username)s"
-msgstr ""
+msgstr "GitHub:"
 
 #: wafer/users/templates/wafer.users/profile.html:85
 msgid "Registered"
-msgstr ""
+msgstr "Registrert"
 
 #: wafer/users/templates/wafer.users/profile.html:91
 msgid ""
@@ -1328,8 +1341,8 @@ msgstr ""
 
 #: wafer/users/templates/wafer.users/users.html:3
 msgid "Users"
-msgstr ""
+msgstr "Brukere"
 
 #: wafer/users/templates/wafer.users/users.html:5
 msgid "Users:"
-msgstr ""
+msgstr "Brukere:"
