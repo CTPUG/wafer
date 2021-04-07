@@ -45,7 +45,7 @@ jobs:
         pip install django~=${{ matrix.django-version }}
       if: matrix.django-version != 'main'
     - name: Install Django Main
-      continue-on-error: matrix.django-version == 'main'
+      continue-on-error: ${{ matrix.django-version == 'main' }}
       run: |
         pip install 'https://github.com/django/django/archive/main.tar.gz'
       if: matrix.django-version == 'main'
@@ -83,7 +83,7 @@ jobs:
         pip install django~=${{ matrix.django-version }}
       if: matrix.django-version != 'main'
     - name: Install Django Main
-      continue-on-error: matrix.django-version == 'main'
+      continue-on-error: ${{ matrix.django-version == 'main' }}
       run: |
         pip install 'https://github.com/django/django/archive/main.tar.gz'
       if: matrix.django-version == 'main'
