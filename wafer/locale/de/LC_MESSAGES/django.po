@@ -8,34 +8,35 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-11-25 14:05+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2021-04-07 12:20+0000\n"
+"Last-Translator: K. Herbert <herbert.ka@mailo.com>\n"
+"Language-Team: German <https://hosted.weblate.org/projects/wafer/wafer/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.6-dev\n"
 
 #: wafer/compare/admin.py:22
 msgid "Last Modified"
-msgstr ""
+msgstr "Zuletzt geändert"
 
 #: wafer/compare/admin.py:27
 msgid "Today"
-msgstr ""
+msgstr "Heute"
 
 #: wafer/compare/admin.py:28
 msgid "Since yesterday"
-msgstr ""
+msgstr "Seit gestern"
 
 #: wafer/compare/admin.py:29
 msgid "In the last 7 days"
-msgstr ""
+msgstr "In den letzten 7 Tagen"
 
 #: wafer/compare/admin.py:30
 msgid "In the last 30 days"
-msgstr ""
+msgstr "In den letzten 30 Tagen"
 
 #: wafer/compare/admin.py:140
 #, python-format
@@ -52,30 +53,30 @@ msgstr ""
 
 #: wafer/compare/templates/admin/wafer.compare/change_form.html:13
 msgid "View on site"
-msgstr ""
+msgstr "Auf Website anzeigen"
 
 #: wafer/compare/templates/admin/wafer.compare/compare.html:6
 msgid "Compare"
-msgstr ""
+msgstr "Vergleichen"
 
 #: wafer/compare/templates/admin/wafer.compare/compare.html:7
 #, python-format
 msgid "%(name)s"
-msgstr ""
+msgstr "%(name)s"
 
 #: wafer/compare/templates/admin/wafer.compare/compare.html:19
 #: wafer/pages/templates/wafer.pages/page_compare.html:24
 msgid "No differences found"
-msgstr ""
+msgstr "Keine Unterschiede gefunden"
 
 #: wafer/compare/templates/admin/wafer.compare/compare_list.html:6
 msgid "Home"
-msgstr ""
+msgstr "Startseite"
 
 #: wafer/compare/templates/admin/wafer.compare/compare_list.html:10
 #, python-format
 msgid "Compare %(name)s"
-msgstr ""
+msgstr "%(name)s vergleichen"
 
 #: wafer/compare/templates/admin/wafer.compare/compare_list.html:17
 msgid ""
@@ -153,7 +154,7 @@ msgstr ""
 #: wafer/talks/templates/wafer.talks/talk_form.html:28
 #: wafer/users/templates/wafer.users/profile.html:164
 msgid "Edit"
-msgstr ""
+msgstr "Bearbeiten"
 
 #: wafer/pages/templates/wafer.pages/page.html:13
 msgid "Compare to Previous version"
@@ -191,18 +192,18 @@ msgstr ""
 
 #: wafer/pages/templates/wafer.pages/page_form.html:11
 msgid "Edit Page"
-msgstr ""
+msgstr "Seite bearbeiten"
 
 #: wafer/registration/forms.py:15
 #: wafer/registration/templates/registration/login.html:16
 #: wafer/registration/templates/registration/registration_form.html:6
 msgid "Sign up"
-msgstr ""
+msgstr "Registrieren"
 
 #: wafer/registration/forms.py:25
 #: wafer/registration/templates/registration/login.html:11
 msgid "Log in"
-msgstr ""
+msgstr "Anmelden"
 
 #: wafer/registration/templates/registration/activate.html:4
 msgid "Oops, account activation failed"
@@ -225,6 +226,8 @@ msgstr ""
 msgid ""
 "Your account is now activated! Please <a href=\"%(login_url)s\">log in</a>."
 msgstr ""
+"Ihr Konto ist jetzt aktiviert! Bitte <a href=\"%(login_url)s\">melden Sie "
+"sich an</a>."
 
 #: wafer/registration/templates/registration/activation_complete.html:13
 #: wafer/registration/templates/registration/registration_complete.html:13
@@ -233,7 +236,7 @@ msgstr ""
 
 #: wafer/registration/templates/registration/activation_complete.html:16
 msgid "You can now log in and start the conference registration process."
-msgstr ""
+msgstr "Sie können sich nun anmelden und die Konferenzanmeldung starten."
 
 #: wafer/registration/templates/registration/activation_email.txt:5
 #, python-format
@@ -258,6 +261,25 @@ msgid ""
 " %(WAFER_CONFERENCE_NAME)s\n"
 " http://%(domain)s%(index_url)s\n"
 msgstr ""
+"Hallo,\n"
+"\n"
+"TL;DR Klicken Sie https://%(domain)s%(activation_url)s\n"
+"\n"
+"Danke, dass Sie sich für %(WAFER_CONFERENCE_NAME)s angemeldet haben.\n"
+"\n"
+"Um Ihre E-Mail-Adresse zu verifizieren, folgen Sie bitte dem obigen Link zur "
+"Aktivierung Ihres\n"
+"Konto. Sie haben noch %(expiration_days)s Tage Zeit, dies zu tun.\n"
+"\n"
+"Wir hoffen, Sie bald zu sehen.\n"
+"\n"
+"Danke,\n"
+"\n"
+"Die %(WAFER_CONFERENCE_NAME)s Website.\n"
+"\n"
+"--\n"
+" %(WAFER_CONFERENCE_NAME)s\n"
+" http://%(domain)s%(index_url)s\n"
 
 #: wafer/registration/templates/registration/activation_email_subject.txt:2
 #, python-format
@@ -271,18 +293,20 @@ msgstr ""
 #, python-format
 msgid "Not registered? Please <a href=\"%(signup_url)s\">sign up</a>."
 msgstr ""
+"Nicht registriert? Bitte <a href=\"%(signup_url)s\">registrieren Sie "
+"sich</a>."
 
 #: wafer/registration/templates/registration/login.html:22
 msgid "Shared/Social Log in and Sign up"
-msgstr ""
+msgstr "Geteilte/Soziale Anmeldung und Registration"
 
 #: wafer/registration/templates/registration/logout.html:7
 msgid "Logged out"
-msgstr ""
+msgstr "Abgemeldet"
 
 #: wafer/registration/templates/registration/logout.html:9
 msgid "You've been logged out."
-msgstr ""
+msgstr "Sie sind abgemeldet worden."
 
 #: wafer/registration/templates/registration/registration_complete.html:4
 msgid "Account creation almost complete"
@@ -295,6 +319,9 @@ msgid ""
 "sent you an e-mail. Please follow the instructions in it to activate your "
 "account."
 msgstr ""
+"Vielen Dank, dass Sie ein Konto für %(WAFER_CONFERENCE_NAME)s erstellt "
+"haben. Wir haben Ihnen eine E-Mail gesendet. Bitte folgen Sie den darin "
+"enthaltenen Anweisungen, um Ihr Konto zu aktivieren."
 
 #: wafer/registration/templates/registration/registration_complete.html:16
 msgid "You can register after your account is activated."
@@ -466,11 +493,11 @@ msgstr ""
 #: wafer/schedule/templates/wafer.schedule/current.html:23
 #: wafer/schedule/templates/wafer.schedule/full_schedule.html:48
 msgid "Time"
-msgstr ""
+msgstr "Zeit"
 
 #: wafer/schedule/templates/wafer.schedule/current.html:71
 msgid "Last updated"
-msgstr ""
+msgstr "Zuletzt aktualisiert"
 
 #: wafer/schedule/templates/wafer.schedule/edit_schedule.html:10
 msgid "Validation errors:"
@@ -857,6 +884,10 @@ msgid ""
 "presenter. But you can specify yourself, if you can't think of anyone else "
 "who would care."
 msgstr ""
+"E-Mail-Adresse einer Person, die Ihre Videodetails überprüfen und genehmigen "
+"darf. Idealerweise ist dies eine zweite Person, die nicht gerade an einer "
+"Konferenz teilnimmt. Sie können aber auch sich selbst angeben, wenn Ihnen "
+"niemand anderes einfällt, der sich darum kümmern würde."
 
 #: wafer/talks/models.py:253
 msgid "NO CONTACT INFO"
@@ -1150,11 +1181,11 @@ msgstr ""
 
 #: wafer/templates/wafer/nav.html:68
 msgid "Log out"
-msgstr ""
+msgstr "Abmelden"
 
 #: wafer/templates/wafer/nav.html:76
 msgid "Sign up / Log In"
-msgstr ""
+msgstr "Registrieren / Anmelden"
 
 #: wafer/tickets/forms.py:18
 msgid "Claim"
