@@ -8,26 +8,28 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-11-25 14:05+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2021-05-25 13:33+0000\n"
+"Last-Translator: liimee <alt3753.7@gmail.com>\n"
+"Language-Team: Indonesian <https://hosted.weblate.org/projects/wafer/wafer/"
+"id/>\n"
 "Language: id\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 4.7-dev\n"
 
 #: wafer/compare/admin.py:22
 msgid "Last Modified"
-msgstr ""
+msgstr "Terakhir dimodifikasi"
 
 #: wafer/compare/admin.py:27
 msgid "Today"
-msgstr ""
+msgstr "Hari ini"
 
 #: wafer/compare/admin.py:28
 msgid "Since yesterday"
-msgstr ""
+msgstr "Sejak kemarin"
 
 #: wafer/compare/admin.py:29
 msgid "In the last 7 days"
@@ -44,19 +46,19 @@ msgstr ""
 
 #: wafer/compare/templates/admin/wafer.compare/change_form.html:6
 msgid "History"
-msgstr ""
+msgstr "Riwayat"
 
 #: wafer/compare/templates/admin/wafer.compare/change_form.html:9
 msgid "Compare Versions"
-msgstr ""
+msgstr "Bandingkan Versi"
 
 #: wafer/compare/templates/admin/wafer.compare/change_form.html:13
 msgid "View on site"
-msgstr ""
+msgstr "Lihat di situs"
 
 #: wafer/compare/templates/admin/wafer.compare/compare.html:6
 msgid "Compare"
-msgstr ""
+msgstr "Bandingkan"
 
 #: wafer/compare/templates/admin/wafer.compare/compare.html:7
 #, python-format
@@ -66,11 +68,11 @@ msgstr ""
 #: wafer/compare/templates/admin/wafer.compare/compare.html:19
 #: wafer/pages/templates/wafer.pages/page_compare.html:24
 msgid "No differences found"
-msgstr ""
+msgstr "Tidak ada perbedaan yang ditemukan"
 
 #: wafer/compare/templates/admin/wafer.compare/compare_list.html:6
 msgid "Home"
-msgstr ""
+msgstr "Beranda"
 
 #: wafer/compare/templates/admin/wafer.compare/compare_list.html:10
 #, python-format
@@ -85,15 +87,15 @@ msgstr ""
 
 #: wafer/compare/templates/admin/wafer.compare/compare_list.html:27
 msgid "Date/time"
-msgstr ""
+msgstr "Tanggal/waktu"
 
 #: wafer/compare/templates/admin/wafer.compare/compare_list.html:28
 msgid "User"
-msgstr ""
+msgstr "Pengguna"
 
 #: wafer/compare/templates/admin/wafer.compare/compare_list.html:29
 msgid "Comment"
-msgstr ""
+msgstr "Komentar"
 
 #: wafer/compare/templates/admin/wafer.compare/compare_list.html:51
 msgid ""
@@ -191,22 +193,22 @@ msgstr ""
 
 #: wafer/pages/templates/wafer.pages/page_form.html:11
 msgid "Edit Page"
-msgstr ""
+msgstr "Sunting Halaman"
 
 #: wafer/registration/forms.py:15
 #: wafer/registration/templates/registration/login.html:16
 #: wafer/registration/templates/registration/registration_form.html:6
 msgid "Sign up"
-msgstr ""
+msgstr "Daftar"
 
 #: wafer/registration/forms.py:25
 #: wafer/registration/templates/registration/login.html:11
 msgid "Log in"
-msgstr ""
+msgstr "Masuk"
 
 #: wafer/registration/templates/registration/activate.html:4
 msgid "Oops, account activation failed"
-msgstr ""
+msgstr "Ups, pengaktivasian akun gagal"
 
 #: wafer/registration/templates/registration/activate.html:8
 #, python-format
@@ -215,16 +217,21 @@ msgid ""
 "href=\"%(register_url)s\">try again</a> or <a href=\"%(contact_url)s"
 "\">contact our admins</a>."
 msgstr ""
+"Kami tampaknya mengalami kesulitan dalam mengaktifkan akun Anda. Silakan <a "
+"href=\"%(register_url)s\">coba lagi</a> atau <a href=\"%(contact_url)s\""
+">hubungi admin kami</a>."
 
 #: wafer/registration/templates/registration/activation_complete.html:4
 msgid "Activation complete"
-msgstr ""
+msgstr "Aktivasi selesai"
 
 #: wafer/registration/templates/registration/activation_complete.html:7
 #, python-format
 msgid ""
 "Your account is now activated! Please <a href=\"%(login_url)s\">log in</a>."
 msgstr ""
+"Akun Anda sekarang sudah diaktivasi! Silakan <a href=\"%(login_url)s\""
+">masuk</a>."
 
 #: wafer/registration/templates/registration/activation_complete.html:13
 #: wafer/registration/templates/registration/registration_complete.html:13
@@ -233,7 +240,7 @@ msgstr ""
 
 #: wafer/registration/templates/registration/activation_complete.html:16
 msgid "You can now log in and start the conference registration process."
-msgstr ""
+msgstr "Anda sekarang dapat masuk dan mulai proses pendaftaran konferensi."
 
 #: wafer/registration/templates/registration/activation_email.txt:5
 #, python-format
@@ -258,6 +265,23 @@ msgid ""
 " %(WAFER_CONFERENCE_NAME)s\n"
 " http://%(domain)s%(index_url)s\n"
 msgstr ""
+"Hai,\n"
+"\n"
+"Singkatnya klik https://%(domain)s%(activation_url)s\n"
+"\n"
+"Terima kasih karena telah mendaftar untuk %(WAFER_CONFERENCE_NAME)s.\n"
+"\n"
+"Untuk memverifikasi alamat email Anda, silakan ikuti tautan di atas untuk "
+"mengaktifkan akun Anda. Anda memiliki %(expiration_days)s tersisa untuk "
+"melakukannya.\n"
+"\n"
+"Kami harap kami dapat melihat Anda segera.\n"
+"\n"
+"Situs web %(WAFER_CONFERENCE_NAME)s.\n"
+"\n"
+"-- \n"
+"%(WAFER_CONFERENCE_NAME)s\n"
+"http://%(domain)s%(index_url)s\n"
 
 #: wafer/registration/templates/registration/activation_email_subject.txt:2
 #, python-format
@@ -266,11 +290,14 @@ msgid ""
 "Activate your %(WAFER_CONFERENCE_NAME)s account [%(expiration_days)s days "
 "left]\n"
 msgstr ""
+"\n"
+"Aktifkan akun %(WAFER_CONFERENCE_NAME)s Anda [%(expiration_days)s hari "
+"tersisa]\n"
 
 #: wafer/registration/templates/registration/login.html:18
 #, python-format
 msgid "Not registered? Please <a href=\"%(signup_url)s\">sign up</a>."
-msgstr ""
+msgstr "Tidak terdaftar? Silakan <a href=\"%(signup_url)s\">mendaftar</a>."
 
 #: wafer/registration/templates/registration/login.html:22
 msgid "Shared/Social Log in and Sign up"
@@ -278,15 +305,15 @@ msgstr ""
 
 #: wafer/registration/templates/registration/logout.html:7
 msgid "Logged out"
-msgstr ""
+msgstr "Telah keluar"
 
 #: wafer/registration/templates/registration/logout.html:9
 msgid "You've been logged out."
-msgstr ""
+msgstr "Anda telah keluar."
 
 #: wafer/registration/templates/registration/registration_complete.html:4
 msgid "Account creation almost complete"
-msgstr ""
+msgstr "Pembuatan akun hampir selesai"
 
 #: wafer/registration/templates/registration/registration_complete.html:6
 #, python-format
@@ -295,6 +322,9 @@ msgid ""
 "sent you an e-mail. Please follow the instructions in it to activate your "
 "account."
 msgstr ""
+"Terima kasih karena telah membuat akun untuk %(WAFER_CONFERENCE_NAME)s. Kami "
+"telah mengirimkan Anda sebuah surel. Silakan ikuti instruksi di dalam surel "
+"tersebut untuk mengaktifkan akun Anda."
 
 #: wafer/registration/templates/registration/registration_complete.html:16
 msgid "You can register after your account is activated."
@@ -322,19 +352,19 @@ msgstr ""
 
 #: wafer/schedule/admin.py:195
 msgid "Block"
-msgstr ""
+msgstr "Blokir"
 
 #: wafer/schedule/admin.py:247 wafer/schedule/models.py:316
 msgid "Start Time"
-msgstr ""
+msgstr "Waktu Mulai"
 
 #: wafer/schedule/admin.py:303
 msgid "Venue"
-msgstr ""
+msgstr "Lokasi"
 
 #: wafer/schedule/admin.py:390
 msgid "Additional slots"
-msgstr ""
+msgstr "Slot tambahan"
 
 #: wafer/schedule/admin.py:391
 msgid "Create this number of additional slots following this one"
@@ -382,7 +412,7 @@ msgstr ""
 
 #: wafer/schedule/models.py:148
 msgid "Start Date & Time"
-msgstr ""
+msgstr "Tanggal & Waktu Mulai"
 
 #: wafer/schedule/models.py:176
 msgid "Schedule Block"
@@ -390,11 +420,11 @@ msgstr ""
 
 #: wafer/schedule/models.py:235
 msgid "Additional details (if required)"
-msgstr ""
+msgstr "Keterangan tambahan (jika dibutuhkan)"
 
 #: wafer/schedule/models.py:239
 msgid "Notes for the conference organisers"
-msgstr ""
+msgstr "Catatan untuk penyusun konferensi"
 
 #: wafer/schedule/models.py:243
 msgid "Custom css class for this schedule item"
@@ -439,7 +469,7 @@ msgstr ""
 #: wafer/schedule/templates/admin/scheduleitem_list.html:70
 #: wafer/schedule/templates/wafer.schedule/full_schedule.html:10
 msgid "Edit schedule"
-msgstr ""
+msgstr "Sunting jadwal"
 
 #: wafer/schedule/templates/admin/slot_list.html:10
 msgid "Errors in the slots"
@@ -452,25 +482,25 @@ msgstr ""
 #: wafer/schedule/templates/wafer.schedule/current.html:3
 #: wafer/schedule/templates/wafer.schedule/current.html:6
 msgid "Happening now"
-msgstr ""
+msgstr "Terjadi sekarang"
 
 #: wafer/schedule/templates/wafer.schedule/current.html:10
 #: wafer/schedule/templates/wafer.schedule/full_schedule.html:20
 msgid "<p>The final schedule has not been published yet.</p>"
-msgstr ""
+msgstr "<p>Jadwal yang mutakhir belum dipublikasikan.</p>"
 
 #: wafer/schedule/templates/wafer.schedule/current.html:14
 msgid "<p>Nothing happening right now.</p>"
-msgstr ""
+msgstr "<p> Tidak ada yang sedang terjadi saat ini. </p>"
 
 #: wafer/schedule/templates/wafer.schedule/current.html:23
 #: wafer/schedule/templates/wafer.schedule/full_schedule.html:48
 msgid "Time"
-msgstr ""
+msgstr "Waktu"
 
 #: wafer/schedule/templates/wafer.schedule/current.html:71
 msgid "Last updated"
-msgstr ""
+msgstr "Terakhir diperbarui"
 
 #: wafer/schedule/templates/wafer.schedule/edit_schedule.html:10
 msgid "Validation errors:"
@@ -484,18 +514,18 @@ msgstr ""
 
 #: wafer/schedule/templates/wafer.schedule/edit_schedule.html:33
 msgid "Schedule Editor"
-msgstr ""
+msgstr "Penyunting Jadwal"
 
 #: wafer/schedule/templates/wafer.schedule/edit_schedule.html:62
 msgid "Close"
-msgstr ""
+msgstr "Tutup"
 
 #: wafer/schedule/templates/wafer.schedule/edit_schedule.html:69
 #: wafer/schedule/templates/wafer.schedule/edit_schedule.html:132
 #: wafer/schedule/templates/wafer.schedule/edit_schedule.html:158
 #: wafer/talks/models.py:153 wafer/talks/templates/wafer.talks/talk.html:114
 msgid "Cancelled"
-msgstr ""
+msgstr "Dibatalkan"
 
 #: wafer/schedule/templates/wafer.schedule/edit_schedule.html:81
 msgid "Bucket"
@@ -507,24 +537,24 @@ msgstr ""
 
 #: wafer/schedule/templates/wafer.schedule/edit_schedule.html:97
 msgid "All Talks"
-msgstr ""
+msgstr "Semua Perbincangan"
 
 #: wafer/schedule/templates/wafer.schedule/edit_schedule.html:102
 msgid "Pages"
-msgstr ""
+msgstr "Halaman-halaman"
 
 #: wafer/schedule/templates/wafer.schedule/full_schedule.html:3
 #: wafer/schedule/templates/wafer.schedule/full_schedule.html:15
 msgid "Schedule"
-msgstr ""
+msgstr "Jadwal"
 
 #: wafer/schedule/templates/wafer.schedule/full_schedule.html:29
 msgid "Previous"
-msgstr ""
+msgstr "Sebelumnya"
 
 #: wafer/schedule/templates/wafer.schedule/full_schedule.html:33
 msgid "Next"
-msgstr ""
+msgstr "Selanjutnya"
 
 #: wafer/sponsors/models.py:36
 msgid "Currency symbol for the sponsorship amount."
@@ -554,7 +584,7 @@ msgstr ""
 
 #: wafer/sponsors/models.py:73
 msgid "Write some nice things about the sponsor."
-msgstr ""
+msgstr "Tuliskan beberapa hal baik tentang sponsor ini."
 
 #: wafer/sponsors/models.py:76
 msgid "Url to link back to the sponsor if required"
@@ -564,11 +594,11 @@ msgstr ""
 #: wafer/sponsors/templates/wafer.sponsors/sponsors.html:4
 #: wafer/sponsors/templates/wafer.sponsors/sponsors.html:7
 msgid "Sponsors"
-msgstr ""
+msgstr "Sponsor-sponsor"
 
 #: wafer/sponsors/models.py:113
 msgid "Our sponsors"
-msgstr ""
+msgstr "Sponsor kami"
 
 #: wafer/sponsors/models.py:114
 msgid "Sponsorship packages"
@@ -584,7 +614,7 @@ msgstr ""
 
 #: wafer/sponsors/templates/wafer.sponsors/packages.html:21
 msgid "Packages claimed:"
-msgstr ""
+msgstr "Paket yang telah diklaim:"
 
 #: wafer/sponsors/templates/wafer.sponsors/packages.html:28
 msgid "No sponsorship packages available yet."
@@ -592,11 +622,11 @@ msgstr ""
 
 #: wafer/sponsors/templates/wafer.sponsors/sponsors.html:39
 msgid "No sponsors yet."
-msgstr ""
+msgstr "Belum ada sponsor."
 
 #: wafer/talks/admin.py:24
 msgid "in schedule"
-msgstr ""
+msgstr "sesuai jadwal"
 
 #: wafer/talks/admin.py:29
 msgid "Allocated to schedule"
@@ -608,15 +638,15 @@ msgstr ""
 
 #: wafer/talks/admin.py:42
 msgid "has notes"
-msgstr ""
+msgstr "memiliki catatan"
 
 #: wafer/talks/admin.py:47
 msgid "Yes"
-msgstr ""
+msgstr "Ya"
 
 #: wafer/talks/admin.py:48
 msgid "No"
-msgstr ""
+msgstr "Tidak"
 
 #: wafer/talks/admin.py:93
 msgid "Mark selected talks as Submitted"
