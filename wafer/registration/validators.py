@@ -8,5 +8,5 @@ def validate_username(username):
     if re.match(r'^\.+$', username):
         raise ValidationError(
             "usernames cannot consist of only .")
-    if username == 'index.html':
+    if username in ('index.html', 'page'):
         raise ValidationError('Not an acceptable username')
