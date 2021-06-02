@@ -199,8 +199,8 @@ LOGGING = {
 
 # Django registration:
 ACCOUNT_ACTIVATION_DAYS = 7
-
 AUTH_USER_MODEL = 'auth.User'
+REGISTRATION_FORM = 'wafer.registration.forms.WaferRegistrationForm'
 
 # Forms:
 CRISPY_TEMPLATE_PACK = 'bootstrap4'

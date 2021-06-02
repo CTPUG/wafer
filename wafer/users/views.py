@@ -67,6 +67,9 @@ class ProfileView(Hide404Mixin, BuildableDetailView):
 
     def build_object(self, obj):
         """Override django-bakery to skip profiles that raise 403"""
+        if obj.username in ('.', '..'):
+            log.warning('Skipping build of user %s, bad username', obj.username)
+            return
         try:
             build_path = self.get_build_path(obj)
             self.request = self.create_request(build_path)

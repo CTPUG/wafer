@@ -7,6 +7,7 @@ from crispy_forms.bootstrap import PrependedText
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit
 
+from wafer.registration.validators import validate_username
 from wafer.users.models import UserProfile
 
 
@@ -21,6 +22,11 @@ class UserForm(forms.ModelForm):
         self.helper.add_input(Submit('submit', _('Save')))
         self.fields['first_name'].required = True
         self.fields['email'].required = True
+
+    def clean_username(self):
+        username = self.cleaned_data['username']
+        validate_username(username)
+        return username
 
     class Meta:
         # TODO: Password reset
