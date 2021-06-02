@@ -6,4 +6,4 @@ def validate_username(username):
     if username.startswith('.'):
         raise ValidationError('usernames cannot start with a "."')
     if username in ('index.html', 'page'):
-        raise ValidationError('Not an acceptable username')
+        raise ValidationError('This username is not available')
