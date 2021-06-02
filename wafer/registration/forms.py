@@ -4,15 +4,17 @@ from django.utils.translation import ugettext as _
 
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Hidden, Submit
+from registration.forms import RegistrationForm
 
 
-class RegistrationFormHelper(FormHelper):
-    form_action = reverse('registration_register')
-    include_media = False
 
-    def __init__(self, request, *args, **kwargs):
-        super(RegistrationFormHelper, self).__init__(*args, **kwargs)
-        self.add_input(Submit('submit', _('Sign up')))
+class WaferRegistrationForm(RegistrationForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.include_media = False
+        self.helper.form_action = reverse('registration_register')
+        self.helper.add_input(Submit('submit', _('Sign up')))
 
 
 class LoginFormHelper(FormHelper):
