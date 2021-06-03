@@ -12,7 +12,7 @@ from bakery.views import BuildableDetailView
 from rest_framework import viewsets
 from rest_framework.permissions import IsAdminUser
 
-from wafer.talks.models import ACCEPTED
+from wafer.talks.models import ACCEPTED, CANCELLED
 from wafer.users.forms import UserForm, UserProfileForm
 from wafer.users.serializers import UserSerializer
 from wafer.users.models import UserProfile
@@ -30,7 +30,7 @@ class UsersView(PaginatedBuildableListView):
     def get_queryset(self, *args, **kwargs):
         qs = super(UsersView, self).get_queryset(*args, **kwargs)
         if not settings.WAFER_PUBLIC_ATTENDEE_LIST:
-            qs = qs.filter(talks__status=ACCEPTED).distinct()
+            qs = qs.filter(talks__status__in=(ACCEPTED, CANCELLED)).distinct()
         qs = qs.order_by('first_name', 'last_name', 'username')
         return qs
 
@@ -84,7 +84,7 @@ class ProfileView(Hide404Mixin, BuildableDetailView):
         object_ = super(ProfileView, self).get_object(*args, **kwargs)
         if not settings.WAFER_PUBLIC_ATTENDEE_LIST:
             if (not self.can_edit(object_) and
-                    not object_.userprofile.accepted_talks().exists()):
+                    not object_.userprofile.published_talks().exists()):
                 raise PermissionDenied()
         return object_
 

@@ -66,6 +66,9 @@ class UserProfile(models.Model):
     def cancelled_talks(self):
         return self.user.talks.filter(status=CANCELLED)
 
+    def published_talks(self):
+        return self.user.talks.filter(status__in=(ACCEPTED, CANCELLED))
+
     def avatar_url(self, size=96, https=True, default='mm'):
         if not self.user.email:
             return None

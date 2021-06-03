@@ -130,23 +130,23 @@
         </div>
       {% endfor %}
     {% endif %}
-    {% if profile.provisional_talks.exists %}
-      <h2>{% trans 'Provisionally Accepted Talks:' %}</h2>
-      {% for talk in profile.provisional_talks %}
-        <div class="card">
-          <div class="card-body">
-            <h3 class="card-title">
-              <a href="{{ talk.get_absolute_url }}">
-                {{ talk.title }}
-              </a>
-            </h3>
-            <p>{{ talk.abstract.rendered|safe }}</p>
-          </div>
-        </div>
-      {% endfor %}
-    {% endif %}
     {# Submitted talk proposals are only visible to the owner #}
     {% if can_edit %}
+      {% if profile.provisional_talks.exists %}
+        <h2>{% trans 'Provisionally Accepted Talks:' %}</h2>
+        {% for talk in profile.provisional_talks %}
+          <div class="card">
+            <div class="card-body">
+              <h3 class="card-title">
+                <a href="{{ talk.get_absolute_url }}">
+                  {{ talk.title }}
+                </a>
+              </h3>
+              <p>{{ talk.abstract.rendered|safe }}</p>
+            </div>
+          </div>
+        {% endfor %}
+      {% endif %}
       {% if profile.pending_talks.exists %}
         <h2>{% trans 'Submitted or Under Consideration Talks:' %}</h2>
         {% for talk in profile.pending_talks %}
