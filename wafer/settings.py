@@ -267,6 +267,9 @@ WAFER_TALKS_OPEN = True
 # The form used for talk submission
 WAFER_TALK_FORM = 'wafer.talks.forms.TalkForm'
 
+# Languages the talks can be in
+WAFER_TALK_LANGUAGES = ()
+
 # Ask speakers for video release, and an email address of a reviewer
 WAFER_VIDEO = True
 WAFER_VIDEO_REVIEWER = True

@@ -103,6 +103,13 @@ Wafer's settings
     There is a reasonable default form, but this can be changed to
     customise the submission process.
 
+``WAFER_TALK_LANGUAGUES``
+    A tuple of tuples, indicating the languages that users can select when
+    submitting talks. Each tuple has the language code as the first element,
+    and the language name as the second element. Example: ``(("en", "English"),
+    ("pt", "Portuguese"))``. The first language listed will be considered the
+    default language, and will be selected by default on new submissions.
+
 ``WAFER_TALK_REVIEW_SCORES``
     A tuple of 2 integers.
     The range of values for talk reviews. Inclusive.

@@ -52,6 +52,14 @@
       {% endfor %}
     {% endif %}
 
+    {% if object.language %}
+      <p>
+        {% blocktrans trimmed with language=object.get_language_display %}
+          Language:
+          {{ language }}
+        {% endblocktrans %}
+      </p>
+    {% endif %}
     {% if object.track %}
       <p>
         {% blocktrans trimmed with track=object.track.name %}

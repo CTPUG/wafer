@@ -88,6 +88,11 @@ class TalkForm(forms.ModelForm):
         if not self.user.has_perm('talks.edit_private_notes'):
             self.fields.pop('private_notes')
 
+        if Talk.LANGUAGES:
+            self.fields['language'].required = True
+        else:
+            self.fields.pop('language')
+
         if not Track.objects.exists():
             self.fields.pop('track')
 
@@ -131,7 +136,7 @@ class TalkForm(forms.ModelForm):
 
     class Meta:
         model = Talk
-        fields = ('title', 'talk_type', 'track', 'abstract', 'authors',
+        fields = ('title', 'language', 'talk_type', 'track', 'abstract', 'authors',
                   'video', 'video_reviewer', 'notes', 'private_notes')
         widgets = {
             'abstract': MarkItUpWidget(),
