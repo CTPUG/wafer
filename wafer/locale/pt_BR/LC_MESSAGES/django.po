@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: wafer\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-06-05 21:56+0000\n"
-"PO-Revision-Date: 2020-07-11 12:32-0300\n"
+"PO-Revision-Date: 2021-06-06 08:34-0300\n"
 "Last-Translator: Allythy <allythy@protonmail.com>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
@@ -589,26 +589,20 @@ msgid "Images and other files for use in the description markdown field."
 msgstr "Imagens e outros arquivos para uso na descrição do campo."
 
 #: wafer/sponsors/models.py:52
-#, fuzzy
-#| msgid ""
-#| "Optional symbol to display in the sponsors list next to sponsors who have "
-#| "sponsored at this list, (for example *)."
 msgid ""
 "Optional symbol to display in the sponsors list next to sponsors who have "
 "taken this package, (for example *)."
 msgstr ""
 "Símbolo opcional a ser exibido na lista de patrocinadores ao lado dos "
-"patrocinadores que tempatrocinadores nessa lista (por exemplo *)."
+"patrocinadores que escolheram esse pacote (por exemplo *)."
 
 #: wafer/sponsors/models.py:73
 msgid "Write some nice things about the sponsor."
 msgstr "Eescreva coisas boas sobre o patrocinador."
 
 #: wafer/sponsors/models.py:76
-#, fuzzy
-#| msgid "Url to link back to the sponsor if required"
 msgid "URL to link back to the sponsor if required"
-msgstr "Url do link para voltar ao patrocinador se requerido"
+msgstr "URL do link para o patrocinador se requerido"
 
 #: wafer/sponsors/models.py:112
 #: wafer/sponsors/templates/wafer.sponsors/sponsors.html:4
@@ -775,11 +769,13 @@ msgstr "Se as submissões após o prazo final devem ser aceitas"
 
 #: wafer/talks/models.py:90
 msgid "Show authors in speakers list"
-msgstr ""
+msgstr "Exibir autores na lista de palestrantes"
 
 #: wafer/talks/models.py:92
 msgid "Whether to show the authors for this talk type in the speakers list"
 msgstr ""
+"Se os autores de palestras deste tipo devem ser exibidos na lista de "
+"palestrantes"
 
 #: wafer/talks/models.py:102 wafer/talks/models.py:162
 msgid "talk type"
@@ -839,7 +835,7 @@ msgstr "Retirada"
 
 #: wafer/talks/models.py:169
 msgid "language"
-msgstr ""
+msgstr "idioma"
 
 #: wafer/talks/models.py:177
 msgid "title"
@@ -1021,10 +1017,9 @@ msgid "Speakers"
 msgstr "Palestrantes"
 
 #: wafer/talks/templates/wafer.talks/speakers.html:10
-#, fuzzy, python-format
-#| msgid "Type: %(talk_type)s"
+#, python-format
 msgid "%(talk_type)s Speakers"
-msgstr "Tipo: %(talk_type)s"
+msgstr "Palestrantes de %(talk_type)s"
 
 #: wafer/talks/templates/wafer.talks/talk.html:21
 msgid "Admin"
@@ -1052,7 +1047,7 @@ msgstr "Não fornecido"
 #: wafer/talks/templates/wafer.talks/talk.html:57
 #, python-format
 msgid "Language: %(language)s"
-msgstr ""
+msgstr "Idioma: %(language)s"
 
 #: wafer/talks/templates/wafer.talks/talk.html:65
 #, python-format
