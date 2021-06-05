@@ -113,12 +113,12 @@ mark_accepted.short_description = _("Mark selected talks as Accepted")
 
 class TalkAdmin(CompareVersionAdmin):
     list_display = ('title', 'get_corresponding_author_name',
-                    'get_corresponding_author_contact', 'talk_type',
-                    'get_in_schedule', 'has_url', 'status',
+                    'get_corresponding_author_contact', 'language',
+                    'talk_type', 'get_in_schedule', 'has_url', 'status',
                     'review_count', 'review_score')
     list_editable = ('status',)
-    list_filter = ('status', 'talk_type', 'track', ScheduleListFilter,
-                   DateModifiedFilter, HasNotesFilter,)
+    list_filter = ('status', 'language', 'talk_type', 'track',
+                   ScheduleListFilter, DateModifiedFilter, HasNotesFilter,)
     search_fields = ('title',)
     autocomplete_fields = ('authors', 'corresponding_author')
     exclude = ('kv',)

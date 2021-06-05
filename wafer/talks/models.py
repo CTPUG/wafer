@@ -163,6 +163,17 @@ class Talk(models.Model):
     track = models.ForeignKey(
         Track, verbose_name=_("track"), null=True, blank=True, on_delete=models.SET_NULL)
 
+    LANGUAGES = settings.WAFER_TALK_LANGUAGES
+    DEFAULT_LANGUAGE = LANGUAGES and LANGUAGES[0][0]
+    language = models.CharField(
+        verbose_name=_("language"),
+        max_length=5,
+        null=True,
+        blank=True,
+        choices=LANGUAGES,
+        default=DEFAULT_LANGUAGE,
+    )
+
     title = models.CharField(_("title"), max_length=1024)
 
     abstract = MarkupField(
