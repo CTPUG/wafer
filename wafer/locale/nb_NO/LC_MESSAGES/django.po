@@ -273,7 +273,7 @@ msgid ""
 "left]\n"
 msgstr ""
 "\n"
-"Aktiver din %(WAFER_CONFERENCE_NAME)-konto [%(expiration_days)s dager "
+"Aktiver din %(WAFER_CONFERENCE_NAME)s-konto [%(expiration_days)s dager "
 "igjen]\n"
 
 #: wafer/registration/templates/registration/login.html:18
@@ -1311,12 +1311,12 @@ msgstr "Send inn presentasjonsforespørsel"
 #: wafer/users/templates/wafer.users/profile.html:62
 #, python-format
 msgid "Follow @%(handle)s"
-msgstr "Følg @"
+msgstr "Følg @%(handle)s"
 
 #: wafer/users/templates/wafer.users/profile.html:69
 #, python-format
 msgid "GitHub: %(username)s"
-msgstr "GitHub:"
+msgstr "GitHub: %(username)s"
 
 #: wafer/users/templates/wafer.users/profile.html:85
 msgid "Registered"
