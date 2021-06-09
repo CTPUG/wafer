@@ -8,14 +8,16 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-06-05 21:56+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2021-06-09 02:33+0000\n"
+"Last-Translator: Daniele Tricoli <eriol@mornie.org>\n"
+"Language-Team: Italian <https://hosted.weblate.org/projects/wafer/wafer/it/>"
+"\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.7-dev\n"
 
 #: wafer/compare/admin.py:22
 msgid "Last Modified"
@@ -23,19 +25,19 @@ msgstr ""
 
 #: wafer/compare/admin.py:27
 msgid "Today"
-msgstr ""
+msgstr "Oggi"
 
 #: wafer/compare/admin.py:28
 msgid "Since yesterday"
-msgstr ""
+msgstr "Da ieri"
 
 #: wafer/compare/admin.py:29
 msgid "In the last 7 days"
-msgstr ""
+msgstr "Negli ultimi 7 giorni"
 
 #: wafer/compare/admin.py:30
 msgid "In the last 30 days"
-msgstr ""
+msgstr "Negli ultimi 30 giorni"
 
 #: wafer/compare/admin.py:140
 #, python-format
@@ -44,62 +46,66 @@ msgstr ""
 
 #: wafer/compare/templates/admin/wafer.compare/change_form.html:6
 msgid "History"
-msgstr ""
+msgstr "Storia"
 
 #: wafer/compare/templates/admin/wafer.compare/change_form.html:9
 msgid "Compare Versions"
-msgstr ""
+msgstr "Confronta versioni"
 
 #: wafer/compare/templates/admin/wafer.compare/change_form.html:13
 msgid "View on site"
-msgstr ""
+msgstr "Vedi sul sito"
 
 #: wafer/compare/templates/admin/wafer.compare/compare.html:6
 msgid "Compare"
-msgstr ""
+msgstr "Confronta"
 
 #: wafer/compare/templates/admin/wafer.compare/compare.html:7
 #, python-format
 msgid "%(name)s"
-msgstr ""
+msgstr "%(name)s"
 
 #: wafer/compare/templates/admin/wafer.compare/compare.html:19
 #: wafer/pages/templates/wafer.pages/page_compare.html:24
 msgid "No differences found"
-msgstr ""
+msgstr "Nessuna differenza trovata"
 
 #: wafer/compare/templates/admin/wafer.compare/compare_list.html:6
 msgid "Home"
-msgstr ""
+msgstr "Pagina iniziale"
 
 #: wafer/compare/templates/admin/wafer.compare/compare_list.html:10
 #, python-format
 msgid "Compare %(name)s"
-msgstr ""
+msgstr "Confronta %(name)s"
 
 #: wafer/compare/templates/admin/wafer.compare/compare_list.html:17
 msgid ""
 "Choose a date from the list below to compare the current version to a "
 "previous version of this object."
 msgstr ""
+"Scegliere una data dalla lista sottostante per confrontare la versione "
+"corrente con una versione precedente di questo oggetto."
 
 #: wafer/compare/templates/admin/wafer.compare/compare_list.html:27
 msgid "Date/time"
-msgstr ""
+msgstr "Data/ora"
 
 #: wafer/compare/templates/admin/wafer.compare/compare_list.html:28
 msgid "User"
-msgstr ""
+msgstr "Utente"
 
 #: wafer/compare/templates/admin/wafer.compare/compare_list.html:29
 msgid "Comment"
-msgstr ""
+msgstr "Commento"
 
 #: wafer/compare/templates/admin/wafer.compare/compare_list.html:51
 msgid ""
 "This object doesn't have a change history. It probably wasn't added via this "
 "admin site."
 msgstr ""
+"Questo oggetto non ha cambiamenti registrati. Probabilmente non è stato "
+"creato con questo sito di amministrazione."
 
 #: wafer/pages/models.py:31
 msgid "Last component of the page URL"
@@ -107,7 +113,7 @@ msgstr ""
 
 #: wafer/pages/models.py:35
 msgid "Markdown contents for the page."
-msgstr ""
+msgstr "Contenuto della pagina in formato Markdown."
 
 #: wafer/pages/models.py:37
 msgid "Whether to include in menus."
@@ -115,7 +121,7 @@ msgstr ""
 
 #: wafer/pages/models.py:40
 msgid "Ordering in the menu (smaller numbers come first)"
-msgstr ""
+msgstr "Ordine nel menù (i numeri più piccoli vengono prima)"
 
 #: wafer/pages/models.py:45
 msgid ""
@@ -153,11 +159,11 @@ msgstr ""
 #: wafer/talks/templates/wafer.talks/talk_form.html:28
 #: wafer/users/templates/wafer.users/profile.html:164
 msgid "Edit"
-msgstr ""
+msgstr "Modifica"
 
 #: wafer/pages/templates/wafer.pages/page.html:13
 msgid "Compare to Previous version"
-msgstr ""
+msgstr "Confronta con la versione precedente"
 
 #: wafer/pages/templates/wafer.pages/page_compare.html:6
 msgid "Comparing Page"
@@ -166,12 +172,12 @@ msgstr ""
 #: wafer/pages/templates/wafer.pages/page_compare.html:8
 #, python-format
 msgid "Last Saved: %(cur_date)s by %(cur_author)s"
-msgstr ""
+msgstr "Ultimo salvataggio: %(cur_date)s da %(cur_author)s"
 
 #: wafer/pages/templates/wafer.pages/page_compare.html:11
 #, python-format
 msgid "Comparing to version saved: %(prev_date)s by %(prev_author)s"
-msgstr ""
+msgstr "Confronto con la versione salvata: %(prev_date)s da %(prev_author)s"
 
 #: wafer/pages/templates/wafer.pages/page_compare.html:33
 msgid "Compare to next older version"
@@ -179,7 +185,7 @@ msgstr ""
 
 #: wafer/pages/templates/wafer.pages/page_compare.html:37
 msgid "Return to Page"
-msgstr ""
+msgstr "Ritorna alla pagina"
 
 #: wafer/pages/templates/wafer.pages/page_compare.html:41
 msgid "Compare to next newer version"
@@ -206,7 +212,7 @@ msgstr ""
 
 #: wafer/registration/templates/registration/activate.html:4
 msgid "Oops, account activation failed"
-msgstr ""
+msgstr "Ops, l'attivazione dell'account è fallita"
 
 #: wafer/registration/templates/registration/activate.html:8
 #, python-format
@@ -215,10 +221,13 @@ msgid ""
 "href=\"%(register_url)s\">try again</a> or <a href=\"%(contact_url)s"
 "\">contact our admins</a>."
 msgstr ""
+"Sembra ci siano delle difficoltà ad attivare il tuo account. Per favore <a "
+"href=\"%(register_url)s\">prova di nuovo</a> o <a href=\"%(contact_url)s\""
+">contatta i nostri amministratori</a>."
 
 #: wafer/registration/templates/registration/activation_complete.html:4
 msgid "Activation complete"
-msgstr ""
+msgstr "Attivazione completata"
 
 #: wafer/registration/templates/registration/activation_complete.html:7
 #, python-format
@@ -258,6 +267,26 @@ msgid ""
 " %(WAFER_CONFERENCE_NAME)s\n"
 " http://%(domain)s%(index_url)s\n"
 msgstr ""
+"Salve,\n"
+"\n"
+"TL;DR Clicca su https://%(domain)s%(activation_url)s\n"
+"\n"
+"Grazie per esserti iscritto a %(WAFER_CONFERENCE_NAME)s.\n"
+"\n"
+"Per verificare il tuo indirizzo e-mail, per favore clicca sul link sopra in "
+"modo\n"
+"da attivare il tuo account. Hai ancora %(expiration_days)s giorni per farlo."
+"\n"
+"\n"
+"Speriamo di vederti presto.\n"
+"\n"
+"Grazie,\n"
+"\n"
+"Il sito web %(WAFER_CONFERENCE_NAME)s.\n"
+"\n"
+"-- \n"
+" %(WAFER_CONFERENCE_NAME)s\n"
+" http://%(domain)s%(index_url)s\n"
 
 #: wafer/registration/templates/registration/activation_email_subject.txt:2
 #, python-format
@@ -352,7 +381,7 @@ msgstr ""
 
 #: wafer/schedule/models.py:74
 msgid "Notes or directions that will be useful to conference attendees"
-msgstr ""
+msgstr "Note o indicazioni che saranno utili ai partecipanti alla conferenza"
 
 #: wafer/schedule/models.py:78
 msgid "Blocks (days) on which this venue will be used."
@@ -394,7 +423,7 @@ msgstr ""
 
 #: wafer/schedule/models.py:239
 msgid "Notes for the conference organisers"
-msgstr ""
+msgstr "Note per gli organizzatori della conferenza"
 
 #: wafer/schedule/models.py:243
 msgid "Custom css class for this schedule item"
@@ -612,11 +641,11 @@ msgstr ""
 
 #: wafer/talks/admin.py:47
 msgid "Yes"
-msgstr ""
+msgstr "Sì"
 
 #: wafer/talks/admin.py:48
 msgid "No"
-msgstr ""
+msgstr "No"
 
 #: wafer/talks/admin.py:93
 msgid "Mark selected talks as Submitted"
@@ -687,11 +716,11 @@ msgstr ""
 
 #: wafer/talks/models.py:70 wafer/talks/models.py:117 wafer/talks/models.py:419
 msgid "name"
-msgstr ""
+msgstr "nome"
 
 #: wafer/talks/models.py:71 wafer/talks/models.py:118
 msgid "description"
-msgstr ""
+msgstr "descrizione"
 
 #: wafer/talks/models.py:72 wafer/talks/models.py:119
 msgid "order"
@@ -783,15 +812,15 @@ msgstr ""
 
 #: wafer/talks/models.py:169
 msgid "language"
-msgstr ""
+msgstr "lingua"
 
 #: wafer/talks/models.py:177
 msgid "title"
-msgstr ""
+msgstr "titolo"
 
 #: wafer/talks/models.py:180
 msgid "abstract"
-msgstr ""
+msgstr "abstract"
 
 #: wafer/talks/models.py:181
 msgid ""
@@ -802,7 +831,7 @@ msgstr ""
 
 #: wafer/talks/models.py:187 wafer/talks/models.py:390
 msgid "notes"
-msgstr ""
+msgstr "note"
 
 #: wafer/talks/models.py:190
 msgid ""
@@ -822,7 +851,7 @@ msgstr ""
 
 #: wafer/talks/models.py:201
 msgid "status"
-msgstr ""
+msgstr "stato"
 
 #: wafer/talks/models.py:207
 msgid "corresponding author"
@@ -836,7 +865,7 @@ msgstr ""
 
 #: wafer/talks/models.py:214
 msgid "authors"
-msgstr ""
+msgstr "autori"
 
 #: wafer/talks/models.py:219
 msgid "video"
@@ -977,7 +1006,7 @@ msgstr ""
 #: wafer/talks/templates/wafer.talks/talk.html:57
 #, python-format
 msgid "Language: %(language)s"
-msgstr ""
+msgstr "Lingua: %(language)s"
 
 #: wafer/talks/templates/wafer.talks/talk.html:65
 #, python-format
@@ -1207,11 +1236,11 @@ msgstr ""
 
 #: wafer/users/admin.py:39
 msgid "profile"
-msgstr ""
+msgstr "profilo"
 
 #: wafer/users/admin.py:40
 msgid "profiles"
-msgstr ""
+msgstr "profili"
 
 #: wafer/users/forms.py:46
 msgid "handle"
@@ -1337,8 +1366,8 @@ msgstr ""
 
 #: wafer/users/templates/wafer.users/users.html:3
 msgid "Users"
-msgstr ""
+msgstr "Utenti"
 
 #: wafer/users/templates/wafer.users/users.html:5
 msgid "Users:"
-msgstr ""
+msgstr "Utenti:"
