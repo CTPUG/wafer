@@ -7,13 +7,10 @@ from django.utils import timezone
 
 from wafer.pages.models import Page
 from wafer.schedule.admin import (
-    SlotAdmin, SlotBlockFilter, ScheduleItemBlockFilter, SlotStartTimeFilter,
-    ScheduleItemStartTimeFilter, ScheduleItemVenueFilter,
-    prefetch_schedule_items, prefetch_slots,
-    validate_items,
-    find_duplicate_schedule_items, find_clashes, find_invalid_venues,
-    find_non_contiguous,
-    check_schedule, validate_schedule)
+    SlotAdmin, SlotBlockFilter, SlotStartTimeFilter,
+    check_schedule, find_clashes, find_duplicate_schedule_items,
+    find_invalid_venues, find_non_contiguous, prefetch_schedule_items,
+    validate_items, validate_schedule)
 from wafer.schedule.models import ScheduleBlock, Venue, Slot, ScheduleItem
 from wafer.talks.models import (Talk, ACCEPTED, REJECTED, CANCELLED,
                                 SUBMITTED, UNDER_CONSIDERATION)

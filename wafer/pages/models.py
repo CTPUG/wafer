@@ -10,7 +10,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from markitup.fields import MarkupField, render_func
 
-from wafer.menu import MenuError, refresh_menu_cache
+from wafer.menu import refresh_menu_cache
 
 logger = logging.getLogger(__name__)
 

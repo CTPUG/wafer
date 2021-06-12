@@ -4,9 +4,7 @@ import unicodedata
 from django.core.cache import caches
 from django.conf import settings
 
-from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import AnonymousUser
-from django.utils.decorators import method_decorator
 
 from bakery.views import BuildableListView
 

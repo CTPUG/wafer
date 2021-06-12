@@ -5,8 +5,6 @@ import logging
 
 from icalendar import Calendar, Event
 
-import json
-
 from django.db.models import Q
 from django.views.generic import TemplateView, View
 from django.contrib.sites.shortcuts import get_current_site

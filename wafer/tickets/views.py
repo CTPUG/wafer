@@ -12,10 +12,7 @@ from django.views.decorators.http import require_POST
 from django.views.generic.edit import FormView
 
 from rest_framework import viewsets
-from rest_framework.permissions import (
-    DjangoModelPermissions,
-    DjangoModelPermissionsOrAnonReadOnly,
-)
+from rest_framework.permissions import DjangoModelPermissions
 from rest_framework_extensions.mixins import NestedViewSetMixin
 
 from wafer.tickets.models import Ticket, TicketType
