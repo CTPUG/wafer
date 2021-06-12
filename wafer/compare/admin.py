@@ -115,7 +115,7 @@ class CompareVersionAdmin(VersionAdmin):
     change_form_template = "admin/wafer.compare/change_form.html"
 
     def get_urls(self):
-        urls = super(CompareVersionAdmin, self).get_urls()
+        urls = super().get_urls()
         opts = self.model._meta
         compare_urls = [
               url("^([^/]+)/([^/]+)/compare/$", self.admin_site.admin_view(self.compare_view),

@@ -13,7 +13,7 @@ from wafer.users.models import UserProfile
 
 class UserForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
-        super(UserForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.include_media = False
         username = kwargs['instance'].username
@@ -36,7 +36,7 @@ class UserForm(forms.ModelForm):
 
 class UserProfileForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
-        super(UserProfileForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.helper = FormHelper(self)
         self.helper.include_media = False
         username = kwargs['instance'].user.username

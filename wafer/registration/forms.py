@@ -27,7 +27,7 @@ class LoginFormHelper(FormHelper):
     form_action = settings.LOGIN_URL
 
     def __init__(self, request, *args, **kwargs):
-        super(LoginFormHelper, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         if 'next' in request.GET:
             self.add_input(Hidden('next', request.GET['next']))
         self.add_input(Submit('submit', _('Log in')))

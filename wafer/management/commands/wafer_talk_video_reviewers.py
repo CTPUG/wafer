@@ -3,8 +3,7 @@ import csv
 
 from django.core.management.base import BaseCommand
 
-from django.contrib.auth import get_user_model
-from wafer.talks.models import Talk, ACCEPTED, PROVISIONAL
+from wafer.talks.models import Talk, ACCEPTED
 
 
 class Command(BaseCommand):

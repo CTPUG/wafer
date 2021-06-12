@@ -10,7 +10,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from markitup.fields import MarkupField, render_func
 
-from wafer.menu import MenuError, refresh_menu_cache
+from wafer.menu import refresh_menu_cache
 
 logger = logging.getLogger(__name__)
 
@@ -139,7 +139,7 @@ class Page(models.Model):
                     })
             keys.append(parent.pk)
             parent = parent.parent
-        return super(Page, self).clean()
+        return super().clean()
 
     def validate_unique(self, exclude=None):
         existing = Page.objects.filter(slug=self.slug, parent=self.parent)
@@ -153,11 +153,11 @@ class Page(models.Model):
                         _("Duplicate parent/slug combination."),
                     ],
                 })
-        return super(Page, self).validate_unique(exclude)
+        return super().validate_unique(exclude)
 
     def save(self, *args, **kwargs):
         """Ensure we invalidate the cache after saving"""
-        super(Page, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
         self.invalidate_cache()
 
 

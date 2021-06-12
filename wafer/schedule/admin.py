@@ -323,7 +323,7 @@ class ScheduleItemAdminForm(forms.ModelForm):
                   'css_class', 'expand')
 
     def __init__(self, *args, **kwargs):
-        super(ScheduleItemAdminForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.fields['talk'].queryset = Talk.objects.filter(
             Q(status=ACCEPTED) | Q(status=CANCELLED))
         # Present all pages as possible entries in the schedule
@@ -356,13 +356,13 @@ class ScheduleItemAdmin(CompareVersionAdmin):
             if failed_items:
                 errors[err_type].extend(failed_items)
         extra_context['errors'] = errors
-        return super(ScheduleItemAdmin, self).changelist_view(request,
+        return super().changelist_view(request,
                                                               extra_context)
 
     def get_urls(self):
         from wafer.schedule.views import ScheduleEditView
 
-        urls = super(ScheduleItemAdmin, self).get_urls()
+        urls = super().get_urls()
         admin_schedule_edit_view = self.admin_site.admin_view(
             ScheduleEditView.as_view())
         my_urls = [
@@ -419,8 +419,7 @@ class SlotAdmin(CompareVersionAdmin):
             if failed_slots:
                 errors[err_type].extend(failed_slots)
         extra_context['errors'] = errors
-        return super(SlotAdmin, self).changelist_view(request,
-                                                      extra_context)
+        return super().changelist_view(request, extra_context)
 
     def get_form(self, request, obj=None, **kwargs):
         """Change the form depending on whether we're adding or
@@ -428,10 +427,10 @@ class SlotAdmin(CompareVersionAdmin):
         if obj is None:
             # Adding a new Slot
             kwargs['form'] = SlotAdminAddForm
-        return super(SlotAdmin, self).get_form(request, obj, **kwargs)
+        return super().get_form(request, obj, **kwargs)
 
     def save_model(self, request, obj, form, change):
-        super(SlotAdmin, self).save_model(request, obj, form, change)
+        super().save_model(request, obj, form, change)
         if not change and form.cleaned_data['additional']:
             # We add the requested additional slots
             # All created slot will have the same length as the slot just

@@ -35,7 +35,7 @@ class TalkCategorisationWidget(forms.Select):
         js = ('wafer/talks/talk-categorization.js',)
 
     def __init__(self, *args, **kwargs):
-        super(TalkCategorisationWidget, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.attrs["class"] = "talk-categorization"
 
 
@@ -44,7 +44,7 @@ class TalkCategorisationField(forms.ModelChoiceField):
     These are always required, if there are any registered.
     """
     def __init__(self, model, initial=None, empty_label=None, *args, **kwargs):
-        super(TalkCategorisationField, self).__init__(
+        super().__init__(
             initial=initial,
             widget=TalkCategorisationWidget(),
             queryset=model.objects.all(),
@@ -83,7 +83,7 @@ class TalkForm(forms.ModelForm):
             self.base_fields['authors'].limit_choices_to = {
                 'id__in': [author.id for author in authors]}
 
-        super(TalkForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
         if not self.user.has_perm('talks.edit_private_notes'):
             self.fields.pop('private_notes')
@@ -158,7 +158,7 @@ class ReviewForm(forms.Form):
                 'notes': self.instance.notes.raw,
             }
 
-        super(ReviewForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
         review_range = _("(Score range: %(min)d to %(max)d)") % {
             'min': settings.WAFER_TALK_REVIEW_SCORES[0],

@@ -1,5 +1,4 @@
 from django.contrib import admin
-from django import forms
 from django.db import models
 from django.db.models import Q
 from django.utils.translation import ugettext_lazy as _
@@ -139,7 +138,7 @@ class TalkAdmin(CompareVersionAdmin):
     ]
 
     def get_queryset(self, request):
-        qs = super(TalkAdmin, self).get_queryset(request)
+        qs = super().get_queryset(request)
         qs = qs.annotate(
             review_count_annotation=models.Count('reviews', distinct=True),
             review_score_annotation=models.Avg('reviews__scores__value')

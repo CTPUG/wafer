@@ -27,4 +27,4 @@ class KeyValueSerializer(serializers.ModelSerializer):
         groups = self.fields['group']
         groups.queryset = user.groups
 
-        super(KeyValueSerializer, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
