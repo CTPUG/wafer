@@ -24,8 +24,6 @@ class Command(BaseCommand):
                                  ' (for all talks)')
 
     def _website_user_emails(self, options):
-        query = {}
-
         people = get_user_model().objects.all()
 
         csv_file = csv.writer(sys.stdout)
