@@ -30,7 +30,7 @@ class PublicTalkUrlSerializer(TalkUrlSerializer):
 
 class MarkdownSerializer(serializers.CharField):
     def get_attribute(self, instance):
-        value = super(MarkdownSerializer, self).get_attribute(instance)
+        value = super().get_attribute(instance)
         return value.raw
 
 
@@ -60,9 +60,9 @@ class TalkSerializer(serializers.ModelSerializer):
     @revisions.create_revision()
     def create(self, validated_data):
         revisions.set_comment("Created via REST api")
-        return super(TalkSerializer, self).create(validated_data)
+        return super().create(validated_data)
 
     @revisions.create_revision()
     def update(self, talk, validated_data):
         revisions.set_comment("Changed via REST api")
-        return super(TalkSerializer, self).update(talk, validated_data)
+        return super().update(talk, validated_data)

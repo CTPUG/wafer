@@ -48,4 +48,4 @@ class ScheduleItemSerializer(serializers.HyperlinkedModelSerializer):
             revisions.set_user(request.user)
             revisions.set_comment("Updated using Schedule Editor")
             return existing_schedule_item
-        return super(ScheduleItemSerializer, self).create(validated_data)
+        return super().create(validated_data)

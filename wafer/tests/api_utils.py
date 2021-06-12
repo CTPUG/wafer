@@ -8,7 +8,7 @@ class SortedResultsClient(APIClient):
     """
     def __init__(self, *args, **kw):
         self._sort_key = kw.pop('sort_key')
-        super(SortedResultsClient, self).__init__(*args, **kw)
+        super().__init__(*args, **kw)
 
     def _sorted_response(self, response):
         def get_key(item):
@@ -18,5 +18,5 @@ class SortedResultsClient(APIClient):
         return response
 
     def generic(self, *args, **kw):
-        response = super(SortedResultsClient, self).generic(*args, **kw)
+        response = super().generic(*args, **kw)
         return self._sorted_response(response)

@@ -138,7 +138,7 @@ class TalkAdmin(CompareVersionAdmin):
     ]
 
     def get_queryset(self, request):
-        qs = super(TalkAdmin, self).get_queryset(request)
+        qs = super().get_queryset(request)
         qs = qs.annotate(
             review_count_annotation=models.Count('reviews', distinct=True),
             review_score_annotation=models.Avg('reviews__scores__value')

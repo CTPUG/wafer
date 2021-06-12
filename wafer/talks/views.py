@@ -33,7 +33,7 @@ class EditOwnTalksMixin(object):
     '''Users can edit their own talks as long as the talk is
        "Under Consideration"'''
     def get_object(self, *args, **kwargs):
-        object_ = super(EditOwnTalksMixin, self).get_object(*args, **kwargs)
+        object_ = super().get_object(*args, **kwargs)
         if object_.can_edit(self.request.user):
             return object_
         else:
@@ -63,19 +63,19 @@ class TalkView(BuildableDetailView):
     def build_object(self, obj):
         """Override django-bakery to skip talks that raise 403"""
         try:
-            super(TalkView, self).build_object(obj)
+            super().build_object(obj)
         except PermissionDenied:
             # We cleanup the directory created
             self.unbuild_object(obj)
 
     def create_request(self, path):
-        request = super(TalkView, self).create_request(path)
+        request = super().create_request(path)
         request.user = AnonymousUser()
         return request
 
     def get_object(self, *args, **kwargs):
         '''Only talk owners can see talks, unless they've been accepted'''
-        object_ = super(TalkView, self).get_object(*args, **kwargs)
+        object_ = super().get_object(*args, **kwargs)
         if not object_.can_view(self.request.user):
             raise PermissionDenied
         return object_
@@ -84,10 +84,10 @@ class TalkView(BuildableDetailView):
         '''Canonicalize the URL if the slug changed'''
         if self.request.path != self.object.get_absolute_url():
             return HttpResponseRedirect(self.object.get_absolute_url())
-        return super(TalkView, self).render_to_response(*args, **kwargs)
+        return super().render_to_response(*args, **kwargs)
 
     def get_context_data(self, **kwargs):
-        context = super(TalkView, self).get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
         talk = self.object
         user = self.request.user
 
@@ -111,12 +111,12 @@ class TalkCreate(LoginRequiredMixin, CreateView):
         return get_talk_form_class()
 
     def get_form_kwargs(self):
-        kwargs = super(TalkCreate, self).get_form_kwargs()
+        kwargs = super().get_form_kwargs()
         kwargs['user'] = self.request.user
         return kwargs
 
     def get_context_data(self, **kwargs):
-        context = super(TalkCreate, self).get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
         can_submit = getattr(settings, 'WAFER_TALKS_OPEN', True)
         if can_submit and TalkType.objects.exists():
             # Check for all talk types being disabled
@@ -149,12 +149,12 @@ class TalkUpdate(EditOwnTalksMixin, UpdateView):
         return get_talk_form_class()
 
     def get_form_kwargs(self):
-        kwargs = super(TalkUpdate, self).get_form_kwargs()
+        kwargs = super().get_form_kwargs()
         kwargs['user'] = self.request.user
         return kwargs
 
     def get_context_data(self, **kwargs):
-        context = super(TalkUpdate, self).get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
         context['can_edit'] = self.object.can_edit(self.request.user)
         return context
 
@@ -162,7 +162,7 @@ class TalkUpdate(EditOwnTalksMixin, UpdateView):
     def form_valid(self, form):
         revisions.set_user(self.request.user)
         revisions.set_comment("Talk Modified")
-        return super(TalkUpdate, self).form_valid(form)
+        return super().form_valid(form)
 
 
 class TalkWithdraw(EditOwnTalksMixin, DeleteView):
@@ -188,7 +188,7 @@ class TalkReview(PermissionRequiredMixin, CreateView):
     template_name = 'wafer.talks/review_talk.html'
 
     def get_form_kwargs(self):
-        kwargs = super(TalkReview, self).get_form_kwargs()
+        kwargs = super().get_form_kwargs()
         kwargs['talk'] = Talk.objects.get(pk=self.kwargs['pk'])
         kwargs['instance'] = self.get_object()
         kwargs['user'] = self.request.user
@@ -204,7 +204,7 @@ class TalkReview(PermissionRequiredMixin, CreateView):
     def form_valid(self, form):
         existing = self.get_object()
         with revisions.create_revision():
-            response = super(TalkReview, self).form_valid(form)
+            response = super().form_valid(form)
             revisions.set_user(self.request.user)
             if existing:
                 revisions.set_comment("Review Modified")
@@ -238,7 +238,7 @@ class Speakers(BuildableListView):
         return [speakers[i:i + n] for i in range(0, len(speakers), n)]
 
     def get_context_data(self, **kwargs):
-        context = super(Speakers, self).get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
         speakers = UserProfile.objects.filter(
             user__talks__status='A').distinct().prefetch_related(
             'user').order_by('user__talks__talk_type',
@@ -313,8 +313,8 @@ class TalkUrlsViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
 
     def create(self, request, *args, **kw):
         request.data['talk'] = self.get_parents_query_dict()['talk']
-        return super(TalkUrlsViewSet, self).create(request, *args, **kw)
+        return super().create(request, *args, **kw)
 
     def update(self, request, *args, **kw):
         request.data['talk'] = self.get_parents_query_dict()['talk']
-        return super(TalkUrlsViewSet, self).update(request, *args, **kw)
+        return super().update(request, *args, **kw)

@@ -148,7 +148,7 @@ class ScheduleView(BuildableTemplateView):
     build_path = 'schedule/index.html'
 
     def get_context_data(self, **kwargs):
-        context = super(ScheduleView, self).get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
         # Check if the schedule is valid
         context['active'] = False
         context['prev_block'] = None
@@ -190,7 +190,7 @@ class ScheduleXmlView(ScheduleView):
 
     def get_context_data(self, **kwargs):
         """Allow adding a 'render_description' parameter"""
-        context = super(ScheduleXmlView, self).get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
         if self.request.GET.get('render_description', None) == '1':
             context['render_description'] = True
         else:
@@ -272,7 +272,7 @@ class CurrentView(TemplateView):
         return [r for r in rows if r]
 
     def get_context_data(self, **kwargs):
-        context = super(CurrentView, self).get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
         # If the schedule is invalid, return a context with active=False
         context['active'] = False
         if not check_schedule():
@@ -343,7 +343,7 @@ class ScheduleEditView(TemplateView):
         return slot_context
 
     def get_context_data(self, block_id=None, **kwargs):
-        context = super(ScheduleEditView, self).get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
 
         blocks = ScheduleBlock.objects.all()
         if block_id:

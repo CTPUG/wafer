@@ -35,15 +35,14 @@ class RegisteredUserList(object):
 
 class TicketRegisteredUserList(RegisteredUserList):
     def fields(self):
-        return super(TicketRegisteredUserList, self).fields() + (
-            'ticket_type', 'ticket_barcode')
+        return super().fields() + ('ticket_type', 'ticket_barcode')
 
     def details(self, person):
         ticket = person.user.ticket.first()
         details = (None, None)
         if ticket:
             details = (ticket.type.name, ticket.barcode)
-        return super(TicketRegisteredUserList, self).details(person) + details
+        return super().details(person) + details
 
 
 class Command(BaseCommand):

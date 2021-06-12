@@ -15,14 +15,12 @@ class TicketTypeSerializer(serializers.ModelSerializer):
     @revisions.create_revision()
     def create(self, validated_data):
         revisions.set_comment("Created via REST api")
-        return super(TicketTypeSerializer, self).create(validated_data)
+        return super().create(validated_data)
 
     @revisions.create_revision()
     def update(self, ticket_type, validated_data):
         revisions.set_comment("Changed via REST api")
-        return super(TicketTypeSerializer, self).update(
-            ticket_type, validated_data,
-        )
+        return super().update(ticket_type, validated_data)
 
 
 class TicketSerializer(serializers.ModelSerializer):
@@ -48,7 +46,7 @@ class TicketSerializer(serializers.ModelSerializer):
         if "barcode" not in validated_data:
             raise serializers.ValidationError(
                 "barcode required during ticket creation")
-        return super(TicketSerializer, self).create(validated_data)
+        return super().create(validated_data)
 
     @revisions.create_revision()
     def update(self, ticket, validated_data):
@@ -56,4 +54,4 @@ class TicketSerializer(serializers.ModelSerializer):
         if "barcode" in validated_data:
             raise serializers.ValidationError(
                 "barcode forbidden during ticket update")
-        return super(TicketSerializer, self).update(ticket, validated_data)
+        return super().update(ticket, validated_data)

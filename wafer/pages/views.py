@@ -23,7 +23,7 @@ class ShowPage(BuildableDetailView):
     def build_object(self, obj):
         """Override django-bakery to skip pages marked exclude_from_static"""
         if not obj.exclude_from_static:
-            super(ShowPage, self).build_object(obj)
+            super().build_object(obj)
         # else we just ignore this page entirely
         # This does create a directory, but that's usually what we want
         # for container pages, so we leave it.
@@ -38,7 +38,7 @@ class EditPage(UpdateView):
     def form_valid(self, form):
         revisions.set_user(self.request.user)
         revisions.set_comment("Page Modified")
-        return super(EditPage, self).form_valid(form)
+        return super().form_valid(form)
 
 
 class ComparePage(DetailView):
@@ -46,7 +46,7 @@ class ComparePage(DetailView):
     model = Page
 
     def get_context_data(self, **kwargs):
-        context = super(ComparePage, self).get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
 
         versions = Version.objects.get_for_object(self.object)
         # By revisions api definition, this is the most recent version

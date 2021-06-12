@@ -19,7 +19,7 @@ class PageSerializer(serializers.ModelSerializer):
     @revisions.create_revision()
     def create(self, validated_data):
         revisions.set_comment("Created via REST api")
-        return super(PageSerializer, self).create(validated_data)
+        return super().create(validated_data)
 
     @revisions.create_revision()
     def update(self, page, validated_data):

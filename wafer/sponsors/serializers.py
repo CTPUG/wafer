@@ -13,7 +13,7 @@ class SponsorSerializer(serializers.ModelSerializer):
     @revisions.create_revision()
     def create(self, validated_data):
         revisions.set_comment("Created via REST api")
-        return super(SponsorSerializer, self).create(validated_data)
+        return super().create(validated_data)
 
     @revisions.create_revision()
     def update(self, sponsor, validated_data):
@@ -33,7 +33,7 @@ class PackageSerializer(serializers.ModelSerializer):
     @revisions.create_revision()
     def create(self, validated_data):
         revisions.set_comment("Created via REST api")
-        return super(PackageSerializer, self).create(validated_data)
+        return super().create(validated_data)
 
     @revisions.create_revision()
     def update(self, package, validated_data):

@@ -27,7 +27,7 @@ class ClaimView(LoginRequiredMixin, FormView):
     form_class = TicketForm
 
     def get_context_data(self, **kwargs):
-        context = super(ClaimView, self).get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
         context['can_claim'] = self.can_claim()
         return context
 
@@ -44,7 +44,7 @@ class ClaimView(LoginRequiredMixin, FormView):
         ticket = Ticket.objects.get(barcode=form.cleaned_data['barcode'])
         ticket.user = self.request.user
         ticket.save()
-        return super(ClaimView, self).form_valid(form)
+        return super().form_valid(form)
 
     def get_success_url(self):
         return reverse(

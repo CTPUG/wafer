@@ -28,7 +28,7 @@ class UsersView(PaginatedBuildableListView):
     build_prefix = 'users'
 
     def get_queryset(self, *args, **kwargs):
-        qs = super(UsersView, self).get_queryset(*args, **kwargs)
+        qs = super().get_queryset(*args, **kwargs)
         if not settings.WAFER_PUBLIC_ATTENDEE_LIST:
             qs = qs.filter(talks__status__in=(ACCEPTED, CANCELLED)).distinct()
         qs = qs.order_by('first_name', 'last_name', 'username')
@@ -42,7 +42,7 @@ class Hide404Mixin(object):
        403's when the attendee list isn't public."""
     def get(self, *args, **kwargs):
         try:
-            result = super(Hide404Mixin, self).get(*args, **kwargs)
+            result = super().get(*args, **kwargs)
         except Http404:
             if not settings.WAFER_PUBLIC_ATTENDEE_LIST:
                 # We convert all 404's to 403's to prevent info leakage
@@ -81,7 +81,7 @@ class ProfileView(Hide404Mixin, BuildableDetailView):
             self.unbuild_object(obj)
 
     def get_object(self, *args, **kwargs):
-        object_ = super(ProfileView, self).get_object(*args, **kwargs)
+        object_ = super().get_object(*args, **kwargs)
         if not settings.WAFER_PUBLIC_ATTENDEE_LIST:
             if (not self.can_edit(object_) and
                     not object_.userprofile.published_talks().exists()):
@@ -89,7 +89,7 @@ class ProfileView(Hide404Mixin, BuildableDetailView):
         return object_
 
     def get_context_data(self, **kwargs):
-        context = super(ProfileView, self).get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
         context['can_edit'] = self.can_edit(context['object'])
         return context
 
@@ -103,7 +103,7 @@ class ProfileView(Hide404Mixin, BuildableDetailView):
 class EditOneselfMixin(Hide404Mixin):
     """Extend the behaviour with edit permission checks."""
     def get_object(self, *args, **kwargs):
-        object_ = super(EditOneselfMixin, self).get_object(*args, **kwargs)
+        object_ = super().get_object(*args, **kwargs)
         self.verify_edit_permission(object_)
         return object_
 

@@ -12,7 +12,7 @@ class TicketForm(forms.Form):
     barcode = forms.fields.IntegerField(label='Ticket barcode')
 
     def __init__(self, *args, **kwargs):
-        super(TicketForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.include_media = False
         self.helper.add_input(Submit('submit', _('Claim')))
