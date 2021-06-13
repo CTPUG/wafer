@@ -176,6 +176,12 @@ documentation for more details.
     Used by `django-registration-redux`_.
     When ``True``, user sign-up is permitted.
 
+``REGISTRATION_FORM``
+    Dotted path.
+    Used by `django-registration-redux`_.
+    We provide ``wafer.registration.forms.WaferRegistrationForm`` to
+    validate usernames.
+
 .. _django-markitup: https://github.com/zsiciarz/django-markitup
 .. _django-bakery: https://github.com/datadesk/django-bakery
 .. _django-registration-redux: https://django-registration-redux.readthedocs.io/
