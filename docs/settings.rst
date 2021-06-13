@@ -73,6 +73,15 @@ Wafer's settings
     ``items``
         An optional list of similar dicts, making up a submenu.
 
+``WAFER_PAGE_MARKITUP_FILTER``
+    Configuration for `django-markitup`_.
+    The type of markup used for pages, only.
+
+    ``MARKITUP_FILTER`` is used for rendering other objects.
+    This allows a more relaxed security configuration for pages, where
+    XSS is less of a risk, and embedded HTML markup can be useful for
+    styling.
+
 ``WAFER_PUBLIC_ATTENDEE_LIST``
     A boolean flag.
     When ``True``, all registered users' profiles are publicly visible.
@@ -162,10 +171,13 @@ documentation for more details.
 
 ``MARKITUP_FILTER``
     Configuration for `django-markitup`_.
-    The type of markup used for pages, talk abstracts, user profiles,
-    and other things.
+    The type of markup used for talk abstracts, user profiles, and other
+    things.
     Also, configuration for the conversion, such as allowing arbitrary
     HTML embedding.
+
+    ``WAFER_PAGE_MARKITUP_FILTER`` is used for rendering pages, which
+    usually have a lower security risk to other markup on the site.
 
 ``BUILD_DIR``
     Used by `django-bakery`_.
