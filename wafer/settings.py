@@ -298,7 +298,7 @@ WAFER_PUBLIC_ATTENDEE_LIST = True
 # django-bakery -- disk-based renderer
 BUILD_DIR = os.path.join(project_root, 'static_mirror')
 
-MARKITUP_FILTER = ('markdown.markdown', {'safe_mode': True})
+MARKITUP_FILTER = ('wafer.markdown.bleached_markdown', {})
 JQUERY_URL = None
 SELECT2_USE_BUNDLED_JQUERY = False
 

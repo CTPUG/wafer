@@ -1,29 +1,30 @@
 from glob import glob
 import subprocess
-import sys
 
 from setuptools import find_packages, setup
 
 REQUIRES = [
     'Django>=2.2,<3.1',
+    'bleach',
+    'bleach-allowlist',
+    'diff-match-patch',
+    'django-bakery>=0.12.0',
     'django-crispy-forms',
+    'django-markitup>=4.0.0',
     'django-nose',
     'django-registration-redux',
+    'django-reversion',
+    'django-select2',
     'djangorestframework',
     'drf-extensions>=0.5.0',
+    'icalendar>=4.0',
     'jsonfield',
+    'markdown>=2.5',
     'pillow',
-    'diff-match-patch',
+    'py3dns',
     'pyLibravatar',
     'pytz',
     'requests',
-    'django-bakery>=0.12.0',
-    'django-select2',
-    'django-reversion',
-    'markdown>=2.5',
-    'icalendar>=4.0',
-    'py3dns',
-    'django-markitup>=4.0.0',
 ]
 
 SOURCES = []

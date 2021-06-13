@@ -129,7 +129,7 @@
     </div>
   {% endif %}
   <div id="abstract">
-    {{ object.abstract.rendered|safe }}
+    {{ object.abstract }}
   </div>
   {% if perms.talks.view_all_talks or user.is_superuser %}
     {% if talk.notes %}

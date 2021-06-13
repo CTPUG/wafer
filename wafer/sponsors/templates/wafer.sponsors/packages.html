@@ -20,7 +20,7 @@
             {% endif %}
             <p>{% trans 'Packages claimed:' %} {{ package.number_claimed }}</p>
             <p>{{ package.short_description }}</p>
-            {{ package.description.rendered|safe }}
+            {{ package.description }}
           </div>
         </div>
       </section>
