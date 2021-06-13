@@ -5,6 +5,8 @@ from setuptools import find_packages, setup
 
 REQUIRES = [
     'Django>=2.2,<3.1',
+    'bleach',
+    'bleach-allowlist',
     'diff-match-patch',
     'django-bakery>=0.12.0',
     'django-crispy-forms',
