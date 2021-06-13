@@ -17,7 +17,7 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('name', models.CharField(max_length=255)),
                 ('description', models.TextField()),
-                ('item', models.FileField(upload_to=b'pages_files')),
+                ('item', models.FileField(upload_to='pages_files')),
             ],
             options={
             },
@@ -36,7 +36,7 @@ class Migration(migrations.Migration):
                 ('files', models.ManyToManyField(help_text='Images and other files for use in the content markdown field.', related_name='pages', null=True, to='pages.File', blank=True)),
                 ('parent', models.ForeignKey(
                     blank=True, to='pages.Page', null=True,
-                    on_delete=models.CASCADE)),
+                    on_delete=models.CASCADE, related_name='children')),
             ],
             options={
             },
