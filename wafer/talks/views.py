@@ -80,10 +80,15 @@ class TalkView(BuildableDetailView):
             raise PermissionDenied
         return object_
 
+    def canonical_url(self):
+        '''Return the canonical URL for this view'''
+        return self.object.get_absolute_url()
+
     def render_to_response(self, *args, **kwargs):
         '''Canonicalize the URL if the slug changed'''
-        if self.request.path != self.object.get_absolute_url():
-            return HttpResponseRedirect(self.object.get_absolute_url())
+        canonical_url = self.canonical_url()
+        if self.request.path != canonical_url:
+            return HttpResponseRedirect(canonical_url)
         return super().render_to_response(*args, **kwargs)
 
     def get_context_data(self, **kwargs):
