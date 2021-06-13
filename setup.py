@@ -1,6 +1,5 @@
 from glob import glob
 import subprocess
-import sys
 
 from setuptools import find_packages, setup
 
