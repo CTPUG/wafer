@@ -65,12 +65,13 @@ Installation
    as required.
 
    ``STATIC_FILES``, ``WAFER_MENUS``, ``MARKITUP_FILTER``,
-   ``WAFER_TALKS_OPEN``, ``WAFER_REGISTRATION_OPEN`` and
-   ``WAFER_PUBLIC_ATTENDEE_LIST`` will probably need to be
-   overridden.
+   ``WAFER_PAGE_MARKITUP_FILTER``, ``WAFER_TALKS_OPEN``,
+   ``WAFER_REGISTRATION_OPEN`` and ``WAFER_PUBLIC_ATTENDEE_LIST`` will
+   probably need to be overridden.
 
-   If you add extensions to ``MARKITUP_FILTER``, be
-   sure to install the appropriate python packages as well.
+   If you add extensions to ``MARKITUP_FILTER`` or
+   ``WAFER_PAGE_MARKITUP_FILTER``, be sure to install the appropriate
+   python packages as well.
 
 7. Wafer uses the Django caching infrastructure in several places, so
    the cache table needs to be created using ``manage.py createcachetable``.
