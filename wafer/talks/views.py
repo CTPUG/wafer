@@ -57,6 +57,10 @@ class UsersTalks(PaginatedBuildableListView):
             "talk_type", "corresponding_author", "authors", "authors__userprofile"
         )
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["languages"] = Talk.LANGUAGES
+        return context
 
 
 class TalkView(BuildableDetailView):

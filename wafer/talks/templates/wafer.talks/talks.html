@@ -5,44 +5,65 @@
 {% block content %}
 <section class="wafer wafer-talks">
   {% regroup talk_list by talk_type.name as grouped_talks %}
-  {% for type, talks in grouped_talks %}
-    {% if type %}
-      <h1>{{ type }}</h1>
-    {% else %}
-      <h1>{% trans 'Talks' %}</h1>
-    {% endif %}
-    <div class="wafer list">
-      {% for talk in talks %}
-        <div>
-          {% if not talk.cancelled and not talk.accepted and talk.is_late_submission %}
-            <span class="badge badge-warning" title="{% trans 'Late submission' %}">L</span>
-          {% endif %}
-          {% if talk.submitted %}
-            <span class="badge badge-info" title="{% trans 'Submitted' %}">{{ talk.status }}</span>
-          {% elif talk.under_consideration %}
-            <span class="badge badge-info" title="{% trans 'Under consideration' %}">{{ talk.status }}</span>
-          {% elif talk.reject %}
-            <span class="badge badge-danger" title="{% trans 'Not accepted' %}">{{ talk.status }}</span>
-          {% elif talk.cancelled %}
-            <span class="badge badge-warning" title="{% trans 'Talk Cancelled' %}">{{ talk.status }}</span>
-          {% elif talk.provisional %}
-            <span class="badge badge-success" title="{% trans 'Provisionally Accepted' %}">{{ talk.status }}</span>
-          {% endif %}
-          {% reviewed_badge user talk %}
-          {% if talk.withdrawn %}
-            <del><a href="{{ talk.get_absolute_url }}">{{ talk.title }}</a></del>
-          {% else %}
-            <a href="{{ talk.get_absolute_url }}">{{ talk.title }}</a>
-          {% endif %}
-          {% blocktrans trimmed with authors=talk.get_authors_display_name %}
-            by <span class="author">{{ authors }}</span>
-          {% endblocktrans %}
-        </div>
+  <div class="table-responsive">
+    <table class='table table-striped'>
+      {% for type, talks in grouped_talks %}
+        <thead class='thead-dark'>
+          <tr>
+            <th>
+              {% if type %}
+                {{ type }}
+              {% else %}
+                {% trans "Talk" %}
+              {% endif %}
+            </th>
+            {% if languages %}<th>{% trans "Language" %}</th>{% endif %}
+            <th>{% trans "Speakers" %}</th>
+          </tr>
+        </thead>
+        {% for talk in talks %}
+          <tr>
+            <td>
+              {% if not talk.cancelled and not talk.accepted and talk.is_late_submission %}
+                <span class="badge badge-warning" title="{% trans 'Late submission' %}">L</span>
+              {% endif %}
+              {% if talk.submitted %}
+                <span class="badge badge-info" title="{% trans 'Submitted' %}">{{ talk.status }}</span>
+              {% elif talk.under_consideration %}
+                <span class="badge badge-info" title="{% trans 'Under consideration' %}">{{ talk.status }}</span>
+              {% elif talk.reject %}
+                <span class="badge badge-danger" title="{% trans 'Not accepted' %}">{{ talk.status }}</span>
+              {% elif talk.cancelled %}
+                <span class="badge badge-warning" title="{% trans 'Talk Cancelled' %}">{{ talk.status }}</span>
+              {% elif talk.provisional %}
+                <span class="badge badge-success" title="{% trans 'Provisionally Accepted' %}">{{ talk.status }}</span>
+              {% endif %}
+              {% reviewed_badge user talk %}
+              {% if talk.withdrawn %}
+                <del><a href="{{ talk.get_absolute_url }}">{{ talk.title }}</a></del>
+              {% else %}
+                <a href="{{ talk.get_absolute_url }}">{{ talk.title }}</a>
+              {% endif %}
+            </td>
+            {% if languages %}
+              <td>{{ talk.get_language_display }}</td>
+            {% endif %}
+            <td>
+              {% with authors=talk.get_authors_display_name %}
+                <span class="author">{{ authors }}</span>
+              {% endwith %}
+            </td>
+          </tr>
+        {% endfor %}
       {% empty %}
-        <p>{% trans 'No talks accepted yet.' %}</p>
+        <tr>
+          <th colspan="{% if languages %}3{% else %}2{% endif %}">
+            {% trans 'No talks accepted yet.' %}
+          </th>
+        </tr>
       {% endfor %}
-    </div>
-  {% endfor %}
+    </table>
+  </div>
 </section>
 {% if is_paginated %}
   <section class="wafer wafer-pagination">
