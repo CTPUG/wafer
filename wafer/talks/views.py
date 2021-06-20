@@ -43,7 +43,7 @@ class EditOwnTalksMixin(object):
 class UsersTalks(PaginatedBuildableListView):
     template_name = 'wafer.talks/talks.html'
     build_prefix = 'talks'
-    paginate_by = 25
+    paginate_by = 100
 
     @order_results_by('talk_type', 'talk_id')
     def get_queryset(self):
