@@ -49,10 +49,14 @@ class UsersTalks(PaginatedBuildableListView):
     def get_queryset(self):
         # self.request will be None when we come here via the static site
         # renderer
-        if (self.request and Talk.can_view_all(self.request.user)):
-            return Talk.objects.all()
-        return Talk.objects.filter(Q(status=ACCEPTED) |
-                                   Q(status=CANCELLED))
+        if self.request and Talk.can_view_all(self.request.user):
+            talks = Talk.objects.all()
+        else:
+            talks = Talk.objects.filter(Q(status=ACCEPTED) | Q(status=CANCELLED))
+        return talks.prefetch_related(
+            "talk_type", "corresponding_author", "authors", "authors__userprofile"
+        )
+
 
 
 class TalkView(BuildableDetailView):
