@@ -43,16 +43,24 @@ class EditOwnTalksMixin(object):
 class UsersTalks(PaginatedBuildableListView):
     template_name = 'wafer.talks/talks.html'
     build_prefix = 'talks'
-    paginate_by = 25
+    paginate_by = 100
 
     @order_results_by('talk_type', 'talk_id')
     def get_queryset(self):
         # self.request will be None when we come here via the static site
         # renderer
-        if (self.request and Talk.can_view_all(self.request.user)):
-            return Talk.objects.all()
-        return Talk.objects.filter(Q(status=ACCEPTED) |
-                                   Q(status=CANCELLED))
+        if self.request and Talk.can_view_all(self.request.user):
+            talks = Talk.objects.all()
+        else:
+            talks = Talk.objects.filter(Q(status=ACCEPTED) | Q(status=CANCELLED))
+        return talks.prefetch_related(
+            "talk_type", "corresponding_author", "authors", "authors__userprofile"
+        )
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["languages"] = Talk.LANGUAGES
+        return context
 
 
 class TalkView(BuildableDetailView):
