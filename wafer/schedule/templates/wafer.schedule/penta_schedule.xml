@@ -120,13 +120,7 @@
                         <license>{{ WAFER_VIDEO_LICENSE }}</license>
                       </recording>
                     {% endif %}
-                    <conf_url>{{ items.item.get_url }}</conf_url>
-                    {# It's useful to have the full url available in the xml file. The pentabarf.xml format isn't that well #}
-                    {# standardised, so we add our own full_conf_url tag to accomodate this requirement #}
-
-                    {# forcing https here is a bit horrible - make this configurable somewhere? #}
-                    <full_conf_url>https://{{ WAFER_CONFERENCE_DOMAIN }}{{ items.item.get_url }}</full_conf_url>
-
+                    <url>https://{{ WAFER_CONFERENCE_DOMAIN }}{{ items.item.get_url }}</url>
                   </event>
                 {% endif %}
               {% endfor %}
