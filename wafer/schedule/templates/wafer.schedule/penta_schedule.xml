@@ -2,6 +2,7 @@
 {% load i18n %}
 <schedule>
   <generator name="wafer" version="{{ wafer_version }}" />
+  <version>{# FIXME: We have no schedule versions #}</version>
   <conference>
     <title>{{ WAFER_CONFERENCE_NAME }}</title>
       {% if schedule_pages %}

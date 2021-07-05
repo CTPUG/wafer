@@ -1500,19 +1500,20 @@ class NonHTMLViewTests(TestCase):
         parsed = ElementTree.XML(response.content)
         self.assertEqual(parsed.tag, 'schedule')
         self.assertEqual(parsed[0].tag, 'generator')
-        self.assertEqual(parsed[1].tag, 'conference')
-        self.assertEqual(parsed[2].tag, 'day')
+        self.assertEqual(parsed[1].tag, 'version')
+        self.assertEqual(parsed[2].tag, 'conference')
+        self.assertEqual(parsed[3].tag, 'day')
 
         # Various tools expect 'start' and 'end' values, so
         # check we have those
-        conf = parsed[1]
+        conf = parsed[2]
         self.assertEqual('title', conf[0].tag)
         self.assertEqual('start', conf[1].tag)
         self.assertEqual('end', conf[2].tag)
         self.assertEqual('2013-09-22', conf[1].text)
         self.assertEqual('2013-09-23', conf[2].text)
 
-        day = parsed[2]
+        day = parsed[3]
         self.assertIn(('date', '2013-09-22'), day.items())
         self.assertEqual(day[0].tag, 'room')
         self.assertIn(('name', 'Venue 1'), day[0].items())
