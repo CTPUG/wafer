@@ -37,21 +37,16 @@
                     {% endwith %}
                     <room>{{ venue.name }}</room>
                     <track>{{ items.item.talk.track.name|default:"No Track" }}</track>
-                    {# It's not clear what the difference between abstract and description is meant to be #}
-                    {# Both confclerk and Giggity just lump them together into the same thing anyway, and #}
-                    {# summit only outputs stuff in description, so we keep abstract blank and follow #}
-                    {# summit's pattern and only include stuff in the description #}
+                    {# Abstract is defined to be a 1-paragraph summary, displayed before description. #}
+                    {# That doesn't match our data model, so we leave it blank. #}
                     <abstract/>
                     <subtitle/>
                     <slug>{{ WAFER_CONFERENCE_ACRONYM|lower }}-{{ items.item.pk }}-{{ items.item.get_slug }}</slug>
                     {% if items.item.talk %}
                       {% with talk=items.item.talk %}
                         <title>{{ items.item.get_title }}</title>
-                        {# I'm not sure if the raw markdown is the best thing here, but it seems to match what summit does, #}
-                        {# so hopefully the tools can handle the odd corner cases correctly. Giggity at least does some #}
-                        {# santization here. #}
-                        {# We do allow people to request html if they want it, which may also be a bad idea, but is useful for #}
-                        {# the video team #}
+                        {# description is allowed to be HTML or Markdown #}
+                        {# We let the requester select their desired format #}
                         {% if talk.abstract and render_description %}
                           <description>{{ talk.abstract.rendered }}</description>
                         {% elif talk.abstract %}
