@@ -194,6 +194,7 @@ class ScheduleXmlView(ScheduleView):
         context = super().get_context_data(**kwargs)
         context['wafer_version'] = __version__
         context['TIME_ZONE'] = settings.TIME_ZONE
+        context['WAFER_CONFERENCE_ACRONYM'] = settings.WAFER_CONFERENCE_ACRONYM
         if self.request.GET.get('render_description', None) == '1':
             context['render_description'] = True
         else:

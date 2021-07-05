@@ -242,6 +242,9 @@ WAFER_DYNAMIC_MENUS = (
     'wafer.sponsors.models.sponsor_menu',
 )
 
+# Short name for the conference
+WAFER_CONFERENCE_ACRONYM = 'waferconf'
+
 # Enabled SSO mechanims:
 WAFER_SSO = (
     # 'github',

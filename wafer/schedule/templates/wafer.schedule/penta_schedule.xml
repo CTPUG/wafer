@@ -17,6 +17,7 @@
     <timeslot_duration>00:15</timeslot_duration>
     <base_url>https://{{ WAFER_CONFERENCE_DOMAIN }}</base_url>
     <time_zone_name>{{ TIME_ZONE }}</time_zone_name>
+    <acronym>{{ WAFER_CONFERENCE_ACRONYM }}</acronym>
   </conference>
   {% for page in schedule_pages %}
     <day date="{{ page.block.start_time|date:'Y-m-d' }}" index="{{ forloop.counter }}">
