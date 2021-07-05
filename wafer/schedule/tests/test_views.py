@@ -1,11 +1,15 @@
 import json
 import datetime as D
-import icalendar
+import os.path
+from io import BytesIO
 from xml.etree import ElementTree
 
 from django.test import Client, TestCase
 from django.contrib.auth import get_user_model
 from django.utils import timezone
+
+import icalendar
+import lxml.etree
 
 from wafer.talks.models import Talk, ACCEPTED
 from wafer.pages.models import Page
@@ -1516,6 +1520,15 @@ class NonHTMLViewTests(TestCase):
         self.assertEqual(talk[0].text, '2013-09-22T10:00:00+00:00')
         title = [z for z in talk if z.tag == 'title'][0]
         self.assertEqual(title.text, 'Item 0')
+
+    def test_pentabarf_view_against_frab_xsd(self):
+        # Frab has an XSD schema, validate against it
+        doc = lxml.etree.parse(os.path.dirname(__file__) + '/frab.xml.xsd')
+        xsd = lxml.etree.XMLSchema(doc)
+        c = Client()
+        response = c.get('/schedule/pentabarf.xml')
+        doc = lxml.etree.parse(BytesIO(response.content))
+        xsd.assertValid(doc)
 
     def test_ics_view(self):
         # This is a bit circular, since we use icalendar to generate
