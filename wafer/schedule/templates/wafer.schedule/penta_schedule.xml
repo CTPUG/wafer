@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 {% load i18n %}
 <schedule>
+  <generator name="wafer" version="{{ wafer_version }}" />
   <conference>
     <title>{{ WAFER_CONFERENCE_NAME }}</title>
       {% if schedule_pages %}

@@ -16,6 +16,7 @@ from django.conf import settings
 from bakery.views import BuildableDetailView, BuildableTemplateView, BuildableMixin
 from rest_framework import viewsets
 from rest_framework.permissions import IsAdminUser
+from wafer import __version__
 from wafer.pages.models import Page
 from wafer.schedule.models import Venue, Slot, ScheduleBlock, ScheduleItem
 from wafer.schedule.admin import check_schedule, validate_schedule
@@ -191,6 +192,7 @@ class ScheduleXmlView(ScheduleView):
     def get_context_data(self, **kwargs):
         """Allow adding a 'render_description' parameter"""
         context = super().get_context_data(**kwargs)
+        context['wafer_version'] = __version__
         if self.request.GET.get('render_description', None) == '1':
             context['render_description'] = True
         else:
