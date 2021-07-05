@@ -42,6 +42,7 @@
                     {# summit only outputs stuff in description, so we keep abstract blank and follow #}
                     {# summit's pattern and only include stuff in the description #}
                     <abstract/>
+                    <subtitle/>
                     {% if items.item.talk %}
                       {% with talk=items.item.talk %}
                         <title>{{ items.item.get_title }}</title>
