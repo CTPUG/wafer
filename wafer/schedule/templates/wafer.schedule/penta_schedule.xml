@@ -76,10 +76,14 @@
                           {% endfor %}
                         </persons>
                         <abstract/>
-                        <released>{{ talk.video }}</released>
-                        {% if talk.video %}
-                          <license>{{ WAFER_VIDEO_LICENSE }}</license>
-                        {% endif %}
+                        <recording>
+                          {% if talk.video %}
+                            <optout>false</optout>
+                            <license>{{ WAFER_VIDEO_LICENSE }}</license>
+                          {% else %}
+                            <optout>true</optout>
+                          {% endif %}
+                        </recording>
                       {% endwith %}
                     {% else %}
                       <title>{{ items.item.get_details|escape }}</title>
@@ -111,8 +115,10 @@
                       {% else %}
                         <description/>
                       {% endif %}
-                      <released>True</released>
-                      <license>{{ WAFER_VIDEO_LICENSE }}</license>
+                      <recording>
+                        <optout>false</optout>
+                        <license>{{ WAFER_VIDEO_LICENSE }}</license>
+                      </recording>
                     {% endif %}
                     <conf_url>{{ items.item.get_url }}</conf_url>
                     {# It's useful to have the full url available in the xml file. The pentabarf.xml format isn't that well #}
