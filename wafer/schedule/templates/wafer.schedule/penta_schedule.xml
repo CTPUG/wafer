@@ -43,6 +43,7 @@
                     {# summit's pattern and only include stuff in the description #}
                     <abstract/>
                     <subtitle/>
+                    <slug>{{ WAFER_CONFERENCE_ACRONYM|lower }}-{{ items.item.pk }}-{{ items.item.get_slug }}</slug>
                     {% if items.item.talk %}
                       {% with talk=items.item.talk %}
                         <title>{{ items.item.get_title }}</title>

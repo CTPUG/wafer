@@ -299,6 +299,13 @@ class ScheduleItem(models.Model):
             return self.page.get_absolute_url()
         return None
 
+    def get_slug(self):
+        if self.talk:
+            return self.talk.slug
+        elif self.page:
+            return self.page.slug
+        return None
+
     def get_details(self):
         return self.get_desc()
 
