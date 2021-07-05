@@ -29,7 +29,7 @@
               {% for row_venue, items in row.items.items %}
                 {% if row_venue == venue and items.item %}
                   {# The event id is the ScheduleItem pk, which should be unique enough #}
-                  <event id="{{ items.item.pk }}">
+                  <event id="{{ items.item.pk }}" guid="{{ items.item.guid }}">
                     <date>{{ row.start_time.isoformat }}</date>
                     <start>{{ row.start_time|time:"H:i" }}</start>
                     {% with dur=items.item.get_duration %}

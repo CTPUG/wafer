@@ -1,3 +1,5 @@
+from uuid import UUID
+
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models.signals import post_save, post_delete
@@ -342,6 +344,11 @@ class ScheduleItem(models.Model):
         """Return the duration in total number of minutes."""
         duration = self.get_duration()
         return int(duration['hours'] * 60 + duration['minutes'])
+
+    @property
+    def guid(self):
+        """Return a GUID for the ScheduleItem (for frab xml)"""
+        return UUID(int=self.pk)
 
 
 def invalidate_check_schedule(*args, **kw):
