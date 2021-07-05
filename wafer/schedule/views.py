@@ -193,6 +193,7 @@ class ScheduleXmlView(ScheduleView):
         """Allow adding a 'render_description' parameter"""
         context = super().get_context_data(**kwargs)
         context['wafer_version'] = __version__
+        context['TIME_ZONE'] = settings.TIME_ZONE
         if self.request.GET.get('render_description', None) == '1':
             context['render_description'] = True
         else:

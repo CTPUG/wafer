@@ -14,8 +14,9 @@
         {% endwith %}
         <days>{{ schedule_pages|length }}</days>
       {% endif %}
-    <day_change>00:00</day_change>
     <timeslot_duration>00:15</timeslot_duration>
+    <base_url>https://{{ WAFER_CONFERENCE_DOMAIN }}</base_url>
+    <time_zone_name>{{ TIME_ZONE }}</time_zone_name>
   </conference>
   {% for page in schedule_pages %}
     <day date="{{ page.block.start_time|date:'Y-m-d' }}" index="{{ forloop.counter }}">
