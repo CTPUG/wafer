@@ -4,6 +4,7 @@ from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models.signals import post_save, post_delete
 from django.urls import reverse
+from django.utils.crypto import salted_hmac
 from django.utils.translation import ugettext_lazy as _
 from django.utils.timezone import localtime
 
@@ -355,7 +356,8 @@ class ScheduleItem(models.Model):
     @property
     def guid(self):
         """Return a GUID for the ScheduleItem (for frab xml)"""
-        return UUID(int=self.pk)
+        hmac = salted_hmac('wafer-event-uuid', str(self.pk))
+        return UUID(bytes=hmac.digest()[:16])
 
 
 def invalidate_check_schedule(*args, **kw):
