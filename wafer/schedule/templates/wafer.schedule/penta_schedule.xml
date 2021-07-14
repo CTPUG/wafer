@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 {% load i18n %}
 <schedule>
+  <generator name="wafer" version="{{ wafer_version }}" />
+  <version>{# FIXME: We have no schedule versions #}</version>
   <conference>
     <title>{{ WAFER_CONFERENCE_NAME }}</title>
       {% if schedule_pages %}
@@ -12,8 +14,10 @@
         {% endwith %}
         <days>{{ schedule_pages|length }}</days>
       {% endif %}
-    <day_change>00:00</day_change>
     <timeslot_duration>00:15</timeslot_duration>
+    <base_url>https://{{ WAFER_CONFERENCE_DOMAIN }}</base_url>
+    <time_zone_name>{{ TIME_ZONE }}</time_zone_name>
+    <acronym>{{ WAFER_CONFERENCE_ACRONYM }}</acronym>
   </conference>
   {% for page in schedule_pages %}
     <day date="{{ page.block.start_time|date:'Y-m-d' }}" index="{{ forloop.counter }}">
@@ -25,7 +29,7 @@
               {% for row_venue, items in row.items.items %}
                 {% if row_venue == venue and items.item %}
                   {# The event id is the ScheduleItem pk, which should be unique enough #}
-                  <event id="{{ items.item.pk }}">
+                  <event id="{{ items.item.pk }}" guid="{{ items.item.guid }}">
                     <date>{{ row.start_time.isoformat }}</date>
                     <start>{{ row.start_time|time:"H:i" }}</start>
                     {% with dur=items.item.get_duration %}
@@ -33,19 +37,16 @@
                     {% endwith %}
                     <room>{{ venue.name }}</room>
                     <track>{{ items.item.talk.track.name|default:"No Track" }}</track>
-                    {# It's not clear what the difference between abstract and description is meant to be #}
-                    {# Both confclerk and Giggity just lump them together into the same thing anyway, and #}
-                    {# summit only outputs stuff in description, so we keep abstract blank and follow #}
-                    {# summit's pattern and only include stuff in the description #}
+                    {# Abstract is defined to be a 1-paragraph summary, displayed before description. #}
+                    {# That doesn't match our data model, so we leave it blank. #}
                     <abstract/>
+                    <subtitle/>
+                    <slug>{{ WAFER_CONFERENCE_ACRONYM|lower }}-{{ items.item.pk }}-{{ items.item.get_slug }}</slug>
                     {% if items.item.talk %}
                       {% with talk=items.item.talk %}
                         <title>{{ items.item.get_title }}</title>
-                        {# I'm not sure if the raw markdown is the best thing here, but it seems to match what summit does, #}
-                        {# so hopefully the tools can handle the odd corner cases correctly. Giggity at least does some #}
-                        {# santization here. #}
-                        {# We do allow people to request html if they want it, which may also be a bad idea, but is useful for #}
-                        {# the video team #}
+                        {# description is allowed to be HTML or Markdown #}
+                        {# We let the requester select their desired format #}
                         {% if talk.abstract and render_description %}
                           <description>{{ talk.abstract.rendered }}</description>
                         {% elif talk.abstract %}
@@ -70,10 +71,14 @@
                           {% endfor %}
                         </persons>
                         <abstract/>
-                        <released>{{ talk.video }}</released>
-                        {% if talk.video %}
-                          <license>{{ WAFER_VIDEO_LICENSE }}</license>
-                        {% endif %}
+                        <recording>
+                          {% if talk.video %}
+                            <optout>false</optout>
+                            <license>{{ WAFER_VIDEO_LICENSE }}</license>
+                          {% else %}
+                            <optout>true</optout>
+                          {% endif %}
+                        </recording>
                       {% endwith %}
                     {% else %}
                       <title>{{ items.item.get_details|escape }}</title>
@@ -105,16 +110,12 @@
                       {% else %}
                         <description/>
                       {% endif %}
-                      <released>True</released>
-                      <license>{{ WAFER_VIDEO_LICENSE }}</license>
+                      <recording>
+                        <optout>false</optout>
+                        <license>{{ WAFER_VIDEO_LICENSE }}</license>
+                      </recording>
                     {% endif %}
-                    <conf_url>{{ items.item.get_url }}</conf_url>
-                    {# It's useful to have the full url available in the xml file. The pentabarf.xml format isn't that well #}
-                    {# standardised, so we add our own full_conf_url tag to accomodate this requirement #}
-
-                    {# forcing https here is a bit horrible - make this configurable somewhere? #}
-                    <full_conf_url>https://{{ WAFER_CONFERENCE_DOMAIN }}{{ items.item.get_url }}</full_conf_url>
-
+                    <url>https://{{ WAFER_CONFERENCE_DOMAIN }}{{ items.item.get_url }}</url>
                   </event>
                 {% endif %}
               {% endfor %}

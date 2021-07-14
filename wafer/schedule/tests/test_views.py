@@ -1,11 +1,15 @@
 import json
 import datetime as D
-import icalendar
+import os.path
+from io import BytesIO
 from xml.etree import ElementTree
 
 from django.test import Client, TestCase
 from django.contrib.auth import get_user_model
 from django.utils import timezone
+
+import icalendar
+import lxml.etree
 
 from wafer.talks.models import Talk, ACCEPTED
 from wafer.pages.models import Page
@@ -1495,19 +1499,21 @@ class NonHTMLViewTests(TestCase):
         response = c.get('/schedule/pentabarf.xml')
         parsed = ElementTree.XML(response.content)
         self.assertEqual(parsed.tag, 'schedule')
-        self.assertEqual(parsed[0].tag, 'conference')
-        self.assertEqual(parsed[1].tag, 'day')
+        self.assertEqual(parsed[0].tag, 'generator')
+        self.assertEqual(parsed[1].tag, 'version')
+        self.assertEqual(parsed[2].tag, 'conference')
+        self.assertEqual(parsed[3].tag, 'day')
 
         # Various tools expect 'start' and 'end' values, so
         # check we have those
-        conf = parsed[0]
+        conf = parsed[2]
         self.assertEqual('title', conf[0].tag)
         self.assertEqual('start', conf[1].tag)
         self.assertEqual('end', conf[2].tag)
         self.assertEqual('2013-09-22', conf[1].text)
         self.assertEqual('2013-09-23', conf[2].text)
 
-        day = parsed[1]
+        day = parsed[3]
         self.assertIn(('date', '2013-09-22'), day.items())
         self.assertEqual(day[0].tag, 'room')
         self.assertIn(('name', 'Venue 1'), day[0].items())
@@ -1516,6 +1522,15 @@ class NonHTMLViewTests(TestCase):
         self.assertEqual(talk[0].text, '2013-09-22T10:00:00+00:00')
         title = [z for z in talk if z.tag == 'title'][0]
         self.assertEqual(title.text, 'Item 0')
+
+    def test_pentabarf_view_against_frab_xsd(self):
+        # Frab has an XSD schema, validate against it
+        doc = lxml.etree.parse(os.path.dirname(__file__) + '/frab.xml.xsd')
+        xsd = lxml.etree.XMLSchema(doc)
+        c = Client()
+        response = c.get('/schedule/pentabarf.xml')
+        doc = lxml.etree.parse(BytesIO(response.content))
+        xsd.assertValid(doc)
 
     def test_ics_view(self):
         # This is a bit circular, since we use icalendar to generate

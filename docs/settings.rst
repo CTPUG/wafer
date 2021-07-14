@@ -22,6 +22,9 @@ Wafer's settings
     The name of the Django cache backend that wafer can use.
     Defaults to ``'wafer_cache'``.
 
+``WAFER_CONFERENCE_ACRONYM``
+    The abbreviated name of the conference.
+
 ``WAFER_DEFAULT_GROUPS``
     A list of groups that any new user is automatically added to.
     This can be used to tweak the default permissions available
