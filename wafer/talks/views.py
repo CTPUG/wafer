@@ -234,7 +234,10 @@ class TalkReview(PermissionRequiredMixin, CreateView):
         talk = review.talk
         if talk.status == SUBMITTED:
             talk.status = UNDER_CONSIDERATION
-            talk.save()
+            with revisions.create_revision():
+                revisions.set_user(self.request.user)
+                revisions.set_comment("Status changed by review process")
+                talk.save()
 
         return response
 
