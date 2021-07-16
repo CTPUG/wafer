@@ -416,6 +416,7 @@ class Review(models.Model):
         verbose_name_plural = _('reviews')
 
 
+@reversion.register()
 class ReviewAspect(models.Model):
     name = models.CharField(_('name'), max_length=255)
 
