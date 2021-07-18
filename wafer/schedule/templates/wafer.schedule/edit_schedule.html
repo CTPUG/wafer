@@ -119,7 +119,7 @@
                     class="badge badge-success draggable"
                     id="talk{{ talk.talk_id }}"
                     data-toggle="tooltip" data-placement="left"
-                    title="{{ talk.title }}"
+                    title="{{ talk.notes|default:"(no notes)" }}"
                     {% if talk not in talks_unassigned %}
                       hidden
                     {% endif %}
