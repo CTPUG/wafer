@@ -381,7 +381,7 @@ def update_schedule_items(*args, **kw):
         return
     for item in slot.scheduleitem_set.all():
         item.save(update_fields=['last_updated'])
-    # We also need to update the next slot, in case we changed it's
+    # We also need to update the next slot, in case we changed its
     # times as well
     next_slot = slot.slot_set.all()
     if next_slot.count():
