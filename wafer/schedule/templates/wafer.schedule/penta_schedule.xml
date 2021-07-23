@@ -70,7 +70,6 @@
                             {% endif %}
                           {% endfor %}
                         </persons>
-                        <abstract/>
                         <recording>
                           {% if talk.video %}
                             <optout>false</optout>

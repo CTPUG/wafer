@@ -1467,6 +1467,7 @@ class NonHTMLViewTests(TestCase):
         venue2 = Venue.objects.create(order=2, name='Venue 2')
         venue1.blocks.add(day1)
         venue2.blocks.add(day1)
+        venue1.blocks.add(day2)
 
         start1 = D.datetime(2013, 9, 22, 10, 0, 0, tzinfo=timezone.utc)
         start2 = D.datetime(2013, 9, 22, 11, 0, 0, tzinfo=timezone.utc)
@@ -1490,6 +1491,13 @@ class NonHTMLViewTests(TestCase):
 
         for index, item in enumerate(items):
             item.slots.add(slots[index // 2])
+
+        user = get_user_model().objects.create_user('john', 'best@wafer.test',
+                                                    'johnpassword')
+        talk = Talk.objects.create(title="Test talk", status=ACCEPTED,
+                                   corresponding_author_id=user.id)
+        talk_item = ScheduleItem.objects.create(venue=venue1, talk_id=talk.pk)
+        talk_item.slots.add(slots[4])
 
     def test_pentabarf_view(self):
         # We don't exhaustively test that the pentabarf view is valid pentabarf,
@@ -1543,7 +1551,7 @@ class NonHTMLViewTests(TestCase):
         # No major errors
         self.assertFalse(calendar.is_broken)
         # Check number of events
-        self.assertEqual(len(calendar.walk(name='VEVENT')), 8)
+        self.assertEqual(len(calendar.walk(name='VEVENT')), 9)
         # Check we have the right time in places
         event = calendar.walk(name='VEVENT')[0]
         self.assertEqual(event['dtstart'].params['value'], 'DATE-TIME')
