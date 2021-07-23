@@ -12,7 +12,8 @@ import lxml.etree
 
 from wafer.pages.models import Page
 from wafer.schedule.models import ScheduleBlock, Venue, Slot, ScheduleItem
-from wafer.talks.models import Talk, ACCEPTED
+from wafer.talks.models import ACCEPTED
+from wafer.talks.tests.fixtures import create_talk
 from wafer.tests.utils import create_user
 from wafer.utils import QueryTracker
 
@@ -1422,9 +1423,7 @@ class CurrentViewTests(TestCase):
         slot1 = Slot.objects.create(start_time=start1, end_time=start2)
         slot2 = Slot.objects.create(start_time=start1, end_time=end)
 
-        user = create_user('john')
-        talk = Talk.objects.create(title="Test talk", status=ACCEPTED,
-                                   corresponding_author_id=user.id)
+        talk = create_talk('Test talk', status=ACCEPTED, username='john')
 
         item1 = ScheduleItem.objects.create(venue=venue1,
                                             talk_id=talk.pk)
@@ -1486,9 +1485,7 @@ class NonHTMLViewTests(TestCase):
         for index, item in enumerate(items):
             item.slots.add(slots[index // 2])
 
-        user = create_user('john')
-        talk = Talk.objects.create(title="Test talk", status=ACCEPTED,
-                                   corresponding_author_id=user.id)
+        talk = create_talk('Test talk', status=ACCEPTED, username='john')
         talk_item = ScheduleItem.objects.create(venue=venue1, talk_id=talk.pk)
         talk_item.slots.add(slots[4])
 
@@ -1595,15 +1592,8 @@ class JsonViewTests(TestCase):
         for index, item in enumerate(items):
             item.slots.add(slots[(index + 1) // 2])
 
-        user = create_user('jimbob')
-
-        talk1 = Talk.objects.create(title="Test talk", status=ACCEPTED,
-                                    corresponding_author_id=user.id)
-        talk1.authors.add(user)
-
-        talk2 = Talk.objects.create(title="Test 2 talk", status=ACCEPTED,
-                                    corresponding_author_id=user.id)
-        talk2.authors.add(user)
+        talk1 = create_talk('Test talk', status=ACCEPTED, username='jimbob')
+        talk2 = create_talk('Test 2 talk', status=ACCEPTED, username='jimbob2')
 
         item1 = ScheduleItem.objects.create(venue=venue1,
                                             talk_id=talk1.pk)
