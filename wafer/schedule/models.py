@@ -1,5 +1,6 @@
 from uuid import UUID
 
+from django.core.cache import cache
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models.signals import post_save, post_delete
@@ -360,6 +361,14 @@ class ScheduleItem(models.Model):
         return UUID(bytes=hmac.digest()[:16])
 
 
+def get_schedule_version():
+    """Return the current schedule version"""
+    version = cache.get('wafer_schedule_version')
+    if not version:
+        version = update_schedule_version()
+    return version
+
+
 def invalidate_check_schedule(*args, **kw):
     sender = kw.pop('sender', None)
     if sender is Talk or sender is Page:
@@ -391,15 +400,24 @@ def update_schedule_items(*args, **kw):
             item.save(update_fields=['last_updated'])
 
 
-post_save.connect(invalidate_check_schedule, sender=ScheduleBlock)
-post_save.connect(invalidate_check_schedule, sender=Venue)
-post_save.connect(invalidate_check_schedule, sender=Slot)
-post_save.connect(invalidate_check_schedule, sender=ScheduleItem)
+def update_schedule_version(*args, **kwargs):
+    """Store the schedule version in the Django cache.
 
-post_delete.connect(invalidate_check_schedule, sender=ScheduleBlock)
-post_delete.connect(invalidate_check_schedule, sender=Venue)
-post_delete.connect(invalidate_check_schedule, sender=Slot)
-post_delete.connect(invalidate_check_schedule, sender=ScheduleItem)
+    The version is used to allow clients to perform conditional HTTP requests
+    on the schedule.
+
+    We don't just rely on max(ScheduleItem.updated_at) as that misses
+    deletions.
+    """
+    version = localtime().isoformat()
+    cache.set('wafer_schedule_version', version, timeout=None)
+    return version
+
+
+for sender in (ScheduleBlock, Venue, Slot, ScheduleItem):
+    for receiver in (invalidate_check_schedule, update_schedule_version):
+        post_save.connect(receiver, sender=sender)
+        post_delete.connect(receiver, sender=sender)
 
 # We also hook up calls from Page and Talk, so
 # changes to those reflect in the schedule immediately

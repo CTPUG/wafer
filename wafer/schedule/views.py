@@ -18,7 +18,8 @@ from rest_framework import viewsets
 from rest_framework.permissions import IsAdminUser
 from wafer import __version__
 from wafer.pages.models import Page
-from wafer.schedule.models import Venue, Slot, ScheduleBlock, ScheduleItem
+from wafer.schedule.models import (
+    Venue, Slot, ScheduleBlock, ScheduleItem, get_schedule_version)
 from wafer.schedule.admin import check_schedule, validate_schedule
 from wafer.schedule.serializers import ScheduleItemSerializer
 from wafer.talks.models import ACCEPTED, CANCELLED
@@ -181,6 +182,7 @@ class ScheduleView(BuildableTemplateView):
             if pos < len(blocks) - 1:
                 context['next_block'] = blocks[pos + 1]
         context['schedule_pages'] = generate_schedule(this_block)
+        context['schedule_version'] = get_schedule_version()
         return context
 
 
