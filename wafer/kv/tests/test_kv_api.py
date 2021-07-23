@@ -1,10 +1,12 @@
 """Tests for wafer.kv api views."""
 
-from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group
 from django.test import Client, TestCase
+
 from rest_framework.test import APIClient
+
 from wafer.kv.models import KeyValue
+from wafer.tests.utils import create_user
 
 
 def get_group(group):
@@ -13,17 +15,6 @@ def get_group(group):
 
 def create_group(group):
     return Group.objects.create(name=group)
-
-
-def create_user(username, groups):
-    create = get_user_model().objects.create_user
-    user = create(
-        username, '%s@example.com' % username, 'password')
-    for the_group in groups:
-        grp = get_group(the_group)
-        user.groups.add(grp)
-    user.save()
-    return user
 
 
 def create_kv_pair(name, value, group):
@@ -37,10 +28,10 @@ class KeyValueViewSetTests(TestCase):
     def setUp(self):
         for grp in ['group_1', 'group_2', 'group_3', 'group_4']:
             create_group(grp)
-        self.user1 = create_user("user1", ["group_1", "group_2"])
-        self.user2 = create_user("user2", ["group_1"]),
-        self.user3 = create_user("user3", ["group_4"]),
-        self.user4 = create_user("user4", ["group_3"]),
+        self.user1 = create_user("user1", groups=["group_1", "group_2"])
+        self.user2 = create_user("user2", groups=["group_1"]),
+        self.user3 = create_user("user3", groups=["group_4"]),
+        self.user4 = create_user("user4", groups=["group_3"]),
         self.kv_1_grp1 = create_kv_pair("Val 1.1", '{"key": "Data"}', "group_1")
         self.kv_2_grp2 = create_kv_pair("Val 2.1", '{"key2": "False"}', "group_2")
         self.kv_2_grp1 = create_kv_pair("Val 1.2", '{"key3": "True"}', "group_1")
@@ -56,7 +47,7 @@ class KeyValueViewSetTests(TestCase):
         self.assertEqual(response.status_code, 404)
 
     def test_group_1_member(self):
-        self.client.login(username='user2', password='password')
+        self.client.login(username='user2', password='user2_password')
         response = self.client.get('/kv/api/kv/')
         self.assertEqual(response.data['count'], 3)
         pairs = [x['key'] for x in response.data['results']]
@@ -71,7 +62,7 @@ class KeyValueViewSetTests(TestCase):
         self.assertEqual(response.status_code, 404)
 
     def test_group_1_2_member(self):
-        self.client.login(username='user1', password='password')
+        self.client.login(username='user1', password='user1_password')
         response = self.client.get('/kv/api/kv/')
         self.assertEqual(response.data['count'], 4)
         pairs = [x['key'] for x in response.data['results']]
@@ -89,7 +80,7 @@ class KeyValueViewSetTests(TestCase):
         self.assertEqual(response.status_code, 404)
 
     def test_group_4_member(self):
-        self.client.login(username='user3', password='password')
+        self.client.login(username='user3', password='user3_password')
         response = self.client.get('/kv/api/kv/')
         self.assertEqual(response.data['count'], 0)
         response = self.client.get('/kv/api/kv/%d/' % self.kv_1_grp1.pk)
@@ -100,7 +91,7 @@ class KeyValueViewSetTests(TestCase):
         self.assertEqual(response.status_code, 404)
 
     def test_group_3_member(self):
-        self.client.login(username='user4', password='password')
+        self.client.login(username='user4', password='user4_password')
         response = self.client.get('/kv/api/kv/')
         self.assertEqual(response.data['count'], 2)
         pairs = [x['key'] for x in response.data['results']]
@@ -120,16 +111,16 @@ class KeyValueAPITests(TestCase):
     def setUp(self):
         for grp in ['group_1', 'group_2']:
             create_group(grp)
-        self.user1 = create_user("user1", ["group_1", "group_2"])
-        self.user2 = create_user("user2", ["group_1"]),
-        self.user3 = create_user("user3", ["group_2"]),
+        self.user1 = create_user("user1", groups=["group_1", "group_2"])
+        self.user2 = create_user("user2", groups=["group_1"]),
+        self.user3 = create_user("user3", groups=["group_2"]),
         self.kv_1_grp1 = create_kv_pair("Val 1.1", '{"key": "Data"}', "group_1")
         self.kv_2_grp2 = create_kv_pair("Val 2.1", '{"key2": "False"}', "group_2")
         self.kv_3_grp1 = create_kv_pair("Val 1.3", '{"key1": "Data"}', "group_1")
         self.client = APIClient()
 
     def test_group_1_actions(self):
-        self.client.login(username='user2', password='password')
+        self.client.login(username='user2', password='user2_password')
         # Test creation
         data = {'key': 'new',
                 'value': "{'mykey': 'Value'}",
@@ -147,7 +138,7 @@ class KeyValueAPITests(TestCase):
         kv = KeyValue.objects.get(key='new')
         self.assertEqual(kv.value, "{'mykey': 'Value 2'}")
 
-        self.client.login(username='user1', password='password')
+        self.client.login(username='user1', password='user1_password')
         # Test that changing group ownership fails
         data = {'group': get_group("group_2").pk}
         response = self.client.patch('/kv/api/kv/%d/' % kv.pk, data,
@@ -159,7 +150,7 @@ class KeyValueAPITests(TestCase):
         self.assertFalse(KeyValue.objects.filter(key="new").exists())
 
         # Test non-group member
-        self.client.login(username='user3', password='password')
+        self.client.login(username='user3', password='user3_password')
         response = self.client.delete('/kv/api/kv/%d/' % self.kv_1_grp1.pk)
         self.assertEqual(response.status_code, 404)
         data = {'key': 'foobar'}
@@ -177,7 +168,7 @@ class KeyValueAPITests(TestCase):
         # Same tests as above, but with group_2 and a different ordering
         # of users belonging to 1 or both groups
         # Multi-group user
-        self.client.login(username='user1', password='password')
+        self.client.login(username='user1', password='user1_password')
         data = {'key': 'new',
                 'value': "{'mykey': 'Value'}",
                 'group': get_group("group_2").pk}
@@ -187,7 +178,7 @@ class KeyValueAPITests(TestCase):
         kv = KeyValue.objects.get(key='new')
         self.assertEqual(kv.value, "{'mykey': 'Value'}")
         # Single group user
-        self.client.login(username='user3', password='password')
+        self.client.login(username='user3', password='user3_password')
         data = {'value': "{'mykey': 'Value 2'}"}
         response = self.client.patch('/kv/api/kv/%d/' % kv.pk, data,
                                      format='json')
@@ -198,7 +189,7 @@ class KeyValueAPITests(TestCase):
         self.assertEqual(response.status_code, 204)
         self.assertFalse(KeyValue.objects.filter(key="new").exists())
 
-        self.client.login(username='user2', password='password')
+        self.client.login(username='user2', password='user2_password')
         response = self.client.delete('/kv/api/kv/%d/' % self.kv_2_grp2.pk)
         self.assertEqual(response.status_code, 404)
         data = {'key': 'foobar'}

@@ -1,10 +1,10 @@
 """Utilities for testing wafer."""
 
 from django.contrib.auth import get_user_model
-from django.contrib.auth.models import Permission
+from django.contrib.auth.models import Group, Permission
 
 
-def create_user(username, email=None, superuser=False, perms=()):
+def create_user(username, email=None, superuser=False, perms=(), groups=()):
     if superuser:
         create = get_user_model().objects.create_superuser
     else:
@@ -15,7 +15,10 @@ def create_user(username, email=None, superuser=False, perms=()):
     for codename in perms:
         perm = Permission.objects.get(codename=codename)
         user.user_permissions.add(perm)
-    if perms:
+    for group_name in groups:
+        group = Group.objects.get(name=group_name)
+        user.groups.add(group)
+    if perms or groups:
         user = get_user_model().objects.get(pk=user.pk)
     return user
 
