@@ -6,17 +6,11 @@ from django.test import Client, TestCase
 from django.urls import reverse
 
 from wafer.tests.api_utils import SortedResultsClient
-from wafer.tests.utils import create_user
+from wafer.tests.utils import create_user, mock_avatar_url
 from wafer.talks.models import (
     Talk, TalkUrl, ACCEPTED, REJECTED, SUBMITTED, UNDER_CONSIDERATION,
     CANCELLED, PROVISIONAL)
 from wafer.talks.tests.fixtures import create_talk, create_talk_type
-
-
-def mock_avatar_url(self):
-    if self.user.email is None:
-        return None
-    return "avatar-%s" % self.user.email
 
 
 class UsersTalksTests(TestCase):

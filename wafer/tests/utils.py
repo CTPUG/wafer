@@ -18,3 +18,10 @@ def create_user(username, email=None, superuser=False, perms=()):
     if perms:
         user = get_user_model().objects.get(pk=user.pk)
     return user
+
+
+def mock_avatar_url(self):
+    """Avoid libravatar DNS lookups during tests"""
+    if self.user.email is None:
+        return None
+    return "avatar-%s" % self.user.email
