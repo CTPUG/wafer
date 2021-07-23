@@ -6,7 +6,8 @@ import mock
 
 from django.test import Client, TestCase
 
-from wafer.talks.models import Talk, ACCEPTED
+from wafer.talks.models import ACCEPTED
+from wafer.talks.tests.fixtures import create_talk
 from wafer.tests.utils import create_user, mock_avatar_url
 
 
@@ -16,10 +17,8 @@ class UserProfileTests(TestCase):
         # Create 2 users
         create_user('test1')
         create_user('test2')
-        user3 = create_user('test3')
-        talk = Talk.objects.create(title="Test talk", status=ACCEPTED,
-                                   corresponding_author_id=user3.id)
-        talk.authors.add(user3)
+        # And a 3rd, with a talk
+        create_talk(title="Test talk", status=ACCEPTED, username='test3')
         self.client = Client()
 
     @mock.patch('wafer.users.models.UserProfile.avatar_url', mock_avatar_url)
