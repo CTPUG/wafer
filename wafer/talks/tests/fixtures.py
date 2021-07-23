@@ -8,6 +8,8 @@ def create_talk_type(name):
 
 
 def create_talk(title, status, username=None, user=None, talk_type=None):
+    if sum((user is None, username is None)) != 1:
+        raise ValueError('One of user OR username must be specified')
     if username:
         user = create_user(username)
     talk = Talk.objects.create(
