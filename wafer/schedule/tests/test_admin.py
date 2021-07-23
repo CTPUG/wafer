@@ -1,6 +1,5 @@
 import datetime as D
 
-from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.http import HttpRequest
 from django.utils import timezone
@@ -14,6 +13,7 @@ from wafer.schedule.admin import (
 from wafer.schedule.models import ScheduleBlock, Venue, Slot, ScheduleItem
 from wafer.talks.models import (Talk, ACCEPTED, REJECTED, CANCELLED,
                                 SUBMITTED, UNDER_CONSIDERATION)
+from wafer.tests.utils import create_user
 
 
 class DummyForm(object):
@@ -486,8 +486,7 @@ class ValidationTests(TestCase):
         slot1 = Slot.objects.create(start_time=start1, end_time=start2)
         slot2 = Slot.objects.create(start_time=start1, end_time=end)
 
-        user = get_user_model().objects.create_user('john', 'best@wafer.test',
-                                                    'johnpassword')
+        user = create_user('john')
         talk = Talk.objects.create(title="Test talk", status=ACCEPTED,
                                    corresponding_author_id=user.id)
         page = Page.objects.create(name="test page", slug="test")
@@ -564,8 +563,7 @@ class ValidationTests(TestCase):
         slot2 = Slot.objects.create(start_time=start2, end_time=start3)
         slot3 = Slot.objects.create(start_time=start3, end_time=end)
 
-        user = get_user_model().objects.create_user('john', 'best@wafer.test',
-                                                    'johnpassword')
+        user = create_user('john')
         talk = Talk.objects.create(title="Test talk", status=ACCEPTED,
                                    corresponding_author_id=user.id)
         page = Page.objects.create(name="test page", slug="test")
@@ -617,8 +615,7 @@ class ValidationTests(TestCase):
         slot1 = Slot.objects.create(start_time=start1, end_time=start2)
         slot2 = Slot.objects.create(start_time=start1, end_time=end)
 
-        user = get_user_model().objects.create_user('john', 'best@wafer.test',
-                                                    'johnpassword')
+        user = create_user('john')
         talk = Talk.objects.create(title="Test talk", status=ACCEPTED,
                                    corresponding_author_id=user.id)
         page1 = Page.objects.create(name="test page", slug="test")

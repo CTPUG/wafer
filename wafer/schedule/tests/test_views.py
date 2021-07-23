@@ -5,15 +5,15 @@ from io import BytesIO
 from xml.etree import ElementTree
 
 from django.test import Client, TestCase
-from django.contrib.auth import get_user_model
 from django.utils import timezone
 
 import icalendar
 import lxml.etree
 
-from wafer.talks.models import Talk, ACCEPTED
 from wafer.pages.models import Page
 from wafer.schedule.models import ScheduleBlock, Venue, Slot, ScheduleItem
+from wafer.talks.models import Talk, ACCEPTED
+from wafer.tests.utils import create_user
 from wafer.utils import QueryTracker
 
 
@@ -63,13 +63,8 @@ def make_slot():
 def create_client(username=None, superuser=False):
     client = Client()
     if username:
-        email = '%s@example.com' % (username,)
+        create_user(username, superuser=superuser)
         password = '%s_password' % (username,)
-        if superuser:
-            create = get_user_model().objects.create_superuser
-        else:
-            create = get_user_model().objects.create_user
-        create(username, email, password)
         client.login(username=username, password=password)
     return client
 
@@ -1427,8 +1422,7 @@ class CurrentViewTests(TestCase):
         slot1 = Slot.objects.create(start_time=start1, end_time=start2)
         slot2 = Slot.objects.create(start_time=start1, end_time=end)
 
-        user = get_user_model().objects.create_user('john', 'best@wafer.test',
-                                                    'johnpassword')
+        user = create_user('john')
         talk = Talk.objects.create(title="Test talk", status=ACCEPTED,
                                    corresponding_author_id=user.id)
 
@@ -1492,8 +1486,7 @@ class NonHTMLViewTests(TestCase):
         for index, item in enumerate(items):
             item.slots.add(slots[index // 2])
 
-        user = get_user_model().objects.create_user('john', 'best@wafer.test',
-                                                    'johnpassword')
+        user = create_user('john')
         talk = Talk.objects.create(title="Test talk", status=ACCEPTED,
                                    corresponding_author_id=user.id)
         talk_item = ScheduleItem.objects.create(venue=venue1, talk_id=talk.pk)
@@ -1602,8 +1595,7 @@ class JsonViewTests(TestCase):
         for index, item in enumerate(items):
             item.slots.add(slots[(index + 1) // 2])
 
-        user = get_user_model().objects.create_user('jimbob', 'best@wafer.test',
-                                                    'johnpassword')
+        user = create_user('jimbob')
 
         talk1 = Talk.objects.create(title="Test talk", status=ACCEPTED,
                                     corresponding_author_id=user.id)
