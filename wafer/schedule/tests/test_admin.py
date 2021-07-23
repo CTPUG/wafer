@@ -1,6 +1,5 @@
 import datetime as D
 
-from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.http import HttpRequest
 from django.utils import timezone
@@ -12,8 +11,9 @@ from wafer.schedule.admin import (
     find_invalid_venues, find_non_contiguous, prefetch_schedule_items,
     validate_items, validate_schedule)
 from wafer.schedule.models import ScheduleBlock, Venue, Slot, ScheduleItem
-from wafer.talks.models import (Talk, ACCEPTED, REJECTED, CANCELLED,
-                                SUBMITTED, UNDER_CONSIDERATION)
+from wafer.talks.models import (ACCEPTED, REJECTED, CANCELLED, SUBMITTED,
+                                UNDER_CONSIDERATION)
+from wafer.talks.tests.fixtures import create_talk
 
 
 class DummyForm(object):
@@ -486,10 +486,7 @@ class ValidationTests(TestCase):
         slot1 = Slot.objects.create(start_time=start1, end_time=start2)
         slot2 = Slot.objects.create(start_time=start1, end_time=end)
 
-        user = get_user_model().objects.create_user('john', 'best@wafer.test',
-                                                    'johnpassword')
-        talk = Talk.objects.create(title="Test talk", status=ACCEPTED,
-                                   corresponding_author_id=user.id)
+        talk = create_talk('Test talk', status=ACCEPTED, username='john')
         page = Page.objects.create(name="test page", slug="test")
 
         item1 = ScheduleItem.objects.create(venue=venue1,
@@ -564,10 +561,7 @@ class ValidationTests(TestCase):
         slot2 = Slot.objects.create(start_time=start2, end_time=start3)
         slot3 = Slot.objects.create(start_time=start3, end_time=end)
 
-        user = get_user_model().objects.create_user('john', 'best@wafer.test',
-                                                    'johnpassword')
-        talk = Talk.objects.create(title="Test talk", status=ACCEPTED,
-                                   corresponding_author_id=user.id)
+        talk = create_talk('Test Talk', status=ACCEPTED, username='john')
         page = Page.objects.create(name="test page", slug="test")
 
         item1 = ScheduleItem.objects.create(venue=venue1,
@@ -617,10 +611,7 @@ class ValidationTests(TestCase):
         slot1 = Slot.objects.create(start_time=start1, end_time=start2)
         slot2 = Slot.objects.create(start_time=start1, end_time=end)
 
-        user = get_user_model().objects.create_user('john', 'best@wafer.test',
-                                                    'johnpassword')
-        talk = Talk.objects.create(title="Test talk", status=ACCEPTED,
-                                   corresponding_author_id=user.id)
+        talk = create_talk('Test talk', status=ACCEPTED, username='john')
         page1 = Page.objects.create(name="test page", slug="test")
         page2 = Page.objects.create(name="test page 2", slug="test2")
 
