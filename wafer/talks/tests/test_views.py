@@ -409,9 +409,12 @@ class SpeakerTests(TestCase):
     @mock.patch('wafer.users.models.UserProfile.avatar_url', mock_avatar_url)
     def test_multiple_types(self):
         """Test the view for multiple talk types"""
-        talk_d = create_talk('Talk D', ACCEPTED, 'author_d', self.talk_type1)
-        talk_e = create_talk('Talk E', ACCEPTED, 'author_e', self.talk_type1)
-        keynote_f = create_talk('Talk F', ACCEPTED, 'author_f', self.talk_type2)
+        talk_d = create_talk('Talk D', ACCEPTED, 'author_d',
+                             talk_type=self.talk_type1)
+        talk_e = create_talk('Talk E', ACCEPTED, 'author_e',
+                             talk_type=self.talk_type1)
+        keynote_f = create_talk('Talk F', ACCEPTED, 'author_f',
+                                talk_type=self.talk_type2)
 
         user_d = talk_d.corresponding_author
         user_e = talk_e.corresponding_author
@@ -510,7 +513,7 @@ class SpeakerTests(TestCase):
     def test_exluding_types(self):
         """Test that the show_speakers flag excludes the speakers from the list."""
         hidden = create_talk_type('Hidden')
-        talk_d = create_talk('Talk D', ACCEPTED, 'author_d', hidden)
+        talk_d = create_talk('Talk D', ACCEPTED, 'author_d', talk_type=hidden)
 
         response = self.client.get(
             reverse('wafer_talks_speakers'))
@@ -538,8 +541,8 @@ class SpeakerTests(TestCase):
         test2.order = 2
         test2.save()
 
-        talk_d = create_talk('Talk D', ACCEPTED, 'author_d', test1)
-        talk_e = create_talk('Talk D', ACCEPTED, 'author_e', test2)
+        talk_d = create_talk('Talk D', ACCEPTED, 'author_d', talk_type=test1)
+        talk_e = create_talk('Talk D', ACCEPTED, 'author_e', talk_type=test2)
         response = self.client.get(
             reverse('wafer_talks_speakers'))
         types = list(response.context['speaker_rows'])

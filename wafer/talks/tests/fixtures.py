@@ -7,8 +7,9 @@ def create_talk_type(name):
     return TalkType.objects.create(name=name)
 
 
-def create_talk(title, status, username, talk_type=None):
-    user = create_user(username)
+def create_talk(title, status, username=None, user=None, talk_type=None):
+    if username:
+        user = create_user(username)
     talk = Talk.objects.create(
         title=title, status=status, corresponding_author_id=user.id)
     talk.authors.add(user)
