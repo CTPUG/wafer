@@ -506,6 +506,7 @@ class SpeakerTests(TestCase):
             '</div>',
         ]), html=True)
 
+    @mock.patch('wafer.users.models.UserProfile.avatar_url', mock_avatar_url)
     def test_exluding_types(self):
         """Test that the show_speakers flag excludes the speakers from the list."""
         hidden = create_talk_type('Hidden')
@@ -525,6 +526,7 @@ class SpeakerTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertNotIn('Hidden', response.context["speaker_rows"])
 
+    @mock.patch('wafer.users.models.UserProfile.avatar_url', mock_avatar_url)
     def test_ordering_types(self):
         """Test that we order the speakers according to the talk type correctly"""
         test1 = create_talk_type('Test 1')
