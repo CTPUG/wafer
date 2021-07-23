@@ -3,17 +3,15 @@
 from django.contrib.auth import get_user_model
 from django.utils.timezone import datetime, now, utc
 
-from wafer.talks.models import Talk, TalkType
+from wafer.talks.models import Talk, TalkType, SUBMITTED
+from wafer.talks.tests.fixtures import create_talk
 from wafer.tests.utils import create_user
 
 
 def test_add_talk():
     """Create a user and add a talk to it"""
     user = create_user('john')
-    Talk.objects.create(
-        title="This is a test talk",
-        abstract="This should be a long and interesting abstract, but isn't",
-        corresponding_author_id=user.id)
+    create_talk('This is a test talk', status=SUBMITTED, user=user)
 
     assert user.contact_talks.count() == 1
 
@@ -34,18 +32,12 @@ def test_multiple_talks():
     user1 = UserModel.objects.filter(username='john').get()
     user2 = UserModel.objects.filter(username='james').get()
 
-    Talk.objects.create(
-        title="This is a another test talk",
-        abstract="This should be a long and interesting abstract, but isn't",
-        corresponding_author_id=user1.id)
+    create_talk('This is a another test talk', status=SUBMITTED, user=user1)
 
     assert len([x.title for x in user1.contact_talks.all()]) == 2
     assert len([x.title for x in user2.contact_talks.all()]) == 0
 
-    Talk.objects.create(
-        title="This is a third test talk",
-        abstract="This should be a long and interesting abstract, but isn't",
-        corresponding_author_id=user2.id)
+    create_talk('This is a third test talk', status=SUBMITTED, user=user2)
 
     assert len([x.title for x in user2.contact_talks.all()]) == 1
 
@@ -59,10 +51,7 @@ def test_corresponding_author_details():
 
     speaker = create_user('bob')
 
-    Talk.objects.create(
-        title="This is a another test talk",
-        abstract="This should be a long and interesting abstract, but isn't",
-        corresponding_author_id=user.id)
+    create_talk('This is a another test talk', status=SUBMITTED, user=user)
 
     talk = user.contact_talks.all()[0]
     talk.authors.add(user)
