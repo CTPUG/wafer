@@ -5,20 +5,24 @@ import logging
 
 from icalendar import Calendar, Event
 
-from django.db.models import Q
-from django.views.generic import TemplateView, View
+from django.conf import settings
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
+from django.db.models import Q
 from django.http import HttpResponse, JsonResponse
 from django.utils import timezone
-from django.conf import settings
+from django.utils.dateparse import parse_datetime
+from django.utils.decorators import method_decorator
+from django.views.decorators.http import condition
+from django.views.generic import TemplateView, View
 
 from bakery.views import BuildableDetailView, BuildableTemplateView, BuildableMixin
 from rest_framework import viewsets
 from rest_framework.permissions import IsAdminUser
 from wafer import __version__
 from wafer.pages.models import Page
-from wafer.schedule.models import Venue, Slot, ScheduleBlock, ScheduleItem
+from wafer.schedule.models import (
+    Venue, Slot, ScheduleBlock, ScheduleItem, get_schedule_version)
 from wafer.schedule.admin import check_schedule, validate_schedule
 from wafer.schedule.serializers import ScheduleItemSerializer
 from wafer.talks.models import ACCEPTED, CANCELLED
@@ -144,6 +148,15 @@ def lookup_highlighted_venue(request):
     return None
 
 
+def schedule_version_last_modified(request, **kwargs):
+    """Return the current schedule version as a datetime"""
+    version = get_schedule_version()
+    return parse_datetime(version)
+
+
+@method_decorator(
+    condition(last_modified_func=schedule_version_last_modified),
+    name='dispatch')
 class ScheduleView(BuildableTemplateView):
     template_name = 'wafer.schedule/full_schedule.html'
     build_path = 'schedule/index.html'
@@ -181,6 +194,7 @@ class ScheduleView(BuildableTemplateView):
             if pos < len(blocks) - 1:
                 context['next_block'] = blocks[pos + 1]
         context['schedule_pages'] = generate_schedule(this_block)
+        context['schedule_version'] = get_schedule_version()
         return context
 
 
@@ -381,6 +395,9 @@ class ScheduleEditView(TemplateView):
         return context
 
 
+@method_decorator(
+    condition(last_modified_func=schedule_version_last_modified),
+    name='dispatch')
 class ICalView(View, BuildableMixin):
     build_path = 'schedule/schedule.ics'
 
@@ -429,6 +446,9 @@ class ICalView(View, BuildableMixin):
         self.build_file(path, self.get_content())
 
 
+@method_decorator(
+    condition(last_modified_func=schedule_version_last_modified),
+    name='dispatch')
 class JsonDataView(View, BuildableMixin):
     build_path = "schedule/schedule.json"
 
