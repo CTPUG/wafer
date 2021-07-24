@@ -20,7 +20,7 @@
     <acronym>{{ WAFER_CONFERENCE_ACRONYM }}</acronym>
   </conference>
   {% for page in schedule_pages %}
-    <day date="{{ page.block.start_time|date:'Y-m-d' }}" index="{{ forloop.counter }}">
+    <day date="{{ page.block.start_time.date.isoformat }}" start="{{ page.block.start_time.isoformat }}" end="{{ page.block.end_time.isoformat }}" index="{{ forloop.counter }}">
       {% for venue in page.venues %}
         <room name="{{ venue.name }}">
           {% for row in page.rows %}
