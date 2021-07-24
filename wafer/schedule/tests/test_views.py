@@ -1,11 +1,11 @@
-import json
 import datetime as D
+import json
 import os.path
 from io import BytesIO
 from xml.etree import ElementTree
 
 from django.test import Client, TestCase
-from django.utils import timezone
+from django.utils import http, timezone
 
 import icalendar
 import lxml.etree
@@ -124,6 +124,8 @@ class ScheduleViewTests(TestCase):
         with QueryTracker() as tracker:
             response = c.get('/schedule/')
             self.assertTrue(len(tracker.queries) < 60)
+
+        self.assertIn('Last-Modified', response)
 
         [day1] = response.context['schedule_pages']
 
@@ -1495,6 +1497,7 @@ class NonHTMLViewTests(TestCase):
         # have the basic details we expect present
         c = Client()
         response = c.get('/schedule/pentabarf.xml')
+        self.assertIn('Last-Modified', response)
         parsed = ElementTree.XML(response.content)
         self.assertEqual(parsed.tag, 'schedule')
         self.assertEqual(parsed[0].tag, 'generator')
@@ -1537,6 +1540,7 @@ class NonHTMLViewTests(TestCase):
         # and some of the required details
         c = Client()
         response = c.get('/schedule/schedule.ics')
+        self.assertIn('Last-Modified', response)
         calendar = icalendar.Calendar.from_ical(response.content)
         # No major errors
         self.assertFalse(calendar.is_broken)
@@ -1548,6 +1552,31 @@ class NonHTMLViewTests(TestCase):
         self.assertEqual(event['dtstart'].dt, D.datetime(2013, 9, 22, 10, 0, 0, tzinfo=timezone.utc))
         # Check that we have the page slug in the ical event
         self.assertTrue('/test0/' in event['url'])
+
+    def test_xml_conditional_requests(self):
+        # All the public schedule views implement these, but we'll just check
+        # one of them
+        c = Client()
+        response = c.get('/schedule/pentabarf.xml')
+        self.assertEqual(response.status_code, 200)
+        last_modified = response['Last-Modified']
+
+        with QueryTracker() as tracker:
+            not_modified_response = c.get(
+                '/schedule/pentabarf.xml', HTTP_IF_MODIFIED_SINCE=last_modified)
+        self.assertEqual(not_modified_response.status_code, 304)
+        self.assertLess(len(tracker.queries), 2)
+
+        last_modified_seconds = http.parse_http_date(last_modified)
+        last_modified_seconds -= 1
+        before_last_modified = http.http_date(last_modified_seconds)
+
+        with QueryTracker() as tracker:
+            modified_response = c.get(
+                '/schedule/pentabarf.xml',
+                HTTP_IF_MODIFIED_SINCE=before_last_modified)
+        self.assertEqual(modified_response.status_code, 200)
+        self.assertGreater(len(tracker.queries), 10)
 
 
 class JsonViewTests(TestCase):

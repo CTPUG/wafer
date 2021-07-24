@@ -362,7 +362,7 @@ class ScheduleItem(models.Model):
 
 
 def get_schedule_version():
-    """Return the current schedule version"""
+    """Return the current schedule version as a string"""
     version = cache.get('wafer_schedule_version')
     if not version:
         version = update_schedule_version()
