@@ -356,13 +356,15 @@ class ScheduleItem(models.Model):
 
     @property
     def guid(self):
-        """Return a GUID for the ScheduleItem (for frab xml)"""
+        """Return a GUID for the ScheduleItem (for frab xml)
+
+        We return static GUIDs across re-scheduling, when possible.
+        """
         if self.talk:
-            # Talks can only appear once in the schedule, they get a static ID
             id_ = 'talk:' + str(self.talk.pk)
+        elif self.page and self.page.scheduleitem_set.count() == 1:
+            id_ = 'page:' + str(self.page.pk)
         else:
-            # Other things can appear multiple times, they get the schedule
-            # item ID to avoid duplicate IDs
             id_ = 'schedule_item:' + str(self.pk)
         hmac = salted_hmac('wafer-event-uuid', id_)
         return UUID(bytes=hmac.digest()[:16])
