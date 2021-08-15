@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-06-05 21:56+0000\n"
-"PO-Revision-Date: 2021-08-13 23:35+0000\n"
+"PO-Revision-Date: 2021-08-15 00:46+0000\n"
 "Last-Translator: Reza Almanda <rezaalmanda27@gmail.com>\n"
 "Language-Team: Indonesian <https://hosted.weblate.org/projects/wafer/wafer/"
 "id/>\n"
@@ -269,19 +269,18 @@ msgstr ""
 "\n"
 "Singkatnya klik https://%(domain)s%(activation_url)s\n"
 "\n"
-"Terima kasih karena telah mendaftar untuk %(WAFER_CONFERENCE_NAME)s.\n"
+"Terima kasih telah mendaftar untuk %(WAFER_CONFERENCE_NAME)s.\n"
 "\n"
 "Untuk memverifikasi alamat email Anda, silakan ikuti tautan di atas untuk "
-"mengaktifkan akun Anda. Anda memiliki %(expiration_days)s tersisa untuk "
-"melakukannya.\n"
+"mengaktifkan akun. Tinggal %(expiration_days)s tersisa untuk melakukannya.\n"
 "\n"
-"Kami harap kami dapat melihat Anda segera.\n"
+"Sampai jumpa nanti.\n"
 "\n"
 "Situs web %(WAFER_CONFERENCE_NAME)s.\n"
 "\n"
 "-- \n"
-"%(WAFER_CONFERENCE_NAME)s\n"
-"http://%(domain)s%(index_url)s\n"
+" %(WAFER_CONFERENCE_NAME)s\n"
+" http://%(domain)s%(index_url)s\n"
 
 #: wafer/registration/templates/registration/activation_email_subject.txt:2
 #, python-format
@@ -1180,7 +1179,7 @@ msgstr ""
 #: wafer/templates/wafer/nav.html:58
 #, python-format
 msgid "%(name)s's profile"
-msgstr ""
+msgstr "%(name)s profil"
 
 #: wafer/templates/wafer/nav.html:64
 msgid "Site admin"
@@ -1188,15 +1187,15 @@ msgstr ""
 
 #: wafer/templates/wafer/nav.html:68
 msgid "Log out"
-msgstr ""
+msgstr "Keluar"
 
 #: wafer/templates/wafer/nav.html:76
 msgid "Sign up / Log In"
-msgstr ""
+msgstr "Daftar / Masuk"
 
 #: wafer/tickets/forms.py:18
 msgid "Claim"
-msgstr ""
+msgstr "Klaim"
 
 #: wafer/tickets/forms.py:25
 msgid ""
@@ -1226,7 +1225,7 @@ msgstr ""
 
 #: wafer/tickets/templates/wafer.tickets/claim.html:16
 msgid "Ticket claim"
-msgstr ""
+msgstr "Klaim tiket"
 
 #: wafer/tickets/templates/wafer.tickets/claim.html:18
 msgid ""
@@ -1236,7 +1235,7 @@ msgstr ""
 
 #: wafer/users/admin.py:39
 msgid "profile"
-msgstr ""
+msgstr "profil"
 
 #: wafer/users/admin.py:40
 msgid "profiles"
@@ -1248,7 +1247,7 @@ msgstr ""
 
 #: wafer/users/forms.py:48
 msgid "username"
-msgstr ""
+msgstr "nama pengguna"
 
 #: wafer/users/models.py:38
 msgid "user profile"
@@ -1256,19 +1255,19 @@ msgstr ""
 
 #: wafer/users/models.py:39
 msgid "user profiles"
-msgstr ""
+msgstr "profil pengguna"
 
 #: wafer/users/models.py:43
 msgid "contact number"
-msgstr ""
+msgstr "Nomor kontak"
 
 #: wafer/users/models.py:44
 msgid "bio"
-msgstr ""
+msgstr "bio"
 
 #: wafer/users/models.py:46
 msgid "homepage"
-msgstr ""
+msgstr "beranda"
 
 #: wafer/users/models.py:49
 msgid "Twitter handle"
@@ -1280,16 +1279,16 @@ msgstr ""
 
 #: wafer/users/templates/wafer.users/edit_profile.html:5
 msgid "Edit Profile:"
-msgstr ""
+msgstr "Edit Profil:"
 
 #: wafer/users/templates/wafer.users/edit_user.html:5
 #: wafer/users/templates/wafer.users/profile.html:31
 msgid "Edit Account"
-msgstr ""
+msgstr "Edit Akun"
 
 #: wafer/users/templates/wafer.users/edit_user.html:10
 msgid "Change Password"
-msgstr ""
+msgstr "Ganti Kata sandi"
 
 #: wafer/users/templates/wafer.users/profile.html:17
 msgid "Changing your mugshot"
@@ -1308,7 +1307,7 @@ msgstr ""
 
 #: wafer/users/templates/wafer.users/profile.html:32
 msgid "Edit Profile"
-msgstr ""
+msgstr "Edit Profil"
 
 #: wafer/users/templates/wafer.users/profile.html:41
 msgctxt "conference"
@@ -1327,16 +1326,16 @@ msgstr ""
 #: wafer/users/templates/wafer.users/profile.html:62
 #, python-format
 msgid "Follow @%(handle)s"
-msgstr ""
+msgstr "Ikuti @%(handle)s"
 
 #: wafer/users/templates/wafer.users/profile.html:69
 #, python-format
 msgid "GitHub: %(username)s"
-msgstr ""
+msgstr "GitHub: %(username)s"
 
 #: wafer/users/templates/wafer.users/profile.html:85
 msgid "Registered"
-msgstr ""
+msgstr "Terdaftar"
 
 #: wafer/users/templates/wafer.users/profile.html:91
 msgid ""
@@ -1366,8 +1365,8 @@ msgstr ""
 
 #: wafer/users/templates/wafer.users/users.html:3
 msgid "Users"
-msgstr ""
+msgstr "Pengguna"
 
 #: wafer/users/templates/wafer.users/users.html:5
 msgid "Users:"
-msgstr ""
+msgstr "Pengguna:"
