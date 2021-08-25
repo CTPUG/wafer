@@ -219,13 +219,20 @@ class ScheduleXmlView(ScheduleView):
 class CurrentView(TemplateView):
     template_name = 'wafer.schedule/current.html'
 
-    def _parse_today(self, day):
+    def _parse_today(self, day, time):
         if day is None:
             day = datetime.date.today()
         else:
             day = datetime.datetime.strptime(day, '%Y-%m-%d').date()
+        if time is None:
+            time = datetime.datetime.now().time()
+        else:
+            time = datetime.datetime.strptime(time, '%H:%M').time()
+        full_time = datetime.datetime.combine(day, time)
+        tz = timezone.get_default_timezone()
+        timestamp = timezone.make_aware(full_time, tz)
         for candidate in ScheduleBlock.objects.all():
-            if candidate.start_time.date() <= day and candidate.end_time.date() >= day:
+            if candidate.start_time < timestamp < candidate.end_time:
                 return SchedulePage(candidate)
         return None
 
@@ -301,7 +308,7 @@ class CurrentView(TemplateView):
         # Allow refresh time to be overridden
         context['refresh'] = self.request.GET.get('refresh', None)
         # If there are no items scheduled for today, return an empty slots list
-        schedule_page = self._parse_today(self.request.GET.get('day', None))
+        schedule_page = self._parse_today(self.request.GET.get('day', None), self.request.GET.get('time', None))
         if schedule_page is None:
             return context
         context['schedule_page'] = schedule_page
