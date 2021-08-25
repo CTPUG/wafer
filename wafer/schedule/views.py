@@ -6,6 +6,7 @@ import logging
 from icalendar import Calendar, Event
 
 from django.conf import settings
+from django.contrib import messages
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
 from django.db.models import Q
@@ -219,30 +220,30 @@ class ScheduleXmlView(ScheduleView):
 class CurrentView(TemplateView):
     template_name = 'wafer.schedule/current.html'
 
-    def _parse_today(self, day):
-        if day is None:
-            day = datetime.date.today()
-        else:
-            day = datetime.datetime.strptime(day, '%Y-%m-%d').date()
+    def _parse_timestamp(self, timestamp):
+        """
+        Parse a user provided timestamp query string parameter.
+        Return a TZ aware datetime, or None.
+        """
+        if not timestamp:
+            return None
+        try:
+            timestamp = parse_datetime(timestamp)
+        except ValueError as e:
+            messages.error(self.request,
+                           'Failed to parse timestamp: %s' % e)
+        if timestamp is None:
+            messages.error(self.request, 'Failed to parse timestamp')
+            return None
+        if not timezone.is_aware(timestamp):
+            timestamp = timezone.make_aware(timestamp)
+        return timestamp
+
+    def _get_schedule_page(self, timestamp):
         for candidate in ScheduleBlock.objects.all():
-            if candidate.start_time.date() <= day and candidate.end_time.date() >= day:
+            if candidate.start_time < timestamp < candidate.end_time:
                 return SchedulePage(candidate)
         return None
-
-    def _parse_time(self, day, time):
-        tz = timezone.get_default_timezone()
-        now = timezone.make_aware(datetime.datetime.now(), tz)
-        if day is None:
-            return now
-        if time is None:
-            return now
-        try:
-            full_time = datetime.datetime.combine(datetime.datetime.strptime(day, "%Y-%m-%d").date(),
-                                                  datetime.datetime.strptime(time, '%H:%M').time())
-            return timezone.make_aware(full_time, tz)
-        except ValueError:
-            pass
-        return now
 
     def _add_note(self, row, note, overlap_note):
         for item in row.items.values():
@@ -300,20 +301,23 @@ class CurrentView(TemplateView):
         context['slots'] = []
         # Allow refresh time to be overridden
         context['refresh'] = self.request.GET.get('refresh', None)
+
+        # Allow the current time to be overridden, mostly for testing
+        timestamp = self._parse_timestamp(
+                self.request.GET.get('timestamp', None)) or timezone.now()
+
+        schedule_page = self._get_schedule_page(timestamp)
         # If there are no items scheduled for today, return an empty slots list
-        schedule_page = self._parse_today(self.request.GET.get('day', None))
         if schedule_page is None:
             return context
         context['schedule_page'] = schedule_page
-        # Allow current time to be overridden
-        time = self._parse_time(self.request.GET.get('day', None), self.request.GET.get('time', None))
 
         highlight_venue = lookup_highlighted_venue(self.request)
         context['highlight_venue_pk'] = -1
         if highlight_venue is not None:
             context['highlight_venue_pk'] = highlight_venue
 
-        cur_slot, current_rows = self._current_slots(schedule_page, time)
+        cur_slot, current_rows = self._current_slots(schedule_page, timestamp)
         context['cur_slot'] = cur_slot
         context['slots'].extend(current_rows)
 
