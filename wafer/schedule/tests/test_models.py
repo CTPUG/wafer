@@ -404,6 +404,9 @@ class ScheduleItemTests(TestCase):
         # Single Slot
         item.slots.add(self.slots[0])
         self.assertEqual(item.get_duration_minutes(), 20)
+        # Spanning 2 slots with a gap in-between
+        item.slots.add(self.slots[1])
+        self.assertEqual(item.get_duration_minutes(), 50)
 
     def test_get_duration(self):
         """Test ScheduleItem.get_duration()"""
