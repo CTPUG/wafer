@@ -164,7 +164,8 @@ class Talk(models.Model):
         Track, verbose_name=_("track"), null=True, blank=True, on_delete=models.SET_NULL)
 
     LANGUAGES = settings.WAFER_TALK_LANGUAGES
-    DEFAULT_LANGUAGE = LANGUAGES and LANGUAGES[0][0]
+    # DEFAULT_LANGUAGE should be None if WAFER_TALK_LANGUAGES is empty
+    DEFAULT_LANGUAGE = LANGUAGES[0][0] if LANGUAGES else None
     language = models.CharField(
         verbose_name=_("language"),
         max_length=5,
