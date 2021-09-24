@@ -56,7 +56,9 @@ setup(
     include_package_data=True,
     install_requires=REQUIRES,
     dependency_links=SOURCES,
-    data_files=compile_translations(),
+    data_files=[
+        ('locale', compile_translations()),
+    ],
     setup_requires=[
         # Add setuptools-git, so we get correct behaviour for
         # include_package_data
