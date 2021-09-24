@@ -471,3 +471,34 @@ class LastUpdateTests(TestCase):
                 # No other items should have changed, as time changes don't
                 # cascade that way
                 self.assertEqual(item.last_updated, update_times[item.pk])
+
+
+class ScheduleItemGUIDTests(TestCase):
+    def setUp(self):
+        venue1 = Venue.objects.create(order=1, name='Venue 1')
+        self.venues = [venue1]
+
+    def test_unique_guid(self):
+        """Test that the all guids are unique."""
+        pages = make_pages(2)
+        items = make_items(self.venues * 2, pages)
+
+        guids = set(item.guid for item in items)
+        self.assertEqual(len(guids), len(items))
+
+    def test_rescheduled_page_keeps_guid(self):
+        """A page that's in the schedule once keeps its guid when rescheduled"""
+        pages = make_pages(2)
+        items = make_items(self.venues * 2, pages)
+        guid = items[0].guid
+        # Reschedule
+        for item in items:
+            item.delete()
+        items = make_items(self.venues, pages)
+        self.assertEqual(guid, items[0].guid)
+
+    def test_double_scheduled_page_has_unique_guid(self):
+        """A page that's in the schedule twice has a unique GUID per instance"""
+        pages = make_pages(1)
+        items = make_items(self.venues * 2, pages * 2)
+        self.assertNotEqual(items[0].guid, items[1].guid)
