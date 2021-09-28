@@ -1,10 +1,10 @@
 {% load sponsors %}
 <div id="wafer-sponsors" class="container">
-  {% spaceless %}
-    {% for package in packages %}
-      {% if package.sponsors.exists %}
-        {% for sponsor in package.sponsors.all %}
-          {% sponsor_tagged_image sponsor "footer_logo" as logo_url %}
+  {% for package in packages %}
+    {% if package.sponsors.exists %}
+      {% for sponsor in package.sponsors.all %}
+        {% sponsor_tagged_image sponsor "footer_logo" as logo_url %}
+          {% spaceless %}
           <a href="{{ sponsor.url }}">
             {% if logo_url != '' %}
               <img src="{{ logo_url }}"
@@ -15,9 +15,9 @@
               <span class="nologo">{{ sponsor.name }}</span>
             {% endif %}
           </a>
-        {% endfor %}
-        <br>
-      {% endif %}
-    {% endfor %}
-  {% endspaceless %}
+          {% endspaceless %}
+      {% endfor %}
+      <br>
+    {% endif %}
+  {% endfor %}
 </div>
