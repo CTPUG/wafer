@@ -37,7 +37,7 @@ class ScheduleItemSerializer(serializers.HyperlinkedModelSerializer):
         else:
             existing_schedule_item.talk = talk
             existing_schedule_item.page = page
-            existing_schedule_item.slots = slots
+            existing_schedule_item.slots.set(slots)
             # Clear any existing details that aren't editable by the
             # schedule edit view
             existing_schedule_item.details = ''
