@@ -231,6 +231,8 @@ class TalkReview(PermissionRequiredMixin, CreateView):
         version.object_repr = str(review)
         version.save()
 
+        # Update the talk to 'under consideration' if a review is
+        # added.
         talk = review.talk
         if talk.status == SUBMITTED:
             talk.status = UNDER_CONSIDERATION
@@ -238,6 +240,11 @@ class TalkReview(PermissionRequiredMixin, CreateView):
                 revisions.set_user(self.request.user)
                 revisions.set_comment("Status changed by review process")
                 talk.save()
+            # We also change the date to apotentially changing the talk to
+            # ensure is_current behaves as expected
+            talk_version = Version.objects.get_for_object(talk).order_by('-pk').first()
+            version.revision.date_created = talk_version.revision.date_created
+            version.revision.save()
 
         return response
 
