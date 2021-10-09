@@ -216,21 +216,9 @@ class TalkReview(PermissionRequiredMixin, CreateView):
 
     def form_valid(self, form):
         existing = self.get_object()
-        with revisions.create_revision():
-            response = super().form_valid(form)
-            revisions.set_user(self.request.user)
-            if existing:
-                revisions.set_comment("Review Modified")
-            else:
-                revisions.set_comment("Review Created")
+        response = super().form_valid(form)
 
-        # Because Review.save() was called before any scores were added,
-        # the str() on the version would have had the previous total. Update.
         review = self.get_object()
-        version = Version.objects.get_for_object(review).order_by('-pk').first()
-        version.object_repr = str(review)
-        version.save()
-
         # Update the talk to 'under consideration' if a review is
         # added.
         talk = review.talk
@@ -240,11 +228,21 @@ class TalkReview(PermissionRequiredMixin, CreateView):
                 revisions.set_user(self.request.user)
                 revisions.set_comment("Status changed by review process")
                 talk.save()
-            # We also change the date to apotentially changing the talk to
-            # ensure is_current behaves as expected
-            talk_version = Version.objects.get_for_object(talk).order_by('-pk').first()
-            version.revision.date_created = talk_version.revision.date_created
-            version.revision.save()
+
+        # Create the revision
+        # Note that we do this after the review has been saved
+        # (without a revision) in the super().form_valid call and
+        # after the scores have been added, so that the object_repr
+        # is correct
+        # We also do this after potentially updating the talk, so
+        # that the review revision time is correct for is_current
+        with revisions.create_revision():
+            revisions.set_user(self.request.user)
+            if existing:
+                revisions.set_comment("Review Modified")
+            else:
+                revisions.set_comment("Review Created")
+            review.save()
 
         return response
 
