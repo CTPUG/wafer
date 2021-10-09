@@ -29,6 +29,11 @@ def has_field(model, field_name):
         return False
 
 
+def make_aspect_key(aspect):
+    """Turn an apsect into a dictionary key for the form"""
+    return f'aspeect_{aspect.pk}'
+
+
 class TalkCategorisationWidget(forms.Select):
 
     class Media:
@@ -174,7 +179,7 @@ class ReviewForm(forms.Form):
                     initial = None
             # We can't use label_suffix because we're going through crispy
             # forms, so we tack the range onto the label
-            self.fields['aspect_{}'.format(aspect.pk)] = forms.IntegerField(
+            self.fields[make_aspect_key(aspect)] = forms.IntegerField(
                 initial=initial, label="%s %s" % (aspect.name, review_range),
                 max_value=settings.WAFER_TALK_REVIEW_SCORES[1])
 
@@ -195,5 +200,5 @@ class ReviewForm(forms.Form):
                 score = review.scores.get(aspect=aspect)
             except Score.DoesNotExist:
                 score = Score(review=review, aspect=aspect)
-            score.value = self.cleaned_data['aspect_{}'.format(aspect.pk)]
+            score.value = self.cleaned_data[make_aspect_key(aspect)]
             score.save()
