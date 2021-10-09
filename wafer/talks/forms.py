@@ -181,6 +181,7 @@ class ReviewForm(forms.Form):
             # forms, so we tack the range onto the label
             self.fields[make_aspect_key(aspect)] = forms.IntegerField(
                 initial=initial, label="%s %s" % (aspect.name, review_range),
+                min_value=settings.WAFER_TALK_REVIEW_SCORES[0],
                 max_value=settings.WAFER_TALK_REVIEW_SCORES[1])
 
         self.helper = FormHelper(self)
