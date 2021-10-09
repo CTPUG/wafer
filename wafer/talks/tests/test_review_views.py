@@ -42,3 +42,25 @@ class ReviewFormTests(TestCase):
         self.assertEqual(self.talk_a.status, UNDER_CONSIDERATION)
         self.assertTrue(Version.objects.get_for_object(self.talk_a), 2)
         self.assertTrue(review.is_current())
+
+    def test_review_revision_str(self):
+        """Check that we update the revision repr correctly."""
+        self.client.login(username='reviewer_a', password='reviewer_a_password')
+        response = self.client.post(reverse('wafer_talk_review',  kwargs={'pk': self.talk_a.pk}),
+                                    data={'notes': 'Review notes',
+                                          make_aspect_key(self.aspect_1): '1',
+                                          make_aspect_key(self.aspect_2): '2'})
+        self.assertEqual(response.status_code, 302)
+        review = Review.objects.get(talk=self.talk_a, reviewer=self.reviewer_a)
+        version = Version.objects.get_for_object(review).order_by('-pk').first()
+        review_1_str = str(review)
+        self.assertEqual(review_1_str, version.object_repr)
+        response = self.client.post(reverse('wafer_talk_review',  kwargs={'pk': self.talk_a.pk}),
+                                    data={'notes': 'New Notes',
+                                          make_aspect_key(self.aspect_1): '2',
+                                          make_aspect_key(self.aspect_2): '0'})
+        self.assertEqual(response.status_code, 302)
+        review = Review.objects.get(talk=self.talk_a, reviewer=self.reviewer_a)
+        version = Version.objects.get_for_object(review).order_by('-pk').first()
+        self.assertEqual(str(review), version.object_repr)
+        self.assertNotEqual(str(review), review_1_str)
