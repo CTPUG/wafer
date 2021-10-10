@@ -30,7 +30,7 @@ class ReviewFormTests(TestCase):
                        data={'notes': "Test review",
                              make_aspect_key(self.aspect_1): scores[0],
                              make_aspect_key(self.aspect_2): scores[1]})
-        form.is_valid()
+        self.assertTrue(form.is_valid())
         with revisions.create_revision():
             form.save()
         return Review.objects.get(talk=self.talk_a, reviewer=self.reviewer_a)
