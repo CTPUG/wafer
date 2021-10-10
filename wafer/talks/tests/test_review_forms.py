@@ -49,15 +49,15 @@ class ReviewFormTests(TestCase):
 
     def test_review_outdated(self):
         """Test that reviews are marked as outdated correctly
-           and that updatingt the review does the right thing"""
+           and that updating the review does the right thing"""
         review = self._save_review(None)
         self.assertTrue(review.is_current())
-        # Change the talk time
+        # Update the talk, so it is newer than the review
         self.talk_a.notes = 'New note'
         with revisions.create_revision():
             self.talk_a.save()
         self.assertFalse(review.is_current())
-        # Change the review
+        # Update the review so it is current again
         review.notes = 'New notes'
         with revisions.create_revision():
             review.save()
