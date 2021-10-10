@@ -44,7 +44,7 @@ def compile_translations():
 
 setup(
     name="wafer",
-    version="0.11.1a",
+    version="0.12.1a",
     url='http://github.com/CTPUG/wafer',
     license='ISC',
     description="A wafer-thin Django library for running small conferences.",
@@ -56,7 +56,9 @@ setup(
     include_package_data=True,
     install_requires=REQUIRES,
     dependency_links=SOURCES,
-    data_files=compile_translations(),
+    data_files=[
+        ('locale', compile_translations()),
+    ],
     setup_requires=[
         # Add setuptools-git, so we get correct behaviour for
         # include_package_data

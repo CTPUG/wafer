@@ -30,7 +30,7 @@ class ReviewFormTests(TestCase):
                        data={'notes': "Test review",
                              make_aspect_key(self.aspect_1): scores[0],
                              make_aspect_key(self.aspect_2): scores[1]})
-        form.is_valid()
+        self.assertTrue(form.is_valid())
         with revisions.create_revision():
             form.save()
         return Review.objects.get(talk=self.talk_a, reviewer=self.reviewer_a)
@@ -49,15 +49,15 @@ class ReviewFormTests(TestCase):
 
     def test_review_outdated(self):
         """Test that reviews are marked as outdated correctly
-           and that updatingt the review does the right thing"""
+           and that updating the review does the right thing"""
         review = self._save_review(None)
         self.assertTrue(review.is_current())
-        # Change the talk time
+        # Update the talk, so it is newer than the review
         self.talk_a.notes = 'New note'
         with revisions.create_revision():
             self.talk_a.save()
         self.assertFalse(review.is_current())
-        # Change the review
+        # Update the review so it is current again
         review.notes = 'New notes'
         with revisions.create_revision():
             review.save()

@@ -31,7 +31,7 @@ def has_field(model, field_name):
 
 def make_aspect_key(aspect):
     """Turn an apsect into a dictionary key for the form"""
-    return f'aspeect_{aspect.pk}'
+    return f'aspect_{aspect.pk}'
 
 
 class TalkCategorisationWidget(forms.Select):
