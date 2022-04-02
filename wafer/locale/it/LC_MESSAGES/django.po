@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-06-05 21:56+0000\n"
-"PO-Revision-Date: 2021-06-09 02:33+0000\n"
+"PO-Revision-Date: 2022-04-02 22:11+0000\n"
 "Last-Translator: Daniele Tricoli <eriol@mornie.org>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/wafer/wafer/it/>"
 "\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.7-dev\n"
+"X-Generator: Weblate 4.12-dev\n"
 
 #: wafer/compare/admin.py:22
 msgid "Last Modified"
@@ -132,6 +132,8 @@ msgstr ""
 #: wafer/pages/models.py:50
 msgid "Images and other files for use in the content markdown field."
 msgstr ""
+"Immagini e altri file da utilizzare nel campo di contenuto in formato "
+"markdown."
 
 #: wafer/pages/models.py:56
 msgid ""
@@ -167,7 +169,7 @@ msgstr "Confronta con la versione precedente"
 
 #: wafer/pages/templates/wafer.pages/page_compare.html:6
 msgid "Comparing Page"
-msgstr ""
+msgstr "Padina di confronto"
 
 #: wafer/pages/templates/wafer.pages/page_compare.html:8
 #, python-format
@@ -193,22 +195,22 @@ msgstr ""
 
 #: wafer/pages/templates/wafer.pages/page_compare.html:46
 msgid "No previous versions to compare to"
-msgstr ""
+msgstr "Nessuna versione precedente da confrontare"
 
 #: wafer/pages/templates/wafer.pages/page_form.html:11
 msgid "Edit Page"
-msgstr ""
+msgstr "Modifica Pagina"
 
 #: wafer/registration/forms.py:18
 #: wafer/registration/templates/registration/login.html:16
 #: wafer/registration/templates/registration/registration_form.html:5
 msgid "Sign up"
-msgstr ""
+msgstr "Iscriviti"
 
 #: wafer/registration/forms.py:33
 #: wafer/registration/templates/registration/login.html:11
 msgid "Log in"
-msgstr ""
+msgstr "Accedi"
 
 #: wafer/registration/templates/registration/activate.html:4
 msgid "Oops, account activation failed"
@@ -234,6 +236,8 @@ msgstr "Attivazione completata"
 msgid ""
 "Your account is now activated! Please <a href=\"%(login_url)s\">log in</a>."
 msgstr ""
+"Il tuo account adessp è attivo! Per favore <a href=\"%(login_url)s\""
+">accedi</a>."
 
 #: wafer/registration/templates/registration/activation_complete.html:13
 #: wafer/registration/templates/registration/registration_complete.html:13
@@ -299,7 +303,7 @@ msgstr ""
 #: wafer/registration/templates/registration/login.html:18
 #, python-format
 msgid "Not registered? Please <a href=\"%(signup_url)s\">sign up</a>."
-msgstr ""
+msgstr "Non registrato? Per favore <a href=\"%(signup_url)s\">iscriviti</a>."
 
 #: wafer/registration/templates/registration/login.html:22
 msgid "Shared/Social Log in and Sign up"
@@ -315,7 +319,7 @@ msgstr ""
 
 #: wafer/registration/templates/registration/registration_complete.html:4
 msgid "Account creation almost complete"
-msgstr ""
+msgstr "La creazione dell'account è quasi completa"
 
 #: wafer/registration/templates/registration/registration_complete.html:6
 #, python-format
@@ -637,7 +641,7 @@ msgstr ""
 
 #: wafer/talks/admin.py:42
 msgid "has notes"
-msgstr ""
+msgstr "ha note"
 
 #: wafer/talks/admin.py:47
 msgid "Yes"
@@ -677,7 +681,7 @@ msgstr ""
 
 #: wafer/talks/forms.py:118 wafer/users/forms.py:22 wafer/users/forms.py:49
 msgid "Save"
-msgstr ""
+msgstr "Salva"
 
 #: wafer/talks/forms.py:118 wafer/talks/forms.py:185
 msgid "Submit"
@@ -843,7 +847,7 @@ msgstr ""
 
 #: wafer/talks/models.py:196
 msgid "private notes"
-msgstr ""
+msgstr "note private"
 
 #: wafer/talks/models.py:198
 msgid "Note space for the conference organisers (not visible to submitter)"
@@ -1025,7 +1029,7 @@ msgstr ""
 #: wafer/talks/templates/wafer.talks/talk.html:80
 #, python-format
 msgid "Room: %(venue)s"
-msgstr ""
+msgstr "Stanza: %(venue)s"
 
 #: wafer/talks/templates/wafer.talks/talk.html:86
 #, python-format
@@ -1332,7 +1336,7 @@ msgstr ""
 #: wafer/users/templates/wafer.users/profile.html:69
 #, python-format
 msgid "GitHub: %(username)s"
-msgstr ""
+msgstr "GitHub: %(username)s"
 
 #: wafer/users/templates/wafer.users/profile.html:85
 msgid "Registered"
