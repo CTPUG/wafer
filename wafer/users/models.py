@@ -7,6 +7,7 @@ from django.contrib.auth.models import User, Group
 from django.db import models
 from django.db.models import Q
 from django.db.models.signals import post_save
+from django.dispatch import receiver
 from django.utils.module_loading import import_string
 from django.utils.translation import ugettext_lazy as _
 from django.core.validators import RegexValidator
@@ -100,6 +101,7 @@ class UserProfile(models.Model):
     is_registered.boolean = True
 
 
+@receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, raw=False, **kwargs):
     if raw:
         return
@@ -107,6 +109,7 @@ def create_user_profile(sender, instance, created, raw=False, **kwargs):
         UserProfile.objects.create(user=instance)
 
 
+@receiver(post_save, sender=User)
 def add_default_groups(sender, instance, created, raw=False, **kwargs):
     """Add the user to the configured set of default groups"""
     if raw:
@@ -118,7 +121,3 @@ def add_default_groups(sender, instance, created, raw=False, **kwargs):
                 instance.groups.add(group)
             except ObjectDoesNotExist:
                 logger.warn("Specified default group %s not found" % grp_name)
-
-
-post_save.connect(create_user_profile, sender=User)
-post_save.connect(add_default_groups, sender=User)
