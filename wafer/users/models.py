@@ -28,7 +28,6 @@ from wafer.talks.models import (ACCEPTED, SUBMITTED, UNDER_CONSIDERATION,
 # Specification taken from https://support.twitter.com/articles/101299
 TwitterValidator = RegexValidator('^[A-Za-z0-9_]{1,15}$',
                                   'Incorrectly formatted twitter handle')
-is_registered = import_string(settings.WAFER_USER_IS_REGISTERED)
 
 
 class UserProfile(models.Model):
@@ -95,6 +94,7 @@ class UserProfile(models.Model):
         return self.user.get_full_name() or self.user.username
 
     def is_registered(self):
+        is_registered = import_string(settings.WAFER_USER_IS_REGISTERED)
         return is_registered(self.user)
 
     is_registered.boolean = True
