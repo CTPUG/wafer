@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 {% load i18n %}
+{% load tz %}
+{% localtime on %}
 <schedule>
   <generator name="wafer" version="{{ wafer_version }}" />
   <version>{{ schedule_version }}</version>
@@ -20,7 +22,7 @@
     <acronym>{{ WAFER_CONFERENCE_ACRONYM }}</acronym>
   </conference>
   {% for page in schedule_pages %}
-    <day date="{{ page.block.start_time.date.isoformat }}" start="{{ page.block.start_time.isoformat }}" end="{{ page.block.end_time.isoformat }}" index="{{ forloop.counter }}">
+    <day date="{{ page.block.start_time|localtime|date:"Y-m-d" }}" start="{{ page.block.start_time|localtime|date:"c" }}" end="{{ page.block.end_time|localtime|date:"c" }}" index="{{ forloop.counter }}">
       {% for venue in page.venues %}
         <room name="{{ venue.name }}">
           {% for row in page.rows %}
@@ -32,7 +34,7 @@
                   {# enough, but changes if the event is rescheduled. #}
                   {# Talks' guid will be stable across re-scheduling. #}
                   <event id="{{ items.item.pk }}" guid="{{ items.item.guid }}">
-                    <date>{{ row.start_time.isoformat }}</date>
+                    <date>{{ row.start_time|localtime|date:"c" }}</date>
                     <start>{{ row.start_time|time:"H:i" }}</start>
                     {% with dur=items.item.get_duration %}
                       <duration>{{ dur.hours|stringformat:"02d" }}:{{ dur.minutes|stringformat:"02d" }}</duration>
@@ -127,3 +129,4 @@
     </day>
   {% endfor %}
 </schedule>
+{% endlocaltime %}
