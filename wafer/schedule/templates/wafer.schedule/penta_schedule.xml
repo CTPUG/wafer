@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 {% load i18n %}
 {% load tz %}
-{% localtime on %}
 <schedule>
   <generator name="wafer" version="{{ wafer_version }}" />
   <version>{{ schedule_version }}</version>
@@ -129,4 +128,3 @@
     </day>
   {% endfor %}
 </schedule>
-{% endlocaltime %}
