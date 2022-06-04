@@ -4,7 +4,7 @@ import subprocess
 from setuptools import find_packages, setup
 
 REQUIRES = [
-    'Django>=2.2,<3.1',
+    'Django>=2.2,<4',
     'bleach',
     'bleach-allowlist',
     'diff-match-patch',

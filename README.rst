@@ -35,7 +35,7 @@ Available on `readthedocs.org`_.
 Supported Django versions
 =========================
 
-Wafer supports Django 2+ and Django 3.0.
+Wafer supports Django 2.2 and Django 3.0 - 3.2.
 
 Installation
 ============
