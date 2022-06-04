@@ -22,12 +22,23 @@ jobs:
           # Maps tcp port 5432 on service container to the host
           - 5432:5432
 
-    name: Postgres - Python ${{ matrix.python-version }}, Django ${{ matrix.django-version }} (Allowed Failures - ${{ matrix.django-version == '3.1.0' || matrix.django-version == 'main' }} )
+    name: Postgres - Python ${{ matrix.python-version }}, Django ${{ matrix.django-version }} (Allowed Failures - ${{ matrix.django-version == '3.1.0' ||  matrix.django-version == '3.2.0' ||  matrix.django-version == '4.0.0' || matrix.django-version == 'main'|| matrix.python-version == '3.10' }} )
     strategy:
       max-parallel: 4
       matrix:
-        python-version: [3.6, 3.7, 3.8, 3.9]
-        django-version: ['2.2.0', '3.0.0', '3.1.0', 'main']
+        python-version: ['3.6', '3.7', '3.8', '3.9', '3.10']
+        django-version: ['2.2.0', '3.0.0', '3.1.0', '3.2.0', '4.0.0', 'main']
+        exclude:
+          - django-version: '4.0.0'
+            python-version: '3.6'
+          - django-version: '4.0.0'
+            python-version: '3.7'
+          - django-version: 'main'
+            python-version: '3.6'
+          - django-version: 'main'
+            python-version: '3.7'
+          - django-version: '2.2.0'
+            python-version: '3.10'
     steps:
     - uses: actions/checkout@v2
     - name: Set up Python ${{ matrix.python-version }}
@@ -35,7 +46,7 @@ jobs:
       with:
         python-version: ${{ matrix.python-version }}
     - name: Install Dependencies
-      continue-on-error: ${{ matrix.django-version == '3.1.0' || matrix.django-version == 'main' }}
+      continue-on-error: ${{ matrix.django-version == '3.1.0' || matrix.django-version == '3.2.0' || matrix.django-version == '4.0.0' || matrix.django-version == 'main' || matrix.python-version == '3.10' }}
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt -r requirements-dev.txt
@@ -59,7 +70,7 @@ jobs:
         pip install 'https://github.com/django/django/archive/main.tar.gz'
       if: matrix.django-version == 'main'
     - name: Run Tests
-      continue-on-error: ${{ matrix.django-version == '3.1.0' || matrix.django-version == 'main' }}
+      continue-on-error: ${{ matrix.django-version == '3.1.0' || matrix.django-version == '3.2.0' || matrix.django-version == '4.0.0' || matrix.django-version == 'main' || matrix.python-version == '3.10' }}
       env:
         TESTDB: postgres
       run: |
@@ -69,12 +80,23 @@ jobs:
 
     runs-on: ubuntu-latest
 
-    name: SQLite - Python ${{ matrix.python-version }}, Django ${{ matrix.django-version }} (Allowed Failures - ${{ matrix.django-version == '3.1.0' || matrix.django-version == 'main' }} )
+    name: SQLite - Python ${{ matrix.python-version }}, Django ${{ matrix.django-version }} (Allowed Failures - ${{ matrix.django-version == '3.1.0' ||  matrix.django-version == '3.2.0' ||  matrix.django-version == '4.0.0' || matrix.django-version == 'main'|| matrix.python-version == '3.10' }} )
     strategy:
       max-parallel: 4
       matrix:
-        python-version: [3.6, 3.7, 3.8, 3.9]
-        django-version: ['2.2.0', '3.0.0', '3.1.0', 'main']
+        python-version: ['3.6', '3.7', '3.8', '3.9', '3.10']
+        django-version: ['2.2.0', '3.0.0', '3.1.0', '3.2.0', '4.0.0', 'main']
+        exclude:
+          - django-version: '4.0.0'
+            python-version: '3.6'
+          - django-version: '4.0.0'
+            python-version: '3.7'
+          - django-version: 'main'
+            python-version: '3.6'
+          - django-version: 'main'
+            python-version: '3.7'
+          - django-version: '2.2.0'
+            python-version: '3.10'
     steps:
     - uses: actions/checkout@v2
     - name: Set up Python ${{ matrix.python-version }}
@@ -82,7 +104,7 @@ jobs:
       with:
         python-version: ${{ matrix.python-version }}
     - name: Install Dependencies
-      continue-on-error: ${{ matrix.django-version == '3.1.0' || matrix.django-version == 'main' }}
+      continue-on-error: ${{ matrix.django-version == '3.1.0' || matrix.django-version == '3.2.0' || matrix.django-version == '4.0.0' || matrix.django-version == 'main' || matrix.python-version == '3.10' }}
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt -r requirements-dev.txt
@@ -96,7 +118,7 @@ jobs:
         pip install 'https://github.com/django/django/archive/main.tar.gz'
       if: matrix.django-version == 'main'
     - name: Run Tests
-      continue-on-error: ${{ matrix.django-version == '3.1.0' || matrix.django-version == 'main' }}
+      continue-on-error: ${{ matrix.django-version == '3.1.0' || matrix.django-version == '3.2.0' || matrix.django-version == '4.0.0' || matrix.django-version == 'main' || matrix.python-version == '3.10' }}
       run: |
         NOSE_WITH_COVERAGE=1 NOSE_COVER_PACKAGE=wafer python manage.py test
 
