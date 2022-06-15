@@ -74,7 +74,8 @@ jobs:
       env:
         TESTDB: postgres
       run: |
-        python -Wa manage.py test
+        export PYTHONWARNINGS=always
+        coverage run manage.py --source='wafer' test && coverage report --skip-covered
 
   sqlite:
 
@@ -120,7 +121,8 @@ jobs:
     - name: Run Tests
       continue-on-error: ${{ matrix.django-version == '4.0.0' || matrix.django-version == 'main' }}
       run: |
-        python -Wa manage.py test
+        export PYTHONWARNINGS=always
+        coverage run --source='wafer' manage.py test && coverage report --skip-covered
 
   translations:
     runs-on: ubuntu-latest
