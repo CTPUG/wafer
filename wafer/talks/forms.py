@@ -5,7 +5,7 @@ from django.conf import settings
 from django.core.exceptions import FieldDoesNotExist
 from django.urls import reverse
 from django.utils.module_loading import import_string
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 
 from crispy_forms.bootstrap import FormActions
 from crispy_forms.helper import FormHelper

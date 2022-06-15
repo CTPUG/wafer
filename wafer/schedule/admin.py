@@ -8,7 +8,7 @@ from django.core.exceptions import ValidationError
 from django.contrib import admin
 from django.contrib import messages
 from django.utils.encoding import force_text
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 from django import forms
 from reversion.admin import VersionAdmin
 
