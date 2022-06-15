@@ -4,7 +4,7 @@
 from diff_match_patch import diff_match_patch
 import datetime
 
-from django.conf.urls import url
+from django.urls import re_path
 from django.contrib.admin import SimpleListFilter
 from django.contrib.admin.utils import unquote, quote
 from django.contrib.contenttypes.models import ContentType
@@ -118,9 +118,9 @@ class CompareVersionAdmin(VersionAdmin):
         urls = super().get_urls()
         opts = self.model._meta
         compare_urls = [
-              url("^([^/]+)/([^/]+)/compare/$", self.admin_site.admin_view(self.compare_view),
+              re_path("^([^/]+)/([^/]+)/compare/$", self.admin_site.admin_view(self.compare_view),
                   name='%s_%s_compare' % (opts.app_label, opts.model_name)),
-              url("^([^/]+)/comparelist/$", self.admin_site.admin_view(self.comparelist_view),
+              re_path("^([^/]+)/comparelist/$", self.admin_site.admin_view(self.comparelist_view),
                   name='%s_%s_comparelist' % (opts.app_label, opts.model_name)),
         ]
         return compare_urls + urls

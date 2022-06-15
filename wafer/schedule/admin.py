@@ -2,7 +2,7 @@ import datetime
 from collections import defaultdict
 
 from django.db.models import Q
-from django.conf.urls import url
+from django.urls import re_path
 from django.core.exceptions import ValidationError
 
 from django.contrib import admin
@@ -366,8 +366,8 @@ class ScheduleItemAdmin(CompareVersionAdmin):
         admin_schedule_edit_view = self.admin_site.admin_view(
             ScheduleEditView.as_view())
         my_urls = [
-            url(r'^edit/$', admin_schedule_edit_view, name='schedule_editor'),
-            url(r'^edit/(?P<block_id>[0-9]+)$', admin_schedule_edit_view,
+            re_path(r'^edit/$', admin_schedule_edit_view, name='schedule_editor'),
+            re_path(r'^edit/(?P<block_id>[0-9]+)$', admin_schedule_edit_view,
                 name='schedule_editor'),
         ]
         return my_urls + urls
