@@ -74,7 +74,7 @@ jobs:
       env:
         TESTDB: postgres
       run: |
-        NOSE_WITH_COVERAGE=1 NOSE_COVER_PACKAGE=wafer python manage.py test
+        python manage.py test
 
   sqlite:
 
@@ -120,7 +120,7 @@ jobs:
     - name: Run Tests
       continue-on-error: ${{ matrix.django-version == '4.0.0' || matrix.django-version == 'main' || matrix.python-version == '3.10' }}
       run: |
-        NOSE_WITH_COVERAGE=1 NOSE_COVER_PACKAGE=wafer python manage.py test
+        python manage.py test
 
   translations:
     runs-on: ubuntu-latest
