@@ -147,7 +147,6 @@ INSTALLED_APPS = (
     'reversion',
     'bakery',
     'crispy_forms',
-    'django_nose',
     'rest_framework',
     'django_select2',
     'wafer',
@@ -165,8 +164,6 @@ INSTALLED_APPS = (
     'registration',
     'django.contrib.admin',
 )
-
-TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to
