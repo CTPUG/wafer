@@ -9,7 +9,7 @@ from django.contrib.admin import SimpleListFilter
 from django.contrib.admin.utils import unquote, quote
 from django.contrib.contenttypes.models import ContentType
 from django.shortcuts import get_object_or_404, render
-from django.utils.encoding import force_text
+from django.utils.encoding import force_str
 from django.utils.translation import gettext as _
 from django.urls import reverse
 
@@ -98,7 +98,7 @@ def make_diff(current, revision):
             continue
         else:
             # Compare the actual field values
-            diffs = dmp.diff_main(force_text(old_val), force_text(cur_val))
+            diffs = dmp.diff_main(force_str(old_val), force_str(cur_val))
             patch = dmp.diff_prettyHtml(diffs)
         the_diff.append((field, patch))
 

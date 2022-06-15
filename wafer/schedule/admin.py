@@ -7,7 +7,7 @@ from django.core.exceptions import ValidationError
 
 from django.contrib import admin
 from django.contrib import messages
-from django.utils.encoding import force_text
+from django.utils.encoding import force_str
 from django.utils.translation import gettext as _
 from django import forms
 from reversion.admin import VersionAdmin
@@ -448,7 +448,7 @@ class SlotAdmin(CompareVersionAdmin):
                 try:
                     new_slot.full_clean()
                     new_slot.save()
-                    msgdict = {'obj': force_text(new_slot)}
+                    msgdict = {'obj': force_str(new_slot)}
                     msg = _("Additional slot %(obj)s added sucessfully") % msgdict
                     if hasattr(request, '_messages'):
                         # Don't add messages unless we have a suitable request
