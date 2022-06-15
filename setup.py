@@ -11,7 +11,6 @@ REQUIRES = [
     'django-bakery>=0.12.0',
     'django-crispy-forms',
     'django-markitup>=4.0.0',
-    'django-nose',
     'django-registration-redux',
     'django-reversion',
     'django-select2',
