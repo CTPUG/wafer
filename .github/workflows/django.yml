@@ -75,7 +75,7 @@ jobs:
         TESTDB: postgres
       run: |
         export PYTHONWARNINGS=always
-        coverage run manage.py --source='wafer' test && coverage report --skip-covered
+        coverage run --source='wafer' manage.py test && coverage report --skip-covered
 
   sqlite:
 
