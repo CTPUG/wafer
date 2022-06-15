@@ -120,4 +120,4 @@ def add_default_groups(sender, instance, created, raw=False, **kwargs):
                 group = Group.objects.get_by_natural_key(grp_name)
                 instance.groups.add(group)
             except ObjectDoesNotExist:
-                logger.warn("Specified default group %s not found" % grp_name)
+                logger.warning("Specified default group %s not found" % grp_name)
