@@ -237,7 +237,6 @@ class SlotListFilterTest(TestCase):
         TestFilter = self._make_time_filter('11:00')
         # Check lookup details
         lookups = list(TestFilter.lookups(None, self.admin))
-        print(lookups)
         self.assertEqual(len(lookups), 3)
         self.assertEqual(lookups[0], ('11:00', '11:00'))
         TestFilter = self._make_time_filter('12:00')
