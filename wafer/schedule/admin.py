@@ -2,13 +2,13 @@ import datetime
 from collections import defaultdict
 
 from django.db.models import Q
-from django.conf.urls import url
+from django.urls import re_path
 from django.core.exceptions import ValidationError
 
 from django.contrib import admin
 from django.contrib import messages
-from django.utils.encoding import force_text
-from django.utils.translation import ugettext as _
+from django.utils.encoding import force_str
+from django.utils.translation import gettext as _
 from django import forms
 from reversion.admin import VersionAdmin
 
@@ -366,8 +366,8 @@ class ScheduleItemAdmin(CompareVersionAdmin):
         admin_schedule_edit_view = self.admin_site.admin_view(
             ScheduleEditView.as_view())
         my_urls = [
-            url(r'^edit/$', admin_schedule_edit_view, name='schedule_editor'),
-            url(r'^edit/(?P<block_id>[0-9]+)$', admin_schedule_edit_view,
+            re_path(r'^edit/$', admin_schedule_edit_view, name='schedule_editor'),
+            re_path(r'^edit/(?P<block_id>[0-9]+)$', admin_schedule_edit_view,
                 name='schedule_editor'),
         ]
         return my_urls + urls
@@ -448,7 +448,7 @@ class SlotAdmin(CompareVersionAdmin):
                 try:
                     new_slot.full_clean()
                     new_slot.save()
-                    msgdict = {'obj': force_text(new_slot)}
+                    msgdict = {'obj': force_str(new_slot)}
                     msg = _("Additional slot %(obj)s added sucessfully") % msgdict
                     if hasattr(request, '_messages'):
                         # Don't add messages unless we have a suitable request

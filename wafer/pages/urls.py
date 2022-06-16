@@ -1,5 +1,4 @@
-from django.conf.urls import include, url
-from django.urls import get_script_prefix
+from django.urls import include, re_path, get_script_prefix
 from django.views.generic import RedirectView
 
 from rest_framework import routers
@@ -10,8 +9,8 @@ router = routers.DefaultRouter()
 router.register(r'pages', PageViewSet)
 
 urlpatterns = [
-    url(r'^api/', include(router.urls)),
-    url(r'^index(?:\.html)?/?$', RedirectView.as_view(
+    re_path(r'^api/', include(router.urls)),
+    re_path(r'^index(?:\.html)?/?$', RedirectView.as_view(
         url=get_script_prefix(), permanent=True, query_string=True)),
-    url(r'^(?:(.+)/)?$', slug, name='wafer_page'),
+    re_path(r'^(?:(.+)/)?$', slug, name='wafer_page'),
 ]

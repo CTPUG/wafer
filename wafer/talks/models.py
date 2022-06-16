@@ -5,7 +5,7 @@ from django.template.defaultfilters import slugify
 from django.urls import reverse
 from django.utils.functional import lazy
 from django.utils.text import format_lazy
-from django.utils.translation import ugettext, ugettext_lazy as _
+from django.utils.translation import gettext, gettext_lazy as _
 from django.utils.timezone import now
 
 import reversion
@@ -33,7 +33,7 @@ def render_author(author):
 
 
 def authors_help():
-    _ = ugettext  # This function will be wrapped for lazy evaluation
+    _ = gettext  # This function will be wrapped for lazy evaluation
     text = []
     text.append(_("The speakers presenting the talk."))
     if not settings.WAFER_PUBLIC_ATTENDEE_LIST:

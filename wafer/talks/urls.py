@@ -1,4 +1,4 @@
-from django.conf.urls import url, include
+from django.urls import re_path, include
 from rest_framework_extensions import routers
 
 from wafer.talks.views import (
@@ -14,20 +14,20 @@ talks_router.register(
     parents_query_lookups=['talk'])
 
 urlpatterns = [
-    url(r'^$', UsersTalks.as_view(), name='wafer_users_talks'),
-    url(r'^page/(?P<page>\d+)/$', UsersTalks.as_view(),
+    re_path(r'^$', UsersTalks.as_view(), name='wafer_users_talks'),
+    re_path(r'^page/(?P<page>\d+)/$', UsersTalks.as_view(),
         name='wafer_users_talks_page'),
-    url(r'^new/$', TalkCreate.as_view(), name='wafer_talk_submit'),
-    url(r'^(?P<pk>\d+)(?:-(?P<slug>[\w-]*))?/$', TalkView.as_view(),
+    re_path(r'^new/$', TalkCreate.as_view(), name='wafer_talk_submit'),
+    re_path(r'^(?P<pk>\d+)(?:-(?P<slug>[\w-]*))?/$', TalkView.as_view(),
         name='wafer_talk'),
-    url(r'^(?P<pk>\d+)/edit/$', TalkUpdate.as_view(),
+    re_path(r'^(?P<pk>\d+)/edit/$', TalkUpdate.as_view(),
         name='wafer_talk_edit'),
-    url(r'^(?P<pk>\d+)/review/$', TalkReview.as_view(),
+    re_path(r'^(?P<pk>\d+)/review/$', TalkReview.as_view(),
         name='wafer_talk_review'),
-    url(r'^(?P<pk>\d+)/withdraw/$', TalkWithdraw.as_view(),
+    re_path(r'^(?P<pk>\d+)/withdraw/$', TalkWithdraw.as_view(),
         name='wafer_talk_withdraw'),
-    url(r'^speakers/$', Speakers.as_view(), name='wafer_talks_speakers'),
-    url(r'^tracks/', TracksView.as_view(), name='wafer_talk_tracks'),
-    url(r'^types/', TalkTypesView.as_view(), name='wafer_talk_types'),
-    url(r'^api/', include(router.urls)),
+    re_path(r'^speakers/$', Speakers.as_view(), name='wafer_talks_speakers'),
+    re_path(r'^tracks/', TracksView.as_view(), name='wafer_talk_tracks'),
+    re_path(r'^types/', TalkTypesView.as_view(), name='wafer_talk_types'),
+    re_path(r'^api/', include(router.urls)),
 ]

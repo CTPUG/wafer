@@ -9,7 +9,7 @@ from django.db.models import Q
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.utils.module_loading import import_string
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from django.core.validators import RegexValidator
 from django.core.exceptions import ObjectDoesNotExist
 
@@ -120,4 +120,4 @@ def add_default_groups(sender, instance, created, raw=False, **kwargs):
                 group = Group.objects.get_by_natural_key(grp_name)
                 instance.groups.add(group)
             except ObjectDoesNotExist:
-                logger.warn("Specified default group %s not found" % grp_name)
+                logger.warning("Specified default group %s not found" % grp_name)

@@ -41,7 +41,7 @@ Sub-menu have the keys:
 
 Example snippet from ``settings.py``::
 
-    from django.utils.translation import ugettext_lazy as _
+    from django.utils.translation import gettext_lazy as _
     from django.core.urlresolvers import reverse_lazy
 
     WAFER_MENUS += (

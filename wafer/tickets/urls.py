@@ -1,4 +1,4 @@
-from django.conf.urls import include, url
+from django.urls import include, re_path
 
 from rest_framework import routers
 
@@ -15,8 +15,8 @@ router.register(r'tickets', TicketsViewSet)
 router.register(r'tickettypes', TicketTypesViewSet)
 
 urlpatterns = [
-    url(r'^claim/$', ClaimView.as_view(), name='wafer_ticket_claim'),
-    url(r'^zapier_guest_hook/$', zapier_guest_hook),
-    url(r'^zapier_cancel_hook/$', zapier_cancel_hook),
-    url(r'^api/', include(router.urls)),
+    re_path(r'^claim/$', ClaimView.as_view(), name='wafer_ticket_claim'),
+    re_path(r'^zapier_guest_hook/$', zapier_guest_hook),
+    re_path(r'^zapier_cancel_hook/$', zapier_cancel_hook),
+    re_path(r'^api/', include(router.urls)),
 ]

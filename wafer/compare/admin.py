@@ -4,13 +4,13 @@
 from diff_match_patch import diff_match_patch
 import datetime
 
-from django.conf.urls import url
+from django.urls import re_path
 from django.contrib.admin import SimpleListFilter
 from django.contrib.admin.utils import unquote, quote
 from django.contrib.contenttypes.models import ContentType
 from django.shortcuts import get_object_or_404, render
-from django.utils.encoding import force_text
-from django.utils.translation import ugettext as _
+from django.utils.encoding import force_str
+from django.utils.translation import gettext as _
 from django.urls import reverse
 
 from markitup.fields import Markup
@@ -98,7 +98,7 @@ def make_diff(current, revision):
             continue
         else:
             # Compare the actual field values
-            diffs = dmp.diff_main(force_text(old_val), force_text(cur_val))
+            diffs = dmp.diff_main(force_str(old_val), force_str(cur_val))
             patch = dmp.diff_prettyHtml(diffs)
         the_diff.append((field, patch))
 
@@ -118,9 +118,9 @@ class CompareVersionAdmin(VersionAdmin):
         urls = super().get_urls()
         opts = self.model._meta
         compare_urls = [
-              url("^([^/]+)/([^/]+)/compare/$", self.admin_site.admin_view(self.compare_view),
+              re_path("^([^/]+)/([^/]+)/compare/$", self.admin_site.admin_view(self.compare_view),
                   name='%s_%s_compare' % (opts.app_label, opts.model_name)),
-              url("^([^/]+)/comparelist/$", self.admin_site.admin_view(self.comparelist_view),
+              re_path("^([^/]+)/comparelist/$", self.admin_site.admin_view(self.comparelist_view),
                   name='%s_%s_comparelist' % (opts.app_label, opts.model_name)),
         ]
         return compare_urls + urls
