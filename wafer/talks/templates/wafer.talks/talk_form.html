@@ -40,7 +40,9 @@
         {% endblocktrans %}
       </div>
     {% endif %}
-    {% crispy form %}
+    <form method="post">
+      {% crispy form %}
+    </form>
   {% endif %}
 </section>
 {% endblock %}

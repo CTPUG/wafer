@@ -118,6 +118,7 @@ class TalkForm(forms.ModelForm):
         self.fields['authors'].label_from_instance = render_author
 
         self.helper = FormHelper(self)
+        self.helper.form_tag = False
         self.helper.include_media = False
         instance = kwargs['instance']
         submit_button = Submit('submit', _('Save') if instance else _('Submit'))
