@@ -35,7 +35,9 @@
       <h1>{{ WAFER_CONFERENCE_NAME }}</h1>
     {% endblock %}
   </div>
-  {% sponsors %}
+  {% block wafer_sponsors %}
+    {% sponsors %}
+  {% endblock %}
   {% block wafer_js %}
   <script src="{% static 'vendor/jquery/dist/jquery.min.js' %}"></script>
   <script src="{% static 'vendor/popper.js/dist/umd/popper.min.js' %}"></script>
