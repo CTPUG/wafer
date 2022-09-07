@@ -36,15 +36,15 @@ class SlotAdminTests(TestCase):
         timezone.activate('UTC')
         self.block = ScheduleBlock.objects.create(
                 start_time=D.datetime(2013, 9, 22, 9, 0, 0,
-                                      tzinfo=timezone.utc),
+                                      tzinfo=D.timezone.utc),
                 end_time=D.datetime(2013, 9, 22, 23, 0, 0,
-                                    tzinfo=timezone.utc))
+                                    tzinfo=D.timezone.utc))
         self.admin = SlotAdmin(Slot, None)
 
     def test_save_model_single_new(self):
         """Test save_model creating a new slot, but no additional slots"""
-        slot = Slot(start_time=D.datetime(2013, 9, 22, 11, 0, 0, tzinfo=timezone.utc),
-                    end_time=D.datetime(2013, 9, 22, 11, 30, 0, tzinfo=timezone.utc))
+        slot = Slot(start_time=D.datetime(2013, 9, 22, 11, 0, 0, tzinfo=D.timezone.utc),
+                    end_time=D.datetime(2013, 9, 22, 11, 30, 0, tzinfo=D.timezone.utc))
         # check that it's not saved in the database yet
         self.assertEqual(Slot.objects.count(), 0)
         request = HttpRequest()
@@ -52,13 +52,13 @@ class SlotAdminTests(TestCase):
         self.admin.save_model(request, slot, dummy, False)
         # check that it's now been saved in the database
         self.assertEqual(Slot.objects.count(), 1)
-        slot2 = Slot.objects.filter(start_time=D.datetime(2013, 9, 22, 11, 0, 0, tzinfo=timezone.utc)).get()
+        slot2 = Slot.objects.filter(start_time=D.datetime(2013, 9, 22, 11, 0, 0, tzinfo=D.timezone.utc)).get()
         self.assertEqual(slot, slot2)
 
     def test_save_model_change_slot(self):
         """Test save_model changing a slot"""
-        slot = Slot(start_time=D.datetime(2013, 9, 22, 11, 0, 0, tzinfo=timezone.utc),
-                    end_time=D.datetime(2013, 9, 22, 12, 30, 0, tzinfo=timezone.utc))
+        slot = Slot(start_time=D.datetime(2013, 9, 22, 11, 0, 0, tzinfo=D.timezone.utc),
+                    end_time=D.datetime(2013, 9, 22, 12, 30, 0, tzinfo=D.timezone.utc))
         # end_time is chosen as 12:30 so it stays valid through all the
         # subsequent fiddling
         slot.save()
@@ -66,35 +66,35 @@ class SlotAdminTests(TestCase):
         self.assertEqual(Slot.objects.count(), 1)
         request = HttpRequest()
         dummy = make_dummy_form(0)
-        slot.start_time = D.datetime(2013, 9, 22, 12, 0, 0, tzinfo=timezone.utc)
+        slot.start_time = D.datetime(2013, 9, 22, 12, 0, 0, tzinfo=D.timezone.utc)
         self.assertEqual(
-            Slot.objects.filter(start_time=D.datetime(2013, 9, 22, 11, 0, 0, tzinfo=timezone.utc)).count(), 1)
+            Slot.objects.filter(start_time=D.datetime(2013, 9, 22, 11, 0, 0, tzinfo=D.timezone.utc)).count(), 1)
         self.admin.save_model(request, slot, dummy, True)
         # Check that the database has changed
         self.assertEqual(
-            Slot.objects.filter(start_time=D.datetime(2013, 9, 22, 11, 0, 0, tzinfo=timezone.utc)).count(), 0)
+            Slot.objects.filter(start_time=D.datetime(2013, 9, 22, 11, 0, 0, tzinfo=D.timezone.utc)).count(), 0)
         self.assertEqual(Slot.objects.count(), 1)
-        slot2 = Slot.objects.filter(start_time=D.datetime(2013, 9, 22, 12, 0, 0, tzinfo=timezone.utc)).get()
+        slot2 = Slot.objects.filter(start_time=D.datetime(2013, 9, 22, 12, 0, 0, tzinfo=D.timezone.utc)).get()
         self.assertEqual(slot, slot2)
 
         # Check that setting additional has no influence on the change path
         dummy = make_dummy_form(3)
-        slot.start_time = D.datetime(2013, 9, 22, 11, 0, 0, tzinfo=timezone.utc)
+        slot.start_time = D.datetime(2013, 9, 22, 11, 0, 0, tzinfo=D.timezone.utc)
         self.assertEqual(
-            Slot.objects.filter(start_time=D.datetime(2013, 9, 22, 11, 0, 0, tzinfo=timezone.utc)).count(), 0)
+            Slot.objects.filter(start_time=D.datetime(2013, 9, 22, 11, 0, 0, tzinfo=D.timezone.utc)).count(), 0)
         self.admin.save_model(request, slot, dummy, True)
         # Still only 1 object
         self.assertEqual(Slot.objects.count(), 1)
         # And it has been updated
         self.assertEqual(
-            Slot.objects.filter(start_time=D.datetime(2013, 9, 22, 12, 0, 0, tzinfo=timezone.utc)).count(), 0)
+            Slot.objects.filter(start_time=D.datetime(2013, 9, 22, 12, 0, 0, tzinfo=D.timezone.utc)).count(), 0)
         self.assertEqual(
-            Slot.objects.filter(start_time=D.datetime(2013, 9, 22, 11, 0, 0, tzinfo=timezone.utc)).count(), 1)
+            Slot.objects.filter(start_time=D.datetime(2013, 9, 22, 11, 0, 0, tzinfo=D.timezone.utc)).count(), 1)
 
     def test_save_model_new_additional(self):
         """Test save_model changing a new slot with some additional slots"""
-        slot = Slot(start_time=D.datetime(2013, 9, 22, 11, 0, 0, tzinfo=timezone.utc),
-                    end_time=D.datetime(2013, 9, 22, 11, 30, 0, tzinfo=timezone.utc))
+        slot = Slot(start_time=D.datetime(2013, 9, 22, 11, 0, 0, tzinfo=D.timezone.utc),
+                    end_time=D.datetime(2013, 9, 22, 11, 30, 0, tzinfo=D.timezone.utc))
         # check that it's not saved in the database
         self.assertEqual(Slot.objects.count(), 0)
         request = HttpRequest()
@@ -105,49 +105,49 @@ class SlotAdminTests(TestCase):
         # check the hierachy is created correctly
         slot1 = Slot.objects.filter(previous_slot=slot).get()
         self.assertEqual(slot1.get_start_time(), slot.end_time)
-        self.assertEqual(slot1.end_time, D.datetime(2013, 9, 22, 12, 0, 0, tzinfo=timezone.utc))
+        self.assertEqual(slot1.end_time, D.datetime(2013, 9, 22, 12, 0, 0, tzinfo=D.timezone.utc))
         slot2 = Slot.objects.filter(previous_slot=slot1).get()
         self.assertEqual(slot2.get_start_time(), slot1.end_time)
-        self.assertEqual(slot2.end_time, D.datetime(2013, 9, 22, 12, 30, 0, tzinfo=timezone.utc))
+        self.assertEqual(slot2.end_time, D.datetime(2013, 9, 22, 12, 30, 0, tzinfo=D.timezone.utc))
         self.assertEqual(slot2.get_block(), slot.get_block())
         self.assertEqual(slot2.previous_slot, slot1)
         slot3 = Slot.objects.filter(previous_slot=slot2).get()
         self.assertEqual(slot3.get_start_time(), slot2.end_time)
-        self.assertEqual(slot3.end_time, D.datetime(2013, 9, 22, 13, 00, 0, tzinfo=timezone.utc))
+        self.assertEqual(slot3.end_time, D.datetime(2013, 9, 22, 13, 00, 0, tzinfo=D.timezone.utc))
         self.assertEqual(slot3.get_block(), slot.get_block())
         self.assertEqual(slot3.previous_slot, slot2)
 
         # repeat checks with a different length of slot
         slot = Slot(previous_slot=slot3,
-                    end_time=D.datetime(2013, 9, 22, 14, 30, 0, tzinfo=timezone.utc))
+                    end_time=D.datetime(2013, 9, 22, 14, 30, 0, tzinfo=D.timezone.utc))
         dummy = make_dummy_form(4)
         self.admin.save_model(request, slot, dummy, False)
         self.assertEqual(Slot.objects.count(), 9)
         slot1 = Slot.objects.filter(previous_slot=slot).get()
         self.assertEqual(slot1.get_start_time(), slot.end_time)
-        self.assertEqual(slot1.end_time, D.datetime(2013, 9, 22, 16, 0, 0, tzinfo=timezone.utc))
+        self.assertEqual(slot1.end_time, D.datetime(2013, 9, 22, 16, 0, 0, tzinfo=D.timezone.utc))
         slot2 = Slot.objects.filter(previous_slot=slot1).get()
         self.assertEqual(slot2.get_start_time(), slot1.end_time)
-        self.assertEqual(slot2.end_time, D.datetime(2013, 9, 22, 17, 30, 0, tzinfo=timezone.utc))
+        self.assertEqual(slot2.end_time, D.datetime(2013, 9, 22, 17, 30, 0, tzinfo=D.timezone.utc))
         self.assertEqual(slot2.get_block(), slot.get_block())
         self.assertEqual(slot2.previous_slot, slot1)
         slot3 = Slot.objects.filter(previous_slot=slot2).get()
         self.assertEqual(slot3.get_start_time(), slot2.end_time)
-        self.assertEqual(slot3.end_time, D.datetime(2013, 9, 22, 19, 00, 0, tzinfo=timezone.utc))
+        self.assertEqual(slot3.end_time, D.datetime(2013, 9, 22, 19, 00, 0, tzinfo=D.timezone.utc))
         self.assertEqual(slot3.get_block(), slot.get_block())
         slot4 = Slot.objects.filter(previous_slot=slot3).get()
         self.assertEqual(slot4.get_start_time(), slot3.end_time)
-        self.assertEqual(slot4.end_time, D.datetime(2013, 9, 22, 20, 30, 0, tzinfo=timezone.utc))
+        self.assertEqual(slot4.end_time, D.datetime(2013, 9, 22, 20, 30, 0, tzinfo=D.timezone.utc))
         self.assertEqual(slot4.get_block(), slot.get_block())
 
     def test_save_model_prev_slot_additional(self):
         """Test save_model changing a new slot with some additional slots,
            starting from a slot specified via previous slot"""
-        prev_slot = Slot(start_time=D.datetime(2013, 9, 22, 11, 0, 0, tzinfo=timezone.utc),
-                         end_time=D.datetime(2013, 9, 22, 11, 30, 0, tzinfo=timezone.utc))
+        prev_slot = Slot(start_time=D.datetime(2013, 9, 22, 11, 0, 0, tzinfo=D.timezone.utc),
+                         end_time=D.datetime(2013, 9, 22, 11, 30, 0, tzinfo=D.timezone.utc))
         prev_slot.save()
         self.assertEqual(Slot.objects.count(), 1)
-        slot = Slot(previous_slot=prev_slot, end_time=D.datetime(2013, 9, 22, 12, 00, 0, tzinfo=timezone.utc))
+        slot = Slot(previous_slot=prev_slot, end_time=D.datetime(2013, 9, 22, 12, 00, 0, tzinfo=D.timezone.utc))
         # Check that newly added slot isn't in the database
         self.assertEqual(Slot.objects.count(), 1)
         request = HttpRequest()
@@ -158,10 +158,10 @@ class SlotAdminTests(TestCase):
         # check the hierachy is created correctly
         slot1 = Slot.objects.filter(previous_slot=slot).get()
         self.assertEqual(slot1.get_start_time(), slot.end_time)
-        self.assertEqual(slot1.end_time, D.datetime(2013, 9, 22, 12, 30, 0, tzinfo=timezone.utc))
+        self.assertEqual(slot1.end_time, D.datetime(2013, 9, 22, 12, 30, 0, tzinfo=D.timezone.utc))
         slot2 = Slot.objects.filter(previous_slot=slot1).get()
         self.assertEqual(slot2.get_start_time(), slot1.end_time)
-        self.assertEqual(slot2.end_time, D.datetime(2013, 9, 22, 13, 00, 0, tzinfo=timezone.utc))
+        self.assertEqual(slot2.end_time, D.datetime(2013, 9, 22, 13, 00, 0, tzinfo=D.timezone.utc))
 
 
 class SlotListFilterTest(TestCase):
@@ -176,19 +176,19 @@ class SlotListFilterTest(TestCase):
         """Create some data for use in the actual tests."""
         self.block1 = ScheduleBlock.objects.create(
                 start_time=D.datetime(2013, 9, 22, 9, 0, 0,
-                                      tzinfo=timezone.utc),
+                                      tzinfo=D.timezone.utc),
                 end_time=D.datetime(2013, 9, 22, 19, 0, 0,
-                                    tzinfo=timezone.utc))
+                                    tzinfo=D.timezone.utc))
         self.block2 = ScheduleBlock.objects.create(
                 start_time=D.datetime(2013, 9, 23, 9, 0, 0,
-                                      tzinfo=timezone.utc),
+                                      tzinfo=D.timezone.utc),
                 end_time=D.datetime(2013, 9, 23, 19, 0, 0,
-                                    tzinfo=timezone.utc))
+                                    tzinfo=D.timezone.utc))
         self.block3 = ScheduleBlock.objects.create(
                 start_time=D.datetime(2013, 9, 24, 9, 0, 0,
-                                      tzinfo=timezone.utc),
+                                      tzinfo=D.timezone.utc),
                 end_time=D.datetime(2013, 9, 24, 19, 0, 0,
-                                    tzinfo=timezone.utc))
+                                    tzinfo=D.timezone.utc))
 
         self.admin = SlotAdmin(Slot, None)
 
@@ -222,14 +222,14 @@ class SlotListFilterTest(TestCase):
     def test_time_filter_lookups(self):
         """Test that filter lookups are sane."""
         # Add some slots
-        slot1 = Slot(start_time=D.datetime(2013, 9, 22, 11, 0, 0, tzinfo=timezone.utc),
-                     end_time=D.datetime(2013, 9, 22, 12, 00, 0, tzinfo=timezone.utc))
-        slot2 = Slot(start_time=D.datetime(2013, 9, 23, 11, 0, 0, tzinfo=timezone.utc),
-                     end_time=D.datetime(2013, 9, 23, 12, 00, 0, tzinfo=timezone.utc))
-        slot3 = Slot(start_time=D.datetime(2013, 9, 22, 12, 0, 0, tzinfo=timezone.utc),
-                     end_time=D.datetime(2013, 9, 22, 13, 0, 0, tzinfo=timezone.utc))
-        slot4 = Slot(start_time=D.datetime(2013, 9, 22, 13, 0, 0, tzinfo=timezone.utc),
-                     end_time=D.datetime(2013, 9, 22, 14, 0, 0, tzinfo=timezone.utc))
+        slot1 = Slot(start_time=D.datetime(2013, 9, 22, 11, 0, 0, tzinfo=D.timezone.utc),
+                     end_time=D.datetime(2013, 9, 22, 12, 00, 0, tzinfo=D.timezone.utc))
+        slot2 = Slot(start_time=D.datetime(2013, 9, 23, 11, 0, 0, tzinfo=D.timezone.utc),
+                     end_time=D.datetime(2013, 9, 23, 12, 00, 0, tzinfo=D.timezone.utc))
+        slot3 = Slot(start_time=D.datetime(2013, 9, 22, 12, 0, 0, tzinfo=D.timezone.utc),
+                     end_time=D.datetime(2013, 9, 22, 13, 0, 0, tzinfo=D.timezone.utc))
+        slot4 = Slot(start_time=D.datetime(2013, 9, 22, 13, 0, 0, tzinfo=D.timezone.utc),
+                     end_time=D.datetime(2013, 9, 22, 14, 0, 0, tzinfo=D.timezone.utc))
         slot1.save()
         slot2.save()
         slot3.save()
@@ -246,21 +246,21 @@ class SlotListFilterTest(TestCase):
     def test_queryset_day_time(self):
         """Test queries with slots created purely by day + start_time"""
         slots = {}
-        slots[self.block1] = [Slot(start_time=D.datetime(2013, 9, 22, 11, 0, 0, tzinfo=timezone.utc),
-                                   end_time=D.datetime(2013, 9, 22, 12, 00, 0, tzinfo=timezone.utc))]
-        slots[self.block2] = [Slot(start_time=D.datetime(2013, 9, 23, 11, 0, 0, tzinfo=timezone.utc),
-                                   end_time=D.datetime(2013, 9, 23, 12, 00, 0, tzinfo=timezone.utc))]
+        slots[self.block1] = [Slot(start_time=D.datetime(2013, 9, 22, 11, 0, 0, tzinfo=D.timezone.utc),
+                                   end_time=D.datetime(2013, 9, 22, 12, 00, 0, tzinfo=D.timezone.utc))]
+        slots[self.block2] = [Slot(start_time=D.datetime(2013, 9, 23, 11, 0, 0, tzinfo=D.timezone.utc),
+                                   end_time=D.datetime(2013, 9, 23, 12, 00, 0, tzinfo=D.timezone.utc))]
 
         # ScheduleBlock1 slots
         for x in range(12, 17):
             slots[self.block1].append(Slot(
-                start_time=D.datetime(2013, 9, 22, x, 0, 0, tzinfo=timezone.utc),
-                end_time=D.datetime(2013, 9, 22, x+1, 0, 0, tzinfo=timezone.utc)))
+                start_time=D.datetime(2013, 9, 22, x, 0, 0, tzinfo=D.timezone.utc),
+                end_time=D.datetime(2013, 9, 22, x+1, 0, 0, tzinfo=D.timezone.utc)))
             if x < 15:
                 # Fewer slots for day 2
                 slots[self.block2].append(Slot(
-                    start_time=D.datetime(2013, 9, 23, x, 0, 0, tzinfo=timezone.utc),
-                    end_time=D.datetime(2013, 9, 23, x+1, 0, 0, tzinfo=timezone.utc)))
+                    start_time=D.datetime(2013, 9, 23, x, 0, 0, tzinfo=D.timezone.utc),
+                    end_time=D.datetime(2013, 9, 23, x+1, 0, 0, tzinfo=D.timezone.utc)))
         for d in slots:
             for s in slots[d]:
                 s.save()
@@ -298,25 +298,25 @@ class SlotListFilterTest(TestCase):
     def test_queryset_prev_slot(self):
         """Test lookup with a chain of previous slots."""
         slots = {}
-        prev = Slot(start_time=D.datetime(2013, 9, 22, 11, 0, 0, tzinfo=timezone.utc),
-                    end_time=D.datetime(2013, 9, 22, 12, 00, 0, tzinfo=timezone.utc))
+        prev = Slot(start_time=D.datetime(2013, 9, 22, 11, 0, 0, tzinfo=D.timezone.utc),
+                    end_time=D.datetime(2013, 9, 22, 12, 00, 0, tzinfo=D.timezone.utc))
         prev.save()
         slots[self.block1] = [prev]
-        prev = Slot(start_time=D.datetime(2013, 9, 23, 11, 0, 0, tzinfo=timezone.utc),
-                    end_time=D.datetime(2013, 9, 23, 12, 00, 0, tzinfo=timezone.utc))
+        prev = Slot(start_time=D.datetime(2013, 9, 23, 11, 0, 0, tzinfo=D.timezone.utc),
+                    end_time=D.datetime(2013, 9, 23, 12, 00, 0, tzinfo=D.timezone.utc))
         prev.save()
         slots[self.block2] = [prev]
         # ScheduleBlock1 slots
         for x in range(12, 17):
             prev1 = slots[self.block1][-1]
             slots[self.block1].append(Slot(previous_slot=prev1,
-                                           end_time=D.datetime(2013, 9, 22, x+1, 0, 0, tzinfo=timezone.utc)))
+                                           end_time=D.datetime(2013, 9, 22, x+1, 0, 0, tzinfo=D.timezone.utc)))
             slots[self.block1][-1].save()
             if x < 15:
                 prev2 = slots[self.block2][-1]
                 # Fewer slots for day 2
                 slots[self.block2].append(Slot(previous_slot=prev2,
-                                               end_time=D.datetime(2013, 9, 22, x+1, 0, 0, tzinfo=timezone.utc)))
+                                               end_time=D.datetime(2013, 9, 22, x+1, 0, 0, tzinfo=D.timezone.utc)))
                 slots[self.block2][-1].save()
         # Check Null filter
         TestFilter = self._make_block_filter(None)
@@ -352,12 +352,12 @@ class SlotListFilterTest(TestCase):
     def test_queryset_mixed(self):
         """Test with a mix of day+time and previous slot cases."""
         slots = {}
-        prev = Slot(start_time=D.datetime(2013, 9, 22, 11, 0, 0, tzinfo=timezone.utc),
-                    end_time=D.datetime(2013, 9, 22, 12, 00, 0, tzinfo=timezone.utc))
+        prev = Slot(start_time=D.datetime(2013, 9, 22, 11, 0, 0, tzinfo=D.timezone.utc),
+                    end_time=D.datetime(2013, 9, 22, 12, 00, 0, tzinfo=D.timezone.utc))
         prev.save()
         slots[self.block1] = [prev]
-        prev = Slot(start_time=D.datetime(2013, 9, 23, 11, 0, 0, tzinfo=timezone.utc),
-                    end_time=D.datetime(2013, 9, 23, 12, 00, 0, tzinfo=timezone.utc))
+        prev = Slot(start_time=D.datetime(2013, 9, 23, 11, 0, 0, tzinfo=D.timezone.utc),
+                    end_time=D.datetime(2013, 9, 23, 12, 00, 0, tzinfo=D.timezone.utc))
         prev.save()
         slots[self.block2] = [prev]
         # ScheduleBlock1 slots
@@ -365,19 +365,19 @@ class SlotListFilterTest(TestCase):
             prev1 = slots[self.block1][-1]
             if x % 2:
                 slots[self.block1].append(Slot(previous_slot=prev1,
-                                               end_time=D.datetime(2013, 9, 22, x+1, 0, 0, tzinfo=timezone.utc)))
+                                               end_time=D.datetime(2013, 9, 22, x+1, 0, 0, tzinfo=D.timezone.utc)))
             else:
-                slots[self.block1].append(Slot(start_time=D.datetime(2013, 9, 22, x, 0, 0, tzinfo=timezone.utc),
-                                               end_time=D.datetime(2013, 9, 22, x+1, 0, 0, tzinfo=timezone.utc)))
+                slots[self.block1].append(Slot(start_time=D.datetime(2013, 9, 22, x, 0, 0, tzinfo=D.timezone.utc),
+                                               end_time=D.datetime(2013, 9, 22, x+1, 0, 0, tzinfo=D.timezone.utc)))
 
             slots[self.block1][-1].save()
             prev2 = slots[self.block2][-1]
             if x % 5:
                 slots[self.block2].append(Slot(previous_slot=prev2,
-                                               end_time=D.datetime(2013, 9, 23, x+1, 0, 0, tzinfo=timezone.utc)))
+                                               end_time=D.datetime(2013, 9, 23, x+1, 0, 0, tzinfo=D.timezone.utc)))
             else:
-                slots[self.block2].append(Slot(start_time=D.datetime(2013, 9, 23, x, 0, 0, tzinfo=timezone.utc),
-                                               end_time=D.datetime(2013, 9, 23, x+1, 0, 0, tzinfo=timezone.utc)))
+                slots[self.block2].append(Slot(start_time=D.datetime(2013, 9, 23, x, 0, 0, tzinfo=D.timezone.utc),
+                                               end_time=D.datetime(2013, 9, 23, x+1, 0, 0, tzinfo=D.timezone.utc)))
             slots[self.block2][-1].save()
         # Check Null filter
         TestFilter = self._make_block_filter(None)
@@ -404,17 +404,17 @@ class ValidationTests(TestCase):
         """Test that we can detect clashes correctly"""
         day1 = ScheduleBlock.objects.create(
                 start_time=D.datetime(2013, 9, 22, 9, 0, 0,
-                                      tzinfo=timezone.utc),
+                                      tzinfo=D.timezone.utc),
                 end_time=D.datetime(2013, 9, 22, 19, 0, 0,
-                                    tzinfo=timezone.utc))
+                                    tzinfo=D.timezone.utc))
         venue1 = Venue.objects.create(order=1, name='Venue 1')
         venue2 = Venue.objects.create(order=2, name='Venue 2')
         venue1.blocks.add(day1)
         venue2.blocks.add(day1)
 
-        start1 = D.datetime(2013, 9, 22, 10, 0, 0, tzinfo=timezone.utc)
-        start2 = D.datetime(2013, 9, 22, 11, 0, 0, tzinfo=timezone.utc)
-        end = D.datetime(2013, 9, 22, 12, 0, 0, tzinfo=timezone.utc)
+        start1 = D.datetime(2013, 9, 22, 10, 0, 0, tzinfo=D.timezone.utc)
+        start2 = D.datetime(2013, 9, 22, 11, 0, 0, tzinfo=D.timezone.utc)
+        end = D.datetime(2013, 9, 22, 12, 0, 0, tzinfo=D.timezone.utc)
 
         slot1 = Slot.objects.create(start_time=start1, end_time=start2)
         slot2 = Slot.objects.create(start_time=start2, end_time=end)
@@ -472,15 +472,15 @@ class ValidationTests(TestCase):
         # Create a item with both a talk and a page assigned
         day1 = ScheduleBlock.objects.create(
                 start_time=D.datetime(2013, 9, 22, 9, 0, 0,
-                                      tzinfo=timezone.utc),
+                                      tzinfo=D.timezone.utc),
                 end_time=D.datetime(2013, 9, 22, 19, 0, 0,
-                                    tzinfo=timezone.utc))
+                                    tzinfo=D.timezone.utc))
         venue1 = Venue.objects.create(order=1, name='Venue 1')
         venue1.blocks.add(day1)
 
-        start1 = D.datetime(2013, 9, 22, 10, 0, 0, tzinfo=timezone.utc)
-        start2 = D.datetime(2013, 9, 22, 11, 0, 0, tzinfo=timezone.utc)
-        end = D.datetime(2013, 9, 22, 12, 0, 0, tzinfo=timezone.utc)
+        start1 = D.datetime(2013, 9, 22, 10, 0, 0, tzinfo=D.timezone.utc)
+        start2 = D.datetime(2013, 9, 22, 11, 0, 0, tzinfo=D.timezone.utc)
+        end = D.datetime(2013, 9, 22, 12, 0, 0, tzinfo=D.timezone.utc)
 
         slot1 = Slot.objects.create(start_time=start1, end_time=start2)
         slot2 = Slot.objects.create(start_time=start1, end_time=end)
@@ -545,16 +545,16 @@ class ValidationTests(TestCase):
         # Create a item with a gap in the slots assigned to it
         day1 = ScheduleBlock.objects.create(
                 start_time=D.datetime(2013, 9, 22, 9, 0, 0,
-                                      tzinfo=timezone.utc),
+                                      tzinfo=D.timezone.utc),
                 end_time=D.datetime(2013, 9, 22, 19, 0, 0,
-                                    tzinfo=timezone.utc))
+                                    tzinfo=D.timezone.utc))
         venue1 = Venue.objects.create(order=1, name='Venue 1')
         venue1.blocks.add(day1)
 
-        start1 = D.datetime(2013, 9, 22, 10, 0, 0, tzinfo=timezone.utc)
-        start2 = D.datetime(2013, 9, 22, 11, 0, 0, tzinfo=timezone.utc)
-        start3 = D.datetime(2013, 9, 22, 12, 0, 0, tzinfo=timezone.utc)
-        end = D.datetime(2013, 9, 22, 13, 0, 0, tzinfo=timezone.utc)
+        start1 = D.datetime(2013, 9, 22, 10, 0, 0, tzinfo=D.timezone.utc)
+        start2 = D.datetime(2013, 9, 22, 11, 0, 0, tzinfo=D.timezone.utc)
+        start3 = D.datetime(2013, 9, 22, 12, 0, 0, tzinfo=D.timezone.utc)
+        end = D.datetime(2013, 9, 22, 13, 0, 0, tzinfo=D.timezone.utc)
 
         slot1 = Slot.objects.create(start_time=start1, end_time=start2)
         slot2 = Slot.objects.create(start_time=start2, end_time=start3)
@@ -595,17 +595,17 @@ class ValidationTests(TestCase):
         # 11-12 Talk 1   Page 1
         day1 = ScheduleBlock.objects.create(
                 start_time=D.datetime(2013, 9, 22, 9, 0, 0,
-                                      tzinfo=timezone.utc),
+                                      tzinfo=D.timezone.utc),
                 end_time=D.datetime(2013, 9, 22, 19, 0, 0,
-                                    tzinfo=timezone.utc))
+                                    tzinfo=D.timezone.utc))
         venue1 = Venue.objects.create(order=1, name='Venue 1')
         venue2 = Venue.objects.create(order=2, name='Venue 2')
         venue1.blocks.add(day1)
         venue2.blocks.add(day1)
 
-        start1 = D.datetime(2013, 9, 22, 10, 0, 0, tzinfo=timezone.utc)
-        start2 = D.datetime(2013, 9, 22, 11, 0, 0, tzinfo=timezone.utc)
-        end = D.datetime(2013, 9, 22, 12, 0, 0, tzinfo=timezone.utc)
+        start1 = D.datetime(2013, 9, 22, 10, 0, 0, tzinfo=D.timezone.utc)
+        start2 = D.datetime(2013, 9, 22, 11, 0, 0, tzinfo=D.timezone.utc)
+        end = D.datetime(2013, 9, 22, 12, 0, 0, tzinfo=D.timezone.utc)
 
         slot1 = Slot.objects.create(start_time=start1, end_time=start2)
         slot2 = Slot.objects.create(start_time=start1, end_time=end)
@@ -649,21 +649,21 @@ class ValidationTests(TestCase):
            correctly."""
         day1 = ScheduleBlock.objects.create(
                 start_time=D.datetime(2013, 9, 22, 9, 0, 0,
-                                      tzinfo=timezone.utc),
+                                      tzinfo=D.timezone.utc),
                 end_time=D.datetime(2013, 9, 22, 19, 0, 0,
-                                    tzinfo=timezone.utc))
+                                    tzinfo=D.timezone.utc))
         day2 = ScheduleBlock.objects.create(
                 start_time=D.datetime(2013, 9, 23, 9, 0, 0,
-                                      tzinfo=timezone.utc),
+                                      tzinfo=D.timezone.utc),
                 end_time=D.datetime(2013, 9, 23, 19, 0, 0,
-                                    tzinfo=timezone.utc))
+                                    tzinfo=D.timezone.utc))
         venue1 = Venue.objects.create(order=1, name='Venue 1')
         venue2 = Venue.objects.create(order=2, name='Venue 2')
         venue1.blocks.add(day1)
         venue2.blocks.add(day2)
 
-        start1 = D.datetime(2013, 9, 22, 10, 0, 0, tzinfo=timezone.utc)
-        start2 = D.datetime(2013, 9, 22, 11, 0, 0, tzinfo=timezone.utc)
+        start1 = D.datetime(2013, 9, 22, 10, 0, 0, tzinfo=D.timezone.utc)
+        start2 = D.datetime(2013, 9, 22, 11, 0, 0, tzinfo=D.timezone.utc)
 
         slot1 = Slot.objects.create(start_time=start1, end_time=start2)
 
@@ -683,8 +683,8 @@ class ValidationTests(TestCase):
         assert venues[0][0] == venue2
         assert set(venues[0][1]) == set([item2])
 
-        start1d2 = D.datetime(2013, 9, 23, 10, 0, 0, tzinfo=timezone.utc)
-        start2d2 = D.datetime(2013, 9, 23, 11, 0, 0, tzinfo=timezone.utc)
+        start1d2 = D.datetime(2013, 9, 23, 10, 0, 0, tzinfo=D.timezone.utc)
+        start2d2 = D.datetime(2013, 9, 23, 11, 0, 0, tzinfo=D.timezone.utc)
         slot2 = Slot.objects.create(start_time=start1d2, end_time=start2d2)
         item3 = ScheduleItem.objects.create(venue=venue2, page_id=page.pk)
 
@@ -720,16 +720,16 @@ class ValidationTests(TestCase):
            case for it."""
         day1 = ScheduleBlock.objects.create(
                 start_time=D.datetime(2013, 9, 22, 9, 0, 0,
-                                      tzinfo=timezone.utc),
+                                      tzinfo=D.timezone.utc),
                 end_time=D.datetime(2013, 9, 22, 19, 0, 0,
-                                    tzinfo=timezone.utc))
+                                    tzinfo=D.timezone.utc))
         venue1 = Venue.objects.create(order=1, name='Venue 1')
         venue1.blocks.add(day1)
         page = Page.objects.create(name="test page", slug="test")
 
-        start1 = D.datetime(2013, 9, 22, 10, 0, 0, tzinfo=timezone.utc)
-        start2 = D.datetime(2013, 9, 22, 11, 0, 0, tzinfo=timezone.utc)
-        end = D.datetime(2013, 9, 22, 12, 0, 0, tzinfo=timezone.utc)
+        start1 = D.datetime(2013, 9, 22, 10, 0, 0, tzinfo=D.timezone.utc)
+        start2 = D.datetime(2013, 9, 22, 11, 0, 0, tzinfo=D.timezone.utc)
+        end = D.datetime(2013, 9, 22, 12, 0, 0, tzinfo=D.timezone.utc)
 
         slot1 = Slot.objects.create(start_time=start1, end_time=start2)
         slot2 = Slot.objects.create(start_time=start2, end_time=end)

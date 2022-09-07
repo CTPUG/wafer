@@ -50,13 +50,13 @@ def make_slot():
     """ Make a slot. """
     day = ScheduleBlock.objects.create(
             start_time=D.datetime(2013, 9, 22, 7, 0, 0,
-                                  tzinfo=timezone.utc),
+                                  tzinfo=D.timezone.utc),
             end_time=D.datetime(2013, 9, 22, 19, 0, 0,
-                                tzinfo=timezone.utc),
+                                tzinfo=D.timezone.utc),
             )
     start = D.datetime(2013, 9, 22, 10, 0, 0,
-                       tzinfo=timezone.utc)
-    end = D.datetime(2013, 9, 22, 15, 0, 0, tzinfo=timezone.utc)
+                       tzinfo=D.timezone.utc)
+    end = D.datetime(2013, 9, 22, 15, 0, 0, tzinfo=D.timezone.utc)
     slot = Slot.objects.create(start_time=start, end_time=end)
     return slot
 
@@ -86,9 +86,9 @@ class ScheduleViewTests(TestCase):
         # 12-13   Item3       Item6
         day1 = ScheduleBlock.objects.create(
             start_time=D.datetime(2013, 9, 22, 7, 0, 0,
-                                  tzinfo=timezone.utc),
+                                  tzinfo=D.timezone.utc),
             end_time=D.datetime(2013, 9, 22, 19, 0, 0,
-                                tzinfo=timezone.utc),
+                                tzinfo=D.timezone.utc),
             )
 
         venue1 = Venue.objects.create(order=1, name='Venue 1')
@@ -97,13 +97,13 @@ class ScheduleViewTests(TestCase):
         venue2.blocks.add(day1)
 
         start1 = D.datetime(2013, 9, 22, 10, 0, 0,
-                            tzinfo=timezone.utc)
+                            tzinfo=D.timezone.utc)
         start2 = D.datetime(2013, 9, 22, 11, 0, 0,
-                            tzinfo=timezone.utc)
+                            tzinfo=D.timezone.utc)
         start3 = D.datetime(2013, 9, 22, 12, 0, 0,
-                            tzinfo=timezone.utc)
+                            tzinfo=D.timezone.utc)
         end = D.datetime(2013, 9, 22, 13, 0, 0,
-                         tzinfo=timezone.utc)
+                         tzinfo=D.timezone.utc)
 
         pages = make_pages(6)
         venues = [venue1, venue1, venue1, venue2, venue2, venue2]
@@ -167,19 +167,19 @@ class ScheduleViewTests(TestCase):
         # 12-13   Item1       Item4
         day1 = ScheduleBlock.objects.create(
             start_time=D.datetime(2013, 9, 22, 7, 0, 0,
-                                  tzinfo=timezone.utc),
+                                  tzinfo=D.timezone.utc),
             end_time=D.datetime(2013, 9, 22, 19, 0, 0,
-                                tzinfo=timezone.utc),
+                                tzinfo=D.timezone.utc),
             )
         venue1 = Venue.objects.create(order=1, name='Venue 1')
         venue1.blocks.add(day1)
         venue2 = Venue.objects.create(order=2, name='Venue 2')
         venue2.blocks.add(day1)
 
-        start1 = D.datetime(2013, 9, 22, 10, 0, 0, tzinfo=timezone.utc)
-        start2 = D.datetime(2013, 9, 22, 11, 0, 0, tzinfo=timezone.utc)
-        start3 = D.datetime(2013, 9, 22, 12, 0, 0, tzinfo=timezone.utc)
-        end = D.datetime(2013, 9, 22, 13, 0, 0, tzinfo=timezone.utc)
+        start1 = D.datetime(2013, 9, 22, 10, 0, 0, tzinfo=D.timezone.utc)
+        start2 = D.datetime(2013, 9, 22, 11, 0, 0, tzinfo=D.timezone.utc)
+        start3 = D.datetime(2013, 9, 22, 12, 0, 0, tzinfo=D.timezone.utc)
+        end = D.datetime(2013, 9, 22, 13, 0, 0, tzinfo=D.timezone.utc)
 
         pages = make_pages(6)
         venues = [venue1, venue1, venue1, venue2, venue2, venue2]
@@ -246,15 +246,15 @@ class ScheduleViewTests(TestCase):
         # 12-13   Item3       Item6
         day1 = ScheduleBlock.objects.create(
             start_time=D.datetime(2013, 9, 22, 7, 0, 0,
-                                  tzinfo=timezone.utc),
+                                  tzinfo=D.timezone.utc),
             end_time=D.datetime(2013, 9, 22, 19, 0, 0,
-                                tzinfo=timezone.utc),
+                                tzinfo=D.timezone.utc),
             )
         day2 = ScheduleBlock.objects.create(
             start_time=D.datetime(2013, 9, 23, 7, 0, 0,
-                                  tzinfo=timezone.utc),
+                                  tzinfo=D.timezone.utc),
             end_time=D.datetime(2013, 9, 23, 19, 0, 0,
-                                tzinfo=timezone.utc),
+                                tzinfo=D.timezone.utc),
             )
         venue1 = Venue.objects.create(order=1, name='Venue 1')
         venue1.blocks.add(day1)
@@ -263,12 +263,12 @@ class ScheduleViewTests(TestCase):
         venue2.blocks.add(day1)
         venue2.blocks.add(day2)
 
-        start1 = D.datetime(2013, 9, 22, 10, 0, 0, tzinfo=timezone.utc)
-        start2 = D.datetime(2013, 9, 22, 11, 0, 0, tzinfo=timezone.utc)
-        end1 = D.datetime(2013, 9, 22, 12, 0, 0, tzinfo=timezone.utc)
+        start1 = D.datetime(2013, 9, 22, 10, 0, 0, tzinfo=D.timezone.utc)
+        start2 = D.datetime(2013, 9, 22, 11, 0, 0, tzinfo=D.timezone.utc)
+        end1 = D.datetime(2013, 9, 22, 12, 0, 0, tzinfo=D.timezone.utc)
 
-        start3 = D.datetime(2013, 9, 23, 12, 0, 0, tzinfo=timezone.utc)
-        end2 = D.datetime(2013, 9, 23, 13, 0, 0, tzinfo=timezone.utc)
+        start3 = D.datetime(2013, 9, 23, 12, 0, 0, tzinfo=D.timezone.utc)
+        end2 = D.datetime(2013, 9, 23, 13, 0, 0, tzinfo=D.timezone.utc)
 
         pages = make_pages(6)
         venues = [venue1, venue1, venue1, venue2, venue2, venue2]
@@ -319,15 +319,15 @@ class ScheduleViewTests(TestCase):
         # This is the same schedule as test_multiple_days
         block1 = ScheduleBlock.objects.create(
             start_time=D.datetime(2013, 9, 22, 7, 0, 0,
-                                  tzinfo=timezone.utc),
+                                  tzinfo=D.timezone.utc),
             end_time=D.datetime(2013, 9, 22, 19, 0, 0,
-                                tzinfo=timezone.utc),
+                                tzinfo=D.timezone.utc),
             )
         block2 = ScheduleBlock.objects.create(
             start_time=D.datetime(2013, 9, 23, 7, 0, 0,
-                                  tzinfo=timezone.utc),
+                                  tzinfo=D.timezone.utc),
             end_time=D.datetime(2013, 9, 23, 19, 0, 0,
-                                tzinfo=timezone.utc),
+                                tzinfo=D.timezone.utc),
             )
         venue1 = Venue.objects.create(order=1, name='Venue 1')
         venue1.blocks.add(block1)
@@ -336,12 +336,12 @@ class ScheduleViewTests(TestCase):
         venue2.blocks.add(block1)
         venue2.blocks.add(block2)
 
-        start1 = D.datetime(2013, 9, 22, 10, 0, 0, tzinfo=timezone.utc)
-        start2 = D.datetime(2013, 9, 22, 11, 0, 0, tzinfo=timezone.utc)
-        end1 = D.datetime(2013, 9, 22, 12, 0, 0, tzinfo=timezone.utc)
+        start1 = D.datetime(2013, 9, 22, 10, 0, 0, tzinfo=D.timezone.utc)
+        start2 = D.datetime(2013, 9, 22, 11, 0, 0, tzinfo=D.timezone.utc)
+        end1 = D.datetime(2013, 9, 22, 12, 0, 0, tzinfo=D.timezone.utc)
 
-        start3 = D.datetime(2013, 9, 23, 12, 0, 0, tzinfo=timezone.utc)
-        end2 = D.datetime(2013, 9, 23, 13, 0, 0, tzinfo=timezone.utc)
+        start3 = D.datetime(2013, 9, 23, 12, 0, 0, tzinfo=D.timezone.utc)
+        end2 = D.datetime(2013, 9, 23, 13, 0, 0, tzinfo=D.timezone.utc)
 
         pages = make_pages(6)
         venues = [venue1, venue1, venue1, venue2, venue2, venue2]
@@ -431,27 +431,27 @@ class ScheduleViewTests(TestCase):
         # 12-13   Item3
         day1 = ScheduleBlock.objects.create(
             start_time=D.datetime(2013, 9, 22, 7, 0, 0,
-                                  tzinfo=timezone.utc),
+                                  tzinfo=D.timezone.utc),
             end_time=D.datetime(2013, 9, 22, 19, 0, 0,
-                                tzinfo=timezone.utc),
+                                tzinfo=D.timezone.utc),
             )
         day2 = ScheduleBlock.objects.create(
             start_time=D.datetime(2013, 9, 23, 7, 0, 0,
-                                  tzinfo=timezone.utc),
+                                  tzinfo=D.timezone.utc),
             end_time=D.datetime(2013, 9, 23, 19, 0, 0,
-                                tzinfo=timezone.utc),
+                                tzinfo=D.timezone.utc),
             )
         venue1 = Venue.objects.create(order=1, name='Venue 1')
         venue1.blocks.add(day1)
         venue2 = Venue.objects.create(order=2, name='Venue 2')
         venue2.blocks.add(day2)
 
-        start1 = D.datetime(2013, 9, 22, 10, 0, 0, tzinfo=timezone.utc)
-        start2 = D.datetime(2013, 9, 22, 11, 0, 0, tzinfo=timezone.utc)
-        end1 = D.datetime(2013, 9, 22, 12, 0, 0, tzinfo=timezone.utc)
+        start1 = D.datetime(2013, 9, 22, 10, 0, 0, tzinfo=D.timezone.utc)
+        start2 = D.datetime(2013, 9, 22, 11, 0, 0, tzinfo=D.timezone.utc)
+        end1 = D.datetime(2013, 9, 22, 12, 0, 0, tzinfo=D.timezone.utc)
 
-        start3 = D.datetime(2013, 9, 23, 12, 0, 0, tzinfo=timezone.utc)
-        end2 = D.datetime(2013, 9, 23, 13, 0, 0, tzinfo=timezone.utc)
+        start3 = D.datetime(2013, 9, 23, 12, 0, 0, tzinfo=D.timezone.utc)
+        end2 = D.datetime(2013, 9, 23, 13, 0, 0, tzinfo=D.timezone.utc)
 
         pages = make_pages(3)
         venues = [venue1, venue1, venue2]
@@ -505,9 +505,9 @@ class ScheduleViewTests(TestCase):
         # 14-15   Item3 +     Item5     --
         day1 = ScheduleBlock.objects.create(
             start_time=D.datetime(2013, 9, 22, 7, 0, 0,
-                                  tzinfo=timezone.utc),
+                                  tzinfo=D.timezone.utc),
             end_time=D.datetime(2013, 9, 22, 19, 0, 0,
-                                tzinfo=timezone.utc),
+                                tzinfo=D.timezone.utc),
             )
         venue1 = Venue.objects.create(order=1, name='Venue 1')
         venue2 = Venue.objects.create(order=2, name='Venue 2')
@@ -516,12 +516,12 @@ class ScheduleViewTests(TestCase):
         venue2.blocks.add(day1)
         venue3.blocks.add(day1)
 
-        start1 = D.datetime(2013, 9, 22, 10, 0, 0, tzinfo=timezone.utc)
-        start2 = D.datetime(2013, 9, 22, 11, 0, 0, tzinfo=timezone.utc)
-        start3 = D.datetime(2013, 9, 22, 12, 0, 0, tzinfo=timezone.utc)
-        start4 = D.datetime(2013, 9, 22, 13, 0, 0, tzinfo=timezone.utc)
-        start5 = D.datetime(2013, 9, 22, 14, 0, 0, tzinfo=timezone.utc)
-        end = D.datetime(2013, 9, 22, 15, 0, 0, tzinfo=timezone.utc)
+        start1 = D.datetime(2013, 9, 22, 10, 0, 0, tzinfo=D.timezone.utc)
+        start2 = D.datetime(2013, 9, 22, 11, 0, 0, tzinfo=D.timezone.utc)
+        start3 = D.datetime(2013, 9, 22, 12, 0, 0, tzinfo=D.timezone.utc)
+        start4 = D.datetime(2013, 9, 22, 13, 0, 0, tzinfo=D.timezone.utc)
+        start5 = D.datetime(2013, 9, 22, 14, 0, 0, tzinfo=D.timezone.utc)
+        end = D.datetime(2013, 9, 22, 15, 0, 0, tzinfo=D.timezone.utc)
 
         # We create the slots out of order to tt
         slot1 = Slot.objects.create(start_time=start1, end_time=start2)
@@ -628,21 +628,21 @@ class ScheduleViewTests(TestCase):
         # 14-15   Item4         |
         day1 = ScheduleBlock.objects.create(
             start_time=D.datetime(2013, 9, 22, 7, 0, 0,
-                                  tzinfo=timezone.utc),
+                                  tzinfo=D.timezone.utc),
             end_time=D.datetime(2013, 9, 22, 19, 0, 0,
-                                tzinfo=timezone.utc),
+                                tzinfo=D.timezone.utc),
             )
         venue1 = Venue.objects.create(order=1, name='Venue 1')
         venue2 = Venue.objects.create(order=2, name='Venue 2')
         venue1.blocks.add(day1)
         venue2.blocks.add(day1)
 
-        start1 = D.datetime(2013, 9, 22, 10, 0, 0, tzinfo=timezone.utc)
-        start2 = D.datetime(2013, 9, 22, 11, 0, 0, tzinfo=timezone.utc)
-        start3 = D.datetime(2013, 9, 22, 12, 0, 0, tzinfo=timezone.utc)
-        start4 = D.datetime(2013, 9, 22, 13, 0, 0, tzinfo=timezone.utc)
-        start5 = D.datetime(2013, 9, 22, 14, 0, 0, tzinfo=timezone.utc)
-        end = D.datetime(2013, 9, 22, 15, 0, 0, tzinfo=timezone.utc)
+        start1 = D.datetime(2013, 9, 22, 10, 0, 0, tzinfo=D.timezone.utc)
+        start2 = D.datetime(2013, 9, 22, 11, 0, 0, tzinfo=D.timezone.utc)
+        start3 = D.datetime(2013, 9, 22, 12, 0, 0, tzinfo=D.timezone.utc)
+        start4 = D.datetime(2013, 9, 22, 13, 0, 0, tzinfo=D.timezone.utc)
+        start5 = D.datetime(2013, 9, 22, 14, 0, 0, tzinfo=D.timezone.utc)
+        end = D.datetime(2013, 9, 22, 15, 0, 0, tzinfo=D.timezone.utc)
 
         slot1 = Slot.objects.create(start_time=start1, end_time=start2)
         slot2 = Slot.objects.create(start_time=start2, end_time=start3)
@@ -722,9 +722,9 @@ class ScheduleViewTests(TestCase):
         # 14-15   Item3 +     Item4+     --
         day1 = ScheduleBlock.objects.create(
             start_time=D.datetime(2013, 9, 22, 7, 0, 0,
-                                  tzinfo=timezone.utc),
+                                  tzinfo=D.timezone.utc),
             end_time=D.datetime(2013, 9, 22, 19, 0, 0,
-                                tzinfo=timezone.utc),
+                                tzinfo=D.timezone.utc),
             )
         venue1 = Venue.objects.create(order=1, name='Venue 1')
         venue2 = Venue.objects.create(order=2, name='Venue 2')
@@ -733,12 +733,12 @@ class ScheduleViewTests(TestCase):
         venue2.blocks.add(day1)
         venue3.blocks.add(day1)
 
-        start1 = D.datetime(2013, 9, 22, 10, 0, 0, tzinfo=timezone.utc)
-        start2 = D.datetime(2013, 9, 22, 11, 0, 0, tzinfo=timezone.utc)
-        start3 = D.datetime(2013, 9, 22, 12, 0, 0, tzinfo=timezone.utc)
-        start4 = D.datetime(2013, 9, 22, 13, 0, 0, tzinfo=timezone.utc)
-        start5 = D.datetime(2013, 9, 22, 14, 0, 0, tzinfo=timezone.utc)
-        end = D.datetime(2013, 9, 22, 15, 0, 0, tzinfo=timezone.utc)
+        start1 = D.datetime(2013, 9, 22, 10, 0, 0, tzinfo=D.timezone.utc)
+        start2 = D.datetime(2013, 9, 22, 11, 0, 0, tzinfo=D.timezone.utc)
+        start3 = D.datetime(2013, 9, 22, 12, 0, 0, tzinfo=D.timezone.utc)
+        start4 = D.datetime(2013, 9, 22, 13, 0, 0, tzinfo=D.timezone.utc)
+        start5 = D.datetime(2013, 9, 22, 14, 0, 0, tzinfo=D.timezone.utc)
+        end = D.datetime(2013, 9, 22, 15, 0, 0, tzinfo=D.timezone.utc)
 
         # We create the slots out of order to tt
         slot1 = Slot.objects.create(start_time=start1, end_time=start2)
@@ -823,14 +823,14 @@ class ScheduleViewTests(TestCase):
         """Test that the highlight-venue option works"""
         # This is the same schedule as test_multiple_days
         day1 = ScheduleBlock.objects.create(start_time=D.datetime(2013, 9, 22, 1, 0, 0,
-                                                                  tzinfo=timezone.utc),
+                                                                  tzinfo=D.timezone.utc),
                                             end_time=D.datetime(2013, 9, 22, 23, 0, 0,
-                                                                tzinfo=timezone.utc),
+                                                                tzinfo=D.timezone.utc),
                                             )
         day2 = ScheduleBlock.objects.create(start_time=D.datetime(2013, 9, 23, 1, 0, 0,
-                                                                  tzinfo=timezone.utc),
+                                                                  tzinfo=D.timezone.utc),
                                             end_time=D.datetime(2013, 9, 23, 23, 0, 0,
-                                                                tzinfo=timezone.utc),
+                                                                tzinfo=D.timezone.utc),
                                             )
         venue1 = Venue.objects.create(order=1, name='Venue 1')
         venue1.blocks.add(day1)
@@ -839,12 +839,12 @@ class ScheduleViewTests(TestCase):
         venue2.blocks.add(day1)
         venue2.blocks.add(day2)
 
-        start1 = D.datetime(2013, 9, 22, 10, 0, 0, tzinfo=timezone.utc)
-        start2 = D.datetime(2013, 9, 22, 11, 0, 0, tzinfo=timezone.utc)
-        end1 = D.datetime(2013, 9, 22, 12, 0, 0, tzinfo=timezone.utc)
+        start1 = D.datetime(2013, 9, 22, 10, 0, 0, tzinfo=D.timezone.utc)
+        start2 = D.datetime(2013, 9, 22, 11, 0, 0, tzinfo=D.timezone.utc)
+        end1 = D.datetime(2013, 9, 22, 12, 0, 0, tzinfo=D.timezone.utc)
 
-        start3 = D.datetime(2013, 9, 23, 12, 0, 0, tzinfo=timezone.utc)
-        end2 = D.datetime(2013, 9, 23, 13, 0, 0, tzinfo=timezone.utc)
+        start3 = D.datetime(2013, 9, 23, 12, 0, 0, tzinfo=D.timezone.utc)
+        end2 = D.datetime(2013, 9, 23, 13, 0, 0, tzinfo=D.timezone.utc)
 
         pages = make_pages(6)
         venues = [venue1, venue1, venue1, venue2, venue2, venue2]
@@ -1001,36 +1001,36 @@ class CurrentViewTests(TestCase):
         """Create a schedule and check that the current view looks sane."""
         day1 = ScheduleBlock.objects.create(
             start_time=D.datetime(2013, 9, 22, 7, 0, 0,
-                                  tzinfo=timezone.utc),
+                                  tzinfo=D.timezone.utc),
             end_time=D.datetime(2013, 9, 22, 19, 0, 0,
-                                tzinfo=timezone.utc),
+                                tzinfo=D.timezone.utc),
             )
         day2 = ScheduleBlock.objects.create(
             start_time=D.datetime(2013, 9, 23, 7, 0, 0,
-                                  tzinfo=timezone.utc),
+                                  tzinfo=D.timezone.utc),
             end_time=D.datetime(2013, 9, 23, 19, 0, 0,
-                                tzinfo=timezone.utc),
+                                tzinfo=D.timezone.utc),
             )
         venue1 = Venue.objects.create(order=1, name='Venue 1')
         venue2 = Venue.objects.create(order=2, name='Venue 2')
         venue1.blocks.add(day1)
         venue2.blocks.add(day1)
 
-        start1 = D.datetime(2013, 9, 22, 10, 0, 0, tzinfo=timezone.utc)
-        start2 = D.datetime(2013, 9, 22, 11, 0, 0, tzinfo=timezone.utc)
-        start3 = D.datetime(2013, 9, 22, 12, 0, 0, tzinfo=timezone.utc)
-        start4 = D.datetime(2013, 9, 22, 13, 0, 0, tzinfo=timezone.utc)
-        start5 = D.datetime(2013, 9, 22, 14, 0, 0, tzinfo=timezone.utc)
+        start1 = D.datetime(2013, 9, 22, 10, 0, 0, tzinfo=D.timezone.utc)
+        start2 = D.datetime(2013, 9, 22, 11, 0, 0, tzinfo=D.timezone.utc)
+        start3 = D.datetime(2013, 9, 22, 12, 0, 0, tzinfo=D.timezone.utc)
+        start4 = D.datetime(2013, 9, 22, 13, 0, 0, tzinfo=D.timezone.utc)
+        start5 = D.datetime(2013, 9, 22, 14, 0, 0, tzinfo=D.timezone.utc)
 
         # During the first slot
-        cur1 = D.datetime(2013, 9, 22, 10, 30, 0, tzinfo=timezone.utc)
+        cur1 = D.datetime(2013, 9, 22, 10, 30, 0, tzinfo=D.timezone.utc)
         # Middle of the day
-        cur2 = D.datetime(2013, 9, 22, 11, 30, 0, tzinfo=timezone.utc)
-        cur3 = D.datetime(2013, 9, 22, 12, 30, 0, tzinfo=timezone.utc)
+        cur2 = D.datetime(2013, 9, 22, 11, 30, 0, tzinfo=D.timezone.utc)
+        cur3 = D.datetime(2013, 9, 22, 12, 30, 0, tzinfo=D.timezone.utc)
         # During the last slot
-        cur4 = D.datetime(2013, 9, 22, 13, 30, 0, tzinfo=timezone.utc)
+        cur4 = D.datetime(2013, 9, 22, 13, 30, 0, tzinfo=D.timezone.utc)
         # After the last slot
-        cur5 = D.datetime(2013, 9, 22, 15, 30, 0, tzinfo=timezone.utc)
+        cur5 = D.datetime(2013, 9, 22, 15, 30, 0, tzinfo=D.timezone.utc)
 
         slots = []
 
@@ -1111,9 +1111,9 @@ class CurrentViewTests(TestCase):
         # 14-15   --          Item9     Item10
         day1 = ScheduleBlock.objects.create(
             start_time=D.datetime(2013, 9, 22, 7, 0, 0,
-                                  tzinfo=timezone.utc),
+                                  tzinfo=D.timezone.utc),
             end_time=D.datetime(2013, 9, 22, 19, 0, 0,
-                                tzinfo=timezone.utc),
+                                tzinfo=D.timezone.utc),
             )
         venue1 = Venue.objects.create(order=1, name='Venue 1')
         venue2 = Venue.objects.create(order=2, name='Venue 2')
@@ -1122,12 +1122,12 @@ class CurrentViewTests(TestCase):
         venue2.blocks.add(day1)
         venue3.blocks.add(day1)
 
-        start1 = D.datetime(2013, 9, 22, 10, 0, 0, tzinfo=timezone.utc)
-        start2 = D.datetime(2013, 9, 22, 11, 0, 0, tzinfo=timezone.utc)
-        start3 = D.datetime(2013, 9, 22, 12, 0, 0, tzinfo=timezone.utc)
-        start4 = D.datetime(2013, 9, 22, 13, 0, 0, tzinfo=timezone.utc)
-        start5 = D.datetime(2013, 9, 22, 14, 0, 0, tzinfo=timezone.utc)
-        end = D.datetime(2013, 9, 22, 15, 0, 0, tzinfo=timezone.utc)
+        start1 = D.datetime(2013, 9, 22, 10, 0, 0, tzinfo=D.timezone.utc)
+        start2 = D.datetime(2013, 9, 22, 11, 0, 0, tzinfo=D.timezone.utc)
+        start3 = D.datetime(2013, 9, 22, 12, 0, 0, tzinfo=D.timezone.utc)
+        start4 = D.datetime(2013, 9, 22, 13, 0, 0, tzinfo=D.timezone.utc)
+        start5 = D.datetime(2013, 9, 22, 14, 0, 0, tzinfo=D.timezone.utc)
+        end = D.datetime(2013, 9, 22, 15, 0, 0, tzinfo=D.timezone.utc)
 
         slot1 = Slot.objects.create(start_time=start1, end_time=start2)
         slot2 = Slot.objects.create(start_time=start2, end_time=start3)
@@ -1155,12 +1155,12 @@ class CurrentViewTests(TestCase):
         items[9].slots.add(slot5)
 
         # During the first slot
-        cur1 = D.datetime(2013, 9, 22, 10, 30, 0, tzinfo=timezone.utc)
+        cur1 = D.datetime(2013, 9, 22, 10, 30, 0, tzinfo=D.timezone.utc)
         # Middle of the day
-        cur2 = D.datetime(2013, 9, 22, 11, 30, 0, tzinfo=timezone.utc)
-        cur3 = D.datetime(2013, 9, 22, 12, 30, 0, tzinfo=timezone.utc)
+        cur2 = D.datetime(2013, 9, 22, 11, 30, 0, tzinfo=D.timezone.utc)
+        cur3 = D.datetime(2013, 9, 22, 12, 30, 0, tzinfo=D.timezone.utc)
         # During the last slot
-        cur4 = D.datetime(2013, 9, 22, 14, 30, 0, tzinfo=timezone.utc)
+        cur4 = D.datetime(2013, 9, 22, 14, 30, 0, tzinfo=D.timezone.utc)
 
         c = Client()
         response = c.get('/schedule/current/', {'timestamp': cur1.isoformat()})
@@ -1209,9 +1209,9 @@ class CurrentViewTests(TestCase):
     def test_current_view_highlight_venue(self):
         """Test that the current view highlight's stuff correctly"""
         day1 = ScheduleBlock.objects.create(start_time=D.datetime(2013, 9, 22, 7, 0, 0,
-                                                                  tzinfo=timezone.utc),
+                                                                  tzinfo=D.timezone.utc),
                                             end_time=D.datetime(2013, 9, 22, 19, 0, 0,
-                                                                tzinfo=timezone.utc),
+                                                                tzinfo=D.timezone.utc),
                                             )
         venue1 = Venue.objects.create(order=1, name='Venue 1')
         venue2 = Venue.objects.create(order=2, name='Venue 2')
@@ -1220,12 +1220,12 @@ class CurrentViewTests(TestCase):
         venue2.blocks.add(day1)
         venue3.blocks.add(day1)
 
-        start1 = D.datetime(2013, 9, 22, 10, 0, 0, tzinfo=timezone.utc)
-        start2 = D.datetime(2013, 9, 22, 11, 0, 0, tzinfo=timezone.utc)
-        start3 = D.datetime(2013, 9, 22, 12, 0, 0, tzinfo=timezone.utc)
-        start4 = D.datetime(2013, 9, 22, 13, 0, 0, tzinfo=timezone.utc)
-        start5 = D.datetime(2013, 9, 22, 14, 0, 0, tzinfo=timezone.utc)
-        end = D.datetime(2013, 9, 22, 15, 0, 0, tzinfo=timezone.utc)
+        start1 = D.datetime(2013, 9, 22, 10, 0, 0, tzinfo=D.timezone.utc)
+        start2 = D.datetime(2013, 9, 22, 11, 0, 0, tzinfo=D.timezone.utc)
+        start3 = D.datetime(2013, 9, 22, 12, 0, 0, tzinfo=D.timezone.utc)
+        start4 = D.datetime(2013, 9, 22, 13, 0, 0, tzinfo=D.timezone.utc)
+        start5 = D.datetime(2013, 9, 22, 14, 0, 0, tzinfo=D.timezone.utc)
+        end = D.datetime(2013, 9, 22, 15, 0, 0, tzinfo=D.timezone.utc)
 
         slot1 = Slot.objects.create(start_time=start1, end_time=start2)
         slot2 = Slot.objects.create(start_time=start2, end_time=start3)
@@ -1387,16 +1387,16 @@ class CurrentViewTests(TestCase):
         """Test that invalid schedules return a inactive current view."""
         day1 = ScheduleBlock.objects.create(
             start_time=D.datetime(2013, 9, 22, 7, 0, 0,
-                                  tzinfo=timezone.utc),
+                                  tzinfo=D.timezone.utc),
             end_time=D.datetime(2013, 9, 22, 19, 0, 0,
-                                tzinfo=timezone.utc),
+                                tzinfo=D.timezone.utc),
             )
         venue1 = Venue.objects.create(order=1, name='Venue 1')
         venue1.blocks.add(day1)
-        start1 = D.datetime(2013, 9, 22, 10, 0, 0, tzinfo=timezone.utc)
-        start2 = D.datetime(2013, 9, 22, 11, 0, 0, tzinfo=timezone.utc)
-        end = D.datetime(2013, 9, 22, 12, 0, 0, tzinfo=timezone.utc)
-        cur1 = D.datetime(2013, 9, 22, 10, 30, 0, tzinfo=timezone.utc)
+        start1 = D.datetime(2013, 9, 22, 10, 0, 0, tzinfo=D.timezone.utc)
+        start2 = D.datetime(2013, 9, 22, 11, 0, 0, tzinfo=D.timezone.utc)
+        end = D.datetime(2013, 9, 22, 12, 0, 0, tzinfo=D.timezone.utc)
+        cur1 = D.datetime(2013, 9, 22, 10, 30, 0, tzinfo=D.timezone.utc)
 
         slot1 = Slot.objects.create(start_time=start1, end_time=start2)
         slot2 = Slot.objects.create(start_time=start1, end_time=end)
@@ -1423,15 +1423,15 @@ class NonHTMLViewTests(TestCase):
         timezone.activate('UTC')
         day1 = ScheduleBlock.objects.create(
             start_time=D.datetime(2013, 9, 22, 7, 0, 0,
-                                  tzinfo=timezone.utc),
+                                  tzinfo=D.timezone.utc),
             end_time=D.datetime(2013, 9, 22, 19, 0, 0,
-                                tzinfo=timezone.utc),
+                                tzinfo=D.timezone.utc),
             )
         day2 = ScheduleBlock.objects.create(
             start_time=D.datetime(2013, 9, 23, 7, 0, 0,
-                                  tzinfo=timezone.utc),
+                                  tzinfo=D.timezone.utc),
             end_time=D.datetime(2013, 9, 23, 19, 0, 0,
-                                tzinfo=timezone.utc),
+                                tzinfo=D.timezone.utc),
             )
         venue1 = Venue.objects.create(order=1, name='Venue 1')
         venue2 = Venue.objects.create(order=2, name='Venue 2')
@@ -1439,13 +1439,13 @@ class NonHTMLViewTests(TestCase):
         venue2.blocks.add(day1)
         venue1.blocks.add(day2)
 
-        start1 = D.datetime(2013, 9, 22, 10, 0, 0, tzinfo=timezone.utc)
-        start2 = D.datetime(2013, 9, 22, 11, 0, 0, tzinfo=timezone.utc)
-        start3 = D.datetime(2013, 9, 22, 12, 0, 0, tzinfo=timezone.utc)
-        start4 = D.datetime(2013, 9, 22, 13, 0, 0, tzinfo=timezone.utc)
-        start5 = D.datetime(2013, 9, 22, 14, 0, 0, tzinfo=timezone.utc)
-        start6 = D.datetime(2013, 9, 23, 14, 0, 0, tzinfo=timezone.utc)
-        end6 = D.datetime(2013, 9, 23, 15, 0, 0, tzinfo=timezone.utc)
+        start1 = D.datetime(2013, 9, 22, 10, 0, 0, tzinfo=D.timezone.utc)
+        start2 = D.datetime(2013, 9, 22, 11, 0, 0, tzinfo=D.timezone.utc)
+        start3 = D.datetime(2013, 9, 22, 12, 0, 0, tzinfo=D.timezone.utc)
+        start4 = D.datetime(2013, 9, 22, 13, 0, 0, tzinfo=D.timezone.utc)
+        start5 = D.datetime(2013, 9, 22, 14, 0, 0, tzinfo=D.timezone.utc)
+        start6 = D.datetime(2013, 9, 23, 14, 0, 0, tzinfo=D.timezone.utc)
+        end6 = D.datetime(2013, 9, 23, 15, 0, 0, tzinfo=D.timezone.utc)
 
         slots = []
 
@@ -1524,7 +1524,7 @@ class NonHTMLViewTests(TestCase):
         # Check we have the right time in places
         event = calendar.walk(name='VEVENT')[0]
         self.assertEqual(event['dtstart'].params['value'], 'DATE-TIME')
-        self.assertEqual(event['dtstart'].dt, D.datetime(2013, 9, 22, 10, 0, 0, tzinfo=timezone.utc))
+        self.assertEqual(event['dtstart'].dt, D.datetime(2013, 9, 22, 10, 0, 0, tzinfo=D.timezone.utc))
         # Check that we have the page slug in the ical event
         self.assertTrue('/test0/' in event['url'])
 
@@ -1561,26 +1561,26 @@ class JsonViewTests(TestCase):
         timezone.activate('UTC')
         day1 = ScheduleBlock.objects.create(
             start_time=D.datetime(2013, 9, 22, 7, 0, 0,
-                                  tzinfo=timezone.utc),
+                                  tzinfo=D.timezone.utc),
             end_time=D.datetime(2013, 9, 22, 19, 0, 0,
-                                tzinfo=timezone.utc),
+                                tzinfo=D.timezone.utc),
             )
         day2 = ScheduleBlock.objects.create(
             start_time=D.datetime(2013, 9, 23, 7, 0, 0,
-                                  tzinfo=timezone.utc),
+                                  tzinfo=D.timezone.utc),
             end_time=D.datetime(2013, 9, 23, 19, 0, 0,
-                                tzinfo=timezone.utc),
+                                tzinfo=D.timezone.utc),
             )
         venue1 = Venue.objects.create(order=1, name='Venue 1')
         venue2 = Venue.objects.create(order=2, name='Venue 2')
         venue1.blocks.add(day1)
         venue2.blocks.add(day1)
 
-        start1 = D.datetime(2013, 9, 22, 10, 0, 0, tzinfo=timezone.utc)
-        start2 = D.datetime(2013, 9, 22, 11, 0, 0, tzinfo=timezone.utc)
-        start3 = D.datetime(2013, 9, 22, 12, 0, 0, tzinfo=timezone.utc)
-        start4 = D.datetime(2013, 9, 22, 13, 0, 0, tzinfo=timezone.utc)
-        start5 = D.datetime(2013, 9, 22, 14, 0, 0, tzinfo=timezone.utc)
+        start1 = D.datetime(2013, 9, 22, 10, 0, 0, tzinfo=D.timezone.utc)
+        start2 = D.datetime(2013, 9, 22, 11, 0, 0, tzinfo=D.timezone.utc)
+        start3 = D.datetime(2013, 9, 22, 12, 0, 0, tzinfo=D.timezone.utc)
+        start4 = D.datetime(2013, 9, 22, 13, 0, 0, tzinfo=D.timezone.utc)
+        start5 = D.datetime(2013, 9, 22, 14, 0, 0, tzinfo=D.timezone.utc)
 
         slots = []
 
