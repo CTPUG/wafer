@@ -9,7 +9,6 @@ from __future__ import unicode_literals
 import datetime
 
 from django.db import migrations
-from django.utils import timezone
 
 def convert_day_to_schedule_block(apps, schema_editor):
     """For each Day, create a schedule block with the
@@ -22,14 +21,14 @@ def convert_day_to_schedule_block(apps, schema_editor):
                                        day=day.date.day,
                                        hour=0,
                                        minute=0,
-                                       tzinfo=timezone.utc)
+                                       tzinfo=datetime.timezone.utc)
         end_time = datetime.datetime(year=day.date.year,
                                        month=day.date.month,
                                        day=day.date.day,
                                        hour=23,
                                        minute=59,
                                        second=59,
-                                       tzinfo=timezone.utc)
+                                       tzinfo=datetime.timezone.utc)
         block = ScheduleBlock.objects.create(start_time=start_time,
                                              end_time=end_time)
         block.save()
@@ -55,7 +54,7 @@ def convert_slot_time_to_date_time(apps, schema_editor):
                                                hour=slot.old_start_time.hour,
                                                minute=slot.old_start_time.minute,
                                                second=slot.old_start_time.second,
-                                               tzinfo=timezone.utc)
+                                               tzinfo=datetime.timezone.utc)
             slot.start_time = new_start_time
         new_end_time = datetime.datetime(year=day.date.year,
                                          month=day.date.month,
@@ -63,7 +62,7 @@ def convert_slot_time_to_date_time(apps, schema_editor):
                                          hour=slot.old_end_time.hour,
                                          minute=slot.old_end_time.minute,
                                          second=slot.old_end_time.second,
-                                         tzinfo=timezone.utc)
+                                         tzinfo=datetime.timezone.utc)
         slot.end_time = new_end_time
         slot.save()
 
@@ -80,7 +79,7 @@ def add_blocks_to_venues(apps, schema_editor):
                                            day=day.date.day,
                                            hour=0,
                                            minute=0,
-                                           tzinfo=timezone.utc)
+                                           tzinfo=datetime.timezone.utc)
             # Our earlier migration ensures this block exists
             block = ScheduleBlock.objects.filter(
                 start_time__exact=start_time).first()
