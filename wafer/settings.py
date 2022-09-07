@@ -333,3 +333,6 @@ BAKERY_VIEWS = (
 
 # Groups to which new users should be automatically added.
 WAFER_DEFAULT_GROUPS = ()
+
+# Specify DEFAULT_AUTO_FIELD to make Django >= 3.2 happy
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
