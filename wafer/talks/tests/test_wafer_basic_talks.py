@@ -1,7 +1,9 @@
 # This tests the very basic talk stuff, to ensure some levels of sanity
 
+from datetime import timezone
+
 from django.contrib.auth import get_user_model
-from django.utils.timezone import datetime, now, utc
+from django.utils.timezone import datetime, now
 
 from django.test import TestCase
 
@@ -83,8 +85,8 @@ class TestBasicTalks(TestCase):
 
 
     def test_is_late_submission_not_late(self):
-        deadline = datetime(2019, 11, 1, 0, 0, 0, 0, utc)
-        before_deadline = datetime(2019, 10, 15, 0, 0, 0, 0, utc)
+        deadline = datetime(2019, 11, 1, 0, 0, 0, 0, timezone.utc)
+        before_deadline = datetime(2019, 10, 15, 0, 0, 0, 0, timezone.utc)
 
         talk_type = TalkType(submission_deadline=deadline)
         not_late = Talk(talk_type=talk_type, submission_time=before_deadline)
@@ -92,8 +94,8 @@ class TestBasicTalks(TestCase):
 
 
     def test_is_late_submission_late(self):
-        deadline = datetime(2019, 11, 1, 0, 0, 0, 0, utc)
-        after_deadline = datetime(2019, 11, 2, 0, 0, 0, 0, utc)
+        deadline = datetime(2019, 11, 1, 0, 0, 0, 0, timezone.utc)
+        after_deadline = datetime(2019, 11, 2, 0, 0, 0, 0, timezone.utc)
 
         talk_type = TalkType(submission_deadline=deadline)
         late = Talk(talk_type=talk_type, submission_time=after_deadline)
