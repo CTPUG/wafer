@@ -8,7 +8,7 @@ REQUIRES = [
     'bleach',
     'bleach-allowlist',
     'diff-match-patch',
-    'django-bakery>=0.12.0',
+    'django-bakery>=0.13.0',
     'django-crispy-forms',
     'django-markitup>=4.0.0',
     'django-registration-redux',
