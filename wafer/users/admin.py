@@ -44,6 +44,11 @@ class UserProfileInline(admin.StackedInline):
 class UserAdmin(UserAdmin):
     inlines = (UserProfileInline,)
 
+    # We add date_joined and last login to the list view, as these can be
+    # useful for checking for spam accounts
+    list_display = ("username", "email", "first_name", "last_name",
+                    "date_joined", "last_login", "is_staff")
+
     def autocomplete_view(self, request):
         """Replace the autocomplete view for the users search widget"""
         return AuthorAutocompleteView.as_view(model_admin=self)(request)
