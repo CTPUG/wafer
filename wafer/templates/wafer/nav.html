@@ -1,5 +1,5 @@
 {% load i18n %}
-<nav class="navbar navbar-expand-sm navbar-dark bg-dark d-print-none {{ WAFER_NAVIGATION_VISIBILITY }}">
+<nav class="navbar navbar-expand-sm {% block navbar_bg_class %}navbar-dark bg-dark{% endblock %} d-print-none {{ WAFER_NAVIGATION_VISIBILITY }}">
   <div class="container">
     {% block navtogglebutton %}
       <button type="button" class="navbar-toggler navbar-toggler-right"
