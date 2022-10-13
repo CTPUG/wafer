@@ -58,7 +58,7 @@ class ScheduleBlock(models.Model):
     def clean(self):
         """Ensure Schedule blocks are sane."""
         if self.start_time >= self.end_time:
-            raise ValidationError("Start time must be before end time")
+            raise ValidationError("Start time must precede end time")
         # Validate that we don't overlap any existing blocks
         for other_block in ScheduleBlock.objects.all():
             if other_block.pk == self.pk:
@@ -79,7 +79,7 @@ class Venue(models.Model):
                     " conference attendees"))
 
     blocks = models.ManyToManyField(ScheduleBlock,
-                                    help_text=_("Blocks (days) on which this venue will be used."))
+                                    help_text=_("Blocks (days) this venue will be used."))
 
     video = models.BooleanField(
         default=False,
@@ -149,7 +149,7 @@ class Slot(models.Model):
 
     def get_formatted_start_date_time(self):
         return localtime(self.get_start_time()).strftime('%b %d (%a): %H:%M')
-    get_formatted_start_date_time.short_description = _('Start Date & Time')
+    get_formatted_start_date_time.short_description = _('Start Date and Time')
 
     def get_formatted_end_time(self):
         return localtime(self.end_time).strftime('%H:%M')
@@ -160,7 +160,7 @@ class Slot(models.Model):
     def get_duration(self):
         """Return the duration of the slot as hours and minutes.
 
-           Used for the pentabarf export, which needs it in this format."""
+           Used for the Pentabarf export, which needs it in this format."""
         duration = (self.end_time - self.get_start_time()).total_seconds()
         result = {}
         result['hours'], result['minutes'] = divmod(duration // 60, 60)
@@ -185,7 +185,7 @@ class Slot(models.Model):
             raise ValidationError("Slots must have a start time"
                                   " or previous slot set")
         if self.end_time and self.get_start_time() >= self.end_time:
-            raise ValidationError("Start time must be before end time")
+            raise ValidationError("The start time must precede the end time")
         # Slots should either have day + start_time, or a previous_slot, but
         # not both (since previous_slot overrides the others)
         if self.start_time and self.previous_slot:
@@ -194,7 +194,7 @@ class Slot(models.Model):
         # Validate that we are within the bounds of the block
         block = self.get_block()
         if not block:
-            raise ValidationError("Slot does not fall within any defined block")
+            raise ValidationError("The slot does not fall within any defined block")
         # Validate that we don't overlap any existing slots
         # This isn't very efficient, but OK because it's a once off
         # validation cost.
@@ -244,7 +244,7 @@ class ScheduleItem(models.Model):
 
     css_class = models.CharField(
         max_length=128, null=False, blank=True,
-        help_text=_("Custom css class for this schedule item"))
+        help_text=_("Custom CSS class for this schedule item"))
 
     expand = models.BooleanField(
         null=False, default=False,
@@ -252,7 +252,7 @@ class ScheduleItem(models.Model):
 
     last_updated = models.DateTimeField(null=True, blank=True,
                                         auto_now=True,
-                                        help_text=_("Date & Time this was"
+                                        help_text=_("Date and time this was"
                                                     " last updated"))
 
     def get_title(self):
@@ -281,7 +281,7 @@ class ScheduleItem(models.Model):
         """Convert get_css_classes into a nice string for the admin interface"""
         return ',  '.join(list(self.get_css_classes()))
 
-    list_css_classes.short_description = _('Talk Type & Track CSS classes')
+    list_css_classes.short_description = _('CSS classes for talk type and track')
 
     def get_desc(self):
         if self.details:
@@ -334,7 +334,7 @@ class ScheduleItem(models.Model):
         """Return the total duration of the item.
 
            This is the sum of all the slot durations."""
-        # This is intended for the pentabarf xml file
+        # This is intended for the Pentabarf XML file
         # It will do the wrong thing if the slots aren't
         # contigious, which we should address sometime.
         slots = list(self.slots.all())
@@ -356,7 +356,7 @@ class ScheduleItem(models.Model):
 
     @property
     def guid(self):
-        """Return a GUID for the ScheduleItem (for frab xml)
+        """Return a GUID for the ScheduleItem (for frab XML)
 
         We return static GUIDs across re-scheduling, when possible.
         """
