@@ -79,7 +79,7 @@ class Venue(models.Model):
                     " conference attendees"))
 
     blocks = models.ManyToManyField(ScheduleBlock,
-                                    help_text=_("Blocks (days) this venue will be used."))
+                                    help_text=_("Blocks (days) when this venue will be used."))
 
     video = models.BooleanField(
         default=False,
