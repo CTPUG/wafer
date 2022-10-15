@@ -13,9 +13,9 @@
           {% endif %}
         {% endwith %}
         {% if can_edit %}
-          <a class="btn btn-secondary btn-sm" href="#" rel="popover" data-toggle="popover"
-              data-title="{% trans 'Changing your mugshot' %}" data-html="true"
-              data-placement="bottom">{% trans 'Edit Mugshot' %}</a>
+          <a class="btn btn-secondary btn-sm" href="#" rel="popover" data-bs-toggle="popover"
+              data-bs-title="{% trans 'Changing your mugshot' %}" data-bs-html="true"
+              data-bs-placement="bottom">{% trans 'Edit Mugshot' %}</a>
           <div class="popover-contents">
             {% blocktrans trimmed %}
               Pictures provided by <a href="https://www.libravatar.org/">libravatar</a>
@@ -58,7 +58,7 @@
         </h1>
         {% if profile.twitter_handle %}
           <p>
-            <a href="https://twitter.com/{{ profile.twitter_handle }}" class="twitter-follow-button" data-show-count="false">
+            <a href="https://twitter.com/{{ profile.twitter_handle }}" class="twitter-follow-button" data-bs-show-count="false">
               {% blocktrans with handle=profile.twitter_handle %}Follow @{{ handle }}{% endblocktrans %}
             </a>
           </p>
@@ -191,7 +191,7 @@
     }(document, "script", "twitter-wjs");
   {% endif %}
 
-  $("#profile-avatar [rel=popover]").attr("data-content", $("#profile-avatar .popover-contents").html());
+  $("#profile-avatar [rel=popover]").attr("data-bs-content", $("#profile-avatar .popover-contents").html());
   $("a[rel=popover]").popover();
 </script>
 {% endblock %}
