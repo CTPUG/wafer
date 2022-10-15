@@ -15,14 +15,14 @@
     {{ object.title }}
     {% if can_edit %}
       <a href="{% url 'wafer_talk_edit' object.pk %}"
-         class="float-right btn btn-secondary btn-lg d-print-none">{% trans 'Edit' %}</a>
+         class="float-end btn btn-secondary btn-lg d-print-none">{% trans 'Edit' %}</a>
       {% if user.is_staff %}
         <a href="{% url 'admin:talks_talk_change' object.pk %}"
-           class="float-right btn btn-secondary btn-lg d-print-none">{% trans 'Admin' %}</a>
+           class="float-end btn btn-secondary btn-lg d-print-none">{% trans 'Admin' %}</a>
       {% endif %}
     {% endif %}
     {% if can_review %}
-      <a href="#review" class="float-right btn btn-secondary btn-lg" data-toggle="collapse" data-target="#review">{% trans 'Review' %}</a>
+      <a href="#review" class="float-end btn btn-secondary btn-lg" data-toggle="collapse" data-target="#review">{% trans 'Review' %}</a>
     {% endif %}
   </h1>
   <div>
