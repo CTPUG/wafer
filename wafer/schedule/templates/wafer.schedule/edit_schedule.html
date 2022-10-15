@@ -110,13 +110,13 @@
           {% regroup talks_all by talk_type.name as grouped_talks %}
           {% for type, talks in grouped_talks %}
             {% if type %}
-              <div draggable="false" class="badge badge-secondary">
+              <div draggable="false" class="badge bg-secondary">
                 {{ type }}
               </div>
             {% endif %}
             {% for talk in talks %}
               <div draggable="true"
-                    class="badge badge-success draggable"
+                    class="badge bg-success draggable"
                     id="talk{{ talk.talk_id }}"
                     data-toggle="tooltip" data-placement="left"
                     title="{{ talk.title }}"
@@ -140,12 +140,12 @@
           {% regroup talks_all by talk_type.name as grouped_talks %}
           {% for type, talks in grouped_talks %}
             {% if type %}
-            <div draggable="false" class="badge badge-secondary">
+            <div draggable="false" class="badge bg-secondary">
               {{ type }}
             </div>
             {% endif %}
             {% for talk in talks %}
-              <div draggable="true" class="badge badge-warning draggable"
+              <div draggable="true" class="badge bg-warning draggable"
                     class="talk{{ talk.talk_id }}"
                     data-toggle="tooltip" data-placement="left"
                     title="{{ talk.title }}"
@@ -163,7 +163,7 @@
         </div>
         <div role="tabpanel" class="tab-pane row" id="pages">
           {% for page in pages %}
-            <div draggable="true" class="badge badge-info draggable"
+            <div draggable="true" class="badge bg-info draggable"
                   id="page{{ page.id }}"
                   data-toggle="tooltip" data-placement="left"
                   title="{{ page.name }}" data-type="page" data-page-id="{{ page.id }}">
