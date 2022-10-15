@@ -4,9 +4,9 @@
   "private": true,
   "dependencies": {
     "@fortawesome/fontawesome-free-webfonts": "1.0.x",
-    "bootstrap": "^4.0.0",
+    "bootstrap": "^5.2.0",
     "jquery": ">=1.9.1",
-    "popper.js": "1.16.x"
+    "popper.js": "^2.0.0"
   },
   "scripts": {
     "postinstall": "rsync -a --delete node_modules/ wafer/static/vendor/"
