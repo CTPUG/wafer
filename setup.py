@@ -16,7 +16,7 @@ REQUIRES = [
     'django-select2',
     'djangorestframework',
     'drf-extensions>=0.5.0',
-    'icalendar>=4.0,<5.0',
+    'icalendar>=4.0',
     'jsonfield',
     'markdown>=2.5',
     'pillow',
