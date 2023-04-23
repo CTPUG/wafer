@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-06-05 21:56+0000\n"
-"PO-Revision-Date: 2021-04-07 12:20+0000\n"
-"Last-Translator: K. Herbert <herbert.ka@mailo.com>\n"
+"PO-Revision-Date: 2023-04-23 21:48+0000\n"
+"Last-Translator: Ettore Atalan <atalanttore@googlemail.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/wafer/wafer/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.6-dev\n"
+"X-Generator: Weblate 4.18-dev\n"
 
 #: wafer/compare/admin.py:22
 msgid "Last Modified"
@@ -49,7 +49,7 @@ msgstr ""
 
 #: wafer/compare/templates/admin/wafer.compare/change_form.html:9
 msgid "Compare Versions"
-msgstr ""
+msgstr "Versionen vergleichen"
 
 #: wafer/compare/templates/admin/wafer.compare/change_form.html:13
 msgid "View on site"
@@ -86,15 +86,15 @@ msgstr ""
 
 #: wafer/compare/templates/admin/wafer.compare/compare_list.html:27
 msgid "Date/time"
-msgstr ""
+msgstr "Datum/Uhrzeit"
 
 #: wafer/compare/templates/admin/wafer.compare/compare_list.html:28
 msgid "User"
-msgstr ""
+msgstr "Benutzer"
 
 #: wafer/compare/templates/admin/wafer.compare/compare_list.html:29
 msgid "Comment"
-msgstr ""
+msgstr "Kommentar"
 
 #: wafer/compare/templates/admin/wafer.compare/compare_list.html:51
 msgid ""
@@ -108,7 +108,7 @@ msgstr ""
 
 #: wafer/pages/models.py:35
 msgid "Markdown contents for the page."
-msgstr ""
+msgstr "Markdown-Inhalt für die Seite."
 
 #: wafer/pages/models.py:37
 msgid "Whether to include in menus."
