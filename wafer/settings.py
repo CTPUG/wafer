@@ -148,6 +148,7 @@ INSTALLED_APPS = (
     'reversion',
     'bakery',
     'crispy_forms',
+    'crispy_bootstrap5',
     'rest_framework',
     'django_select2',
     'wafer',
@@ -201,7 +202,8 @@ AUTH_USER_MODEL = 'auth.User'
 REGISTRATION_FORM = 'wafer.registration.forms.WaferRegistrationForm'
 
 # Forms:
-CRISPY_TEMPLATE_PACK = 'bootstrap4'
+CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
+CRISPY_TEMPLATE_PACK = 'bootstrap5'
 
 # Wafer cache settings
 # We assume that the WAFER_CACHE is cross-process

@@ -7,6 +7,7 @@ REQUIRES = [
     'Django>=2.2,<5',
     'bleach',
     'bleach-allowlist',
+    'crispy-bootstrap5',
     'diff-match-patch',
     'django-bakery>=0.13.0',
     'django-crispy-forms',

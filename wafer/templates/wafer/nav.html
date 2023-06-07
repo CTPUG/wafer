@@ -2,8 +2,8 @@
 <nav class="navbar navbar-expand-sm d-print-none {{ WAFER_NAVIGATION_VISIBILITY }}">
   <div class="container">
     {% block navtogglebutton %}
-      <button type="button" class="navbar-toggler navbar-toggler-right"
-              data-toggle="collapse" data-target="#wafer-navbar-collapse"
+      <button type="button" class="navbar-toggler"
+              data-bs-toggle="collapse" data-bs-target="#wafer-navbar-collapse"
               aria-controls="wafer-navbar-collapse" aria-expanded="false"
               aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -30,7 +30,7 @@
               </a></li>
             {% else %}
               <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">
+                <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#">
                   {{ item.label }}
                 </a>
                 <ul class="dropdown-menu">
@@ -46,14 +46,14 @@
         </ul>
       {% endblock navmenulist %}
       {% block navauthmenu %}
-        <ul class="navbar-nav float-md-right">
+        <ul class="navbar-nav float-md-end">
           {% if user.is_authenticated %}
             {% block navauthenticated %}
               <li class="nav-item dropdown">
-                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">
+                <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
                   {{ user.username }}
                 </a>
-                <ul class="dropdown-menu dropdown-menu-right">
+                <ul class="dropdown-menu dropdown-menu-end">
                   <li><a class="dropdown-item" href="{% url 'wafer_user_profile' username=user.username %}">
                     {% blocktrans trimmed with name=user.userprofile.display_name %}
                     {{ name }}'s profile

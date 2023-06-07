@@ -15,14 +15,14 @@
     {{ object.title }}
     {% if can_edit %}
       <a href="{% url 'wafer_talk_edit' object.pk %}"
-         class="float-right btn btn-secondary btn-lg d-print-none">{% trans 'Edit' %}</a>
+         class="float-end btn btn-secondary btn-lg d-print-none">{% trans 'Edit' %}</a>
       {% if user.is_staff %}
         <a href="{% url 'admin:talks_talk_change' object.pk %}"
-           class="float-right btn btn-secondary btn-lg d-print-none">{% trans 'Admin' %}</a>
+           class="float-end btn btn-secondary btn-lg d-print-none">{% trans 'Admin' %}</a>
       {% endif %}
     {% endif %}
     {% if can_review %}
-      <a href="#review" class="float-right btn btn-secondary btn-lg" data-toggle="collapse" data-target="#review">{% trans 'Review' %}</a>
+      <a href="#review" class="float-end btn btn-secondary btn-lg" data-bs=toggle="collapse" data-bs-target="#review">{% trans 'Review' %}</a>
     {% endif %}
   </h1>
   <div>
@@ -103,7 +103,7 @@
         {% trans 'Submission:' %}
         {{ object.submission_time }}
         {% if object.is_late_submission %}
-          <span class="badge badge-warning ">{% blocktrans trimmed %}Late submission{% endblocktrans %}</span>
+          <span class="badge bg-warning ">{% blocktrans trimmed %}Late submission{% endblocktrans %}</span>
         {% endif %}
       </p>
     </div>
@@ -111,19 +111,19 @@
       <p>
         {% trans 'Status:' %}
         {% if object.submitted %}
-          <span class="badge badge-info">{% trans 'Submitted' %}</span>
+          <span class="badge bg-info">{% trans 'Submitted' %}</span>
         {% elif object.under_consideration %}
-          <span class="badge badge-info">{% trans 'Under consideration' %}</span>
+          <span class="badge bg-info">{% trans 'Under consideration' %}</span>
         {% elif object.provisional %}
-          <span class="badge badge-success">{% trans 'Provisionally Accepted' %}</span>
+          <span class="badge bg-success">{% trans 'Provisionally Accepted' %}</span>
         {% elif object.accepted %}
-          <span class="badge badge-success">{% trans 'Accepted' %}</span>
+          <span class="badge bg-success">{% trans 'Accepted' %}</span>
         {% elif object.cancelled %}
-          <span class="badge badge-warning">{% trans 'Cancelled' %}</span>
+          <span class="badge bg-warning">{% trans 'Cancelled' %}</span>
         {% elif object.withdrawn %}
-          <span class="badge badge-warning ">{% trans 'Withdrawn' %}</span>
+          <span class="badge bg-warning ">{% trans 'Withdrawn' %}</span>
         {% else %}
-          <span class="badge badge-danger">{% trans 'Not accepted' %}</span>
+          <span class="badge bg-danger">{% trans 'Not accepted' %}</span>
         {% endif %}
       </p>
     </div>

@@ -13,9 +13,9 @@
           {% endif %}
         {% endwith %}
         {% if can_edit %}
-          <a class="btn btn-secondary btn-sm" href="#" rel="popover" data-toggle="popover"
-              data-title="{% trans 'Changing your mugshot' %}" data-html="true"
-              data-placement="bottom">{% trans 'Edit Mugshot' %}</a>
+          <a class="btn btn-secondary btn-sm" href="#" rel="popover" data-bs-toggle="popover"
+              data-bs-title="{% trans 'Changing your mugshot' %}" data-bs-html="true"
+              data-bs-placement="bottom">{% trans 'Edit Mugshot' %}</a>
           <div class="popover-contents">
             {% blocktrans trimmed %}
               Pictures provided by <a href="https://www.libravatar.org/">libravatar</a>
@@ -27,7 +27,7 @@
       </div>
       <div class="col-md-10">
         {% if can_edit %}
-          <ul class="float-right btn-group btn-group-vertical profile-links">
+          <ul class="float-end btn-group btn-group-vertical profile-links">
             <li><a href="{% url 'wafer_user_edit' object.username %}" class="btn btn-secondary">{% trans 'Edit Account' %}</a></li>
             <li><a href="{% url 'wafer_user_edit_profile' object.username %}" class="btn btn-secondary">{% trans 'Edit Profile' %}</a></li>
             {% if WAFER_REGISTRATION_OPEN %}
@@ -58,7 +58,7 @@
         </h1>
         {% if profile.twitter_handle %}
           <p>
-            <a href="https://twitter.com/{{ profile.twitter_handle }}" class="twitter-follow-button" data-show-count="false">
+            <a href="https://twitter.com/{{ profile.twitter_handle }}" class="twitter-follow-button" data-bs-show-count="false">
               {% blocktrans with handle=profile.twitter_handle %}Follow @{{ handle }}{% endblocktrans %}
             </a>
           </p>
@@ -159,7 +159,7 @@
                 permissions, but we accept that tradeoff for simplicity here.
               {% endcomment %}
               <a href="{% url 'wafer_talk_edit' talk.pk %}"
-                 class="float-right btn btn-secondary btn-lg">
+                 class="float-end btn btn-secondary btn-lg">
                 {% trans 'Edit' %}
               </a>
               <h3 class="card-title">
@@ -191,7 +191,7 @@
     }(document, "script", "twitter-wjs");
   {% endif %}
 
-  $("#profile-avatar [rel=popover]").attr("data-content", $("#profile-avatar .popover-contents").html());
+  $("#profile-avatar [rel=popover]").attr("data-bs-content", $("#profile-avatar .popover-contents").html());
   $("a[rel=popover]").popover();
 </script>
 {% endblock %}

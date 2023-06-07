@@ -95,10 +95,10 @@
         },
         'error': function(jqXHR, textStatus, errorThrown) {
           var errors = $('div.wafer_schedule .timestamp .errors');
-          var count = errors.attr('data-count') || 0;
+          var count = errors.attr('data-bs-count') || 0;
           count++;
           errors.text('Failed updates: ' + count);
-          errors.attr('data-count', count);
+          errors.attr('data-bs-count', count);
         },
       });
     }
