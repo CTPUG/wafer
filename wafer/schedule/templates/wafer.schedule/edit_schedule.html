@@ -17,9 +17,9 @@
     {% endif %}
   </div>
   <div class="col-md-8">
-    <div class="dropdown float-right">
+    <div class="dropdown float-end">
       <button class="btn btn-secondary dropdown-toggle" type="button"
-              data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+              data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
         {{ this_block }} {% blocktrans with block_id=this_block.id %}(Block {{ block_id }}){% endblocktrans %}
       </button>
       <div class="dropdown-menu">
@@ -86,19 +86,19 @@
           <a href="#unassignedTalks"
              class="active"
              aria-controls="unassignedTalks" role="tab"
-             data-toggle="tab">
+             data-bs-toggle="tab">
             {% trans 'Unassigned Talks' %}
           </a>
         </li>
         <li role="presentation">
           <a href="#allTalks"
              aria-controls="allTalks" role="tab"
-             data-toggle="tab">
+             data-bs-toggle="tab">
             {% trans 'All Talks' %}
           </a>
         </li>
         <li role="presentation">
-          <a href="#pages" aria-controls="pages" role="tab" data-toggle="tab">
+          <a href="#pages" aria-controls="pages" role="tab" data-bs-toggle="tab">
             {% trans 'Pages' %}
           </a>
         </li>
@@ -110,15 +110,15 @@
           {% regroup talks_all by talk_type.name as grouped_talks %}
           {% for type, talks in grouped_talks %}
             {% if type %}
-              <div draggable="false" class="badge badge-secondary">
+              <div draggable="false" class="badge bg-secondary">
                 {{ type }}
               </div>
             {% endif %}
             {% for talk in talks %}
               <div draggable="true"
-                    class="badge badge-success draggable"
+                    class="badge bg-success draggable"
                     id="talk{{ talk.talk_id }}"
-                    data-toggle="tooltip" data-placement="left"
+                    data-bs-toggle="tooltip" data-bs-placement="left"
                     title="{{ talk.title }}"
                     {% if talk not in talks_unassigned %}
                       hidden
@@ -140,14 +140,14 @@
           {% regroup talks_all by talk_type.name as grouped_talks %}
           {% for type, talks in grouped_talks %}
             {% if type %}
-            <div draggable="false" class="badge badge-secondary">
+            <div draggable="false" class="badge bg-secondary">
               {{ type }}
             </div>
             {% endif %}
             {% for talk in talks %}
-              <div draggable="true" class="badge badge-warning draggable"
+              <div draggable="true" class="badge bg-warning draggable"
                     class="talk{{ talk.talk_id }}"
-                    data-toggle="tooltip" data-placement="left"
+                    data-bs-toggle="tooltip" data-bs-placement="left"
                     title="{{ talk.title }}"
                     data-type="talk" data-talk-id="{{ talk.talk_id }}">
                 {% if not talk.cancelled %}
@@ -163,9 +163,9 @@
         </div>
         <div role="tabpanel" class="tab-pane row" id="pages">
           {% for page in pages %}
-            <div draggable="true" class="badge badge-info draggable"
+            <div draggable="true" class="badge bg-info draggable"
                   id="page{{ page.id }}"
-                  data-toggle="tooltip" data-placement="left"
+                  data-bs-toggle="tooltip" data-bs-placement="left"
                   title="{{ page.name }}" data-type="page" data-page-id="{{ page.id }}">
               {{ page.name }}
             </div>

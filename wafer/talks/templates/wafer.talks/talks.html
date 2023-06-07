@@ -25,18 +25,18 @@
           <tr>
             <td>
               {% if not talk.cancelled and not talk.accepted and talk.is_late_submission %}
-                <span class="badge badge-warning" title="{% trans 'Late submission' %}">L</span>
+                <span class="badge bg-warning" title="{% trans 'Late submission' %}">L</span>
               {% endif %}
               {% if talk.submitted %}
-                <span class="badge badge-info" title="{% trans 'Submitted' %}">{{ talk.status }}</span>
+                <span class="badge bg-info" title="{% trans 'Submitted' %}">{{ talk.status }}</span>
               {% elif talk.under_consideration %}
-                <span class="badge badge-info" title="{% trans 'Under consideration' %}">{{ talk.status }}</span>
+                <span class="badge bg-info" title="{% trans 'Under consideration' %}">{{ talk.status }}</span>
               {% elif talk.reject %}
-                <span class="badge badge-danger" title="{% trans 'Not accepted' %}">{{ talk.status }}</span>
+                <span class="badge bg-danger" title="{% trans 'Not accepted' %}">{{ talk.status }}</span>
               {% elif talk.cancelled %}
-                <span class="badge badge-warning" title="{% trans 'Talk Cancelled' %}">{{ talk.status }}</span>
+                <span class="badge bg-warning" title="{% trans 'Talk Cancelled' %}">{{ talk.status }}</span>
               {% elif talk.provisional %}
-                <span class="badge badge-success" title="{% trans 'Provisionally Accepted' %}">{{ talk.status }}</span>
+                <span class="badge bg-success" title="{% trans 'Provisionally Accepted' %}">{{ talk.status }}</span>
               {% endif %}
               {% reviewed_badge user talk %}
               {% if talk.withdrawn %}
