@@ -56,10 +56,19 @@
           </tr>
         {% endfor %}
       {% empty %}
+        <thead class='thead-dark'>
+          <tr>
+            <th>
+              {% trans "Talk" %}
+            </th>
+            {% if languages %}<th>{% trans "Language" %}</th>{% endif %}
+            <th>{% trans "Speakers" %}</th>
+          </tr>
+        </thead>
         <tr>
-          <th colspan="{% if languages %}3{% else %}2{% endif %}">
+          <td colspan="{% if languages %}3{% else %}2{% endif %}">
             {% trans 'No talks accepted yet.' %}
-          </th>
+          </td>
         </tr>
       {% endfor %}
     </table>
