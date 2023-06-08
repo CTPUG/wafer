@@ -33,6 +33,17 @@
         </div>
       {% endfor %}
     </div>
+  {% empty %}
+    <!-- We show an empty entry wo a) there's some content here and
+                                   b) it's easier to check some of the styling -->
+    <h1>{% trans 'Speakers' %}</h1>
+    <div class="container speakers-list">
+        <div class="row">
+           <div class="wafer-speakers-name">
+              <p>No accepted talks yet</p>
+           </div>
+        </div>
+    </div>
   {% endfor %}
 </section>
 {% endblock %}
