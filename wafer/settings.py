@@ -202,7 +202,7 @@ AUTH_USER_MODEL = 'auth.User'
 REGISTRATION_FORM = 'wafer.registration.forms.WaferRegistrationForm'
 
 # Forms:
-CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
+CRISPY_ALLOWED_TEMPLATE_PACKS = ["bootstrap5", ]
 CRISPY_TEMPLATE_PACK = 'bootstrap5'
 
 # Wafer cache settings
