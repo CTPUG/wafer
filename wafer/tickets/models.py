@@ -25,4 +25,11 @@ class Ticket(models.Model):
 
 
 def user_is_registered(user):
+    """This function assumes that all ticket types are equally valid for
+       determining the registration status"""
     return Ticket.objects.filter(user=user).exists()
+
+
+def get_user_ticket_types(user):
+    """This returns the distinct ticket types associaated with a user"""
+    return set([x.type for x in Ticket.objects.filter(user=user)])
