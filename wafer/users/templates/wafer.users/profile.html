@@ -102,8 +102,10 @@
                {% endif %}
              </div>
            {% endif %}
-           {% if WAFER_REGISTRATION_MODE == 'ticket' and profile.is_registered  %}
-              {{ profile.tickets }}
+           {% if WAFER_REGISTRATION_MODE == 'ticket' and profile.is_registered %}
+           <p>Tickets:
+              {{ profile.ticket_types }}
+           </p>
            {% endif %}
         {% endblock speaker_registered %}
       {% endif %}
