@@ -118,7 +118,15 @@ def import_ticket(ticket_barcode, ticket_type, email):
     try:
         user = UserModel.objects.get(email=email, ticket=None)
     except UserModel.DoesNotExist:
+        # We didn't get a user without a ticket - maybe an unknown email,
+        # a duplicate ticket (batch purchase) or a new ticket type the user
+        # acquired. We only want to associate the ticket in the last case.
         user = None
+        if UserModel.objects.filter(email=email).count() == 1:
+            # We have a unique user with this email, so check if this is a ticket
+            # type that isn't associated with the user
+            if not UserModel.objects.filter(email=email, ticket__type=type_).exists():
+                user = UserModel.objects.get(email=email)
     except UserModel.MultipleObjectsReturned:
         # We're can't uniquely identify the user to associate this ticket
         # with, so leave it for them to figure out via the 'claim ticket'
