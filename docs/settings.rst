@@ -140,6 +140,12 @@ Wafer's settings
     It should return a boolean result.
     The default function checks for a Quicket ticket.
 
+``WAFER_USER_TICKET_TYPES``
+   A function which returns a list of ticket types associated with a user.
+   This is intende to help track remote vs in-person tickets and similar cases.
+   It should return a list of ticket type descriptions.
+   The default function returns the types of any Quicket tickets associated with the user.
+
 ``WAFER_VIDEO``
     A boolean flag.
     When ``True``, the default talk submission form will ask for a video
