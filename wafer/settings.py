@@ -291,6 +291,9 @@ WAFER_REGISTRATION_OPEN = True
 WAFER_REGISTRATION_MODE = 'ticket'
 # WAFER_USER_IS_REGISTERED should return a boolean, when passed a Django user.
 WAFER_USER_IS_REGISTERED = 'wafer.tickets.models.user_is_registered'
+# If using 'ticket' registration, WAFER_USER_TICKET_TYPES should return
+# the ticket types associated with the user as a list
+WAFER_USER_TICKET_TYPES = 'wafer.tickets.models.get_user_ticket_types'
 
 # Allow registered and anonymous users to see registered users
 WAFER_PUBLIC_ATTENDEE_LIST = True
