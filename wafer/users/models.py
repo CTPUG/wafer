@@ -100,7 +100,7 @@ class UserProfile(models.Model):
 
     def ticket_types(self):
         ticket_types = import_string(settings.WAFER_USER_TICKET_TYPES)
-        return ticket_types(self.user)
+        return [x.name for x in ticket_types(self.user)]
 
     is_registered.boolean = True
 
