@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-06-05 21:56+0000\n"
-"PO-Revision-Date: 2022-04-02 22:11+0000\n"
+"PO-Revision-Date: 2023-06-23 01:41+0000\n"
 "Last-Translator: Daniele Tricoli <eriol@mornie.org>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/wafer/wafer/it/>"
 "\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.12-dev\n"
+"X-Generator: Weblate 4.18.1\n"
 
 #: wafer/compare/admin.py:22
 msgid "Last Modified"
@@ -109,7 +109,7 @@ msgstr ""
 
 #: wafer/pages/models.py:31
 msgid "Last component of the page URL"
-msgstr ""
+msgstr "L'ultima parte del URL della pagina"
 
 #: wafer/pages/models.py:35
 msgid "Markdown contents for the page."
@@ -499,7 +499,7 @@ msgstr ""
 #: wafer/schedule/templates/wafer.schedule/current.html:23
 #: wafer/schedule/templates/wafer.schedule/full_schedule.html:48
 msgid "Time"
-msgstr ""
+msgstr "Tempo"
 
 #: wafer/schedule/templates/wafer.schedule/current.html:71
 msgid "Last updated"
@@ -544,7 +544,7 @@ msgstr ""
 
 #: wafer/schedule/templates/wafer.schedule/edit_schedule.html:102
 msgid "Pages"
-msgstr ""
+msgstr "Pagine"
 
 #: wafer/schedule/templates/wafer.schedule/full_schedule.html:3
 #: wafer/schedule/templates/wafer.schedule/full_schedule.html:15
@@ -553,11 +553,11 @@ msgstr ""
 
 #: wafer/schedule/templates/wafer.schedule/full_schedule.html:29
 msgid "Previous"
-msgstr ""
+msgstr "Precedente"
 
 #: wafer/schedule/templates/wafer.schedule/full_schedule.html:33
 msgid "Next"
-msgstr ""
+msgstr "Successivo"
 
 #: wafer/sponsors/models.py:36
 msgid "Currency symbol for the sponsorship amount."
@@ -873,7 +873,7 @@ msgstr "autori"
 
 #: wafer/talks/models.py:219
 msgid "video"
-msgstr ""
+msgstr "video"
 
 #: wafer/talks/models.py:221
 #, python-brace-format
@@ -918,7 +918,7 @@ msgstr ""
 
 #: wafer/talks/models.py:299
 msgid "Has URL"
-msgstr ""
+msgstr "Ha un URL"
 
 #: wafer/talks/models.py:386
 msgid "reviewer"
@@ -926,7 +926,7 @@ msgstr ""
 
 #: wafer/talks/models.py:392
 msgid "Comments on the proposal (markdown)"
-msgstr ""
+msgstr "Commenti sulla proposta (markdown)"
 
 #: wafer/talks/models.py:395
 #, python-format
@@ -996,8 +996,8 @@ msgstr ""
 #: wafer/talks/templates/wafer.talks/talk.html:30
 msgid "Speaker:"
 msgid_plural "Speakers:"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Relatore:"
+msgstr[1] "Relatori:"
 
 #: wafer/talks/templates/wafer.talks/talk.html:45
 msgid "Bio"
