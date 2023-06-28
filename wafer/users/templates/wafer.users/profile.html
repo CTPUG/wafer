@@ -26,26 +26,28 @@
         {% endif %}
       </div>
       <div class="col-md-10">
-        {% if can_edit %}
-          <ul class="float-end btn-group btn-group-vertical profile-links">
-            <li><a href="{% url 'wafer_user_edit' object.username %}" class="btn btn-secondary">{% trans 'Edit Account' %}</a></li>
-            <li><a href="{% url 'wafer_user_edit_profile' object.username %}" class="btn btn-secondary">{% trans 'Edit Profile' %}</a></li>
-            {% if WAFER_REGISTRATION_OPEN %}
-              {% if WAFER_REGISTRATION_MODE == 'ticket' and not profile.is_registered  %}
-                {% url 'wafer_ticket_claim' as register_url %}
-              {% endif %}
-              {% if WAFER_REGISTRATION_MODE == 'custom' %}
-                {% url 'register' as register_url %}
-              {% endif %}
-              {% if register_url %}
-                <li><a href="{{ register_url }}" class="btn btn-secondary">{% if profile.is_registered %}{% trans 'Update registration' context "conference" %}{% else %}{% trans 'Register' context "conference" %}{% endif %}</a></li>
-              {% endif %}
-            {% endif %}
-            {% if WAFER_TALKS_OPEN %}
-              <li><a href="{% url 'wafer_talk_submit' %}" class="btn btn-secondary">{% trans 'Submit Talk Proposal' %}</a></li>
-            {% endif %}
-          </ul>
-        {% endif %}
+        {% block side_menu %}
+           {% if can_edit %}
+             <ul class="float-end btn-group btn-group-vertical profile-links">
+               <li><a href="{% url 'wafer_user_edit' object.username %}" class="btn btn-secondary">{% trans 'Edit Account' %}</a></li>
+               <li><a href="{% url 'wafer_user_edit_profile' object.username %}" class="btn btn-secondary">{% trans 'Edit Profile' %}</a></li>
+               {% if WAFER_REGISTRATION_OPEN %}
+                 {% if WAFER_REGISTRATION_MODE == 'ticket' and not profile.is_registered  %}
+                   {% url 'wafer_ticket_claim' as register_url %}
+                 {% endif %}
+                 {% if WAFER_REGISTRATION_MODE == 'custom' %}
+                   {% url 'register' as register_url %}
+                 {% endif %}
+                 {% if register_url %}
+                   <li><a href="{{ register_url }}" class="btn btn-secondary">{% if profile.is_registered %}{% trans 'Update registration' context "conference" %}{% else %}{% trans 'Register' context "conference" %}{% endif %}</a></li>
+                 {% endif %}
+               {% endif %}
+               {% if WAFER_TALKS_OPEN %}
+                 <li><a href="{% url 'wafer_talk_submit' %}" class="btn btn-secondary">{% trans 'Submit Talk Proposal' %}</a></li>
+               {% endif %}
+             </ul>
+           {% endif %}
+         {% endblock side_menu %}
         {% spaceless %}
         <h1>
           {% if profile.homepage %}
@@ -56,20 +58,22 @@
             </a>
           {% endif %}
         </h1>
-        {% if profile.twitter_handle %}
-          <p>
-            <a href="https://twitter.com/{{ profile.twitter_handle }}" class="twitter-follow-button" data-bs-show-count="false">
-              {% blocktrans with handle=profile.twitter_handle %}Follow @{{ handle }}{% endblocktrans %}
-            </a>
-          </p>
-        {% endif %}
-        {% if profile.github_username %}
-          <p>
-            <a href="https://github.com/{{ profile.github_username }}">
-              {% blocktrans with username=profile.github_username %}GitHub: {{ username }}{% endblocktrans %}
-            </a>
-          </p>
-        {% endif %}
+        {% block social %}
+           {% if profile.twitter_handle %}
+             <p>
+               <a href="https://twitter.com/{{ profile.twitter_handle }}" class="twitter-follow-button" data-bs-show-count="false">
+                 {% blocktrans with handle=profile.twitter_handle %}Follow @{{ handle }}{% endblocktrans %}
+               </a>
+             </p>
+           {% endif %}
+           {% if profile.github_username %}
+             <p>
+               <a href="https://github.com/{{ profile.github_username }}">
+                 {% blocktrans with username=profile.github_username %}GitHub: {{ username }}{% endblocktrans %}
+               </a>
+             </p>
+           {% endif %}
+        {% endblock social %}
         {% endspaceless %}
       </div>
     </div>
@@ -80,23 +84,30 @@
     {% endif %}
     {% if can_edit %}
       {% if profile.pending_talks.exists or profile.accepted_talks.exists or profile.provisional_talks.exists%}
-        {% if profile.is_registered %}
-          <div class="alert alert-success">
-            {% blocktrans trimmed %}
-              Registered
-            {% endblocktrans %}
-          </div>
-        {% else %}
-          <div class="alert alert-danger">
-            {% blocktrans trimmed %}
-              <strong>WARNING:</strong>
-              Talk proposal submitted, but speaker hasn't registered to attend.
-            {% endblocktrans %}
-            {% if WAFER_REGISTRATION_OPEN %}
-              {% trans "Register now!" %}
-            {% endif %}
-          </div>
-        {% endif %}
+        {% block speaker_registered %}
+           {% if profile.is_registered %}
+             <div class="alert alert-success">
+               {% blocktrans trimmed %}
+                 Registered
+               {% endblocktrans %}
+             </div>
+           {% else %}
+             <div class="alert alert-danger">
+               {% blocktrans trimmed %}
+                 <strong>WARNING:</strong>
+                 Talk proposal submitted, but speaker hasn't registered to attend.
+               {% endblocktrans %}
+               {% if WAFER_REGISTRATION_OPEN %}
+                 {% trans "Register now!" %}
+               {% endif %}
+             </div>
+           {% endif %}
+           {% if WAFER_REGISTRATION_MODE == 'ticket' and profile.is_registered %}
+           <p>Tickets:
+              {{ profile.ticket_types }}
+           </p>
+           {% endif %}
+        {% endblock speaker_registered %}
       {% endif %}
     {% endif %}
     {# Accepted talks are globally visible #}
