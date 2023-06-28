@@ -192,7 +192,7 @@
     {% endif %}
   {% endwith %}
 </section>
-{% endblock %}
+{% endblock content %}
 {% block extra_foot %}
 <script type="text/javascript">
   {% if profile.twitter_handle %}
@@ -211,4 +211,4 @@
   $("#profile-avatar [rel=popover]").attr("data-bs-content", $("#profile-avatar .popover-contents").html());
   $("a[rel=popover]").popover();
 </script>
-{% endblock %}
+{% endblock extra_foot %}
