@@ -4,45 +4,53 @@
 {% load static %}
 {% block content %}
 <section class="wafer wafer-talk-edit">
-  {% if can_edit %}
-    <h1>{% trans "Edit Talk" %}</h1>
-    {% with corresponding_author_name=object.corresponding_author.userprofile.display_name %}
-      {% url 'wafer_user_profile' username=object.corresponding_author.username as corresponding_author_url %}
-      {% blocktrans trimmed %}
-        <p>Submitted by <a href="{{ corresponding_author_url }}">{{ corresponding_author_name }}</a>.</p>
-      {% endblocktrans %}
-    {% endwith %}
-  {% else %}
-    <h1>{% trans "Talk Submission" %}</h1>
-  {% endif %}
-  {% if not can_edit and not can_submit %}
-    {% blocktrans trimmed %}
-      <em>Talk submission is closed</em>
-    {% endblocktrans %}
-  {% else %}
-    {% url 'wafer_user_edit_profile' form.user as edit_bio_url %}
-    {% if form.user.userprofile.bio %}
-      <div>
-        <label for="bio" class="col-form-label">
-          {% trans "Your Biography" %}
-          <a href="{{ edit_bio_url }}">{% trans "Edit" %}</a>
-        </label>
-        <div id="bio" class="card card-body">
-          {{ form.user.userprofile.bio|linebreaks }}
-        </div>
-      </div>
-    {% else %}
-      <div class="alert alert-primary">
+  {% block heading %}
+    {% if can_edit %}
+      <h1>{% trans "Edit Talk" %}</h1>
+      {% with corresponding_author_name=object.corresponding_author.userprofile.display_name %}
+        {% url 'wafer_user_profile' username=object.corresponding_author.username as corresponding_author_url %}
         {% blocktrans trimmed %}
-          Please
-          <a href="{{ edit_bio_url }}">add a speaker biography</a>
-          before submitting a talk.
+          <p>Submitted by <a href="{{ corresponding_author_url }}">{{ corresponding_author_name }}</a>.</p>
         {% endblocktrans %}
-      </div>
+      {% endwith %}
+    {% else %}
+      <h1>{% trans "Talk Submission" %}</h1>
     {% endif %}
+  {% endblock heading %}
+  {% if not can_edit and not can_submit %}
+    {% block talks_closed %}
+      {% blocktrans trimmed %}
+        <em>Talk submission is closed</em>
+      {% endblocktrans %}
+    {% endblock talks_closed %}
+  {% else %}
+    {% block form_preamble %}
+      {% url 'wafer_user_edit_profile' form.user as edit_bio_url %}
+      {% if form.user.userprofile.bio %}
+        <div>
+          <label for="bio" class="col-form-label">
+            {% trans "Your Biography" %}
+            <a href="{{ edit_bio_url }}">{% trans "Edit" %}</a>
+          </label>
+          <div id="bio" class="card card-body">
+            {{ form.user.userprofile.bio|linebreaks }}
+          </div>
+        </div>
+      {% else %}
+        <div class="alert alert-primary">
+          {% blocktrans trimmed %}
+            Please
+            <a href="{{ edit_bio_url }}">add a speaker biography</a>
+            before submitting a talk.
+          {% endblocktrans %}
+        </div>
+      {% endif %}
+    {% endblock form_preamble %}
+    {% block talkform %}
     <form method="post">
       {% crispy form %}
     </form>
+    {% endblock talkform %}
   {% endif %}
 </section>
 {% endblock %}
