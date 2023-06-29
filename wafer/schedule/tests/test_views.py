@@ -1522,10 +1522,30 @@ class NonHTMLViewTests(TestCase):
         # Check number of events
         self.assertEqual(len(calendar.walk(name='VEVENT')), 9)
         # Check we have the right time in places
-        event = calendar.walk(name='VEVENT')[0]
-        self.assertEqual(event['dtstart'].dt, D.datetime(2013, 9, 22, 10, 0, 0, tzinfo=D.timezone.utc))
-        # Check that we have the page slug in the ical event
-        self.assertTrue('/test0/' in event['url'])
+        start1_events = 0
+        start2_events = 0
+        test0_events = 0
+        test1_events = 0
+        # We don't enforce an ordering in the database for this view,
+        # since the ical specification doesn't require one, so the results
+        # may vary depending on database and / or ical implementation
+        # Hence this more convoluted check
+        for event in calendar.walk(name='VEVENT'):
+            if event['dtstart'].dt == D.datetime(2013, 9, 22, 10, 0, 0, tzinfo=D.timezone.utc):
+                start1_events += 1
+            elif event['dtstart'].dt == D.datetime(2013, 9, 22, 11, 0, 0, tzinfo=D.timezone.utc):
+                start2_events += 1
+            if '/test0/' in event['url']:
+                test0_events += 1
+                # Check we have the right time for this event explicitly
+                self.assertEqual(event['dtstart'].dt,
+                                 D.datetime(2013, 9, 22, 10, 0, 0, tzinfo=D.timezone.utc))
+            if '/test1/' in event['url']:
+                test1_events += 1
+        self.assertEqual(start1_events, 2)
+        self.assertEqual(start2_events, 2)
+        self.assertEqual(test0_events, 1)
+        self.assertEqual(test1_events, 1)
 
     def test_xml_conditional_requests(self):
         # All the public schedule views implement these, but we'll just check
@@ -1637,16 +1657,32 @@ class JsonViewTests(TestCase):
         self.assertTrue('track' in data['events'][0])
         self.assertTrue('duration' in data['events'][0])
 
-        # Events are ordered by creation order currently, because of how
-        # we construct the json file, so events[0] is a page and events[6]
-        # is a talk with the same start time
-        self.assertEqual(data['events'][0]['start_time'], data['events'][6]['start_time'])
-        self.assertEqual(len(data['events'][0]['authors']), 0)
-        self.assertEqual(len(data['events'][6]['authors']), 1)
-        # events[7] is talk2
-        self.assertNotEqual(data['events'][0]['start_time'], data['events'][7]['start_time'])
-        self.assertEqual(len(data['events'][7]['authors']), 1)
+        # We don't enforce ordering in the database for this view, since
+        # it doesn't matter, so the results may vary between databases
+        # So we explicitly check that we have 6 pages and 2 talks
+        # and that we have a talk and a page starting at start 1
+        # and that we have a talk starting at a different time
+        pages = 0
+        talks = 0
+        page_start_time = None
+        talk1_start_time = None
+        talk2_start_time = None
+        for event in data['events']:
+            if len(event['authors']) > 0:
+                talks += 1
+                if 'Test talk' in event['title']:
+                    talk1_start_time = event['start_time']
+                else:
+                    talk2_start_time = event['start_time']
+            else:
+                pages += 1
+                if '/test0/' in event['url']:
+                    page_start_time =  event['start_time']
 
+        self.assertEqual(pages, 6)
+        self.assertEqual(talks, 2)
+        self.assertEqual(talk1_start_time, page_start_time)
+        self.assertNotEqual(talk2_start_time, page_start_time)
 
 class ScheduleItemViewSetTests(TestCase):
 
