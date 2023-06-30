@@ -4,6 +4,11 @@
 {% block title %}{% trans "Talks" %} - {{ WAFER_CONFERENCE_NAME }}{% endblock %}
 {% block content %}
 <section class="wafer wafer-talks">
+  {% if see_all %}
+  <h1>{% trans "All Submitted Talks" %}</h1>
+  {% else %}
+  <h1>{% trans "Accepted Talks" %}</h1>
+  {% endif %}
   {% regroup talk_list by talk_type.name as grouped_talks %}
   <div class="table-responsive">
     <table class='table table-striped'>
