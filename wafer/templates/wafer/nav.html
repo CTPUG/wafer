@@ -14,7 +14,7 @@
       <a class="navbar-brand" href="{% url 'wafer_page' %}">{{ WAFER_CONFERENCE_NAME }}</a>
     {% endblock navtitle %}
 
-    <div class="collapse navbar-collapse" id="wafer-navbar-collapse">
+    <div class="collapse navbar-collapse align-items-center" id="wafer-navbar-collapse">
       {% block navmenulist %}
         <ul class="navbar-nav mr-auto">
           {% for item in WAFER_MENUS.items %}
