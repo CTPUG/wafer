@@ -27,7 +27,7 @@ jobs:
       max-parallel: 4
       matrix:
         python-version: ['3.7', '3.8', '3.9', '3.10', '3.11']
-        django-version: ['2.2.0', '3.0.0', '3.1.0', '3.2.0', '4.0.0', '4.1.0', 'main']
+        django-version: ['3.2.0', '4.0.0', '4.1.0', 'main']
         exclude:
           - django-version: '4.0.0'
             python-version: '3.7'
@@ -39,14 +39,6 @@ jobs:
             python-version: '3.8'
           - django-version: 'main'
             python-version: '3.9'
-          - django-version: '2.2.0'
-            python-version: '3.10'
-          - django-version: '2.2.0'
-            python-version: '3.11'
-          - django-version: '3.0.0'
-            python-version: '3.11'
-          - django-version: '3.1.0'
-            python-version: '3.11'
           - django-version: '3.2.0'
             python-version: '3.11'
           - django-version: '4.0.0'
@@ -98,7 +90,7 @@ jobs:
       max-parallel: 4
       matrix:
         python-version: ['3.7', '3.8', '3.9', '3.10','3.11']
-        django-version: ['2.2.0', '3.0.0', '3.1.0', '3.2.0', '4.0.0', '4.1.0', 'main']
+        django-version: ['3.2.0', '4.0.0', '4.1.0', 'main']
         exclude:
           - django-version: '4.0.0'
             python-version: '3.7'
@@ -110,14 +102,6 @@ jobs:
             python-version: '3.8'
           - django-version: 'main'
             python-version: '3.9'
-          - django-version: '2.2.0'
-            python-version: '3.10'
-          - django-version: '2.2.0'
-            python-version: '3.11'
-          - django-version: '3.0.0'
-            python-version: '3.11'
-          - django-version: '3.1.0'
-            python-version: '3.11'
           - django-version: '3.2.0'
             python-version: '3.11'
           - django-version: '4.0.0'
