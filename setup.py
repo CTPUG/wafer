@@ -4,7 +4,7 @@ import subprocess
 from setuptools import find_packages, setup
 
 REQUIRES = [
-    'Django>=2.2,<5',
+    'Django>=3.2,<5',
     'bleach',
     'bleach-allowlist',
     'crispy-bootstrap5',
