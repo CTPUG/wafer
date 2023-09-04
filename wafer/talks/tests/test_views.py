@@ -9,7 +9,7 @@ from wafer.tests.api_utils import SortedResultsClient
 from wafer.tests.utils import create_user, mock_avatar_url
 from wafer.talks.models import (
     Talk, TalkUrl, ACCEPTED, REJECTED, SUBMITTED, UNDER_CONSIDERATION,
-    CANCELLED, PROVISIONAL)
+    CANCELLED, PROVISIONAL, WITHDRAWN)
 from wafer.talks.tests.fixtures import create_talk, create_talk_type
 
 
@@ -157,6 +157,66 @@ class TalkViewTests(TestCase):
             reverse('wafer_talk', kwargs={'pk': self.talk_a.pk}),
             follow=True)
         self.assertEqual(response.status_code, 200)
+
+class TalkDeleteViewTests(TestCase):
+    def setUp(self):
+        self.talk_a = create_talk("Talk A", ACCEPTED, "author_a")
+        self.talk_s = create_talk("Talk S", SUBMITTED, "author_s")
+        self.talk_u = create_talk("Talk U", UNDER_CONSIDERATION, "author_u")
+        self.talk_p = create_talk("Talk P", PROVISIONAL, "author_p")
+        self.client = Client()
+
+    def test_delete_permissions_accepted(self):
+        self.client.login(username='author_a', password='author_a_password')
+        post_url = reverse('wafer_talk_withdraw', kwargs={'pk': self.talk_a.pk})
+        response = self.client.post(post_url)
+        self.assertEqual(response.status_code, 403)
+
+    def test_delete_permissions_provisionally_accepted(self):
+        self.client.login(username='author_p', password='author_p_password')
+        post_url = reverse('wafer_talk_withdraw', kwargs={'pk': self.talk_p.pk})
+        response = self.client.post(post_url)
+        self.assertEqual(response.status_code, 403)
+
+    def test_delete_other_talks_provisional(self):
+        self.client.login(username='author_p', password='author_p_password')
+        post_url = reverse('wafer_talk_withdraw', kwargs={'pk': self.talk_a.pk})
+        response = self.client.post(post_url)
+        self.assertEqual(response.status_code, 403)
+        post_url = reverse('wafer_talk_withdraw', kwargs={'pk': self.talk_s.pk})
+        response = self.client.post(post_url)
+        self.assertEqual(response.status_code, 403)
+        post_url = reverse('wafer_talk_withdraw', kwargs={'pk': self.talk_u.pk})
+        response = self.client.post(post_url)
+        self.assertEqual(response.status_code, 403)
+
+    def test_delete_other_talks_submitted(self):
+        self.client.login(username='author_s', password='author_s_password')
+        post_url = reverse('wafer_talk_withdraw', kwargs={'pk': self.talk_a.pk})
+        response = self.client.post(post_url)
+        self.assertEqual(response.status_code, 403)
+        post_url = reverse('wafer_talk_withdraw', kwargs={'pk': self.talk_p.pk})
+        response = self.client.post(post_url)
+        self.assertEqual(response.status_code, 403)
+        post_url = reverse('wafer_talk_withdraw', kwargs={'pk': self.talk_u.pk})
+        response = self.client.post(post_url)
+        self.assertEqual(response.status_code, 403)
+
+    def test_delete_is_withdraw_under_consideration(self):
+        self.client.login(username='author_u', password='author_u_password')
+        post_url = reverse('wafer_talk_withdraw', kwargs={'pk': self.talk_u.pk})
+        response = self.client.post(post_url)
+        self.assertEqual(response.status_code, 302)
+        self.talk_u.refresh_from_db()
+        self.assertEqual(self.talk_u.status, WITHDRAWN)
+
+    def test_delete_is_withdraw_submitted(self):
+        self.client.login(username='author_s', password='author_s_password')
+        post_url = reverse('wafer_talk_withdraw', kwargs={'pk': self.talk_s.pk})
+        response = self.client.post(post_url)
+        self.assertEqual(response.status_code, 302)
+        self.talk_s.refresh_from_db()
+        self.assertEqual(self.talk_s.status, WITHDRAWN)
 
 
 class TalkNoteViewTests(TestCase):

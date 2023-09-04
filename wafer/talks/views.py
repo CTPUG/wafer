@@ -184,15 +184,24 @@ class TalkWithdraw(EditOwnTalksMixin, DeleteView):
     template_name = 'wafer.talks/talk_withdraw.html'
     success_url = reverse_lazy('wafer_page')
 
+
     @revisions.create_revision()
-    def delete(self, request, *args, **kwargs):
-        """Override delete to only withdraw"""
+    def withdraw_helper(self, request):
+        """Handle the logic for withdrawing a talk"""
         talk = self.get_object()
         talk.status = WITHDRAWN
         talk.save()
         revisions.set_user(self.request.user)
         revisions.set_comment("Talk Withdrawn")
         return HttpResponseRedirect(self.success_url)
+
+    def delete(self, request, *args, **kwargs):
+        """Override delete to only withdraw for Django < 4"""
+        return self.withdraw_helper(request)
+
+    def form_valid(self, request, *args, **kwargs):
+        """Override delete to only withdraw for Django >= 4.0"""
+        return self.withdraw_helper(request)
 
 
 class TalkReview(PermissionRequiredMixin, CreateView):
