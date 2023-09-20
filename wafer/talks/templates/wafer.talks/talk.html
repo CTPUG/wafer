@@ -44,7 +44,7 @@
         <p class="bio">
           {% blocktrans trimmed %}Bio{% endblocktrans %}{% if object.authors.count > 1 %} - {{ author.userprofile.display_name }}{% endif %}:
           {% if author.userprofile.bio %}
-            {{ author.userprofile.bio }}
+            {{ author.userprofile.bio|linebreaks }}
           {% else %}
             <em>{% blocktrans trimmed %}Not provided{% endblocktrans %}</em>
           {% endif %}
