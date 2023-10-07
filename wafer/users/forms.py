@@ -2,10 +2,11 @@ from django import forms
 from django.contrib.auth import get_user_model
 from django.urls import reverse
 from django.utils.translation import gettext as _
+from django.conf import settings
 
 from crispy_forms.bootstrap import PrependedText
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Submit
+from crispy_forms.layout import HTML, Submit
 
 from wafer.registration.validators import validate_username
 from wafer.users.models import UserProfile
@@ -37,13 +38,37 @@ class UserForm(forms.ModelForm):
 class UserProfileForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+
+        pre_social_index = len(self.fields)
+
+        for field_name in settings.SOCIAL_MEDIA_ENTRIES:
+            self.fields[field_name] = forms.CharField()
+
+        pre_code_index = len(self.fields)
+
+        for field_name in settings.CODE_HOSTING_ENTRIES:
+            self.fields[field_name] = forms.CharField()
+
         self.helper = FormHelper(self)
         self.helper.include_media = False
         username = kwargs['instance'].user.username
         self.helper.form_action = reverse('wafer_user_edit_profile',
                                           args=(username,))
+
+        # Add code hosting media header
+        # We do this in this order to avoid needing to do
+        # more maths
+        if settings.CODE_HOSTING_ENTRIES:
+            self.helper.layout.insert(pre_code_index, HTML('<p>Code</p>'))
+
+        # Add social media header
+        if settings.SOCIAL_MEDIA_ENTRIES:
+            self.helper.layout.insert(pre_social_index, HTML('<p>Socail</p>'))
+
+
         self.helper.add_input(Submit('submit', _('Save')))
 
     class Meta:
         model = UserProfile
         exclude = ('user', 'kv')
+
