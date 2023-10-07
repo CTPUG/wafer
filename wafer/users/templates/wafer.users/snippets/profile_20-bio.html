@@ -38,20 +38,6 @@
           </h1>
         {% endblock name %}
         {% block social %}
-           {% if profile.twitter_handle %}
-             <p>
-               <a href="https://twitter.com/{{ profile.twitter_handle }}" class="twitter-follow-button" data-bs-show-count="false">
-                 {% blocktrans with handle=profile.twitter_handle %}Follow @{{ handle }}{% endblocktrans %}
-               </a>
-             </p>
-           {% endif %}
-           {% if profile.github_username %}
-             <p>
-               <a href="https://github.com/{{ profile.github_username }}">
-                 {% blocktrans with username=profile.github_username %}GitHub: {{ username }}{% endblocktrans %}
-               </a>
-             </p>
-           {% endif %}
         {% endblock social %}
         {% endspaceless %}
       </div>

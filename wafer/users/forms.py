@@ -42,10 +42,6 @@ class UserProfileForm(forms.ModelForm):
         username = kwargs['instance'].user.username
         self.helper.form_action = reverse('wafer_user_edit_profile',
                                           args=(username,))
-        self.helper['twitter_handle'].wrap(PrependedText,
-                                           '@', placeholder=_('handle'))
-        self.helper['github_username'].wrap(PrependedText,
-                                            '@', placeholder=_('username'))
         self.helper.add_input(Submit('submit', _('Save')))
 
     class Meta:
