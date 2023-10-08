@@ -41,13 +41,15 @@ class UserProfileForm(forms.ModelForm):
 
         pre_social_index = len(self.fields)
 
+        # currently everything I'm asking for is an url, and this adds some
+        # validation - we may need to revisit this later
         for field_name in settings.SOCIAL_MEDIA_ENTRIES:
-            self.fields[field_name] = forms.CharField()
+            self.fields[field_name] = forms.URLField(max_length=1024)
 
         pre_code_index = len(self.fields)
 
         for field_name in settings.CODE_HOSTING_ENTRIES:
-            self.fields[field_name] = forms.CharField()
+            self.fields[field_name] = forms.URLField(max_length=1024)
 
         self.helper = FormHelper(self)
         self.helper.include_media = False
