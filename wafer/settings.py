@@ -346,15 +346,15 @@ DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 # We assume people will enter approriate urls
 # FIXME: Validation would be nice
 SOCIAL_MEDIA_ENTRIES = [
-    'twitter',
-    'massadon',
+    'Twitter Profile link',
+    'Fediverse Profile link',
     'other',
 ]
 
 # List of code hosting sites that can be added to the user profile
 # See above
 CODE_HOSTING_ENTRIES = [
-    'github',
-    'gitlab',
-    'bitbucket',
+    'github profile',
+    'gitlab profile',
+    'bitbucket profile',
 ]
