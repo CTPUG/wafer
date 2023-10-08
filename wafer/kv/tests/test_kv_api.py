@@ -1,20 +1,11 @@
 """Tests for wafer.kv api views."""
 
-from django.contrib.auth.models import Group
 from django.test import Client, TestCase
 
 from rest_framework.test import APIClient
 
 from wafer.kv.models import KeyValue
-from wafer.tests.utils import create_user
-
-
-def get_group(group):
-    return Group.objects.get(name=group)
-
-
-def create_group(group):
-    return Group.objects.create(name=group)
+from wafer.tests.utils import create_group, create_user, get_group
 
 
 def create_kv_pair(name, value, group):
