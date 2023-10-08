@@ -38,6 +38,12 @@
           </h1>
         {% endblock name %}
         {% block social %}
+        {% for tag, site_url in social_sites.items %}
+          <p><b>{{ tag }}</b>: {{ site_url }}</p>
+        {% endfor %}
+        {% for tag, site_url in code_sites.items %}
+          <p><b>{{ tag }}</b>: {{ site_url }}</p>
+        {% endfor %}
         {% endblock social %}
         {% endspaceless %}
       </div>
