@@ -18,7 +18,6 @@ from rest_framework.permissions import (
     BasePermission)
 from rest_framework_extensions.mixins import NestedViewSetMixin
 from reversion import revisions
-from reversion.models import Version
 
 from wafer.talks.models import (
     Review, Talk, TalkType, TalkUrl, Track,
