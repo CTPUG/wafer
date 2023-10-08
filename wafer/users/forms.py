@@ -11,7 +11,6 @@ from crispy_forms.layout import HTML, Submit
 
 from wafer.registration.validators import validate_username
 from wafer.users.models import UserProfile
-from wafer.kv.models import KeyValue
 
 
 class UserForm(forms.ModelForm):
