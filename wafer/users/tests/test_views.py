@@ -6,9 +6,10 @@ import mock
 
 from django.test import Client, TestCase
 
+from wafer.users.models import PROFILE_GROUP
 from wafer.talks.models import ACCEPTED
 from wafer.talks.tests.fixtures import create_talk
-from wafer.tests.utils import create_user, mock_avatar_url
+from wafer.tests.utils import create_group, create_user, mock_avatar_url
 
 
 class UserProfileTests(TestCase):
@@ -17,6 +18,8 @@ class UserProfileTests(TestCase):
         # Create 2 users
         create_user('test1')
         create_user('test2')
+        # create kv group
+        create_group(PROFILE_GROUP)
         # And a 3rd, with a talk
         create_talk(title="Test talk", status=ACCEPTED, username='test3')
         self.client = Client()
