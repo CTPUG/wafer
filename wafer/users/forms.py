@@ -44,12 +44,14 @@ class UserProfileForm(forms.ModelForm):
         # currently everything I'm asking for is an url, and this adds some
         # validation - we may need to revisit this later
         for field_name in settings.SOCIAL_MEDIA_ENTRIES:
-            self.fields[field_name] = forms.URLField(max_length=1024)
+            self.fields[field_name] = forms.URLField(label=_(settings.SOCIAL_MEDIA_ENTRIES[field_name]), 
+                                                     max_length=1024, required=False)
 
         pre_code_index = len(self.fields)
 
         for field_name in settings.CODE_HOSTING_ENTRIES:
-            self.fields[field_name] = forms.URLField(max_length=1024)
+            self.fields[field_name] = forms.URLField(label=_(settings.CODE_HOSTING_ENTRIES[field_name]),
+                                                    max_length=1024, required=False)
 
         self.helper = FormHelper(self)
         self.helper.include_media = False
