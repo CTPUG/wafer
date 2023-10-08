@@ -30,6 +30,7 @@ class Command(BaseCommand):
             ('talks', 'view_all_talks'),
         ),
         'Registration': (),
+        'Online Profiles': (),
     }
 
     def add_wafer_groups(self):
