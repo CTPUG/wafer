@@ -24,6 +24,8 @@ from wafer.talks.models import (ACCEPTED, SUBMITTED, UNDER_CONSIDERATION,
                                 PROVISIONAL, CANCELLED)
 
 
+PROFILE_GROUP = 'Online Profiles'
+
 
 class UserProfile(models.Model):
 

@@ -10,7 +10,7 @@ from crispy_forms.helper import FormHelper
 from crispy_forms.layout import HTML, Submit
 
 from wafer.registration.validators import validate_username
-from wafer.users.models import UserProfile
+from wafer.users.models import UserProfile, PROFILE_GROUP
 
 
 class UserForm(forms.ModelForm):
@@ -80,7 +80,7 @@ class UserProfileForm(forms.ModelForm):
         # but perhaps we should.
         profile = super().save()
 
-        group = Group.objects.get_by_natural_key('Online Profiles')
+        group = Group.objects.get_by_natural_key(PROFILE_GROUP)
 
         for field in settings.SOCIAL_MEDIA_ENTRIES:
             if self.cleaned_data[field]:
