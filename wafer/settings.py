@@ -345,16 +345,17 @@ DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 # List of social media sites that can be added to the user profile
 # We assume people will enter approriate urls
 # FIXME: Validation would be nice
-SOCIAL_MEDIA_ENTRIES = [
-    'Twitter Profile link',
-    'Fediverse Profile link',
-    'other',
-]
+# These are dictionaries of database/kv key and then friendly text
+SOCIAL_MEDIA_ENTRIES = {
+    'twitter': 'Twitter Profile link',
+    'fediverse': 'Fediverse Profile link',
+    'other': 'other',
+}
 
 # List of code hosting sites that can be added to the user profile
 # See above
-CODE_HOSTING_ENTRIES = [
-    'github profile',
-    'gitlab profile',
-    'bitbucket profile',
-]
+CODE_HOSTING_ENTRIES = {
+    'github': 'github profile',
+    'gitlab': 'gitlab profile',
+    'bitbucket': 'bitbucket profile',
+}
