@@ -1,5 +1,6 @@
 from django import forms
 from django.contrib.auth import get_user_model
+from django.contrib.auth.models import Group
 from django.urls import reverse
 from django.utils.translation import gettext as _
 from django.conf import settings
@@ -10,6 +11,7 @@ from crispy_forms.layout import HTML, Submit
 
 from wafer.registration.validators import validate_username
 from wafer.users.models import UserProfile
+from wafer.kv.models import KeyValue
 
 
 class UserForm(forms.ModelForm):
@@ -71,6 +73,27 @@ class UserProfileForm(forms.ModelForm):
 
 
         self.helper.add_input(Submit('submit', _('Save')))
+
+    def save(self):
+        """We save the base profile, and then iterate over the
+           keys, adding/updating any new ones"""
+        # We don't currently delete keys that have been blamked,
+        # but perhaps we should.
+        profile = super().save()
+
+        group = Group.objects.get_by_natural_key('Online Profiles')
+
+        for field in settings.SOCIAL_MEDIA_ENTRIES:
+            if self.cleaned_data[field]:
+                profile.kv.get_or_create(group=group, key=field,
+                        defaults={'value': self.cleaned_data[field]})
+
+        for field in settings.CODE_HOSTING_ENTRIES:
+            if self.cleaned_data[field]:
+                profile.kv.get_or_create(group=group, key=field,
+                        defaults={'value': self.cleaned_data[field]})
+
+        return profile
 
     class Meta:
         model = UserProfile
