@@ -347,15 +347,15 @@ DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 # FIXME: Validation would be nice
 # These are dictionaries of database/kv key and then friendly text
 SOCIAL_MEDIA_ENTRIES = {
-    'twitter': 'Twitter Profile link',
-    'fediverse': 'Fediverse Profile link',
-    'other': 'other',
+    'twitter': _('Twitter Profile link'),
+    'fediverse': _('Fediverse Profile link'),
+    'other': _('Other Social'),
 }
 
 # List of code hosting sites that can be added to the user profile
 # See above
 CODE_HOSTING_ENTRIES = {
-    'github': 'github profile',
-    'gitlab': 'gitlab profile',
-    'bitbucket': 'bitbucket profile',
+    'github': _('github profile'),
+    'gitlab': _('gitlab profile'),
+    'bitbucket': _('bitbucket profile'),
 }
