@@ -119,22 +119,28 @@ def github_sso(code):
             log.warning('Error extracting github email address: %s', e)
             raise SSOError('Failed to obtain email address from GitHub')
 
-    profile_fields = {
-        'github_username': login,
-    }
+    # TODO: Extend this to also set the github profile url KV
+    profile_fields = {}
     if 'blog' in gh:
         profile_fields['blog'] = gh['blog']
 
-    try:
-        user = get_user_model().objects.get(userprofile__github_username=login)
-    except MultipleObjectsReturned:
-        log.warning('Multiple accounts have GitHub username %s', login)
-        raise SSOError('Multiple accounts have GitHub username %s' % login)
-    except ObjectDoesNotExist:
-        user = None
+    group = Group.objects.get_by_natural_key('Registration')
+    user = None
+
+    for kv in KeyValue.objects.filter(
+            group=group, key='github_sso_account_id', value=login,
+            userprofile__isnull=False):
+        if kv.userprofile_set.count() > 1:
+            message = 'Multiple accounts have the same GitHub username %s'
+            log.warning(message, login)
+            raise SSOError(message % login)
+        user = kv.userprofile_set.first().user
+        break
 
     user = sso(user=user, desired_username=login, name=name, email=email,
                profile_fields=profile_fields)
+    user.userprofile.kv.get_or_create(group=group, key='github_sso_account_id',
+                                      defaults={'value': login})
     return user
 
 
