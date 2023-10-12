@@ -64,12 +64,11 @@ class UserProfileForm(forms.ModelForm):
         # We do this in this order to avoid needing to do
         # more maths
         if settings.CODE_HOSTING_ENTRIES:
-            self.helper.layout.insert(pre_code_index, HTML('<p>Code</p>'))
+            self.helper.layout.insert(pre_code_index, HTML(_('<p>Code Hosting Profiles</p>')))
 
         # Add social media header
         if settings.SOCIAL_MEDIA_ENTRIES:
-            self.helper.layout.insert(pre_social_index, HTML('<p>Socail</p>'))
-
+            self.helper.layout.insert(pre_social_index, HTML(_('<p>Social Profiles</p>')))
 
         self.helper.add_input(Submit('submit', _('Save')))
 
