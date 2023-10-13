@@ -85,20 +85,24 @@ class RegistrationSSOTests(TestCase):
         """Test that a failed github auth call doesn't create a user"""
         # Test incorrect code response
         cur_users = get_user_model().objects.count()
-        with (self.assertRaises(SSOError) as cm,
-                self.settings(WAFER_GITHUB_CLIENT_ID='testy', WAFER_GITHUB_CLIENT_SECRET='abc'),
-                mock.patch('requests.post', new=lambda x, **kw: SSOPost(status_code=333, access_token='aaaa'))):
-            user = github_sso('abcde')
+        # We use the nested syntax to have something legible that supports Python < 3.10
+        with self.assertRaises(SSOError) as cm:
+            with self.settings(WAFER_GITHUB_CLIENT_ID='testy', WAFER_GITHUB_CLIENT_SECRET='abc'):
+                with mock.patch('requests.post', new=lambda x, **kw: SSOPost(status_code=333, access_token='aaaa')):
+                    user = github_sso('abcde')
         self.assertTrue('Invalid code' in str(cm.exception))
         self.assertEqual(cur_users, get_user_model().objects.count())
 
         # Test auth token response failure
-        with (self.assertRaises(SSOError) as cm,
-                self.settings(WAFER_GITHUB_CLIENT_ID='testy', WAFER_GITHUB_CLIENT_SECRET='abc'),
-                mock.patch('requests.post', new=lambda x, **kw: SSOPost(status_code=200, access_token='aaaa')),
-                mock.patch('requests.get', new=lambda x, **kw: SSOGet(status_code=333, username='github_dup',
-                                                                      name='Joe Soap', email='joe@nowhere.test'))):
-            user = github_sso('abcde')
+        with self.assertRaises(SSOError) as cm:
+            with self.settings(WAFER_GITHUB_CLIENT_ID='testy', WAFER_GITHUB_CLIENT_SECRET='abc'):
+                with mock.patch('requests.post', new=lambda x, **kw: SSOPost(status_code=200, 
+                                                                             access_token='aaaa')):
+                    with mock.patch('requests.get', new=lambda x, **kw: SSOGet(status_code=333,
+                                                                               username='github_dup',
+                                                                               name='Joe Soap',
+                                                                               email='joe@no.test')):
+                        user = github_sso('abcde')
         self.assertTrue('Failed response from GitHub' in str(cm.exception))
         self.assertEqual(cur_users, get_user_model().objects.count())
 
@@ -117,8 +121,9 @@ class RegistrationSSOTests(TestCase):
         dup2.userprofile.kv.get_or_create(group=self.reg_group,
                                           key='github_sso_account_id',
                                           defaults={'value': 'github_dup'})
-        with (self.assertRaises(SSOError) as cm, self.settings(WAFER_GITHUB_CLIENT_ID='testy', WAFER_GITHUB_CLIENT_SECRET='abcd')):
-            user = github_sso('abcdef')
+        with self.assertRaises(SSOError) as cm:
+            with self.settings(WAFER_GITHUB_CLIENT_ID='testy', WAFER_GITHUB_CLIENT_SECRET='abcd'):
+                user = github_sso('abcdef')
         exception = cm.exception
         self.assertTrue('Multiple accounts have the same GitHub' in str(exception))
 
@@ -152,29 +157,35 @@ class RegistrationSSOTests(TestCase):
         """Test that a failed gitlab auth call doesn't create a user"""
         # Test incorrect code response
         cur_users = get_user_model().objects.count()
-        with (self.assertRaises(SSOError) as cm,
-                self.settings(WAFER_GITLAB_CLIENT_ID='testy', WAFER_GITLAB_CLIENT_SECRET='abc'),
-                mock.patch('requests.post', new=lambda x, **kw: SSOPost(status_code=333, access_token='aaaa'))):
-            user = gitlab_sso('abcde', 'http://localhost/')
+        with self.assertRaises(SSOError) as cm:
+            with self.settings(WAFER_GITLAB_CLIENT_ID='testy', WAFER_GITLAB_CLIENT_SECRET='abc'):
+                with mock.patch('requests.post', new=lambda x, **kw: SSOPost(status_code=333,
+                                                                             access_token='aaaa')):
+                    user = gitlab_sso('abcde', 'http://localhost/')
         self.assertTrue('Invalid code' in str(cm.exception))
         self.assertEqual(cur_users, get_user_model().objects.count())
 
         # Test auth token response failure
-        with (self.assertRaises(SSOError) as cm,
-                self.settings(WAFER_GITLAB_CLIENT_ID='testy', WAFER_GITLAB_CLIENT_SECRET='abc'),
-                mock.patch('requests.post', new=lambda x, **kw: SSOPost(status_code=200, access_token='aaaa')),
-                mock.patch('requests.get', new=lambda x, **kw: SSOGet(status_code=333, username='github_dup',
-                                                                      name='Joe Soap', email='joe@nowhere.test'))):
-            user = gitlab_sso('abcde', 'http://localhost/')
+        with self.assertRaises(SSOError) as cm:
+            with self.settings(WAFER_GITLAB_CLIENT_ID='testy', WAFER_GITLAB_CLIENT_SECRET='abc'):
+                with mock.patch('requests.post', new=lambda x, **kw: SSOPost(status_code=200,
+                                                                             access_token='aaaa')):
+                    with mock.patch('requests.get', new=lambda x, **kw: SSOGet(status_code=333,
+                                                                               username='github_dup',
+                                                                               name='Joe Soap',
+                                                                               email='joe@nowhere.test')):
+                        user = gitlab_sso('abcde', 'http://localhost/')
         self.assertTrue('Failed response from GitLab' in str(cm.exception))
         self.assertEqual(cur_users, get_user_model().objects.count())
         # Test profile error
-        with (self.assertRaises(SSOError) as cm,
-                self.settings(WAFER_GITLAB_CLIENT_ID='testy', WAFER_GITLAB_CLIENT_SECRET='abc'),
-                mock.patch('requests.post', new=lambda x, **kw: SSOPost(status_code=200, access_token='aaaa')),
-                mock.patch('requests.get', new=lambda x, **kw: SSOGet(status_code=200, username='github_dup',
-                                                                      name='Joe Soap', email=None))):
-            user = gitlab_sso('abcde', 'http://localhost/')
+        with self.assertRaises(SSOError) as cm:
+            with self.settings(WAFER_GITLAB_CLIENT_ID='testy', WAFER_GITLAB_CLIENT_SECRET='abc'):
+                with mock.patch('requests.post', new=lambda x, **kw: SSOPost(status_code=200, access_token='aaaa')):
+                    with mock.patch('requests.get', new=lambda x, **kw: SSOGet(status_code=200,
+                                                                               username='github_dup',
+                                                                               name='Joe Soap',
+                                                                               email=None)):
+                        user = gitlab_sso('abcde', 'http://localhost/')
         self.assertEqual('GitLab profile missing required content', str(cm.exception))
         self.assertEqual(cur_users, get_user_model().objects.count())
 
@@ -192,8 +203,9 @@ class RegistrationSSOTests(TestCase):
         dup2 = create_user('gitlab_dup2')
         kv = KeyValue.objects.filter(group=self.reg_group, key='gitlab_sso_account_id', value='dup2').get()
         kv.userprofile_set.add(dup2.userprofile)
-        with (self.assertRaises(SSOError) as cm, self.settings(WAFER_GITLAB_CLIENT_ID='testy', WAFER_GITLAB_CLIENT_SECRET='abcd')):
-            gitlab_sso('abcdef', 'http://localhost/')
+        with self.assertRaises(SSOError) as cm:
+            with self.settings(WAFER_GITLAB_CLIENT_ID='testy', WAFER_GITLAB_CLIENT_SECRET='abcd'):
+                gitlab_sso('abcdef', 'http://localhost/')
         exception = cm.exception
         self.assertTrue('Multiple accounts have GitLab' in str(exception))
 
