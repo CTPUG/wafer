@@ -341,3 +341,21 @@ WAFER_DEFAULT_GROUPS = ()
 
 # Specify DEFAULT_AUTO_FIELD to make Django >= 3.2 happy
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
+
+# List of social media sites that can be added to the user profile
+# We assume people will enter approriate urls
+# FIXME: Validation would be nice
+# These are dictionaries of database/kv key and then friendly text
+SOCIAL_MEDIA_ENTRIES = {
+    'twitter': _('Twitter Profile link'),
+    'fediverse': _('Fediverse Profile link'),
+    'other': _('Other Social'),
+}
+
+# List of code hosting sites that can be added to the user profile
+# See above
+CODE_HOSTING_ENTRIES = {
+    'github': _('github profile'),
+    'gitlab': _('gitlab profile'),
+    'bitbucket': _('bitbucket profile'),
+}

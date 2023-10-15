@@ -64,9 +64,6 @@
                             {% if user.is_staff %}
                               {# We will want finer grained control off this eventually, but staff will do for now #}
                               <person id="{{ author.pk }}"
-                                {% if author.userprofile.twitter_handle %}
-                                      twitter="https://twitter.com/{{ author.userprofile.twitter_handle }}"
-                                {% endif %}
                                       contact="{{ author.email }}">{{ author.userprofile.display_name }}</person>
                             {% else %}
                               <person id="{{ author.pk }}">{{ author.userprofile.display_name }}</person>
@@ -100,9 +97,6 @@
                             {% if user.is_staff %}
                               {# We will want finer grained control off this eventually, but staff will do for now #}
                               <person id="{{ person.pk }}"
-                                {% if author.userprofile.twitter_handle %}
-                                      twitter="https://twitter.com/{{ person.userprofile.twitter_handle }}"
-                                {% endif %}
                                       contact="{{ person.email }}">{{ person.userprofile.display_name }}</person>
                             {% else %}
                               <person id="{{ person.pk }}">{{ person.userprofile.display_name }}</person>

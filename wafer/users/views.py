@@ -2,7 +2,7 @@ import logging
 
 from django.conf import settings
 from django.contrib.auth import get_user_model
-from django.contrib.auth.models import AnonymousUser
+from django.contrib.auth.models import AnonymousUser, Group
 from django.core.exceptions import PermissionDenied
 from django.http import Http404
 from django.urls import reverse
@@ -15,7 +15,7 @@ from rest_framework.permissions import IsAdminUser
 from wafer.talks.models import ACCEPTED, CANCELLED
 from wafer.users.forms import UserForm, UserProfileForm
 from wafer.users.serializers import UserSerializer
-from wafer.users.models import UserProfile
+from wafer.users.models import UserProfile, PROFILE_GROUP
 from wafer.utils import PaginatedBuildableListView
 
 log = logging.getLogger(__name__)
@@ -91,6 +91,26 @@ class ProfileView(Hide404Mixin, BuildableDetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['can_edit'] = self.can_edit(context['object'])
+        # Add social and code profile info
+        group = Group.objects.get_by_natural_key(PROFILE_GROUP)
+
+        context['social_sites'] = {}
+        context['code_sites'] = {}
+
+        profile = self.get_object().userprofile
+
+        for field in settings.SOCIAL_MEDIA_ENTRIES:
+            if profile.kv.filter(group=group, key=field).exists():
+                value = profile.kv.get(group=group, key=field).value
+                if value:
+                    context['social_sites'][settings.SOCIAL_MEDIA_ENTRIES[field]] = value
+
+        for field in settings.CODE_HOSTING_ENTRIES:
+            if profile.kv.filter(group=group, key=field).exists():
+                value = profile.kv.get(group=group, key=field).value
+                if value:
+                    context['code_sites'][settings.CODE_HOSTING_ENTRIES[field]] = value
+
         return context
 
     def can_edit(self, user):

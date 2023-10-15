@@ -4,6 +4,14 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group, Permission
 
 
+def get_group(group):
+    return Group.objects.get(name=group)
+
+
+def create_group(group):
+    return Group.objects.create(name=group)
+
+
 def create_user(username, email=None, superuser=False, perms=(), groups=()):
     if superuser:
         create = get_user_model().objects.create_superuser

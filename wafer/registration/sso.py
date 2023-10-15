@@ -78,6 +78,28 @@ def _configure_user(user, name, email, profile_fields):
     profile.save()
 
 
+def _check_count(kv_search):
+    """Return the number of matches found.
+
+       We need to check for two possible sources of duplicates which
+       will make us unable to uniquely identify the user:
+         1) Multiple different KeyValues created with the same value
+         2) Multiple user profiles assigned to the same KeyValue
+       Both errors should require something strange to have happened - importing data
+       into an existing database, weird API interactions, etc -, but we
+       don't want to allow incorrect access to an existing account.
+       """
+    if kv_search.count() > 1:
+        # Multiple KeyValues
+        return kv_search.count()
+    if kv_search.count() == 1:
+        # Could have multiple user profiles
+        # Will be 1 in the case of a unique match, which is what we want
+        return kv_search[0].userprofile_set.count()
+    # No matches
+    return 0
+
+
 def github_sso(code):
     r = requests.post(
         'https://github.com/login/oauth/access_token', data={
@@ -119,22 +141,30 @@ def github_sso(code):
             log.warning('Error extracting github email address: %s', e)
             raise SSOError('Failed to obtain email address from GitHub')
 
-    profile_fields = {
-        'github_username': login,
-    }
+    # TODO: Extend this to also set the github profile url KV
+    profile_fields = {}
     if 'blog' in gh:
         profile_fields['blog'] = gh['blog']
 
-    try:
-        user = get_user_model().objects.get(userprofile__github_username=login)
-    except MultipleObjectsReturned:
-        log.warning('Multiple accounts have GitHub username %s', login)
-        raise SSOError('Multiple accounts have GitHub username %s' % login)
-    except ObjectDoesNotExist:
-        user = None
+    group = Group.objects.get_by_natural_key('Registration')
+    user = None
+
+    kv_search = KeyValue.objects.filter(
+            group=group, key='github_sso_account_id', value=login,
+            userprofile__isnull=False)
+    count = _check_count(kv_search)
+    if count > 1:
+        message = 'Multiple accounts have the same GitHub SSO id: %s'
+        log.warning(message, login)
+        raise SSOError(message % login)
+
+    if count:
+        user = kv_search[0].userprofile_set.first().user
 
     user = sso(user=user, desired_username=login, name=name, email=email,
                profile_fields=profile_fields)
+    user.userprofile.kv.get_or_create(group=group, key='github_sso_account_id',
+                                      defaults={'value': login})
     return user
 
 
@@ -172,15 +202,18 @@ def gitlab_sso(code, redirect_uri):
 
     group = Group.objects.get_by_natural_key('Registration')
     user = None
-    for kv in KeyValue.objects.filter(
+    kv_search = KeyValue.objects.filter(
             group=group, key='gitlab_sso_account_id', value=gl['id'],
-            userprofile__isnull=False):
-        if kv.userprofile_set.count() > 1:
-            message = 'Multiple accounts have GitLab SSOed for User ID %s'
-            log.warning(message, gl['id'])
-            raise SSOError(message % gl['id'])
-        user = kv.userprofile_set.first().user
-        break
+            userprofile__isnull=False)
+
+    count = _check_count(kv_search)
+    if count > 1:
+        message = 'Multiple accounts have GitLab SSOed for User ID %s'
+        log.warning(message, gl['id'])
+        raise SSOError(message % gl['id'])
+
+    if count:
+        user = kv_search[0].userprofile_set.first().user
 
     user = sso(user=user, desired_username=username, name=name, email=email)
     user.userprofile.kv.get_or_create(group=group, key='gitlab_sso_account_id',

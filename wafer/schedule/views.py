@@ -522,8 +522,6 @@ class JsonDataView(View, BuildableMixin):
                     'name': person.userprofile.display_name(),
                     'email': person.email
                 }
-                if person.userprofile.twitter_handle:
-                    person_data['twitter'] = person.userprofile.twitter_handle
                 sched_event['authors'].append(person_data)
             sched_event['license'] = settings.WAFER_VIDEO_LICENSE
             sched_event['license_url'] = settings.WAFER_VIDEO_LICENSE_URL

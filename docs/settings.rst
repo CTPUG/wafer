@@ -13,10 +13,32 @@ in the ``wafer.settings`` module, so you can import this in your app's
 Wafer's settings
 ================
 
+``CODE_HOSTING_ENTRIES``
+    A dictionary of code hosting sites for the user profile.
+    Entries should be of the form: **keyname**: "Description" .
+
+    Each entry in the dictionary will be added as a form field
+    on the profile page - entries are assumed to be for urls to
+    the approriate site.
+
+    Entries in this dictionary will be grouped together on
+    the edit profile form and on the profile display.
+
 ``PAGE_DIR``
     The directory that the ``load_pages`` management command will load
     pages from.
     Should be an absolute path with a trailing ``/``.
+
+``SOCIAL_MEDIA_ENTRIES``
+    A dictionary of social sites for the user profile.
+    Entries should be of the form: **keyname**: "Description" .
+
+    Each entry in the dictionary will be added as a form field
+    on the profile page - entries are assumed to be for urls to
+    the approriate site.
+
+    Entries in this dictionary will be grouped together on
+    the edit profile form and on the profile display.
 
 ``WAFER_CACHE``
     The name of the Django cache backend that wafer can use.
@@ -164,6 +186,7 @@ Wafer's settings
     When ``True``, the default talk submission form will ask for the
     email address of someone who will review the talk's video, once it
     is ready to publish.
+
 
 Third party settings
 ====================
