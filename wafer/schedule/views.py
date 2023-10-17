@@ -232,7 +232,11 @@ class CurrentView(TemplateView):
         except ValueError as e:
             messages.error(self.request,
                            'Failed to parse timestamp: %s' % e)
+            # Short circuit out here
+            return None
         if timestamp is None:
+            # If parse_datetime completely fails to extract anything
+            # we end up here
             messages.error(self.request, 'Failed to parse timestamp')
             return None
         if not timezone.is_aware(timestamp):
