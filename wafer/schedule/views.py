@@ -220,20 +220,24 @@ class ScheduleXmlView(ScheduleView):
 class CurrentView(TemplateView):
     template_name = 'wafer.schedule/current.html'
 
-    def _parse_timestamp(self, timestamp):
+    def _parse_timestamp(self, given_timestamp):
         """
         Parse a user provided timestamp query string parameter.
         Return a TZ aware datetime, or None.
         """
-        if not timestamp:
+        if not given_timestamp:
             return None
         try:
-            timestamp = parse_datetime(timestamp)
+            timestamp = parse_datetime(given_timestamp)
         except ValueError as e:
             messages.error(self.request,
-                           'Failed to parse timestamp: %s' % e)
+                           f'Failed to parse timestamp ({given_timestamp}): {e}')
+            # Short circuit out here
+            return None
         if timestamp is None:
-            messages.error(self.request, 'Failed to parse timestamp')
+            # If parse_datetime completely fails to extract anything
+            # we end up here
+            messages.error(self.request, f'Failed to parse timestamp {given_timestamp}')
             return None
         if not timezone.is_aware(timestamp):
             timestamp = timezone.make_aware(timestamp)

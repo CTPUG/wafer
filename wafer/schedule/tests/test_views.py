@@ -1383,6 +1383,53 @@ class CurrentViewTests(TestCase):
             items[5].get_details(),
             '</a></td>']), html=True)
 
+    def test_current_view_invalid_timestamp(self):
+        """Test that invalid timestamps are treated as no timestamp"""
+        day1 = ScheduleBlock.objects.create(
+            start_time=D.datetime.now(tz=D.timezone.utc) - D.timedelta(minutes=120),
+            end_time=D.datetime.now(tz=D.timezone.utc) + D.timedelta(minutes=120)
+            )
+        venue1 = Venue.objects.create(order=1, name='Venue 1')
+        venue2 = Venue.objects.create(order=2, name='Venue 2')
+        venue1.blocks.add(day1)
+        venue2.blocks.add(day1)
+
+        start1 = D.datetime.now(tz=D.timezone.utc) - D.timedelta(minutes=45)
+        start2 = D.datetime.now(tz=D.timezone.utc) + D.timedelta(minutes=30)
+        end = D.datetime.now(tz=D.timezone.utc) + D.timedelta(minutes=90)
+
+        slots = []
+
+        slots.append(Slot.objects.create(start_time=start1, end_time=start2))
+        slots.append(Slot.objects.create(start_time=start2, end_time=end))
+
+        pages = make_pages(4)
+        venues = [venue1, venue2] * 2
+        items = make_items(venues, pages)
+
+        for index, item in enumerate(items):
+            item.slots.add(slots[index // 2])
+
+        c = Client()
+
+        default_view = c.get('/schedule/current/')
+
+        # Try with complete nonsense
+        response = c.get('/schedule/current/',
+                         {'timestamp': 'this_is_not_a_timestamp'})
+        self.assertEqual(len(response.context['slots']), 2)
+        self.assertEqual(default_view.context['cur_slot'], response.context['cur_slot'])
+        # We compare the __repr__'s, because of how the objects are created
+        self.assertEqual(str(default_view.context['slots']), str(response.context['slots']))
+
+        # Try with a timestamp that give a ValueError
+        response = c.get('/schedule/current/',
+                        {'timestamp': '2016-12-32T12:00:00'})
+        self.assertEqual(len(response.context['slots']), 2)
+        self.assertEqual(default_view.context['cur_slot'], response.context['cur_slot'])
+        self.assertEqual(str(default_view.context['slots']), str(response.context['slots']))
+
+
     def test_current_view_invalid(self):
         """Test that invalid schedules return a inactive current view."""
         day1 = ScheduleBlock.objects.create(
