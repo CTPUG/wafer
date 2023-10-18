@@ -356,8 +356,7 @@ class ScheduleItemAdmin(CompareVersionAdmin):
             if failed_items:
                 errors[err_type].extend(failed_items)
         extra_context['errors'] = errors
-        return super().changelist_view(request,
-                                                              extra_context)
+        return super().changelist_view(request, extra_context)
 
     def get_urls(self):
         from wafer.schedule.views import ScheduleEditView
