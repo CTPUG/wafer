@@ -169,7 +169,13 @@ class ScheduleView(BuildableTemplateView):
         context['prev_block'] = None
         context['next_block'] = None
         if not check_schedule():
+            if self.request.user.is_staff:
+                context['validation_errors'] = validate_schedule()
             return context
+        if settings.WAFER_HIDE_SCHEDULE:
+            if not self.request.user.is_staff:
+                return context
+            context['draft_warning'] = True
         context['active'] = True
         try:
             block_id = int(self.request.GET.get('block', -1))
@@ -220,24 +226,24 @@ class ScheduleXmlView(ScheduleView):
 class CurrentView(TemplateView):
     template_name = 'wafer.schedule/current.html'
 
-    def _parse_timestamp(self, given_timestamp):
+    def _parse_timestamp(self, timestamp):
         """
         Parse a user provided timestamp query string parameter.
         Return a TZ aware datetime, or None.
         """
-        if not given_timestamp:
+        if not timestamp:
             return None
         try:
-            timestamp = parse_datetime(given_timestamp)
+            timestamp = parse_datetime(timestamp)
         except ValueError as e:
             messages.error(self.request,
-                           f'Failed to parse timestamp ({given_timestamp}): {e}')
+                           'Failed to parse timestamp: %s' % e)
             # Short circuit out here
             return None
         if timestamp is None:
             # If parse_datetime completely fails to extract anything
             # we end up here
-            messages.error(self.request, f'Failed to parse timestamp {given_timestamp}')
+            messages.error(self.request, 'Failed to parse timestamp')
             return None
         if not timezone.is_aware(timestamp):
             timestamp = timezone.make_aware(timestamp)
@@ -299,8 +305,19 @@ class CurrentView(TemplateView):
         # If the schedule is invalid, return a context with active=False
         context['active'] = False
         if not check_schedule():
+            if self.request.user.is_staff:
+                context['validation_errors'] = validate_schedule()
             return context
-        # The schedule is valid, so add active=True and empty slots
+        # The schedule is valid
+        if settings.WAFER_HIDE_SCHEDULE:
+            if not self.request.user.is_staff:
+                # The schedule is hidden, and the user doesn't get to see
+                # the draft version
+                return context
+            # Display the 'This is a draft warning' because we're hiding the
+            # schedule
+            context['draft_warning'] = True
+        # We're displaying the schedule so add active=True and empty slots
         context['active'] = True
         context['slots'] = []
         # Allow refresh time to be overridden
