@@ -2,6 +2,12 @@
 Schedule
 ========
 
+Permissions
+===========
+
+Setting up the schedule blocks and using the schedule editor requires access
+to the admin site.
+
 Specifying Block and Venues
 ===========================
 
@@ -104,3 +110,23 @@ to add the validators to the list.
 To display the errors in the admin form, you will also need to extend the
 ``displayerrors`` block in ``scheduleitem_list.html`` and ``slot_list.html``
 templates.
+
+Schedule fails to render
+========================
+
+To avoid displaying misleading or incorrect information to attendees, the
+schedule will not be rendered if the schedule fails to validate, and it
+will display a "The final schedule has not been published" message instead.
+
+Users with permissions to use the schedule editor will see a list of validation
+errors as well, to help diagnose the problem preventing the schedule from
+rendering correctly. These errors will also be displayed in the schedule editor
+and in the admin site.
+
+
+Hiding the schedule while editing
+=================================
+
+The setting ``WAFER_HIDE_SCHEDULE`` will prevent the schedule from rendering for
+users without admin access. Users with admin access will see a note that the
+schedule is a draft and not public.
