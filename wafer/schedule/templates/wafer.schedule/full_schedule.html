@@ -15,7 +15,23 @@
     {% trans "Schedule" %}
   </h1>
   <div class="wafer_schedule">
+    {% if draft_warning %}
+      <div class="messages alert alert-warning">
+        <p><strong>{% trans "This is a draft that is not visible to the public" %}</strong></p>
+      </div>
+    {% endif %}
     {% if not schedule_pages %}
+      {# Show errors to authorised users (checked in get_context_data) #}
+      {% if validation_errors %}
+        <div class="messages alert alert-danger">
+          <p><strong>{% trans "Validation errors:" %}</strong></p>
+          <ul>
+            {% for validation_error in validation_errors %}
+              <li>{{ validation_error }}</li>
+            {% endfor %}
+          </ul>
+        </div>
+      {% endif %}
       {# Schedule is incomplete / invalid, so show nothing #}
       {% blocktrans trimmed %}
         <p>The final schedule has not been published yet.</p>
