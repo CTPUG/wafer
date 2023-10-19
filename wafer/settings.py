@@ -359,3 +359,6 @@ CODE_HOSTING_ENTRIES = {
     'gitlab': _('gitlab profile'),
     'bitbucket': _('bitbucket profile'),
 }
+
+# Hide the schedule from users without permission to edit it
+WAFER_HIDE_SCHEDULE = False

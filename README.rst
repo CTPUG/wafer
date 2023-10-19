@@ -76,7 +76,7 @@ Installation
 7. Wafer uses the Django caching infrastructure in several places, so
    the cache table needs to be created using ``manage.py createcachetable``.
 
-8. Create the default 'Page Editors' and 'Talk Mentors' groups using
+8. Create the default 'Page Editors', 'Talk Mentors' and other useful groups using
    ``manage.py wafer_add_default_groups``.
 
 9. Log in and configure the Site:
