@@ -85,11 +85,15 @@ class TalkType(models.Model):
         default=False,
         help_text=_("Whether submissions after the deadline should be accepted")
     )
-
     show_speakers = models.BooleanField(
         _('Show authors in speakers list'),
         default=True,
         help_text=_("Whether to show the authors for this talk type in the speakers list")
+    )
+    show_pending_submissions = models.BooleanField(
+        _('show pending submissions'),
+        default=False,
+        help_text=_("Whether to publicly show pending submissions, before acceptance")
     )
 
     objects = TalkTypeManager()
@@ -342,6 +346,8 @@ class Talk(models.Model):
         if self._is_among_authors(user):
             return True
         if self.accepted or self.cancelled:
+            return True
+        if self.talk_type and self.talk_type.show_pending_submissions:
             return True
         return False
 

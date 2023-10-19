@@ -113,6 +113,11 @@ If for some reason, an ``Accepted`` talk cannot be given, it can be
 marked as ``Cancelled``. ``Cancelled`` talks are still public, so that
 cancelled a scheduled talk does not invalidate the schedule.
 
+If the talk has a type that has ``show_pending_submissions`` enabled,
+then it will be public immediately after submission, in any of the
+``Submitted``, ``Under Consideration``, and ``Provisionally Accepted``
+states.
+
 Talk tracks
 ===========
 

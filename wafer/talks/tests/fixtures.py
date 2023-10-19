@@ -2,9 +2,9 @@ from wafer.talks.models import Talk, TalkType
 from wafer.tests.utils import create_user
 
 
-def create_talk_type(name):
+def create_talk_type(name, **kwargs):
     """Create a talk type"""
-    return TalkType.objects.create(name=name)
+    return TalkType.objects.create(name=name, **kwargs)
 
 
 def create_talk(title, status, username=None, user=None, talk_type=None):

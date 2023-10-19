@@ -4,6 +4,7 @@ from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import AnonymousUser, Group
 from django.core.exceptions import PermissionDenied
+from django.db.models import Q
 from django.http import Http404
 from django.urls import reverse
 from django.views.generic import UpdateView
@@ -12,7 +13,8 @@ from bakery.views import BuildableDetailView
 from rest_framework import viewsets
 from rest_framework.permissions import IsAdminUser
 
-from wafer.talks.models import ACCEPTED, CANCELLED
+from wafer.talks.models import (
+    ACCEPTED, CANCELLED, PROVISIONAL, SUBMITTED, UNDER_CONSIDERATION)
 from wafer.users.forms import UserForm, UserProfileForm
 from wafer.users.serializers import UserSerializer
 from wafer.users.models import UserProfile, PROFILE_GROUP
@@ -30,7 +32,12 @@ class UsersView(PaginatedBuildableListView):
     def get_queryset(self, *args, **kwargs):
         qs = super().get_queryset(*args, **kwargs)
         if not settings.WAFER_PUBLIC_ATTENDEE_LIST:
-            qs = qs.filter(talks__status__in=(ACCEPTED, CANCELLED)).distinct()
+            qs = qs.filter(
+                Q(talks__status__in=(ACCEPTED, CANCELLED))
+                | Q(talks__status__in=(SUBMITTED, UNDER_CONSIDERATION,
+                                       PROVISIONAL),
+                    talks__talk_type__show_pending_submissions=True)
+            ).distinct()
         qs = qs.order_by('first_name', 'last_name', 'username')
         return qs
 

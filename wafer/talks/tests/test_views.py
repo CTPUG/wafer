@@ -54,11 +54,18 @@ class UsersTalksTests(TestCase):
 
 class TalkViewTests(TestCase):
     def setUp(self):
+        public_type = create_talk_type(name="BoF", show_pending_submissions=True)
         self.talk_a = create_talk("Talk A", ACCEPTED, "author_a")
         self.talk_r = create_talk("Talk R", REJECTED, "author_r")
         self.talk_s = create_talk("Talk S", SUBMITTED, "author_s")
+        self.talk_sp = create_talk("Talk SP", SUBMITTED, "author_sp",
+                                   talk_type=public_type)
         self.talk_u = create_talk("Talk U", UNDER_CONSIDERATION, "author_u")
+        self.talk_up = create_talk("Talk UP", UNDER_CONSIDERATION, "author_up",
+                                   talk_type=public_type)
         self.talk_p = create_talk("Talk P", PROVISIONAL, "author_p")
+        self.talk_pp = create_talk("Talk PP", PROVISIONAL, "author_pp",
+                                   talk_type=public_type)
         self.talk_c = create_talk("Talk C", CANCELLED, "author_c")
         self.client = Client()
 
@@ -77,14 +84,23 @@ class TalkViewTests(TestCase):
     def test_view_cancelled_not_logged_in(self):
         self.check_talk_view(self.talk_c, 200)
 
+    def test_view_public_submitted_not_logged_in(self):
+        self.check_talk_view(self.talk_sp, 200)
+
     def test_view_submitted_not_logged_in(self):
         self.check_talk_view(self.talk_s, 403)
 
     def test_view_consideration_not_logged_in(self):
         self.check_talk_view(self.talk_u, 403)
 
+    def test_view_public_consideration_not_logged_in(self):
+        self.check_talk_view(self.talk_up, 200)
+
     def test_view_provisional_not_logged_in(self):
         self.check_talk_view(self.talk_p, 403)
+
+    def test_view_public_provisional_not_logged_in(self):
+        self.check_talk_view(self.talk_pp, 200)
 
     def test_view_accepted_author(self):
         self.check_talk_view(self.talk_a, 200, auth={

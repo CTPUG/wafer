@@ -18,11 +18,11 @@ from rest_framework.permissions import (
     BasePermission)
 from rest_framework_extensions.mixins import NestedViewSetMixin
 from reversion import revisions
-from reversion.models import Version
 
 from wafer.talks.models import (
     Review, Talk, TalkType, TalkUrl, Track,
-    ACCEPTED, CANCELLED, SUBMITTED, UNDER_CONSIDERATION, WITHDRAWN)
+    ACCEPTED, CANCELLED, PROVISIONAL, SUBMITTED, UNDER_CONSIDERATION,
+    WITHDRAWN)
 from wafer.talks.forms import ReviewForm, get_talk_form_class
 from wafer.talks.serializers import TalkSerializer, TalkUrlSerializer
 from wafer.users.models import UserProfile
@@ -52,7 +52,11 @@ class UsersTalks(PaginatedBuildableListView):
         if self.request and Talk.can_view_all(self.request.user):
             talks = Talk.objects.all()
         else:
-            talks = Talk.objects.filter(Q(status=ACCEPTED) | Q(status=CANCELLED))
+            talks = Talk.objects.filter(
+                Q(status__in=(ACCEPTED, CANCELLED))
+                | Q(status__in=(SUBMITTED, UNDER_CONSIDERATION, PROVISIONAL),
+                    talk_type__show_pending_submissions=True)
+            )
         return talks.prefetch_related(
             "talk_type", "corresponding_author", "authors", "authors__userprofile"
         )
@@ -314,8 +318,11 @@ class TalksViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         # to people who aren't part of the management group
         if self.request.user.id is None:
             # Anonymous user, so just accepted or cancelled talks
-            return Talk.objects.filter(Q(status=ACCEPTED) |
-                                       Q(status=CANCELLED))
+            return Talk.objects.filter(
+                Q(status__in=(ACCEPTED, CANCELLED))
+                | Q(status__in=(SUBMITTED, UNDER_CONSIDERATION, PROVISIONAL),
+                    talk_type__show_pending_submissions=True)
+            )
         elif Talk.can_view_all(self.request.user):
             return Talk.objects.all()
         else:
@@ -323,9 +330,11 @@ class TalksViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
             # XXX: Should this be all authors rather than just
             # the corresponding author?
             return Talk.objects.filter(
-                Q(status=ACCEPTED) |
-                Q(status=CANCELLED) |
-                Q(corresponding_author=self.request.user))
+                Q(status__in=(ACCEPTED, CANCELLED))
+                | Q(status__in=(SUBMITTED, UNDER_CONSIDERATION, PROVISIONAL),
+                    talk_type__show_pending_submissions=True)
+                | Q(corresponding_author=self.request.user)
+            )
 
 
 class TalkExistsPermission(BasePermission):
