@@ -1091,7 +1091,8 @@ class ScheduleViewTests(TestCase):
             assert response.context['active'] is False
             assert 'draft_warning' not in response.context
 
-            # Check that a user with elevated privileges sees validation errors
+            # Check that a user with elevated privileges sees the schedule
+            # and the appropriate warning
             admin = create_client('admin', True)
 
             response = admin.get('/schedule/')
