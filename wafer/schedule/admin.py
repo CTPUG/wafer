@@ -176,6 +176,9 @@ register_schedule_item_validator(
 register_schedule_item_validator(
         find_invalid_venues, 'venues',
         _('Invalid venues found in schedule.'))
+register_schedule_item_validator(
+        find_speaker_clashes, 'speaker_clashes',
+        _('Common speaker in simultaneous schedule items'))
 
 
 # Utility functions for checking the schedule state
