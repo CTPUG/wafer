@@ -9,8 +9,16 @@ from wafer.talks.models import ACCEPTED, CANCELLED, REJECTED
 
 from wafer.schedule.models import ScheduleBlock, Slot, ScheduleItem, Venue
 from wafer.schedule.admin import (find_clashes, find_invalid_venues, validate_items,
-                                  find_duplicate_schedule_items, prefetch_schedule_items)
+                                  find_duplicate_schedule_items, find_speaker_clashes,
+                                  prefetch_schedule_items)
 from wafer.schedule.tests.test_views import make_pages, make_items
+
+
+def get_new_result(result, old_result):
+    """Helper method so we're robust against the influence of database
+       ordering on the results"""
+    old_keys = set(x[0] for x in old_result)
+    return [x for x in result if x[0] not in old_keys]
 
 
 class ScheduleValidationTests(TestCase):
@@ -178,14 +186,108 @@ class ScheduleValidationTests(TestCase):
 
     def test_find_speaker_clashes(self):
         """Test the the `find_spekaer_clashes` check works"""
-        # Check two talks witht the same author fails
+        # Replace some pages with talks and check that it is valid
+        self.items[0].page_id = None
+        self.items[0].talk_id = self.talk1.pk
+        self.items[0].save()
+
+        self.items[1].page_id = None
+        self.items[1].talk_id = self.talk2.pk
+        self.items[1].save()
+
+        self.items[2].page_id = None
+        self.items[2].talk_id = self.talk3.pk
+        self.items[2].save()
+
+        self.items[3].page_id = None
+        self.items[3].talk_id = self.talk4.pk
+        self.items[3].save()
+
+        self.items[4].page_id = None
+        self.items[4].talk_id = self.talk5.pk
+        self.items[4].save()
+
+        all_items = prefetch_schedule_items()
+        self.assertEqual(list(find_speaker_clashes(all_items)), [])
+        # Check two talks witht the same author at the same time fails
+        self.items[1].talk_id = self.talk6.pk
+        self.items[1].save()
+
+        all_items = prefetch_schedule_items()
+        result = list(find_speaker_clashes(all_items))
+        self.assertEqual(len(result), 1)
+        self.assertIn(self.author1, result[0][0])
+        self.assertIn(self.slots[0], result[0][0])
+        self.assertIn(self.items[0], result[0][1])
+        self.assertIn(self.items[1], result[0][1])
+        old_result = result
 
         # Check that it also fails if the one talk has multiple authors, and
         # the common speaker is not the primary author
 
+        self.talk4.authors.add(self.author3)
+        self.talk4.save()
+
+        all_items = prefetch_schedule_items()
+        result = list(find_speaker_clashes(all_items))
+
+        self.assertEqual(len(result), 2)
+        new_result = get_new_result(result, old_result)
+        self.assertIn(self.author3, new_result[0][0])
+        self.assertIn(self.slots[1], new_result[0][0])
+        self.assertIn(self.items[2], new_result[0][1])
+        self.assertIn(self.items[3], new_result[0][1])
+        old_result = result
+
         # Check that it also fails if the speaker is assigned to a page and a talk
 
+        self.pages[5].people.add(self.author5)
+        self.pages[5].save()
+
+        all_items = prefetch_schedule_items()
+        result = list(find_speaker_clashes(all_items))
+
+        self.assertEqual(len(result), 3)
+        new_result = get_new_result(result, old_result)
+        self.assertIn(self.author5, new_result[0][0])
+        self.assertIn(self.slots[2], new_result[0][0])
+        self.assertIn(self.items[4], new_result[0][1])
+        self.assertIn(self.items[5], new_result[0][1])
+        old_result = result
+
         # Check that it also fails in the case of 2 pages
+
+        self.pages[6].people.add(self.author4)
+        self.pages[6].people.add(self.author1)
+        self.pages[6].save()
+
+        self.pages[7].people.add(self.author4)
+        self.pages[7].people.add(self.author3)
+        self.pages[7].people.add(self.author2)
+        self.pages[7].save()
         
+        all_items = prefetch_schedule_items()
+        result = list(find_speaker_clashes(all_items))
 
+        self.assertEqual(len(result), 4)
+        new_result = get_new_result(result, old_result)
+        self.assertIn(self.author4, new_result[0][0])
+        self.assertIn(self.slots[3], new_result[0][0])
+        self.assertIn(self.items[6], new_result[0][1])
+        self.assertIn(self.items[7], new_result[0][1])
+        old_result = result
 
+        # Also check that multiple clashing speakers are reported
+
+        self.pages[6].people.add(self.author2)
+        self.pages[6].save()
+
+        all_items = prefetch_schedule_items()
+        result = list(find_speaker_clashes(all_items))
+
+        self.assertEqual(len(result), 5)
+        new_result = get_new_result(result, old_result)
+        self.assertIn(self.author2, new_result[0][0])
+        self.assertIn(self.slots[3], new_result[0][0])
+        self.assertIn(self.items[6], new_result[0][1])
+        self.assertIn(self.items[7], new_result[0][1])
