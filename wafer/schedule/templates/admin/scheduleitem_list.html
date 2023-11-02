@@ -57,6 +57,18 @@
           {% endfor %}
         </ul>
       {% endif %}
+      {% if errors.speaker_clashes %}
+        <h3>{% trans "Common speaker in simultaneous schedule items" %}</h3>
+        <ul>
+          {% for slot_speaker, items in errors.speaker_clashes %}
+            <li>{{ slot_speaker.0 }} at {{ slot_speaker.0.get_start_time }} with speaker {{ slot_speaker.1.userprofile.display_name }} --
+              {% for item in items %}
+                <b>{{ item.get_desc|escape }}</b>,
+              {% endfor %}
+            </li>
+          {% endfor %}
+        </ul>
+      {% endif %}
     {% endblock %}
   </div>
 {% endif %}

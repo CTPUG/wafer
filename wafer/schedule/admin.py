@@ -106,6 +106,29 @@ def find_invalid_venues(all_items):
     return venues.items()
 
 
+def find_speaker_clashes(all_items):
+    """Find items that have the same speaker and also have overlapping
+       slots"""
+    clashes = {}
+    seen_slots_speakers = {}
+    for item in all_items:
+        if item.talk:
+            speakers = list(item.talk.authors.all())
+        elif item.page:
+            speakers = list(item.page.people.all())
+        for speaker in speakers:
+            for slot in item.slots.all():
+                candidate = (slot, speaker)
+                if candidate in seen_slots_speakers:
+                    if seen_slots_speakers[candidate] not in clashes:
+                        clashes[candidate] = [seen_slots_speakers[candidate]]
+                    clashes[candidate].append(item)
+                else:
+                    seen_slots_speakers[candidate] = item
+    # We return a list, to match other validators
+    return clashes.items()
+
+
 # Helper methods for calling the validators
 def prefetch_schedule_items():
     """Prefetch all schedule items and related objects."""
@@ -153,6 +176,9 @@ register_schedule_item_validator(
 register_schedule_item_validator(
         find_invalid_venues, 'venues',
         _('Invalid venues found in schedule.'))
+register_schedule_item_validator(
+        find_speaker_clashes, 'speaker_clashes',
+        _('Common speaker in simultaneous schedule items'))
 
 
 # Utility functions for checking the schedule state
