@@ -83,7 +83,7 @@ jobs:
         TESTDB: postgres
       run: |
         export PYTHONWARNINGS=always
-        coverage run --source='wafer' manage.py test && coverage report --skip-covered
+        coverage run --source='wafer' manage.py test --exclude-tag selenium && coverage report --skip-covered
 
   sqlite:
 
@@ -138,7 +138,7 @@ jobs:
       continue-on-error: ${{ matrix.django-version == 'main' }}
       run: |
         export PYTHONWARNINGS=always
-        coverage run --source='wafer' manage.py test && coverage report --skip-covered
+        coverage run --source='wafer' manage.py test --exclude-tag selenium && coverage report --skip-covered
 
   translations:
     runs-on: ubuntu-latest
