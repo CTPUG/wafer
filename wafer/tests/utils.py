@@ -2,6 +2,14 @@
 
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group, Permission
+from django.test import tag
+from django.contrib.staticfiles.testing import StaticLiveServerTestCase
+
+try:
+    # Guard for running this without selenium installed
+    from selenium import webdriver
+except ImportError:
+    selenium = None
 
 
 def get_group(group):
@@ -36,3 +44,38 @@ def mock_avatar_url(self):
     if self.user.email is None:
         return None
     return "avatar-%s" % self.user.email
+
+@tag('selenium')
+class BaseWebdriverRunner(StaticLiveServerTestCase):
+
+    def setUp(self):
+        """Create an ordinary user and an admin user for testing"""
+        if not selenium:
+            raise RuntimeError("Test requires selenium installed")
+        super().setUp()
+        self.admin_user = create_user('admin', email='admin@localhost', superuser=True)
+        self.admin_password = 'admin_password'
+        self.normal_user = create_user('normal', email='normal@localhost', superuser=False)
+        self.normal_password = 'normal_password'
+
+    def normal_login(self):
+        """Login as an ordinary user"""
+
+    def admin_login(self):
+        """Login as the admin user"""
+
+
+@tag('chrome')
+class ChromeTestRunner(BaseWebdriverRunner):
+
+    def setUp(self):
+        super().setUp()
+        # Load the chrome webdriver
+
+
+@tag('firefox')
+class FirefoxTestRunner(BaseWebdriverRunner):
+
+    def setUp(self):
+        super().setUp()
+        # Load the firefox webdriver
