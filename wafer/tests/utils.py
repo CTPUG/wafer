@@ -1,5 +1,6 @@
 """Utilities for testing wafer."""
 
+from django.urls import reverse
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group, Permission
 from django.test import tag
@@ -68,7 +69,8 @@ class BaseWebdriverRunner(StaticLiveServerTestCase):
 
     def _login(self, name, password):
         """Generic login handler"""
-        self.driver.get(f"{self.live_server_url}/accounts/login/")
+        login_url = reverse('auth_login')
+        self.driver.get(f"{self.live_server_url}{login_url}")
         WebDriverWait(self.driver, 10).until(
             expected_conditions.presence_of_element_located((By.NAME, "submit"))
         )
@@ -91,6 +93,9 @@ class BaseWebdriverRunner(StaticLiveServerTestCase):
         """Login as the admin user"""
         self._login(self.admin_user.username, self.admin_password)
 
+    def tearDown(self):
+        self.driver.close()
+
 
 @tag('chrome')
 class ChromeTestRunner(BaseWebdriverRunner):
@@ -101,6 +106,7 @@ class ChromeTestRunner(BaseWebdriverRunner):
         self.options = webdriver.ChromeOptions()
         self.options.add_argument("--headless=new")
         self.driver = webdriver.Chrome(options=self.options)
+
 
 @tag('firefox')
 class FirefoxTestRunner(BaseWebdriverRunner):
