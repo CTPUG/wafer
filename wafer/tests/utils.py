@@ -55,10 +55,15 @@ def mock_avatar_url(self):
 @tag('selenium')
 class BaseWebdriverRunner(StaticLiveServerTestCase):
 
-    def setUp(self):
-        """Create an ordinary user and an admin user for testing"""
+    @classmethod
+    def setUpClass(cls):
+        """Create the driver instance"""
         if not webdriver:
             raise RuntimeError("Test requires selenium installed")
+        super().setUpClass()
+
+    def setUp(self):
+        """Create an ordinary user and an admin user for testing"""
         super().setUp()
         self.admin_user = create_user('admin', email='admin@localhost', superuser=True)
         self.admin_password = 'admin_password'
@@ -80,9 +85,8 @@ class BaseWebdriverRunner(StaticLiveServerTestCase):
         pass_field.send_keys(password)
         loginbut = self.driver.find_element(By.NAME, 'submit')
         loginbut.click()
-        #self.driver.get(f"{self.live_server_url}/")
         WebDriverWait(self.driver, 10).until(
-            expected_conditions.presence_of_element_located((By.PARTIAL_LINK_TEXT, "Log out"))
+            expected_conditions.presence_of_element_located((By.CLASS_NAME, "wafer-profile"))
         )
 
     def normal_login(self):
@@ -93,32 +97,36 @@ class BaseWebdriverRunner(StaticLiveServerTestCase):
         """Login as the admin user"""
         self._login(self.admin_user.username, self.admin_password)
 
-    def tearDown(self):
-        self.driver.close()
+    @classmethod
+    def tearDownClass(cls):
+        cls.driver.quit()
+        super().tearDownClass()
 
 
 @tag('chrome')
 class ChromeTestRunner(BaseWebdriverRunner):
 
-    def setUp(self):
-        super().setUp()
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
         # Load the chrome webdriver
-        self.options = webdriver.ChromeOptions()
-        self.options.add_argument("--headless=new")
-        self.driver = webdriver.Chrome(options=self.options)
+        cls.options = webdriver.ChromeOptions()
+        cls.options.add_argument("--headless=new")
+        cls.driver = webdriver.Chrome(options=cls.options)
 
 
 @tag('firefox')
 class FirefoxTestRunner(BaseWebdriverRunner):
 
-    def setUp(self):
-        super().setUp()
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
         # Load the firefox webdriver
-        self.options = webdriver.FirefoxOptions()
-        self.options.add_argument('-headless')
+        cls.options = webdriver.FirefoxOptions()
+        cls.options.add_argument('-headless')
         # Disable options that may break selenium
         # see https://github.com/mozilla/geckodriver/releases/tag/v0.33.0 and
         # https://github.com/SeleniumHQ/selenium/issues/11736
-        self.options.set_preference('fission.bfcacheInParent', False)
-        self.options.set_preference('fission.webContentIsolationStrategy', 0)
-        self.driver = webdriver.Firefox(options=self.options)
+        cls.options.set_preference('fission.bfcacheInParent', False)
+        cls.options.set_preference('fission.webContentIsolationStrategy', 0)
+        cls.driver = webdriver.Firefox(options=cls.options)
