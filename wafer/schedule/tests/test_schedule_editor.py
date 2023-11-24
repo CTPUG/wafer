@@ -299,31 +299,40 @@ class EditorTestsMixin:
         self.assertEqual(item.page, self.pages[11])
         # Check that this hasn't changed the page tab list
         post_drag_tab_items = []
-        found = False
+        found1 = False
+        found2 = False
         for x in tab_pane.find_elements(By.CLASS_NAME, 'draggable'):
             if 'test page 5' in x.text:
-                found = True
+                found1 = True
             if 'test page 11' in x.text:
-                found = True
+                found2 = True
             post_drag_tab_items.append(x.text)
-        self.assertTrue(found)
+        self.assertTrue(found1)
+        self.assertTrue(found2)
         self.assertEqual(tab_items, post_drag_tab_items)
 
     def test_swicth_day(self):
         """Test selecting different days"""
+        # Create a couple of schedule items on each day
+        # Load schedule page
         self.admin_login()
         self.driver.get(self.edit_page)
+        # Verify we see the expected schedule items on day 1
+        # Switch day
+        # Verify we see the expected schedule items on day 2
+
 
     def test_drag_over(self):
         """Test that dragging over an item replaces it"""
+        # Create a schedule with a single item
         self.admin_login()
         self.driver.get(self.edit_page)
-        # Check that unassigned list is updated correctly
         # Test dragging a talk over an existing talk
         # Check that unassigned list is updated correctly
 
     def test_drag_over_page(self):
         """Test that dragging over a page with another page works"""
+        # Create a schedule with a single item
         self.admin_login()
         self.driver.get(self.edit_page)
         # Test dragging a page over an existing page
