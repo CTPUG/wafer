@@ -1,6 +1,9 @@
 import datetime as D
 
+import time
+
 try:
+    from selenium import webdriver
     from selenium.webdriver.common.keys import Keys
     from selenium.webdriver.common.by import By
     from selenium.webdriver.support.ui import WebDriverWait
@@ -60,6 +63,9 @@ class EditorTestsMixin:
                                 tzinfo=D.timezone.utc),
             )
 
+        block1.save()
+        block2.save()
+
         venue1 = Venue.objects.create(order=1, name='Venue 1')
         venue1.blocks.add(block1)
         venue1.blocks.add(block2)
@@ -72,6 +78,9 @@ class EditorTestsMixin:
         venue3.blocks.add(block2)
 
         self.venues = [venue1, venue2, venue3]
+
+        for x in self.venues:
+            x.save()
 
         b1_start1 = D.datetime(2013, 9, 22, 10, 0, 0,
                                tzinfo=D.timezone.utc)
@@ -109,6 +118,9 @@ class EditorTestsMixin:
 
         self.block1_slots = [b1_slot1, b1_slot2, b1_slot3]
         self.block2_slots = [b2_slot1, b2_slot2, b2_slot3]
+
+        for x in  self.block1_slots + self.block2_slots:
+            x.save()
 
         self.talk1 = create_talk('Test talk 1', status=ACCEPTED, username='john')
         self.talk2 = create_talk('Test talk 2', status=ACCEPTED, username='james')
@@ -153,48 +165,169 @@ class EditorTestsMixin:
         WebDriverWait(self.driver, 10).until(
            expected_conditions.presence_of_element_located((By.TAG_NAME, "h1"))
         )
-        all_talks = self.driver.find_element(By.ID, "allTalks")
-        self.assertTrue(all_talks is not None)
+        all_talks_link = self.driver.find_element(By.PARTIAL_LINK_TEXT, "All Talks")
+        all_talks_link.click()
+        tab_pane = None
+        for pane in self.driver.find_elements(By.CLASS_NAME, "tab-pane"):
+            if 'active' in pane.get_attribute('class'):
+                tab_pane = pane
         # Ordering should ensure that this is always talk 1
-        talk_1_block = all_talks.find_element(By.TAG_NAME, "div")
+        talk_1_block = tab_pane.find_element(By.CLASS_NAME, "draggable")
         self.assertIn(self.talk1.title, talk_1_block.text)
 
     def test_drag_talk(self):
         """Test dragging talk behavior"""
+        self.assertEqual(ScheduleItem.objects.count(), 0)
         self.admin_login()
         self.driver.get(self.edit_page)
-        # Drag a talk from the siderbar to a slot in the schedule
+        WebDriverWait(self.driver, 10).until(
+           expected_conditions.presence_of_element_located((By.TAG_NAME, "h1"))
+        )
+        # partial link text to avoid whitespace fiddling
+        talks_link = self.driver.find_element(By.PARTIAL_LINK_TEXT, "Unassigned Talks")
+        talks_link.click()
+        tab_pane = None
+        for pane in self.driver.find_elements(By.CLASS_NAME, "tab-pane"):
+            if 'active' in pane.get_attribute('class'):
+                tab_pane = pane
+                break
+        # Find the first talk
+        source = None
+        for x in tab_pane.find_elements(By.CLASS_NAME, 'draggable'):
+            if self.talk1.title in x.text:
+                source = x
+                break
+        # Find the first schedule item in the schedule tabls
+        target = self.driver.find_element(By.ID, "scheduleItem")
+        actions = webdriver.ActionChains(self.driver)
+        actions.drag_and_drop(source, target)
+        # Pause briefly to make sure the server has a chance to do stuff
+        actions.pause(0.5)
+        actions.perform()
+        WebDriverWait(self.driver, 10).until(
+           expected_conditions.presence_of_element_located((By.CLASS_NAME, "close"))
+        )
+        self.assertEqual(ScheduleItem.objects.count(), 1)
+        item = ScheduleItem.objects.first()
+        self.assertEqual(item.talk, self.talk1)
         # Check that dragged talk is not on the list of unassigned talks
-        # Drag a talk from one slot to another
+        for x in tab_pane.find_elements(By.CLASS_NAME, 'draggable'):
+            self.assertNotIn(self.talk1.title, x.text)
+        # Try drag the last talk
+        source = None
+        for x in tab_pane.find_elements(By.CLASS_NAME, 'draggable'):
+            if self.talk4.title in x.text:
+                source = x
+                break
+        # Find the first schedule item in the schedule tabls
+        target = self.driver.find_element(By.ID, "scheduleItem")
+        actions.reset_actions()
+        actions.drag_and_drop(source, target)
+        actions.pause(0.5)
+        actions.perform()
+        WebDriverWait(self.driver, 10).until(
+           expected_conditions.presence_of_element_located((By.CLASS_NAME, "close"))
+        )
+        self.assertEqual(ScheduleItem.objects.count(), 2)
+        item = ScheduleItem.objects.last()
+        self.assertEqual(item.talk, self.talk4)
+        for x in tab_pane.find_elements(By.CLASS_NAME, 'draggable'):
+            self.assertNotIn(self.talk1.title, x.text)
+            self.assertNotIn(self.talk4.title, x.text)
 
     def test_drag_page(self):
         """Test dragging page behavior"""
+        self.assertEqual(ScheduleItem.objects.count(), 0)
         self.admin_login()
         self.driver.get(self.edit_page)
+        WebDriverWait(self.driver, 10).until(
+           expected_conditions.presence_of_element_located((By.TAG_NAME, "h1"))
+        )
         # Drag a page from the siderbar to a slot in the schedule
-        # Check that this doesn't change the unassigned list
-        # Drag a page from one spot to another
+        talks_link = self.driver.find_element(By.PARTIAL_LINK_TEXT, "Pages")
+        talks_link.click()
+        tab_pane = None
+        for pane in self.driver.find_elements(By.CLASS_NAME, "tab-pane"):
+            if 'active' in pane.get_attribute('class'):
+                tab_pane = pane
+                break
+        # Find the first page
+        source = None
+        tab_items = []
+        for x in tab_pane.find_elements(By.CLASS_NAME, 'draggable'):
+            # We choose page 5 so we're dragging from the middle of the list
+            if 'test page 5' in x.text:
+                source = x
+            tab_items.append(x.text)
+        # Find the first schedule item in the schedule tabls
+        target = self.driver.find_element(By.ID, "scheduleItem")
+        actions = webdriver.ActionChains(self.driver)
+        actions.drag_and_drop(source, target)
+        actions.pause(0.5)
+        actions.perform()
+        WebDriverWait(self.driver, 10).until(
+           expected_conditions.presence_of_element_located((By.CLASS_NAME, "close"))
+        )
+        self.assertEqual(ScheduleItem.objects.count(), 1)
+        item = ScheduleItem.objects.first()
+        self.assertEqual(item.page, self.pages[5])
+        # Check that this hasn't changed the page tab list
+        post_drag_tab_items = []
+        found = False
+        for x in tab_pane.find_elements(By.CLASS_NAME, 'draggable'):
+            if 'test page 5' in x.text:
+                found = True
+            post_drag_tab_items.append(x.text)
+        self.assertTrue(found)
+        self.assertEqual(tab_items, post_drag_tab_items)
+        # Try drag the last page
+        for x in tab_pane.find_elements(By.CLASS_NAME, 'draggable'):
+            if 'test page 11' in x.text:
+                source = x
+                break
+        # Find the first schedule item in the schedule tabls
+        target = self.driver.find_element(By.ID, "scheduleItem")
+        actions = webdriver.ActionChains(self.driver)
+        actions.drag_and_drop(source, target)
+        actions.pause(0.5)
+        actions.perform()
+        WebDriverWait(self.driver, 10).until(
+           expected_conditions.presence_of_element_located((By.CLASS_NAME, "close"))
+        )
+        self.assertEqual(ScheduleItem.objects.count(), 2)
+        item = ScheduleItem.objects.last()
+        self.assertEqual(item.page, self.pages[11])
+        # Check that this hasn't changed the page tab list
+        post_drag_tab_items = []
+        found = False
+        for x in tab_pane.find_elements(By.CLASS_NAME, 'draggable'):
+            if 'test page 5' in x.text:
+                found = True
+            if 'test page 11' in x.text:
+                found = True
+            post_drag_tab_items.append(x.text)
+        self.assertTrue(found)
+        self.assertEqual(tab_items, post_drag_tab_items)
 
     def test_swicth_day(self):
         """Test selecting different days"""
         self.admin_login()
         self.driver.get(self.edit_page)
 
-    def test_remove_talk(self):
-        """Test removing talks"""
+    def test_drag_over(self):
+        """Test that dragging over an item replaces it"""
         self.admin_login()
         self.driver.get(self.edit_page)
-        # Test delete button
         # Check that unassigned list is updated correctly
         # Test dragging a talk over an existing talk
         # Check that unassigned list is updated correctly
 
-    def test_remove_page(self):
-        """Test removing pages"""
+    def test_drag_over_page(self):
+        """Test that dragging over a page with another page works"""
         self.admin_login()
         self.driver.get(self.edit_page)
-        # Test delete button
         # Test dragging a page over an existing page
+        # Check that page list is unchanged
 
     def test_create_invalid_schedule(self):
         """Test that an invalid schedule displays the errors"""
