@@ -143,6 +143,19 @@
             e.dataTransfer.getData('text/plain'));
         var scheduleItemId = data.getAttribute('data-scheduleitem-id');
         var scheduleItemType = data.getAttribute('data-type');
+
+        var curScheduleItemId = e.target.getAttribute('data-scheduleitem-id');
+        if (curScheduleItemId)
+        {
+            var curType = e.target.getAttribute('data-type');
+            if (curType == 'talk')
+            {
+                // Need to redisplay the talk we're removing
+                var curId = e.target.getAttribute('data-talk-id');
+                var oldUnassigned = document.getElementById("talk" + curId);
+                oldUnassigned.hidden = false;
+            }
+        }
         e.target.innerHTML = data.getAttribute('title');
         e.target.setAttribute('data-scheduleitem-id', scheduleItemId);
         e.target.setAttribute('data-type', scheduleItemType);
