@@ -4,7 +4,7 @@ from rest_framework import routers
 
 from wafer.schedule.views import (
     CurrentView, ScheduleView, ScheduleItemViewSet, ScheduleXmlView,
-    VenueView, ICalView, JsonDataView)
+    VenueView, ICalView, JsonDataView, get_validation_info)
 
 router = routers.DefaultRouter()
 router.register(r'scheduleitems', ScheduleItemViewSet)
@@ -17,5 +17,6 @@ urlpatterns = [
         name='wafer_pentabarf_xml'),
     re_path(r'^schedule\.ics$', ICalView.as_view(), name="schedule.ics"),
     re_path(r'^schedule\.json$', JsonDataView.as_view(), name="schedule.json"),
+    re_path(r'^api/validate', get_validation_info),
     re_path(r'^api/', include(router.urls)),
 ]

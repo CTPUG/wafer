@@ -20,6 +20,9 @@ from django.views.generic import TemplateView, View
 from bakery.views import BuildableDetailView, BuildableTemplateView, BuildableMixin
 from rest_framework import viewsets
 from rest_framework.permissions import IsAdminUser
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.response import Response
+
 from wafer import __version__
 from wafer.pages.models import Page
 from wafer.schedule.models import (
@@ -343,6 +346,15 @@ class CurrentView(TemplateView):
         context['slots'].extend(current_rows)
 
         return context
+
+
+@api_view(['GET'])
+@permission_classes([IsAdminUser])
+def get_validation_info(request):
+    """API wrapper around validate schedule for use in the schedule
+       editor"""
+    errors = validate_schedule()
+    return Response({'Validation Status': errors})
 
 
 class ScheduleItemViewSet(viewsets.ModelViewSet):
