@@ -121,6 +121,14 @@ class EditorTestsMixin:
         schedue_edit_url = reverse('admin:schedule_editor')
         self.edit_page = f"{self.live_server_url}{schedue_edit_url}"
 
+    def _start(self):
+        """Helper method to login as admin and load the editor"""
+        self.admin_login()
+        self.driver.get(self.edit_page)
+        WebDriverWait(self.driver, 10).until(
+           expected_conditions.presence_of_element_located((By.TAG_NAME, "h1"))
+        )
+
     def test_access_schedule_editor_no_login(self):
         """Test that the schedule editor isn't accessible if not logged in"""
         self.driver.get(self.edit_page)
@@ -151,11 +159,7 @@ class EditorTestsMixin:
 
     def test_access_schedule_editor_admin(self):
         """Test that the schedule editor is accessible for superuser accounts"""
-        self.admin_login()
-        self.driver.get(self.edit_page)
-        WebDriverWait(self.driver, 10).until(
-           expected_conditions.presence_of_element_located((By.TAG_NAME, "h1"))
-        )
+        self._start()
         all_talks_link = self.driver.find_element(By.PARTIAL_LINK_TEXT, "All Talks")
         all_talks_link.click()
         tab_pane = None
@@ -169,11 +173,7 @@ class EditorTestsMixin:
     def test_drag_talk(self):
         """Test dragging talk behavior"""
         self.assertEqual(ScheduleItem.objects.count(), 0)
-        self.admin_login()
-        self.driver.get(self.edit_page)
-        WebDriverWait(self.driver, 10).until(
-           expected_conditions.presence_of_element_located((By.TAG_NAME, "h1"))
-        )
+        self._start()
         # partial link text to avoid whitespace fiddling
         talks_link = self.driver.find_element(By.PARTIAL_LINK_TEXT, "Unassigned Talks")
         talks_link.click()
@@ -229,14 +229,10 @@ class EditorTestsMixin:
     def test_drag_page(self):
         """Test dragging page behavior"""
         self.assertEqual(ScheduleItem.objects.count(), 0)
-        self.admin_login()
-        self.driver.get(self.edit_page)
-        WebDriverWait(self.driver, 10).until(
-           expected_conditions.presence_of_element_located((By.TAG_NAME, "h1"))
-        )
+        self._start()
         # Drag a page from the siderbar to a slot in the schedule
-        talks_link = self.driver.find_element(By.PARTIAL_LINK_TEXT, "Pages")
-        talks_link.click()
+        page_link = self.driver.find_element(By.PARTIAL_LINK_TEXT, "Pages")
+        page_link.click()
         tab_pane = None
         for pane in self.driver.find_elements(By.CLASS_NAME, "tab-pane"):
             if 'active' in pane.get_attribute('class'):
@@ -324,8 +320,7 @@ class EditorTestsMixin:
         item5.slots.add(self.block2_slots[1])
 
         # Load schedule page
-        self.admin_login()
-        self.driver.get(self.edit_page)
+        self._start()
         # Verify we see the expected schedule items on day 1
         td1 = self.driver.find_element(By.ID, f"scheduleItem{item1.pk}")
         self.assertEqual(td1.tag_name, 'td')
@@ -362,19 +357,99 @@ class EditorTestsMixin:
         """Test that dragging over an item replaces it"""
         # Expected to fail - see https://github.com/CTPUG/wafer/issues/689
         # Create a schedule with a single item
-        self.admin_login()
-        self.driver.get(self.edit_page)
+        item1 = ScheduleItem.objects.create(venue=self.venues[0],
+                                           talk_id=self.talk1.pk)
+        item1.slots.add(self.block1_slots[0])
+        item1.save()
+        self._start()
         # Test dragging a talk over an existing talk
-        # Check that unassigned list is updated correctly
+        target = self.driver.find_element(By.ID, f"scheduleItem{item1.pk}")
+        talks_link = self.driver.find_element(By.PARTIAL_LINK_TEXT, "Unassigned Talks")
+        talks_link.click()
+        tab_pane = None
+        for pane in self.driver.find_elements(By.CLASS_NAME, "tab-pane"):
+            if 'active' in pane.get_attribute('class'):
+                tab_pane = pane
+                break
+        # Find the first talk
+        source = None
+        found = False
+        # Find the second talk and verify that talk 1 is not in
+        # the Unassigned Talk list
+        for x in tab_pane.find_elements(By.CLASS_NAME, 'draggable'):
+            if self.talk2.title in x.text:
+                source = x
+            if self.talk1.title in x.text:
+                found = True
+        self.assertFalse(found)
+        # Do the drag
+        actions = webdriver.ActionChains(self.driver)
+        actions.drag_and_drop(source, target)
+        actions.pause(0.5)
+        actions.perform()
+        # Check that schedule item and table entry are correct
+        item = ScheduleItem.objects.first()
+        self.assertEqual(item.talk, self.talk2)
+        target = self.driver.find_element(By.ID, f"scheduleItem{item1.pk}")
+        self.assertIn(self.talk2.title, target.text)
+        # Check that Unassigned list has been updated correctly
+        # (Talk 1 added, and talk 2 removed)
+        found2 = False
+        found1 = False
+        for x in tab_pane.find_elements(By.CLASS_NAME, 'draggable'):
+            if self.talk1.title in x.text:
+                found1 = True
+            if self.talk2.title in x.text:
+                found2 = True
+        self.assertFalse(found2)
         # FIXME: The schedule editor doesn't do this correctly
+        self.assertTrue(found1)
 
     def test_drag_over_page(self):
         """Test that dragging over a page with another page works"""
         # Create a schedule with a single item
-        self.admin_login()
-        self.driver.get(self.edit_page)
+        self._start()
+
+        item1 = ScheduleItem.objects.create(venue=self.venues[0],
+                                            page_id=self.pages[0].pk)
+        item1.slots.add(self.block1_slots[0])
+        item1.save()
+        self._start()
         # Test dragging a page over an existing page
-        # Check that page list is unchanged
+        target = self.driver.find_element(By.ID, f"scheduleItem{item1.pk}")
+        page_link = self.driver.find_element(By.PARTIAL_LINK_TEXT, "Pages")
+        page_link.click()
+        tab_pane = None
+        for pane in self.driver.find_elements(By.CLASS_NAME, "tab-pane"):
+            if 'active' in pane.get_attribute('class'):
+                tab_pane = pane
+                break
+        # Find the source page
+        source = None
+        # Find the second talk and verify that talk 1 is not in
+        # the Unassigned Talk list
+        before = []
+        for x in tab_pane.find_elements(By.CLASS_NAME, 'draggable'):
+            if 'test page 3' in x.text:
+                source = x
+            before.append(x.text)
+        # Do the drag
+        actions = webdriver.ActionChains(self.driver)
+        actions.drag_and_drop(source, target)
+        actions.pause(0.5)
+        actions.perform()
+        # Check that schedule item and table entry are correct
+        item = ScheduleItem.objects.first()
+        self.assertEqual(item.page, self.pages[3])
+        target = self.driver.find_element(By.ID, f"scheduleItem{item1.pk}")
+        self.assertIn('test page 3', target.text)
+        # Check that the list is unchanged
+        after = []
+        for x in tab_pane.find_elements(By.CLASS_NAME, 'draggable'):
+            if 'test page 3' in x.text:
+                source = x
+            after.append(x.text)
+        self.assertEqual(before, after)
 
     @expectedFailure
     def test_adding_clash(self):
@@ -382,8 +457,7 @@ class EditorTestsMixin:
            error section to be updated"""
         # Expected to fail -see https://github.com/CTPUG/wafer/issues/158
         # Create initial schedule
-        self.admin_login()
-        self.driver.get(self.edit_page)
+        self._start()
         # Drag a talk into a clashing slot
         # Verify errors are present
         # FIXME: The schedule editor doesn't currently update this
@@ -394,8 +468,7 @@ class EditorTestsMixin:
            error section to be cleared"""
         # Expected to fail -see https://github.com/CTPUG/wafer/issues/158
         # Create initial schedule
-        self.admin_login()
-        self.driver.get(self.edit_page)
+        self._start()
         # Verify we have the expected errors
         # Delete one of the clashes
         # Verify errors are gone
