@@ -40,17 +40,6 @@ class EditorTestsMixin:
         """Create two day table with 3 slots each and 2 venues
            and create some page and talks to populate the schedul"""
         super().setUp()
-        # Schedule is
-        # Day1
-        #         Venue 1     Venue 2
-        # 10-11   Item1       Item4
-        # 11-12   Item2       Item5
-        # 12-13   Item3       Item6
-        # Day 2
-        #         Venue 1     Venue 2   Venue 3
-        # 10-11   Item7       Item10    Item13
-        # 11-12   Item8       Item11    Item14
-        # 12-13   Item9       Item12    Item15
         block1 = ScheduleBlock.objects.create(
             start_time=D.datetime(2013, 9, 22, 7, 0, 0,
                                   tzinfo=D.timezone.utc),
@@ -316,12 +305,57 @@ class EditorTestsMixin:
     def test_swicth_day(self):
         """Test selecting different days"""
         # Create a couple of schedule items on each day
+        item1 = ScheduleItem.objects.create(venue=self.venues[0],
+                                           talk_id=self.talk1.pk)
+
+        item2 = ScheduleItem.objects.create(venue=self.venues[1],
+                                            talk_id=self.talk2.pk)
+        item1.slots.add(self.block1_slots[0])
+        item2.slots.add(self.block1_slots[1])
+
+        item3 = ScheduleItem.objects.create(venue=self.venues[0],
+                                            page_id=self.pages[0].pk)
+        item4 = ScheduleItem.objects.create(venue=self.venues[1],
+                                            page_id=self.pages[1].pk)
+        item5 = ScheduleItem.objects.create(venue=self.venues[2],
+                                            page_id=self.pages[2].pk)
+        item3.slots.add(self.block2_slots[0])
+        item4.slots.add(self.block2_slots[1])
+        item5.slots.add(self.block2_slots[1])
+
         # Load schedule page
         self.admin_login()
         self.driver.get(self.edit_page)
         # Verify we see the expected schedule items on day 1
+        td1 = self.driver.find_element(By.ID, f"scheduleItem{item1.pk}")
+        self.assertEqual(td1.tag_name, 'td')
+        td2 = self.driver.find_element(By.ID, f"scheduleItem{item2.pk}")
+        self.assertEqual(td2.tag_name, 'td')
+        with self.assertRaises(NoSuchElementException):
+            self.driver.find_element(By.ID, f"scheduleItem{item3.pk}")
         # Switch day
+        buttons = self.driver.find_elements(By.TAG_NAME, 'button')
+        self.assertIn('Sep', buttons[1].text)
+        buttons[1].click()
+        WebDriverWait(self.driver, 10).until(
+           expected_conditions.presence_of_element_located((By.CLASS_NAME, "show"))
+        )
+        days = self.driver.find_elements(By.PARTIAL_LINK_TEXT, "Sep")
+        days[1].click()
+        WebDriverWait(self.driver, 10).until(
+           expected_conditions.presence_of_element_located((By.CLASS_NAME, "close"))
+        )
         # Verify we see the expected schedule items on day 2
+        td3 = self.driver.find_element(By.ID, f"scheduleItem{item3.pk}")
+        self.assertEqual(td3.tag_name, 'td')
+        td4 = self.driver.find_element(By.ID, f"scheduleItem{item4.pk}")
+        self.assertEqual(td4.tag_name, 'td')
+        td5 = self.driver.find_element(By.ID, f"scheduleItem{item5.pk}")
+        self.assertEqual(td5.tag_name, 'td')
+        with self.assertRaises(NoSuchElementException):
+            self.driver.find_element(By.ID, f"scheduleItem{item1.pk}")
+        with self.assertRaises(NoSuchElementException):
+            self.driver.find_element(By.ID, f"scheduleItem{item2.pk}")
 
     @expectedFailure
     def test_drag_over_talk(self):
