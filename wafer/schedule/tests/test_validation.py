@@ -11,7 +11,7 @@ from wafer.schedule.models import ScheduleBlock, Slot, ScheduleItem, Venue
 from wafer.schedule.admin import (find_clashes, find_invalid_venues, validate_items,
                                   find_duplicate_schedule_items, find_speaker_clashes,
                                   prefetch_schedule_items)
-from wafer.schedule.tests.test_views import make_pages, make_items
+from wafer.schedule.tests.test_views import make_pages, make_items, create_client
 
 
 def get_new_result(result, old_result):
@@ -23,7 +23,6 @@ def get_new_result(result, old_result):
 
 class ScheduleValidationTests(TestCase):
     """Test that various validators pick up the correct errors"""
-
 
     def setUp(self):
         """Create some blocks, slots and talks to work with"""
@@ -265,7 +264,7 @@ class ScheduleValidationTests(TestCase):
         self.pages[7].people.add(self.author3)
         self.pages[7].people.add(self.author2)
         self.pages[7].save()
-        
+
         all_items = prefetch_schedule_items()
         result = list(find_speaker_clashes(all_items))
 
@@ -291,3 +290,96 @@ class ScheduleValidationTests(TestCase):
         self.assertIn(self.slots[3], new_result[0][0])
         self.assertIn(self.items[6], new_result[0][1])
         self.assertIn(self.items[7], new_result[0][1])
+
+
+class ScheduleValidationApiTests(TestCase):
+    """Test that validation status can be checked via the api"""
+
+    def setUp(self):
+        """Create some blocks, slots and talks to work with"""
+        timezone.activate('UTC')
+        self.block1 = ScheduleBlock.objects.create(
+                start_time=D.datetime(2013, 9, 22, 9, 0, 0,
+                                      tzinfo=D.timezone.utc),
+                end_time=D.datetime(2013, 9, 22, 19, 0, 0,
+                                    tzinfo=D.timezone.utc))
+
+        self.venue1 = Venue.objects.create(order=1, name='Venue 1')
+        self.venue2 = Venue.objects.create(order=2, name='Venue 2')
+        self.venue1.blocks.add(self.block1)
+        self.venue2.blocks.add(self.block1)
+
+        start1 = D.datetime(2013, 9, 22, 10, 0, 0,
+                            tzinfo=D.timezone.utc)
+        start2 = D.datetime(2013, 9, 22, 11, 0, 0,
+                            tzinfo=D.timezone.utc)
+        start3 = D.datetime(2013, 9, 22, 12, 0, 0,
+                            tzinfo=D.timezone.utc)
+        self.slots = []
+        self.slots.append(Slot.objects.create(start_time=start1,
+                                              end_time=start2))
+        self.slots.append(Slot.objects.create(start_time=start2,
+                                              end_time=start3))
+        self.pages = make_pages(4)
+        venues = [self.venue1, self.venue2] * 2
+        self.items = make_items(venues, self.pages)
+
+        for index, item in enumerate(self.items):
+            item.slots.add(self.slots[index // 2])
+
+        self.author1 = create_user('Author 1')
+        self.author2 = create_user('Author 2')
+
+        self.talk1 = create_talk('Talk 1', ACCEPTED, user=self.author1)
+        self.talk2 = create_talk('Talk 2', ACCEPTED, user=self.author2)
+        self.talk3 = create_talk('Talk 3', ACCEPTED, user=self.author1)
+
+    def test_normal_permissions(self):
+        """Check that we don't allow non-superuser access"""
+        c = create_client('ordinary', superuser=False)
+        response = c.get('/schedule/api/validate/')
+        self.assertEqual(response.status_code, 403)
+        self.assertEqual(response.data, {
+            "detail": "You do not have permission to perform this action.",
+        })
+
+    def test_no_errors(self):
+        """Check that we get no errors on a valid schedule"""
+        c = create_client('super', superuser=True)
+        response = c.get('/schedule/api/validate/')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data, {'Validation Status': []})
+
+    def test_find_duplicates(self):
+        """Test that duplicates are reported"""
+        # Create a duplicate item
+        duplicate_item = ScheduleItem.objects.create(venue=self.venue2,
+                                                     details="Duplicate item",
+                                                     page_id=self.pages[0].pk)
+        duplicate_item.slots.add(self.slots[1])
+        c = create_client('super', superuser=True)
+        response = c.get('/schedule/api/validate/')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.data['Validation Status']), 1)
+        self.assertIn('Clashes found in schedule', response.data['Validation Status'][0])
+
+    def test_find_speaker_clashes(self):
+        """Test that speaker clashes are reported"""
+        # Check two talks witht the same author at the same time fails
+        self.items[0].page_id = None
+        self.items[0].talk_id = self.talk1.pk
+        self.items[0].save()
+
+        self.items[2].page_id = None
+        self.items[2].talk_id = self.talk2.pk
+        self.items[2].save()
+
+        self.items[1].page_id = None
+        self.items[1].talk_id = self.talk3.pk
+        self.items[1].save()
+        c = create_client('super', superuser=True)
+        response = c.get('/schedule/api/validate/')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.data['Validation Status']), 1)
+        self.assertIn('Common speaker in simultaneous schedule items',
+                      response.data['Validation Status'][0])
