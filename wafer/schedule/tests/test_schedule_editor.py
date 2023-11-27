@@ -113,10 +113,11 @@ class EditorTestsMixin:
         for x in  self.block1_slots + self.block2_slots:
             x.save()
 
-        self.talk1 = create_talk('Test talk 1', status=ACCEPTED, username='john')
+        self.author_john = create_user('john')
+        self.talk1 = create_talk('Test talk 1', status=ACCEPTED, user=self.author_john)
         self.talk2 = create_talk('Test talk 2', status=ACCEPTED, username='james')
         self.talk3 = create_talk('Test talk 3', status=ACCEPTED, username='jess')
-        self.talk4 = create_talk('Test talk 4', status=ACCEPTED, username='jonah')
+        self.talk4 = create_talk('Test talk 4', status=ACCEPTED, user=self.author_john)
 
         schedue_edit_url = reverse('admin:schedule_editor')
         self.edit_page = f"{self.live_server_url}{schedue_edit_url}"
@@ -457,10 +458,51 @@ class EditorTestsMixin:
            error section to be updated"""
         # Expected to fail -see https://github.com/CTPUG/wafer/issues/158
         # Create initial schedule
+        item1 = ScheduleItem.objects.create(venue=self.venues[0],
+                                           talk_id=self.talk1.pk)
+        item1.slots.add(self.block1_slots[0])
+        item1.save()
+        item2 = ScheduleItem.objects.create(venue=self.venues[1],
+                                           talk_id=self.talk2.pk)
+        item2.slots.add(self.block1_slots[0])
+        item2.save()
         self._start()
+        # Verify that there are no validation errors
+        with self.assertRaises(NoSuchElementException):
+            self.driver.find_element(By.TAG_NAME, "strong")
         # Drag a talk into a clashing slot
+        target = self.driver.find_element(By.ID, f"scheduleItem{item2.pk}")
+        talks_link = self.driver.find_element(By.PARTIAL_LINK_TEXT, "Unassigned Talks")
+        talks_link.click()
+        tab_pane = None
+        for pane in self.driver.find_elements(By.CLASS_NAME, "tab-pane"):
+            if 'active' in pane.get_attribute('class'):
+                tab_pane = pane
+                break
+        # Find the first talk
+        source = None
+        found = False
+        # Find the second talk and verify that talk 1 is not in
+        # the Unassigned Talk list
+        for x in tab_pane.find_elements(By.CLASS_NAME, 'draggable'):
+            if self.talk4.title in x.text:
+                source = x
+            if self.talk1.title in x.text:
+                found = True
+        self.assertFalse(found)
+        # Do the drag
+        actions = webdriver.ActionChains(self.driver)
+        actions.drag_and_drop(source, target)
+        actions.pause(0.5)
+        actions.perform()
         # Verify errors are present
         # FIXME: The schedule editor doesn't currently update this
+        try:
+            vaidation = self.driver.find_element(By.TAG_NAME, "strong")
+        except NoSuchElementException:
+            vaidation = None
+        self.assertNotNone(vaidation)
+        self.assertIn('Validation errors:', validation.text)
 
     @expectedFailure
     def test_removing_clash(self):
@@ -468,11 +510,41 @@ class EditorTestsMixin:
            error section to be cleared"""
         # Expected to fail -see https://github.com/CTPUG/wafer/issues/158
         # Create initial schedule
+        item1 = ScheduleItem.objects.create(venue=self.venues[0],
+                                           talk_id=self.talk1.pk)
+        item1.slots.add(self.block1_slots[0])
+        item1.save()
+        item2 = ScheduleItem.objects.create(venue=self.venues[1],
+                                           talk_id=self.talk4.pk)
+        item2.slots.add(self.block1_slots[0])
+        item2.save()
         self._start()
-        # Verify we have the expected errors
-        # Delete one of the clashes
+        # Verify that there are no validation errors
+        validation = self.driver.find_element(By.TAG_NAME, "strong")
+        self.assertIn('Validation errors:', validation.text)
+        # Delete the clashing talk
+        target = self.driver.find_element(By.ID, f"scheduleItem{item2.pk}")
+        close = target.find_element(By.CLASS_NAME, 'close')
+        close.click()
+        talks_link = self.driver.find_element(By.PARTIAL_LINK_TEXT, "Unassigned Talks")
+        talks_link.click()
+        tab_pane = None
+        for pane in self.driver.find_elements(By.CLASS_NAME, "tab-pane"):
+            if 'active' in pane.get_attribute('class'):
+                tab_pane = pane
+                break
+        # Verify we've deleted the clashing talk
+        found = None
+        # Find the second talk and verify that talk 1 is not in
+        # the Unassigned Talk list
+        for x in tab_pane.find_elements(By.CLASS_NAME, 'draggable'):
+            if self.talk4.title in x.text:
+                found = True
+        self.assertTrue(found)
         # Verify errors are gone
         # FIXME: The schedule editor doesn't currently update this
+        with self.assertRaises(NoSuchElementException):
+            self.driver.find_element(By.TAG_NAME, "strong")
 
 
 class ChromeScheduleEditorTests(EditorTestsMixin, ChromeTestRunner):
