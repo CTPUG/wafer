@@ -15,6 +15,8 @@ except ImportError:
     # if stuff isn't loaded
     pass
 
+from unittest import expectedFailure
+
 from django.utils import timezone
 from django.urls import reverse
 
@@ -114,7 +116,7 @@ class EditorTestsMixin:
         b2_slot3 = Slot(previous_slot=b2_slot2,
                         end_time=b2_end)
 
-        self.pages = make_pages(12)
+        self.pages = make_pages(6)
 
         self.block1_slots = [b1_slot1, b1_slot2, b1_slot3]
         self.block2_slots = [b2_slot1, b2_slot2, b2_slot3]
@@ -256,7 +258,7 @@ class EditorTestsMixin:
         tab_items = []
         for x in tab_pane.find_elements(By.CLASS_NAME, 'draggable'):
             # We choose page 5 so we're dragging from the middle of the list
-            if 'test page 5' in x.text:
+            if 'test page 3' in x.text:
                 source = x
             tab_items.append(x.text)
         # Find the first schedule item in the schedule tabls
@@ -270,19 +272,19 @@ class EditorTestsMixin:
         )
         self.assertEqual(ScheduleItem.objects.count(), 1)
         item = ScheduleItem.objects.first()
-        self.assertEqual(item.page, self.pages[5])
+        self.assertEqual(item.page, self.pages[3])
         # Check that this hasn't changed the page tab list
         post_drag_tab_items = []
         found = False
         for x in tab_pane.find_elements(By.CLASS_NAME, 'draggable'):
-            if 'test page 5' in x.text:
+            if 'test page 3' in x.text:
                 found = True
             post_drag_tab_items.append(x.text)
         self.assertTrue(found)
         self.assertEqual(tab_items, post_drag_tab_items)
         # Try drag the last page
         for x in tab_pane.find_elements(By.CLASS_NAME, 'draggable'):
-            if 'test page 11' in x.text:
+            if 'test page 5' in x.text:
                 source = x
                 break
         # Find the first schedule item in the schedule tabls
@@ -296,15 +298,15 @@ class EditorTestsMixin:
         )
         self.assertEqual(ScheduleItem.objects.count(), 2)
         item = ScheduleItem.objects.last()
-        self.assertEqual(item.page, self.pages[11])
+        self.assertEqual(item.page, self.pages[5])
         # Check that this hasn't changed the page tab list
         post_drag_tab_items = []
         found1 = False
         found2 = False
         for x in tab_pane.find_elements(By.CLASS_NAME, 'draggable'):
-            if 'test page 5' in x.text:
+            if 'test page 3' in x.text:
                 found1 = True
-            if 'test page 11' in x.text:
+            if 'test page 5' in x.text:
                 found2 = True
             post_drag_tab_items.append(x.text)
         self.assertTrue(found1)
@@ -321,14 +323,16 @@ class EditorTestsMixin:
         # Switch day
         # Verify we see the expected schedule items on day 2
 
-
-    def test_drag_over(self):
+    @expectedFailure
+    def test_drag_over_talk(self):
         """Test that dragging over an item replaces it"""
+        # Expected to fail - see https://github.com/CTPUG/wafer/issues/689
         # Create a schedule with a single item
         self.admin_login()
         self.driver.get(self.edit_page)
         # Test dragging a talk over an existing talk
         # Check that unassigned list is updated correctly
+        # FIXME: The schedule editor doesn't do this correctly
 
     def test_drag_over_page(self):
         """Test that dragging over a page with another page works"""
@@ -338,10 +342,30 @@ class EditorTestsMixin:
         # Test dragging a page over an existing page
         # Check that page list is unchanged
 
-    def test_create_invalid_schedule(self):
-        """Test that an invalid schedule displays the errors"""
+    @expectedFailure
+    def test_adding_clash(self):
+        """Test that introducing a speaker clash causes the
+           error section to be updated"""
+        # Expected to fail -see https://github.com/CTPUG/wafer/issues/158
+        # Create initial schedule
         self.admin_login()
         self.driver.get(self.edit_page)
+        # Drag a talk into a clashing slot
+        # Verify errors are present
+        # FIXME: The schedule editor doesn't currently update this
+
+    @expectedFailure
+    def test_removing_clash(self):
+        """Test that removing a speaker clash causes the
+           error section to be cleared"""
+        # Expected to fail -see https://github.com/CTPUG/wafer/issues/158
+        # Create initial schedule
+        self.admin_login()
+        self.driver.get(self.edit_page)
+        # Verify we have the expected errors
+        # Delete one of the clashes
+        # Verify errors are gone
+        # FIXME: The schedule editor doesn't currently update this
 
 
 class ChromeScheduleEditorTests(EditorTestsMixin, ChromeTestRunner):
