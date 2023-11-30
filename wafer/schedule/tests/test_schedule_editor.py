@@ -552,7 +552,7 @@ class ChromeScheduleEditorTests(EditorTestsMixin, ChromeTestRunner):
 
 
 class FirefoxSchedultEditorTests(EditorTestsMixin, FirefoxTestRunner):
-    # We explictly mark the tests we expect due to
+    # We explictly mark the tests we expect to fail due to
     # https://bugzilla.mozilla.org/show_bug.cgi?id=1515879
     # as expectedFailure, so we can run these in github actions
     # with sensible results (and hopefully see when the bug gets
