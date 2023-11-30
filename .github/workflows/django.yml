@@ -160,3 +160,41 @@ jobs:
       run: |
         cd wafer
         python ../manage.py compilemessages
+
+
+
+  selenium:
+
+    runs-on: ubuntu-latest
+
+    name: Selenium - Browser ${{ matrix.browser }}
+    strategy:
+      max-parallel: 2
+      matrix:
+        browser: ['chrome', 'firefox']
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Python
+      uses: actions/setup-python@v4
+    - name: Install Dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt -r requirements-dev.txt
+        pip install selenium
+    - name: Install node
+      uses: actions/setup-node@v4
+    - name: Install javascript dependencies
+      run: |
+        npm install
+    - name: Setup Chrome
+      uses: browser-actions/setup-chrome@v1
+      if: matrix.browser == 'chrome'
+    - name: Setup firefox
+      run: |
+        wget -O firefox.tar.bz2 'https://download.mozilla.org/?product=firefox-latest&os=linux64&lang=en-US'
+        tar xaf firefox.tar.bz2
+        export PATH=$PATH:${PWD}/firefox
+      if: matrix.browser == 'firefox'
+    - name: Run Tests
+      run: |
+        python manage.py test --tag ${{ matrix.browser }}
