@@ -552,4 +552,28 @@ class ChromeScheduleEditorTests(EditorTestsMixin, ChromeTestRunner):
 
 
 class FirefoxSchedultEditorTests(EditorTestsMixin, FirefoxTestRunner):
-    pass
+    # We explictly mark the tests we expect due to
+    # https://bugzilla.mozilla.org/show_bug.cgi?id=1515879
+    # as expectedFailure, so we can run these in github actions
+    # with sensible results (and hopefully see when the bug gets
+    # fixed).
+
+    @expectedFailure
+    def test_drag_talk(self):
+        super().test_drag_talk()
+
+    @expectedFailure
+    def test_drag_page(self):
+        super().test_drag_page()
+
+    @expectedFailure
+    def test_drag_over_talk(self):
+        super().test_drag_over_talk()
+
+    @expectedFailure
+    def test_drag_over_page(self):
+        super().test_drag_over_page()
+
+    @expectedFailure
+    def test_adding_clash(self):
+        super().test_adding_clash()
