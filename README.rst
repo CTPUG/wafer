@@ -118,3 +118,16 @@ Translation
 Translations for wafer are managed at `weblate.org`_
 
 .. _weblate.org: https://hosted.weblate.org/projects/wafer/
+
+
+Selenium tests
+==============
+
+wafer includes a small set of selenium tests to test various bits of javascript
+used in the site (mostly in the schedule editor).
+
+To run the tests, you will need to install selenium - ``pip install selenium``
+and also run ``rpm install`` to install the required javascript dependencies.
+
+The tests can be run using the ``selenium`` tag, or using the individual browser
+tags (currently ``firefox`` and ``chrome``).
