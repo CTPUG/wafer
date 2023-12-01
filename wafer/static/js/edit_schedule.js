@@ -57,6 +57,34 @@
         e.target.classList.remove('over');
     }
 
+    function updateValidation(validation_response) {
+        // update the information in the validation errors section
+        // if required
+        var messageArea =  document.getElementById("validationMessages");
+        var list = messageArea.children[1];
+
+        // Clear any current entries
+        while (list.hasChildNodes()) {
+            list.removeChild(list.firstChild);
+        }
+
+        var errors = validation_response['Validation Status'];
+        if (errors.length)
+        {
+            messageArea.hidden = false;
+            for (let i = 0; i < errors.length; i++) {
+                var node = document.createElement("li");
+                var text = document.createTextNode(errors[i]);
+                node.appendChild(text);
+                list.appendChild(node);
+            }
+        }
+        else
+        {
+           messageArea.hidden = true;
+        }
+    }
+
     function handleItemUpdate(data) {
         console.log(data);
         var scheduleItemId = data.id;
@@ -90,11 +118,15 @@
         closeButton.appendChild(buttonSpan);
         closeButton.addEventListener('click', handleClickDelete, false);
         newItem.insertBefore(closeButton, newItem.childNodes[0]);
+
+        $.get('/schedule/api/validate/', updateValidation);
     }
 
 
     function handleItemDelete() {
         console.log(this);
+
+        $.get('/schedule/api/validate/', updateValidation);
     }
 
     function handleDrop(e) {

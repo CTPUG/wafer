@@ -452,12 +452,9 @@ class EditorTestsMixin:
             after.append(x.text)
         self.assertEqual(before, after)
 
-    @expectedFailure
     def test_adding_clash(self):
         """Test that introducing a speaker clash causes the
            error section to be updated"""
-        # Expected to fail -see https://github.com/CTPUG/wafer/issues/158
-        # Create initial schedule
         item1 = ScheduleItem.objects.create(venue=self.venues[0],
                                            talk_id=self.talk1.pk)
         item1.slots.add(self.block1_slots[0])
@@ -468,8 +465,8 @@ class EditorTestsMixin:
         item2.save()
         self._start()
         # Verify that there are no validation errors
-        with self.assertRaises(NoSuchElementException):
-            self.driver.find_element(By.TAG_NAME, "strong")
+        validation = self.driver.find_element(By.CLASS_NAME, "alert-danger")
+        self.assertFalse(validation.is_displayed())
         # Drag a talk into a clashing slot
         target = self.driver.find_element(By.ID, f"scheduleItem{item2.pk}")
         talks_link = self.driver.find_element(By.PARTIAL_LINK_TEXT, "Unassigned Talks")
@@ -495,21 +492,14 @@ class EditorTestsMixin:
         actions.drag_and_drop(source, target)
         actions.pause(0.5)
         actions.perform()
-        # Verify errors are present
-        # FIXME: The schedule editor doesn't currently update this
-        try:
-            vaidation = self.driver.find_element(By.TAG_NAME, "strong")
-        except NoSuchElementException:
-            vaidation = None
-        self.assertNotNone(vaidation)
-        self.assertIn('Validation errors:', validation.text)
+        # Verify error block is displayed
+        self.assertTrue(validation.is_displayed())
+        error_item = validation.find_element(By.TAG_NAME, "li")
+        self.assertIn('Common speaker', error_item.text)
 
-    @expectedFailure
     def test_removing_clash(self):
         """Test that removing a speaker clash causes the
            error section to be cleared"""
-        # Expected to fail -see https://github.com/CTPUG/wafer/issues/158
-        # Create initial schedule
         item1 = ScheduleItem.objects.create(venue=self.venues[0],
                                            talk_id=self.talk1.pk)
         item1.slots.add(self.block1_slots[0])
@@ -519,9 +509,11 @@ class EditorTestsMixin:
         item2.slots.add(self.block1_slots[0])
         item2.save()
         self._start()
-        # Verify that there are no validation errors
-        validation = self.driver.find_element(By.TAG_NAME, "strong")
-        self.assertIn('Validation errors:', validation.text)
+        # Verify that there are validation errors
+        validation = self.driver.find_element(By.CLASS_NAME, "alert-danger")
+        self.assertTrue(validation.is_displayed())
+        error_item = validation.find_element(By.TAG_NAME, "li")
+        self.assertIn('Common speaker', error_item.text)
         # Delete the clashing talk
         target = self.driver.find_element(By.ID, f"scheduleItem{item2.pk}")
         close = target.find_element(By.CLASS_NAME, 'close')
@@ -535,16 +527,16 @@ class EditorTestsMixin:
                 break
         # Verify we've deleted the clashing talk
         found = None
-        # Find the second talk and verify that talk 1 is not in
-        # the Unassigned Talk list
+        # Find the deleted talk in the Unassigned Talk list
         for x in tab_pane.find_elements(By.CLASS_NAME, 'draggable'):
             if self.talk4.title in x.text:
                 found = True
         self.assertTrue(found)
-        # Verify errors are gone
-        # FIXME: The schedule editor doesn't currently update this
+        # Verify errors are hidden
+        self.assertFalse(validation.is_displayed())
+        # Check that the list has been removed
         with self.assertRaises(NoSuchElementException):
-            self.driver.find_element(By.TAG_NAME, "strong")
+            validation.find_element(By.TAG_NAME,"li")
 
 
 class ChromeScheduleEditorTests(EditorTestsMixin, ChromeTestRunner):
