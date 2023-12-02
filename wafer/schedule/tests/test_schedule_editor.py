@@ -353,10 +353,8 @@ class EditorTestsMixin:
         with self.assertRaises(NoSuchElementException):
             self.driver.find_element(By.ID, f"scheduleItem{item2.pk}")
 
-    @expectedFailure
     def test_drag_over_talk(self):
         """Test that dragging over an item replaces it"""
-        # Expected to fail - see https://github.com/CTPUG/wafer/issues/689
         # Create a schedule with a single item
         item1 = ScheduleItem.objects.create(venue=self.venues[0],
                                            talk_id=self.talk1.pk)
@@ -403,7 +401,6 @@ class EditorTestsMixin:
             if self.talk2.title in x.text:
                 found2 = True
         self.assertFalse(found2)
-        # FIXME: The schedule editor doesn't do this correctly
         self.assertTrue(found1)
 
     def test_drag_over_page(self):
