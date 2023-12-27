@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: wafer\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-27 18:07+0000\n"
+"POT-Creation-Date: 2023-12-27 18:02+0000\n"
 "PO-Revision-Date: 2021-06-06 08:34-0300\n"
 "Last-Translator: Allythy <allythy@protonmail.com>\n"
 "Language: \n"
@@ -362,7 +362,7 @@ msgstr "Locais inválidos encontrados na programação."
 #: wafer/schedule/admin.py:181
 #: wafer/schedule/templates/admin/scheduleitem_list.html:61
 msgid "Common speaker in simultaneous schedule items"
-msgstr ""
+msgstr "Palestrante em comum em itens agendados em paralelo"
 
 #: wafer/schedule/admin.py:221
 msgid "Block"
@@ -504,7 +504,7 @@ msgstr "Acontecendo agora"
 #: wafer/schedule/templates/wafer.schedule/current.html:10
 #: wafer/schedule/templates/wafer.schedule/full_schedule.html:20
 msgid "This is a draft that is not visible to the public"
-msgstr ""
+msgstr "Este é um rascunho e não é visível pelo público"
 
 #: wafer/schedule/templates/wafer.schedule/current.html:17
 #: wafer/schedule/templates/wafer.schedule/edit_schedule.html:18
@@ -531,8 +531,6 @@ msgid "Last updated"
 msgstr "Última atualização"
 
 #: wafer/schedule/templates/wafer.schedule/edit_schedule.html:4
-#, fuzzy
-#| msgid "Edit schedule"
 msgid "Edit Schedule"
 msgstr "Editar programação"
 
@@ -587,36 +585,28 @@ msgid "Next"
 msgstr "Proximo"
 
 #: wafer/settings.py:350
-#, fuzzy
-#| msgid "Edit Profile"
 msgid "Twitter Profile link"
-msgstr "Editar Perfil"
+msgstr "Link para perfil no Twitter"
 
 #: wafer/settings.py:351
 msgid "Fediverse Profile link"
-msgstr ""
+msgstr "Link para perfil no Fediverso"
 
 #: wafer/settings.py:352
 msgid "Other Social"
-msgstr ""
+msgstr "Outra rede social"
 
 #: wafer/settings.py:358
-#, fuzzy
-#| msgid "user profile"
 msgid "github profile"
-msgstr "perfil de usuário"
+msgstr "Perfil no github"
 
 #: wafer/settings.py:359
-#, fuzzy
-#| msgid "Edit Profile"
 msgid "gitlab profile"
-msgstr "Editar Perfil"
+msgstr "Perfil no gitlab"
 
 #: wafer/settings.py:360
-#, fuzzy
-#| msgid "user profile"
 msgid "bitbucket profile"
-msgstr "perfil de usuário"
+msgstr "perfil no bitbucket"
 
 #: wafer/sponsors/models.py:36
 msgid "Currency symbol for the sponsorship amount."
@@ -828,14 +818,12 @@ msgstr ""
 "palestrantes"
 
 #: wafer/talks/models.py:94
-#, fuzzy
-#| msgid "disable submission"
 msgid "show pending submissions"
-msgstr "Desativar submissão"
+msgstr "mostrar submissões pendentes"
 
 #: wafer/talks/models.py:96
 msgid "Whether to publicly show pending submissions, before acceptance"
-msgstr ""
+msgstr "Se devemos mostrar publicamente submissões pendentes, antes da aceitação"
 
 #: wafer/talks/models.py:106 wafer/talks/models.py:166
 msgid "talk type"
@@ -1245,21 +1233,15 @@ msgid "Talks"
 msgstr "Palestras"
 
 #: wafer/talks/templates/wafer.talks/talks.html:9
-#, fuzzy
-#| msgid "Submitted"
 msgid "All Submitted Talks"
-msgstr "Enviada"
+msgstr "Todas palestras submetidas"
 
 #: wafer/talks/templates/wafer.talks/talks.html:11
-#, fuzzy
-#| msgid "Accepted Talks:"
 msgid "Accepted Talks"
 msgstr "Palestras aceitas:"
 
 #: wafer/talks/templates/wafer.talks/talks.html:27
 #: wafer/talks/templates/wafer.talks/talks.html:71
-#, fuzzy
-#| msgid "language"
 msgid "Language"
 msgstr "idioma"
 
@@ -1380,11 +1362,11 @@ msgstr "perfis"
 
 #: wafer/users/forms.py:67
 msgid "<p>Code Hosting Profiles</p>"
-msgstr ""
+msgstr "<p>Perfils de hospedagem de código</p>"
 
 #: wafer/users/forms.py:71
 msgid "<p>Social Profiles</p>"
-msgstr ""
+msgstr "<p>Perfis de rede social</p>"
 
 #: wafer/users/models.py:34
 msgid "user profile"
@@ -1452,12 +1434,9 @@ msgid "Register"
 msgstr "Se Inscrever"
 
 #: wafer/users/templates/wafer.users/snippets/profile_25-menu.html:20
-#, fuzzy
-#| msgctxt "conference"
-#| msgid "Register"
 msgctxt "conference"
 msgid "Unregister"
-msgstr "Se Inscrever"
+msgstr "Cancelar inscrição"
 
 #: wafer/users/templates/wafer.users/snippets/profile_25-menu.html:24
 msgid "Submit Talk Proposal"
