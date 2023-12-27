@@ -12,8 +12,9 @@
 {% endblock content %}
 {% block extra_foot %}
 <script type="text/javascript">
-
-  $("#profile-avatar [rel=popover]").attr("data-bs-content", $("#profile-avatar .popover-contents").html());
-  $("a[rel=popover]").popover();
+  $(function() {
+    $("#profile-avatar [rel=popover]").attr("data-bs-content", $("#profile-avatar .popover-contents").html());
+    $("a[rel=popover]").popover();
+  })
 </script>
 {% endblock extra_foot %}
