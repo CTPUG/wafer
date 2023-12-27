@@ -11,9 +11,13 @@
           {% endif %}
           {% if WAFER_REGISTRATION_MODE == 'custom' %}
             {% url 'register' as register_url %}
+            {% url 'unregister' as unregister_url %}
           {% endif %}
           {% if register_url %}
             <li><a href="{{ register_url }}" class="btn btn-secondary">{% if profile.is_registered %}{% trans 'Update registration' context "conference" %}{% else %}{% trans 'Register' context "conference" %}{% endif %}</a></li>
+          {% endif %}
+          {% if unregister_url and profile.is_registered %}
+            <li><a href="{{ unregister_url }}" class="btn btn-secondary">{% trans 'Unregister' context "conference" %}</a></li>
           {% endif %}
         {% endif %}
         {% if WAFER_TALKS_OPEN %}
