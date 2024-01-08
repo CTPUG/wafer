@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-06-05 21:56+0000\n"
+"POT-Creation-Date: 2023-12-27 18:02+0000\n"
 "PO-Revision-Date: 2023-02-20 21:36+0000\n"
 "Last-Translator: ssantos <ssantos@web.de>\n"
 "Language-Team: Portuguese <https://hosted.weblate.org/projects/wafer/wafer/"
@@ -107,23 +107,23 @@ msgstr ""
 "Este objeto não tem um histórico de alterações. Provavelmente não foi "
 "adicionado por meio da administração do site."
 
-#: wafer/pages/models.py:31
+#: wafer/pages/models.py:49
 msgid "Last component of the page URL"
 msgstr "Último compomente da URl na página"
 
-#: wafer/pages/models.py:35
+#: wafer/pages/models.py:53
 msgid "Markdown contents for the page."
 msgstr "Conteúdo de marcação para a página."
 
-#: wafer/pages/models.py:37
+#: wafer/pages/models.py:55
 msgid "Whether to include in menus."
 msgstr "Se deve incluir nos menus."
 
-#: wafer/pages/models.py:40
+#: wafer/pages/models.py:58
 msgid "Ordering in the menu (smaller numbers come first)"
 msgstr "Ordenação no menu (números menores vêm primeiro)"
 
-#: wafer/pages/models.py:45
+#: wafer/pages/models.py:63
 msgid ""
 "Whether to exclude this page from the static version of the site (Container "
 "pages, etc.)"
@@ -131,11 +131,11 @@ msgstr ""
 "Se deve excluir essa página da versão estática do site (conteúdos, páginas, "
 "etc)"
 
-#: wafer/pages/models.py:50
+#: wafer/pages/models.py:68
 msgid "Images and other files for use in the content markdown field."
 msgstr "Imagens e outros ficheiros para usar no campo de marcação do conteúdo."
 
-#: wafer/pages/models.py:56
+#: wafer/pages/models.py:74
 msgid ""
 "People associated with this page for display in the schedule (Session "
 "chairs, panelists, etc.)"
@@ -143,7 +143,7 @@ msgstr ""
 "Pessoas associadas com essa página para exibição da programação (Mediadores "
 "da Sessão, painelistas, etc)"
 
-#: wafer/pages/models.py:61
+#: wafer/pages/models.py:79
 msgid ""
 "Length of time (in seconds) to cache the page for dynamic page content. A "
 "negative value means this page is not dynamic and it will be not be "
@@ -153,18 +153,18 @@ msgstr ""
 "dinâmico da páginaUm valor negativo significa que essa página não é dinâmica "
 "e nem seráregeneração até a próxima edição."
 
-#: wafer/pages/models.py:137
+#: wafer/pages/models.py:156
 msgid "Circular reference in parent."
 msgstr "Referência circular no principal."
 
-#: wafer/pages/models.py:153
+#: wafer/pages/models.py:172
 msgid "Duplicate parent/slug combination."
 msgstr "Duplicação parent/slug combinação."
 
 #: wafer/pages/templates/wafer.pages/page.html:10
 #: wafer/talks/templates/wafer.talks/talk.html:18
-#: wafer/talks/templates/wafer.talks/talk_form.html:28
-#: wafer/users/templates/wafer.users/profile.html:164
+#: wafer/talks/templates/wafer.talks/talk_form.html:33
+#: wafer/users/templates/wafer.users/snippets/profile_40-talks.html:72
 msgid "Edit"
 msgstr "Editar"
 
@@ -225,12 +225,12 @@ msgstr "Oops, criação de conta falhou"
 #, python-format
 msgid ""
 "We seem to have had some difficulty with activating your account. Please <a "
-"href=\"%(register_url)s\">try again</a> or <a href=\"%(contact_url)s"
-"\">contact our admins</a>."
+"href=\"%(register_url)s\">try again</a> or <a "
+"href=\"%(contact_url)s\">contact our admins</a>."
 msgstr ""
-"Parece que está com dificuldades ao ativar a sua conta. Por favor <a href= \""
-"%(register_url)s\">tente de novo</a> ou <a href=\"%(contact_url)s\">contate "
-"os nossos administradores</a>."
+"Parece que está com dificuldades ao ativar a sua conta. Por favor <a href= "
+"\"%(register_url)s\">tente de novo</a> ou <a "
+"href=\"%(contact_url)s\">contate os nossos administradores</a>."
 
 #: wafer/registration/templates/registration/activation_complete.html:4
 msgid "Activation complete"
@@ -241,8 +241,8 @@ msgstr "Ativação completa"
 msgid ""
 "Your account is now activated! Please <a href=\"%(login_url)s\">log in</a>."
 msgstr ""
-"A sua conta foi ativade! Por favor, <a href=\"%(login_url)s\">inicia "
-"sessão</a>."
+"A sua conta foi ativade! Por favor, <a href=\"%(login_url)s\">inicia sessão</"
+"a>."
 
 #: wafer/registration/templates/registration/activation_complete.html:13
 #: wafer/registration/templates/registration/registration_complete.html:13
@@ -345,70 +345,75 @@ msgstr ""
 msgid "You can register after your account is activated."
 msgstr "Pode se inscrever depois de ativar a sua conta."
 
-#: wafer/schedule/admin.py:143
+#: wafer/schedule/admin.py:166
 msgid "Clashes found in schedule."
 msgstr "Conflitos encontrados na programação."
 
-#: wafer/schedule/admin.py:146
+#: wafer/schedule/admin.py:169
 msgid "Duplicate schedule items found in schedule."
 msgstr "Itens duplicados achados na programação."
 
-#: wafer/schedule/admin.py:149
+#: wafer/schedule/admin.py:172
 msgid "Invalid schedule items found in schedule."
 msgstr "Itens inválidos achados na programação."
 
-#: wafer/schedule/admin.py:152
+#: wafer/schedule/admin.py:175
 msgid "Non contiguous slots found in schedule."
 msgstr "Slots não contíguos encontrados na programação."
 
-#: wafer/schedule/admin.py:155
+#: wafer/schedule/admin.py:178
 msgid "Invalid venues found in schedule."
 msgstr "Locais inválidos encontrados na programação."
 
-#: wafer/schedule/admin.py:195
+#: wafer/schedule/admin.py:181
+#: wafer/schedule/templates/admin/scheduleitem_list.html:61
+msgid "Common speaker in simultaneous schedule items"
+msgstr ""
+
+#: wafer/schedule/admin.py:221
 msgid "Block"
 msgstr "Bloco"
 
-#: wafer/schedule/admin.py:247 wafer/schedule/models.py:316
+#: wafer/schedule/admin.py:273 wafer/schedule/models.py:327
 msgid "Start Time"
 msgstr "Hora de início"
 
-#: wafer/schedule/admin.py:303
+#: wafer/schedule/admin.py:329
 msgid "Venue"
 msgstr "local"
 
-#: wafer/schedule/admin.py:390
+#: wafer/schedule/admin.py:415
 msgid "Additional slots"
 msgstr "Adicional slots"
 
-#: wafer/schedule/admin.py:391
+#: wafer/schedule/admin.py:416
 msgid "Create this number of additional slots following this one"
 msgstr "Criar essa quantidade de slots adicionais depois de este"
 
-#: wafer/schedule/admin.py:453
+#: wafer/schedule/admin.py:477
 #, python-format
 msgid "Additional slot %(obj)s added sucessfully"
 msgstr "Adicional slot %(obj)s adicionado com sucesso"
 
-#: wafer/schedule/admin.py:460
+#: wafer/schedule/admin.py:484
 #, python-format
 msgid "Failed to create new slot - %s"
 msgstr "Falha a criar novo slot - %s"
 
-#: wafer/schedule/models.py:74
+#: wafer/schedule/models.py:78
 msgid "Notes or directions that will be useful to conference attendees"
 msgstr ""
 "Notas ou instruções que serão úteis para os participantes da conferência"
 
-#: wafer/schedule/models.py:78
+#: wafer/schedule/models.py:82
 msgid "Blocks (days) on which this venue will be used."
 msgstr "Blocos (dias) em cada local que será usado."
 
-#: wafer/schedule/models.py:82
+#: wafer/schedule/models.py:86
 msgid "Venue has video coverage"
 msgstr "O local tem cobertura de vídeo"
 
-#: wafer/schedule/models.py:102
+#: wafer/schedule/models.py:106
 msgid ""
 "Previous slot if applicable (slots should have either a previous slot OR a "
 "start time set)"
@@ -416,47 +421,47 @@ msgstr ""
 "Slot anterior, se aplicaável (os slots devem ter um slot anterior OU uma "
 "hora de início definido)"
 
-#: wafer/schedule/models.py:108
+#: wafer/schedule/models.py:112
 msgid "Start time (if no previous slot selected)"
 msgstr "Hora de início (se nenhum slot anterior foi selecionado)"
 
-#: wafer/schedule/models.py:110
+#: wafer/schedule/models.py:114
 msgid "Slot end time"
 msgstr "Hora de término do slot"
 
-#: wafer/schedule/models.py:113
+#: wafer/schedule/models.py:117
 msgid "Identifier for use in the admin panel"
 msgstr "Indentificador para uso no painel de administrador"
 
-#: wafer/schedule/models.py:148
+#: wafer/schedule/models.py:152
 msgid "Start Date & Time"
 msgstr "Data e hora de início"
 
-#: wafer/schedule/models.py:176
+#: wafer/schedule/models.py:180
 msgid "Schedule Block"
 msgstr "Bloco de agendamento"
 
-#: wafer/schedule/models.py:235
+#: wafer/schedule/models.py:239
 msgid "Additional details (if required)"
 msgstr "Detalhes adicionais (se necessário)"
 
-#: wafer/schedule/models.py:239
+#: wafer/schedule/models.py:243
 msgid "Notes for the conference organisers"
 msgstr "Notas para os organizadores da conferência"
 
-#: wafer/schedule/models.py:243
+#: wafer/schedule/models.py:247
 msgid "Custom css class for this schedule item"
 msgstr "Classe CSS personalizada para esse item de programação"
 
-#: wafer/schedule/models.py:247
+#: wafer/schedule/models.py:251
 msgid "Expand to neighbouring venues"
 msgstr "Expandir para locais vizinhos"
 
-#: wafer/schedule/models.py:251
+#: wafer/schedule/models.py:255
 msgid "Date & Time this was last updated"
 msgstr "Data e hora da última atualização"
 
-#: wafer/schedule/models.py:280
+#: wafer/schedule/models.py:284
 msgid "Talk Type & Track CSS classes"
 msgstr "Tipo de Palestra e Rastreador de classe CSS"
 
@@ -484,7 +489,7 @@ msgstr "Duplicatas na programação"
 msgid "Venues assigned on days they are not available"
 msgstr "Locais atribuídos nos dias em que não estão disponíveis"
 
-#: wafer/schedule/templates/admin/scheduleitem_list.html:70
+#: wafer/schedule/templates/admin/scheduleitem_list.html:82
 #: wafer/schedule/templates/wafer.schedule/full_schedule.html:10
 msgid "Edit schedule"
 msgstr "Editar programação"
@@ -504,60 +509,73 @@ msgstr "Acontecendo agora"
 
 #: wafer/schedule/templates/wafer.schedule/current.html:10
 #: wafer/schedule/templates/wafer.schedule/full_schedule.html:20
-msgid "<p>The final schedule has not been published yet.</p>"
-msgstr "<p>A programação final não foi publicada ainda.</p>"
+msgid "This is a draft that is not visible to the public"
+msgstr ""
 
-#: wafer/schedule/templates/wafer.schedule/current.html:14
-msgid "<p>Nothing happening right now.</p>"
-msgstr "<p>Nada acontecendo agora.</p>"
-
-#: wafer/schedule/templates/wafer.schedule/current.html:23
-#: wafer/schedule/templates/wafer.schedule/full_schedule.html:48
-msgid "Time"
-msgstr "Hora"
-
-#: wafer/schedule/templates/wafer.schedule/current.html:71
-msgid "Last updated"
-msgstr "Última atualização"
-
-#: wafer/schedule/templates/wafer.schedule/edit_schedule.html:10
+#: wafer/schedule/templates/wafer.schedule/current.html:17
+#: wafer/schedule/templates/wafer.schedule/edit_schedule.html:18
+#: wafer/schedule/templates/wafer.schedule/full_schedule.html:27
 msgid "Validation errors:"
 msgstr "Erros de validação:"
 
-#: wafer/schedule/templates/wafer.schedule/edit_schedule.html:23
-#: wafer/schedule/templates/wafer.schedule/edit_schedule.html:28
+#: wafer/schedule/templates/wafer.schedule/current.html:26
+#: wafer/schedule/templates/wafer.schedule/full_schedule.html:36
+msgid "<p>The final schedule has not been published yet.</p>"
+msgstr "<p>A programação final não foi publicada ainda.</p>"
+
+#: wafer/schedule/templates/wafer.schedule/current.html:30
+msgid "<p>Nothing happening right now.</p>"
+msgstr "<p>Nada acontecendo agora.</p>"
+
+#: wafer/schedule/templates/wafer.schedule/current.html:39
+#: wafer/schedule/templates/wafer.schedule/full_schedule.html:64
+msgid "Time"
+msgstr "Hora"
+
+#: wafer/schedule/templates/wafer.schedule/current.html:87
+msgid "Last updated"
+msgstr "Última atualização"
+
+#: wafer/schedule/templates/wafer.schedule/edit_schedule.html:4
+#, fuzzy
+#| msgid "Edit schedule"
+msgid "Edit Schedule"
+msgstr "Editar programação"
+
+#: wafer/schedule/templates/wafer.schedule/edit_schedule.html:32
+#: wafer/schedule/templates/wafer.schedule/edit_schedule.html:37
 #, python-format
 msgid "(Block %(block_id)s)"
 msgstr "(Bloco %(block_id)s)"
 
-#: wafer/schedule/templates/wafer.schedule/edit_schedule.html:33
+#: wafer/schedule/templates/wafer.schedule/edit_schedule.html:42
 msgid "Schedule Editor"
 msgstr "Editar programação"
 
-#: wafer/schedule/templates/wafer.schedule/edit_schedule.html:62
+#: wafer/schedule/templates/wafer.schedule/edit_schedule.html:71
 msgid "Close"
 msgstr "Fechar"
 
-#: wafer/schedule/templates/wafer.schedule/edit_schedule.html:69
-#: wafer/schedule/templates/wafer.schedule/edit_schedule.html:132
-#: wafer/schedule/templates/wafer.schedule/edit_schedule.html:158
-#: wafer/talks/models.py:153 wafer/talks/templates/wafer.talks/talk.html:122
+#: wafer/schedule/templates/wafer.schedule/edit_schedule.html:78
+#: wafer/schedule/templates/wafer.schedule/edit_schedule.html:141
+#: wafer/schedule/templates/wafer.schedule/edit_schedule.html:167
+#: wafer/talks/models.py:157 wafer/talks/templates/wafer.talks/talk.html:122
 msgid "Cancelled"
 msgstr "Cancelada"
 
-#: wafer/schedule/templates/wafer.schedule/edit_schedule.html:81
+#: wafer/schedule/templates/wafer.schedule/edit_schedule.html:90
 msgid "Bucket"
 msgstr "Espaço"
 
-#: wafer/schedule/templates/wafer.schedule/edit_schedule.html:90
+#: wafer/schedule/templates/wafer.schedule/edit_schedule.html:99
 msgid "Unassigned Talks"
 msgstr "Palestra não atribuídas"
 
-#: wafer/schedule/templates/wafer.schedule/edit_schedule.html:97
+#: wafer/schedule/templates/wafer.schedule/edit_schedule.html:106
 msgid "All Talks"
 msgstr "Todas as palestra"
 
-#: wafer/schedule/templates/wafer.schedule/edit_schedule.html:102
+#: wafer/schedule/templates/wafer.schedule/edit_schedule.html:111
 msgid "Pages"
 msgstr "Páginas"
 
@@ -566,13 +584,45 @@ msgstr "Páginas"
 msgid "Schedule"
 msgstr "Programação"
 
-#: wafer/schedule/templates/wafer.schedule/full_schedule.html:29
+#: wafer/schedule/templates/wafer.schedule/full_schedule.html:45
 msgid "Previous"
 msgstr "Anterior"
 
-#: wafer/schedule/templates/wafer.schedule/full_schedule.html:33
+#: wafer/schedule/templates/wafer.schedule/full_schedule.html:49
 msgid "Next"
 msgstr "Proximo"
+
+#: wafer/settings.py:350
+#, fuzzy
+#| msgid "Edit Profile"
+msgid "Twitter Profile link"
+msgstr "Editar Perfil"
+
+#: wafer/settings.py:351
+msgid "Fediverse Profile link"
+msgstr ""
+
+#: wafer/settings.py:352
+msgid "Other Social"
+msgstr ""
+
+#: wafer/settings.py:358
+#, fuzzy
+#| msgid "user profile"
+msgid "github profile"
+msgstr "perfil de utilizador"
+
+#: wafer/settings.py:359
+#, fuzzy
+#| msgid "Edit Profile"
+msgid "gitlab profile"
+msgstr "Editar Perfil"
+
+#: wafer/settings.py:360
+#, fuzzy
+#| msgid "user profile"
+msgid "bitbucket profile"
+msgstr "perfil de utilizador"
 
 #: wafer/sponsors/models.py:36
 msgid "Currency symbol for the sponsorship amount."
@@ -644,75 +694,75 @@ msgstr "Nenhum pacotes de patrocínios disponpiveis ainda."
 msgid "No sponsors yet."
 msgstr "Ainda não há patrocinadoresr."
 
-#: wafer/talks/admin.py:24
+#: wafer/talks/admin.py:23
 msgid "in schedule"
 msgstr "Na programação"
 
-#: wafer/talks/admin.py:29
+#: wafer/talks/admin.py:28
 msgid "Allocated to schedule"
 msgstr "Alocado para agendar"
 
-#: wafer/talks/admin.py:30
+#: wafer/talks/admin.py:29
 msgid "Not allocated"
 msgstr "Não alocado"
 
-#: wafer/talks/admin.py:42
+#: wafer/talks/admin.py:41
 msgid "has notes"
 msgstr "Têm notas"
 
-#: wafer/talks/admin.py:47
+#: wafer/talks/admin.py:46
 msgid "Yes"
 msgstr "Sim"
 
-#: wafer/talks/admin.py:48
+#: wafer/talks/admin.py:47
 msgid "No"
 msgstr "Não"
 
-#: wafer/talks/admin.py:93
+#: wafer/talks/admin.py:92
 msgid "Mark selected talks as Submitted"
 msgstr "Marcar palestras selectionas como Submetidas"
 
-#: wafer/talks/admin.py:96
+#: wafer/talks/admin.py:95
 msgid "Mark selected talks as Withdrawn"
 msgstr "Marcar palestras selecionadas como Retiradas"
 
-#: wafer/talks/admin.py:99
+#: wafer/talks/admin.py:98
 msgid "Mark selected talks as Cancelled"
 msgstr "Marcar palestras selecionadas como Canceladas"
 
-#: wafer/talks/admin.py:102
+#: wafer/talks/admin.py:101
 msgid "Mark selected talks as Under consideration"
 msgstr "Marcar palestras selecionadas como Sob consideração"
 
-#: wafer/talks/admin.py:105
+#: wafer/talks/admin.py:104
 msgid "Mark selected talks as Not Accepted"
 msgstr "Marcar palestras selecionadas como Não Aceitas"
 
-#: wafer/talks/admin.py:108
+#: wafer/talks/admin.py:107
 msgid "Mark selected talks as Provisionally Accepted"
 msgstr "Marcar palestras selecionadas como Provisoriamente Aceitas"
 
-#: wafer/talks/admin.py:111
+#: wafer/talks/admin.py:110
 msgid "Mark selected talks as Accepted"
 msgstr "Marcar palestras selecionadas como Aceitas"
 
-#: wafer/talks/forms.py:118 wafer/users/forms.py:22 wafer/users/forms.py:49
+#: wafer/talks/forms.py:124 wafer/users/forms.py:24 wafer/users/forms.py:73
 msgid "Save"
 msgstr "Gravar"
 
-#: wafer/talks/forms.py:118 wafer/talks/forms.py:185
+#: wafer/talks/forms.py:124 wafer/talks/forms.py:192
 msgid "Submit"
 msgstr "Enviar"
 
-#: wafer/talks/forms.py:125
+#: wafer/talks/forms.py:131
 msgid "Withdraw Talk"
 msgstr "Retirar Palestra"
 
-#: wafer/talks/forms.py:134
+#: wafer/talks/forms.py:140
 msgid "A reviewer is required, if video is permitted."
 msgstr "Um revisor é necessário, se o vídeo é permitido."
 
-#: wafer/talks/forms.py:163
+#: wafer/talks/forms.py:169
 #, python-format
 msgid "(Score range: %(min)d to %(max)d)"
 msgstr "(Faixa de pontuação: %(min)d para %(max)d)"
@@ -741,15 +791,15 @@ msgstr ""
 "<strong>Como apresentador da palestra, será o autor correspondente da "
 "palestra</strong>"
 
-#: wafer/talks/models.py:70 wafer/talks/models.py:117 wafer/talks/models.py:419
+#: wafer/talks/models.py:70 wafer/talks/models.py:121 wafer/talks/models.py:427
 msgid "name"
 msgstr "Nome"
 
-#: wafer/talks/models.py:71 wafer/talks/models.py:118
+#: wafer/talks/models.py:71 wafer/talks/models.py:122
 msgid "description"
 msgstr "Descrição"
 
-#: wafer/talks/models.py:72 wafer/talks/models.py:119
+#: wafer/talks/models.py:72 wafer/talks/models.py:123
 msgid "order"
 msgstr "Ordem"
 
@@ -773,85 +823,95 @@ msgstr "Aceitar submissões atrasadas"
 msgid "Whether submissions after the deadline should be accepted"
 msgstr "Se as submissões após o prazo final devem ser aceitas"
 
-#: wafer/talks/models.py:90
+#: wafer/talks/models.py:89
 msgid "Show authors in speakers list"
 msgstr "Exibir autores na lista de palestrantes"
 
-#: wafer/talks/models.py:92
+#: wafer/talks/models.py:91
 msgid "Whether to show the authors for this talk type in the speakers list"
 msgstr ""
 "Se os autores de palestras deste tipo devem ser exibidos na lista de "
 "palestrantes"
 
-#: wafer/talks/models.py:102 wafer/talks/models.py:162
+#: wafer/talks/models.py:94
+#, fuzzy
+#| msgid "disable submission"
+msgid "show pending submissions"
+msgstr "Desativar submissão"
+
+#: wafer/talks/models.py:96
+msgid "Whether to publicly show pending submissions, before acceptance"
+msgstr ""
+
+#: wafer/talks/models.py:106 wafer/talks/models.py:166
 msgid "talk type"
 msgstr "Tipo de palestra"
 
-#: wafer/talks/models.py:103
+#: wafer/talks/models.py:107
 msgid "talk types"
 msgstr "Tipos de palestras"
 
-#: wafer/talks/models.py:112 wafer/talks/models.py:136
+#: wafer/talks/models.py:116 wafer/talks/models.py:140
 msgid "CSS class name"
 msgstr "Nome da classe CSS"
 
-#: wafer/talks/models.py:126 wafer/talks/models.py:164
+#: wafer/talks/models.py:130 wafer/talks/models.py:168
 msgid "track"
 msgstr "trilha"
 
-#: wafer/talks/models.py:127
+#: wafer/talks/models.py:131
 msgid "tracks"
 msgstr "trilhas"
 
-#: wafer/talks/models.py:147 wafer/talks/models.py:383
+#: wafer/talks/models.py:151 wafer/talks/models.py:390
 msgid "talk"
 msgstr "Palestra"
 
-#: wafer/talks/models.py:148
+#: wafer/talks/models.py:152
 msgid "talks"
 msgstr "Palestras"
 
-#: wafer/talks/models.py:151 wafer/talks/templates/wafer.talks/talk.html:120
+#: wafer/talks/models.py:155 wafer/talks/templates/wafer.talks/talk.html:120
 msgid "Accepted"
 msgstr "Aceita"
 
-#: wafer/talks/models.py:152 wafer/talks/templates/wafer.talks/talk.html:126
-#: wafer/talks/templates/wafer.talks/talks.html:25
+#: wafer/talks/models.py:156 wafer/talks/templates/wafer.talks/talk.html:126
+#: wafer/talks/templates/wafer.talks/talks.html:42
 msgid "Not accepted"
 msgstr "Não aceita"
 
-#: wafer/talks/models.py:154 wafer/talks/templates/wafer.talks/talk.html:116
-#: wafer/talks/templates/wafer.talks/talks.html:23
+#: wafer/talks/models.py:158 wafer/talks/templates/wafer.talks/talk.html:116
+#: wafer/talks/templates/wafer.talks/talks.html:40
 msgid "Under consideration"
 msgstr "Sob consideração"
 
-#: wafer/talks/models.py:155 wafer/talks/templates/wafer.talks/talk.html:114
-#: wafer/talks/templates/wafer.talks/talks.html:21
+#: wafer/talks/models.py:159 wafer/talks/templates/wafer.talks/talk.html:114
+#: wafer/talks/templates/wafer.talks/talks.html:38
 msgid "Submitted"
 msgstr "Enviada"
 
-#: wafer/talks/models.py:156 wafer/talks/templates/wafer.talks/talk.html:118
-#: wafer/talks/templates/wafer.talks/talks.html:29
+#: wafer/talks/models.py:160 wafer/talks/templates/wafer.talks/talk.html:118
+#: wafer/talks/templates/wafer.talks/talks.html:46
 msgid "Provisionally Accepted"
 msgstr "Provisoriamente Aceita"
 
-#: wafer/talks/models.py:157 wafer/talks/templates/wafer.talks/talk.html:124
+#: wafer/talks/models.py:161 wafer/talks/templates/wafer.talks/talk.html:124
 msgid "Withdrawn"
 msgstr "Retirada"
 
-#: wafer/talks/models.py:169
+#: wafer/talks/models.py:174
 msgid "language"
 msgstr "idioma"
 
-#: wafer/talks/models.py:177
+#: wafer/talks/models.py:182
 msgid "title"
 msgstr "título"
 
-#: wafer/talks/models.py:180
+#: wafer/talks/models.py:185
 msgid "abstract"
 msgstr "resumo"
 
-#: wafer/talks/models.py:181
+#: wafer/talks/models.py:186
 msgid ""
 "Write two or three paragraphs describing your talk. Who is your audience? "
 "What will they get out of it? What will you cover?<br />You can use Markdown "
@@ -861,11 +921,11 @@ msgstr ""
 "público alvo?O que eles vão ganhar com a palestra? O que vai cobrir?<br /> "
 "Pode usar a sintaxe Markdown."
 
-#: wafer/talks/models.py:187 wafer/talks/models.py:390
+#: wafer/talks/models.py:192 wafer/talks/models.py:397
 msgid "notes"
 msgstr "notas"
 
-#: wafer/talks/models.py:190
+#: wafer/talks/models.py:195
 msgid ""
 "Any notes for the conference? Such as additional background on the topic or "
 "presenters that isn't going to be published publicly, special requirements "
@@ -877,25 +937,25 @@ msgstr ""
 "especials para a atividade, ou solicitações sobre o agendamento da "
 "atividade. Estas informações não são serão mostradas ao público."
 
-#: wafer/talks/models.py:196
+#: wafer/talks/models.py:201
 msgid "private notes"
 msgstr "notas privadas"
 
-#: wafer/talks/models.py:198
+#: wafer/talks/models.py:203
 msgid "Note space for the conference organisers (not visible to submitter)"
 msgstr ""
 "Espaço de notas para os organizadores da conferência (invisível para os "
 "submetedores)"
 
-#: wafer/talks/models.py:201
+#: wafer/talks/models.py:206
 msgid "status"
 msgstr "status"
 
-#: wafer/talks/models.py:207
+#: wafer/talks/models.py:212
 msgid "corresponding author"
 msgstr "autor correspondente"
 
-#: wafer/talks/models.py:209
+#: wafer/talks/models.py:214
 msgid ""
 "The person submitting the talk (and who questions regarding the talk should "
 "be addressed to)."
@@ -903,29 +963,29 @@ msgstr ""
 "A pessoa que enviou a palestra (a quem as perguntas sobre a palestra devem "
 "ser encaminhadas)."
 
-#: wafer/talks/models.py:214
+#: wafer/talks/models.py:219
 msgid "authors"
 msgstr "autores"
 
-#: wafer/talks/models.py:219
+#: wafer/talks/models.py:224
 msgid "video"
 msgstr "video"
 
-#: wafer/talks/models.py:221
+#: wafer/talks/models.py:226
 #, python-brace-format
 msgid ""
 "By checking this, you are giving permission for the talk to be videoed, and "
-"distributed by the conference, under the <a href="
-"\"{license_url}\">{license_name} license</a>."
+"distributed by the conference, under the <a "
+"href=\"{license_url}\">{license_name} license</a>."
 msgstr ""
 "Ao marcar essa opção, dá permissão para a palestra ser filmada e distribuída "
 "pela conferência, sob a <a href=\"{license_url}\">licença {license_name}</a>."
 
-#: wafer/talks/models.py:230
+#: wafer/talks/models.py:235
 msgid "video reviewer"
 msgstr "revisor de vídeo"
 
-#: wafer/talks/models.py:232
+#: wafer/talks/models.py:237
 msgid ""
 "Email address of a person who will be allowed to review and approve your "
 "video details. Ideally, a second set of eyes who is not a busy conference "
@@ -937,70 +997,70 @@ msgstr ""
 "ocupado. Mas pode especificar a si mesmo, se não conseguir pensar em outra "
 "pessoa que se importaria."
 
-#: wafer/talks/models.py:264
+#: wafer/talks/models.py:269
 msgid "NO CONTACT INFO"
 msgstr "SEM INFORMAÇÕES DE CONTATO"
 
-#: wafer/talks/models.py:266
+#: wafer/talks/models.py:271
 msgid "Contact Details"
 msgstr "Detalhes do contato"
 
-#: wafer/talks/models.py:272
+#: wafer/talks/models.py:277
 msgid "Corresponding Author"
 msgstr "Autor correspondente"
 
-#: wafer/talks/models.py:283
+#: wafer/talks/models.py:288
 #, python-format
 msgid "%s, et al."
 msgstr "%s e outros(as)"
 
-#: wafer/talks/models.py:290
+#: wafer/talks/models.py:295
 msgid "Added to schedule"
 msgstr "Adicionado à programação"
 
-#: wafer/talks/models.py:299
+#: wafer/talks/models.py:304
 msgid "Has URL"
 msgstr "Tem URL"
 
-#: wafer/talks/models.py:386
+#: wafer/talks/models.py:393
 msgid "reviewer"
 msgstr "revisor"
 
-#: wafer/talks/models.py:392
+#: wafer/talks/models.py:399
 msgid "Comments on the proposal (markdown)"
 msgstr "Comentários sobre a proposta (markdown)"
 
-#: wafer/talks/models.py:395
+#: wafer/talks/models.py:402
 #, python-format
 msgid "Review of %(title)s by %(reviewer)s (%(average_score)s)"
 msgstr "Revisão de %(title)s por %(reviewer)s (%(average_score)s)"
 
-#: wafer/talks/models.py:414
+#: wafer/talks/models.py:421
 msgid "review"
 msgstr "revisar"
 
-#: wafer/talks/models.py:415
+#: wafer/talks/models.py:422
 msgid "reviews"
 msgstr "revisões"
 
-#: wafer/talks/models.py:425
+#: wafer/talks/models.py:433
 msgid "review aspect"
 msgstr "aspeto da revisão"
 
-#: wafer/talks/models.py:426
+#: wafer/talks/models.py:434
 msgid "review aspects"
 msgstr "aspectos da revisão"
 
-#: wafer/talks/models.py:442
+#: wafer/talks/models.py:450
 #, python-format
 msgid "Review of %(title)s by %(reviewer)s on %(aspect)s: %(score)i"
 msgstr "Revisão de %(title)s por %(reviewer)s em %(aspect)s: %(score)i"
 
-#: wafer/talks/models.py:450
+#: wafer/talks/models.py:458
 msgid "score"
 msgstr "Pontuação"
 
-#: wafer/talks/models.py:451
+#: wafer/talks/models.py:459
 msgid "scores"
 msgstr "pontuações"
 
@@ -1018,6 +1078,9 @@ msgstr "Revisada, mas desatualizado (modificado desde a última revisão)"
 
 #: wafer/talks/templates/wafer.talks/speakers.html:3
 #: wafer/talks/templates/wafer.talks/speakers.html:8
+#: wafer/talks/templates/wafer.talks/speakers.html:39
+#: wafer/talks/templates/wafer.talks/talks.html:28
+#: wafer/talks/templates/wafer.talks/talks.html:72
 msgid "Speakers"
 msgstr "Palestrantes"
 
@@ -1060,6 +1123,8 @@ msgid "Track: %(track)s"
 msgstr "Trilha: %(track)s"
 
 #: wafer/talks/templates/wafer.talks/talk.html:72
+#: wafer/talks/templates/wafer.talks/talks.html:24
+#: wafer/talks/templates/wafer.talks/talks.html:69
 msgid "Talk"
 msgstr "Palestra"
 
@@ -1088,7 +1153,7 @@ msgid "Submission:"
 msgstr "Submissão:"
 
 #: wafer/talks/templates/wafer.talks/talk.html:106
-#: wafer/talks/templates/wafer.talks/talks.html:18
+#: wafer/talks/templates/wafer.talks/talks.html:35
 msgid "Late submission"
 msgstr "Submissão atrasada"
 
@@ -1113,32 +1178,32 @@ msgstr ""
 msgid "URLs"
 msgstr "URLs"
 
-#: wafer/talks/templates/wafer.talks/talk_form.html:8
+#: wafer/talks/templates/wafer.talks/talk_form.html:9
 msgid "Edit Talk"
 msgstr "Editar Palestra"
 
-#: wafer/talks/templates/wafer.talks/talk_form.html:11
+#: wafer/talks/templates/wafer.talks/talk_form.html:12
 #, python-format
 msgid ""
-"<p>Submitted by <a href=\"%(corresponding_author_url)s\">"
-"%(corresponding_author_name)s</a>.</p>"
+"<p>Submitted by <a "
+"href=\"%(corresponding_author_url)s\">%(corresponding_author_name)s</a>.</p>"
 msgstr ""
-"<p>Enviado por <a href=\"%(corresponding_author_url)s\""
-">%(corresponding_author_name)s</a>.</p>"
+"<p>Enviado por <a "
+"href=\"%(corresponding_author_url)s\">%(corresponding_author_name)s</a>.</p>"
 
-#: wafer/talks/templates/wafer.talks/talk_form.html:16
+#: wafer/talks/templates/wafer.talks/talk_form.html:17
 msgid "Talk Submission"
 msgstr "Submissão de palestra"
 
-#: wafer/talks/templates/wafer.talks/talk_form.html:19
+#: wafer/talks/templates/wafer.talks/talk_form.html:22
 msgid "<em>Talk submission is closed</em>"
 msgstr "<em>Envio da palestras está encerrada</em>"
 
-#: wafer/talks/templates/wafer.talks/talk_form.html:27
+#: wafer/talks/templates/wafer.talks/talk_form.html:32
 msgid "Your Biography"
 msgstr "A sua biografia"
 
-#: wafer/talks/templates/wafer.talks/talk_form.html:36
+#: wafer/talks/templates/wafer.talks/talk_form.html:41
 #, python-format
 msgid ""
 "Please <a href=\"%(edit_bio_url)s\">add a speaker biography</a> before "
@@ -1168,32 +1233,46 @@ msgstr "Confirmar retirada da palestra"
 #: wafer/talks/templates/wafer.talks/talk_withdraw.html:7
 #, python-format
 msgid ""
-"You are about to withdraw the talk <a href=\"%(talk_url)s\">\"%(talk_title)s"
-"\"</a>.<br> This cannot be undone without help from the site administrators."
+"You are about to withdraw the talk <a "
+"href=\"%(talk_url)s\">\"%(talk_title)s\"</a>.<br> This cannot be undone "
+"without help from the site administrators."
 msgstr ""
-"Está prestes a retirar a sua palestra <a href=\"%(talk_url)s\">\""
-"%(talk_title)s\"</a>.<br> Isso não pode ser desfeito sem a ajuda dos "
-"administradores do site."
+"Está prestes a retirar a sua palestra <a "
+"href=\"%(talk_url)s\">\"%(talk_title)s\"</a>.<br> Isso não pode ser desfeito "
+"sem a ajuda dos administradores do site."
 
 #: wafer/talks/templates/wafer.talks/talk_withdraw.html:14
 msgid "Confirm Withdrawal"
 msgstr "Confirmar retirada"
 
 #: wafer/talks/templates/wafer.talks/talks.html:4
-#: wafer/talks/templates/wafer.talks/talks.html:12
 msgid "Talks"
 msgstr "Palestras"
 
+#: wafer/talks/templates/wafer.talks/talks.html:9
+#, fuzzy
+#| msgid "Submitted"
+msgid "All Submitted Talks"
+msgstr "Enviada"
+
+#: wafer/talks/templates/wafer.talks/talks.html:11
+#, fuzzy
+#| msgid "Accepted Talks:"
+msgid "Accepted Talks"
+msgstr "Palestras aceitas:"
+
 #: wafer/talks/templates/wafer.talks/talks.html:27
+#: wafer/talks/templates/wafer.talks/talks.html:71
+#, fuzzy
+#| msgid "language"
+msgid "Language"
+msgstr "idioma"
+
+#: wafer/talks/templates/wafer.talks/talks.html:44
 msgid "Talk Cancelled"
 msgstr "Palestra cancelada"
 
-#: wafer/talks/templates/wafer.talks/talks.html:37
-#, python-format
-msgid "by <span class=\"author\">%(authors)s</span>"
-msgstr "Por <span class=\"author\">%(authors)s</span>"
-
-#: wafer/talks/templates/wafer.talks/talks.html:42
+#: wafer/talks/templates/wafer.talks/talks.html:77
 msgid "No talks accepted yet."
 msgstr "Nenhuma palestra aceita ainda."
 
@@ -1223,7 +1302,8 @@ msgstr "Ocorreu um erro ao preparar a página solicitada."
 
 #: wafer/templates/markitup/preview.html:5
 msgid "This is only a preview of the page. It has not yet been updated."
-msgstr "Esta é apenas uma pré-visualização da página. Ainda não foi atualizado."
+msgstr ""
+"Esta é apenas uma pré-visualização da página. Ainda não foi atualizado."
 
 #: wafer/templates/wafer/index.html:6
 msgid "Index page missing"
@@ -1302,48 +1382,40 @@ msgstr "perfil"
 msgid "profiles"
 msgstr "perfis"
 
-#: wafer/users/forms.py:46
-msgid "handle"
-msgstr "perfil"
+#: wafer/users/forms.py:67
+msgid "<p>Code Hosting Profiles</p>"
+msgstr ""
 
-#: wafer/users/forms.py:48
-msgid "username"
-msgstr "nome do utilizador"
+#: wafer/users/forms.py:71
+msgid "<p>Social Profiles</p>"
+msgstr ""
 
-#: wafer/users/models.py:38
+#: wafer/users/models.py:34
 msgid "user profile"
 msgstr "perfil de utilizador"
 
-#: wafer/users/models.py:39
+#: wafer/users/models.py:35
 msgid "user profiles"
 msgstr "perfis de utilizador"
 
-#: wafer/users/models.py:43
+#: wafer/users/models.py:39
 msgid "contact number"
 msgstr "número de contato"
 
-#: wafer/users/models.py:44
+#: wafer/users/models.py:40
 msgid "bio"
 msgstr "bio"
 
-#: wafer/users/models.py:46
+#: wafer/users/models.py:42
 msgid "homepage"
 msgstr "página web"
-
-#: wafer/users/models.py:49
-msgid "Twitter handle"
-msgstr "Perfil no Twitter"
-
-#: wafer/users/models.py:51
-msgid "GitHub username"
-msgstr "Nome de utilizador do GitHub"
 
 #: wafer/users/templates/wafer.users/edit_profile.html:5
 msgid "Edit Profile:"
 msgstr "Editar Perfil:"
 
 #: wafer/users/templates/wafer.users/edit_user.html:5
-#: wafer/users/templates/wafer.users/profile.html:31
+#: wafer/users/templates/wafer.users/snippets/profile_25-menu.html:6
 msgid "Edit Account"
 msgstr "Editar conta"
 
@@ -1351,57 +1423,55 @@ msgstr "Editar conta"
 msgid "Change Password"
 msgstr "Mudar palavra-passe"
 
-#: wafer/users/templates/wafer.users/profile.html:17
+#: wafer/users/templates/wafer.users/snippets/profile_20-bio.html:14
 msgid "Changing your mugshot"
 msgstr "A alterar a sua foto"
 
-#: wafer/users/templates/wafer.users/profile.html:18
+#: wafer/users/templates/wafer.users/snippets/profile_20-bio.html:15
 msgid "Edit Mugshot"
 msgstr "Editar a sua Foto"
 
-#: wafer/users/templates/wafer.users/profile.html:20
+#: wafer/users/templates/wafer.users/snippets/profile_20-bio.html:17
 msgid ""
 "Pictures provided by <a href=\"https://www.libravatar.org/\">libravatar</a> "
 "(which falls back to <a href=\"https://secure.gravatar.com/\">Gravatar</a>)."
 "<br> Change your picture there."
 msgstr ""
 "Imagens fornecidas pelo <a href=\"https://www.libravatar.org/\">libravatar</"
-"a> (ou então pelo <a href=\"https://secure.gravatar.com/\">Gravatar</a>)"
-".<br> Altere a sua foto lá."
+"a> (ou então pelo <a href=\"https://secure.gravatar.com/\">Gravatar</a>)."
+"<br> Altere a sua foto lá."
 
-#: wafer/users/templates/wafer.users/profile.html:32
+#: wafer/users/templates/wafer.users/snippets/profile_25-menu.html:7
 msgid "Edit Profile"
 msgstr "Editar Perfil"
 
-#: wafer/users/templates/wafer.users/profile.html:41
+#: wafer/users/templates/wafer.users/snippets/profile_25-menu.html:17
 msgctxt "conference"
 msgid "Update registration"
 msgstr "Atualizar inscrição"
 
-#: wafer/users/templates/wafer.users/profile.html:41
+#: wafer/users/templates/wafer.users/snippets/profile_25-menu.html:17
 msgctxt "conference"
 msgid "Register"
 msgstr "Inscrever-se"
 
-#: wafer/users/templates/wafer.users/profile.html:45
+#: wafer/users/templates/wafer.users/snippets/profile_25-menu.html:20
+#, fuzzy
+#| msgctxt "conference"
+#| msgid "Register"
+msgctxt "conference"
+msgid "Unregister"
+msgstr "Inscrever-se"
+
+#: wafer/users/templates/wafer.users/snippets/profile_25-menu.html:24
 msgid "Submit Talk Proposal"
 msgstr "Enviar proposta de palestra"
 
-#: wafer/users/templates/wafer.users/profile.html:62
-#, python-format
-msgid "Follow @%(handle)s"
-msgstr "Siga @%(handle)s"
-
-#: wafer/users/templates/wafer.users/profile.html:69
-#, python-format
-msgid "GitHub: %(username)s"
-msgstr "GitHub: %(username)s"
-
-#: wafer/users/templates/wafer.users/profile.html:85
+#: wafer/users/templates/wafer.users/snippets/profile_30-registered.html:8
 msgid "Registered"
 msgstr "Registado/a"
 
-#: wafer/users/templates/wafer.users/profile.html:91
+#: wafer/users/templates/wafer.users/snippets/profile_30-registered.html:14
 msgid ""
 "<strong>WARNING:</strong> Talk proposal submitted, but speaker hasn't "
 "registered to attend."
@@ -1409,23 +1479,23 @@ msgstr ""
 "<strong>AVISO:</strong> Proposta de palestra enviada, mas o palestrante não "
 "se inscreveu para participar."
 
-#: wafer/users/templates/wafer.users/profile.html:96
+#: wafer/users/templates/wafer.users/snippets/profile_30-registered.html:19
 msgid "Register now!"
 msgstr "Se inscreva já!"
 
-#: wafer/users/templates/wafer.users/profile.html:104
+#: wafer/users/templates/wafer.users/snippets/profile_40-talks.html:6
 msgid "Accepted Talks:"
 msgstr "Palestras aceitas:"
 
-#: wafer/users/templates/wafer.users/profile.html:119
+#: wafer/users/templates/wafer.users/snippets/profile_40-talks.html:23
 msgid "Cancelled Talks:"
 msgstr "Palestras canceladas:"
 
-#: wafer/users/templates/wafer.users/profile.html:136
+#: wafer/users/templates/wafer.users/snippets/profile_40-talks.html:42
 msgid "Provisionally Accepted Talks:"
 msgstr "Palestras aceitas provisoriamente:"
 
-#: wafer/users/templates/wafer.users/profile.html:151
+#: wafer/users/templates/wafer.users/snippets/profile_40-talks.html:59
 msgid "Submitted or Under Consideration Talks:"
 msgstr "Palestras enviadas ou em consideração:"
 
@@ -1436,3 +1506,27 @@ msgstr "Utilizadores"
 #: wafer/users/templates/wafer.users/users.html:5
 msgid "Users:"
 msgstr "Utilizadores:"
+
+#, python-format
+#~ msgid "by <span class=\"author\">%(authors)s</span>"
+#~ msgstr "Por <span class=\"author\">%(authors)s</span>"
+
+#~ msgid "handle"
+#~ msgstr "perfil"
+
+#~ msgid "username"
+#~ msgstr "nome do utilizador"
+
+#~ msgid "Twitter handle"
+#~ msgstr "Perfil no Twitter"
+
+#~ msgid "GitHub username"
+#~ msgstr "Nome de utilizador do GitHub"
+
+#, python-format
+#~ msgid "Follow @%(handle)s"
+#~ msgstr "Siga @%(handle)s"
+
+#, python-format
+#~ msgid "GitHub: %(username)s"
+#~ msgstr "GitHub: %(username)s"
