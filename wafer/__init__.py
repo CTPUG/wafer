@@ -1,3 +1,3 @@
 """Wafer, a light-weight conference management library for Django."""
 
-__version__ = "0.15.3a"
+__version__ = "0.16.0"
