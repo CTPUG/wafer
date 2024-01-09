@@ -46,7 +46,7 @@
         </ul>
       {% endblock navmenulist %}
       {% block navauthmenu %}
-        <ul class="navbar-nav float-md-end">
+        <ul class="navbar-nav ms-auto">
           {% if user.is_authenticated %}
             {% block navauthenticated %}
               <li class="nav-item dropdown">
