@@ -2,7 +2,7 @@ import datetime as D
 
 from django.test import TestCase
 from django.http import HttpRequest
-from django.utils import timezone
+from django.utils import timezone, version
 
 from wafer.pages.models import Page
 from wafer.schedule.admin import (
@@ -197,16 +197,23 @@ class SlotListFilterTest(TestCase):
         # We can get away with request None, since SimpleListFilter
         # doesn't use request in the bits we want to test
         if block:
-            return SlotBlockFilter(None, {'block': str(block.pk)}, Slot, self.admin)
+            value = str(block.pk)
         else:
-            return SlotBlockFilter(None, {'block': None}, Slot, self.admin)
+            value = None
+        if version.get_complete_version()[0] >= 5:
+            # Django 5 changes the way filter parameters are handled
+            value = [value]
+        return SlotBlockFilter(None, {'block': value}, Slot, self.admin)
 
     def _make_time_filter(self, time):
         """create a list filter for testing."""
         if time:
-            return SlotStartTimeFilter(None, {'start': time}, Slot, self.admin)
+            value = time
         else:
-            return SlotStartTimeFilter(None, {'start': None}, Slot, self.admin)
+            value = None
+        if version.get_complete_version()[0] >= 5:
+            value = [value]
+        return SlotStartTimeFilter(None, {'start': value}, Slot, self.admin)
 
     def test_day_filter_lookups(self):
         """Test that filter lookups are sane."""
