@@ -161,7 +161,9 @@ class EditorTestsMixin:
     def test_access_schedule_editor_admin(self):
         """Test that the schedule editor is accessible for superuser accounts"""
         self._start()
-        all_talks_link = self.driver.find_element(By.PARTIAL_LINK_TEXT, "All Talks")
+        all_talks_link = WebDriverWait(self.driver, WAIT_TIME).until(
+            expected_conditions.presence_of_element_located((By.PARTIAL_LINK_TEXT, "All Talks"))
+        )
         all_talks_link.click()
         tab_pane = None
         for pane in self.driver.find_elements(By.CLASS_NAME, "tab-pane"):
@@ -176,7 +178,9 @@ class EditorTestsMixin:
         self.assertEqual(ScheduleItem.objects.count(), 0)
         self._start()
         # partial link text to avoid whitespace fiddling
-        talks_link = self.driver.find_element(By.PARTIAL_LINK_TEXT, "Unassigned Talks")
+        talks_link = WebDriverWait(self.driver, WAIT_TIME).until(
+            expected_conditions.presence_of_element_located((By.PARTIAL_LINK_TEXT, "Unassigned Talks"))
+        )
         talks_link.click()
         tab_pane = None
         for pane in self.driver.find_elements(By.CLASS_NAME, "tab-pane"):
@@ -232,7 +236,10 @@ class EditorTestsMixin:
         self.assertEqual(ScheduleItem.objects.count(), 0)
         self._start()
         # Drag a page from the siderbar to a slot in the schedule
-        page_link = self.driver.find_element(By.PARTIAL_LINK_TEXT, "Pages")
+
+        page_link = WebDriverWait(self.driver, WAIT_TIME).until(
+            expected_conditions.presence_of_element_located((By.PARTIAL_LINK_TEXT, "Pages"))
+        )
         page_link.click()
         tab_pane = None
         for pane in self.driver.find_elements(By.CLASS_NAME, "tab-pane"):
@@ -323,7 +330,9 @@ class EditorTestsMixin:
         # Load schedule page
         self._start()
         # Verify we see the expected schedule items on day 1
-        td1 = self.driver.find_element(By.ID, f"scheduleItem{item1.pk}")
+        td1 = WebDriverWait(self.driver, WAIT_TIME).until(
+            expected_conditions.presence_of_element_located((By.ID, f"scheduleItem{item1.pk}"))
+        )
         self.assertEqual(td1.tag_name, 'td')
         td2 = self.driver.find_element(By.ID, f"scheduleItem{item2.pk}")
         self.assertEqual(td2.tag_name, 'td')
@@ -362,7 +371,9 @@ class EditorTestsMixin:
         item1.save()
         self._start()
         # Test dragging a talk over an existing talk
-        target = self.driver.find_element(By.ID, f"scheduleItem{item1.pk}")
+        target = WebDriverWait(self.driver, WAIT_TIME).until(
+            expected_conditions.presence_of_element_located((By.ID, f"scheduleItem{item1.pk}"))
+        )
         talks_link = self.driver.find_element(By.PARTIAL_LINK_TEXT, "Unassigned Talks")
         talks_link.click()
         tab_pane = None
@@ -414,7 +425,9 @@ class EditorTestsMixin:
         item1.save()
         self._start()
         # Test dragging a page over an existing page
-        target = self.driver.find_element(By.ID, f"scheduleItem{item1.pk}")
+        target = WebDriverWait(self.driver, WAIT_TIME).until(
+            expected_conditions.presence_of_element_located((By.ID, f"scheduleItem{item1.pk}"))
+        )
         page_link = self.driver.find_element(By.PARTIAL_LINK_TEXT, "Pages")
         page_link.click()
         tab_pane = None
@@ -462,7 +475,9 @@ class EditorTestsMixin:
         item2.save()
         self._start()
         # Verify that there are no validation errors
-        validation = self.driver.find_element(By.CLASS_NAME, "alert-danger")
+        validation = WebDriverWait(self.driver, WAIT_TIME).until(
+            expected_conditions.presence_of_element_located((By.CLASS_NAME, "alert-danger"))
+        )
         self.assertFalse(validation.is_displayed())
         # Drag a talk into a clashing slot
         target = self.driver.find_element(By.ID, f"scheduleItem{item2.pk}")
@@ -507,7 +522,9 @@ class EditorTestsMixin:
         item2.save()
         self._start()
         # Verify that there are validation errors
-        validation = self.driver.find_element(By.CLASS_NAME, "alert-danger")
+        validation = WebDriverWait(self.driver, WAIT_TIME).until(
+            expected_conditions.presence_of_element_located((By.CLASS_NAME, "alert-danger"))
+        )
         self.assertTrue(validation.is_displayed())
         error_item = validation.find_element(By.TAG_NAME, "li")
         self.assertIn('Common speaker', error_item.text)
