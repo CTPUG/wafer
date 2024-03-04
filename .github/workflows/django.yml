@@ -26,31 +26,33 @@ jobs:
     strategy:
       max-parallel: 4
       matrix:
-        python-version: ['3.7', '3.8', '3.9', '3.10', '3.11']
-        django-version: ['3.2.0', '4.0.0', '4.1.0', '4.2.0', 'main']
+        python-version: ['3.8', '3.9', '3.10', '3.11', '3.12']
+        django-version: ['3.2.0', '4.0.0', '4.1.0', '4.2.0', '5.0.0', 'main']
         exclude:
-          - django-version: '4.0.0'
-            python-version: '3.7'
-          - django-version: '4.1.0'
-            python-version: '3.7'
           - django-version: '4.2.0'
             python-version: '3.8'
-          - django-version: '4.2.0'
-            python-version: '3.7'
-          - django-version: 'main'
-            python-version: '3.7'
           - django-version: 'main'
             python-version: '3.8'
           - django-version: 'main'
+            python-version: '3.9'
+          - django-version: '5.0.0'
+            python-version: '3.8'
+          - django-version: '5.0.0'
             python-version: '3.9'
           - django-version: '3.2.0'
             python-version: '3.11'
           - django-version: '4.0.0'
             python-version: '3.11'
+          - django-version: '3.2.0'
+            python-version: '3.12'
+          - django-version: '4.0.0'
+            python-version: '3.12'
+          - django-version: '4.1.0'
+            python-version: '3.12'
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v5
       with:
         python-version: ${{ matrix.python-version }}
     - name: Install Dependencies
@@ -58,14 +60,7 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt -r requirements-dev.txt
-    - name: 'Install psycopg2 for Django < 3.1'
-      # Django < 3.1 is incompatible with psycopg2 2.9
-      # See https://github.com/psycopg/psycopg2/issues/1293
-      if: "matrix.django-version == '2.2.0' || matrix.django-version == '3.0.0'"
-      run: |
-        pip install 'psycopg2<2.9'
     - name: 'Install psycopg2'
-      if: "matrix.django-version != '2.2.0' && matrix.django-version != '3.0.0'"
       run: |
         pip install psycopg2
     - name: Install Django Release
@@ -93,31 +88,33 @@ jobs:
     strategy:
       max-parallel: 4
       matrix:
-        python-version: ['3.7', '3.8', '3.9', '3.10','3.11']
-        django-version: ['3.2.0', '4.0.0', '4.1.0', '4.2.0', 'main']
+        python-version: ['3.8', '3.9', '3.10', '3.11', '3.12']
+        django-version: ['3.2.0', '4.0.0', '4.1.0', '4.2.0', '5.0.0', 'main']
         exclude:
-          - django-version: '4.0.0'
-            python-version: '3.7'
-          - django-version: '4.1.0'
-            python-version: '3.7'
-          - django-version: '4.2.0'
-            python-version: '3.7'
           - django-version: '4.2.0'
             python-version: '3.8'
           - django-version: 'main'
-            python-version: '3.7'
-          - django-version: 'main'
             python-version: '3.8'
           - django-version: 'main'
+            python-version: '3.9'
+          - django-version: '5.0.0'
+            python-version: '3.8'
+          - django-version: '5.0.0'
             python-version: '3.9'
           - django-version: '3.2.0'
             python-version: '3.11'
           - django-version: '4.0.0'
             python-version: '3.11'
+          - django-version: '3.2.0'
+            python-version: '3.12'
+          - django-version: '4.0.0'
+            python-version: '3.12'
+          - django-version: '4.1.0'
+            python-version: '3.12'
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v5
       with:
         python-version: ${{ matrix.python-version }}
     - name: Install Dependencies
@@ -144,11 +141,11 @@ jobs:
     runs-on: ubuntu-latest
     name: Compile Translations
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - name: Set up Python
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v5
       with:
-        python-version: '3.10'
+        python-version: '3.11'
     - name: Install Python Dependencies
       run: |
         python -m pip install --upgrade pip
@@ -173,9 +170,9 @@ jobs:
       matrix:
         browser: ['chrome', 'firefox']
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - name: Set up Python
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v5
     - name: Install Dependencies
       run: |
         python -m pip install --upgrade pip
