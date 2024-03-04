@@ -21,7 +21,7 @@ from django.utils import timezone
 from django.urls import reverse
 
 from wafer.pages.models import Page
-from wafer.tests.utils import create_user, ChromeTestRunner, FirefoxTestRunner
+from wafer.tests.utils import create_user, ChromeTestRunner, FirefoxTestRunner, WAIT_TIME
 from wafer.talks.tests.fixtures import create_talk
 from wafer.talks.models import ACCEPTED
 
@@ -126,14 +126,14 @@ class EditorTestsMixin:
         """Helper method to login as admin and load the editor"""
         self.admin_login()
         self.driver.get(self.edit_page)
-        WebDriverWait(self.driver, 10).until(
+        WebDriverWait(self.driver, WAIT_TIME).until(
            expected_conditions.presence_of_element_located((By.TAG_NAME, "h1"))
         )
 
     def test_access_schedule_editor_no_login(self):
         """Test that the schedule editor isn't accessible if not logged in"""
         self.driver.get(self.edit_page)
-        header = WebDriverWait(self.driver, 10).until(
+        header = WebDriverWait(self.driver, WAIT_TIME).until(
            expected_conditions.presence_of_element_located((By.TAG_NAME, "h1"))
         )
         self.assertEqual('Django administration', header.text)
@@ -148,7 +148,7 @@ class EditorTestsMixin:
         """Test that the schedule editor isn't accessible for non-superuser accounts"""
         self.normal_login()
         self.driver.get(self.edit_page)
-        WebDriverWait(self.driver, 10).until(
+        WebDriverWait(self.driver, WAIT_TIME).until(
            expected_conditions.presence_of_element_located((By.TAG_NAME, "h1"))
         )
         error = self.driver.find_element(By.CLASS_NAME, "errornote")
@@ -196,7 +196,7 @@ class EditorTestsMixin:
         # Pause briefly to make sure the server has a chance to do stuff
         actions.pause(0.5)
         actions.perform()
-        WebDriverWait(self.driver, 10).until(
+        WebDriverWait(self.driver, WAIT_TIME).until(
            expected_conditions.presence_of_element_located((By.CLASS_NAME, "close"))
         )
         self.assertEqual(ScheduleItem.objects.count(), 1)
@@ -217,7 +217,7 @@ class EditorTestsMixin:
         actions.drag_and_drop(source, target)
         actions.pause(0.5)
         actions.perform()
-        WebDriverWait(self.driver, 10).until(
+        WebDriverWait(self.driver, WAIT_TIME).until(
            expected_conditions.presence_of_element_located((By.CLASS_NAME, "close"))
         )
         self.assertEqual(ScheduleItem.objects.count(), 2)
@@ -253,7 +253,7 @@ class EditorTestsMixin:
         actions.drag_and_drop(source, target)
         actions.pause(0.5)
         actions.perform()
-        WebDriverWait(self.driver, 10).until(
+        WebDriverWait(self.driver, WAIT_TIME).until(
            expected_conditions.presence_of_element_located((By.CLASS_NAME, "close"))
         )
         self.assertEqual(ScheduleItem.objects.count(), 1)
@@ -279,7 +279,7 @@ class EditorTestsMixin:
         actions.drag_and_drop(source, target)
         actions.pause(0.5)
         actions.perform()
-        WebDriverWait(self.driver, 10).until(
+        WebDriverWait(self.driver, WAIT_TIME).until(
            expected_conditions.presence_of_element_located((By.CLASS_NAME, "close"))
         )
         self.assertEqual(ScheduleItem.objects.count(), 2)
@@ -333,12 +333,12 @@ class EditorTestsMixin:
         buttons = self.driver.find_elements(By.TAG_NAME, 'button')
         self.assertIn('Sep', buttons[1].text)
         buttons[1].click()
-        WebDriverWait(self.driver, 10).until(
+        WebDriverWait(self.driver, WAIT_TIME).until(
            expected_conditions.presence_of_element_located((By.CLASS_NAME, "show"))
         )
         days = self.driver.find_elements(By.PARTIAL_LINK_TEXT, "Sep")
         days[1].click()
-        WebDriverWait(self.driver, 10).until(
+        WebDriverWait(self.driver, WAIT_TIME).until(
            expected_conditions.presence_of_element_located((By.CLASS_NAME, "close"))
         )
         # Verify we see the expected schedule items on day 2
