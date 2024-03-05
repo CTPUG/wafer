@@ -54,7 +54,7 @@ def mock_avatar_url(self):
 
 
 # Time to wait for elements to appear - single constant so we can easily tune it if needed
-WAIT_TIME = 20
+SELENIUM_WAIT_TIME = 20
 
 
 @tag('selenium')
@@ -81,7 +81,7 @@ class BaseWebdriverRunner(StaticLiveServerTestCase):
         """Generic login handler"""
         login_url = reverse('auth_login')
         self.driver.get(f"{self.live_server_url}{login_url}")
-        WebDriverWait(self.driver, WAIT_TIME).until(
+        WebDriverWait(self.driver, SELENIUM_WAIT_TIME).until(
             expected_conditions.presence_of_element_located((By.NAME, "submit"))
         )
         user_field = self.driver.find_element(By.NAME, 'username')
@@ -90,7 +90,7 @@ class BaseWebdriverRunner(StaticLiveServerTestCase):
         pass_field.send_keys(password)
         loginbut = self.driver.find_element(By.NAME, 'submit')
         loginbut.click()
-        WebDriverWait(self.driver, WAIT_TIME).until(
+        WebDriverWait(self.driver, SELENIUM_WAIT_TIME).until(
             expected_conditions.presence_of_element_located((By.CLASS_NAME, "wafer-profile"))
         )
 

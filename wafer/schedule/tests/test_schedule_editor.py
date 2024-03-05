@@ -21,7 +21,7 @@ from django.utils import timezone
 from django.urls import reverse
 
 from wafer.pages.models import Page
-from wafer.tests.utils import create_user, ChromeTestRunner, FirefoxTestRunner, WAIT_TIME
+from wafer.tests.utils import create_user, ChromeTestRunner, FirefoxTestRunner, SELENIUM_WAIT_TIME
 from wafer.talks.tests.fixtures import create_talk
 from wafer.talks.models import ACCEPTED
 
@@ -126,14 +126,14 @@ class EditorTestsMixin:
         """Helper method to login as admin and load the editor"""
         self.admin_login()
         self.driver.get(self.edit_page)
-        WebDriverWait(self.driver, WAIT_TIME).until(
+        WebDriverWait(self.driver, SELENIUM_WAIT_TIME).until(
            expected_conditions.presence_of_element_located((By.TAG_NAME, "h1"))
         )
 
     def test_access_schedule_editor_no_login(self):
         """Test that the schedule editor isn't accessible if not logged in"""
         self.driver.get(self.edit_page)
-        header = WebDriverWait(self.driver, WAIT_TIME).until(
+        header = WebDriverWait(self.driver, SELENIUM_WAIT_TIME).until(
            expected_conditions.presence_of_element_located((By.TAG_NAME, "h1"))
         )
         self.assertEqual('Django administration', header.text)
@@ -148,10 +148,10 @@ class EditorTestsMixin:
         """Test that the schedule editor isn't accessible for non-superuser accounts"""
         self.normal_login()
         self.driver.get(self.edit_page)
-        WebDriverWait(self.driver, WAIT_TIME).until(
+        WebDriverWait(self.driver, SELENIUM_WAIT_TIME).until(
            expected_conditions.presence_of_element_located((By.TAG_NAME, "h1"))
         )
-        error = WebDriverWait(self.driver, WAIT_TIME).until(
+        error = WebDriverWait(self.driver, SELENIUM_WAIT_TIME).until(
            expected_conditions.presence_of_element_located((By.CLASS_NAME, "errornote"))
         )
         self.assertIn("authenticated as normal", error.text)
@@ -163,7 +163,7 @@ class EditorTestsMixin:
     def test_access_schedule_editor_admin(self):
         """Test that the schedule editor is accessible for superuser accounts"""
         self._start()
-        all_talks_link = WebDriverWait(self.driver, WAIT_TIME).until(
+        all_talks_link = WebDriverWait(self.driver, SELENIUM_WAIT_TIME).until(
             expected_conditions.presence_of_element_located((By.PARTIAL_LINK_TEXT, "All Talks"))
         )
         all_talks_link.click()
@@ -180,7 +180,7 @@ class EditorTestsMixin:
         self.assertEqual(ScheduleItem.objects.count(), 0)
         self._start()
         # partial link text to avoid whitespace fiddling
-        talks_link = WebDriverWait(self.driver, WAIT_TIME).until(
+        talks_link = WebDriverWait(self.driver, SELENIUM_WAIT_TIME).until(
             expected_conditions.presence_of_element_located((By.PARTIAL_LINK_TEXT, "Unassigned Talks"))
         )
         talks_link.click()
@@ -202,7 +202,7 @@ class EditorTestsMixin:
         # Pause briefly to make sure the server has a chance to do stuff
         actions.pause(0.5)
         actions.perform()
-        WebDriverWait(self.driver, WAIT_TIME).until(
+        WebDriverWait(self.driver, SELENIUM_WAIT_TIME).until(
            expected_conditions.presence_of_element_located((By.CLASS_NAME, "close"))
         )
         self.assertEqual(ScheduleItem.objects.count(), 1)
@@ -223,7 +223,7 @@ class EditorTestsMixin:
         actions.drag_and_drop(source, target)
         actions.pause(0.5)
         actions.perform()
-        WebDriverWait(self.driver, WAIT_TIME).until(
+        WebDriverWait(self.driver, SELENIUM_WAIT_TIME).until(
            expected_conditions.presence_of_element_located((By.CLASS_NAME, "close"))
         )
         self.assertEqual(ScheduleItem.objects.count(), 2)
@@ -239,7 +239,7 @@ class EditorTestsMixin:
         self._start()
         # Drag a page from the siderbar to a slot in the schedule
 
-        page_link = WebDriverWait(self.driver, WAIT_TIME).until(
+        page_link = WebDriverWait(self.driver, SELENIUM_WAIT_TIME).until(
             expected_conditions.presence_of_element_located((By.PARTIAL_LINK_TEXT, "Pages"))
         )
         page_link.click()
@@ -262,7 +262,7 @@ class EditorTestsMixin:
         actions.drag_and_drop(source, target)
         actions.pause(0.5)
         actions.perform()
-        WebDriverWait(self.driver, WAIT_TIME).until(
+        WebDriverWait(self.driver, SELENIUM_WAIT_TIME).until(
            expected_conditions.presence_of_element_located((By.CLASS_NAME, "close"))
         )
         self.assertEqual(ScheduleItem.objects.count(), 1)
@@ -288,7 +288,7 @@ class EditorTestsMixin:
         actions.drag_and_drop(source, target)
         actions.pause(0.5)
         actions.perform()
-        WebDriverWait(self.driver, WAIT_TIME).until(
+        WebDriverWait(self.driver, SELENIUM_WAIT_TIME).until(
            expected_conditions.presence_of_element_located((By.CLASS_NAME, "close"))
         )
         self.assertEqual(ScheduleItem.objects.count(), 2)
@@ -332,7 +332,7 @@ class EditorTestsMixin:
         # Load schedule page
         self._start()
         # Verify we see the expected schedule items on day 1
-        td1 = WebDriverWait(self.driver, WAIT_TIME).until(
+        td1 = WebDriverWait(self.driver, SELENIUM_WAIT_TIME).until(
             expected_conditions.presence_of_element_located((By.ID, f"scheduleItem{item1.pk}"))
         )
         self.assertEqual(td1.tag_name, 'td')
@@ -344,12 +344,12 @@ class EditorTestsMixin:
         buttons = self.driver.find_elements(By.TAG_NAME, 'button')
         self.assertIn('Sep', buttons[1].text)
         buttons[1].click()
-        WebDriverWait(self.driver, WAIT_TIME).until(
+        WebDriverWait(self.driver, SELENIUM_WAIT_TIME).until(
            expected_conditions.presence_of_element_located((By.CLASS_NAME, "show"))
         )
         days = self.driver.find_elements(By.PARTIAL_LINK_TEXT, "Sep")
         days[1].click()
-        WebDriverWait(self.driver, WAIT_TIME).until(
+        WebDriverWait(self.driver, SELENIUM_WAIT_TIME).until(
            expected_conditions.presence_of_element_located((By.CLASS_NAME, "close"))
         )
         # Verify we see the expected schedule items on day 2
@@ -373,7 +373,7 @@ class EditorTestsMixin:
         item1.save()
         self._start()
         # Test dragging a talk over an existing talk
-        target = WebDriverWait(self.driver, WAIT_TIME).until(
+        target = WebDriverWait(self.driver, SELENIUM_WAIT_TIME).until(
             expected_conditions.presence_of_element_located((By.ID, f"scheduleItem{item1.pk}"))
         )
         talks_link = self.driver.find_element(By.PARTIAL_LINK_TEXT, "Unassigned Talks")
@@ -427,7 +427,7 @@ class EditorTestsMixin:
         item1.save()
         self._start()
         # Test dragging a page over an existing page
-        target = WebDriverWait(self.driver, WAIT_TIME).until(
+        target = WebDriverWait(self.driver, SELENIUM_WAIT_TIME).until(
             expected_conditions.presence_of_element_located((By.ID, f"scheduleItem{item1.pk}"))
         )
         page_link = self.driver.find_element(By.PARTIAL_LINK_TEXT, "Pages")
@@ -477,7 +477,7 @@ class EditorTestsMixin:
         item2.save()
         self._start()
         # Verify that there are no validation errors
-        validation = WebDriverWait(self.driver, WAIT_TIME).until(
+        validation = WebDriverWait(self.driver, SELENIUM_WAIT_TIME).until(
             expected_conditions.presence_of_element_located((By.CLASS_NAME, "alert-danger"))
         )
         self.assertFalse(validation.is_displayed())
@@ -524,7 +524,7 @@ class EditorTestsMixin:
         item2.save()
         self._start()
         # Verify that there are validation errors
-        validation = WebDriverWait(self.driver, WAIT_TIME).until(
+        validation = WebDriverWait(self.driver, SELENIUM_WAIT_TIME).until(
             expected_conditions.presence_of_element_located((By.CLASS_NAME, "alert-danger"))
         )
         self.assertTrue(validation.is_displayed())
