@@ -151,7 +151,9 @@ class EditorTestsMixin:
         WebDriverWait(self.driver, WAIT_TIME).until(
            expected_conditions.presence_of_element_located((By.TAG_NAME, "h1"))
         )
-        error = self.driver.find_element(By.CLASS_NAME, "errornote")
+        error = WebDriverWait(self.driver, WAIT_TIME).until(
+           expected_conditions.presence_of_element_located((By.CLASS_NAME, "errornote"))
+        )
         self.assertIn("authenticated as normal", error.text)
         self.assertIn("not authorized to access this page", error.text)
         # Check that no admin info has loaded
