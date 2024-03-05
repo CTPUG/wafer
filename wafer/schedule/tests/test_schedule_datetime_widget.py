@@ -17,7 +17,7 @@ from django.utils import timezone
 from django.urls import reverse
 
 from wafer.pages.models import Page
-from wafer.tests.utils import ChromeTestRunner, FirefoxTestRunner
+from wafer.tests.utils import ChromeTestRunner, FirefoxTestRunner, SELENIUM_WAIT_TIME
 
 from wafer.schedule.models import Venue, Slot, ScheduleBlock
 from wafer.schedule.tests.test_views import make_pages, make_items
@@ -51,7 +51,7 @@ class ScheduleDateTimeJSMixin:
     def check_clock_button(self):
         """Standard check for the clock button contents"""
         # Find the clock button
-        clock_button = WebDriverWait(self.driver, 10).until(
+        clock_button = WebDriverWait(self.driver, SELENIUM_WAIT_TIME).until(
             expected_conditions.presence_of_element_located((By.CLASS_NAME, 'clock-icon'))
         )
         # Check that the list isn't visible before we click
@@ -59,7 +59,7 @@ class ScheduleDateTimeJSMixin:
         style = clock_box.get_attribute('style')
         self.assertIn('display: none', style)
         clock_button.click()
-        timelist =  WebDriverWait(self.driver, 10).until(
+        timelist =  WebDriverWait(self.driver, SELENIUM_WAIT_TIME).until(
             expected_conditions.presence_of_element_located((By.CLASS_NAME, 'timelist'))
         )
         clock_box = self.driver.find_element(By.ID, 'clockbox0')
