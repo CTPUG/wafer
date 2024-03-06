@@ -4,40 +4,48 @@
 {% block title %}{% trans "Sponsors" %} - {{ WAFER_CONFERENCE_NAME }}{% endblock %}
 {% block content %}
 <section class="wafer wafer-sponsors">
+  {% block page_title %}
   <h1>{% trans 'Sponsors' %}</h1>
-  <div class="wafer list">
-    {% for sponsor in sponsor_list %}
-      <section class="wafer wafer-sponsor
-                      wafer-sponsor-{{ sponsor.packages.first.name.lower }}">
-        <div class="card">
-          <div class="card-body">
-            <h2 class="card-title">
-              {% if sponsor.symbol %}
-                {{ sponsor.symbol }}
-              {% endif %}
-              {% if sponsor.url %}
-                <a href="{{ sponsor.url }}">{{ sponsor.name }}</a>
-              {% else %}
-                {{ sponsor.name }}
-              {% endif %}
-              <small class="text-right">{{ sponsor.packages.first.name }}</small>
-            </h2>
-            {% sponsor_tagged_image sponsor "main_logo" as logo_url %}
-            {% if logo_url != '' %}
-              <div style="float: right; margin-left:5px;">
-                <a href="{{ sponsor.url }}">
-                  <img style="background: white; max-width:400px; max-height:200px;" src="{{ logo_url }}">
-                </a>
+  {% endblock %}
+  {% block pre_sponsor_list %}{% endblock %}
+  {% block sponsor_list %}
+    <div class="wafer list">
+      {% for sponsor in sponsor_list %}
+        {% block sponsor_details %}
+          <section class="wafer wafer-sponsor
+                          wafer-sponsor-{{ sponsor.packages.first.name.lower }}">
+            <div class="card">
+              <div class="card-body">
+                <h2 class="card-title">
+                  {% if sponsor.symbol %}
+                    {{ sponsor.symbol }}
+                  {% endif %}
+                  {% if sponsor.url %}
+                    <a href="{{ sponsor.url }}">{{ sponsor.name }}</a>
+                  {% else %}
+                    {{ sponsor.name }}
+                  {% endif %}
+                  <small class="text-right">{{ sponsor.packages.first.name }}</small>
+                </h2>
+                {% sponsor_tagged_image sponsor "main_logo" as logo_url %}
+                {% if logo_url != '' %}
+                  <div style="float: right; margin-left:5px;">
+                    <a href="{{ sponsor.url }}">
+                      <img style="background: white; max-width:400px; max-height:200px;" src="{{ logo_url }}">
+                    </a>
+                  </div>
+                {% endif %}
+                {{ sponsor.description }}
               </div>
-            {% endif %}
-            {{ sponsor.description }}
-          </div>
-        </div>
-        <hr>
-      </section>
-    {% empty %}
-      <p>{% trans 'No sponsors yet.' %}</p>
-    {% endfor %}
-  </div>
+            </div>
+            <hr>
+          </section>
+        {% endblock sponsor_details %}
+      {% empty %}
+        <p>{% trans 'No sponsors yet.' %}</p>
+      {% endfor %}
+    </div>
+  {% endblock sponsor_list %}
+  {% block post_sponsor_list %}{% endblock %}
 </section>
-{% endblock %}
+{% endblock content %}
