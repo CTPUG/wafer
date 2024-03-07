@@ -3,10 +3,10 @@ wafer
 
 |wafer-ci-badge| |wafer-docs-badge| |wafer-weblate-badge|
 
-.. |wafer-ci-badge| image:: https://travis-ci.org/CTPUG/wafer.png?branch=master
-    :alt: Travis CI build status
+.. |wafer-ci-badge| image:: https://github.com/CTPUG/wafer/actions/workflows/django.yml/badge.svg
+    :alt: Github actions CI build status
     :scale: 100%
-    :target: https://travis-ci.org/CTPUG/wafer
+    :target: https://github.com/CTPUG/wafer/actions/
 
 .. |wafer-docs-badge| image:: https://readthedocs.org/projects/wafer/badge/?version=latest
     :alt: Wafer documentation
