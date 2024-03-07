@@ -47,3 +47,6 @@ nosetests.xml
 /wafer.db
 /media/
 /wafer/static/vendor/
+
+# Selenium log files
+geckodriver.log
