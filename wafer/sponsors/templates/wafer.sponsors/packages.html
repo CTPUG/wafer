@@ -2,31 +2,39 @@
 {% load i18n %}
 {% block content %}
 <section class="wafer wafer-sponsorship-packages">
+  {% block page_title %}
   <h1>{% trans 'Sponsorship Packages' %}</h1>
-  <div class="wafer list">
-    {% for package in sponsorshippackage_list %}
-      <section class="wafer wafer-sponsorship-package
-                      wafer-sponsor-{{ package.name.lower }}">
-        <div class="card">
-          <div class="card-body">
-            <h2 class="card-title">
-              {% if package.symbol %}
-                {{ package.symbol }}
-              {% endif %}
-              {{ package.name }} ({{ package.currency }} {{ package.price|floatformat:0 }})
-            </h2>
-            {% if package.number_available %}
-              <p>{% trans 'Total number available:' %} {{ package.number_available }}</p>
-            {% endif %}
-            <p>{% trans 'Packages claimed:' %} {{ package.number_claimed }}</p>
-            <p>{{ package.short_description }}</p>
-            {{ package.description }}
-          </div>
-        </div>
-      </section>
-    {% empty %}
-      <p>{% trans 'No sponsorship packages available yet.' %}</p>
-    {% endfor %}
-  </div>
+  {% endblock %}
+  {% block pre_package_list %}{% endblock %}
+  {% block package_list %}
+    <div class="wafer list">
+      {% for package in sponsorshippackage_list %}
+        {% block package_display %}
+          <section class="wafer wafer-sponsorship-package
+                          wafer-sponsor-{{ package.name.lower }}">
+            <div class="card">
+              <div class="card-body">
+                <h2 class="card-title">
+                  {% if package.symbol %}
+                    {{ package.symbol }}
+                  {% endif %}
+                  {{ package.name }} ({{ package.currency }} {{ package.price|floatformat:0 }})
+                </h2>
+                {% if package.number_available %}
+                  <p>{% trans 'Total number available:' %} {{ package.number_available }}</p>
+                {% endif %}
+                <p>{% trans 'Packages claimed:' %} {{ package.number_claimed }}</p>
+                <p>{{ package.short_description }}</p>
+                {{ package.description }}
+              </div>
+            </div>
+          </section>
+        {% endblock package_display %}
+      {% empty %}
+        <p>{% trans 'No sponsorship packages available yet.' %}</p>
+      {% endfor %}
+    </div>
+  {% endblock package_list %}
+  {% block post_package_list %}{% endblock %}
 </section>
-{% endblock %}
+{% endblock content %}
