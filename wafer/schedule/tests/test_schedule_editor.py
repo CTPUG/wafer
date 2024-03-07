@@ -17,7 +17,7 @@ except ImportError:
 
 from unittest import expectedFailure
 
-from django.utils import timezone
+from django.utils import timezone, version
 from django.urls import reverse
 
 from wafer.pages.models import Page
@@ -40,6 +40,9 @@ class EditorTestsMixin:
         """Create two day table with 3 slots each and 2 venues
            and create some page and talks to populate the schedul"""
         super().setUp()
+
+        self.is_django_5 = version.get_complete_version()[0] >= 5
+
         block1 = ScheduleBlock.objects.create(
             start_time=D.datetime(2013, 9, 22, 7, 0, 0,
                                   tzinfo=D.timezone.utc),
@@ -133,10 +136,15 @@ class EditorTestsMixin:
     def test_access_schedule_editor_no_login(self):
         """Test that the schedule editor isn't accessible if not logged in"""
         self.driver.get(self.edit_page)
-        header = WebDriverWait(self.driver, SELENIUM_WAIT_TIME).until(
-           expected_conditions.presence_of_element_located((By.TAG_NAME, "h1"))
-        )
-        self.assertEqual('Django administration', header.text)
+        if self.is_django_5:
+            header = WebDriverWait(self.driver, SELENIUM_WAIT_TIME).until(
+                expected_conditions.presence_of_element_located((By.ID, "header"))
+            )
+        else:
+            header = WebDriverWait(self.driver, SELENIUM_WAIT_TIME).until(
+                expected_conditions.presence_of_element_located((By.TAG_NAME, "h1"))
+            )
+        self.assertIn('Django administration', header.text)
         login = self.driver.find_element(By.ID, "login-form")
         self.assertIsNotNone(login)
         self.assertIn('login', login.get_attribute('action'))
@@ -148,9 +156,14 @@ class EditorTestsMixin:
         """Test that the schedule editor isn't accessible for non-superuser accounts"""
         self.normal_login()
         self.driver.get(self.edit_page)
-        WebDriverWait(self.driver, SELENIUM_WAIT_TIME).until(
-           expected_conditions.presence_of_element_located((By.TAG_NAME, "h1"))
-        )
+        if self.is_django_5:
+            WebDriverWait(self.driver, SELENIUM_WAIT_TIME).until(
+               expected_conditions.presence_of_element_located((By.ID, "header"))
+            )
+        else:
+            WebDriverWait(self.driver, SELENIUM_WAIT_TIME).until(
+               expected_conditions.presence_of_element_located((By.TAG_NAME, "h1"))
+            )
         error = WebDriverWait(self.driver, SELENIUM_WAIT_TIME).until(
            expected_conditions.presence_of_element_located((By.CLASS_NAME, "errornote"))
         )
