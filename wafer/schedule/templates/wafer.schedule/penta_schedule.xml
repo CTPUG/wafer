@@ -84,7 +84,7 @@
                       <type/>
                       {% if items.item.page.people.exists %}
                         {# If there are people, we care about the description #}
-                        {# For now, we drop the raw markdown content from pages here. We probably want to sanatize this in the future #}
+                        {# For now, we drop the raw markdown content from pages here. We probably want to sanitize this in the future #}
                         {# Also honour render_description #}
                         {% if render_description %}
                           <description>{{ items.item.page.content.rendered }}</description>
