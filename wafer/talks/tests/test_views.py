@@ -2,13 +2,13 @@
 
 import mock
 
-from django.test import Client, TestCase
+from django.test import Client, TestCase, override_settings
 from django.urls import reverse
 
 from wafer.tests.api_utils import SortedResultsClient
 from wafer.tests.utils import create_user, mock_avatar_url
 from wafer.talks.models import (
-    Talk, TalkUrl, ACCEPTED, REJECTED, SUBMITTED, UNDER_CONSIDERATION,
+    Talk, TalkUrl, Track, ACCEPTED, REJECTED, SUBMITTED, UNDER_CONSIDERATION,
     CANCELLED, PROVISIONAL, WITHDRAWN)
 from wafer.talks.tests.fixtures import create_talk, create_talk_type
 
@@ -50,6 +50,114 @@ class UsersTalksTests(TestCase):
         self.assertEqual(set(response.context['talk_list']),
                          set([self.talk_a, self.talk_r, self.talk_p,
                               self.talk_s, self.talk_u, self.talk_c]))
+
+
+class TalksListLayoutTests(TestCase):
+    """Test the table layout with different options
+
+       We test this with both no talks and talks so we can check both headers and the
+       span for the 'No Accepted Talks' line.
+
+       Some tests moneky-patch Talk.LANGUAGES - this is to avoid needing to re-import
+       Talk with modified settings to achieve the same result"""
+
+    def setUp(self):
+        self.client = Client()
+
+    def tearDown(self):
+        """Ensure Talk monkey-patching doesn't leak"""
+        Talk.LANGUAGES = ()
+
+    def test_no_options(self):
+        """Test that we have the right layout if no tracks or languages"""
+        response = self.client.get('/talks/')
+        self.assertFalse(response.context['tracks'])
+        self.assertEqual(len(response.context['languages']), 0)
+        self.assertContains(response, 'Talk', html=True)
+        self.assertContains(response, 'Speakers', html=True)
+        self.assertNotContains(response, 'Track', html=True)
+        self.assertNotContains(response, 'Language', html=True)
+        self.assertContains(response, '<td colspan="2">\nNo talks accepted yet.\n</td>', html=True)
+
+        talk1 = create_talk('Talk 1', ACCEPTED, 'author_a')
+        response = self.client.get('/talks/')
+        self.assertFalse(response.context['tracks'])
+        self.assertEqual(len(response.context['languages']), 0)
+        self.assertContains(response, 'Talk', html=True)
+        self.assertContains(response, 'Speakers', html=True)
+        self.assertNotContains(response, 'Track', html=True)
+        self.assertNotContains(response, 'Language', html=True)
+        self.assertNotContains(response, '<td colspan="2">\nNo talks accepted yet.\n</td>', html=True)
+
+    def test_langauge(self):
+        """Test that we have the right layout if langauges, but no tracks"""
+        Talk.LANGUAGES = (('en', 'English'),)
+
+        response = self.client.get('/talks/')
+        self.assertFalse(response.context['tracks'])
+        self.assertEqual(len(response.context['languages']), 1)
+        self.assertContains(response, 'Talk', html=True)
+        self.assertContains(response, 'Speakers', html=True)
+        self.assertNotContains(response, 'Track', html=True)
+        self.assertContains(response, 'Language', html=True)
+        self.assertContains(response, '<td colspan="3">\nNo talks accepted yet.\n</td>', html=True)
+
+        talk1 = create_talk('Talk 1', ACCEPTED, 'author_a')
+        response = self.client.get('/talks/')
+        self.assertFalse(response.context['tracks'])
+        self.assertEqual(len(response.context['languages']), 1)
+        self.assertContains(response, 'Talk', html=True)
+        self.assertContains(response, 'Speakers', html=True)
+        self.assertNotContains(response, 'Track', html=True)
+        self.assertContains(response, 'Language', html=True)
+        self.assertNotContains(response, '<td colspan="3">\nNo talks accepted yet.\n</td>', html=True)
+
+    def test_track(self):
+        """Test that we have the right layout if tracks, but no languages"""
+        track1 = Track.objects.create(name="Test Trakc 1")
+        response = self.client.get('/talks/')
+        self.assertTrue(response.context['tracks'])
+        self.assertEqual(len(response.context['languages']), 0)
+        self.assertContains(response, 'Talk', html=True)
+        self.assertContains(response, 'Speakers', html=True)
+        self.assertContains(response, 'Track', html=True)
+        self.assertNotContains(response, 'Language', html=True)
+        self.assertContains(response, '<td colspan="3">\nNo talks accepted yet.\n</td>', html=True)
+
+        talk1 = create_talk('Talk 1', ACCEPTED, 'author_a')
+        response = self.client.get('/talks/')
+        self.assertTrue(response.context['tracks'])
+        self.assertEqual(len(response.context['languages']), 0)
+        self.assertContains(response, 'Talk', html=True)
+        self.assertContains(response, 'Speakers', html=True)
+        self.assertContains(response, 'Track', html=True)
+        self.assertNotContains(response, 'Language', html=True)
+        self.assertNotContains(response, '<td colspan="3">\nNo talks accepted yet.\n</td>', html=True)
+
+
+    def test_track_and_language(self):
+        """Test that we have the right layout if we have tracks and languages"""
+        track1 = Track.objects.create(name="Test Trakc 1")
+        Talk.LANGUAGES = (('en', 'English'),)
+
+        response = self.client.get('/talks/')
+        self.assertTrue(response.context['tracks'])
+        self.assertEqual(len(response.context['languages']), 1)
+        self.assertContains(response, 'Talk', html=True)
+        self.assertContains(response, 'Speakers', html=True)
+        self.assertContains(response, 'Track', html=True)
+        self.assertContains(response, 'Language', html=True)
+        self.assertContains(response, '<td colspan="4">\nNo talks accepted yet.\n</td>', html=True)
+
+        talk1 = create_talk('Talk 1', ACCEPTED, 'author_a')
+        response = self.client.get('/talks/')
+        self.assertTrue(response.context['tracks'])
+        self.assertEqual(len(response.context['languages']), 1)
+        self.assertContains(response, 'Talk', html=True)
+        self.assertContains(response, 'Speakers', html=True)
+        self.assertContains(response, 'Track', html=True)
+        self.assertContains(response, 'Language', html=True)
+        self.assertNotContains(response, '<td colspan="4">\nNo talks accepted yet.\n</td>', html=True)
 
 
 class TalkViewTests(TestCase):
