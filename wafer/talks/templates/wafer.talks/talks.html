@@ -24,6 +24,7 @@
                 {% trans "Talk" %}
               {% endif %}
             </th>
+            {% if tracks %}<th>{% trans "Track" %}</th>{% endif %}
             {% if languages %}<th>{% trans "Language" %}</th>{% endif %}
             <th>{% trans "Speakers" %}</th>
           </tr>
@@ -52,6 +53,9 @@
                 <a href="{{ talk.get_absolute_url }}">{{ talk.title }}</a>
               {% endif %}
             </td>
+            {% if tracks %}
+              <td>{{ talk.track.name }}</td>
+            {% endif %}
             {% if languages %}
               <td>{{ talk.get_language_display }}</td>
             {% endif %}
@@ -68,12 +72,13 @@
             <th>
               {% trans "Talk" %}
             </th>
+            {% if tracks %}<th>{% trans "Track" %}</th>{% endif %}
             {% if languages %}<th>{% trans "Language" %}</th>{% endif %}
             <th>{% trans "Speakers" %}</th>
           </tr>
         </thead>
         <tr>
-          <td colspan="{% if languages %}3{% else %}2{% endif %}">
+           <td colspan="{% if tracks and languages %}4{% elif tracks or languages %}3{% else %}2{% endif %}">
             {% trans 'No talks accepted yet.' %}
           </td>
         </tr>

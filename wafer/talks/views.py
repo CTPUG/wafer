@@ -64,6 +64,7 @@ class UsersTalks(PaginatedBuildableListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["languages"] = Talk.LANGUAGES
+        context["tracks"] = Track.objects.count() > 0
         context["see_all"] = Talk.can_view_all(self.request.user)
         return context
 
