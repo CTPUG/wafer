@@ -3,28 +3,30 @@
   {% if can_edit %}
     {% if profile.pending_talks.exists or profile.accepted_talks.exists or profile.provisional_talks.exists%}
       {% block speaker_registered %}
-        {% if profile.is_registered %}
-          <div class="alert alert-success">
-            {% blocktrans trimmed %}
-              Registered
-            {% endblocktrans %}
-          </div>
-        {% else %}
-          <div class="alert alert-danger">
-            {% blocktrans trimmed %}
-              <strong>WARNING:</strong>
-              Talk proposal submitted, but speaker hasn't registered to attend.
-            {% endblocktrans %}
-            {% if WAFER_REGISTRATION_OPEN %}
-              {% trans "Register now!" %}
-            {% endif %}
-          </div>
-        {% endif %}
-        {% if WAFER_REGISTRATION_MODE == 'ticket' and profile.is_registered %}
-          <p>Tickets:
-            {{ profile.ticket_types }}
-          </p>
-        {% endif %}
+        <section class="wafer-profile-registered">
+          {% if profile.is_registered %}
+            <div class="alert alert-success">
+              {% blocktrans trimmed %}
+                Registered
+              {% endblocktrans %}
+            </div>
+          {% else %}
+            <div class="alert alert-danger">
+              {% blocktrans trimmed %}
+                <strong>WARNING:</strong>
+                Talk proposal submitted, but speaker hasn't registered to attend.
+              {% endblocktrans %}
+              {% if WAFER_REGISTRATION_OPEN %}
+                {% trans "Register now!" %}
+              {% endif %}
+            </div>
+          {% endif %}
+          {% if WAFER_REGISTRATION_MODE == 'ticket' and profile.is_registered %}
+            <p>Tickets:
+              {{ profile.ticket_types }}
+            </p>
+          {% endif %}
+        </section>
       {% endblock speaker_registered %}
     {% endif %}
   {% endif %}
