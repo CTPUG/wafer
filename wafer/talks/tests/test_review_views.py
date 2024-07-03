@@ -8,7 +8,7 @@ from reversion.models import Version
 
 from wafer.talks.models import (SUBMITTED, UNDER_CONSIDERATION,
                                 ReviewAspect, Review)
-from wafer.talks.forms import ReviewForm, make_aspect_key
+from wafer.talks.forms import make_aspect_key
 
 from wafer.tests.utils import create_user
 from wafer.talks.tests.fixtures import create_talk

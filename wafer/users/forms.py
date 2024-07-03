@@ -5,7 +5,6 @@ from django.urls import reverse
 from django.utils.translation import gettext as _
 from django.conf import settings
 
-from crispy_forms.bootstrap import PrependedText
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import HTML, Submit
 

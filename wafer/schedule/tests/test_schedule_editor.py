@@ -1,10 +1,7 @@
 import datetime as D
 
-import time
-
 try:
     from selenium import webdriver
-    from selenium.webdriver.common.keys import Keys
     from selenium.webdriver.common.by import By
     from selenium.webdriver.support.ui import WebDriverWait
     from selenium.webdriver.support import expected_conditions
@@ -17,16 +14,15 @@ except ImportError:
 
 from unittest import expectedFailure
 
-from django.utils import timezone, version
+from django.utils import version
 from django.urls import reverse
 
-from wafer.pages.models import Page
 from wafer.tests.utils import create_user, ChromeTestRunner, FirefoxTestRunner, SELENIUM_WAIT_TIME
 from wafer.talks.tests.fixtures import create_talk
 from wafer.talks.models import ACCEPTED
 
 from wafer.schedule.models import ScheduleBlock, Venue, Slot, ScheduleItem
-from wafer.schedule.tests.test_views import make_pages, make_items
+from wafer.schedule.tests.test_views import make_pages
 
 
 class EditorTestsMixin:

@@ -2,9 +2,7 @@
 # Manual migration to cleanup old columns and models after migrating the data
 from __future__ import unicode_literals
 
-from django.db import migrations, models
-import django.db.models.deletion
-import wafer.snippets.markdown_field
+from django.db import migrations
 
 
 class Migration(migrations.Migration):

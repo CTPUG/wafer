@@ -1,12 +1,10 @@
 """Tests for wafer.talk review form behaviour."""
 
 from django.test import TestCase, override_settings
-from django.urls import reverse
 
 from reversion import revisions
 
-from wafer.talks.models import (SUBMITTED, UNDER_CONSIDERATION,
-                                ReviewAspect, Review)
+from wafer.talks.models import SUBMITTED, ReviewAspect, Review
 from wafer.talks.forms import ReviewForm, make_aspect_key
 
 from wafer.tests.utils import create_user
