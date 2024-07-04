@@ -2,7 +2,7 @@ from django.test import TestCase
 
 from wafer.tests.utils import create_user
 from wafer.tickets.views import import_ticket
-from wafer.tickets.models import Ticket, TicketType, user_is_registered, get_user_ticket_types
+from wafer.tickets.models import TicketType, user_is_registered, get_user_ticket_types
 
 
 class TicketsHelperFunctionTests(TestCase):

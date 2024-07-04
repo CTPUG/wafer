@@ -1,11 +1,9 @@
 import datetime as D
 
 try:
-    from selenium.webdriver.common.keys import Keys
     from selenium.webdriver.common.by import By
     from selenium.webdriver.support.ui import WebDriverWait
     from selenium.webdriver.support import expected_conditions
-    from selenium.common.exceptions import NoSuchElementException
 except ImportError:
     # These need to be non-fatal so the tests can be always loaded
     # and the check in the Runner base class will fail these
@@ -13,14 +11,11 @@ except ImportError:
     pass
 
 
-from django.utils import timezone
 from django.urls import reverse
 
-from wafer.pages.models import Page
 from wafer.tests.utils import ChromeTestRunner, FirefoxTestRunner, SELENIUM_WAIT_TIME
 
 from wafer.schedule.models import Venue, Slot, ScheduleBlock
-from wafer.schedule.tests.test_views import make_pages, make_items
 
 
 class ScheduleDateTimeJSMixin:
