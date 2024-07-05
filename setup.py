@@ -15,7 +15,7 @@ REQUIRES = [
     'django-registration-redux',
     'django-reversion',
     'django-select2',
-    'djangorestframework',
+    'djangorestframework<3.15.2',
     'drf-extensions>=0.5.0',
     'icalendar>=4.0',
     'jsonfield',
