@@ -89,8 +89,8 @@ class TalksListLayoutTests(TestCase):
         self.assertNotContains(response, 'Language', html=True)
         self.assertNotContains(response, '<td colspan="2">\nNo talks accepted yet.\n</td>', html=True)
 
-    def test_langauge(self):
-        """Test that we have the right layout if langauges, but no tracks"""
+    def test_language(self):
+        """Test that we have the right layout if languages, but no tracks"""
         Talk.LANGUAGES = (('en', 'English'),)
 
         response = self.client.get('/talks/')
@@ -114,7 +114,7 @@ class TalksListLayoutTests(TestCase):
 
     def test_track(self):
         """Test that we have the right layout if tracks, but no languages"""
-        track1 = Track.objects.create(name="Test Trakc 1")
+        track1 = Track.objects.create(name="Test Track 1")
         response = self.client.get('/talks/')
         self.assertTrue(response.context['tracks'])
         self.assertEqual(len(response.context['languages']), 0)
@@ -137,7 +137,7 @@ class TalksListLayoutTests(TestCase):
 
     def test_track_and_language(self):
         """Test that we have the right layout if we have tracks and languages"""
-        track1 = Track.objects.create(name="Test Trakc 1")
+        track1 = Track.objects.create(name="Test Track 1")
         Talk.LANGUAGES = (('en', 'English'),)
 
         response = self.client.get('/talks/')
@@ -158,6 +158,74 @@ class TalksListLayoutTests(TestCase):
         self.assertContains(response, 'Track', html=True)
         self.assertContains(response, 'Language', html=True)
         self.assertNotContains(response, '<td colspan="4">\nNo talks accepted yet.\n</td>', html=True)
+
+
+class TalksListSortingTests(TestCase):
+    """Test the table sorting options.
+
+       This monkey-patches TALKS.languages for the same reason as the layout tests.
+       """
+
+    def setUp(self):
+        """Create talks and tracks"""
+        self.client = Client()
+        Talk.LANGUAGES = (('en', 'English'), ('de', 'German'))
+
+        author = create_user('author_a')
+
+        # We choose the names so that they sort differently from creation order
+        track2 = Track.objects.create(name="Test Track 2", order=2)
+        track1 = Track.objects.create(name="Test Track 1", order=1)
+
+        talk_d = create_talk('Talk D', ACCEPTED, user=author, talk_track=track1,
+                                 language='en')
+        talk_c = create_talk('Talk C', ACCEPTED, user=author, talk_track=track2,
+                                 language='de')
+        talk_b = create_talk('Talk B', ACCEPTED, user=author, talk_track=track1,
+                                 language='de')
+        talk_a = create_talk('Talk A', ACCEPTED, user=author, talk_track=track2,
+                                 language='en')
+
+    def tearDown(self):
+        """Ensure Talk monkey-patching doesn't leak"""
+        Talk.LANGUAGES = ()
+
+    def test_sort_title(self):
+        response = self.client.get('/talks/?sort=title')
+        # We check via find to avoid hardcoding too much HTML here
+        pos_talk_a = response.content.find(b'Talk A')
+        pos_talk_b = response.content.find(b'Talk B')
+        pos_talk_c = response.content.find(b'Talk C')
+        pos_talk_d = response.content.find(b'Talk D')
+        self.assertGreater(pos_talk_b, pos_talk_a)
+        self.assertGreater(pos_talk_c, pos_talk_b)
+        self.assertGreater(pos_talk_d, pos_talk_c)
+
+    def test_sort_track(self):
+        response = self.client.get('/talks/?sort=track')
+        pos_talk_a = response.content.find(b'Talk A')
+        pos_talk_b = response.content.find(b'Talk B')
+        pos_talk_c = response.content.find(b'Talk C')
+        pos_talk_d = response.content.find(b'Talk D')
+
+        # track 1 (B, D) should sort before track 2 (A, C)
+        self.assertGreater(pos_talk_a, pos_talk_b)
+        self.assertGreater(pos_talk_c, pos_talk_b)
+        self.assertGreater(pos_talk_a, pos_talk_d)
+        self.assertGreater(pos_talk_c, pos_talk_d)
+
+    def test_sort_lang(self):
+        response = self.client.get('/talks/?sort=lang')
+        pos_talk_a = response.content.find(b'Talk A')
+        pos_talk_b = response.content.find(b'Talk B')
+        pos_talk_c = response.content.find(b'Talk C')
+        pos_talk_d = response.content.find(b'Talk D')
+
+        # de (B, C) should sort before en (A, D)
+        self.assertGreater(pos_talk_a, pos_talk_b)
+        self.assertGreater(pos_talk_a, pos_talk_c)
+        self.assertGreater(pos_talk_d, pos_talk_b)
+        self.assertGreater(pos_talk_d, pos_talk_c)
 
 
 class TalkViewTests(TestCase):
