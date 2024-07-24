@@ -190,13 +190,25 @@ class TalksListSortingTests(TestCase):
         """Ensure Talk monkey-patching doesn't leak"""
         Talk.LANGUAGES = ()
 
-    def test_sort_title(self):
-        response = self.client.get('/talks/?sort=title')
+    def test_no_sorting(self):
+        response = self.client.get('/talks/')
         # We check via find to avoid hardcoding too much HTML here
         pos_talk_a = response.content.find(b'Talk A')
         pos_talk_b = response.content.find(b'Talk B')
         pos_talk_c = response.content.find(b'Talk C')
         pos_talk_d = response.content.find(b'Talk D')
+        # Order should be D, C, B, A (id order)
+        self.assertGreater(pos_talk_a, pos_talk_b)
+        self.assertGreater(pos_talk_b, pos_talk_c)
+        self.assertGreater(pos_talk_c, pos_talk_d)
+
+    def test_sort_title(self):
+        response = self.client.get('/talks/?sort=title')
+        pos_talk_a = response.content.find(b'Talk A')
+        pos_talk_b = response.content.find(b'Talk B')
+        pos_talk_c = response.content.find(b'Talk C')
+        pos_talk_d = response.content.find(b'Talk D')
+        # Should be A, B, C, D
         self.assertGreater(pos_talk_b, pos_talk_a)
         self.assertGreater(pos_talk_c, pos_talk_b)
         self.assertGreater(pos_talk_d, pos_talk_c)
