@@ -77,6 +77,10 @@ class UsersTalks(PaginatedBuildableListView):
         context["languages"] = Talk.LANGUAGES
         context["tracks"] = Track.objects.count() > 0
         context["see_all"] = Talk.can_view_all(self.request.user)
+        if self.request.GET.get('sort'):
+            context['sort'] = self.request.GET.get('sort')
+        else:
+            context['sort'] = 'default'
         return context
 
 
