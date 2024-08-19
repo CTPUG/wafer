@@ -18,14 +18,28 @@
         <thead class='thead-dark'>
           <tr>
             <th>
-              {% if type %}
-                {{ type }}
-              {% else %}
-                {% trans "Talk" %}
-              {% endif %}
+               <a href="{% url 'wafer_users_talks' %}?sort={% if sort == 'title' %}default{% else %}title{% endif %}">
+                {% if type %}
+                  {{ type }}
+                {% else %}
+                  {% trans "Talk" %}
+                {% endif %}
+              </a>
             </th>
-            {% if tracks %}<th>{% trans "Track" %}</th>{% endif %}
-            {% if languages %}<th>{% trans "Language" %}</th>{% endif %}
+            {% if tracks %}
+              <th>
+                 <a href="{% url 'wafer_users_talks' %}?sort={% if sort == 'track' %}default{% else %}track{% endif %}">
+                  {% trans "Track" %}
+                </a>
+              </th>
+            {% endif %}
+            {% if languages %}
+              <th>
+                 <a href="{% url 'wafer_users_talks' %}?sort={% if sort == 'lang' %}default{% else %}lang{% endif %}">
+                  {% trans "Language" %}
+                </a>
+              </th>
+            {% endif %}
             <th>{% trans "Speakers" %}</th>
           </tr>
         </thead>
