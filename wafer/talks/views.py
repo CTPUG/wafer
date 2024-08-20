@@ -45,7 +45,6 @@ class UsersTalks(PaginatedBuildableListView):
     build_prefix = 'talks'
     paginate_by = 100
 
-    @order_results_by('talk_type', 'talk_id')
     def get_queryset(self):
         # self.request will be None when we come here via the static site
         # renderer
@@ -57,8 +56,20 @@ class UsersTalks(PaginatedBuildableListView):
                 | Q(status__in=(SUBMITTED, UNDER_CONSIDERATION, PROVISIONAL),
                     talk_type__show_pending_submissions=True)
             )
+        if self.request:
+            if self.request.GET.get('sort') == 'track' and Track.objects.count() > 0:
+                talks = talks.order_by('talk_type', 'track')
+            elif self.request.GET.get('sort') == 'lang' and Talk.LANGUAGES:
+                talks = talks.order_by('talk_type', 'language')
+            elif self.request.GET.get('sort') == 'title':
+                talks = talks.order_by('talk_type', 'title')
+            else:
+                talks = talks.order_by('talk_type', 'talk_id')
+        else:
+            talks = talks.order_by('talk_type', 'talk_id')
         return talks.prefetch_related(
-            "talk_type", "corresponding_author", "authors", "authors__userprofile"
+            "talk_type", "corresponding_author", "authors", "authors__userprofile",
+            "track"
         )
 
     def get_context_data(self, **kwargs):
@@ -66,6 +77,7 @@ class UsersTalks(PaginatedBuildableListView):
         context["languages"] = Talk.LANGUAGES
         context["tracks"] = Track.objects.count() > 0
         context["see_all"] = Talk.can_view_all(self.request.user)
+        context['sort'] = self.request.GET.get('sort', 'default')
         return context
 
 

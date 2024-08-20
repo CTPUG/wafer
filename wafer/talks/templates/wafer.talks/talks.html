@@ -18,14 +18,28 @@
         <thead class='thead-dark'>
           <tr>
             <th>
-              {% if type %}
-                {{ type }}
-              {% else %}
-                {% trans "Talk" %}
-              {% endif %}
+               <a href="{% url 'wafer_users_talks' %}?sort={% if sort == 'title' %}default{% else %}title{% endif %}">
+                {% if type %}
+                  {{ type }}
+                {% else %}
+                  {% trans "Talk" %}
+                {% endif %}
+              </a>
             </th>
-            {% if tracks %}<th>{% trans "Track" %}</th>{% endif %}
-            {% if languages %}<th>{% trans "Language" %}</th>{% endif %}
+            {% if tracks %}
+              <th>
+                 <a href="{% url 'wafer_users_talks' %}?sort={% if sort == 'track' %}default{% else %}track{% endif %}">
+                  {% trans "Track" %}
+                </a>
+              </th>
+            {% endif %}
+            {% if languages %}
+              <th>
+                 <a href="{% url 'wafer_users_talks' %}?sort={% if sort == 'lang' %}default{% else %}lang{% endif %}">
+                  {% trans "Language" %}
+                </a>
+              </th>
+            {% endif %}
             <th>{% trans "Speakers" %}</th>
           </tr>
         </thead>
@@ -90,15 +104,15 @@
   <section class="wafer wafer-pagination">
     <ul class="pagination">
       {% if page_obj.has_previous %}
-        <li class="page-item"><a class="page-link" href="{% url 'wafer_users_talks_page' page=page_obj.previous_page_number %}">&laquo;</a></li>
+        <li class="page-item"><a class="page-link" href="{% url 'wafer_users_talks_page' page=page_obj.previous_page_number %}?sort={{ sort }}">&laquo;</a></li>
       {% else %}
         <li class="page-item" class="disabled"><a class="page-link" href="#">&laquo;</a></li>
       {% endif %}
       {% for page in paginator.page_range %}
-        <li class="page-item"><a class="page-link" href="{% url 'wafer_users_talks_page' page=page %}">{{ page }}</a></li>
+        <li class="page-item"><a class="page-link" href="{% url 'wafer_users_talks_page' page=page %}?sort={{ sort }}">{{ page }}</a></li>
       {% endfor %}
       {% if page_obj.has_next %}
-        <li class="page-item"><a class="page-link" href="{% url 'wafer_users_talks_page' page=page_obj.next_page_number %}">&raquo;</a></li>
+        <li class="page-item"><a class="page-link" href="{% url 'wafer_users_talks_page' page=page_obj.next_page_number %}?sort={{ sort }}">&raquo;</a></li>
       {% else %}
         <li class="page-item" class="disabled"><a class="page-link" href="#">&raquo;</a></li>
       {% endif %}
