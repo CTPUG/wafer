@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-12-27 18:02+0000\n"
-"PO-Revision-Date: 2021-08-15 00:46+0000\n"
+"PO-Revision-Date: 2024-09-23 02:16+0000\n"
 "Last-Translator: Reza Almanda <rezaalmanda27@gmail.com>\n"
 "Language-Team: Indonesian <https://hosted.weblate.org/projects/wafer/wafer/"
 "id/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.8-dev\n"
+"X-Generator: Weblate 5.8-dev\n"
 
 #: wafer/compare/admin.py:22
 msgid "Last Modified"
@@ -84,6 +84,8 @@ msgid ""
 "Choose a date from the list below to compare the current version to a "
 "previous version of this object."
 msgstr ""
+"Pilih tanggal dari daftar di bawah ini untuk membandingkan versi saat ini "
+"dengan versi sebelumnya dari objek ini."
 
 #: wafer/compare/templates/admin/wafer.compare/compare_list.html:27
 msgid "Date/time"
@@ -102,38 +104,44 @@ msgid ""
 "This object doesn't have a change history. It probably wasn't added via this "
 "admin site."
 msgstr ""
+"Objek ini tidak memiliki riwayat perubahan. Mungkin tidak ditambahkan "
+"melalui situs admin ini."
 
 #: wafer/pages/models.py:49
 msgid "Last component of the page URL"
-msgstr ""
+msgstr "Komponen terakhir dari URL halaman"
 
 #: wafer/pages/models.py:53
 msgid "Markdown contents for the page."
-msgstr ""
+msgstr "Markdown untuk halaman tersebut."
 
 #: wafer/pages/models.py:55
 msgid "Whether to include in menus."
-msgstr ""
+msgstr "Apakah akan disertakan dalam menu."
 
 #: wafer/pages/models.py:58
 msgid "Ordering in the menu (smaller numbers come first)"
-msgstr ""
+msgstr "Memesan dalam menu (nomor yang lebih kecil didahulukan)"
 
 #: wafer/pages/models.py:63
 msgid ""
 "Whether to exclude this page from the static version of the site (Container "
 "pages, etc.)"
 msgstr ""
+"Apakah akan mengecualikan halaman ini dari versi statis situs (halaman "
+"kontainer, dll.)"
 
 #: wafer/pages/models.py:68
 msgid "Images and other files for use in the content markdown field."
-msgstr ""
+msgstr "Gambar dan file lain untuk digunakan di bidang markdown konten."
 
 #: wafer/pages/models.py:74
 msgid ""
 "People associated with this page for display in the schedule (Session "
 "chairs, panelists, etc.)"
 msgstr ""
+"Orang yang terkait dengan halaman ini untuk ditampilkan dalam jadwal (Ketua "
+"sesi, panelis, dll.)"
 
 #: wafer/pages/models.py:79
 msgid ""
@@ -141,6 +149,9 @@ msgid ""
 "negative value means this page is not dynamic and it will be not be "
 "regenerated until it is next edited."
 msgstr ""
+"Lamanya waktu (dalam detik) untuk menyimpan cache halaman untuk konten "
+"halaman dinamis. Nilai negatif berarti halaman ini tidak dinamis dan tidak "
+"akan dibuat ulang hingga diedit berikutnya."
 
 #: wafer/pages/models.py:156
 msgid "Circular reference in parent."
