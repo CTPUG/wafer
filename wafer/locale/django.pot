@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-10-05 11:48+0000\n"
+"POT-Creation-Date: 2024-10-05 20:23+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -190,7 +190,12 @@ msgstr ""
 msgid "No previous versions to compare to"
 msgstr ""
 
-#: wafer/pages/templates/wafer.pages/page_form.html:11
+#: wafer/pages/templates/wafer.pages/page_form.html:5
+#, python-format
+msgid "Editing Page: %(page)s - %(WAFER_CONFERENCE_NAME)s"
+msgstr ""
+
+#: wafer/pages/templates/wafer.pages/page_form.html:12
 msgid "Edit Page"
 msgstr ""
 
@@ -687,7 +692,7 @@ msgstr ""
 msgid "Mark selected talks as Accepted"
 msgstr ""
 
-#: wafer/talks/forms.py:124 wafer/users/forms.py:23 wafer/users/forms.py:74
+#: wafer/talks/forms.py:124 wafer/users/forms.py:23 wafer/users/forms.py:72
 msgid "Save"
 msgstr ""
 
@@ -1280,11 +1285,11 @@ msgstr ""
 msgid "profiles"
 msgstr ""
 
-#: wafer/users/forms.py:68
+#: wafer/users/forms.py:66
 msgid "<p>Code Hosting Profiles</p>"
 msgstr ""
 
-#: wafer/users/forms.py:72
+#: wafer/users/forms.py:70
 msgid "<p>Social Profiles</p>"
 msgstr ""
 
