@@ -2,6 +2,7 @@
 {% load crispy_forms_tags %}
 {% load i18n %}
 {% load static %}
+{% block title %}{% blocktranslate %}Editing Page: {{ page }} - {{ WAFER_CONFERENCE_NAME }}{% endblocktranslate %}{% endblock %}
 {% block extra_head %}
 {{ block.super }}
 <link href="{% static 'css/markitup_styling.css' %}" type="text/css" media="screen" rel="stylesheet" />
