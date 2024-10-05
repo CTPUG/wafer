@@ -37,7 +37,7 @@ jobs:
 
   translations:
     runs-on: ubuntu-latest
-    name: Compile Translations
+    name: Check translation inforamtion is up to date
     steps:
     - uses: actions/checkout@v4
     - name: Set up Python
@@ -51,11 +51,23 @@ jobs:
     - name: Install gettext
       run: |
         sudo apt-get -y install gettext
+    - name: Check makemessages doesn't pick up significant changes
+      run: |
+        python ./manage.py makemessages --all --keep-pot
+        # Output the diff for visual comparison
+        # We filter the results to just changed or new/remove entries
+        git diff | grep --color '^[+-]msg' || echo "No diff"
+        # Asset that the filtered diff is empty
+        COUNT=$(git diff wafer/locale/ | grep --color '^[+-]msg' | wc -l)
+        if [ $COUNT -gt 0 ]; then
+           echo "Non-empty diff for django.pot - Regenerate file"
+           exit 1
+        fi
     - name: Compile Translations
       run: |
+        # Check that the compile messages step doesn't fail due to bad formatting, etc.
         cd wafer
         python ../manage.py compilemessages
-
 
 
   selenium:
