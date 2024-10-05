@@ -1749,8 +1749,8 @@ class NonHTMLViewTests(TestCase):
         response = c.get('/schedule/schedule.ics')
         self.assertIn('Last-Modified', response)
         calendar = icalendar.Calendar.from_ical(response.content)
-        # No major errors
-        self.assertFalse(calendar.is_broken)
+        # No errors reported
+        self.assertEqual(len(calendar.errors), 0)
         # Check number of events
         self.assertEqual(len(calendar.walk(name='VEVENT')), 9)
         # Check we have the right time in places

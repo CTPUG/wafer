@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-09 05:30+0000\n"
+"POT-Creation-Date: 2024-10-05 11:48+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -603,7 +603,7 @@ msgstr ""
 
 #: wafer/sponsors/models.py:112
 #: wafer/sponsors/templates/wafer.sponsors/sponsors.html:4
-#: wafer/sponsors/templates/wafer.sponsors/sponsors.html:7
+#: wafer/sponsors/templates/wafer.sponsors/sponsors.html:8
 msgid "Sponsors"
 msgstr ""
 
@@ -615,23 +615,23 @@ msgstr ""
 msgid "Sponsorship packages"
 msgstr ""
 
-#: wafer/sponsors/templates/wafer.sponsors/packages.html:5
+#: wafer/sponsors/templates/wafer.sponsors/packages.html:6
 msgid "Sponsorship Packages"
 msgstr ""
 
-#: wafer/sponsors/templates/wafer.sponsors/packages.html:19
+#: wafer/sponsors/templates/wafer.sponsors/packages.html:24
 msgid "Total number available:"
 msgstr ""
 
-#: wafer/sponsors/templates/wafer.sponsors/packages.html:21
+#: wafer/sponsors/templates/wafer.sponsors/packages.html:26
 msgid "Packages claimed:"
 msgstr ""
 
-#: wafer/sponsors/templates/wafer.sponsors/packages.html:28
+#: wafer/sponsors/templates/wafer.sponsors/packages.html:34
 msgid "No sponsorship packages available yet."
 msgstr ""
 
-#: wafer/sponsors/templates/wafer.sponsors/sponsors.html:39
+#: wafer/sponsors/templates/wafer.sponsors/sponsors.html:45
 msgid "No sponsors yet."
 msgstr ""
 
@@ -687,7 +687,7 @@ msgstr ""
 msgid "Mark selected talks as Accepted"
 msgstr ""
 
-#: wafer/talks/forms.py:124 wafer/users/forms.py:24 wafer/users/forms.py:73
+#: wafer/talks/forms.py:124 wafer/users/forms.py:23 wafer/users/forms.py:74
 msgid "Save"
 msgstr ""
 
@@ -807,22 +807,22 @@ msgid "Accepted"
 msgstr ""
 
 #: wafer/talks/models.py:156 wafer/talks/templates/wafer.talks/talk.html:126
-#: wafer/talks/templates/wafer.talks/talks.html:42
+#: wafer/talks/templates/wafer.talks/talks.html:57
 msgid "Not accepted"
 msgstr ""
 
 #: wafer/talks/models.py:158 wafer/talks/templates/wafer.talks/talk.html:116
-#: wafer/talks/templates/wafer.talks/talks.html:40
+#: wafer/talks/templates/wafer.talks/talks.html:55
 msgid "Under consideration"
 msgstr ""
 
 #: wafer/talks/models.py:159 wafer/talks/templates/wafer.talks/talk.html:114
-#: wafer/talks/templates/wafer.talks/talks.html:38
+#: wafer/talks/templates/wafer.talks/talks.html:53
 msgid "Submitted"
 msgstr ""
 
 #: wafer/talks/models.py:160 wafer/talks/templates/wafer.talks/talk.html:118
-#: wafer/talks/templates/wafer.talks/talks.html:46
+#: wafer/talks/templates/wafer.talks/talks.html:61
 msgid "Provisionally Accepted"
 msgstr ""
 
@@ -993,8 +993,8 @@ msgstr ""
 #: wafer/talks/templates/wafer.talks/speakers.html:3
 #: wafer/talks/templates/wafer.talks/speakers.html:8
 #: wafer/talks/templates/wafer.talks/speakers.html:39
-#: wafer/talks/templates/wafer.talks/talks.html:28
-#: wafer/talks/templates/wafer.talks/talks.html:72
+#: wafer/talks/templates/wafer.talks/talks.html:43
+#: wafer/talks/templates/wafer.talks/talks.html:91
 msgid "Speakers"
 msgstr ""
 
@@ -1037,8 +1037,8 @@ msgid "Track: %(track)s"
 msgstr ""
 
 #: wafer/talks/templates/wafer.talks/talk.html:72
-#: wafer/talks/templates/wafer.talks/talks.html:24
-#: wafer/talks/templates/wafer.talks/talks.html:69
+#: wafer/talks/templates/wafer.talks/talks.html:25
+#: wafer/talks/templates/wafer.talks/talks.html:87
 msgid "Talk"
 msgstr ""
 
@@ -1067,7 +1067,7 @@ msgid "Submission:"
 msgstr ""
 
 #: wafer/talks/templates/wafer.talks/talk.html:106
-#: wafer/talks/templates/wafer.talks/talks.html:35
+#: wafer/talks/templates/wafer.talks/talks.html:50
 msgid "Late submission"
 msgstr ""
 
@@ -1161,16 +1161,21 @@ msgstr ""
 msgid "Accepted Talks"
 msgstr ""
 
-#: wafer/talks/templates/wafer.talks/talks.html:27
-#: wafer/talks/templates/wafer.talks/talks.html:71
+#: wafer/talks/templates/wafer.talks/talks.html:32
+#: wafer/talks/templates/wafer.talks/talks.html:89
+msgid "Track"
+msgstr ""
+
+#: wafer/talks/templates/wafer.talks/talks.html:39
+#: wafer/talks/templates/wafer.talks/talks.html:90
 msgid "Language"
 msgstr ""
 
-#: wafer/talks/templates/wafer.talks/talks.html:44
+#: wafer/talks/templates/wafer.talks/talks.html:59
 msgid "Talk Cancelled"
 msgstr ""
 
-#: wafer/talks/templates/wafer.talks/talks.html:77
+#: wafer/talks/templates/wafer.talks/talks.html:96
 msgid "No talks accepted yet."
 msgstr ""
 
@@ -1275,31 +1280,31 @@ msgstr ""
 msgid "profiles"
 msgstr ""
 
-#: wafer/users/forms.py:67
+#: wafer/users/forms.py:68
 msgid "<p>Code Hosting Profiles</p>"
 msgstr ""
 
-#: wafer/users/forms.py:71
+#: wafer/users/forms.py:72
 msgid "<p>Social Profiles</p>"
 msgstr ""
 
-#: wafer/users/models.py:34
+#: wafer/users/models.py:33
 msgid "user profile"
 msgstr ""
 
-#: wafer/users/models.py:35
+#: wafer/users/models.py:34
 msgid "user profiles"
 msgstr ""
 
-#: wafer/users/models.py:39
+#: wafer/users/models.py:38
 msgid "contact number"
 msgstr ""
 
-#: wafer/users/models.py:40
+#: wafer/users/models.py:39
 msgid "bio"
 msgstr ""
 
-#: wafer/users/models.py:42
+#: wafer/users/models.py:41
 msgid "homepage"
 msgstr ""
 
@@ -1354,17 +1359,17 @@ msgstr ""
 msgid "Submit Talk Proposal"
 msgstr ""
 
-#: wafer/users/templates/wafer.users/snippets/profile_30-registered.html:8
+#: wafer/users/templates/wafer.users/snippets/profile_30-registered.html:9
 msgid "Registered"
 msgstr ""
 
-#: wafer/users/templates/wafer.users/snippets/profile_30-registered.html:14
+#: wafer/users/templates/wafer.users/snippets/profile_30-registered.html:15
 msgid ""
 "<strong>WARNING:</strong> Talk proposal submitted, but speaker hasn't "
 "registered to attend."
 msgstr ""
 
-#: wafer/users/templates/wafer.users/snippets/profile_30-registered.html:19
+#: wafer/users/templates/wafer.users/snippets/profile_30-registered.html:20
 msgid "Register now!"
 msgstr ""
 
