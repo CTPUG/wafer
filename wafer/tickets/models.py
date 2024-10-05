@@ -2,14 +2,34 @@ from django.db import models
 from django.conf import settings
 
 
+class TicketTypeTag(models.Model):
+    """Tags that can be added to a TicketType.
+
+       For example 'online, 'sponsor'"""
+
+    MAX_NAME_LENGTH = 75
+    name = models.CharField(max_length=MAX_NAME_LENGTH)
+
+    def __str__(self):
+        return self.name
+
+
 class TicketType(models.Model):
 
     MAX_NAME_LENGTH = 255
 
     name = models.CharField(max_length=MAX_NAME_LENGTH)
 
+    tags = models.ManyToManyField(TicketTypeTag)
+
     def __str__(self):
         return self.name
+
+    def get_count(self):
+        return 0
+
+    def get_tags(self):
+        return ''
 
 
 class Ticket(models.Model):
