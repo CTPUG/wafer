@@ -25,11 +25,10 @@ class TicketType(models.Model):
     def __str__(self):
         return self.name
 
-    def get_count(self):
-        return 0
-
     def get_tags(self):
-        return ''
+        return ', '.join([x.name for x in self.tags.all()])
+
+    get_tags.short_description = 'tags'
 
 
 class Ticket(models.Model):
