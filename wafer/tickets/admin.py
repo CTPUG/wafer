@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.db import models
 from django.utils.translation import gettext_lazy as _
 from reversion.admin import VersionAdmin
 
@@ -22,7 +23,6 @@ class ClaimedFilter(admin.SimpleListFilter):
             return queryset.filter(user__isnull=True)
         return queryset
 
-
 class TicketTypeTagAdmin(VersionAdmin):
     pass
 
@@ -30,7 +30,21 @@ class TicketTypeTagAdmin(VersionAdmin):
 # We don't use the versioned admin here, as these are usually created and
 # updated by external triggers and we don't currently version that
 class TicketTypeAdmin(admin.ModelAdmin):
-    list_display = ('name', 'get_tags', 'get_count')
+    list_display = ('name', 'get_tags', 'get_ticket_count')
+    list_filter = ('tags',)
+
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        qs = qs.annotate(
+            ticket_count_annotation=models.Count('ticket', distinct=True),
+        )
+        return qs
+
+    def get_ticket_count(self, obj):
+        return obj.ticket_count_annotation
+
+    get_ticket_count.short_description = 'total purchased'
+    get_ticket_count.admin_order_field = 'ticket_count_annotation'
 
 
 class TicketAdmin(admin.ModelAdmin):
