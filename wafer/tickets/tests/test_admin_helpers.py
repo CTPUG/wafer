@@ -41,9 +41,12 @@ class TicketTypeAdminTests(TestCase):
         """Test the get_count query on the admin model"""
 
         # Buy some tickets
-        Ticket.objects.create(email=self.user_emails[0], type=self.type_sponsor)
-        Ticket.objects.create(email=self.user_emails[1], type=self.type_sponsor)
-        Ticket.objects.create(email=self.user_emails[2], type=self.type_sponsor)
+        Ticket.objects.create(email=self.user_emails[0], type=self.type_sponsor,
+                              barcode='1234')
+        Ticket.objects.create(email=self.user_emails[1], type=self.type_sponsor,
+                              barcode='2345')
+        Ticket.objects.create(email=self.user_emails[2], type=self.type_sponsor,
+                              barcode='3456')
 
         request = self.request_factory.get("/")
         request.user = self.admin_user
@@ -51,7 +54,8 @@ class TicketTypeAdminTests(TestCase):
         self.assertEqual(self.admin_model.get_ticket_count(qs[0]), 3)
         self.assertEqual(self.admin_model.get_ticket_count(qs[1]), 0)
 
-        Ticket.objects.create(email=self.user_emails[3], type=self.type_student)
+        Ticket.objects.create(email=self.user_emails[3], type=self.type_student,
+                              barcode='4321')
         ticket5 = Ticket.objects.create(email=self.user_emails[4], type=self.type_student,
                                         barcode='1111')
 
