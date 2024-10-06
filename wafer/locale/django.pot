@@ -190,7 +190,12 @@ msgstr ""
 msgid "No previous versions to compare to"
 msgstr ""
 
-#: wafer/pages/templates/wafer.pages/page_form.html:11
+#: wafer/pages/templates/wafer.pages/page_form.html:5
+#, python-format
+msgid "Editing Page: %(page)s - %(WAFER_CONFERENCE_NAME)s"
+msgstr ""
+
+#: wafer/pages/templates/wafer.pages/page_form.html:12
 msgid "Edit Page"
 msgstr ""
 
