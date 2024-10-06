@@ -26,7 +26,7 @@ class TicketType(models.Model):
         return self.name
 
     def get_tags(self):
-        return ', '.join([x.name for x in self.tags.all()])
+        return ', '.join([x.name for x in self.tags.all().order_by('name')])
 
     get_tags.short_description = 'tags'
 
