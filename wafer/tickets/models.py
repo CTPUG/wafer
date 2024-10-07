@@ -5,7 +5,8 @@ from django.conf import settings
 class TicketTypeTag(models.Model):
     """Tags that can be added to a TicketType.
 
-       For example 'online, 'sponsor'"""
+       For example 'online', 'sponsor'.
+       """
 
     MAX_NAME_LENGTH = 75
     name = models.CharField(max_length=MAX_NAME_LENGTH)
