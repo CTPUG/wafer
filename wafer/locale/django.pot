@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-10-05 20:23+0000\n"
+"POT-Creation-Date: 2024-10-06 10:25+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1235,6 +1235,18 @@ msgstr ""
 
 #: wafer/templates/wafer/nav.html:76
 msgid "Sign up / Log In"
+msgstr ""
+
+#: wafer/tickets/admin.py:10
+msgid "ticket claimed"
+msgstr ""
+
+#: wafer/tickets/admin.py:15
+msgid "Ticket has been claimed"
+msgstr ""
+
+#: wafer/tickets/admin.py:16
+msgid "Ticket is unclaimed"
 msgstr ""
 
 #: wafer/tickets/forms.py:18
