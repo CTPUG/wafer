@@ -128,6 +128,12 @@ Wafer's settings
     When ``True``, users can register for the conference.
     (Note, this is not the same as signing up for an account on the website.)
 
+``WAFER_SCHEDULE_MAX_AUTHORS``
+   A number.
+   This is the maximum list of people to be listed as talk authors in the
+   schedule. If the number of talk authors is higher than this, then they get
+   displayed as "First Author, et al."
+
 ``WAFER_SSO``
     A list of SSO mechanisms in use.
     Possible options are: ``'github'``, ``'gitlab'``.

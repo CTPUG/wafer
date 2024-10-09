@@ -283,7 +283,7 @@ class Talk(models.Model):
             key=lambda author: u'' if author == self.corresponding_author
                                else author.userprofile.display_name())
         names = [author.userprofile.display_name() for author in authors]
-        if len(names) <= 2:
+        if len(names) <= settings.WAFER_SCHEDULE_MAX_AUTHORS:
             return u' & '.join(names)
         return _(u'%s, et al.') % names[0]
 
