@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-10-06 10:25+0000\n"
-"PO-Revision-Date: 2024-11-06 17:00+0000\n"
+"PO-Revision-Date: 2024-11-14 05:00+0000\n"
 "Last-Translator: தமிழ்நேரம் <anishprabu.t@gmail.com>\n"
 "Language-Team: Tamil <https://hosted.weblate.org/projects/wafer/wafer/ta/>\n"
 "Language: ta\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.8.2\n"
+"X-Generator: Weblate 5.9-dev\n"
 
 #: wafer/compare/admin.py:22
 msgid "Last Modified"
@@ -39,9 +39,9 @@ msgid "In the last 30 days"
 msgstr "கடந்த 30 நாட்களில்"
 
 #: wafer/compare/admin.py:140
-#, fuzzy, python-format
+#, python-format
 msgid "Comparing current %(model)s with revision created %(date)s"
-msgstr "தற்போதைய %(மாதிரி) களை திருத்தம் உருவாக்கிய %(தேதி) கள் ஒப்பிடுகின்றன"
+msgstr "தற்போதைய %(model)s திருத்தம் உருவாக்கிய %(date)s ஒப்பிடுகின்றன"
 
 #: wafer/compare/templates/admin/wafer.compare/change_form.html:6
 msgid "History"
@@ -60,9 +60,9 @@ msgid "Compare"
 msgstr "ஒப்பிடுக"
 
 #: wafer/compare/templates/admin/wafer.compare/compare.html:7
-#, fuzzy, python-format
+#, python-format
 msgid "%(name)s"
-msgstr "%(பெயர்) கள்"
+msgstr "%(name)s"
 
 #: wafer/compare/templates/admin/wafer.compare/compare.html:19
 #: wafer/pages/templates/wafer.pages/page_compare.html:24
@@ -74,9 +74,9 @@ msgid "Home"
 msgstr "வீடு"
 
 #: wafer/compare/templates/admin/wafer.compare/compare_list.html:10
-#, fuzzy, python-format
+#, python-format
 msgid "Compare %(name)s"
-msgstr "%(பெயர்) களை ஒப்பிடுக"
+msgstr "%(name)s ஒப்பிடுக"
 
 #: wafer/compare/templates/admin/wafer.compare/compare_list.html:17
 msgid ""
@@ -172,14 +172,14 @@ msgid "Comparing Page"
 msgstr "ஒப்பிடும் பக்கம்"
 
 #: wafer/pages/templates/wafer.pages/page_compare.html:8
-#, fuzzy, python-format
+#, python-format
 msgid "Last Saved: %(cur_date)s by %(cur_author)s"
-msgstr "கடைசியாக சேமிக்கப்பட்டது: %(cur_date) கள் %(cur_author) கள்"
+msgstr "கடைசியாக சேமிக்கப்பட்டது: %(cur_date)s %(cur_author)s"
 
 #: wafer/pages/templates/wafer.pages/page_compare.html:11
-#, fuzzy, python-format
+#, python-format
 msgid "Comparing to version saved: %(prev_date)s by %(prev_author)s"
-msgstr "சேமிக்கப்பட்ட பதிப்போடு ஒப்பிடுதல்: %(prev_date) s %(prev_author) கள்"
+msgstr "சேமிக்கப்பட்ட பதிப்போடு ஒப்பிடுதல்: %(prev_author)s %(prev_date)s"
 
 #: wafer/pages/templates/wafer.pages/page_compare.html:33
 msgid "Compare to next older version"
@@ -198,9 +198,9 @@ msgid "No previous versions to compare to"
 msgstr "ஒப்பிடுவதற்கு முந்தைய பதிப்புகள் எதுவும் இல்லை"
 
 #: wafer/pages/templates/wafer.pages/page_form.html:5
-#, fuzzy, python-format
+#, python-format
 msgid "Editing Page: %(page)s - %(WAFER_CONFERENCE_NAME)s"
-msgstr "திருத்துதல் பக்கம்: %(பக்கம்) எச் - %(Wafer_conference_name) கள்"
+msgstr "திருத்துதல் பக்கம்: %(WAFER_CONFERENCE_NAME)s - %(page)s"
 
 #: wafer/pages/templates/wafer.pages/page_form.html:12
 msgid "Edit Page"
@@ -222,14 +222,14 @@ msgid "Oops, account activation failed"
 msgstr "அச்சச்சோ, கணக்கு செயல்படுத்தல் தோல்வியடைந்தது"
 
 #: wafer/registration/templates/registration/activate.html:8
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "We seem to have had some difficulty with activating your account. Please <a "
 "href=\"%(register_url)s\">try again</a> or <a "
 "href=\"%(contact_url)s\">contact our admins</a>."
 msgstr ""
 "உங்கள் கணக்கை செயல்படுத்துவதில் எங்களுக்கு கொஞ்சம் தொல்லை இருப்பதாகத் தெரிகிறது. தயவுசெய்து <a href = \""
-"%(register_url) s\"> மீண்டும் முயற்சிக்கவும் </a> அல்லது <a href = \"%(contact_url) s\"> "
+"%(register_url)s\"> மீண்டும் முயற்சிக்கவும் </a> அல்லது <a href = \"%(contact_url)s\"> "
 "எங்கள் நிர்வாகிகளைத் தொடர்பு கொள்ளுங்கள் </a>."
 
 #: wafer/registration/templates/registration/activation_complete.html:4
@@ -237,11 +237,11 @@ msgid "Activation complete"
 msgstr "செயல்படுத்தல் முடிந்தது"
 
 #: wafer/registration/templates/registration/activation_complete.html:7
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "Your account is now activated! Please <a href=\"%(login_url)s\">log in</a>."
 msgstr ""
-"உங்கள் கணக்கு இப்போது செயல்படுத்தப்பட்டுள்ளது! தயவுசெய்து <a href = \"%(login_url) s\"> </a> இல் "
+"உங்கள் கணக்கு இப்போது செயல்படுத்தப்பட்டுள்ளது! தயவுசெய்து <a href = \"%(login_url)s\"> </a> இல் "
 "உள்நுழைக."
 
 #: wafer/registration/templates/registration/activation_complete.html:13
@@ -254,7 +254,7 @@ msgid "You can now log in and start the conference registration process."
 msgstr "நீங்கள் இப்போது உள்நுழைந்து மாநாட்டு பதிவு செயல்முறையைத் தொடங்கலாம்."
 
 #: wafer/registration/templates/registration/activation_email.txt:5
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "Hi,\n"
 "\n"
@@ -278,38 +278,39 @@ msgid ""
 msgstr ""
 "ஆய்,\n"
 "\n"
-" Tl; dr சொடுக்கு https: //%(டொமைன்) s%(activation_url) கள்\n"
+"TL;DR https://%(domain)s%(activation_url)s சொடுக்கு \n"
 "\n"
-" %(Wafer_conference_name) கள் பதிவுபெற்றதற்கு நன்றி.\n"
+"%(WAFER_CONFERENCE_NAME)s பதிவுபெற்றதற்கு நன்றி.\n"
 "\n"
 " உங்கள் மின்னஞ்சல் முகவரியை சரிபார்க்க, உங்கள் செயல்படுத்த மேலே உள்ள இணைப்பைப் பின்தொடரவும்\n"
-" கணக்கு. அவ்வாறு செய்ய உங்களுக்கு %(காலாவதி_கட்டங்கள்) நாட்கள் உள்ளன.\n"
+" கணக்கு. அவ்வாறு செய்ய உங்களுக்கு %(expiration_days)s நாட்கள் உள்ளன.\n"
 "\n"
-" விரைவில் உங்களைப் பார்ப்போம் என்று நம்புகிறோம்.\n"
+"விரைவில் உங்களைப் பார்ப்போம் என்று நம்புகிறோம்.\n"
 "\n"
-" நன்றி,\n"
+"நன்றி,\n"
 "\n"
-" %(Wafer_conference_name) s வலைத்தளம்.\n"
+"%(WAFER_CONFERENCE_NAME)s வலைத்தளம்.\n"
 "\n"
 " -\n"
-" %(Wafer_conference_name) கள்\n"
-" http: //%(டொமைன்) s%(index_url) கள்\n"
+"%(WAFER_CONFERENCE_NAME)s\n"
+"http://%(domain)s%(index_url)s\n"
 
 #: wafer/registration/templates/registration/activation_email_subject.txt:2
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "\n"
 "Activate your %(WAFER_CONFERENCE_NAME)s account [%(expiration_days)s days "
 "left]\n"
 msgstr ""
 "\n"
-"உங்கள் %(Wafer_conference_name) இன் கணக்கை செயல்படுத்தவும்\n"
+"உங்கள் %(WAFER_CONFERENCE_NAME)s இன் கணக்கைச் செயல்படுத்த %(expiration_days)s நாட்கள் உள்"
+"ளன\n"
 
 #: wafer/registration/templates/registration/login.html:18
-#, fuzzy, python-format
+#, python-format
 msgid "Not registered? Please <a href=\"%(signup_url)s\">sign up</a>."
 msgstr ""
-"பதிவு செய்யப்படவில்லை? தயவுசெய்து <a href = \"%(signup_url) s\"> பதிவுசெய்க </a>."
+"பதிவு செய்யப்படவில்லை? தயவுசெய்து <a href = \"%(signup_url)s\"> பதிவுசெய்க </a>."
 
 #: wafer/registration/templates/registration/login.html:22
 msgid "Shared/Social Log in and Sign up"
@@ -328,13 +329,13 @@ msgid "Account creation almost complete"
 msgstr "கணக்கு உருவாக்கம் கிட்டத்தட்ட முடிந்தது"
 
 #: wafer/registration/templates/registration/registration_complete.html:6
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "Thank you for creating an account for %(WAFER_CONFERENCE_NAME)s. We have "
 "sent you an e-mail. Please follow the instructions in it to activate your "
 "account."
 msgstr ""
-"%(Wafer_conference_name) கள் ஒரு கணக்கை உருவாக்கியதற்கு நன்றி. நாங்கள் உங்களுக்கு ஒரு மின்னஞ்சல் "
+"%(WAFER_CONFERENCE_NAME)s ஒரு கணக்கை உருவாக்கியதற்கு நன்றி. நாங்கள் உங்களுக்கு ஒரு மின்னஞ்சல் "
 "அனுப்பியுள்ளோம். உங்கள் கணக்கை செயல்படுத்த அதில் உள்ள வழிமுறைகளைப் பின்பற்றவும்."
 
 #: wafer/registration/templates/registration/registration_complete.html:16
@@ -387,9 +388,9 @@ msgid "Create this number of additional slots following this one"
 msgstr "இதைத் தொடர்ந்து இந்த கூடுதல் இடங்களை உருவாக்கவும்"
 
 #: wafer/schedule/admin.py:477
-#, fuzzy, python-format
+#, python-format
 msgid "Additional slot %(obj)s added sucessfully"
-msgstr "கூடுதல் ச்லாட் %(பொருள்) வெற்றிகரமாக சேர்க்கப்படுகிறது"
+msgstr "கூடுதல் ச்லாட்%(obj)s வெற்றிகரமாகச் சேர்க்கப்படுகிறது"
 
 #: wafer/schedule/admin.py:484
 #, python-format
@@ -537,9 +538,9 @@ msgstr "அட்டவணையைத் திருத்து"
 
 #: wafer/schedule/templates/wafer.schedule/edit_schedule.html:32
 #: wafer/schedule/templates/wafer.schedule/edit_schedule.html:37
-#, fuzzy, python-format
+#, python-format
 msgid "(Block %(block_id)s)"
-msgstr "(பிளாக் %(பிளாக்_ஐடி) கள்)"
+msgstr "(பிளாக் %(block_id)s)"
 
 #: wafer/schedule/templates/wafer.schedule/edit_schedule.html:42
 msgid "Schedule Editor"
@@ -750,9 +751,9 @@ msgid "A reviewer is required, if video is permitted."
 msgstr "வீடியோ அனுமதிக்கப்பட்டால், ஒரு மதிப்பாய்வாளர் தேவை."
 
 #: wafer/talks/forms.py:169
-#, fuzzy, python-format
+#, python-format
 msgid "(Score range: %(min)d to %(max)d)"
-msgstr "(மதிப்பெண் வரம்பு: %(நிமிடம்) டி முதல் %(அதிகபட்சம்) டி)"
+msgstr "(மதிப்பெண் வரம்பு: %(min)d முதல் %(max)d)"
 
 #: wafer/talks/models.py:38
 msgid "The speakers presenting the talk."
@@ -950,14 +951,14 @@ msgid "video"
 msgstr "ஒளிதோற்றம்"
 
 #: wafer/talks/models.py:226
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "By checking this, you are giving permission for the talk to be videoed, and "
 "distributed by the conference, under the <a "
 "href=\"{license_url}\">{license_name} license</a>."
 msgstr ""
-"இதைச் சரிபார்ப்பதன் மூலம், <a href = \"{உரிமம்_ஆர்ல்}\"> {உரிமம்_நாம்} உரிமம் </a> இன் கீழ் பேச்சுக்கு "
-"வீடியோ எடுக்கப்பட வேண்டும், மாநாட்டால் விநியோகிக்கப்படுகிறது."
+"இதைச் சரிபார்ப்பதன் மூலம், <a href=\"{license_url}\"> {license_name}உரிமம் </a> இன் கீழ் "
+"பேச்சுக்கு வீடியோ எடுக்கப்பட வேண்டும், மாநாட்டால் விநியோகிக்கப்படுகிறது."
 
 #: wafer/talks/models.py:235
 msgid "video reviewer"
@@ -1008,10 +1009,9 @@ msgid "Comments on the proposal (markdown)"
 msgstr "முன்மொழிவு குறித்த கருத்துகள் (மார்க் டவுன்)"
 
 #: wafer/talks/models.py:402
-#, fuzzy, python-format
+#, python-format
 msgid "Review of %(title)s by %(reviewer)s (%(average_score)s)"
-msgstr ""
-"%(தலைப்பு) களை %(மதிப்பாய்வாளர்) கள் ( %(சராசரி_ச்கோர்) கள்) மதிப்பாய்வு"
+msgstr "%(title)s %(reviewer)s ( %(average_score)s) மதிப்பாய்வு"
 
 #: wafer/talks/models.py:421
 msgid "review"
@@ -1030,10 +1030,10 @@ msgid "review aspects"
 msgstr "அம்சங்களை மதிப்பாய்வு செய்யவும்"
 
 #: wafer/talks/models.py:450
-#, fuzzy, python-format
+#, python-format
 msgid "Review of %(title)s by %(reviewer)s on %(aspect)s: %(score)i"
 msgstr ""
-"%இன் மதிப்பாய்வு (தலைப்பு %(மதிப்பாய்வாளர்கள் %(அம்சங்கள்: %(மதிப்பெண்) i"
+"%(title)s இன் மதிப்பாய்வு %(reviewer)s மூலம் %(aspect)s: %(score)i இதைப் பற்றி"
 
 #: wafer/talks/models.py:458
 msgid "score"
@@ -1065,9 +1065,9 @@ msgid "Speakers"
 msgstr "பேச்சாளர்கள்"
 
 #: wafer/talks/templates/wafer.talks/speakers.html:10
-#, fuzzy, python-format
+#, python-format
 msgid "%(talk_type)s Speakers"
-msgstr "%(Talk_Type) S பேச்சாளர்கள்"
+msgstr "%(talk_type)s பேச்சாளர்கள்"
 
 #: wafer/talks/templates/wafer.talks/talk.html:21
 msgid "Admin"
@@ -1093,14 +1093,14 @@ msgid "Not provided"
 msgstr "வழங்கப்படவில்லை"
 
 #: wafer/talks/templates/wafer.talks/talk.html:57
-#, fuzzy, python-format
+#, python-format
 msgid "Language: %(language)s"
-msgstr "மொழி: %(மொழி) கள்"
+msgstr "மொழி: %(language)s"
 
 #: wafer/talks/templates/wafer.talks/talk.html:65
-#, fuzzy, python-format
+#, python-format
 msgid "Track: %(track)s"
-msgstr "ட்ராக்: %(ட்ராக்) கள்"
+msgstr "ட்ராக்: %(track)s"
 
 #: wafer/talks/templates/wafer.talks/talk.html:72
 #: wafer/talks/templates/wafer.talks/talks.html:25
@@ -1109,24 +1109,24 @@ msgid "Talk"
 msgstr "பேச்சு"
 
 #: wafer/talks/templates/wafer.talks/talk.html:72
-#, fuzzy, python-format
+#, python-format
 msgid "Type: %(talk_type)s"
-msgstr "வகை: %(talk_type) கள்"
+msgstr "வகை: %(talk_type)s"
 
 #: wafer/talks/templates/wafer.talks/talk.html:80
-#, fuzzy, python-format
+#, python-format
 msgid "Room: %(venue)s"
-msgstr "அறை: %(இடம்) கள்"
+msgstr "அறை: %(venue)s"
 
 #: wafer/talks/templates/wafer.talks/talk.html:86
-#, fuzzy, python-format
+#, python-format
 msgid "Time: %(start_time)s"
-msgstr "நேரம்: %(Start_Time) கள்"
+msgstr "நேரம்: %(start_time)s"
 
 #: wafer/talks/templates/wafer.talks/talk.html:92
-#, fuzzy, python-format
+#, python-format
 msgid "Duration: %(hours)s:%(minutes)s"
-msgstr "காலம்: %(மணிநேரம்) இல்: %(நிமிடங்கள்"
+msgstr "காலம்: %(hours)s: %(minutes)s"
 
 #: wafer/talks/templates/wafer.talks/talk.html:103
 msgid "Submission:"
@@ -1162,13 +1162,13 @@ msgid "Edit Talk"
 msgstr "பேச்சைத் திருத்து"
 
 #: wafer/talks/templates/wafer.talks/talk_form.html:12
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "<p>Submitted by <a "
 "href=\"%(corresponding_author_url)s\">%(corresponding_author_name)s</a>.</p>"
 msgstr ""
-"<p> சமர்ப்பிக்கப்பட்டது <a href = \"%(தொடர்புடைய_ஆதர்_ஆர்ல்) எச்\">%(தொடர்புடைய_ஆதர்_பேம்) எச் </"
-"a>. </p>"
+"<p> சமர்ப்பிக்கப்பட்டது <a href = \"%(corresponding_author_url)s\""
+">%(corresponding_author_name)s </a>. </p>"
 
 #: wafer/talks/templates/wafer.talks/talk_form.html:17
 msgid "Talk Submission"
@@ -1183,12 +1183,12 @@ msgid "Your Biography"
 msgstr "உங்கள் வாழ்க்கை வரலாறு"
 
 #: wafer/talks/templates/wafer.talks/talk_form.html:41
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "Please <a href=\"%(edit_bio_url)s\">add a speaker biography</a> before "
 "submitting a talk."
 msgstr ""
-"தயவுசெய்து <a href = \"%(edit_bio_url) s\"> ஒரு பேச்சாளர் வாழ்க்கை வரலாற்றைச் சேர்க்கவும் </a> ஒரு "
+"தயவுசெய்து <a href = \"%(edit_bio_url)s\"> ஒரு பேச்சாளர் வாழ்க்கை வரலாற்றைச் சேர்க்கவும் </a> ஒரு "
 "பேச்சு சமர்ப்பிக்கும் முன்."
 
 #: wafer/talks/templates/wafer.talks/talk_tracks.html:3
@@ -1210,14 +1210,14 @@ msgid "Confirm Talk Withdrawal"
 msgstr "பேச்சு திரும்பப் பெறுவதை உறுதிப்படுத்தவும்"
 
 #: wafer/talks/templates/wafer.talks/talk_withdraw.html:7
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "You are about to withdraw the talk <a "
 "href=\"%(talk_url)s\">\"%(talk_title)s\"</a>.<br> This cannot be undone "
 "without help from the site administrators."
 msgstr ""
-"நீங்கள் பேச்சு <a href = \"%(talk_url) s\"> \"%(talk_title) s\" </a>. <br> தள "
-"நிர்வாகிகளின் உதவியின்றி இதைச் செயல்தவிர்க்க முடியாது."
+"நீங்கள் பேச்சு <a href = \"%(talk_url)s\"> \"%(talk_title)s\" </a>. <br> தள நிர்வாகிகளின்"
+" உதவியின்றி இதைச் செயல்தவிர்க்க முடியாது."
 
 #: wafer/talks/templates/wafer.talks/talk_withdraw.html:14
 msgid "Confirm Withdrawal"
@@ -1290,9 +1290,9 @@ msgid "Create a Page called 'index'."
 msgstr "'குறியீட்டு' என்ற பக்கத்தை உருவாக்கவும்."
 
 #: wafer/templates/wafer/nav.html:58
-#, fuzzy, python-format
+#, python-format
 msgid "%(name)s's profile"
-msgstr "%(பெயர்) S இன் சுயவிவரம்"
+msgstr "%(name)s இன் சுயவிவரம்"
 
 #: wafer/templates/wafer/nav.html:64
 msgid "Site admin"
