@@ -362,3 +362,7 @@ CODE_HOSTING_ENTRIES = {
 
 # Hide the schedule from users without permission to edit it
 WAFER_HIDE_SCHEDULE = False
+
+# Number of talk authors to list explicitly, before listing them as "First
+# Author, et al."
+WAFER_SCHEDULE_MAX_AUTHORS = 2
