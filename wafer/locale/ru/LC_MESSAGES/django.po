@@ -7,17 +7,17 @@ msgstr ""
 "Project-Id-Version: Wafer\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-12-27 18:02+0000\n"
-"PO-Revision-Date: 2021-06-07 13:32+0000\n"
-"Last-Translator: Andrej Shadura <andrew@shadura.me>\n"
-"Language-Team: Russian <https://hosted.weblate.org/projects/wafer/wafer/ru/"
-">\n"
+"PO-Revision-Date: 2025-01-23 14:10+0000\n"
+"Last-Translator: gfbdrgng <hnaofegnp@hldrive.com>\n"
+"Language-Team: Russian <https://hosted.weblate.org/projects/wafer/wafer/ru/>"
+"\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
-"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.7-dev\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"X-Generator: Weblate 5.10-dev\n"
 
 #: wafer/compare/admin.py:22
 msgid "Last Modified"
@@ -367,7 +367,7 @@ msgstr "В программе найдены проблемные залы."
 #: wafer/schedule/admin.py:181
 #: wafer/schedule/templates/admin/scheduleitem_list.html:61
 msgid "Common speaker in simultaneous schedule items"
-msgstr ""
+msgstr "Общий оратор в одновременных элементах расписания"
 
 #: wafer/schedule/admin.py:221
 msgid "Block"
@@ -508,7 +508,7 @@ msgstr "Что происходит сейчас"
 #: wafer/schedule/templates/wafer.schedule/current.html:10
 #: wafer/schedule/templates/wafer.schedule/full_schedule.html:20
 msgid "This is a draft that is not visible to the public"
-msgstr ""
+msgstr "Это черновик, который не виден общественности"
 
 #: wafer/schedule/templates/wafer.schedule/current.html:17
 #: wafer/schedule/templates/wafer.schedule/edit_schedule.html:18
@@ -535,10 +535,8 @@ msgid "Last updated"
 msgstr "Последнее изменение"
 
 #: wafer/schedule/templates/wafer.schedule/edit_schedule.html:4
-#, fuzzy
-#| msgid "Edit schedule"
 msgid "Edit Schedule"
-msgstr "Править программу"
+msgstr "Редактировать расписание"
 
 #: wafer/schedule/templates/wafer.schedule/edit_schedule.html:32
 #: wafer/schedule/templates/wafer.schedule/edit_schedule.html:37
@@ -591,36 +589,28 @@ msgid "Next"
 msgstr "Следующий"
 
 #: wafer/settings.py:350
-#, fuzzy
-#| msgid "Edit Profile"
 msgid "Twitter Profile link"
-msgstr "Править профиль"
+msgstr "Ссылка на профиль в Twitter"
 
 #: wafer/settings.py:351
 msgid "Fediverse Profile link"
-msgstr ""
+msgstr "Ссылка на профиль Fediverse"
 
 #: wafer/settings.py:352
 msgid "Other Social"
-msgstr ""
+msgstr "Другие социальные"
 
 #: wafer/settings.py:358
-#, fuzzy
-#| msgid "user profile"
 msgid "github profile"
-msgstr "профиль пользователя"
+msgstr "профиль на github"
 
 #: wafer/settings.py:359
-#, fuzzy
-#| msgid "Edit Profile"
 msgid "gitlab profile"
-msgstr "Править профиль"
+msgstr "профиль gitlab"
 
 #: wafer/settings.py:360
-#, fuzzy
-#| msgid "user profile"
 msgid "bitbucket profile"
-msgstr "профиль пользователя"
+msgstr "профиль bitbucket"
 
 #: wafer/sponsors/models.py:36
 msgid "Currency symbol for the sponsorship amount."
@@ -829,14 +819,12 @@ msgid "Whether to show the authors for this talk type in the speakers list"
 msgstr "Показывать ли авторов этого типа докладов в списке докладчиков"
 
 #: wafer/talks/models.py:94
-#, fuzzy
-#| msgid "disable submission"
 msgid "show pending submissions"
-msgstr "закрыть подачу"
+msgstr "показать оставшиеся заявки"
 
 #: wafer/talks/models.py:96
 msgid "Whether to publicly show pending submissions, before acceptance"
-msgstr ""
+msgstr "Показывать ли публично поданные заявки до их принятия"
 
 #: wafer/talks/models.py:106 wafer/talks/models.py:166
 msgid "talk type"
@@ -1240,23 +1228,17 @@ msgid "Talks"
 msgstr "Доклады"
 
 #: wafer/talks/templates/wafer.talks/talks.html:9
-#, fuzzy
-#| msgid "Submitted"
 msgid "All Submitted Talks"
-msgstr "Подан"
+msgstr "Все представленные беседы"
 
 #: wafer/talks/templates/wafer.talks/talks.html:11
-#, fuzzy
-#| msgid "Accepted Talks:"
 msgid "Accepted Talks"
-msgstr "Подтверждённые доклады:"
+msgstr "Принятые беседы"
 
 #: wafer/talks/templates/wafer.talks/talks.html:27
 #: wafer/talks/templates/wafer.talks/talks.html:71
-#, fuzzy
-#| msgid "language"
 msgid "Language"
-msgstr "язык"
+msgstr "Языки"
 
 #: wafer/talks/templates/wafer.talks/talks.html:44
 msgid "Talk Cancelled"
@@ -1375,11 +1357,11 @@ msgstr "профили"
 
 #: wafer/users/forms.py:67
 msgid "<p>Code Hosting Profiles</p>"
-msgstr ""
+msgstr "<p>Профили кодовых хостингов</p>"
 
 #: wafer/users/forms.py:71
 msgid "<p>Social Profiles</p>"
-msgstr ""
+msgstr "<p> Социальные профили </p>"
 
 #: wafer/users/models.py:34
 msgid "user profile"
@@ -1448,12 +1430,9 @@ msgid "Register"
 msgstr "Зарегистрироваться"
 
 #: wafer/users/templates/wafer.users/snippets/profile_25-menu.html:20
-#, fuzzy
-#| msgctxt "conference"
-#| msgid "Register"
 msgctxt "conference"
 msgid "Unregister"
-msgstr "Зарегистрироваться"
+msgstr "Отменить регистрацию"
 
 #: wafer/users/templates/wafer.users/snippets/profile_25-menu.html:24
 msgid "Submit Talk Proposal"
