@@ -4,7 +4,7 @@ import subprocess
 from setuptools import find_packages, setup
 
 REQUIRES = [
-    'Django>=3.2,<5.1',
+    'Django>=4.2,<5.2',
     'bleach',
     'bleach-allowlist',
     'crispy-bootstrap5',
@@ -15,7 +15,7 @@ REQUIRES = [
     'django-registration-redux',
     'django-reversion',
     'django-select2',
-    'djangorestframework<3.15.2',
+    'djangorestframework',
     'drf-extensions>=0.5.0',
     'icalendar>=6.0',
     'jsonfield',
