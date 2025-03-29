@@ -62,8 +62,12 @@ class UserProfile(models.Model):
     def avatar_url(self, size=96, https=True, default='mm'):
         if not self.user.email:
             return None
-        return libravatar_url(self.user.email, size=size, https=https,
-                              default=default)
+        try:
+            return libravatar_url(self.user.email, size=size, https=https,
+                                  default=default)
+        except UnicodeError as e:
+            logger.error("Failed to determine libravatar URL for %s: %s",
+                         self.user.email, e)
 
     def homepage_url(self):
         """Try ensure we prepend http: to the url if there's nothing there
