@@ -46,7 +46,7 @@ class UserProfileFormContentTests(TestCase):
             self.assertEqual(KeyValue.objects.filter(group=self.group, key='twitter').count(), 1)
             self.assertEqual(KeyValue.objects.filter(group=self.group, key='fediverse').count(), 1)
             self.assertEqual(KeyValue.objects.filter(group=self.group, key='github').count(), 1)
-            self.assertEqual(KeyValue.objects.filter(group=self.group, key='gitlab').count(), 0)
+            self.assertEqual(KeyValue.objects.filter(group=self.group, key='gitlab').count(), 1)
 
             kv = KeyValue.objects.filter(group=self.group, key='twitter').get()
             self.assertEqual(kv.value, 'https://twitter.com/test')
@@ -54,3 +54,16 @@ class UserProfileFormContentTests(TestCase):
             self.assertEqual(kv.value, 'https://github.com/test')
             kv = KeyValue.objects.filter(group=self.group, key='fediverse').get()
             self.assertEqual(kv.value, 'https://myserver.test/test')
+
+            # Test that the social profiles can be removed
+            self.client.post('/users/test1/edit_profile/',
+                data={'twitter': '',
+                      'fediverse': '',
+                      'github': ''})
+
+            kv = KeyValue.objects.filter(group=self.group, key='twitter').get()
+            self.assertEqual(kv.value, '')
+            kv = KeyValue.objects.filter(group=self.group, key='github').get()
+            self.assertEqual(kv.value, '')
+            kv = KeyValue.objects.filter(group=self.group, key='fediverse').get()
+            self.assertEqual(kv.value, '')
