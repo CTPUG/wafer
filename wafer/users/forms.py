@@ -87,13 +87,13 @@ class UserProfileForm(forms.ModelForm):
 
         for field in settings.SOCIAL_MEDIA_ENTRIES:
             profile.kv.update_or_create(group=group, key=field,
-                    defaults={'value': self.cleaned_data[field]},
-                    create_defaults={'value': self.cleaned_data[field]})
+                                        defaults={'value': self.cleaned_data[field]},
+                                        create_defaults={'value': self.cleaned_data[field]})
 
         for field in settings.CODE_HOSTING_ENTRIES:
             profile.kv.update_or_create(group=group, key=field,
-                    defaults={'value': self.cleaned_data[field]},
-                    create_defaults={'value': self.cleaned_data[field]})
+                                        defaults={'value': self.cleaned_data[field]},
+                                        create_defaults={'value': self.cleaned_data[field]})
 
         return profile
 
