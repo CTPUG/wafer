@@ -41,17 +41,22 @@ class UserProfileForm(forms.ModelForm):
 
         pre_social_index = len(self.fields)
 
+        user_profile = kwargs.get('instance')
+        profile_kv = {kv.key: kv.value for kv in user_profile.kv.all()} if user_profile else {}
+
         # currently everything I'm asking for is an url, and this adds some
         # validation - we may need to revisit this later
         for field_name in settings.SOCIAL_MEDIA_ENTRIES:
             self.fields[field_name] = forms.URLField(label=settings.SOCIAL_MEDIA_ENTRIES[field_name], 
-                                                     max_length=1024, required=False)
+                                                     max_length=1024, required=False,
+                                                     initial=profile_kv.get(field_name, ''))
 
         pre_code_index = len(self.fields)
 
         for field_name in settings.CODE_HOSTING_ENTRIES:
             self.fields[field_name] = forms.URLField(label=settings.CODE_HOSTING_ENTRIES[field_name],
-                                                    max_length=1024, required=False)
+                                                    max_length=1024, required=False,
+                                                    initial=profile_kv.get(field_name, ''))
 
         self.helper = FormHelper(self)
         self.helper.include_media = False
@@ -81,14 +86,14 @@ class UserProfileForm(forms.ModelForm):
         group = Group.objects.get_by_natural_key(PROFILE_GROUP)
 
         for field in settings.SOCIAL_MEDIA_ENTRIES:
-            if self.cleaned_data[field]:
-                profile.kv.get_or_create(group=group, key=field,
-                        defaults={'value': self.cleaned_data[field]})
+            profile.kv.update_or_create(group=group, key=field,
+                    defaults={'value': self.cleaned_data[field]},
+                    create_defaults={'value': self.cleaned_data[field]})
 
         for field in settings.CODE_HOSTING_ENTRIES:
-            if self.cleaned_data[field]:
-                profile.kv.get_or_create(group=group, key=field,
-                        defaults={'value': self.cleaned_data[field]})
+            profile.kv.update_or_create(group=group, key=field,
+                    defaults={'value': self.cleaned_data[field]},
+                    create_defaults={'value': self.cleaned_data[field]})
 
         return profile
 
