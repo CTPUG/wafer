@@ -6,11 +6,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Wafer\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-27 18:02+0000\n"
+"POT-Creation-Date: 2025-05-07 14:21+0000\n"
 "PO-Revision-Date: 2025-01-23 14:10+0000\n"
 "Last-Translator: gfbdrgng <hnaofegnp@hldrive.com>\n"
-"Language-Team: Russian <https://hosted.weblate.org/projects/wafer/wafer/ru/>"
-"\n"
+"Language-Team: Russian <https://hosted.weblate.org/projects/wafer/wafer/ru/"
+">\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -202,7 +202,12 @@ msgstr "Сравнить со следующей версией"
 msgid "No previous versions to compare to"
 msgstr "Страница ещё не редактировалась"
 
-#: wafer/pages/templates/wafer.pages/page_form.html:11
+#: wafer/pages/templates/wafer.pages/page_form.html:5
+#, python-format
+msgid "Editing Page: %(page)s - %(WAFER_CONFERENCE_NAME)s"
+msgstr ""
+
+#: wafer/pages/templates/wafer.pages/page_form.html:12
 msgid "Edit Page"
 msgstr "Править"
 
@@ -650,7 +655,7 @@ msgstr "Ссылка на спонсора (если требуется)"
 
 #: wafer/sponsors/models.py:112
 #: wafer/sponsors/templates/wafer.sponsors/sponsors.html:4
-#: wafer/sponsors/templates/wafer.sponsors/sponsors.html:7
+#: wafer/sponsors/templates/wafer.sponsors/sponsors.html:8
 msgid "Sponsors"
 msgstr "Спонсоры"
 
@@ -662,23 +667,23 @@ msgstr "Наши спонсоры"
 msgid "Sponsorship packages"
 msgstr "Спонсорские пакеты"
 
-#: wafer/sponsors/templates/wafer.sponsors/packages.html:5
+#: wafer/sponsors/templates/wafer.sponsors/packages.html:6
 msgid "Sponsorship Packages"
 msgstr "Спонсорские пакеты"
 
-#: wafer/sponsors/templates/wafer.sponsors/packages.html:19
+#: wafer/sponsors/templates/wafer.sponsors/packages.html:24
 msgid "Total number available:"
 msgstr "Всего доступно:"
 
-#: wafer/sponsors/templates/wafer.sponsors/packages.html:21
+#: wafer/sponsors/templates/wafer.sponsors/packages.html:26
 msgid "Packages claimed:"
 msgstr "Заявленные пакеты:"
 
-#: wafer/sponsors/templates/wafer.sponsors/packages.html:28
+#: wafer/sponsors/templates/wafer.sponsors/packages.html:34
 msgid "No sponsorship packages available yet."
 msgstr "Спонсорские пакеты ещё не доступны."
 
-#: wafer/sponsors/templates/wafer.sponsors/sponsors.html:39
+#: wafer/sponsors/templates/wafer.sponsors/sponsors.html:45
 msgid "No sponsors yet."
 msgstr "Спонсоров ещё нет."
 
@@ -734,7 +739,7 @@ msgstr "Отметить выбранные доклады как Условно
 msgid "Mark selected talks as Accepted"
 msgstr "Отметить выбранные доклады как Принятые"
 
-#: wafer/talks/forms.py:124 wafer/users/forms.py:24 wafer/users/forms.py:73
+#: wafer/talks/forms.py:124 wafer/users/forms.py:23 wafer/users/forms.py:72
 msgid "Save"
 msgstr "Сохранить"
 
@@ -859,22 +864,22 @@ msgid "Accepted"
 msgstr "Принят"
 
 #: wafer/talks/models.py:156 wafer/talks/templates/wafer.talks/talk.html:126
-#: wafer/talks/templates/wafer.talks/talks.html:42
+#: wafer/talks/templates/wafer.talks/talks.html:65
 msgid "Not accepted"
 msgstr "Не принят"
 
 #: wafer/talks/models.py:158 wafer/talks/templates/wafer.talks/talk.html:116
-#: wafer/talks/templates/wafer.talks/talks.html:40
+#: wafer/talks/templates/wafer.talks/talks.html:63
 msgid "Under consideration"
 msgstr "На рассмотрении"
 
 #: wafer/talks/models.py:159 wafer/talks/templates/wafer.talks/talk.html:114
-#: wafer/talks/templates/wafer.talks/talks.html:38
+#: wafer/talks/templates/wafer.talks/talks.html:61
 msgid "Submitted"
 msgstr "Подан"
 
 #: wafer/talks/models.py:160 wafer/talks/templates/wafer.talks/talk.html:118
-#: wafer/talks/templates/wafer.talks/talks.html:46
+#: wafer/talks/templates/wafer.talks/talks.html:69
 msgid "Provisionally Accepted"
 msgstr "Условно принят"
 
@@ -955,12 +960,12 @@ msgstr "видеозапись"
 #, python-brace-format
 msgid ""
 "By checking this, you are giving permission for the talk to be videoed, and "
-"distributed by the conference, under the <a "
-"href=\"{license_url}\">{license_name} license</a>."
+"distributed by the conference, under the <a href=\"{license_url}"
+"\">{license_name} license</a>."
 msgstr ""
 "Установив этот флажок, вы даете разрешение на запись вашего доклада, а также "
-"дальнейшее распространение видеозаписи под <a "
-"href=\"{license_url}\">лицензией {license_name}</a>."
+"дальнейшее распространение видеозаписи под <a href=\"{license_url}"
+"\">лицензией {license_name}</a>."
 
 #: wafer/talks/models.py:235
 msgid "video reviewer"
@@ -1060,8 +1065,8 @@ msgstr "Рецензирован, но текст поменялся с моме
 #: wafer/talks/templates/wafer.talks/speakers.html:3
 #: wafer/talks/templates/wafer.talks/speakers.html:8
 #: wafer/talks/templates/wafer.talks/speakers.html:39
-#: wafer/talks/templates/wafer.talks/talks.html:28
-#: wafer/talks/templates/wafer.talks/talks.html:72
+#: wafer/talks/templates/wafer.talks/talks.html:51
+#: wafer/talks/templates/wafer.talks/talks.html:99
 msgid "Speakers"
 msgstr "Докладчики"
 
@@ -1105,8 +1110,8 @@ msgid "Track: %(track)s"
 msgstr "Секция: %(track)s"
 
 #: wafer/talks/templates/wafer.talks/talk.html:72
-#: wafer/talks/templates/wafer.talks/talks.html:24
-#: wafer/talks/templates/wafer.talks/talks.html:69
+#: wafer/talks/templates/wafer.talks/talks.html:33
+#: wafer/talks/templates/wafer.talks/talks.html:95
 msgid "Talk"
 msgstr "Доклад"
 
@@ -1135,7 +1140,7 @@ msgid "Submission:"
 msgstr "Подан:"
 
 #: wafer/talks/templates/wafer.talks/talk.html:106
-#: wafer/talks/templates/wafer.talks/talks.html:35
+#: wafer/talks/templates/wafer.talks/talks.html:58
 msgid "Late submission"
 msgstr "Поздняя подача"
 
@@ -1232,19 +1237,41 @@ msgid "All Submitted Talks"
 msgstr "Все представленные беседы"
 
 #: wafer/talks/templates/wafer.talks/talks.html:11
+#, fuzzy
+#| msgid "Unassigned Talks"
+msgid "Planned Talks"
+msgstr "Не в программе"
+
+#: wafer/talks/templates/wafer.talks/talks.html:13
+msgid ""
+"\n"
+"          This list will include submitted \"un-conference\" events that "
+"have not\n"
+"          yet been reviewed, accepted, or scheduled.\n"
+"        "
+msgstr ""
+
+#: wafer/talks/templates/wafer.talks/talks.html:19
 msgid "Accepted Talks"
 msgstr "Принятые беседы"
 
-#: wafer/talks/templates/wafer.talks/talks.html:27
-#: wafer/talks/templates/wafer.talks/talks.html:71
+#: wafer/talks/templates/wafer.talks/talks.html:40
+#: wafer/talks/templates/wafer.talks/talks.html:97
+#, fuzzy
+#| msgid "Tracks"
+msgid "Track"
+msgstr "Секции"
+
+#: wafer/talks/templates/wafer.talks/talks.html:47
+#: wafer/talks/templates/wafer.talks/talks.html:98
 msgid "Language"
 msgstr "Языки"
 
-#: wafer/talks/templates/wafer.talks/talks.html:44
+#: wafer/talks/templates/wafer.talks/talks.html:67
 msgid "Talk Cancelled"
 msgstr "Доклад отменён"
 
-#: wafer/talks/templates/wafer.talks/talks.html:77
+#: wafer/talks/templates/wafer.talks/talks.html:104
 msgid "No talks accepted yet."
 msgstr "Пока не принят ни один доклад."
 
@@ -1303,6 +1330,24 @@ msgstr "Выйти"
 msgid "Sign up / Log In"
 msgstr "Войти"
 
+#: wafer/tickets/admin.py:10
+#, fuzzy
+#| msgid "Ticket claim"
+msgid "ticket claimed"
+msgstr "Выдача билета"
+
+#: wafer/tickets/admin.py:15
+#, fuzzy
+#| msgid "Ticket claim"
+msgid "Ticket has been claimed"
+msgstr "Выдача билета"
+
+#: wafer/tickets/admin.py:16
+#, fuzzy
+#| msgid "Ticket claim"
+msgid "Ticket is unclaimed"
+msgstr "Выдача билета"
+
 #: wafer/tickets/forms.py:18
 msgid "Claim"
 msgstr "Выдать билет"
@@ -1355,31 +1400,31 @@ msgstr "профиль"
 msgid "profiles"
 msgstr "профили"
 
-#: wafer/users/forms.py:67
+#: wafer/users/forms.py:66
 msgid "<p>Code Hosting Profiles</p>"
 msgstr "<p>Профили кодовых хостингов</p>"
 
-#: wafer/users/forms.py:71
+#: wafer/users/forms.py:70
 msgid "<p>Social Profiles</p>"
 msgstr "<p> Социальные профили </p>"
 
-#: wafer/users/models.py:34
+#: wafer/users/models.py:33
 msgid "user profile"
 msgstr "профиль пользователя"
 
-#: wafer/users/models.py:35
+#: wafer/users/models.py:34
 msgid "user profiles"
 msgstr "профили пользователя"
 
-#: wafer/users/models.py:39
+#: wafer/users/models.py:38
 msgid "contact number"
 msgstr "контактный номер"
 
-#: wafer/users/models.py:40
+#: wafer/users/models.py:39
 msgid "bio"
 msgstr "биография"
 
-#: wafer/users/models.py:42
+#: wafer/users/models.py:41
 msgid "homepage"
 msgstr "сайт"
 
@@ -1411,9 +1456,9 @@ msgid ""
 "<br> Change your picture there."
 msgstr ""
 "Фотографии предоставлены сервисом <a href=\"https://www.libravatar.org/"
-"\">libravatar</a> (который также берёт их с <a href=\"https://secure."
-"gravatar.com/\">Gravatar</a>).<br> Изменить фотографию можно на одном из "
-"этих сервисов."
+"\">libravatar</a> (который также берёт их с <a href=\"https://"
+"secure.gravatar.com/\">Gravatar</a>).<br> Изменить фотографию можно на одном "
+"из этих сервисов."
 
 #: wafer/users/templates/wafer.users/snippets/profile_25-menu.html:7
 msgid "Edit Profile"
@@ -1438,11 +1483,11 @@ msgstr "Отменить регистрацию"
 msgid "Submit Talk Proposal"
 msgstr "Предложить презентацию"
 
-#: wafer/users/templates/wafer.users/snippets/profile_30-registered.html:8
+#: wafer/users/templates/wafer.users/snippets/profile_30-registered.html:9
 msgid "Registered"
 msgstr "Вы зарегистрированы на конференции"
 
-#: wafer/users/templates/wafer.users/snippets/profile_30-registered.html:14
+#: wafer/users/templates/wafer.users/snippets/profile_30-registered.html:15
 msgid ""
 "<strong>WARNING:</strong> Talk proposal submitted, but speaker hasn't "
 "registered to attend."
@@ -1450,7 +1495,7 @@ msgstr ""
 "<strong>ВНИМАНИЕ:</strong> Вы подали доклад, но не зарегистрировались как "
 "участник."
 
-#: wafer/users/templates/wafer.users/snippets/profile_30-registered.html:19
+#: wafer/users/templates/wafer.users/snippets/profile_30-registered.html:20
 msgid "Register now!"
 msgstr "Зарегистрируйтесь прямо сейчас!"
 
