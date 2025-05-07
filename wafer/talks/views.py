@@ -77,6 +77,8 @@ class UsersTalks(PaginatedBuildableListView):
         context["languages"] = Talk.LANGUAGES
         context["tracks"] = Track.objects.count() > 0
         context["see_all"] = Talk.can_view_all(self.request.user)
+        context["includes_pending"] = TalkType.objects.filter(
+            show_pending_submissions=True).exists()
         context['sort'] = self.request.GET.get('sort', 'default')
         return context
 

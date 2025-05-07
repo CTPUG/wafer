@@ -7,6 +7,14 @@
   {% block heading %}
     {% if see_all %}
       <h1>{% trans "All Submitted Talks" %}</h1>
+    {% elif includes_pending %}
+      <h1>{% trans "Planned Talks" %}</h1>
+      <div>
+        {% blocktrans %}
+          This list will include submitted "un-conference" events that have not
+          yet been reviewed, accepted, or scheduled.
+        {% endblocktrans %}
+      </div>
     {% else %}
       <h1>{% trans "Accepted Talks" %}</h1>
     {% endif %}
