@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-10-06 10:25+0000\n"
+"POT-Creation-Date: 2025-05-07 14:22+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -812,22 +812,22 @@ msgid "Accepted"
 msgstr ""
 
 #: wafer/talks/models.py:156 wafer/talks/templates/wafer.talks/talk.html:126
-#: wafer/talks/templates/wafer.talks/talks.html:57
+#: wafer/talks/templates/wafer.talks/talks.html:65
 msgid "Not accepted"
 msgstr ""
 
 #: wafer/talks/models.py:158 wafer/talks/templates/wafer.talks/talk.html:116
-#: wafer/talks/templates/wafer.talks/talks.html:55
+#: wafer/talks/templates/wafer.talks/talks.html:63
 msgid "Under consideration"
 msgstr ""
 
 #: wafer/talks/models.py:159 wafer/talks/templates/wafer.talks/talk.html:114
-#: wafer/talks/templates/wafer.talks/talks.html:53
+#: wafer/talks/templates/wafer.talks/talks.html:61
 msgid "Submitted"
 msgstr ""
 
 #: wafer/talks/models.py:160 wafer/talks/templates/wafer.talks/talk.html:118
-#: wafer/talks/templates/wafer.talks/talks.html:61
+#: wafer/talks/templates/wafer.talks/talks.html:69
 msgid "Provisionally Accepted"
 msgstr ""
 
@@ -900,8 +900,8 @@ msgstr ""
 #, python-brace-format
 msgid ""
 "By checking this, you are giving permission for the talk to be videoed, and "
-"distributed by the conference, under the <a "
-"href=\"{license_url}\">{license_name} license</a>."
+"distributed by the conference, under the <a href=\"{license_url}"
+"\">{license_name} license</a>."
 msgstr ""
 
 #: wafer/talks/models.py:235
@@ -998,8 +998,8 @@ msgstr ""
 #: wafer/talks/templates/wafer.talks/speakers.html:3
 #: wafer/talks/templates/wafer.talks/speakers.html:8
 #: wafer/talks/templates/wafer.talks/speakers.html:39
-#: wafer/talks/templates/wafer.talks/talks.html:43
-#: wafer/talks/templates/wafer.talks/talks.html:91
+#: wafer/talks/templates/wafer.talks/talks.html:51
+#: wafer/talks/templates/wafer.talks/talks.html:99
 msgid "Speakers"
 msgstr ""
 
@@ -1042,8 +1042,8 @@ msgid "Track: %(track)s"
 msgstr ""
 
 #: wafer/talks/templates/wafer.talks/talk.html:72
-#: wafer/talks/templates/wafer.talks/talks.html:25
-#: wafer/talks/templates/wafer.talks/talks.html:87
+#: wafer/talks/templates/wafer.talks/talks.html:33
+#: wafer/talks/templates/wafer.talks/talks.html:95
 msgid "Talk"
 msgstr ""
 
@@ -1072,7 +1072,7 @@ msgid "Submission:"
 msgstr ""
 
 #: wafer/talks/templates/wafer.talks/talk.html:106
-#: wafer/talks/templates/wafer.talks/talks.html:50
+#: wafer/talks/templates/wafer.talks/talks.html:58
 msgid "Late submission"
 msgstr ""
 
@@ -1163,24 +1163,37 @@ msgid "All Submitted Talks"
 msgstr ""
 
 #: wafer/talks/templates/wafer.talks/talks.html:11
+msgid "Planned Talks"
+msgstr ""
+
+#: wafer/talks/templates/wafer.talks/talks.html:13
+msgid ""
+"\n"
+"          This list will include submitted \"un-conference\" events that "
+"have not\n"
+"          yet been reviewed, accepted, or scheduled.\n"
+"        "
+msgstr ""
+
+#: wafer/talks/templates/wafer.talks/talks.html:19
 msgid "Accepted Talks"
 msgstr ""
 
-#: wafer/talks/templates/wafer.talks/talks.html:32
-#: wafer/talks/templates/wafer.talks/talks.html:89
+#: wafer/talks/templates/wafer.talks/talks.html:40
+#: wafer/talks/templates/wafer.talks/talks.html:97
 msgid "Track"
 msgstr ""
 
-#: wafer/talks/templates/wafer.talks/talks.html:39
-#: wafer/talks/templates/wafer.talks/talks.html:90
+#: wafer/talks/templates/wafer.talks/talks.html:47
+#: wafer/talks/templates/wafer.talks/talks.html:98
 msgid "Language"
 msgstr ""
 
-#: wafer/talks/templates/wafer.talks/talks.html:59
+#: wafer/talks/templates/wafer.talks/talks.html:67
 msgid "Talk Cancelled"
 msgstr ""
 
-#: wafer/talks/templates/wafer.talks/talks.html:96
+#: wafer/talks/templates/wafer.talks/talks.html:104
 msgid "No talks accepted yet."
 msgstr ""
 
