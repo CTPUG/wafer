@@ -7,17 +7,17 @@ msgstr ""
 "Project-Id-Version: Wafer\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-05-07 14:21+0000\n"
-"PO-Revision-Date: 2025-01-23 14:10+0000\n"
-"Last-Translator: gfbdrgng <hnaofegnp@hldrive.com>\n"
-"Language-Team: Russian <https://hosted.weblate.org/projects/wafer/wafer/ru/"
-">\n"
+"PO-Revision-Date: 2025-06-16 18:01+0000\n"
+"Last-Translator: Yurt Page <yurtpage@gmail.com>\n"
+"Language-Team: Russian <https://hosted.weblate.org/projects/wafer/wafer/ru/>"
+"\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 5.10-dev\n"
+"X-Generator: Weblate 5.12.1\n"
 
 #: wafer/compare/admin.py:22
 msgid "Last Modified"
@@ -1237,10 +1237,8 @@ msgid "All Submitted Talks"
 msgstr "Все представленные беседы"
 
 #: wafer/talks/templates/wafer.talks/talks.html:11
-#, fuzzy
-#| msgid "Unassigned Talks"
 msgid "Planned Talks"
-msgstr "Не в программе"
+msgstr "Запланированные задачи"
 
 #: wafer/talks/templates/wafer.talks/talks.html:13
 msgid ""
@@ -1250,6 +1248,11 @@ msgid ""
 "          yet been reviewed, accepted, or scheduled.\n"
 "        "
 msgstr ""
+"\n"
+"          В этот список будут включены представленные «неконференционные» "
+"мероприятия,\n"
+"          которые ещё не были рассмотрены, приняты или запланированы.\n"
+"        "
 
 #: wafer/talks/templates/wafer.talks/talks.html:19
 msgid "Accepted Talks"
@@ -1257,10 +1260,8 @@ msgstr "Принятые беседы"
 
 #: wafer/talks/templates/wafer.talks/talks.html:40
 #: wafer/talks/templates/wafer.talks/talks.html:97
-#, fuzzy
-#| msgid "Tracks"
 msgid "Track"
-msgstr "Секции"
+msgstr "Секция"
 
 #: wafer/talks/templates/wafer.talks/talks.html:47
 #: wafer/talks/templates/wafer.talks/talks.html:98
@@ -1334,19 +1335,19 @@ msgstr "Войти"
 #, fuzzy
 #| msgid "Ticket claim"
 msgid "ticket claimed"
-msgstr "Выдача билета"
+msgstr "билета выдан"
 
 #: wafer/tickets/admin.py:15
 #, fuzzy
 #| msgid "Ticket claim"
 msgid "Ticket has been claimed"
-msgstr "Выдача билета"
+msgstr "Билет был выдан"
 
 #: wafer/tickets/admin.py:16
 #, fuzzy
 #| msgid "Ticket claim"
 msgid "Ticket is unclaimed"
-msgstr "Выдача билета"
+msgstr "Билет не выдан"
 
 #: wafer/tickets/forms.py:18
 msgid "Claim"
@@ -1361,6 +1362,7 @@ msgstr ""
 "правильный? Свяжитесь с нами."
 
 #: wafer/tickets/forms.py:30
+#, fuzzy
 msgid "This ticket has already been claimed, by another user."
 msgstr "Этот билет уже выдали кому-то ещё."
 
