@@ -113,16 +113,21 @@ class ReviewViewSetTests(TestCase):
                                           make_aspect_key(self.aspect_2): '1'})
 
 
+        review1 = Review.objects.get(talk=talk, reviewer=self.reviewer_a)
+        review2 = Review.objects.get(talk=talk, reviewer=self.reviewer_b)
+        review3 = Review.objects.get(talk=talk2, reviewer=self.reviewer_b)
+
+
         # Check that the user with 'view_all_reviews' sees the reviews
         response = self.client.get('/talks/api/talks/%d/reviews/' % talk.talk_id)
         self.assertEqual(response.data['results'], [
-            self.mk_result(1, talk, self.reviewer_a, [1, 2]),
-            self.mk_result(2, talk, self.reviewer_b, [2, 2]),
+            self.mk_result(review1.id, talk, self.reviewer_a, [1, 2]),
+            self.mk_result(review2.id, talk, self.reviewer_b, [2, 2]),
         ])
 
         response = self.client.get('/talks/api/talks/%d/reviews/' % talk2.talk_id)
         self.assertEqual(response.data['results'], [
-            self.mk_result(3, talk2, self.reviewer_b, [1, 1]),
+            self.mk_result(review3.id, talk2, self.reviewer_b, [1, 1]),
         ])
         # Check that the user without the permissions doesn't
         self.client.login(username='reviewer_a', password='reviewer_a_password')
@@ -132,11 +137,11 @@ class ReviewViewSetTests(TestCase):
         self.client.login(username='super', password='super_password')
         response = self.client.get('/talks/api/talks/%d/reviews/' % talk.talk_id)
         self.assertEqual(response.data['results'], [
-            self.mk_result(1, talk, self.reviewer_a, [1, 2]),
-            self.mk_result(2, talk, self.reviewer_b, [2, 2]),
+            self.mk_result(review1.id, talk, self.reviewer_a, [1, 2]),
+            self.mk_result(review2.id, talk, self.reviewer_b, [2, 2]),
         ])
 
         response = self.client.get('/talks/api/talks/%d/reviews/' % talk2.talk_id)
         self.assertEqual(response.data['results'], [
-            self.mk_result(3, talk2, self.reviewer_b, [1, 1]),
+            self.mk_result(review3.id, talk2, self.reviewer_b, [1, 1]),
         ])
