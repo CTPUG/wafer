@@ -3,7 +3,7 @@ from django.contrib.auth import get_user_model
 from rest_framework import serializers
 from reversion import revisions
 
-from wafer.talks.models import Talk, TalkUrl
+from wafer.talks.models import Talk, TalkUrl, ReviewAspect, Score, Review
 
 
 class TalkUrlSerializer(serializers.ModelSerializer):
@@ -66,3 +66,27 @@ class TalkSerializer(serializers.ModelSerializer):
     def update(self, talk, validated_data):
         revisions.set_comment("Changed via REST api")
         return super().update(talk, validated_data)
+
+
+class ReviewAspectSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ReviewAspect
+        fields = ('name',)
+
+
+class ReviewScoreSerializer(serializers.ModelSerializer):
+
+    aspect = ReviewAspectSerializer()
+
+    class Meta:
+        model = Score
+        fields = ('aspect', 'value')
+
+
+class ReviewSerializer(serializers.ModelSerializer):
+
+    scores = ReviewScoreSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Review
+        fields = ('id', 'talk', 'reviewer', 'notes', 'scores', 'avg_score')
