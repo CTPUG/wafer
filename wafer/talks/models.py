@@ -419,7 +419,7 @@ class Review(models.Model):
     class Meta:
         # Permission to allow pulling all reviews via the API
         permissions = (
-            ("view_all_reviews", "Can see all reiews via the apo"),
+            ("view_all_reviews", "Can see all reiews via the api"),
         )
         unique_together = (('talk', 'reviewer'),)
         verbose_name = _('review')

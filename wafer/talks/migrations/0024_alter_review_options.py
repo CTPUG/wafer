@@ -19,7 +19,7 @@ class Migration(migrations.Migration):
             name="review",
             options={
                 "permissions": (
-                    ("view_all_reviews", "Can see all reiews via the apo"),
+                    ("view_all_reviews", "Can see all reiews via the api"),
                 ),
             },
         ),
