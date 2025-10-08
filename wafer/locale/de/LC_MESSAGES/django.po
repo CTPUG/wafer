@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-05-07 14:21+0000\n"
-"PO-Revision-Date: 2024-07-04 16:09+0000\n"
-"Last-Translator: Coxcopi70f00b67b61542fe <hn_vogel@gmx.net>\n"
+"PO-Revision-Date: 2025-10-07 20:01+0000\n"
+"Last-Translator: Zarakkas <kaz@users.noreply.hosted.weblate.org>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/wafer/wafer/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.7-dev\n"
+"X-Generator: Weblate 5.14-dev\n"
 
 #: wafer/compare/admin.py:22
 msgid "Last Modified"
@@ -104,7 +104,7 @@ msgstr ""
 
 #: wafer/pages/models.py:49
 msgid "Last component of the page URL"
-msgstr ""
+msgstr "Letzte Komponente der Seiten-URL"
 
 #: wafer/pages/models.py:53
 msgid "Markdown contents for the page."
@@ -112,21 +112,23 @@ msgstr "Markdown-Inhalt für die Seite."
 
 #: wafer/pages/models.py:55
 msgid "Whether to include in menus."
-msgstr ""
+msgstr "Ob im Menü aufgeführt werden soll."
 
 #: wafer/pages/models.py:58
 msgid "Ordering in the menu (smaller numbers come first)"
-msgstr ""
+msgstr "Reihenfolge im Menü (kleinere Zahlen kommen zuerst)"
 
 #: wafer/pages/models.py:63
 msgid ""
 "Whether to exclude this page from the static version of the site (Container "
 "pages, etc.)"
 msgstr ""
+"Ob die Seite nicht in der statischen Version auftauchen soll "
+"(Containerseite etc.)"
 
 #: wafer/pages/models.py:68
 msgid "Images and other files for use in the content markdown field."
-msgstr ""
+msgstr "Bilder und andere Dateien zur Verwendung als Inhalt im Markdownfeld."
 
 #: wafer/pages/models.py:74
 msgid ""
@@ -158,42 +160,42 @@ msgstr "Bearbeiten"
 
 #: wafer/pages/templates/wafer.pages/page.html:13
 msgid "Compare to Previous version"
-msgstr ""
+msgstr "Mit vorheriger Version vergleichen"
 
 #: wafer/pages/templates/wafer.pages/page_compare.html:6
 msgid "Comparing Page"
-msgstr ""
+msgstr "Vergleichsansicht"
 
 #: wafer/pages/templates/wafer.pages/page_compare.html:8
 #, python-format
 msgid "Last Saved: %(cur_date)s by %(cur_author)s"
-msgstr ""
+msgstr "Zuletzt gespeichert: %(cur_date)s von %(cur_author)s"
 
 #: wafer/pages/templates/wafer.pages/page_compare.html:11
 #, python-format
 msgid "Comparing to version saved: %(prev_date)s by %(prev_author)s"
-msgstr ""
+msgstr "Vergleich mit gespeicherter Version: %(prev_date)s von %(prev_author)s"
 
 #: wafer/pages/templates/wafer.pages/page_compare.html:33
 msgid "Compare to next older version"
-msgstr ""
+msgstr "Mit der nachfolgenden Version vergleichen"
 
 #: wafer/pages/templates/wafer.pages/page_compare.html:37
 msgid "Return to Page"
-msgstr ""
+msgstr "Zurück zur Seite"
 
 #: wafer/pages/templates/wafer.pages/page_compare.html:41
 msgid "Compare to next newer version"
-msgstr ""
+msgstr "Mit der vorausgegangenen Version vergleichen"
 
 #: wafer/pages/templates/wafer.pages/page_compare.html:46
 msgid "No previous versions to compare to"
-msgstr ""
+msgstr "Es gibt keine vorherigen Versionen, um zu vergleichen"
 
 #: wafer/pages/templates/wafer.pages/page_form.html:5
 #, python-format
 msgid "Editing Page: %(page)s - %(WAFER_CONFERENCE_NAME)s"
-msgstr ""
+msgstr "Seite bearbeiten: %(page)s - %(WAFER_CONFERENCE_NAME)s"
 
 #: wafer/pages/templates/wafer.pages/page_form.html:12
 msgid "Edit Page"
@@ -212,7 +214,7 @@ msgstr "Anmelden"
 
 #: wafer/registration/templates/registration/activate.html:4
 msgid "Oops, account activation failed"
-msgstr ""
+msgstr "Ups, Kontoaktivierung fehlgeschlagen"
 
 #: wafer/registration/templates/registration/activate.html:8
 #, python-format
@@ -221,10 +223,13 @@ msgid ""
 "href=\"%(register_url)s\">try again</a> or <a "
 "href=\"%(contact_url)s\">contact our admins</a>."
 msgstr ""
+"Scheinbar haben wir Schwierigkeiten, dein Konto zu aktivieren. Bitte <a href="
+"\"%(register_url)s\">versuchen Sie es erneut</a> oder <a href="
+"\"%(contact_url)s\">kontaktieren Sie unsere Administratoren</a>."
 
 #: wafer/registration/templates/registration/activation_complete.html:4
 msgid "Activation complete"
-msgstr ""
+msgstr "Aktivierung abgeschlossen"
 
 #: wafer/registration/templates/registration/activation_complete.html:7
 #, python-format
@@ -238,6 +243,8 @@ msgstr ""
 #: wafer/registration/templates/registration/registration_complete.html:13
 msgid "Note that registration for the conference is a separate step."
 msgstr ""
+"Bitte beachten Sie, dass die Anmeldung zur Konferenz ein separater Schritt "
+"ist."
 
 #: wafer/registration/templates/registration/activation_complete.html:16
 msgid "You can now log in and start the conference registration process."
@@ -274,7 +281,7 @@ msgstr ""
 "\n"
 "Um Ihre E-Mail-Adresse zu verifizieren, folgen Sie bitte dem obigen Link zur "
 "Aktivierung Ihres\n"
-"Konto. Sie haben noch %(expiration_days)s Tage Zeit, dies zu tun.\n"
+"Kontos. Sie haben noch %(expiration_days)s Tage Zeit, dies zu tun.\n"
 "\n"
 "Wir hoffen, Sie bald zu sehen.\n"
 "\n"
@@ -293,6 +300,9 @@ msgid ""
 "Activate your %(WAFER_CONFERENCE_NAME)s account [%(expiration_days)s days "
 "left]\n"
 msgstr ""
+"\n"
+"Aktivieren Sie Ihr %(WAFER_CONFERENCE_NAME)sKonto "
+"[%(expiration_days)s Tage verbleiben]\n"
 
 #: wafer/registration/templates/registration/login.html:18
 #, python-format
@@ -315,7 +325,7 @@ msgstr "Sie sind abgemeldet worden."
 
 #: wafer/registration/templates/registration/registration_complete.html:4
 msgid "Account creation almost complete"
-msgstr ""
+msgstr "Kontoerstellung fast abgeschlossen"
 
 #: wafer/registration/templates/registration/registration_complete.html:6
 #, python-format
@@ -330,27 +340,27 @@ msgstr ""
 
 #: wafer/registration/templates/registration/registration_complete.html:16
 msgid "You can register after your account is activated."
-msgstr ""
+msgstr "Sie können sich nach der Aktivierung Ihres Kontos anmelden."
 
 #: wafer/schedule/admin.py:166
 msgid "Clashes found in schedule."
-msgstr ""
+msgstr "Konflikte im Kalender gefunden."
 
 #: wafer/schedule/admin.py:169
 msgid "Duplicate schedule items found in schedule."
-msgstr ""
+msgstr "Gefundene Kalendereinträge des Kalenders duplizieren."
 
 #: wafer/schedule/admin.py:172
 msgid "Invalid schedule items found in schedule."
-msgstr ""
+msgstr "Ungültige Kalendereinträge im Kalender gefunden."
 
 #: wafer/schedule/admin.py:175
 msgid "Non contiguous slots found in schedule."
-msgstr ""
+msgstr "Nicht zusammenhängende Zeitfenster im Kalender gefunden."
 
 #: wafer/schedule/admin.py:178
 msgid "Invalid venues found in schedule."
-msgstr ""
+msgstr "Ungültige Veranstaltungsorte im Kalender gefunden."
 
 #: wafer/schedule/admin.py:181
 #: wafer/schedule/templates/admin/scheduleitem_list.html:61
@@ -367,7 +377,7 @@ msgstr ""
 
 #: wafer/schedule/admin.py:329
 msgid "Venue"
-msgstr ""
+msgstr "Veranstaltungsort"
 
 #: wafer/schedule/admin.py:415
 msgid "Additional slots"
@@ -451,15 +461,15 @@ msgstr ""
 
 #: wafer/schedule/templates/admin/scheduleitem_list.html:10
 msgid "Errors in the schedule"
-msgstr ""
+msgstr "Fehler im Kalender"
 
 #: wafer/schedule/templates/admin/scheduleitem_list.html:13
 msgid "Clashes"
-msgstr ""
+msgstr "Konflikte"
 
 #: wafer/schedule/templates/admin/scheduleitem_list.html:25
 msgid "Validation errors"
-msgstr ""
+msgstr "Überprüfungsfehler"
 
 #: wafer/schedule/templates/admin/scheduleitem_list.html:33
 msgid "Items in the schedule with non-contiguous slots"
@@ -480,7 +490,7 @@ msgstr ""
 
 #: wafer/schedule/templates/admin/slot_list.html:10
 msgid "Errors in the slots"
-msgstr ""
+msgstr "Fehler in den Zeitfenstern"
 
 #: wafer/schedule/templates/admin/slot_list.html:13
 msgid "Overlapping slots"
@@ -500,7 +510,7 @@ msgstr ""
 #: wafer/schedule/templates/wafer.schedule/edit_schedule.html:18
 #: wafer/schedule/templates/wafer.schedule/full_schedule.html:27
 msgid "Validation errors:"
-msgstr ""
+msgstr "Überprüfungsfehler:"
 
 #: wafer/schedule/templates/wafer.schedule/current.html:26
 #: wafer/schedule/templates/wafer.schedule/full_schedule.html:36
@@ -1245,7 +1255,7 @@ msgstr ""
 
 #: wafer/templates/500.html:4
 msgid "Internal server error"
-msgstr ""
+msgstr "Interner Serverfehler"
 
 #: wafer/templates/500.html:5
 msgid "Something went wrong while preparing the page that was requested."
@@ -1375,7 +1385,7 @@ msgstr ""
 #: wafer/users/templates/wafer.users/edit_user.html:5
 #: wafer/users/templates/wafer.users/snippets/profile_25-menu.html:6
 msgid "Edit Account"
-msgstr ""
+msgstr "Konto bearbeiten"
 
 #: wafer/users/templates/wafer.users/edit_user.html:10
 msgid "Change Password"
