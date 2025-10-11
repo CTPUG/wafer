@@ -493,7 +493,7 @@ class ValidationTests(TestCase):
         slot2 = Slot.objects.create(start_time=start1, end_time=end)
 
         talk = create_talk('Test talk', status=ACCEPTED, username='john')
-        page = Page.objects.create(name="test page", slug="test")
+        page = Page.objects.create(name="test page", slug="test", schedule_duplicates=1)
 
         item1 = ScheduleItem.objects.create(venue=venue1,
                                             talk_id=talk.pk,
@@ -568,7 +568,7 @@ class ValidationTests(TestCase):
         slot3 = Slot.objects.create(start_time=start3, end_time=end)
 
         talk = create_talk('Test Talk', status=ACCEPTED, username='john')
-        page = Page.objects.create(name="test page", slug="test")
+        page = Page.objects.create(name="test page", slug="test", schedule_duplicates=1)
 
         item1 = ScheduleItem.objects.create(venue=venue1,
                                             talk_id=talk.pk)
@@ -618,8 +618,8 @@ class ValidationTests(TestCase):
         slot2 = Slot.objects.create(start_time=start1, end_time=end)
 
         talk = create_talk('Test talk', status=ACCEPTED, username='john')
-        page1 = Page.objects.create(name="test page", slug="test")
-        page2 = Page.objects.create(name="test page 2", slug="test2")
+        page1 = Page.objects.create(name="test page", slug="test", schedule_duplicates=1)
+        page2 = Page.objects.create(name="test page 2", slug="test2", schedule_duplicates=1)
 
         item1 = ScheduleItem.objects.create(venue=venue1,
                                             talk_id=talk.pk)
@@ -674,7 +674,7 @@ class ValidationTests(TestCase):
 
         slot1 = Slot.objects.create(start_time=start1, end_time=start2)
 
-        page = Page.objects.create(name="test page", slug="test")
+        page = Page.objects.create(name="test page", slug="test", schedule_duplicates=1)
 
         item1 = ScheduleItem.objects.create(venue=venue1,
                                             page_id=page.pk)
@@ -732,7 +732,8 @@ class ValidationTests(TestCase):
                                     tzinfo=D.timezone.utc))
         venue1 = Venue.objects.create(order=1, name='Venue 1')
         venue1.blocks.add(day1)
-        page = Page.objects.create(name="test page", slug="test")
+        page = Page.objects.create(name="test page", slug="test", schedule_duplicates=1)
+        page2 = Page.objects.create(name="test page 2", slug="test2", schedule_duplicates=1)
 
         start1 = D.datetime(2013, 9, 22, 10, 0, 0, tzinfo=D.timezone.utc)
         start2 = D.datetime(2013, 9, 22, 11, 0, 0, tzinfo=D.timezone.utc)
@@ -756,7 +757,7 @@ class ValidationTests(TestCase):
         errors = validate_schedule()
         self.assertEqual(len(errors), 2)
         # Fix the invalid item
-        item2.page_id = page.pk
+        item2.page_id = page2.pk
         item2.save()
         # Schedule is still invalid, but only the clash remains
         check_schedule.invalidate()
