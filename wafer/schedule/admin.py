@@ -61,8 +61,10 @@ def find_duplicate_schedule_items(all_items):
     for item in all_items:
         if item.talk:
             key = item.talk
-        else:
+        elif item.page:
             key = item.page
+        else:
+            continue
         if key in occurances:
             occurances[key].append(item)
         else:
