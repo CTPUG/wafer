@@ -360,8 +360,10 @@ class ScheduleValidationApiTests(TestCase):
         c = create_client('super', superuser=True)
         response = c.get('/schedule/api/validate/')
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(len(response.data['Validation Status']), 1)
+        # We have a clash and 2 duplicates reported
+        self.assertEqual(len(response.data['Validation Status']), 3)
         self.assertIn('Clashes found in schedule', response.data['Validation Status'][0])
+        self.assertIn('exceed allowed number of duplicates', response.data['Validation Status'][1])
 
     def test_find_speaker_clashes(self):
         """Test that speaker clashes are reported"""
