@@ -57,17 +57,19 @@ def validate_items(all_items):
 def find_duplicate_schedule_items(all_items):
     """Find talks / pages assigned to mulitple schedule items"""
     duplicates = []
-    seen_talks = {}
+    occurances = {}
     for item in all_items:
-        if item.talk and item.talk in seen_talks:
-            duplicates.append(item)
-            if seen_talks[item.talk] not in duplicates:
-                duplicates.append(seen_talks[item.talk])
+        if item.talk:
+            key = item.talk
         else:
-            seen_talks[item.talk] = item
-        # We currently allow duplicate pages for cases were we need disjoint
-        # schedule items, like multiple open space sessions on different
-        # days and similar cases. This may be revisited later
+            key = item.page
+        if key in occurances:
+            occurances[key].append(item)
+        else:
+            occurances[key] = [item]
+    for cand in occurances:
+        if len(occurances[cand]) > cand.schedule_duplicates:
+               duplicates.extend(occurances[cand])
     return duplicates
 
 
@@ -166,7 +168,7 @@ register_schedule_item_validator(
         _('Clashes found in schedule.'))
 register_schedule_item_validator(
         find_duplicate_schedule_items, 'duplicates',
-        _('Duplicate schedule items found in schedule.'))
+        _('Schedule items found in schedule which exceed allowed number of duplicates.'))
 register_schedule_item_validator(
         validate_items, 'validation',
         _('Invalid schedule items found in schedule.'))
