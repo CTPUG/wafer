@@ -246,6 +246,9 @@ class Talk(models.Model):
 
     submission_time = models.DateTimeField(auto_now_add=True)
 
+    schedule_duplicates = models.IntegerField(
+            default=1, validators=[validators.MinValueValidator(0)])
+
     @property
     def slug(self):
         return slugify(self.title)
