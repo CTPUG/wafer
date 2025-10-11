@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-07 14:22+0000\n"
+"POT-Creation-Date: 2025-10-11 09:58+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -102,50 +102,50 @@ msgid ""
 "admin site."
 msgstr ""
 
-#: wafer/pages/models.py:49
+#: wafer/pages/models.py:50
 msgid "Last component of the page URL"
 msgstr ""
 
-#: wafer/pages/models.py:53
+#: wafer/pages/models.py:54
 msgid "Markdown contents for the page."
 msgstr ""
 
-#: wafer/pages/models.py:55
+#: wafer/pages/models.py:56
 msgid "Whether to include in menus."
 msgstr ""
 
-#: wafer/pages/models.py:58
+#: wafer/pages/models.py:59
 msgid "Ordering in the menu (smaller numbers come first)"
 msgstr ""
 
-#: wafer/pages/models.py:63
+#: wafer/pages/models.py:64
 msgid ""
 "Whether to exclude this page from the static version of the site (Container "
 "pages, etc.)"
 msgstr ""
 
-#: wafer/pages/models.py:68
+#: wafer/pages/models.py:69
 msgid "Images and other files for use in the content markdown field."
 msgstr ""
 
-#: wafer/pages/models.py:74
+#: wafer/pages/models.py:75
 msgid ""
 "People associated with this page for display in the schedule (Session "
 "chairs, panelists, etc.)"
 msgstr ""
 
-#: wafer/pages/models.py:79
+#: wafer/pages/models.py:80
 msgid ""
 "Length of time (in seconds) to cache the page for dynamic page content. A "
 "negative value means this page is not dynamic and it will be not be "
 "regenerated until it is next edited."
 msgstr ""
 
-#: wafer/pages/models.py:156
+#: wafer/pages/models.py:162
 msgid "Circular reference in parent."
 msgstr ""
 
-#: wafer/pages/models.py:172
+#: wafer/pages/models.py:178
 msgid "Duplicate parent/slug combination."
 msgstr ""
 
@@ -306,57 +306,58 @@ msgstr ""
 msgid "You can register after your account is activated."
 msgstr ""
 
-#: wafer/schedule/admin.py:166
+#: wafer/schedule/admin.py:170
 msgid "Clashes found in schedule."
 msgstr ""
 
-#: wafer/schedule/admin.py:169
-msgid "Duplicate schedule items found in schedule."
+#: wafer/schedule/admin.py:173
+msgid ""
+"Schedule items found in schedule which exceed allowed number of duplicates."
 msgstr ""
 
-#: wafer/schedule/admin.py:172
+#: wafer/schedule/admin.py:176
 msgid "Invalid schedule items found in schedule."
 msgstr ""
 
-#: wafer/schedule/admin.py:175
+#: wafer/schedule/admin.py:179
 msgid "Non contiguous slots found in schedule."
 msgstr ""
 
-#: wafer/schedule/admin.py:178
+#: wafer/schedule/admin.py:182
 msgid "Invalid venues found in schedule."
 msgstr ""
 
-#: wafer/schedule/admin.py:181
+#: wafer/schedule/admin.py:185
 #: wafer/schedule/templates/admin/scheduleitem_list.html:61
 msgid "Common speaker in simultaneous schedule items"
 msgstr ""
 
-#: wafer/schedule/admin.py:221
+#: wafer/schedule/admin.py:225
 msgid "Block"
 msgstr ""
 
-#: wafer/schedule/admin.py:273 wafer/schedule/models.py:327
+#: wafer/schedule/admin.py:277 wafer/schedule/models.py:327
 msgid "Start Time"
 msgstr ""
 
-#: wafer/schedule/admin.py:329
+#: wafer/schedule/admin.py:333
 msgid "Venue"
 msgstr ""
 
-#: wafer/schedule/admin.py:415
+#: wafer/schedule/admin.py:419
 msgid "Additional slots"
 msgstr ""
 
-#: wafer/schedule/admin.py:416
+#: wafer/schedule/admin.py:420
 msgid "Create this number of additional slots following this one"
 msgstr ""
 
-#: wafer/schedule/admin.py:477
+#: wafer/schedule/admin.py:481
 #, python-format
 msgid "Additional slot %(obj)s added sucessfully"
 msgstr ""
 
-#: wafer/schedule/admin.py:484
+#: wafer/schedule/admin.py:488
 #, python-format
 msgid "Failed to create new slot - %s"
 msgstr ""
@@ -692,7 +693,7 @@ msgstr ""
 msgid "Mark selected talks as Accepted"
 msgstr ""
 
-#: wafer/talks/forms.py:124 wafer/users/forms.py:23 wafer/users/forms.py:72
+#: wafer/talks/forms.py:124 wafer/users/forms.py:23 wafer/users/forms.py:77
 msgid "Save"
 msgstr ""
 
@@ -731,7 +732,7 @@ msgid ""
 "</strong>"
 msgstr ""
 
-#: wafer/talks/models.py:70 wafer/talks/models.py:121 wafer/talks/models.py:427
+#: wafer/talks/models.py:70 wafer/talks/models.py:121 wafer/talks/models.py:438
 msgid "name"
 msgstr ""
 
@@ -799,7 +800,7 @@ msgstr ""
 msgid "tracks"
 msgstr ""
 
-#: wafer/talks/models.py:151 wafer/talks/models.py:390
+#: wafer/talks/models.py:151 wafer/talks/models.py:393
 msgid "talk"
 msgstr ""
 
@@ -854,7 +855,7 @@ msgid ""
 "syntax."
 msgstr ""
 
-#: wafer/talks/models.py:192 wafer/talks/models.py:397
+#: wafer/talks/models.py:192 wafer/talks/models.py:400
 msgid "notes"
 msgstr ""
 
@@ -900,8 +901,8 @@ msgstr ""
 #, python-brace-format
 msgid ""
 "By checking this, you are giving permission for the talk to be videoed, and "
-"distributed by the conference, under the <a href=\"{license_url}"
-"\">{license_name} license</a>."
+"distributed by the conference, under the <a "
+"href=\"{license_url}\">{license_name} license</a>."
 msgstr ""
 
 #: wafer/talks/models.py:235
@@ -916,70 +917,70 @@ msgid ""
 "who would care."
 msgstr ""
 
-#: wafer/talks/models.py:269
+#: wafer/talks/models.py:272
 msgid "NO CONTACT INFO"
 msgstr ""
 
-#: wafer/talks/models.py:271
+#: wafer/talks/models.py:274
 msgid "Contact Details"
 msgstr ""
 
-#: wafer/talks/models.py:277
+#: wafer/talks/models.py:280
 msgid "Corresponding Author"
 msgstr ""
 
-#: wafer/talks/models.py:288
+#: wafer/talks/models.py:291
 #, python-format
 msgid "%s, et al."
 msgstr ""
 
-#: wafer/talks/models.py:295
+#: wafer/talks/models.py:298
 msgid "Added to schedule"
 msgstr ""
 
-#: wafer/talks/models.py:304
+#: wafer/talks/models.py:307
 msgid "Has URL"
 msgstr ""
 
-#: wafer/talks/models.py:393
+#: wafer/talks/models.py:396
 msgid "reviewer"
 msgstr ""
 
-#: wafer/talks/models.py:399
+#: wafer/talks/models.py:402
 msgid "Comments on the proposal (markdown)"
 msgstr ""
 
-#: wafer/talks/models.py:402
+#: wafer/talks/models.py:405
 #, python-format
 msgid "Review of %(title)s by %(reviewer)s (%(average_score)s)"
 msgstr ""
 
-#: wafer/talks/models.py:421
+#: wafer/talks/models.py:428
 msgid "review"
 msgstr ""
 
-#: wafer/talks/models.py:422
+#: wafer/talks/models.py:429
 msgid "reviews"
 msgstr ""
 
-#: wafer/talks/models.py:433
+#: wafer/talks/models.py:444
 msgid "review aspect"
 msgstr ""
 
-#: wafer/talks/models.py:434
+#: wafer/talks/models.py:445
 msgid "review aspects"
 msgstr ""
 
-#: wafer/talks/models.py:450
+#: wafer/talks/models.py:461
 #, python-format
 msgid "Review of %(title)s by %(reviewer)s on %(aspect)s: %(score)i"
 msgstr ""
 
-#: wafer/talks/models.py:458
+#: wafer/talks/models.py:469
 msgid "score"
 msgstr ""
 
-#: wafer/talks/models.py:459
+#: wafer/talks/models.py:470
 msgid "scores"
 msgstr ""
 
@@ -1310,11 +1311,11 @@ msgstr ""
 msgid "profiles"
 msgstr ""
 
-#: wafer/users/forms.py:66
+#: wafer/users/forms.py:71
 msgid "<p>Code Hosting Profiles</p>"
 msgstr ""
 
-#: wafer/users/forms.py:70
+#: wafer/users/forms.py:75
 msgid "<p>Social Profiles</p>"
 msgstr ""
 

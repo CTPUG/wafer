@@ -2,6 +2,7 @@ from functools import partial
 import logging
 
 from django.conf import settings
+from django.core import validators
 from django.core.cache import caches
 from django.core.exceptions import ValidationError, NON_FIELD_ERRORS
 from django.db import models
@@ -80,6 +81,11 @@ class Page(models.Model):
                     "dynamic page content. A negative value means this page "
                     "is not dynamic and it will be not be regenerated "
                     "until it is next edited."))
+
+    # By default, Pages aren't allowed in the schedule
+    # this helps keep the list in the schedule editor sane
+    schedule_duplicates = models.IntegerField(
+            default=0, validators=[validators.MinValueValidator(0)])
 
     def __str__(self):
         return u'%s' % (self.name,)
