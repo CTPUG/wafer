@@ -563,6 +563,75 @@ class EditorTestsMixin:
         with self.assertRaises(NoSuchElementException):
             validation.find_element(By.TAG_NAME,"li")
 
+    def test_schedule_duplicate_hides(self):
+        """Test that setting schedule_duplicates to 0 for an item hides it"""
+        self.assertEqual(ScheduleItem.objects.count(), 0)
+        self._start()
+        # Count the number of pages in the list
+
+        page_link = WebDriverWait(self.driver, SELENIUM_WAIT_TIME).until(
+            expected_conditions.presence_of_element_located((By.PARTIAL_LINK_TEXT, "Pages"))
+        )
+        page_link.click()
+        tab_pane = None
+        for pane in self.driver.find_elements(By.CLASS_NAME, "tab-pane"):
+            if 'active' in pane.get_attribute('class'):
+                tab_pane = pane
+                break
+        source = None
+        tab_items = []
+        for x in tab_pane.find_elements(By.CLASS_NAME, 'draggable'):
+            tab_items.append(x.text)
+        self.assertEqual(len(tab_items), 6)
+        # Cnange to pages to not be in the schedule
+        self.pages[1].schedule_duplicates = 0
+        self.pages[1].save()
+
+        self.pages[4].schedule_duplicates = 0
+        self.pages[4].save()
+        # Reload the page
+        self._driver.navigator.refresh()
+        # Count the number of pages in the list
+
+        page_link = WebDriverWait(self.driver, SELENIUM_WAIT_TIME).until(
+            expected_conditions.presence_of_element_located((By.PARTIAL_LINK_TEXT, "Pages"))
+        )
+        page_link.click()
+        tab_pane = None
+        for pane in self.driver.find_elements(By.CLASS_NAME, "tab-pane"):
+            if 'active' in pane.get_attribute('class'):
+                tab_pane = pane
+                break
+        source = None
+        tab_items = []
+        for x in tab_pane.find_elements(By.CLASS_NAME, 'draggable'):
+            tab_items.append(x.text)
+        self.assertEqual(len(tab_items), 4)
+
+        # Check that numbers > 1 are included in the list
+        self.pages[1].schedule_duplicates = 4
+        self.pages[1].save()
+
+        self.pages[2].schedule_duplicates = 3
+        self.pages[2].save()
+        # Reload the page
+        self._driver.navigator.refresh()
+
+        page_link = WebDriverWait(self.driver, SELENIUM_WAIT_TIME).until(
+            expected_conditions.presence_of_element_located((By.PARTIAL_LINK_TEXT, "Pages"))
+        )
+        page_link.click()
+        tab_pane = None
+        for pane in self.driver.find_elements(By.CLASS_NAME, "tab-pane"):
+            if 'active' in pane.get_attribute('class'):
+                tab_pane = pane
+                break
+        source = None
+        tab_items = []
+        for x in tab_pane.find_elements(By.CLASS_NAME, 'draggable'):
+            tab_items.append(x.text)
+        self.assertEqual(len(tab_items), 5)
+
 
 class ChromeScheduleEditorTests(EditorTestsMixin, ChromeTestRunner):
     pass
