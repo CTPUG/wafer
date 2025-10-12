@@ -36,9 +36,14 @@ Issues = "https://github.com/CTPUG/wafer/issues"
 requires = ["setuptools >= 77.0.3"]
 build-backend = "setuptools.build_meta"
 
+[tool.setuptools.packages]
+find = {}
 
-[tool.setuptools]
-packages = ["wafer",]
+[tool.setuptools.package-data]
+"*" = ["*.rst"]
+
+[tool.setuptools.exclude-package-data]
+"*" = ["utils"]
 
 [tool.setuptools.dynamic]
 version = {attr = "wafer.__version__"}
