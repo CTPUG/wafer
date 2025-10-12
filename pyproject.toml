@@ -1,30 +1,6 @@
 [project]
 name = "wafer"
-dynamic = ["version",]
-
-dependencies = [
-    "Django>=4.2,<6",
-    "bleach",
-    "bleach-allowlist",
-    "crispy-bootstrap5",
-    "diff-match-patch",
-    "django-bakery>=0.13.0",
-    "django-crispy-forms",
-    "django-markitup>=4.0.0",
-    "django-registration-redux",
-    "django-reversion",
-    "django-select2",
-    "djangorestframework",
-    "drf-extensions>=0.5.0",
-    "icalendar>=6.0",
-    "jsonfield",
-    "markdown>=2.5",
-    "pillow",
-    "py3dns",
-    "pyLibravatar",
-    "pytz",
-    "requests",
-]
+dynamic = ["version", "dependencies", "optional-dependencies"]
 
 authors = [
     {name = "CTPUG", email = "ctpug@googlegroups.com" },
@@ -56,18 +32,6 @@ Documentation = "https://wafer.readthedocs.io"
 Issues = "https://github.com/CTPUG/wafer/issues"
 
 
-
-[project.optional-dependencies]
-dev = [
-    "PyYAML",
-    "lxml",
-    "mock",
-    "pep8",
-    "pyflakes",
-    "coverage",
-]
-
-
 [build-system]
 requires = ["setuptools >= 77.0.3"]
 build-backend = "setuptools.build_meta"
@@ -78,3 +42,5 @@ packages = ["wafer",]
 
 [tool.setuptools.dynamic]
 version = {attr = "wafer.__version__"}
+dependencies = { file = ["requirements.txt"] }
+optional-dependencies = { dev = { file = ["requirements-dev.txt"] } }
