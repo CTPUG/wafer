@@ -3,7 +3,7 @@
 # This ensures we run compile messages before we build the wheel
 
 if [ ! -e ./manage.py ]; then
-   echo "PLease run this script in the base diretory of the repo"
+   echo "Please run this script in the base directory of the repository"
    exit 1
 fi
 
