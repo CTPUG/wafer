@@ -40,7 +40,7 @@ build-backend = "setuptools.build_meta"
 find = {}
 
 [tool.setuptools.package-data]
-"*" = ["*.rst", "*po", "*css", "*png", "*js"]
+"*" = ["*.rst", "*po", "*mo", "*css", "*png", "*js"]
 
 [tool.setuptools.exclude-package-data]
 "*" = ["utils"]
