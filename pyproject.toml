@@ -1,0 +1,51 @@
+[project]
+name = "wafer"
+dynamic = ["version", "dependencies", "optional-dependencies"]
+
+authors = [
+    {name = "CTPUG", email = "ctpug@googlegroups.com" },
+]
+
+description = "A wafer-thin Django library for running small conferences."
+readme = "README.rst"
+
+license = "ISC"
+license-files = ["LICENSE",]
+
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Operating System :: POSIX",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Framework :: Django",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Internet :: WWW/HTTP",
+]
+
+[project.urls]
+Repository = "https://github.com/CTPUG/wafer"
+Documentation = "https://wafer.readthedocs.io"
+Issues = "https://github.com/CTPUG/wafer/issues"
+
+
+[build-system]
+requires = ["setuptools >= 77.0.3"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages]
+find = {}
+
+[tool.setuptools.package-data]
+"*" = ["*.rst", "*po", "*mo", "*css", "*png", "*js"]
+
+[tool.setuptools.exclude-package-data]
+"*" = ["utils"]
+
+[tool.setuptools.dynamic]
+version = {attr = "wafer.__version__"}
+dependencies = { file = ["requirements.txt"] }
+optional-dependencies = { dev = { file = ["requirements-dev.txt"] } }

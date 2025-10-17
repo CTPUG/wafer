@@ -1,0 +1,2 @@
+include package.json
+include manage.py
