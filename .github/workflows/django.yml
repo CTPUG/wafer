@@ -123,5 +123,5 @@ jobs:
     - name: Upload sdist
       uses: actions/upload-artifact@v4
       with:
-        name: wheel
+        name: sdist
         path: dist/*tar.gz
