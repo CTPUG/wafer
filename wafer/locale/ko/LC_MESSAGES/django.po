@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-05-07 14:22+0000\n"
-"PO-Revision-Date: 2025-10-17 11:07+0000\n"
+"PO-Revision-Date: 2025-10-23 04:02+0000\n"
 "Last-Translator: Euiseo Cha <zeroday0619_dev@outlook.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/wafer/wafer/ko/>\n"
 "Language: ko\n"
@@ -41,7 +41,7 @@ msgstr "마지막 30일"
 #: wafer/compare/admin.py:140
 #, python-format
 msgid "Comparing current %(model)s with revision created %(date)s"
-msgstr ""
+msgstr "현재 %(model)s을(를) %(date)s에 생성된 리비전과 비교 중"
 
 #: wafer/compare/templates/admin/wafer.compare/change_form.html:6
 msgid "History"
@@ -53,7 +53,7 @@ msgstr "버전 비교"
 
 #: wafer/compare/templates/admin/wafer.compare/change_form.html:13
 msgid "View on site"
-msgstr ""
+msgstr "사이트 맵"
 
 #: wafer/compare/templates/admin/wafer.compare/compare.html:6
 msgid "Compare"
@@ -70,45 +70,48 @@ msgid "No differences found"
 msgstr "변경사항을 찾을 수 없음"
 
 #: wafer/compare/templates/admin/wafer.compare/compare_list.html:6
+#, fuzzy
 msgid "Home"
-msgstr ""
+msgstr "홈"
 
 #: wafer/compare/templates/admin/wafer.compare/compare_list.html:10
 #, python-format
 msgid "Compare %(name)s"
-msgstr ""
+msgstr "%(name)s 비교"
 
 #: wafer/compare/templates/admin/wafer.compare/compare_list.html:17
 msgid ""
 "Choose a date from the list below to compare the current version to a "
 "previous version of this object."
-msgstr ""
+msgstr "아래 목록에서 날짜를 선택하여 현재 버전과 이전 버전을 비교하세요."
 
 #: wafer/compare/templates/admin/wafer.compare/compare_list.html:27
 msgid "Date/time"
-msgstr ""
+msgstr "날짜/시간"
 
 #: wafer/compare/templates/admin/wafer.compare/compare_list.html:28
 msgid "User"
-msgstr ""
+msgstr "사용자"
 
 #: wafer/compare/templates/admin/wafer.compare/compare_list.html:29
 msgid "Comment"
-msgstr ""
+msgstr "댓글"
 
 #: wafer/compare/templates/admin/wafer.compare/compare_list.html:51
+#, fuzzy
 msgid ""
 "This object doesn't have a change history. It probably wasn't added via this "
 "admin site."
-msgstr ""
+msgstr "해당 항목에는 변경 이력이 존재하지 않습니다. 본 관리자 사이트를 통해 추가된 "
+"항목이 아닐 가능성이 있습니다."
 
 #: wafer/pages/models.py:49
 msgid "Last component of the page URL"
-msgstr ""
+msgstr "페이지 URL의 마지막 부분"
 
 #: wafer/pages/models.py:53
 msgid "Markdown contents for the page."
-msgstr ""
+msgstr "페이지의 마크다운 콘텐츠입니다."
 
 #: wafer/pages/models.py:55
 msgid "Whether to include in menus."
@@ -122,7 +125,7 @@ msgstr ""
 msgid ""
 "Whether to exclude this page from the static version of the site (Container "
 "pages, etc.)"
-msgstr ""
+msgstr "사이트의 정적 버전에서 이 페이지를 제외할지 여부 (컨테이너 페이지 등)"
 
 #: wafer/pages/models.py:68
 msgid "Images and other files for use in the content markdown field."
@@ -139,26 +142,27 @@ msgid ""
 "Length of time (in seconds) to cache the page for dynamic page content. A "
 "negative value means this page is not dynamic and it will be not be "
 "regenerated until it is next edited."
-msgstr ""
+msgstr "동적 페이지 콘텐츠의 캐싱 시간(초). 음수일 경우, 이 페이지는 동적이지 않으며 "
+"다음 편집 시까지 다시 생성되지 않습니다."
 
 #: wafer/pages/models.py:156
 msgid "Circular reference in parent."
-msgstr ""
+msgstr "상위에서 순환 참조가 발생했습니다."
 
 #: wafer/pages/models.py:172
 msgid "Duplicate parent/slug combination."
-msgstr ""
+msgstr "상위/슬러그 조합이 중복됩니다."
 
 #: wafer/pages/templates/wafer.pages/page.html:10
 #: wafer/talks/templates/wafer.talks/talk.html:18
 #: wafer/talks/templates/wafer.talks/talk_form.html:33
 #: wafer/users/templates/wafer.users/snippets/profile_40-talks.html:72
 msgid "Edit"
-msgstr ""
+msgstr "수정"
 
 #: wafer/pages/templates/wafer.pages/page.html:13
 msgid "Compare to Previous version"
-msgstr ""
+msgstr "이전 버전과 비교"
 
 #: wafer/pages/templates/wafer.pages/page_compare.html:6
 msgid "Comparing Page"
@@ -176,15 +180,15 @@ msgstr ""
 
 #: wafer/pages/templates/wafer.pages/page_compare.html:33
 msgid "Compare to next older version"
-msgstr ""
+msgstr "다음 이전 버전과 비교"
 
 #: wafer/pages/templates/wafer.pages/page_compare.html:37
 msgid "Return to Page"
-msgstr ""
+msgstr "뒤로 가기"
 
 #: wafer/pages/templates/wafer.pages/page_compare.html:41
 msgid "Compare to next newer version"
-msgstr ""
+msgstr "다음 최신 버전과 비교"
 
 #: wafer/pages/templates/wafer.pages/page_compare.html:46
 msgid "No previous versions to compare to"
@@ -193,26 +197,26 @@ msgstr ""
 #: wafer/pages/templates/wafer.pages/page_form.html:5
 #, python-format
 msgid "Editing Page: %(page)s - %(WAFER_CONFERENCE_NAME)s"
-msgstr ""
+msgstr "페이지 편집: %(page)s - %(WAFER_CONFERENCE_NAME)s"
 
 #: wafer/pages/templates/wafer.pages/page_form.html:12
 msgid "Edit Page"
-msgstr ""
+msgstr "페이지 편집"
 
 #: wafer/registration/forms.py:18
 #: wafer/registration/templates/registration/login.html:16
 #: wafer/registration/templates/registration/registration_form.html:5
 msgid "Sign up"
-msgstr ""
+msgstr "회원 가입"
 
 #: wafer/registration/forms.py:33
 #: wafer/registration/templates/registration/login.html:11
 msgid "Log in"
-msgstr ""
+msgstr "로그인"
 
 #: wafer/registration/templates/registration/activate.html:4
 msgid "Oops, account activation failed"
-msgstr ""
+msgstr "죄송합니다. 계정 활성화에 실패했습니다"
 
 #: wafer/registration/templates/registration/activate.html:8
 #, python-format
@@ -221,25 +225,27 @@ msgid ""
 "href=\"%(register_url)s\">try again</a> or <a "
 "href=\"%(contact_url)s\">contact our admins</a>."
 msgstr ""
+"계정을 활성화하는 데 문제가 발생한 것 같습니다. <a href=\"%(register_url)s\">"
+"다시 시도</a>하거나 <a href=\"%(contact_url)s\">관리자에게 문의</a>해 주세요."
 
 #: wafer/registration/templates/registration/activation_complete.html:4
 msgid "Activation complete"
-msgstr ""
+msgstr "활성화 완료"
 
 #: wafer/registration/templates/registration/activation_complete.html:7
 #, python-format
 msgid ""
 "Your account is now activated! Please <a href=\"%(login_url)s\">log in</a>."
-msgstr ""
+msgstr "계정이 활성화되었습니다! <a href=\"%(login_url)s\">로그인</a>해 주세요."
 
 #: wafer/registration/templates/registration/activation_complete.html:13
 #: wafer/registration/templates/registration/registration_complete.html:13
 msgid "Note that registration for the conference is a separate step."
-msgstr ""
+msgstr "컨퍼런스 등록은 별도 신청이 필요합니다."
 
 #: wafer/registration/templates/registration/activation_complete.html:16
 msgid "You can now log in and start the conference registration process."
-msgstr ""
+msgstr "로그인 후 컨퍼런스 등록을 진행해 주세요."
 
 #: wafer/registration/templates/registration/activation_email.txt:5
 #, python-format
@@ -276,7 +282,7 @@ msgstr ""
 #: wafer/registration/templates/registration/login.html:18
 #, python-format
 msgid "Not registered? Please <a href=\"%(signup_url)s\">sign up</a>."
-msgstr ""
+msgstr "아직 회원이 아니신가요? <a href=\"%(signup_url)s\">회원가입</a> 해주세요."
 
 #: wafer/registration/templates/registration/login.html:22
 msgid "Shared/Social Log in and Sign up"
@@ -284,15 +290,15 @@ msgstr ""
 
 #: wafer/registration/templates/registration/logout.html:7
 msgid "Logged out"
-msgstr ""
+msgstr "로그아웃됨"
 
 #: wafer/registration/templates/registration/logout.html:9
 msgid "You've been logged out."
-msgstr ""
+msgstr "로그아웃되었습니다."
 
 #: wafer/registration/templates/registration/registration_complete.html:4
 msgid "Account creation almost complete"
-msgstr ""
+msgstr "계정 생성이 거의 완료되었습니다"
 
 #: wafer/registration/templates/registration/registration_complete.html:6
 #, python-format
@@ -301,22 +307,24 @@ msgid ""
 "sent you an e-mail. Please follow the instructions in it to activate your "
 "account."
 msgstr ""
+"%(WAFER_CONFERENCE_NAME)s 회원 가입을 완료해 주셔서 감사합니다. 계정 활성화를"
+" 위해 발송된 이메일의 안내를 확인해 주세요."
 
 #: wafer/registration/templates/registration/registration_complete.html:16
 msgid "You can register after your account is activated."
-msgstr ""
+msgstr "계정이 활성화된 후에 등록하실 수 있습니다."
 
 #: wafer/schedule/admin.py:166
 msgid "Clashes found in schedule."
-msgstr ""
+msgstr "일정에 충돌이 발견되었습니다."
 
 #: wafer/schedule/admin.py:169
 msgid "Duplicate schedule items found in schedule."
-msgstr ""
+msgstr "일정에서 중복된 항목이 발견되었습니다."
 
 #: wafer/schedule/admin.py:172
 msgid "Invalid schedule items found in schedule."
-msgstr ""
+msgstr "일정에서 유효하지 않은 항목이 발견되었습니다."
 
 #: wafer/schedule/admin.py:175
 msgid "Non contiguous slots found in schedule."
