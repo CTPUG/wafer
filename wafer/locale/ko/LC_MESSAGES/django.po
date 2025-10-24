@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-05-07 14:22+0000\n"
-"PO-Revision-Date: 2025-10-23 04:02+0000\n"
-"Last-Translator: Euiseo Cha <zeroday0619_dev@outlook.com>\n"
+"PO-Revision-Date: 2025-10-24 11:02+0000\n"
+"Last-Translator: Sung sion <sionsbed2@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/wafer/wafer/ko/>\n"
 "Language: ko\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.14-dev\n"
+"X-Generator: Weblate 5.14.1-dev\n"
 
 #: wafer/compare/admin.py:22
 msgid "Last Modified"
@@ -60,9 +60,9 @@ msgid "Compare"
 msgstr "비교"
 
 #: wafer/compare/templates/admin/wafer.compare/compare.html:7
-#, python-format
+#, fuzzy, python-format
 msgid "%(name)s"
-msgstr ""
+msgstr "%(name)s"
 
 #: wafer/compare/templates/admin/wafer.compare/compare.html:19
 #: wafer/pages/templates/wafer.pages/page_compare.html:24
@@ -70,9 +70,8 @@ msgid "No differences found"
 msgstr "변경사항을 찾을 수 없음"
 
 #: wafer/compare/templates/admin/wafer.compare/compare_list.html:6
-#, fuzzy
 msgid "Home"
-msgstr "홈"
+msgstr "Home"
 
 #: wafer/compare/templates/admin/wafer.compare/compare_list.html:10
 #, python-format
@@ -98,7 +97,6 @@ msgid "Comment"
 msgstr "댓글"
 
 #: wafer/compare/templates/admin/wafer.compare/compare_list.html:51
-#, fuzzy
 msgid ""
 "This object doesn't have a change history. It probably wasn't added via this "
 "admin site."
@@ -115,7 +113,7 @@ msgstr "페이지의 마크다운 콘텐츠입니다."
 
 #: wafer/pages/models.py:55
 msgid "Whether to include in menus."
-msgstr ""
+msgstr "메뉴에 포함할지 여부."
 
 #: wafer/pages/models.py:58
 msgid "Ordering in the menu (smaller numbers come first)"
@@ -216,7 +214,7 @@ msgstr "로그인"
 
 #: wafer/registration/templates/registration/activate.html:4
 msgid "Oops, account activation failed"
-msgstr "죄송합니다. 계정 활성화에 실패했습니다"
+msgstr "앗, 계정 활성화에 실패했습니다"
 
 #: wafer/registration/templates/registration/activate.html:8
 #, python-format
