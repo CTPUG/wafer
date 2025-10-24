@@ -1,2 +1,3 @@
 include package.json
 include manage.py
+recursive-include wafer *html *xml *xsd
