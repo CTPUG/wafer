@@ -121,11 +121,12 @@ jobs:
       run: |
         # We want to create a isolate venv for this
         mkdir $RUNNER_TEMP/venv
-        cp manage.py dist/*whl $RUNNER_TEMP/venv
+        cp manage.py dist/*whl requirements-dev.txt $RUNNER_TEMP/venv
         cd $RUNNER_TEMP/venv
         python -m venv .
         . bin/activate
         pip install wafer*whl
+        pip install -r requirements-dev.txt
         # Link to wafer module so test discovery works
         ln -s lib/python*/site-packages/wafer .
         ./manage.py test --exclude-tag selenium
