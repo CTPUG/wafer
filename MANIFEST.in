@@ -1,2 +1,6 @@
 include package.json
 include manage.py
+include docs/make.bat
+include docs/Makefile
+include install_requirements
+recursive-include wafer *html *xml *txt *xsd *pot

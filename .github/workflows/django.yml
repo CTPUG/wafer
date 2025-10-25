@@ -73,6 +73,8 @@ jobs:
     - uses: actions/checkout@v4
     - name: Set up Python
       uses: actions/setup-python@v5
+      with:
+        python-version: '3.13'
     - name: Install Dependencies
       run: |
         python -m pip install --upgrade pip
@@ -95,3 +97,60 @@ jobs:
     - name: Run Tests
       run: |
         python manage.py test --tag ${{ matrix.browser }}
+
+
+  build:
+
+    runs-on: ubuntu-latest
+    name: Build sdist and wheel
+    steps:
+    - uses: actions/checkout@v4
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.13'
+    - name: Install Python Dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt -r requirements-dev.txt
+        pip install build
+    - name: Run build_release script
+      run: |
+        ./utils/build_release.sh
+    - name: Run tests against the built wheel
+      run: |
+        # We want to create a isolate venv for this
+        mkdir $RUNNER_TEMP/venv
+        cp manage.py dist/*whl requirements-dev.txt $RUNNER_TEMP/venv
+        cd $RUNNER_TEMP/venv
+        python -m venv .
+        . bin/activate
+        pip install wafer*whl
+        pip install -r requirements-dev.txt
+        # Link to wafer module so test discovery works
+        ln -s lib/python*/site-packages/wafer .
+        ./manage.py test --exclude-tag selenium
+    - name: Run diff between the tree and the sdist
+      run: |
+        mkdir $RUNNER_TEMP/sdist
+        cp dist/*tar* $RUNNER_TEMP/sdist
+        pushd $RUNNER_TEMP/sdist
+        tar xaf wafer*tar*
+        popd
+        # Run diff, ignoring the stuff that not included and generated files
+        # We also ignore setup.cfg, because the build process adds an egg-info
+        # section to the version in the sdist
+        diff -x .gitignore -x .git -x .github -x __pycache__ \
+             -x utils -x dist -x PKG-INFO \
+             -x .readthedocs.yml -x setup.cfg \
+             -ur .  $RUNNER_TEMP/sdist/wafer*/
+    - name: Upload wheel
+      uses: actions/upload-artifact@v4
+      with:
+        name: wheel
+        path: dist/*whl
+    - name: Upload sdist
+      uses: actions/upload-artifact@v4
+      with:
+        name: sdist
+        path: dist/*tar.gz
