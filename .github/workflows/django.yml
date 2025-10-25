@@ -130,6 +130,20 @@ jobs:
         # Link to wafer module so test discovery works
         ln -s lib/python*/site-packages/wafer .
         ./manage.py test --exclude-tag selenium
+    - name: Run diff between the tree and the sdist
+      run: |
+        mkdir $RUNNER_TEMP/sdist
+        cp dist/*tar* $RUNNER_TEMP/sdist
+        pushd $RUNNER_TEMP/sdist
+        tar xaf wafer*tar*
+        popd
+        # Run diff, ignoring the stuff that not included and generated files
+        # We also ignore setup.cfg, because the build process adds an egg-info
+        # section to the version in the sdist
+        diff -x .gitignore -x .git -x .github -x __pycache__ \
+             -x utils -x dist -x PKG-INFO \
+             -x .readthedocs.yml -x setup.cfg \
+             -ur .  $RUNNER_TEMP/sdist/wafer*/
     - name: Upload wheel
       uses: actions/upload-artifact@v4
       with:
