@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-05-07 14:22+0000\n"
 "PO-Revision-Date: 2025-10-27 07:02+0000\n"
-"Last-Translator: Yeryung Jang <illhoon1004108@gmail.com>\n"
+"Last-Translator: Sung sion <sionsbed2@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/wafer/wafer/ko/>\n"
 "Language: ko\n"
 "MIME-Version: 1.0\n"
@@ -587,40 +587,49 @@ msgid "Previous"
 msgstr "이전"
 
 #: wafer/schedule/templates/wafer.schedule/full_schedule.html:49
+#, fuzzy
 msgid "Next"
-msgstr ""
+msgstr "다음"
 
 #: wafer/settings.py:350
+#, fuzzy
 msgid "Twitter Profile link"
-msgstr ""
+msgstr "Twitter 프로필 링크"
 
 #: wafer/settings.py:351
+#, fuzzy
 msgid "Fediverse Profile link"
-msgstr ""
+msgstr "Fediverse 프로필 링크"
 
 #: wafer/settings.py:352
+#, fuzzy
 msgid "Other Social"
-msgstr ""
+msgstr "다른 소셜 미디어"
 
 #: wafer/settings.py:358
+#, fuzzy
 msgid "github profile"
-msgstr ""
+msgstr "github 프로필"
 
 #: wafer/settings.py:359
+#, fuzzy
 msgid "gitlab profile"
-msgstr ""
+msgstr "gitlab 프로필"
 
 #: wafer/settings.py:360
+#, fuzzy
 msgid "bitbucket profile"
-msgstr ""
+msgstr "bitbucket 프로필"
 
 #: wafer/sponsors/models.py:36
+#, fuzzy
 msgid "Currency symbol for the sponsorship amount."
-msgstr ""
+msgstr "후원 금액의 통화 기호."
 
 #: wafer/sponsors/models.py:39
+#, fuzzy
 msgid "Amount to be sponsored."
-msgstr ""
+msgstr "후원할 금액"
 
 #: wafer/sponsors/models.py:41
 msgid "One sentence overview of the package."
