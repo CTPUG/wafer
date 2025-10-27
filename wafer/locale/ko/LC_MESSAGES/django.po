@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-05-07 14:22+0000\n"
-"PO-Revision-Date: 2025-10-24 11:02+0000\n"
+"PO-Revision-Date: 2025-10-27 07:02+0000\n"
 "Last-Translator: Sung sion <sionsbed2@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/wafer/wafer/ko/>\n"
 "Language: ko\n"
@@ -117,7 +117,7 @@ msgstr "메뉴에 포함할지 여부."
 
 #: wafer/pages/models.py:58
 msgid "Ordering in the menu (smaller numbers come first)"
-msgstr ""
+msgstr "메뉴에서 주문하기(빠른 번호가 먼저 옴)"
 
 #: wafer/pages/models.py:63
 msgid ""
@@ -127,13 +127,14 @@ msgstr "사이트의 정적 버전에서 이 페이지를 제외할지 여부 (�
 
 #: wafer/pages/models.py:68
 msgid "Images and other files for use in the content markdown field."
-msgstr ""
+msgstr "content markdown 필드 사용에 필요한 이미지 및 기타 파일들."
 
 #: wafer/pages/models.py:74
+#, fuzzy
 msgid ""
 "People associated with this page for display in the schedule (Session "
 "chairs, panelists, etc.)"
-msgstr ""
+msgstr "일정에 표시할 이 페이지 관련 인물 (세션 의장, 패널리스트 등)"
 
 #: wafer/pages/models.py:79
 msgid ""
@@ -164,17 +165,17 @@ msgstr "이전 버전과 비교"
 
 #: wafer/pages/templates/wafer.pages/page_compare.html:6
 msgid "Comparing Page"
-msgstr ""
+msgstr "페이지 비교하는 중"
 
 #: wafer/pages/templates/wafer.pages/page_compare.html:8
-#, python-format
+#, fuzzy, python-format
 msgid "Last Saved: %(cur_date)s by %(cur_author)s"
-msgstr ""
+msgstr "마지막 저장:  %(cur_date)s %(cur_author)s로 부터"
 
 #: wafer/pages/templates/wafer.pages/page_compare.html:11
-#, python-format
+#, fuzzy, python-format
 msgid "Comparing to version saved: %(prev_date)s by %(prev_author)s"
-msgstr ""
+msgstr "저장된 버전과 비교하는 중: %(prev_date)s  %(prev_author)s로 부터"
 
 #: wafer/pages/templates/wafer.pages/page_compare.html:33
 msgid "Compare to next older version"
@@ -190,7 +191,7 @@ msgstr "다음 최신 버전과 비교"
 
 #: wafer/pages/templates/wafer.pages/page_compare.html:46
 msgid "No previous versions to compare to"
-msgstr ""
+msgstr "비교할 이전 버전이 없음"
 
 #: wafer/pages/templates/wafer.pages/page_form.html:5
 #, python-format
@@ -268,6 +269,27 @@ msgid ""
 " %(WAFER_CONFERENCE_NAME)s\n"
 " http://%(domain)s%(index_url)s\n"
 msgstr ""
+"안녕하세요,\n"
+"\n"
+"TL;DR 클릭하세요 https://%(domain)s%(activation_url)s\n"
+"\n"
+"%(WAFER_CONFERENCE_NAME)s에 회원 가입 해주셔서 감사합니다.  \n"
+"\n"
+"당신의 이메일 주소를 인증하기 위해서 위의 링크 안내를 따라주세요. 이후 당신의"
+" 계정을 활성화할 수 있습니다. \n"
+"\n"
+"%(expiration_days)s  일 이내에 인증을 완료해주세요.\n"
+"\n"
+"당신을 곧 다시 만나길 바래요.\n"
+"\n"
+"감사를 담아,\n"
+"\n"
+"%(WAFER_CONFERENCE_NAME)s 웹사이트.\n"
+"-- \n"
+"\n"
+" %(WAFER_CONFERENCE_NAME)s\n"
+"\n"
+" http://%(domain)s%(index_url)s\n"
 
 #: wafer/registration/templates/registration/activation_email_subject.txt:2
 #, python-format
@@ -276,6 +298,8 @@ msgid ""
 "Activate your %(WAFER_CONFERENCE_NAME)s account [%(expiration_days)s days "
 "left]\n"
 msgstr ""
+"\n"
+"%(expiration_days)s일 까지 %(WAFER_CONFERENCE_NAME)s 계정을 활성화 하세요.\n"
 
 #: wafer/registration/templates/registration/login.html:18
 #, python-format
@@ -284,7 +308,7 @@ msgstr "아직 회원이 아니신가요? <a href=\"%(signup_url)s\">회원가�
 
 #: wafer/registration/templates/registration/login.html:22
 msgid "Shared/Social Log in and Sign up"
-msgstr ""
+msgstr "공유/ 소셜 로그인 및 회원 가입"
 
 #: wafer/registration/templates/registration/logout.html:7
 msgid "Logged out"
@@ -326,265 +350,286 @@ msgstr "일정에서 유효하지 않은 항목이 발견되었습니다."
 
 #: wafer/schedule/admin.py:175
 msgid "Non contiguous slots found in schedule."
-msgstr ""
+msgstr "일정에 연속되지 않은 시간 구간이 있음."
 
 #: wafer/schedule/admin.py:178
 msgid "Invalid venues found in schedule."
-msgstr ""
+msgstr "일정에 유효하지 않은 항목들 발견."
 
 #: wafer/schedule/admin.py:181
 #: wafer/schedule/templates/admin/scheduleitem_list.html:61
+#, fuzzy
 msgid "Common speaker in simultaneous schedule items"
-msgstr ""
+msgstr "동 시간대의 일반 발화자"
 
 #: wafer/schedule/admin.py:221
 msgid "Block"
-msgstr ""
+msgstr "차단"
 
 #: wafer/schedule/admin.py:273 wafer/schedule/models.py:327
 msgid "Start Time"
-msgstr ""
+msgstr "시작 시간"
 
 #: wafer/schedule/admin.py:329
+#, fuzzy
 msgid "Venue"
-msgstr ""
+msgstr "항목"
 
 #: wafer/schedule/admin.py:415
 msgid "Additional slots"
-msgstr ""
+msgstr "추가 시간 구간들"
 
 #: wafer/schedule/admin.py:416
+#, fuzzy
 msgid "Create this number of additional slots following this one"
-msgstr ""
+msgstr "이를 따르는 일련의 추가 시간 구간들을 생성하세요."
 
 #: wafer/schedule/admin.py:477
-#, python-format
+#, fuzzy, python-format
 msgid "Additional slot %(obj)s added sucessfully"
-msgstr ""
+msgstr "성공적으로 추가된 추가 시간 구간 %(obj)s 들."
 
 #: wafer/schedule/admin.py:484
-#, python-format
+#, fuzzy, python-format
 msgid "Failed to create new slot - %s"
-msgstr ""
+msgstr "새로운 시간 구간 생성 실패- %s"
 
 #: wafer/schedule/models.py:78
+#, fuzzy
 msgid "Notes or directions that will be useful to conference attendees"
-msgstr ""
+msgstr "컨퍼런스 참석자들에게 유용할 수 있는 메모 또는 위치 방향"
 
 #: wafer/schedule/models.py:82
 msgid "Blocks (days) on which this venue will be used."
-msgstr ""
+msgstr "이 장소가 사용될 블록 (일자)."
 
 #: wafer/schedule/models.py:86
 msgid "Venue has video coverage"
-msgstr ""
+msgstr "이 장소는 영상 촬영이 지원됨"
 
 #: wafer/schedule/models.py:106
+#, fuzzy
 msgid ""
 "Previous slot if applicable (slots should have either a previous slot OR a "
 "start time set)"
-msgstr ""
+msgstr "필요한 경우 이전 시간 구간을 지정하세요. (모든 시간 구간은 이전 구간이 있거나"
+" 시작 시간으로 설정되어 있어야 합니다)"
 
 #: wafer/schedule/models.py:112
+#, fuzzy
 msgid "Start time (if no previous slot selected)"
-msgstr ""
+msgstr "시작 시간을 선택하세요(만약 선택된 이전 시간 구간이 없을 경우)"
 
 #: wafer/schedule/models.py:114
 msgid "Slot end time"
-msgstr ""
+msgstr "끝나는 시간 구간을 선택하세요"
 
 #: wafer/schedule/models.py:117
 msgid "Identifier for use in the admin panel"
-msgstr ""
+msgstr "관리자 패널에서 사용되는 식별자"
 
 #: wafer/schedule/models.py:152
 msgid "Start Date & Time"
-msgstr ""
+msgstr "시작 일자 및 시간"
 
 #: wafer/schedule/models.py:180
 msgid "Schedule Block"
-msgstr ""
+msgstr "일정 차단"
 
 #: wafer/schedule/models.py:239
 msgid "Additional details (if required)"
-msgstr ""
+msgstr "추가 정보들 (필요 시)"
 
 #: wafer/schedule/models.py:243
 msgid "Notes for the conference organisers"
-msgstr ""
+msgstr "컨퍼런스 운영 담당자용 메모"
 
 #: wafer/schedule/models.py:247
 msgid "Custom css class for this schedule item"
-msgstr ""
+msgstr "이 일정 항목에 적용할 사용자 정의 CSS 클래스"
 
 #: wafer/schedule/models.py:251
 msgid "Expand to neighbouring venues"
-msgstr ""
+msgstr "주변 장소 둘러보기"
 
 #: wafer/schedule/models.py:255
 msgid "Date & Time this was last updated"
-msgstr ""
+msgstr "마지막으로 업데이트 된 날짜 & 시간"
 
 #: wafer/schedule/models.py:284
 msgid "Talk Type & Track CSS classes"
-msgstr ""
+msgstr "발표 유형 및 트랙 CSS 클래스"
 
 #: wafer/schedule/templates/admin/scheduleitem_list.html:10
 msgid "Errors in the schedule"
-msgstr ""
+msgstr "일정에 오류들이 있음"
 
 #: wafer/schedule/templates/admin/scheduleitem_list.html:13
 msgid "Clashes"
-msgstr ""
+msgstr "시간 충돌"
 
 #: wafer/schedule/templates/admin/scheduleitem_list.html:25
 msgid "Validation errors"
-msgstr ""
+msgstr "인증 오류"
 
 #: wafer/schedule/templates/admin/scheduleitem_list.html:33
 msgid "Items in the schedule with non-contiguous slots"
-msgstr ""
+msgstr "비 연속적 시간 구간이 있는 일정 항목이 있음"
 
 #: wafer/schedule/templates/admin/scheduleitem_list.html:41
 msgid "Duplicates in the schedule"
-msgstr ""
+msgstr "일정에 중복이 있음"
 
 #: wafer/schedule/templates/admin/scheduleitem_list.html:49
 msgid "Venues assigned on days they are not available"
-msgstr ""
+msgstr "이용할 수 없는 날짜에 장소가 배정되었음"
 
 #: wafer/schedule/templates/admin/scheduleitem_list.html:82
 #: wafer/schedule/templates/wafer.schedule/full_schedule.html:10
 msgid "Edit schedule"
-msgstr ""
+msgstr "일정 수정"
 
 #: wafer/schedule/templates/admin/slot_list.html:10
 msgid "Errors in the slots"
-msgstr ""
+msgstr "시간 구간에 오류가 있음"
 
 #: wafer/schedule/templates/admin/slot_list.html:13
 msgid "Overlapping slots"
-msgstr ""
+msgstr "시간 구간 중복"
 
 #: wafer/schedule/templates/wafer.schedule/current.html:3
 #: wafer/schedule/templates/wafer.schedule/current.html:6
+#, fuzzy
 msgid "Happening now"
-msgstr ""
+msgstr "지금 신청"
 
 #: wafer/schedule/templates/wafer.schedule/current.html:10
 #: wafer/schedule/templates/wafer.schedule/full_schedule.html:20
 msgid "This is a draft that is not visible to the public"
-msgstr ""
+msgstr "이것은 공식적으로 공개 불가능한 초안입니다"
 
 #: wafer/schedule/templates/wafer.schedule/current.html:17
 #: wafer/schedule/templates/wafer.schedule/edit_schedule.html:18
 #: wafer/schedule/templates/wafer.schedule/full_schedule.html:27
 msgid "Validation errors:"
-msgstr ""
+msgstr "인증 오류:"
 
 #: wafer/schedule/templates/wafer.schedule/current.html:26
 #: wafer/schedule/templates/wafer.schedule/full_schedule.html:36
 msgid "<p>The final schedule has not been published yet.</p>"
-msgstr ""
+msgstr "<p>아직 마지막 일정이 발표되지 않았습니다.</p>"
 
 #: wafer/schedule/templates/wafer.schedule/current.html:30
 msgid "<p>Nothing happening right now.</p>"
-msgstr ""
+msgstr "<p>현재 진행 중인 일정이 없습니다.</p>"
 
 #: wafer/schedule/templates/wafer.schedule/current.html:39
 #: wafer/schedule/templates/wafer.schedule/full_schedule.html:64
 msgid "Time"
-msgstr ""
+msgstr "시간"
 
 #: wafer/schedule/templates/wafer.schedule/current.html:87
 msgid "Last updated"
-msgstr ""
+msgstr "최근 업데이트"
 
 #: wafer/schedule/templates/wafer.schedule/edit_schedule.html:4
+#, fuzzy
 msgid "Edit Schedule"
-msgstr ""
+msgstr "일정 수정"
 
 #: wafer/schedule/templates/wafer.schedule/edit_schedule.html:32
 #: wafer/schedule/templates/wafer.schedule/edit_schedule.html:37
 #, python-format
 msgid "(Block %(block_id)s)"
-msgstr ""
+msgstr "(차단 %(block_id)s)"
 
 #: wafer/schedule/templates/wafer.schedule/edit_schedule.html:42
+#, fuzzy
 msgid "Schedule Editor"
-msgstr ""
+msgstr "일정 편집기"
 
 #: wafer/schedule/templates/wafer.schedule/edit_schedule.html:71
 msgid "Close"
-msgstr ""
+msgstr "종료"
 
 #: wafer/schedule/templates/wafer.schedule/edit_schedule.html:78
 #: wafer/schedule/templates/wafer.schedule/edit_schedule.html:141
 #: wafer/schedule/templates/wafer.schedule/edit_schedule.html:167
 #: wafer/talks/models.py:157 wafer/talks/templates/wafer.talks/talk.html:122
 msgid "Cancelled"
-msgstr ""
+msgstr "취소됨"
 
 #: wafer/schedule/templates/wafer.schedule/edit_schedule.html:90
 msgid "Bucket"
-msgstr ""
+msgstr "버킷"
 
 #: wafer/schedule/templates/wafer.schedule/edit_schedule.html:99
 msgid "Unassigned Talks"
-msgstr ""
+msgstr "할당되지 않은 발표"
 
 #: wafer/schedule/templates/wafer.schedule/edit_schedule.html:106
 msgid "All Talks"
-msgstr ""
+msgstr "모든 연설"
 
 #: wafer/schedule/templates/wafer.schedule/edit_schedule.html:111
+#, fuzzy
 msgid "Pages"
-msgstr ""
+msgstr "페이지 수"
 
 #: wafer/schedule/templates/wafer.schedule/full_schedule.html:3
 #: wafer/schedule/templates/wafer.schedule/full_schedule.html:15
+#, fuzzy
 msgid "Schedule"
-msgstr ""
+msgstr "일정"
 
 #: wafer/schedule/templates/wafer.schedule/full_schedule.html:45
 msgid "Previous"
-msgstr ""
+msgstr "이전"
 
 #: wafer/schedule/templates/wafer.schedule/full_schedule.html:49
+#, fuzzy
 msgid "Next"
-msgstr ""
+msgstr "다음"
 
 #: wafer/settings.py:350
+#, fuzzy
 msgid "Twitter Profile link"
-msgstr ""
+msgstr "Twitter 프로필 링크"
 
 #: wafer/settings.py:351
+#, fuzzy
 msgid "Fediverse Profile link"
-msgstr ""
+msgstr "Fediverse 프로필 링크"
 
 #: wafer/settings.py:352
+#, fuzzy
 msgid "Other Social"
-msgstr ""
+msgstr "다른 소셜 미디어"
 
 #: wafer/settings.py:358
+#, fuzzy
 msgid "github profile"
-msgstr ""
+msgstr "github 프로필"
 
 #: wafer/settings.py:359
+#, fuzzy
 msgid "gitlab profile"
-msgstr ""
+msgstr "gitlab 프로필"
 
 #: wafer/settings.py:360
+#, fuzzy
 msgid "bitbucket profile"
-msgstr ""
+msgstr "bitbucket 프로필"
 
 #: wafer/sponsors/models.py:36
+#, fuzzy
 msgid "Currency symbol for the sponsorship amount."
-msgstr ""
+msgstr "후원 금액의 통화 기호."
 
 #: wafer/sponsors/models.py:39
+#, fuzzy
 msgid "Amount to be sponsored."
-msgstr ""
+msgstr "후원할 금액"
 
 #: wafer/sponsors/models.py:41
 msgid "One sentence overview of the package."
@@ -747,111 +792,118 @@ msgstr ""
 
 #: wafer/talks/models.py:72 wafer/talks/models.py:123
 msgid "order"
-msgstr ""
+msgstr "정렬"
 
 #: wafer/talks/models.py:74
+#, fuzzy
 msgid "disable submission"
-msgstr ""
+msgstr "제출 비활성화"
 
 #: wafer/talks/models.py:78
 msgid "submission deadline"
-msgstr ""
+msgstr "제출 기한"
 
 #: wafer/talks/models.py:81
+#, fuzzy
 msgid "Deadline for submitting talks of this type"
-msgstr ""
+msgstr "이 유형 발표 제출 마감일"
 
 #: wafer/talks/models.py:84
 msgid "accept late submissions"
-msgstr ""
+msgstr "늦은 제출 허용"
 
 #: wafer/talks/models.py:86
 msgid "Whether submissions after the deadline should be accepted"
-msgstr ""
+msgstr "제출 기한 이후의 제출이 허용 되는 지 여부"
 
 #: wafer/talks/models.py:89
+#, fuzzy
 msgid "Show authors in speakers list"
-msgstr ""
+msgstr "발표자 목록에서 저자 확인하기"
 
 #: wafer/talks/models.py:91
+#, fuzzy
 msgid "Whether to show the authors for this talk type in the speakers list"
-msgstr ""
+msgstr "이 발표 유형의 발표자를 연사 목록에 표시할지 여부"
 
 #: wafer/talks/models.py:94
 msgid "show pending submissions"
-msgstr ""
+msgstr "승인 대기 중인 제출 확인하기"
 
 #: wafer/talks/models.py:96
+#, fuzzy
 msgid "Whether to publicly show pending submissions, before acceptance"
-msgstr ""
+msgstr "승인 전 제출물을 공개적으로 표시할지 여부"
 
 #: wafer/talks/models.py:106 wafer/talks/models.py:166
 msgid "talk type"
-msgstr ""
+msgstr "연설 유형"
 
 #: wafer/talks/models.py:107
+#, fuzzy
 msgid "talk types"
-msgstr ""
+msgstr "연설 유형"
 
 #: wafer/talks/models.py:116 wafer/talks/models.py:140
+#, fuzzy
 msgid "CSS class name"
-msgstr ""
+msgstr "CSS 클래스 이름"
 
 #: wafer/talks/models.py:130 wafer/talks/models.py:168
 msgid "track"
-msgstr ""
+msgstr "트랙"
 
 #: wafer/talks/models.py:131
 msgid "tracks"
-msgstr ""
+msgstr "트랙"
 
 #: wafer/talks/models.py:151 wafer/talks/models.py:390
 msgid "talk"
-msgstr ""
+msgstr "연설"
 
 #: wafer/talks/models.py:152
 msgid "talks"
-msgstr ""
+msgstr "연설"
 
 #: wafer/talks/models.py:155 wafer/talks/templates/wafer.talks/talk.html:120
 msgid "Accepted"
-msgstr ""
+msgstr "수락됨"
 
 #: wafer/talks/models.py:156 wafer/talks/templates/wafer.talks/talk.html:126
 #: wafer/talks/templates/wafer.talks/talks.html:65
 msgid "Not accepted"
-msgstr ""
+msgstr "수락 되지 않음"
 
 #: wafer/talks/models.py:158 wafer/talks/templates/wafer.talks/talk.html:116
 #: wafer/talks/templates/wafer.talks/talks.html:63
 msgid "Under consideration"
-msgstr ""
+msgstr "검토 중"
 
 #: wafer/talks/models.py:159 wafer/talks/templates/wafer.talks/talk.html:114
 #: wafer/talks/templates/wafer.talks/talks.html:61
 msgid "Submitted"
-msgstr ""
+msgstr "제출됨"
 
 #: wafer/talks/models.py:160 wafer/talks/templates/wafer.talks/talk.html:118
 #: wafer/talks/templates/wafer.talks/talks.html:69
 msgid "Provisionally Accepted"
-msgstr ""
+msgstr "잠정적으로 수락됨"
 
 #: wafer/talks/models.py:161 wafer/talks/templates/wafer.talks/talk.html:124
 msgid "Withdrawn"
-msgstr ""
+msgstr "철회됨"
 
 #: wafer/talks/models.py:174
 msgid "language"
-msgstr ""
+msgstr "언어"
 
 #: wafer/talks/models.py:182
 msgid "title"
-msgstr ""
+msgstr "제목"
 
 #: wafer/talks/models.py:185
 msgid "abstract"
-msgstr ""
+msgstr "초록"
 
 #: wafer/talks/models.py:186
 msgid ""
@@ -859,10 +911,13 @@ msgid ""
 "What will they get out of it? What will you cover?<br />You can use Markdown "
 "syntax."
 msgstr ""
+"연설을 소개하는 둘 혹은 셋 이상의 설명을 작성하세요. 연설의 청중은 누구인가요"
+"? 연설로부터 얻을 수 있는 것은 무엇인가요? 발표에서 다룰 내용은 무엇인가요? "
+"<br /> Markdown 문법을 이용해서 작성할 수 있습니다."
 
 #: wafer/talks/models.py:192 wafer/talks/models.py:397
 msgid "notes"
-msgstr ""
+msgstr "메모"
 
 #: wafer/talks/models.py:195
 msgid ""
@@ -871,36 +926,40 @@ msgid ""
 "for the event, or thoughts on scheduling. These are not visible to the "
 "public."
 msgstr ""
+"컨퍼런스에서 준비해야 할 참고 사항이 있나요? 발표 주제와 관련된 추가 배경 정"
+"보 혹은 공개적으로 알려지지 않았으면 하는 발표자 정보 등 행사에 대한 특별한 "
+"요구 사항이 있거나 일정에 대한 의견이 있나요? 이 내용은 대중에게 공개되지 않"
+"습니다."
 
 #: wafer/talks/models.py:201
 msgid "private notes"
-msgstr ""
+msgstr "개인적인 메모"
 
 #: wafer/talks/models.py:203
 msgid "Note space for the conference organisers (not visible to submitter)"
-msgstr ""
+msgstr "컨퍼런스 운영진을 위한 메모 공간(제출자에게 보여지지 않음)"
 
 #: wafer/talks/models.py:206
 msgid "status"
-msgstr ""
+msgstr "상태"
 
 #: wafer/talks/models.py:212
 msgid "corresponding author"
-msgstr ""
+msgstr "관련 저자"
 
 #: wafer/talks/models.py:214
 msgid ""
 "The person submitting the talk (and who questions regarding the talk should "
 "be addressed to)."
-msgstr ""
+msgstr "연설 제출자(발표와 관련된 질문은 이 제출자에게 전달됩니다)."
 
 #: wafer/talks/models.py:219
 msgid "authors"
-msgstr ""
+msgstr "저자"
 
 #: wafer/talks/models.py:224
 msgid "video"
-msgstr ""
+msgstr "영상 자료"
 
 #: wafer/talks/models.py:226
 #, python-brace-format
@@ -909,10 +968,12 @@ msgid ""
 "distributed by the conference, under the <a href=\"{license_url}"
 "\">{license_name} license</a>."
 msgstr ""
+"체크하면 이 발표가 영상으로 촬영되고 <a href=\"{license_url}\">{license_name}"
+" 라이선스</a>에 따라 컨퍼런스에서 배포되는 것을 허용하게 됩니다."
 
 #: wafer/talks/models.py:235
 msgid "video reviewer"
-msgstr ""
+msgstr "영상 리뷰어"
 
 #: wafer/talks/models.py:237
 msgid ""
@@ -921,27 +982,30 @@ msgid ""
 "presenter. But you can specify yourself, if you can't think of anyone else "
 "who would care."
 msgstr ""
+"영상 세부 사항을 검토하고 승인할 수 있는 사람의 이메일 주소를 입력하세요. 이"
+"상적으로는 바쁜 발표자가 아닌 제 3자가 맡는 것이 좋습니다. 만약 적절한 사람이"
+" 떠오르지 않는다면 본인의 이메일을 지정할 수도 있습니다."
 
 #: wafer/talks/models.py:269
 msgid "NO CONTACT INFO"
-msgstr ""
+msgstr "연락 가능한 정보 없음"
 
 #: wafer/talks/models.py:271
 msgid "Contact Details"
-msgstr ""
+msgstr "연락처 세부 사항"
 
 #: wafer/talks/models.py:277
 msgid "Corresponding Author"
-msgstr ""
+msgstr "관련 저자"
 
 #: wafer/talks/models.py:288
-#, python-format
+#, fuzzy, python-format
 msgid "%s, et al."
-msgstr ""
+msgstr "%s, 외."
 
 #: wafer/talks/models.py:295
 msgid "Added to schedule"
-msgstr ""
+msgstr "일정에 추가됨"
 
 #: wafer/talks/models.py:304
 msgid "Has URL"
