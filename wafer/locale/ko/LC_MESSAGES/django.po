@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-05-07 14:22+0000\n"
-"PO-Revision-Date: 2025-10-27 07:02+0000\n"
-"Last-Translator: Sung sion <sionsbed2@gmail.com>\n"
+"PO-Revision-Date: 2025-10-28 12:02+0000\n"
+"Last-Translator: Yeryung Jang <illhoon1004108@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/wafer/wafer/ko/>\n"
 "Language: ko\n"
 "MIME-Version: 1.0\n"
@@ -247,7 +247,7 @@ msgid "You can now log in and start the conference registration process."
 msgstr "로그인 후 컨퍼런스 등록을 진행해 주세요."
 
 #: wafer/registration/templates/registration/activation_email.txt:5
-#, python-format
+#, fuzzy, python-format
 msgid ""
 "Hi,\n"
 "\n"
