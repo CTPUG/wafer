@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-05-07 14:22+0000\n"
 "PO-Revision-Date: 2025-10-28 12:02+0000\n"
-"Last-Translator: Yeryung Jang <illhoon1004108@gmail.com>\n"
+"Last-Translator: Sung sion <sionsbed2@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/wafer/wafer/ko/>\n"
 "Language: ko\n"
 "MIME-Version: 1.0\n"
@@ -627,9 +627,8 @@ msgid "Currency symbol for the sponsorship amount."
 msgstr "후원 금액의 통화 기호."
 
 #: wafer/sponsors/models.py:39
-#, fuzzy
 msgid "Amount to be sponsored."
-msgstr "후원할 금액"
+msgstr "후원할 금액."
 
 #: wafer/sponsors/models.py:41
 msgid "One sentence overview of the package."
@@ -650,46 +649,56 @@ msgid ""
 msgstr ""
 
 #: wafer/sponsors/models.py:73
+#, fuzzy
 msgid "Write some nice things about the sponsor."
-msgstr ""
+msgstr "스폰서에 대한 좋은 내용을 작성하세요."
 
 #: wafer/sponsors/models.py:76
+#, fuzzy
 msgid "URL to link back to the sponsor if required"
-msgstr ""
+msgstr "필요한 경우 스폰서 웹사이트로 연결할 URL"
 
 #: wafer/sponsors/models.py:112
 #: wafer/sponsors/templates/wafer.sponsors/sponsors.html:4
 #: wafer/sponsors/templates/wafer.sponsors/sponsors.html:8
+#, fuzzy
 msgid "Sponsors"
-msgstr ""
+msgstr "스폰서"
 
 #: wafer/sponsors/models.py:113
+#, fuzzy
 msgid "Our sponsors"
-msgstr ""
+msgstr "후원사"
 
 #: wafer/sponsors/models.py:114
+#, fuzzy
 msgid "Sponsorship packages"
-msgstr ""
+msgstr "후원 패키지"
 
 #: wafer/sponsors/templates/wafer.sponsors/packages.html:6
+#, fuzzy
 msgid "Sponsorship Packages"
-msgstr ""
+msgstr "스폰서십 패키지"
 
 #: wafer/sponsors/templates/wafer.sponsors/packages.html:24
+#, fuzzy
 msgid "Total number available:"
-msgstr ""
+msgstr "총 이용 가능 수량:"
 
 #: wafer/sponsors/templates/wafer.sponsors/packages.html:26
+#, fuzzy
 msgid "Packages claimed:"
-msgstr ""
+msgstr "신청된 패키지 수:"
 
 #: wafer/sponsors/templates/wafer.sponsors/packages.html:34
+#, fuzzy
 msgid "No sponsorship packages available yet."
-msgstr ""
+msgstr "아직 이용 가능한 스폰서십 패키지가 없습니다."
 
 #: wafer/sponsors/templates/wafer.sponsors/sponsors.html:45
+#, fuzzy
 msgid "No sponsors yet."
-msgstr ""
+msgstr "아직 스폰서가 없습니다."
 
 #: wafer/talks/admin.py:23
 msgid "in schedule"
@@ -716,44 +725,54 @@ msgid "No"
 msgstr ""
 
 #: wafer/talks/admin.py:92
+#, fuzzy
 msgid "Mark selected talks as Submitted"
-msgstr ""
+msgstr "선택한 발표를 '제출됨'으로 표시"
 
 #: wafer/talks/admin.py:95
+#, fuzzy
 msgid "Mark selected talks as Withdrawn"
-msgstr ""
+msgstr "선택한 발표를 '철회됨'으로 표시"
 
 #: wafer/talks/admin.py:98
+#, fuzzy
 msgid "Mark selected talks as Cancelled"
-msgstr ""
+msgstr "선택한 발표를 '취소됨'으로 표시"
 
 #: wafer/talks/admin.py:101
+#, fuzzy
 msgid "Mark selected talks as Under consideration"
-msgstr ""
+msgstr "선택한 발표를 '검토 중'으로 표시"
 
 #: wafer/talks/admin.py:104
+#, fuzzy
 msgid "Mark selected talks as Not Accepted"
-msgstr ""
+msgstr "선택한 발표를 '미수락'으로 표시"
 
 #: wafer/talks/admin.py:107
+#, fuzzy
 msgid "Mark selected talks as Provisionally Accepted"
-msgstr ""
+msgstr "선택한 발표를 '가승인'으로 표시"
 
 #: wafer/talks/admin.py:110
+#, fuzzy
 msgid "Mark selected talks as Accepted"
-msgstr ""
+msgstr "선택한 발표를 '수락됨'으로 표시"
 
 #: wafer/talks/forms.py:124 wafer/users/forms.py:23 wafer/users/forms.py:72
+#, fuzzy
 msgid "Save"
-msgstr ""
+msgstr "저장하기"
 
 #: wafer/talks/forms.py:124 wafer/talks/forms.py:192
+#, fuzzy
 msgid "Submit"
-msgstr ""
+msgstr "제출하기"
 
 #: wafer/talks/forms.py:131
+#, fuzzy
 msgid "Withdraw Talk"
-msgstr ""
+msgstr "발표 철회"
 
 #: wafer/talks/forms.py:140
 msgid "A reviewer is required, if video is permitted."
