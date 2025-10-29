@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-05-07 14:22+0000\n"
-"PO-Revision-Date: 2025-10-28 12:02+0000\n"
+"PO-Revision-Date: 2025-10-30 07:02+0000\n"
 "Last-Translator: Sung sion <sionsbed2@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/wafer/wafer/ko/>\n"
 "Language: ko\n"
@@ -796,25 +796,26 @@ msgid ""
 msgstr ""
 
 #: wafer/talks/models.py:48
+#, fuzzy
 msgid ""
 "<strong>You, as the talk submitter, will be the talk's corresponding author."
 "</strong>"
-msgstr ""
+msgstr "<strong>발표 제출자인 귀하가 발표의 교신 저자(Corresponding Author)가 됩니다."
+"</strong>"
 
 #: wafer/talks/models.py:70 wafer/talks/models.py:121 wafer/talks/models.py:427
 msgid "name"
-msgstr ""
+msgstr "이름"
 
 #: wafer/talks/models.py:71 wafer/talks/models.py:122
 msgid "description"
-msgstr ""
+msgstr "설명"
 
 #: wafer/talks/models.py:72 wafer/talks/models.py:123
 msgid "order"
 msgstr "정렬"
 
 #: wafer/talks/models.py:74
-#, fuzzy
 msgid "disable submission"
 msgstr "제출 비활성화"
 
@@ -836,12 +837,10 @@ msgid "Whether submissions after the deadline should be accepted"
 msgstr "제출 기한 이후의 제출이 허용 되는 지 여부"
 
 #: wafer/talks/models.py:89
-#, fuzzy
 msgid "Show authors in speakers list"
 msgstr "발표자 목록에서 저자 확인하기"
 
 #: wafer/talks/models.py:91
-#, fuzzy
 msgid "Whether to show the authors for this talk type in the speakers list"
 msgstr "이 발표 유형의 발표자를 연사 목록에 표시할지 여부"
 
@@ -850,7 +849,6 @@ msgid "show pending submissions"
 msgstr "승인 대기 중인 제출 확인하기"
 
 #: wafer/talks/models.py:96
-#, fuzzy
 msgid "Whether to publicly show pending submissions, before acceptance"
 msgstr "승인 전 제출물을 공개적으로 표시할지 여부"
 
@@ -864,7 +862,6 @@ msgid "talk types"
 msgstr "연설 유형"
 
 #: wafer/talks/models.py:116 wafer/talks/models.py:140
-#, fuzzy
 msgid "CSS class name"
 msgstr "CSS 클래스 이름"
 
@@ -1018,7 +1015,7 @@ msgid "Corresponding Author"
 msgstr "관련 저자"
 
 #: wafer/talks/models.py:288
-#, fuzzy, python-format
+#, python-format
 msgid "%s, et al."
 msgstr "%s, 외."
 
@@ -1027,16 +1024,19 @@ msgid "Added to schedule"
 msgstr "일정에 추가됨"
 
 #: wafer/talks/models.py:304
+#, fuzzy
 msgid "Has URL"
-msgstr ""
+msgstr "URL 보유"
 
 #: wafer/talks/models.py:393
+#, fuzzy
 msgid "reviewer"
-msgstr ""
+msgstr "검토자"
 
 #: wafer/talks/models.py:399
+#, fuzzy
 msgid "Comments on the proposal (markdown)"
-msgstr ""
+msgstr "제안서에 대한 의견 (마크다운)"
 
 #: wafer/talks/models.py:402
 #, python-format
@@ -1044,8 +1044,9 @@ msgid "Review of %(title)s by %(reviewer)s (%(average_score)s)"
 msgstr ""
 
 #: wafer/talks/models.py:421
+#, fuzzy
 msgid "review"
-msgstr ""
+msgstr "검토"
 
 #: wafer/talks/models.py:422
 msgid "reviews"
