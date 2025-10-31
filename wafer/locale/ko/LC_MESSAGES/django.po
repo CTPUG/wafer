@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-05-07 14:22+0000\n"
-"PO-Revision-Date: 2025-10-30 07:02+0000\n"
+"PO-Revision-Date: 2025-10-31 08:02+0000\n"
 "Last-Translator: Sung sion <sionsbed2@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/wafer/wafer/ko/>\n"
 "Language: ko\n"
@@ -60,7 +60,7 @@ msgid "Compare"
 msgstr "비교"
 
 #: wafer/compare/templates/admin/wafer.compare/compare.html:7
-#, fuzzy, python-format
+#, python-format
 msgid "%(name)s"
 msgstr "%(name)s"
 
@@ -1082,107 +1082,120 @@ msgid "Reviewed"
 msgstr ""
 
 #: wafer/talks/templates/wafer.talks/reviewed-badge.html:11
+#, fuzzy
 msgid "Reviewed, but outdated (modified since last review)"
-msgstr ""
+msgstr "검토됨, 그러나 최신이 아님 (마지막 검토 후 수정됨)"
 
 #: wafer/talks/templates/wafer.talks/speakers.html:3
 #: wafer/talks/templates/wafer.talks/speakers.html:8
 #: wafer/talks/templates/wafer.talks/speakers.html:39
 #: wafer/talks/templates/wafer.talks/talks.html:51
 #: wafer/talks/templates/wafer.talks/talks.html:99
+#, fuzzy
 msgid "Speakers"
-msgstr ""
+msgstr "발표자"
 
 #: wafer/talks/templates/wafer.talks/speakers.html:10
-#, python-format
+#, fuzzy, python-format
 msgid "%(talk_type)s Speakers"
-msgstr ""
+msgstr "%(talk_type)s 발표자"
 
 #: wafer/talks/templates/wafer.talks/talk.html:21
+#, fuzzy
 msgid "Admin"
-msgstr ""
+msgstr "관리"
 
 #: wafer/talks/templates/wafer.talks/talk.html:25
 #: wafer/talks/templates/wafer.talks/talk.html:179
+#, fuzzy
 msgid "Review"
-msgstr ""
+msgstr "검토"
 
 #: wafer/talks/templates/wafer.talks/talk.html:30
+#, fuzzy
 msgid "Speaker:"
 msgid_plural "Speakers:"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "발표자"
 
 #: wafer/talks/templates/wafer.talks/talk.html:45
+#, fuzzy
 msgid "Bio"
-msgstr ""
+msgstr "약력"
 
 #: wafer/talks/templates/wafer.talks/talk.html:49
+#, fuzzy
 msgid "Not provided"
-msgstr ""
+msgstr "제공되지 않음"
 
 #: wafer/talks/templates/wafer.talks/talk.html:57
-#, python-format
+#, fuzzy, python-format
 msgid "Language: %(language)s"
-msgstr ""
+msgstr "언어: %(language)s"
 
 #: wafer/talks/templates/wafer.talks/talk.html:65
-#, python-format
+#, fuzzy, python-format
 msgid "Track: %(track)s"
-msgstr ""
+msgstr "트랙: %(track)s"
 
 #: wafer/talks/templates/wafer.talks/talk.html:72
 #: wafer/talks/templates/wafer.talks/talks.html:33
 #: wafer/talks/templates/wafer.talks/talks.html:95
+#, fuzzy
 msgid "Talk"
-msgstr ""
+msgstr "발표"
 
 #: wafer/talks/templates/wafer.talks/talk.html:72
-#, python-format
+#, fuzzy, python-format
 msgid "Type: %(talk_type)s"
-msgstr ""
+msgstr "유형: %(talk_type)s"
 
 #: wafer/talks/templates/wafer.talks/talk.html:80
-#, python-format
+#, fuzzy, python-format
 msgid "Room: %(venue)s"
-msgstr ""
+msgstr "강연장: %(venue)s"
 
 #: wafer/talks/templates/wafer.talks/talk.html:86
-#, python-format
+#, fuzzy, python-format
 msgid "Time: %(start_time)s"
-msgstr ""
+msgstr "시간: %(start_time)s"
 
 #: wafer/talks/templates/wafer.talks/talk.html:92
-#, python-format
+#, fuzzy, python-format
 msgid "Duration: %(hours)s:%(minutes)s"
-msgstr ""
+msgstr "시간: %(hours)s:%(minutes)s"
 
 #: wafer/talks/templates/wafer.talks/talk.html:103
+#, fuzzy
 msgid "Submission:"
-msgstr ""
+msgstr "제출 시각:"
 
 #: wafer/talks/templates/wafer.talks/talk.html:106
 #: wafer/talks/templates/wafer.talks/talks.html:58
+#, fuzzy
 msgid "Late submission"
-msgstr ""
+msgstr "제출 기한 초과"
 
 #: wafer/talks/templates/wafer.talks/talk.html:112
+#, fuzzy
 msgid "Status:"
-msgstr ""
+msgstr "상태:"
 
 #: wafer/talks/templates/wafer.talks/talk.html:138
+#, fuzzy
 msgid "<h2>Talk Notes</h2> <p>(The following is not visible to attendees.)</p>"
-msgstr ""
+msgstr "<h2>발표 노</h2><p>(다음 내용은 청중에게는 표시되지 않습니다.)</p>"
 
 #: wafer/talks/templates/wafer.talks/talk.html:154
+#, fuzzy
 msgid ""
 "<h2>Private notes</h2> <p>(The following is not visible to submitters or "
 "attendees.)</p>"
-msgstr ""
+msgstr "<h2>개인 노트</h2><p>(다음 내용은 제출자나 청중에게는 표시되지 않습니다.)</p>"
 
 #: wafer/talks/templates/wafer.talks/talk.html:167
+#, fuzzy
 msgid "URLs"
-msgstr ""
+msgstr "관련 URL"
 
 #: wafer/talks/templates/wafer.talks/talk_form.html:9
 msgid "Edit Talk"
