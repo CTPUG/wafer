@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-05-07 14:22+0000\n"
-"PO-Revision-Date: 2025-10-31 08:02+0000\n"
+"PO-Revision-Date: 2025-11-11 07:51+0000\n"
 "Last-Translator: Sung sion <sionsbed2@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/wafer/wafer/ko/>\n"
 "Language: ko\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.14.1-dev\n"
+"X-Generator: Weblate 5.15-dev\n"
 
 #: wafer/compare/admin.py:22
 msgid "Last Modified"
@@ -1242,24 +1242,29 @@ msgid "No talk types defined."
 msgstr ""
 
 #: wafer/talks/templates/wafer.talks/talk_withdraw.html:5
+#, fuzzy
 msgid "Confirm Talk Withdrawal"
-msgstr ""
+msgstr "발표 철회 확인"
 
 #: wafer/talks/templates/wafer.talks/talk_withdraw.html:7
-#, python-format
+#, fuzzy, python-format
 msgid ""
 "You are about to withdraw the talk <a "
 "href=\"%(talk_url)s\">\"%(talk_title)s\"</a>.<br> This cannot be undone "
 "without help from the site administrators."
 msgstr ""
+"발표 <a href=\"%(talk_url)s\">\"%(talk_title)s\"</a>를 철회하려 하고 있습니다"
+". 사이트 관리자의 도움 없이는 이 작업을 되돌릴 수 없습니다."
 
 #: wafer/talks/templates/wafer.talks/talk_withdraw.html:14
+#, fuzzy
 msgid "Confirm Withdrawal"
-msgstr ""
+msgstr "철회 확인"
 
 #: wafer/talks/templates/wafer.talks/talks.html:4
+#, fuzzy
 msgid "Talks"
-msgstr ""
+msgstr "발표"
 
 #: wafer/talks/templates/wafer.talks/talks.html:9
 msgid "All Submitted Talks"
