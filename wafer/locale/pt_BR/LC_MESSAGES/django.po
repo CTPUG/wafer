@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: wafer\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-12-20 16:53+0000\n"
-"PO-Revision-Date: 2021-06-06 08:34-0300\n"
+"PO-Revision-Date: 2025-12-20 14:04-0300\n"
 "Last-Translator: Allythy <allythy@protonmail.com>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
@@ -199,7 +199,7 @@ msgstr "Sem prévia versão para comparar"
 #: wafer/pages/templates/wafer.pages/page_form.html:5
 #, python-format
 msgid "Editing Page: %(page)s - %(WAFER_CONFERENCE_NAME)s"
-msgstr ""
+msgstr "Editando página: %(page)s - %(WAFER_CONFERENCE_NAME)s"
 
 #: wafer/pages/templates/wafer.pages/page_form.html:12
 msgid "Edit Page"
@@ -1243,10 +1243,8 @@ msgid "All Submitted Talks"
 msgstr "Todas palestras submetidas"
 
 #: wafer/talks/templates/wafer.talks/talks.html:11
-#, fuzzy
-#| msgid "Unassigned Talks"
 msgid "Planned Talks"
-msgstr "Palestra não atribuídas"
+msgstr "Palestras planejadas"
 
 #: wafer/talks/templates/wafer.talks/talks.html:13
 msgid ""
@@ -1256,6 +1254,10 @@ msgid ""
 "          yet been reviewed, accepted, or scheduled.\n"
 "        "
 msgstr ""
+"\n"
+"Esta lista inclui eventos do tipo \"desconferência\" que não foram \n"
+"avaliados, aceitos ou agendados.\n"
+"        "
 
 #: wafer/talks/templates/wafer.talks/talks.html:19
 msgid "Accepted Talks"
@@ -1263,7 +1265,6 @@ msgstr "Palestras aceitas:"
 
 #: wafer/talks/templates/wafer.talks/talks.html:40
 #: wafer/talks/templates/wafer.talks/talks.html:97
-#, fuzzy
 #| msgid "Tracks"
 msgid "Track"
 msgstr "Trilhas"
@@ -1336,22 +1337,16 @@ msgid "Sign up / Log In"
 msgstr "Criar conta / Entrar"
 
 #: wafer/tickets/admin.py:10
-#, fuzzy
-#| msgid "Ticket claim"
 msgid "ticket claimed"
-msgstr "Pedido de bilhete"
+msgstr "bilhete reservado"
 
 #: wafer/tickets/admin.py:15
-#, fuzzy
-#| msgid "Ticket claim"
 msgid "Ticket has been claimed"
-msgstr "Pedido de bilhete"
+msgstr "Bilhete foi reservado"
 
 #: wafer/tickets/admin.py:16
-#, fuzzy
-#| msgid "Ticket claim"
 msgid "Ticket is unclaimed"
-msgstr "Pedido de bilhete"
+msgstr "Bilhete não foi reservado"
 
 #: wafer/tickets/forms.py:18
 msgid "Claim"
