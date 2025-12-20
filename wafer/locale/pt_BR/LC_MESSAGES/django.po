@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: wafer\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-07 14:21+0000\n"
+"POT-Creation-Date: 2025-12-20 16:53+0000\n"
 "PO-Revision-Date: 2021-06-06 08:34-0300\n"
 "Last-Translator: Allythy <allythy@protonmail.com>\n"
 "Language: \n"
@@ -735,7 +735,7 @@ msgstr "Marcar palestras selecionadas como Provisoriamente Aceitas"
 msgid "Mark selected talks as Accepted"
 msgstr "Marcar palestras selecionadas como Aceitas"
 
-#: wafer/talks/forms.py:124 wafer/users/forms.py:23 wafer/users/forms.py:72
+#: wafer/talks/forms.py:124 wafer/users/forms.py:23 wafer/users/forms.py:77
 msgid "Save"
 msgstr "Salvar"
 
@@ -780,7 +780,7 @@ msgstr ""
 "<strong>Você, como apresentador da palestra, será o autor correspondente da "
 "palestra</strong>"
 
-#: wafer/talks/models.py:70 wafer/talks/models.py:121 wafer/talks/models.py:427
+#: wafer/talks/models.py:70 wafer/talks/models.py:121 wafer/talks/models.py:435
 msgid "name"
 msgstr "Nome"
 
@@ -1024,32 +1024,32 @@ msgstr "Comentários sobre a proposta (markdown)"
 msgid "Review of %(title)s by %(reviewer)s (%(average_score)s)"
 msgstr "Revisão de %(title)s por %(reviewer)s (%(average_score)s)"
 
-#: wafer/talks/models.py:421
+#: wafer/talks/models.py:425
 msgid "review"
 msgstr "revisar"
 
-#: wafer/talks/models.py:422
+#: wafer/talks/models.py:426
 msgid "reviews"
 msgstr "revisões"
 
-#: wafer/talks/models.py:433
+#: wafer/talks/models.py:441
 msgid "review aspect"
 msgstr "aspecto da revisão"
 
-#: wafer/talks/models.py:434
+#: wafer/talks/models.py:442
 msgid "review aspects"
 msgstr "aspectos da revisão"
 
-#: wafer/talks/models.py:450
+#: wafer/talks/models.py:458
 #, python-format
 msgid "Review of %(title)s by %(reviewer)s on %(aspect)s: %(score)i"
 msgstr "Revisão de %(title)s por %(reviewer)s em %(aspect)s: %(score)i"
 
-#: wafer/talks/models.py:458
+#: wafer/talks/models.py:466
 msgid "score"
 msgstr "Pontuação"
 
-#: wafer/talks/models.py:459
+#: wafer/talks/models.py:467
 msgid "scores"
 msgstr "pontuações"
 
@@ -1406,11 +1406,11 @@ msgstr "perfil"
 msgid "profiles"
 msgstr "perfis"
 
-#: wafer/users/forms.py:66
+#: wafer/users/forms.py:71
 msgid "<p>Code Hosting Profiles</p>"
 msgstr "<p>Perfils de hospedagem de código</p>"
 
-#: wafer/users/forms.py:70
+#: wafer/users/forms.py:75
 msgid "<p>Social Profiles</p>"
 msgstr "<p>Perfis de rede social</p>"
 
