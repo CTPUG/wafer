@@ -17,5 +17,5 @@ for cand in wafer/locale/*; do
    lang=$(basename $cand)
    ./manage.py makemessages -l $lang
 done
-./manage.py makemessages --keep-pot
+./manage.py makemessages --all --keep-pot
 git status
