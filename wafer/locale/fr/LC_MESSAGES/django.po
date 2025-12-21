@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-07 14:21+0000\n"
+"POT-Creation-Date: 2025-12-20 16:53+0000\n"
 "PO-Revision-Date: 2021-04-21 22:29+0000\n"
 "Last-Translator: K. Herbert <herbert.ka@mailo.com>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/wafer/wafer/fr/>\n"
@@ -752,7 +752,7 @@ msgstr ""
 msgid "Mark selected talks as Accepted"
 msgstr ""
 
-#: wafer/talks/forms.py:124 wafer/users/forms.py:23 wafer/users/forms.py:72
+#: wafer/talks/forms.py:124 wafer/users/forms.py:23 wafer/users/forms.py:77
 msgid "Save"
 msgstr "Enregistrer"
 
@@ -791,7 +791,7 @@ msgid ""
 "</strong>"
 msgstr ""
 
-#: wafer/talks/models.py:70 wafer/talks/models.py:121 wafer/talks/models.py:427
+#: wafer/talks/models.py:70 wafer/talks/models.py:121 wafer/talks/models.py:435
 msgid "name"
 msgstr "nom"
 
@@ -1024,32 +1024,32 @@ msgstr ""
 msgid "Review of %(title)s by %(reviewer)s (%(average_score)s)"
 msgstr ""
 
-#: wafer/talks/models.py:421
+#: wafer/talks/models.py:425
 msgid "review"
 msgstr ""
 
-#: wafer/talks/models.py:422
+#: wafer/talks/models.py:426
 msgid "reviews"
 msgstr ""
 
-#: wafer/talks/models.py:433
+#: wafer/talks/models.py:441
 msgid "review aspect"
 msgstr ""
 
-#: wafer/talks/models.py:434
+#: wafer/talks/models.py:442
 msgid "review aspects"
 msgstr ""
 
-#: wafer/talks/models.py:450
+#: wafer/talks/models.py:458
 #, python-format
 msgid "Review of %(title)s by %(reviewer)s on %(aspect)s: %(score)i"
 msgstr ""
 
-#: wafer/talks/models.py:458
+#: wafer/talks/models.py:466
 msgid "score"
 msgstr ""
 
-#: wafer/talks/models.py:459
+#: wafer/talks/models.py:467
 msgid "scores"
 msgstr ""
 
@@ -1388,11 +1388,11 @@ msgstr "profil"
 msgid "profiles"
 msgstr "profils"
 
-#: wafer/users/forms.py:66
+#: wafer/users/forms.py:71
 msgid "<p>Code Hosting Profiles</p>"
 msgstr ""
 
-#: wafer/users/forms.py:70
+#: wafer/users/forms.py:75
 msgid "<p>Social Profiles</p>"
 msgstr ""
 

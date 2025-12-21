@@ -6,18 +6,17 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Wafer\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-07 14:21+0000\n"
+"POT-Creation-Date: 2025-12-20 16:53+0000\n"
 "PO-Revision-Date: 2025-10-20 04:50+0000\n"
 "Last-Translator: Yurt Page <yurtpage+weblate@gmail.com>\n"
-"Language-Team: Russian <https://hosted.weblate.org/projects/wafer/wafer/ru/>"
-"\n"
+"Language-Team: Russian <https://hosted.weblate.org/projects/wafer/wafer/ru/"
+">\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural="
-"(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? "
-"1 : 2);\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "X-Generator: Weblate 5.14-dev\n"
 
 #: wafer/compare/admin.py:22
@@ -740,7 +739,7 @@ msgstr "Отметить выбранные доклады как Условно
 msgid "Mark selected talks as Accepted"
 msgstr "Отметить выбранные доклады как Принятые"
 
-#: wafer/talks/forms.py:124 wafer/users/forms.py:23 wafer/users/forms.py:72
+#: wafer/talks/forms.py:124 wafer/users/forms.py:23 wafer/users/forms.py:77
 msgid "Save"
 msgstr "Сохранить"
 
@@ -784,7 +783,7 @@ msgid ""
 msgstr ""
 "<strong>Т.к. вы подаёте доклад, вы будете его автором для переписки</strong>"
 
-#: wafer/talks/models.py:70 wafer/talks/models.py:121 wafer/talks/models.py:427
+#: wafer/talks/models.py:70 wafer/talks/models.py:121 wafer/talks/models.py:435
 msgid "name"
 msgstr "название"
 
@@ -1022,32 +1021,32 @@ msgstr "Замечания по докладу (Markdown)"
 msgid "Review of %(title)s by %(reviewer)s (%(average_score)s)"
 msgstr "Рецензия на %(title)s от %(reviewer)s (%(average_score)s)"
 
-#: wafer/talks/models.py:421
+#: wafer/talks/models.py:425
 msgid "review"
 msgstr "рецензия"
 
-#: wafer/talks/models.py:422
+#: wafer/talks/models.py:426
 msgid "reviews"
 msgstr "рецензии"
 
-#: wafer/talks/models.py:433
+#: wafer/talks/models.py:441
 msgid "review aspect"
 msgstr "аспект рецензии"
 
-#: wafer/talks/models.py:434
+#: wafer/talks/models.py:442
 msgid "review aspects"
 msgstr "аспекты рецензий"
 
-#: wafer/talks/models.py:450
+#: wafer/talks/models.py:458
 #, python-format
 msgid "Review of %(title)s by %(reviewer)s on %(aspect)s: %(score)i"
 msgstr "Рецензия на %(title)s от %(reviewer)s: %(aspect)s: %(score)i"
 
-#: wafer/talks/models.py:458
+#: wafer/talks/models.py:466
 msgid "score"
 msgstr "оценка"
 
-#: wafer/talks/models.py:459
+#: wafer/talks/models.py:467
 msgid "scores"
 msgstr "оценки"
 
@@ -1397,11 +1396,11 @@ msgstr "профиль"
 msgid "profiles"
 msgstr "профили"
 
-#: wafer/users/forms.py:66
+#: wafer/users/forms.py:71
 msgid "<p>Code Hosting Profiles</p>"
 msgstr "<p>Профили кодовых хостингов</p>"
 
-#: wafer/users/forms.py:70
+#: wafer/users/forms.py:75
 msgid "<p>Social Profiles</p>"
 msgstr "<p> Социальные профили </p>"
 
