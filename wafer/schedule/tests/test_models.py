@@ -377,6 +377,45 @@ class SlotTests(TestCase):
         self.assertRaises(ValidationError, slot4.clean)
 
 
+class ScheduleItemTests(TestCase):
+    def setUp(self):
+        utc = timezone.utc
+        self.blocks = [
+            ScheduleBlock.objects.create(
+                start_time=D.datetime(2013, 9, 22, 9, 0, 0, tzinfo=utc),
+                end_time=D.datetime(2013, 9, 22, 19, 0, 0, tzinfo=utc)),
+        ]
+        self.slots = [
+            Slot.objects.create(
+                start_time=D.datetime(2013, 9, 22, 9, 0, 0, tzinfo=utc),
+                end_time=D.datetime(2013, 9, 22, 9, 20, 0, tzinfo=utc)),
+            Slot.objects.create(
+                start_time=D.datetime(2013, 9, 22, 9, 30, 0, tzinfo=utc),
+                end_time=D.datetime(2013, 9, 22, 9, 50, 0, tzinfo=utc)),
+        ]
+        self.venues = [
+            Venue.objects.create(order=1, name='Venue 1'),
+        ]
+        self.pages = make_pages(1)
+
+    def test_duration_minutes(self):
+        """Test events spanning multiple slots with a gap in between"""
+        item = make_items(self.venues, self.pages)[0]
+        # Single Slot
+        item.slots.add(self.slots[0])
+        self.assertEqual(item.get_duration_minutes(), 20)
+        # Spanning 2 slots with a gap in-between
+        item.slots.add(self.slots[1])
+        self.assertEqual(item.get_duration_minutes(), 50)
+
+    def test_get_duration(self):
+        """Test ScheduleItem.get_duration()"""
+        item = make_items(self.venues, self.pages)[0]
+        # Single Slot
+        item.slots.add(self.slots[0])
+        self.assertEqual(item.get_duration(), {'minutes': 20, 'hours': 0})
+
+
 class LastUpdateTests(TestCase):
 
     def setUp(self):
