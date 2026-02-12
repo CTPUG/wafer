@@ -13,6 +13,7 @@
       {% for sponsor in sponsor_list %}
         {% block sponsor_details %}
           <section class="wafer wafer-sponsor
+                          wafer-sponsor-order-{{ sponsor.packages.first.order }}
                           wafer-sponsor-{{ sponsor.packages.first.name.lower }}">
             <div class="card">
               <div class="card-body">
