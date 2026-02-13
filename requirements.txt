@@ -19,3 +19,4 @@ py3dns
 pyLibravatar
 pytz
 requests
+setuptools<82.0.0
