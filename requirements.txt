@@ -19,4 +19,6 @@ py3dns
 pyLibravatar
 pytz
 requests
+# We pin setuptools because fs (used by django-bakery) still requires pkg_resources
+# This can be removed when that is fixed
 setuptools<82.0.0
