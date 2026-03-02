@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-12-20 16:53+0000\n"
-"PO-Revision-Date: 2025-11-11 07:51+0000\n"
+"PO-Revision-Date: 2026-03-03 02:09+0000\n"
 "Last-Translator: Sung sion <sionsbed2@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/wafer/wafer/ko/>\n"
 "Language: ko\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.15-dev\n"
+"X-Generator: Weblate 5.17-dev\n"
 
 #: wafer/compare/admin.py:22
 msgid "Last Modified"
@@ -1343,7 +1343,7 @@ msgstr ""
 
 #: wafer/templates/wafer/index.html:6
 msgid "Index page missing"
-msgstr ""
+msgstr "인덱스 페이지 누락"
 
 #: wafer/templates/wafer/index.html:7
 msgid "Create a Page called 'index'."
@@ -1352,15 +1352,15 @@ msgstr ""
 #: wafer/templates/wafer/nav.html:58
 #, python-format
 msgid "%(name)s's profile"
-msgstr ""
+msgstr "%(name)s의 프로필"
 
 #: wafer/templates/wafer/nav.html:64
 msgid "Site admin"
-msgstr ""
+msgstr "사이트 관리자"
 
 #: wafer/templates/wafer/nav.html:68
 msgid "Log out"
-msgstr ""
+msgstr "로그아웃"
 
 #: wafer/templates/wafer/nav.html:76
 msgid "Sign up / Log In"
@@ -1368,7 +1368,7 @@ msgstr ""
 
 #: wafer/tickets/admin.py:10
 msgid "ticket claimed"
-msgstr ""
+msgstr "티켓 청구"
 
 #: wafer/tickets/admin.py:15
 msgid "Ticket has been claimed"
@@ -1394,7 +1394,7 @@ msgstr ""
 
 #: wafer/tickets/templates/wafer.tickets/claim.html:6
 msgid "Ticket sales are not currently open"
-msgstr ""
+msgstr "티켓 판매는 현재 열려 있지 않습니다"
 
 #: wafer/tickets/templates/wafer.tickets/claim.html:8
 msgid "Unable to claim tickets. Maybe you already have one?"
