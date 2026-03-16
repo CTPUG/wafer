@@ -5,7 +5,7 @@
   "dependencies": {
     "@fortawesome/fontawesome-free": "6.2.x",
     "bootstrap": "^5.2.0",
-    "jquery": ">=1.9.1"
+    "jquery": "^3.7.0"
   },
   "scripts": {
     "postinstall": "rsync -a --delete node_modules/ wafer/static/vendor/"
