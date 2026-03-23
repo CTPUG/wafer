@@ -145,12 +145,12 @@ jobs:
              -x .readthedocs.yml -x setup.cfg \
              -ur .  $RUNNER_TEMP/sdist/wafer*/
     - name: Upload wheel
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v6
       with:
         name: wheel
         path: dist/*whl
     - name: Upload sdist
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v6
       with:
         name: sdist
         path: dist/*tar.gz
