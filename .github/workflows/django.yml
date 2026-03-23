@@ -29,9 +29,9 @@ jobs:
     runs-on: ubuntu-latest
     name: Check translation inforamtion is up to date
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v6
     - name: Set up Python
-      uses: actions/setup-python@v5
+      uses: actions/setup-python@v6
       with:
         python-version: '3.13'
     - name: Install Python Dependencies
@@ -70,9 +70,9 @@ jobs:
       matrix:
         browser: ['chrome', 'firefox']
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v6
     - name: Set up Python
-      uses: actions/setup-python@v5
+      uses: actions/setup-python@v6
       with:
         python-version: '3.13'
     - name: Install Dependencies
@@ -81,12 +81,12 @@ jobs:
         pip install -r requirements.txt -r requirements-dev.txt
         pip install selenium
     - name: Install node
-      uses: actions/setup-node@v4
+      uses: actions/setup-node@v6
     - name: Install javascript dependencies
       run: |
         npm install
     - name: Setup Chrome
-      uses: browser-actions/setup-chrome@v1
+      uses: browser-actions/setup-chrome@v2
       if: matrix.browser == 'chrome'
     - name: Setup firefox
       run: |
@@ -104,9 +104,9 @@ jobs:
     runs-on: ubuntu-latest
     name: Build sdist and wheel
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v6
     - name: Set up Python
-      uses: actions/setup-python@v5
+      uses: actions/setup-python@v6
       with:
         python-version: '3.13'
     - name: Install Python Dependencies
