@@ -246,7 +246,7 @@ msgstr "Ativação completa"
 msgid ""
 "Your account is now activated! Please <a href=\"%(login_url)s\">log in</a>."
 msgstr ""
-"A sua conta foi ativade! Por favor, <a href=\"%(login_url)s\">inicia sessão</"
+"A sua conta foi ativada! Por favor, <a href=\"%(login_url)s\">inicia sessão</"
 "a>."
 
 #: wafer/registration/templates/registration/activation_complete.html:13
