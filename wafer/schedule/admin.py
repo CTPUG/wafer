@@ -116,6 +116,8 @@ def find_speaker_clashes(all_items):
             speakers = list(item.talk.authors.all())
         elif item.page:
             speakers = list(item.page.people.all())
+        else:
+            speakers = []
         for speaker in speakers:
             for slot in item.slots.all():
                 candidate = (slot, speaker)
