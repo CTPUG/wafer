@@ -476,7 +476,7 @@ class SlotAdmin(CompareVersionAdmin):
                     new_slot.full_clean()
                     new_slot.save()
                     msgdict = {'obj': force_str(new_slot)}
-                    msg = _("Additional slot %(obj)s added sucessfully") % msgdict
+                    msg = _("Additional slot %(obj)s added successfully") % msgdict
                     if hasattr(request, '_messages'):
                         # Don't add messages unless we have a suitable request
                         # Needed during testing, and possibly in other cases
