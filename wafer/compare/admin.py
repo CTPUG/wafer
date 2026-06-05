@@ -162,9 +162,9 @@ class CompareVersionAdmin(VersionAdmin):
             {
                 "revision": version.revision,
                 "url": reverse("%s:%s_%s_compare" % (self.admin_site.name, opts.app_label, opts.model_name), args=(quote(version.object_id), version.id)),
-            } for version in self._reversion_order_version_queryset(Version.objects.get_for_object_reference(
+            } for version in Version.objects.get_for_object_reference(
                 self.model,
-                object_id).select_related("revision__user"))]
+                object_id).select_related("revision__user")]
         context = {"action_list": action_list,
                    "opts": opts,
                    "object_id": quote(object_id),
