@@ -214,10 +214,6 @@ class TalkWithdraw(EditOwnTalksMixin, DeleteView):
         revisions.set_comment("Talk Withdrawn")
         return HttpResponseRedirect(self.success_url)
 
-    def delete(self, request, *args, **kwargs):
-        """Override delete to only withdraw for Django < 4"""
-        return self.withdraw_helper(request)
-
     def form_valid(self, request, *args, **kwargs):
         """Override delete to only withdraw for Django >= 4.0"""
         return self.withdraw_helper(request)
