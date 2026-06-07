@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-20 16:53+0000\n"
+"POT-Creation-Date: 2026-06-07 09:47+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -306,57 +306,57 @@ msgstr ""
 msgid "You can register after your account is activated."
 msgstr ""
 
-#: wafer/schedule/admin.py:166
+#: wafer/schedule/admin.py:168
 msgid "Clashes found in schedule."
 msgstr ""
 
-#: wafer/schedule/admin.py:169
+#: wafer/schedule/admin.py:171
 msgid "Duplicate schedule items found in schedule."
 msgstr ""
 
-#: wafer/schedule/admin.py:172
+#: wafer/schedule/admin.py:174
 msgid "Invalid schedule items found in schedule."
 msgstr ""
 
-#: wafer/schedule/admin.py:175
+#: wafer/schedule/admin.py:177
 msgid "Non contiguous slots found in schedule."
 msgstr ""
 
-#: wafer/schedule/admin.py:178
+#: wafer/schedule/admin.py:180
 msgid "Invalid venues found in schedule."
 msgstr ""
 
-#: wafer/schedule/admin.py:181
+#: wafer/schedule/admin.py:183
 #: wafer/schedule/templates/admin/scheduleitem_list.html:61
 msgid "Common speaker in simultaneous schedule items"
 msgstr ""
 
-#: wafer/schedule/admin.py:221
+#: wafer/schedule/admin.py:223
 msgid "Block"
 msgstr ""
 
-#: wafer/schedule/admin.py:273 wafer/schedule/models.py:327
+#: wafer/schedule/admin.py:275 wafer/schedule/models.py:327
 msgid "Start Time"
 msgstr ""
 
-#: wafer/schedule/admin.py:329
+#: wafer/schedule/admin.py:331
 msgid "Venue"
 msgstr ""
 
-#: wafer/schedule/admin.py:415
+#: wafer/schedule/admin.py:417
 msgid "Additional slots"
 msgstr ""
 
-#: wafer/schedule/admin.py:416
+#: wafer/schedule/admin.py:418
 msgid "Create this number of additional slots following this one"
 msgstr ""
 
-#: wafer/schedule/admin.py:477
+#: wafer/schedule/admin.py:479
 #, python-format
-msgid "Additional slot %(obj)s added sucessfully"
+msgid "Additional slot %(obj)s added successfully"
 msgstr ""
 
-#: wafer/schedule/admin.py:484
+#: wafer/schedule/admin.py:486
 #, python-format
 msgid "Failed to create new slot - %s"
 msgstr ""
