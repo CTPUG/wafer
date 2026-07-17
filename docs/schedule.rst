@@ -123,6 +123,18 @@ errors as well, to help diagnose the problem preventing the schedule from
 rendering correctly. These errors will also be displayed in the schedule editor
 and in the admin site.
 
+Duplicate items
+===============
+
+Wafer supports having duplicates of an item in the schedule, but the number
+of allowed duplicates needs to be set on the item. By default, talks are
+created with an allowed duplicate count of 1 (so they can be added to the schedule)
+and pages have a default of 0.
+
+The schedule validation will warn if the number of duplicates is exceeded.
+
+The schedule editor doesn't display items with a duplicate count of 0, since
+those will always create an invalid schedule if added.
 
 Hiding the schedule while editing
 =================================
