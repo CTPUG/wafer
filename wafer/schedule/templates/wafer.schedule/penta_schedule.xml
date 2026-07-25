@@ -107,8 +107,7 @@
                         <description/>
                       {% endif %}
                       <recording>
-                        <optout>false</optout>
-                        <license>{{ WAFER_VIDEO_LICENSE }}</license>
+                        <optout>true</optout>
                       </recording>
                     {% endif %}
                     <url>https://{{ WAFER_CONFERENCE_DOMAIN }}{{ items.item.get_url }}</url>
