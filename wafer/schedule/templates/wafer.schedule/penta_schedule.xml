@@ -76,6 +76,7 @@
                             <license>{{ WAFER_VIDEO_LICENSE }}</license>
                           {% else %}
                             <optout>true</optout>
+                            <license/>
                           {% endif %}
                         </recording>
                       {% endwith %}
@@ -108,6 +109,7 @@
                       {% endif %}
                       <recording>
                         <optout>true</optout>
+                        <license/>
                       </recording>
                     {% endif %}
                     <url>https://{{ WAFER_CONFERENCE_DOMAIN }}{{ items.item.get_url }}</url>
