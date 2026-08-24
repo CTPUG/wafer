@@ -5,11 +5,11 @@
 <h1>{% trans 'Users:' %}</h1>
 <ul class="list-group">
   {% for user in user_list %}
-    <a href="{% url 'wafer_user_profile' username=user.username %}">
-      <li class="list-group-item">
+    <li class="list-group-item">
+      <a href="{% url 'wafer_user_profile' username=user.username %}">
         {{ user.userprofile.display_name }}
-      </li>
-    </a>
+      </a>
+    </li>
   {% endfor %}
 </ul>
 {% if is_paginated %}
