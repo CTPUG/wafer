@@ -20,7 +20,11 @@
             <div class="col-md-3">
               <div class="wafer-speakers-logo">
                 <a href="{% url 'wafer_user_profile' username=user_profile.user.username %}">
-                  <img class="thumbnail mx-auto" src="{{ user_profile.avatar_url }}">
+                   {% if user_profile.avatar_url != None %}
+                    <img class="thumbnail mx-auto" src="{{ user_profile.avatar_url }}">
+                  {% else %}
+                    <img class="thumbnail mx-auto" src="https://seccdn.libravatar.org/static/img/mm/80.png">
+                  {% endif %}
                 </a>
               </div>
               <div class="wafer-speakers-name">
