@@ -333,26 +333,24 @@ class ScheduleItem(models.Model):
     def get_duration(self):
         """Return the total duration of the item.
 
-           This is the sum of all the slot durations."""
-        # This is intended for the pentabarf xml file
-        # It will do the wrong thing if the slots aren't
-        # contigious, which we should address sometime.
-        slots = list(self.slots.all())
-        result = {'hours': 0, 'minutes': 0}
-        if slots:
-            for slot in slots:
-                dur = slot.get_duration()
-                result['hours'] += dur['hours']
-                result['minutes'] += dur['minutes']
-            # Normalise again
-            hours, result['minutes'] = divmod(result['minutes'], 60)
-            result['hours'] += hours
-        return result
+           This is the time from start to end, including any discontinuities
+           between slots."""
+        minutes = self.get_duration_minutes()
+        hours, minutes = divmod(minutes, 60)
+        return {
+            'hours': hours,
+            'minutes': minutes,
+        }
 
     def get_duration_minutes(self):
         """Return the duration in total number of minutes."""
-        duration = self.get_duration()
-        return int(duration['hours'] * 60 + duration['minutes'])
+        slots = list(self.slots.all())
+        if not slots:
+            return 0
+        start = slots[0].get_start_time()
+        end = slots[-1].end_time
+        duration = end - start
+        return duration.total_seconds() // 60
 
     @property
     def guid(self):
