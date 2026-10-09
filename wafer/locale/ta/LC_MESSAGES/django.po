@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-20 16:53+0000\n"
+"POT-Creation-Date: 2026-10-09 12:14+0000\n"
 "PO-Revision-Date: 2025-12-31 19:01+0000\n"
 "Last-Translator: தமிழ்நேரம் <tamilneram247@gmail.com>\n"
 "Language-Team: Tamil <https://hosted.weblate.org/projects/wafer/wafer/ta/>\n"
@@ -344,57 +344,69 @@ msgstr ""
 msgid "You can register after your account is activated."
 msgstr "உங்கள் கணக்கு செயல்படுத்தப்பட்ட பிறகு நீங்கள் பதிவு செய்யலாம்."
 
-#: wafer/schedule/admin.py:166
+#: wafer/schedule/admin.py:184
 msgid "Clashes found in schedule."
 msgstr "அட்டவணையில் காணப்படும் மோதல்கள்."
 
-#: wafer/schedule/admin.py:169
+#: wafer/schedule/admin.py:187
 msgid "Duplicate schedule items found in schedule."
 msgstr "அட்டவணையில் காணப்படும் அட்டவணை உருப்படிகளை நகல்."
 
-#: wafer/schedule/admin.py:172
-msgid "Invalid schedule items found in schedule."
+#: wafer/schedule/admin.py:190
+#, fuzzy
+#| msgid "Invalid schedule items found in schedule."
+msgid "Schedule items with no talk or page asigned found in schedule."
 msgstr "அட்டவணையில் காணப்படும் தவறான அட்டவணை உருப்படிகள்."
 
-#: wafer/schedule/admin.py:175
+#: wafer/schedule/admin.py:193
+msgid "Schedule items with both a talk and a page asigned found in schedule."
+msgstr ""
+
+#: wafer/schedule/admin.py:196
+msgid ""
+"Schedule items with a talk an incorrect state asigned found in schedule."
+msgstr ""
+
+#: wafer/schedule/admin.py:199
 msgid "Non contiguous slots found in schedule."
 msgstr "அட்டவணையில் காணப்படாத தொடர்ச்சியான இடங்கள்."
 
-#: wafer/schedule/admin.py:178
+#: wafer/schedule/admin.py:202
 msgid "Invalid venues found in schedule."
 msgstr "அட்டவணையில் காணப்படும் தவறான இடங்கள்."
 
-#: wafer/schedule/admin.py:181
+#: wafer/schedule/admin.py:205
 #: wafer/schedule/templates/admin/scheduleitem_list.html:61
 msgid "Common speaker in simultaneous schedule items"
 msgstr "ஒரே நேரத்தில் அட்டவணை உருப்படிகளில் பொதுவான பேச்சாளர்"
 
-#: wafer/schedule/admin.py:221
+#: wafer/schedule/admin.py:245
 msgid "Block"
 msgstr "தொகுதி"
 
-#: wafer/schedule/admin.py:273 wafer/schedule/models.py:327
+#: wafer/schedule/admin.py:297 wafer/schedule/models.py:327
 msgid "Start Time"
 msgstr "தொடக்க நேரம்"
 
-#: wafer/schedule/admin.py:329
+#: wafer/schedule/admin.py:353
 msgid "Venue"
 msgstr "இடம்"
 
-#: wafer/schedule/admin.py:415
+#: wafer/schedule/admin.py:439
 msgid "Additional slots"
 msgstr "கூடுதல் இடங்கள்"
 
-#: wafer/schedule/admin.py:416
+#: wafer/schedule/admin.py:440
 msgid "Create this number of additional slots following this one"
 msgstr "இதைத் தொடர்ந்து இந்த கூடுதல் இடங்களை உருவாக்கவும்"
 
-#: wafer/schedule/admin.py:477
-#, python-format
-msgid "Additional slot %(obj)s added sucessfully"
+#: wafer/schedule/admin.py:501
+#, fuzzy, python-format
+#| msgid "Additional slot %(obj)s added sucessfully"
+msgid "Additional slot %(obj)s added successfully"
 msgstr "கூடுதல் ச்லாட்%(obj)s வெற்றிகரமாகச் சேர்க்கப்படுகிறது"
 
-#: wafer/schedule/admin.py:484
+#: wafer/schedule/admin.py:508
 #, python-format
 msgid "Failed to create new slot - %s"
 msgstr "புதிய ச்லாட்டை உருவாக்குவதில் தோல்வி - %s"
@@ -1058,7 +1070,7 @@ msgstr ""
 
 #: wafer/talks/templates/wafer.talks/speakers.html:3
 #: wafer/talks/templates/wafer.talks/speakers.html:8
-#: wafer/talks/templates/wafer.talks/speakers.html:39
+#: wafer/talks/templates/wafer.talks/speakers.html:43
 #: wafer/talks/templates/wafer.talks/talks.html:51
 #: wafer/talks/templates/wafer.talks/talks.html:99
 msgid "Speakers"

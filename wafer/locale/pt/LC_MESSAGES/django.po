@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-20 16:53+0000\n"
+"POT-Creation-Date: 2026-10-09 12:14+0000\n"
 "PO-Revision-Date: 2026-03-27 08:35+0000\n"
 "Last-Translator: Carlos Henrique Lima Melara <charlesmelara@outlook.com>\n"
 "Language-Team: Portuguese <https://hosted.weblate.org/projects/wafer/wafer/"
@@ -350,57 +350,69 @@ msgstr ""
 msgid "You can register after your account is activated."
 msgstr "Pode se inscrever depois de ativar a sua conta."
 
-#: wafer/schedule/admin.py:166
+#: wafer/schedule/admin.py:184
 msgid "Clashes found in schedule."
 msgstr "Conflitos encontrados na programação."
 
-#: wafer/schedule/admin.py:169
+#: wafer/schedule/admin.py:187
 msgid "Duplicate schedule items found in schedule."
 msgstr "Itens duplicados achados na programação."
 
-#: wafer/schedule/admin.py:172
-msgid "Invalid schedule items found in schedule."
+#: wafer/schedule/admin.py:190
+#, fuzzy
+#| msgid "Invalid schedule items found in schedule."
+msgid "Schedule items with no talk or page asigned found in schedule."
 msgstr "Itens inválidos achados na programação."
 
-#: wafer/schedule/admin.py:175
+#: wafer/schedule/admin.py:193
+msgid "Schedule items with both a talk and a page asigned found in schedule."
+msgstr ""
+
+#: wafer/schedule/admin.py:196
+msgid ""
+"Schedule items with a talk an incorrect state asigned found in schedule."
+msgstr ""
+
+#: wafer/schedule/admin.py:199
 msgid "Non contiguous slots found in schedule."
 msgstr "Slots não contíguos encontrados na programação."
 
-#: wafer/schedule/admin.py:178
+#: wafer/schedule/admin.py:202
 msgid "Invalid venues found in schedule."
 msgstr "Locais inválidos encontrados na programação."
 
-#: wafer/schedule/admin.py:181
+#: wafer/schedule/admin.py:205
 #: wafer/schedule/templates/admin/scheduleitem_list.html:61
 msgid "Common speaker in simultaneous schedule items"
 msgstr "Palestrante alocado em itens simultâneos na grade"
 
-#: wafer/schedule/admin.py:221
+#: wafer/schedule/admin.py:245
 msgid "Block"
 msgstr "Bloco"
 
-#: wafer/schedule/admin.py:273 wafer/schedule/models.py:327
+#: wafer/schedule/admin.py:297 wafer/schedule/models.py:327
 msgid "Start Time"
 msgstr "Hora de início"
 
-#: wafer/schedule/admin.py:329
+#: wafer/schedule/admin.py:353
 msgid "Venue"
 msgstr "local"
 
-#: wafer/schedule/admin.py:415
+#: wafer/schedule/admin.py:439
 msgid "Additional slots"
 msgstr "Adicional slots"
 
-#: wafer/schedule/admin.py:416
+#: wafer/schedule/admin.py:440
 msgid "Create this number of additional slots following this one"
 msgstr "Criar essa quantidade de slots adicionais depois de este"
 
-#: wafer/schedule/admin.py:477
-#, python-format
-msgid "Additional slot %(obj)s added sucessfully"
+#: wafer/schedule/admin.py:501
+#, fuzzy, python-format
+#| msgid "Additional slot %(obj)s added sucessfully"
+msgid "Additional slot %(obj)s added successfully"
 msgstr "Adicional slot %(obj)s adicionado com sucesso"
 
-#: wafer/schedule/admin.py:484
+#: wafer/schedule/admin.py:508
 #, python-format
 msgid "Failed to create new slot - %s"
 msgstr "Falha a criar novo slot - %s"
@@ -909,8 +921,8 @@ msgid ""
 "syntax."
 msgstr ""
 "Escreva dois ou três parágrafos descrevendo a sua palestra. Quem é o seu "
-"público-alvo?O que eles vão ganhar com a palestra? O que será coberto?<br />"
-"Sintaxe Markdown é aceita."
+"público-alvo?O que eles vão ganhar com a palestra? O que será coberto?<br /"
+">Sintaxe Markdown é aceita."
 
 #: wafer/talks/models.py:192 wafer/talks/models.py:397
 msgid "notes"
@@ -1069,7 +1081,7 @@ msgstr "Revisada, mas desatualizado (modificado desde a última revisão)"
 
 #: wafer/talks/templates/wafer.talks/speakers.html:3
 #: wafer/talks/templates/wafer.talks/speakers.html:8
-#: wafer/talks/templates/wafer.talks/speakers.html:39
+#: wafer/talks/templates/wafer.talks/speakers.html:43
 #: wafer/talks/templates/wafer.talks/talks.html:51
 #: wafer/talks/templates/wafer.talks/talks.html:99
 msgid "Speakers"
