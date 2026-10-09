@@ -804,6 +804,10 @@ class ValidationTests(TestCase):
         # Invalid item & clash should be reported
         errors = validate_schedule()
         self.assertEqual(len(errors), 2)
+        # Check that the right error message is reported
+        self.assertIn('Clashes found in schedule', ''.join(errors))
+        self.assertIn('items with no talk or page asigned', ''.join(errors))
+
         # Fix the invalid item
         item2.page_id = page.pk
         item2.save()
@@ -812,6 +816,7 @@ class ValidationTests(TestCase):
         self.assertFalse(check_schedule())
         errors = validate_schedule()
         self.assertEqual(len(errors), 1)
+        self.assertIn('Clashes found in schedule', ''.join(errors))
         # Fix clashes
         item2.slots.remove(slot1)
         item2.slots.add(slot2)
