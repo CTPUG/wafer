@@ -9,7 +9,8 @@ from wafer.schedule.admin import (
     SlotAdmin, SlotBlockFilter, SlotStartTimeFilter,
     check_schedule, find_clashes, find_duplicate_schedule_items,
     find_invalid_venues, find_non_contiguous, prefetch_schedule_items,
-    validate_items, validate_schedule)
+    validate_items_no_item, validate_items_both_talk_and_page,
+    validate_items_invalid_talk, validate_schedule)
 from wafer.schedule.models import ScheduleBlock, Venue, Slot, ScheduleItem
 from wafer.talks.models import (ACCEPTED, REJECTED, CANCELLED, SUBMITTED,
                                 UNDER_CONSIDERATION)
@@ -501,8 +502,14 @@ class ValidationTests(TestCase):
         item1.slots.add(slot1)
 
         all_items = prefetch_schedule_items()
-        invalid = validate_items(all_items)
+        invalid = validate_items_both_talk_and_page(all_items)
         assert set(invalid) == set([item1])
+
+        invalid = validate_items_no_item(all_items)
+        assert set(invalid) == set([])
+
+        invalid = validate_items_invalid_talk(all_items)
+        assert set(invalid) == set([])
 
         item2 = ScheduleItem.objects.create(venue=venue1,
                                             talk_id=talk.pk)
@@ -512,40 +519,78 @@ class ValidationTests(TestCase):
         talk.status = REJECTED
         talk.save()
         all_items = prefetch_schedule_items()
-        invalid = validate_items(all_items)
-        assert set(invalid) == set([item1, item2])
+        invalid = validate_items_both_talk_and_page(all_items)
+        assert set(invalid) == set([item1])
+
+        invalid = validate_items_no_item(all_items)
+        assert set(invalid) == set([])
+
+        invalid = validate_items_invalid_talk(all_items)
+        # We expect both here, becaue the invalid talk is
+        # on both items
+        set(invalid) == set([item1, item2])
 
         talk.status = SUBMITTED
         talk.save()
         all_items = prefetch_schedule_items()
-        invalid = validate_items(all_items)
+        invalid = validate_items_both_talk_and_page(all_items)
+        assert set(invalid) == set([item1])
+
+        invalid = validate_items_no_item(all_items)
+        assert set(invalid) == set([])
+
+        invalid = validate_items_invalid_talk(all_items)
         assert set(invalid) == set([item1, item2])
 
         talk.status = CANCELLED
         talk.save()
         all_items = prefetch_schedule_items()
-        invalid = validate_items(all_items)
+        invalid = validate_items_both_talk_and_page(all_items)
         assert set(invalid) == set([item1])
+
+        invalid = validate_items_no_item(all_items)
+        assert set(invalid) == set([])
+
+        invalid = validate_items_invalid_talk(all_items)
+        assert set(invalid) == set([])
 
         talk.status = UNDER_CONSIDERATION
         talk.save()
         all_items = prefetch_schedule_items()
-        invalid = validate_items(all_items)
+        invalid = validate_items_both_talk_and_page(all_items)
+        assert set(invalid) == set([item1])
+
+        invalid = validate_items_no_item(all_items)
+        assert set(invalid) == set([])
+
+        invalid = validate_items_invalid_talk(all_items)
         assert set(invalid) == set([item1, item2])
 
         talk.status = ACCEPTED
         talk.save()
         all_items = prefetch_schedule_items()
-        invalid = validate_items(all_items)
+        invalid = validate_items_both_talk_and_page(all_items)
         assert set(invalid) == set([item1])
+
+        invalid = validate_items_no_item(all_items)
+        assert set(invalid) == set([])
+
+        invalid = validate_items_invalid_talk(all_items)
+        assert set(invalid) == set([])
 
         item3 = ScheduleItem.objects.create(venue=venue1,
                                             talk_id=None, page_id=None)
         item3.slots.add(slot2)
 
         all_items = prefetch_schedule_items()
-        invalid = validate_items(all_items)
-        assert set(invalid) == set([item1, item3])
+        invalid = validate_items_both_talk_and_page(all_items)
+        assert set(invalid) == set([item1])
+
+        invalid = validate_items_no_item(all_items)
+        assert set(invalid) == set([item3])
+
+        invalid = validate_items_invalid_talk(all_items)
+        assert set(invalid) == set([])
 
     def test_non_contiguous(self):
         """Test that we detect items with non contiguous slots"""
@@ -590,8 +635,12 @@ class ValidationTests(TestCase):
         item2.slots.remove(slot2)
 
         all_items = prefetch_schedule_items()
-        invalid = validate_items(all_items)
         # Everything is valid now
+        invalid = validate_items_both_talk_and_page(all_items)
+        assert set(invalid) == set([])
+        invalid = validate_items_no_item(all_items)
+        assert set(invalid) == set([])
+        invalid = validate_items_invalid_talk(all_items)
         assert set(invalid) == set([])
 
     def test_duplicates(self):
