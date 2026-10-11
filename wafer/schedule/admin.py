@@ -57,7 +57,7 @@ def validate_items(all_items):
 def find_duplicate_schedule_items(all_items):
     """Find talks / pages assigned to mulitple schedule items"""
     duplicates = []
-    occurances = {}
+    occurrences = {}
     for item in all_items:
         if item.talk:
             key = item.talk
@@ -65,13 +65,13 @@ def find_duplicate_schedule_items(all_items):
             key = item.page
         else:
             continue
-        if key in occurances:
-            occurances[key].append(item)
+        if key in occurrences:
+            occurrences[key].append(item)
         else:
-            occurances[key] = [item]
-    for cand in occurances:
-        if len(occurances[cand]) > cand.schedule_duplicates:
-               duplicates.extend(occurances[cand])
+            occurrences[key] = [item]
+    for cand in occurrences:
+        if len(occurrences[cand]) > cand.schedule_duplicates:
+               duplicates.extend(occurrences[cand])
     return duplicates
 
 
@@ -281,7 +281,7 @@ class BaseStartTimeFilter(admin.SimpleListFilter):
 
     def lookups(self, request, model_admin):
         values = [slot.get_formatted_start_time() for slot in Slot.objects.all()]
-        # We order drop duplicates and order globally.
+        # We drop duplicates and order globally.
         values = sorted(set(values))
         # It's not great to use the string value as the admin key, but we
         # don't have a better way of dealing with it unfortunately.
