@@ -590,7 +590,7 @@ class EditorTestsMixin:
         self.pages[4].schedule_duplicates = 0
         self.pages[4].save()
         # Reload the page
-        self._driver.navigator.refresh()
+        self.driver.refresh()
         # Count the number of pages in the list
 
         page_link = WebDriverWait(self.driver, SELENIUM_WAIT_TIME).until(
@@ -615,7 +615,7 @@ class EditorTestsMixin:
         self.pages[2].schedule_duplicates = 3
         self.pages[2].save()
         # Reload the page
-        self._driver.navigator.refresh()
+        self.driver.refresh()
 
         page_link = WebDriverWait(self.driver, SELENIUM_WAIT_TIME).until(
             expected_conditions.presence_of_element_located((By.PARTIAL_LINK_TEXT, "Pages"))
