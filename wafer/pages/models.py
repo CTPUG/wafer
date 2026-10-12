@@ -84,7 +84,7 @@ class Page(models.Model):
 
     # By default, Pages aren't allowed in the schedule
     # this helps keep the list in the schedule editor sane
-    schedule_duplicates = models.IntegerField(
+    num_schedulable = models.IntegerField(
             default=0, validators=[validators.MinValueValidator(0)])
 
     def __str__(self):

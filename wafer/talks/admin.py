@@ -58,7 +58,7 @@ class HasNotesFilter(admin.SimpleListFilter):
 
 class ScheduleDuplicatesFilter(admin.SimpleListFilter):
     title = _('Number of Duplicates allowed')
-    parameter_name = 'schedule_duplicates'
+    parameter_name = 'num_schedulable'
 
     def lookups(self, request, model_admin):
         return (
@@ -69,11 +69,11 @@ class ScheduleDuplicatesFilter(admin.SimpleListFilter):
 
     def queryset(self, request, queryset):
         if self.value() == '0':
-            return queryset.filter(schedule_duplicates=0)
+            return queryset.filter(num_schedulable=0)
         if self.value() == '1':
-            return queryset.filter(schedule_duplicates=1)
+            return queryset.filter(num_schedulable=1)
         if self.value() == '2':
-            return queryset.filter(schedule_duplicates__gt=1)
+            return queryset.filter(num_schedulable__gt=1)
         else:
             return queryset
 
@@ -136,7 +136,7 @@ class TalkAdmin(CompareVersionAdmin):
     list_display = ('title', 'get_corresponding_author_name',
                     'get_corresponding_author_contact', 'language',
                     'talk_type', 'get_in_schedule', 'has_url', 'status',
-                    'review_count', 'review_score', 'schedule_duplicates')
+                    'review_count', 'review_score', 'num_schedulable')
     list_editable = ('status',)
     list_filter = ('status', 'language', 'talk_type', 'track',
                    ScheduleListFilter, DateModifiedFilter, HasNotesFilter,

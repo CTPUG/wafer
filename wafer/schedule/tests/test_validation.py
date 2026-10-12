@@ -293,14 +293,14 @@ class ScheduleValidationTests(TestCase):
 
 
     def test_duplicate_multiple_schedule_items(self):
-        """Add more tests to the behavior of schedule_duplicates"""
+        """Add more tests to the behavior of num_schedulable"""
         all_items = prefetch_schedule_items()
         self.assertEqual(list(find_duplicate_schedule_items(all_items)), [])
 
-        self.talk1.schedule_duplicates = 2
+        self.talk1.num_schedulable = 2
         self.talk1.save()
 
-        # Check that fewer than schedule_duplicates is valid
+        # Check that fewer than num_schedulable is valid
         self.items[0].page_id = None
         self.items[0].talk_id = self.talk1.pk
         self.items[0].save()
@@ -308,7 +308,7 @@ class ScheduleValidationTests(TestCase):
         all_items = prefetch_schedule_items()
         self.assertEqual(list(find_duplicate_schedule_items(all_items)), [])
 
-        # Check that equal to schedule_duplicates is valid
+        # Check that equal to num_schedulable is valid
         self.items[6].page_id = None
         self.items[6].talk_id = self.talk1.pk
         self.items[6].save()
@@ -345,12 +345,12 @@ class ScheduleValidationTests(TestCase):
         self.assertIn(self.items[5], result)
         self.assertIn(self.items[3], result)
 
-        # Check that setting schedule_duplicates appropriately fixes stuff
+        # Check that setting num_schedulable appropriately fixes stuff
 
-        self.talk1.schedule_duplicates = 3
+        self.talk1.num_schedulable = 3
         self.talk1.save()
 
-        self.talk2.schedule_duplicates = 2
+        self.talk2.num_schedulable = 2
         self.talk2.save()
 
         all_items = prefetch_schedule_items()
@@ -430,13 +430,13 @@ class ScheduleValidationApiTests(TestCase):
         self.assertIn('Clashes found in schedule', response.data['Validation Status'][0])
         self.assertIn('exceed allowed number of duplicates', response.data['Validation Status'][1])
         # Check that changing the number of duplicates allowed works as expected
-        self.pages[0].schedule_duplicates = 2
+        self.pages[0].num_schedulable = 2
         self.pages[0].save()
         response = c.get('/schedule/api/validate/')
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(response.data['Validation Status']), 1)
         self.assertIn('Clashes found in schedule', response.data['Validation Status'][0])
-        self.pages[0].schedule_duplicates = 1
+        self.pages[0].num_schedulable = 1
         self.pages[0].save()
 
     def test_find_speaker_clashes(self):

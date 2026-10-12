@@ -564,7 +564,7 @@ class EditorTestsMixin:
             validation.find_element(By.TAG_NAME,"li")
 
     def test_schedule_duplicate_hides(self):
-        """Test that setting schedule_duplicates to 0 for an item hides it"""
+        """Test that setting num_schedulable to 0 for an item hides it"""
         self.assertEqual(ScheduleItem.objects.count(), 0)
         self._start()
         # Count the number of pages in the list
@@ -584,10 +584,10 @@ class EditorTestsMixin:
             tab_items.append(x.text)
         self.assertEqual(len(tab_items), 6)
         # Cnange to pages to not be in the schedule
-        self.pages[1].schedule_duplicates = 0
+        self.pages[1].num_schedulable = 0
         self.pages[1].save()
 
-        self.pages[4].schedule_duplicates = 0
+        self.pages[4].num_schedulable = 0
         self.pages[4].save()
         # Reload the page
         self.driver.refresh()
@@ -609,10 +609,10 @@ class EditorTestsMixin:
         self.assertEqual(len(tab_items), 4)
 
         # Check that numbers > 1 are included in the list
-        self.pages[1].schedule_duplicates = 4
+        self.pages[1].num_schedulable = 4
         self.pages[1].save()
 
-        self.pages[2].schedule_duplicates = 3
+        self.pages[2].num_schedulable = 3
         self.pages[2].save()
         # Reload the page
         self.driver.refresh()

@@ -14,7 +14,7 @@ class Migration(migrations.Migration):
     operations = [
         migrations.AddField(
             model_name="talk",
-            name="schedule_duplicates",
+            name="num_schedulable",
             field=models.IntegerField(
                 default=1, validators=[django.core.validators.MinValueValidator(0)]
             ),

@@ -12,7 +12,7 @@ class Migration(migrations.Migration):
     operations = [
         migrations.AddField(
             model_name="page",
-            name="schedule_duplicates",
+            name="num_schedulable",
             field=models.IntegerField(
                 default=0, validators=[django.core.validators.MinValueValidator(0)]
             ),

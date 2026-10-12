@@ -70,7 +70,7 @@ def find_duplicate_schedule_items(all_items):
         else:
             occurrences[key] = [item]
     for cand in occurrences:
-        if len(occurrences[cand]) > cand.schedule_duplicates:
+        if len(occurrences[cand]) > cand.num_schedulable:
                duplicates.extend(occurrences[cand])
     return duplicates
 

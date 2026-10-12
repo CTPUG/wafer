@@ -24,7 +24,7 @@ def make_pages(n):
     for x in range(n):
         page = Page.objects.create(name="test page %s" % x,
                                    slug="test%s" % x,
-                                   schedule_duplicates=1)
+                                   num_schedulable=1)
         pages.append(page)
     return pages
 

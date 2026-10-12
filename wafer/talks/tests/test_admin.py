@@ -32,7 +32,7 @@ class TalkAdminTests(TestCase):
         value = notes
         if version.get_complete_version()[0] >= 5:
             value = [value]
-        return ScheduleDuplicatesFilter(None, {'schedule_duplicates': value}, Talk, self.admin)
+        return ScheduleDuplicatesFilter(None, {'num_schedulable': value}, Talk, self.admin)
 
     def test_has_notes_filter(self):
         """Test that we can filter the talk list on notes"""
@@ -66,7 +66,7 @@ class TalkAdminTests(TestCase):
         filtered = TestFilter.queryset(None, Talk.objects.all())
         self.assertEqual(len(filtered), 5)
         # Disallow a talk from the schedule
-        self.talk_r.schedule_duplicates = 0
+        self.talk_r.num_schedulable = 0
         self.talk_r.save()
         filtered = TestFilter.queryset(None, Talk.objects.all())
         self.assertEqual(len(filtered), 4)
@@ -76,7 +76,7 @@ class TalkAdminTests(TestCase):
         self.assertEqual(len(filtered), 1)
         self.assertEqual(list(filtered), [self.talk_r])
         # Add a talk with mutiplie duplicates
-        self.talk_a.schedule_duplicates = 3
+        self.talk_a.num_schedulable = 3
         self.talk_a.save()
         # Talk should be in the 'duplicates allowed list'
         TestFilter = self._make_duplicates_filter('2')

@@ -127,11 +127,15 @@ Duplicate items
 ===============
 
 Wafer supports having duplicates of an item in the schedule, but the number
-of allowed duplicates needs to be set on the item. By default, talks are
-created with an allowed duplicate count of 1 (so they can be added to the schedule)
-and pages have a default of 0.
+of times an item can be scheduled needs to be set on the item via the
+``num_schedulable`` property.
 
-The schedule validation will warn if the number of duplicates is exceeded.
+By default, talks are created with an allowed count of 1 (so they can be added
+to the schedule) and pages with a allowed count of 0 (so are not schedulable by
+default).
+
+The schedule validation will warn if the number of allowed instances in the
+schedule is exceeded.
 
 Hiding the schedule while editing
 =================================

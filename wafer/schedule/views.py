@@ -408,7 +408,7 @@ class ScheduleEditView(TemplateView):
 
         public_talks = Talk.objects.filter(Q(status=ACCEPTED) |
                                            Q(status=CANCELLED),
-                                           schedule_duplicates__gt=0)
+                                           num_schedulable__gt=0)
         public_talks = public_talks.order_by("talk_type", "talk_id")
         venues = Venue.objects.filter(blocks__in=[block])
         slots = Slot.objects.all().select_related(
@@ -427,7 +427,7 @@ class ScheduleEditView(TemplateView):
         context['slots'] = aggregated_slots
         context['talks_all'] = public_talks
         context['talks_unassigned'] = public_talks.filter(scheduleitem=None)
-        context['pages'] = Page.objects.filter(schedule_duplicates__gt=0)
+        context['pages'] = Page.objects.filter(num_schedulable__gt=0)
         context['all_blocks'] = blocks
         context['validation_errors'] = validate_schedule()
         return context
