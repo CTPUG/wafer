@@ -16,7 +16,7 @@ class Migration(migrations.Migration):
             model_name="talk",
             name="num_schedulable",
             field=models.IntegerField(
-                default=1, validators=[django.core.validators.MinValueValidator(0)]
+                default=1, validators=[django.core.validators.MinValueValidator(-1)]
             ),
         ),
     ]

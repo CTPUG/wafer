@@ -14,7 +14,7 @@ class Migration(migrations.Migration):
             model_name="page",
             name="num_schedulable",
             field=models.IntegerField(
-                default=0, validators=[django.core.validators.MinValueValidator(0)]
+                default=0, validators=[django.core.validators.MinValueValidator(-1)]
             ),
         ),
     ]

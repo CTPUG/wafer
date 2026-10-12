@@ -65,6 +65,9 @@ def find_duplicate_schedule_items(all_items):
             key = item.page
         else:
             continue
+        if key.num_schedulable == -1:
+            # No need to check this
+            continue
         if key in occurrences:
             occurrences[key].append(item)
         else:
