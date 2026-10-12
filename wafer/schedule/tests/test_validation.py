@@ -356,6 +356,27 @@ class ScheduleValidationTests(TestCase):
         all_items = prefetch_schedule_items()
         self.assertEqual(list(find_duplicate_schedule_items(all_items)), [])
 
+        # Check that setting num_schedulable to -1 also works
+
+        self.talk1.num_schedulable = -1
+        self.talk1.save()
+
+        self.talk2.num_schedulable = -1
+        self.talk2.save()
+
+        all_items = prefetch_schedule_items()
+        self.assertEqual(list(find_duplicate_schedule_items(all_items)), [])
+
+        # Check that further duplicates are also ignored with -1
+        self.items[5].talk_id = self.talk1.pk
+        self.items[5].save()
+
+        self.items[3].talk_id = self.talk1.pk
+        self.items[3].save()
+
+        all_items = prefetch_schedule_items()
+        self.assertEqual(list(find_duplicate_schedule_items(all_items)), [])
+
 
 class ScheduleValidationApiTests(TestCase):
     """Test that validation status can be checked via the api"""
