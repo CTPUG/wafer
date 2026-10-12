@@ -73,17 +73,24 @@ def validate_items_invalid_talk(all_items):
 def find_duplicate_schedule_items(all_items):
     """Find talks / pages assigned to mulitple schedule items"""
     duplicates = []
-    seen_talks = {}
+    occurrences = {}
     for item in all_items:
-        if item.talk and item.talk in seen_talks:
-            duplicates.append(item)
-            if seen_talks[item.talk] not in duplicates:
-                duplicates.append(seen_talks[item.talk])
+        if item.talk:
+            key = item.talk
+        elif item.page:
+            key = item.page
         else:
-            seen_talks[item.talk] = item
-        # We currently allow duplicate pages for cases were we need disjoint
-        # schedule items, like multiple open space sessions on different
-        # days and similar cases. This may be revisited later
+            continue
+        if key.num_schedulable == -1:
+            # No need to check this
+            continue
+        if key in occurrences:
+            occurrences[key].append(item)
+        else:
+            occurrences[key] = [item]
+    for cand in occurrences:
+        if len(occurrences[cand]) > cand.num_schedulable:
+               duplicates.extend(occurrences[cand])
     return duplicates
 
 
@@ -184,7 +191,7 @@ register_schedule_item_validator(
         _('Clashes found in schedule.'))
 register_schedule_item_validator(
         find_duplicate_schedule_items, 'duplicates',
-        _('Duplicate schedule items found in schedule.'))
+        _('Schedule items found in schedule which exceed allowed number of duplicates.'))
 register_schedule_item_validator(
         validate_items_no_item, 'validation_no_item',
         _('Schedule items with no talk or page asigned found in schedule.'))
@@ -299,7 +306,7 @@ class BaseStartTimeFilter(admin.SimpleListFilter):
 
     def lookups(self, request, model_admin):
         values = [slot.get_formatted_start_time() for slot in Slot.objects.all()]
-        # We order drop duplicates and order globally.
+        # We drop duplicates and order globally.
         values = sorted(set(values))
         # It's not great to use the string value as the admin key, but we
         # don't have a better way of dealing with it unfortunately.

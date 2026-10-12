@@ -494,7 +494,7 @@ class ValidationTests(TestCase):
         slot2 = Slot.objects.create(start_time=start1, end_time=end)
 
         talk = create_talk('Test talk', status=ACCEPTED, username='john')
-        page = Page.objects.create(name="test page", slug="test")
+        page = Page.objects.create(name="test page", slug="test", num_schedulable=1)
 
         item1 = ScheduleItem.objects.create(venue=venue1,
                                             talk_id=talk.pk,
@@ -613,7 +613,7 @@ class ValidationTests(TestCase):
         slot3 = Slot.objects.create(start_time=start3, end_time=end)
 
         talk = create_talk('Test Talk', status=ACCEPTED, username='john')
-        page = Page.objects.create(name="test page", slug="test")
+        page = Page.objects.create(name="test page", slug="test", num_schedulable=1)
 
         item1 = ScheduleItem.objects.create(venue=venue1,
                                             talk_id=talk.pk)
@@ -661,19 +661,21 @@ class ValidationTests(TestCase):
 
         start1 = D.datetime(2013, 9, 22, 10, 0, 0, tzinfo=D.timezone.utc)
         start2 = D.datetime(2013, 9, 22, 11, 0, 0, tzinfo=D.timezone.utc)
-        end = D.datetime(2013, 9, 22, 12, 0, 0, tzinfo=D.timezone.utc)
+        start3 = D.datetime(2013, 9, 22, 12, 0, 0, tzinfo=D.timezone.utc)
+        end = D.datetime(2013, 9, 22, 13, 0, 0, tzinfo=D.timezone.utc)
 
         slot1 = Slot.objects.create(start_time=start1, end_time=start2)
-        slot2 = Slot.objects.create(start_time=start1, end_time=end)
+        slot2 = Slot.objects.create(start_time=start2, end_time=start3)
+        slot3 = Slot.objects.create(start_time=start3, end_time=end)
 
         talk = create_talk('Test talk', status=ACCEPTED, username='john')
-        page1 = Page.objects.create(name="test page", slug="test")
-        page2 = Page.objects.create(name="test page 2", slug="test2")
+        page1 = Page.objects.create(name="test page", slug="test", num_schedulable=1)
+        page2 = Page.objects.create(name="test page 2", slug="test2", num_schedulable=1)
 
         item1 = ScheduleItem.objects.create(venue=venue1,
                                             talk_id=talk.pk)
         item1.slots.add(slot1)
-        item2 = ScheduleItem.objects.create(venue=venue1,
+        item2 = ScheduleItem.objects.create(venue=venue2,
                                             talk_id=talk.pk)
         item2.slots.add(slot2)
 
@@ -681,12 +683,12 @@ class ValidationTests(TestCase):
         duplicates = find_duplicate_schedule_items(all_items)
         self.assertEqual(set(duplicates), set([item1, item2]))
 
-        item3 = ScheduleItem.objects.create(venue=venue2,
+        item3 = ScheduleItem.objects.create(venue=venue1,
                                             page_id=page1.pk)
         item3.slots.add(slot1)
-        item4 = ScheduleItem.objects.create(venue=venue2,
+        item4 = ScheduleItem.objects.create(venue=venue1,
                                             talk_id=talk.pk)
-        item4.slots.add(slot2)
+        item4.slots.add(slot3)
 
         all_items = prefetch_schedule_items()
         duplicates = find_duplicate_schedule_items(all_items)
@@ -699,6 +701,28 @@ class ValidationTests(TestCase):
         all_items = prefetch_schedule_items()
         duplicates = find_duplicate_schedule_items(all_items)
         self.assertEqual(set(duplicates), set([item1, item2]))
+
+        # Change the allowed duplicate number
+        talk.num_schedulable = 2
+        talk.save()
+        all_items = prefetch_schedule_items()
+        duplicates = find_duplicate_schedule_items(all_items)
+        assert set(duplicates) == set([])
+
+        # Check that adding a new duplicate now breaks
+        item4.talk_id = talk.pk
+        item4.page_id = None
+        item4.save()
+        all_items = prefetch_schedule_items()
+        duplicates = find_duplicate_schedule_items(all_items)
+        assert set(duplicates) == set([item1, item2, item4])
+
+        # And that this can be resolved by allowing more duplicates
+        talk.num_schedulable = 3
+        talk.save()
+        all_items = prefetch_schedule_items()
+        duplicates = find_duplicate_schedule_items(all_items)
+        assert set(duplicates) == set([])
 
     def test_venues(self):
         """Test that we detect venues violating the day constraints
@@ -723,7 +747,7 @@ class ValidationTests(TestCase):
 
         slot1 = Slot.objects.create(start_time=start1, end_time=start2)
 
-        page = Page.objects.create(name="test page", slug="test")
+        page = Page.objects.create(name="test page", slug="test", num_schedulable=1)
 
         item1 = ScheduleItem.objects.create(venue=venue1,
                                             page_id=page.pk)
@@ -781,7 +805,8 @@ class ValidationTests(TestCase):
                                     tzinfo=D.timezone.utc))
         venue1 = Venue.objects.create(order=1, name='Venue 1')
         venue1.blocks.add(day1)
-        page = Page.objects.create(name="test page", slug="test")
+        page = Page.objects.create(name="test page", slug="test", num_schedulable=1)
+        page2 = Page.objects.create(name="test page 2", slug="test2", num_schedulable=1)
 
         start1 = D.datetime(2013, 9, 22, 10, 0, 0, tzinfo=D.timezone.utc)
         start2 = D.datetime(2013, 9, 22, 11, 0, 0, tzinfo=D.timezone.utc)
@@ -809,7 +834,7 @@ class ValidationTests(TestCase):
         self.assertIn('items with no talk or page asigned', ''.join(errors))
 
         # Fix the invalid item
-        item2.page_id = page.pk
+        item2.page_id = page2.pk
         item2.save()
         # Schedule is still invalid, but only the clash remains
         check_schedule.invalidate()

@@ -296,6 +296,92 @@ class ScheduleValidationTests(TestCase):
         self.assertIn(self.items[7], new_result[0][1])
 
 
+    def test_duplicate_multiple_schedule_items(self):
+        """Add more tests to the behavior of num_schedulable"""
+        all_items = prefetch_schedule_items()
+        self.assertEqual(list(find_duplicate_schedule_items(all_items)), [])
+
+        self.talk1.num_schedulable = 2
+        self.talk1.save()
+
+        # Check that fewer than num_schedulable is valid
+        self.items[0].page_id = None
+        self.items[0].talk_id = self.talk1.pk
+        self.items[0].save()
+
+        all_items = prefetch_schedule_items()
+        self.assertEqual(list(find_duplicate_schedule_items(all_items)), [])
+
+        # Check that equal to num_schedulable is valid
+        self.items[6].page_id = None
+        self.items[6].talk_id = self.talk1.pk
+        self.items[6].save()
+
+        all_items = prefetch_schedule_items()
+        self.assertEqual(list(find_duplicate_schedule_items(all_items)), [])
+
+        # Check that more than the number of allowed duplicates fails
+
+        self.items[4].page_id = None
+        self.items[4].talk_id = self.talk1.pk
+        self.items[4].save()
+
+        all_items = prefetch_schedule_items()
+        result = list(find_duplicate_schedule_items(all_items))
+        self.assertEqual(len(result), 3)
+        self.assertIn(self.items[0], result)
+        self.assertIn(self.items[4], result)
+        self.assertIn(self.items[6], result)
+
+        # Assert that multiple duplicate talks are detected
+
+        self.items[5].page_id = None
+        self.items[5].talk_id = self.talk2.pk
+        self.items[5].save()
+
+        self.items[3].page_id = None
+        self.items[3].talk_id = self.talk2.pk
+        self.items[3].save()
+
+        all_items = prefetch_schedule_items()
+        result = list(find_duplicate_schedule_items(all_items))
+        self.assertEqual(len(result), 5)
+        self.assertIn(self.items[5], result)
+        self.assertIn(self.items[3], result)
+
+        # Check that setting num_schedulable appropriately fixes stuff
+
+        self.talk1.num_schedulable = 3
+        self.talk1.save()
+
+        self.talk2.num_schedulable = 2
+        self.talk2.save()
+
+        all_items = prefetch_schedule_items()
+        self.assertEqual(list(find_duplicate_schedule_items(all_items)), [])
+
+        # Check that setting num_schedulable to -1 also works
+
+        self.talk1.num_schedulable = -1
+        self.talk1.save()
+
+        self.talk2.num_schedulable = -1
+        self.talk2.save()
+
+        all_items = prefetch_schedule_items()
+        self.assertEqual(list(find_duplicate_schedule_items(all_items)), [])
+
+        # Check that further duplicates are also ignored with -1
+        self.items[5].talk_id = self.talk1.pk
+        self.items[5].save()
+
+        self.items[3].talk_id = self.talk1.pk
+        self.items[3].save()
+
+        all_items = prefetch_schedule_items()
+        self.assertEqual(list(find_duplicate_schedule_items(all_items)), [])
+
+
 class ScheduleValidationApiTests(TestCase):
     """Test that validation status can be checked via the api"""
 
@@ -364,8 +450,19 @@ class ScheduleValidationApiTests(TestCase):
         c = create_client('super', superuser=True)
         response = c.get('/schedule/api/validate/')
         self.assertEqual(response.status_code, 200)
+        # We have a clash and 2 duplicates reported
+        self.assertEqual(len(response.data['Validation Status']), 3)
+        self.assertIn('Clashes found in schedule', response.data['Validation Status'][0])
+        self.assertIn('exceed allowed number of duplicates', response.data['Validation Status'][1])
+        # Check that changing the number of duplicates allowed works as expected
+        self.pages[0].num_schedulable = 2
+        self.pages[0].save()
+        response = c.get('/schedule/api/validate/')
+        self.assertEqual(response.status_code, 200)
         self.assertEqual(len(response.data['Validation Status']), 1)
         self.assertIn('Clashes found in schedule', response.data['Validation Status'][0])
+        self.pages[0].num_schedulable = 1
+        self.pages[0].save()
 
     def test_find_speaker_clashes(self):
         """Test that speaker clashes are reported"""
