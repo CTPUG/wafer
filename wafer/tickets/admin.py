@@ -49,6 +49,7 @@ class TicketTypeAdmin(admin.ModelAdmin):
 
 class TicketAdmin(admin.ModelAdmin):
     list_filter = (ClaimedFilter, 'type')
+    search_fields = ('email', '=barcode')
 
 
 admin.site.register(Ticket, TicketAdmin)
