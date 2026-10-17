@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-12 13:53+0000\n"
+"POT-Creation-Date: 2026-10-17 09:06+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -317,58 +317,67 @@ msgstr ""
 msgid "You can register after your account is activated."
 msgstr ""
 
-#: wafer/schedule/admin.py:175
+#: wafer/schedule/admin.py:191
 msgid "Clashes found in schedule."
 msgstr ""
 
-#: wafer/schedule/admin.py:178
+#: wafer/schedule/admin.py:194
 msgid ""
 "Schedule items found in schedule which exceed allowed number of duplicates."
 msgstr ""
 
-#: wafer/schedule/admin.py:181
-msgid "Invalid schedule items found in schedule."
+#: wafer/schedule/admin.py:197
+msgid "Schedule items with no talk or page asigned found in schedule."
 msgstr ""
 
-#: wafer/schedule/admin.py:184
+#: wafer/schedule/admin.py:200
+msgid "Schedule items with both a talk and a page asigned found in schedule."
+msgstr ""
+
+#: wafer/schedule/admin.py:203
+msgid ""
+"Schedule items with a talk an incorrect state asigned found in schedule."
+msgstr ""
+
+#: wafer/schedule/admin.py:206
 msgid "Non contiguous slots found in schedule."
 msgstr ""
 
-#: wafer/schedule/admin.py:187
+#: wafer/schedule/admin.py:209
 msgid "Invalid venues found in schedule."
 msgstr ""
 
-#: wafer/schedule/admin.py:190
+#: wafer/schedule/admin.py:212
 #: wafer/schedule/templates/admin/scheduleitem_list.html:61
 msgid "Common speaker in simultaneous schedule items"
 msgstr ""
 
-#: wafer/schedule/admin.py:230
+#: wafer/schedule/admin.py:252
 msgid "Block"
 msgstr ""
 
-#: wafer/schedule/admin.py:282 wafer/schedule/models.py:327
+#: wafer/schedule/admin.py:304 wafer/schedule/models.py:329
 msgid "Start Time"
 msgstr ""
 
-#: wafer/schedule/admin.py:338
+#: wafer/schedule/admin.py:360
 msgid "Venue"
 msgstr ""
 
-#: wafer/schedule/admin.py:424
+#: wafer/schedule/admin.py:446
 msgid "Additional slots"
 msgstr ""
 
-#: wafer/schedule/admin.py:425
+#: wafer/schedule/admin.py:447
 msgid "Create this number of additional slots following this one"
 msgstr ""
 
-#: wafer/schedule/admin.py:486
+#: wafer/schedule/admin.py:508
 #, python-format
 msgid "Additional slot %(obj)s added successfully"
 msgstr ""
 
-#: wafer/schedule/admin.py:493
+#: wafer/schedule/admin.py:515
 #, python-format
 msgid "Failed to create new slot - %s"
 msgstr ""
@@ -478,126 +487,118 @@ msgstr ""
 msgid "Session Chair Checklist"
 msgstr ""
 
-#: wafer/schedule/templates/wafer.schedule/checklist_item_detail.html:11
+#: wafer/schedule/templates/wafer.schedule/checklist_item_detail_base.html:12
 msgid "Notes"
 msgstr ""
 
-#: wafer/schedule/templates/wafer.schedule/checklist_item_detail.html:14
+#: wafer/schedule/templates/wafer.schedule/checklist_item_detail_base.html:17
 msgid "Preparation Checklist"
 msgstr ""
 
-#: wafer/schedule/templates/wafer.schedule/checklist_item_detail.html:16
+#: wafer/schedule/templates/wafer.schedule/checklist_item_detail_base.html:19
 msgid ""
 "Introduce yourself to the speaker and confirm their talk description and how "
 "to pronounce their names"
 msgstr ""
 
-#: wafer/schedule/templates/wafer.schedule/checklist_item_detail.html:17
+#: wafer/schedule/templates/wafer.schedule/checklist_item_detail_base.html:20
 msgid "Ask if there is anything you need to take note of."
 msgstr ""
 
-#: wafer/schedule/templates/wafer.schedule/checklist_item_detail.html:18
+#: wafer/schedule/templates/wafer.schedule/checklist_item_detail_base.html:21
 msgid ""
 "Show the speaker cards that indicate how close they are to the end of the "
 "talk"
 msgstr ""
 
-#: wafer/schedule/templates/wafer.schedule/checklist_item_detail.html:19
+#: wafer/schedule/templates/wafer.schedule/checklist_item_detail_base.html:22
 msgid ""
 "Make sure the speaker has tested their laptop with the projector (AV team "
 "may need to assist)"
 msgstr ""
 
-#: wafer/schedule/templates/wafer.schedule/checklist_item_detail.html:20
+#: wafer/schedule/templates/wafer.schedule/checklist_item_detail_base.html:23
 msgid ""
 "Make sure the speaker is familiar with their microphone (AV team may need to "
 "assist)"
 msgstr ""
 
-#: wafer/schedule/templates/wafer.schedule/checklist_item_detail.html:23
+#: wafer/schedule/templates/wafer.schedule/checklist_item_detail_base.html:28
 msgid "Talk checklist"
 msgstr ""
 
-#: wafer/schedule/templates/wafer.schedule/checklist_item_detail.html:25
+#: wafer/schedule/templates/wafer.schedule/checklist_item_detail_base.html:30
 msgid "At the start, introduce the speaker and the talk,"
 msgstr ""
 
-#: wafer/schedule/templates/wafer.schedule/checklist_item_detail.html:26
-msgid ""
-"Let the online attendees know that they can ask questions, but to use <code>!"
-"question</code> so that they show up."
-msgstr ""
-
-#: wafer/schedule/templates/wafer.schedule/checklist_item_detail.html:27
+#: wafer/schedule/templates/wafer.schedule/checklist_item_detail_base.html:31
 msgid "Ask the audience to give them a round of applause to begin the talk."
 msgstr ""
 
-#: wafer/schedule/templates/wafer.schedule/checklist_item_detail.html:30
+#: wafer/schedule/templates/wafer.schedule/checklist_item_detail_base.html:36
 msgid "During the talk"
 msgstr ""
 
-#: wafer/schedule/templates/wafer.schedule/checklist_item_detail.html:32
+#: wafer/schedule/templates/wafer.schedule/checklist_item_detail_base.html:38
 msgid "Warn the speaker with the cards when their talk is about to end"
 msgstr ""
 
-#: wafer/schedule/templates/wafer.schedule/checklist_item_detail.html:34
+#: wafer/schedule/templates/wafer.schedule/checklist_item_detail_base.html:40
 msgid ""
-"The below times are only indicative. We usually have, for example, a 15-"
-"minute buffer for a 30-minute talk in a 45-minute schedule slot, so if the "
-"speaker starts 10 minutes late, then they still get their full 30 minutes, "
-"and 5 minutes of Q&A."
+"The below times are only indicative and should be adjusted as needed for "
+"unexpected delays or changes to the schedule"
 msgstr ""
 
-#: wafer/schedule/templates/wafer.schedule/checklist_item_detail.html:35
+#: wafer/schedule/templates/wafer.schedule/checklist_item_detail_base.html:41
 msgid ""
 "So note the actual times next to the suggested ones, depending on when the "
 "speaker actually starts."
 msgstr ""
 
-#: wafer/schedule/templates/wafer.schedule/checklist_item_detail.html:39
+#: wafer/schedule/templates/wafer.schedule/checklist_item_detail_base.html:45
 msgid "Time of talk end"
 msgstr ""
 
-#: wafer/schedule/templates/wafer.schedule/checklist_item_detail.html:41
+#: wafer/schedule/templates/wafer.schedule/checklist_item_detail_base.html:47
 #, python-format
 msgid "Time %(minutes)s minutes before talk end"
 msgstr ""
 
-#: wafer/schedule/templates/wafer.schedule/checklist_item_detail.html:44
+#: wafer/schedule/templates/wafer.schedule/checklist_item_detail_base.html:50
 msgid "WARNING: No time and day specified for this talk"
 msgstr ""
 
-#: wafer/schedule/templates/wafer.schedule/checklist_item_detail.html:48
+#: wafer/schedule/templates/wafer.schedule/checklist_item_detail_base.html:56
 msgid "Q&amp;A"
 msgstr ""
 
-#: wafer/schedule/templates/wafer.schedule/checklist_item_detail.html:49
+#: wafer/schedule/templates/wafer.schedule/checklist_item_detail_base.html:57
 msgid "When the speaker has finished, and there is time for questions:"
 msgstr ""
 
-#: wafer/schedule/templates/wafer.schedule/checklist_item_detail.html:51
+#: wafer/schedule/templates/wafer.schedule/checklist_item_detail_base.html:59
 msgid ""
 "Thank the speaker and compliment them on the talk, and announce that they "
 "are ready for Q&amp;A"
 msgstr ""
 
-#: wafer/schedule/templates/wafer.schedule/checklist_item_detail.html:52
+#: wafer/schedule/templates/wafer.schedule/checklist_item_detail_base.html:60
 msgid ""
 "EVERY audience member who is asking questions is using the handheld "
-"microphone (otherwise online viewers won't hear them)"
+"microphone"
 msgstr ""
 
-#: wafer/schedule/templates/wafer.schedule/checklist_item_detail.html:53
+#: wafer/schedule/templates/wafer.schedule/checklist_item_detail_base.html:61
 msgid ""
 "When there are no more questions, or there is no more time left, thank the "
 "speaker again and ask for a final applause"
 msgstr ""
 
-#: wafer/schedule/templates/wafer.schedule/checklist_item_detail.html:56
+#: wafer/schedule/templates/wafer.schedule/checklist_item_detail_base.html:66
 msgid "Post talk"
 msgstr ""
 
-#: wafer/schedule/templates/wafer.schedule/checklist_item_detail.html:58
+#: wafer/schedule/templates/wafer.schedule/checklist_item_detail_base.html:68
 msgid "Make sure the microphones are turned off and returned to the AV desk."
 msgstr ""
 

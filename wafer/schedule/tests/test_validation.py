@@ -8,7 +8,9 @@ from wafer.talks.tests.fixtures import create_talk
 from wafer.talks.models import ACCEPTED, CANCELLED, REJECTED
 
 from wafer.schedule.models import ScheduleBlock, Slot, ScheduleItem, Venue
-from wafer.schedule.admin import (find_clashes, find_invalid_venues, validate_items,
+from wafer.schedule.admin import (find_clashes, find_invalid_venues,
+                                  validate_items_no_item, validate_items_invalid_talk,
+                                  validate_items_both_talk_and_page,
                                   find_duplicate_schedule_items, find_speaker_clashes,
                                   prefetch_schedule_items)
 from wafer.schedule.tests.test_views import make_pages, make_items, create_client
@@ -145,43 +147,45 @@ class ScheduleValidationTests(TestCase):
         cancelled_talk = create_talk('Talk Rejected', CANCELLED, user=self.author1)
 
         all_items = prefetch_schedule_items()
-        self.assertEqual(list(validate_items(all_items)), [])
+        self.assertEqual(list(validate_items_no_item(all_items)), [])
+        self.assertEqual(list(validate_items_both_talk_and_page(all_items)), [])
+        self.assertEqual(list(validate_items_invalid_talk(all_items)), [])
 
         # Check that a cancelled talk doesn't fail
         self.items[7].page_id = None
         self.items[7].talk_id = cancelled_talk.pk
         self.items[7].save()
         all_items = prefetch_schedule_items()
-        self.assertEqual(list(validate_items(all_items)), [])
+        self.assertEqual(list(validate_items_no_item(all_items)), [])
+        self.assertEqual(list(validate_items_both_talk_and_page(all_items)), [])
+        self.assertEqual(list(validate_items_invalid_talk(all_items)), [])
 
         # Test schedule item with no talk or page fail
         self.items[0].page_id = None
         self.items[0].save()
         all_items = prefetch_schedule_items()
-        result = list(validate_items(all_items))
-        self.assertEqual(len(result), 1)
-        self.assertIn(self.items[0], result)
+        self.assertEqual(list(validate_items_no_item(all_items)), [self.items[0]])
+        self.assertEqual(list(validate_items_both_talk_and_page(all_items)), [])
+        self.assertEqual(list(validate_items_invalid_talk(all_items)), [])
 
         # Test that schedule item with both a talk and page fails
         self.items[1].page_id = self.pages[0].pk
         self.items[1].talk_id = self.talk1.pk
         self.items[1].save()
         all_items = prefetch_schedule_items()
-        result = list(validate_items(all_items))
-        self.assertEqual(len(result), 2)
-        self.assertIn(self.items[0], result)
-        self.assertIn(self.items[1], result)
+        self.assertEqual(list(validate_items_no_item(all_items)), [self.items[0]])
+        self.assertEqual(list(validate_items_both_talk_and_page(all_items)), [self.items[1]])
+        self.assertEqual(list(validate_items_invalid_talk(all_items)), [])
 
         # Test that a rejected talk on the schedule fails
         self.items[2].page_id = None
         self.items[2].talk_id = rejected_talk.pk
         self.items[2].save()
         all_items = prefetch_schedule_items()
-        result = list(validate_items(all_items))
-        self.assertEqual(len(result), 3)
-        self.assertIn(self.items[0], result)
-        self.assertIn(self.items[1], result)
-        self.assertIn(self.items[2], result)
+        result = []
+        self.assertEqual(list(validate_items_no_item(all_items)), [self.items[0]])
+        self.assertEqual(list(validate_items_both_talk_and_page(all_items)), [self.items[1]])
+        self.assertEqual(list(validate_items_invalid_talk(all_items)), [self.items[2]])
 
     def test_find_speaker_clashes(self):
         """Test the the `find_spekaer_clashes` check works"""
