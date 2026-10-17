@@ -125,6 +125,7 @@ class TalkView(BuildableDetailView):
         user = self.request.user
 
         context['can_edit'] = talk.can_edit(user)
+        context['extra_fields'] = talk.get_extra_fields(user)
 
         can_review = talk.can_review(user)
         context['can_review'] = can_review

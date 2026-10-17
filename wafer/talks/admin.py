@@ -1,6 +1,8 @@
 from django.contrib import admin
 from django.db import models
 from django.db.models import Q
+from django.utils.html import format_html_join
+from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
 
 from reversion.admin import VersionAdmin
@@ -144,6 +146,7 @@ class TalkAdmin(CompareVersionAdmin):
     search_fields = ('title',)
     autocomplete_fields = ('authors', 'corresponding_author')
     exclude = ('kv',)
+    readonly_fields = ('extra_fields',)
 
     inlines = [
         TalkUrlInline,
@@ -177,6 +180,14 @@ class TalkAdmin(CompareVersionAdmin):
         return obj.review_score_annotation
 
     review_score.admin_order_field = 'review_score_annotation'
+
+    @admin.display(description=_('extra fields'))
+    def extra_fields(self, obj):
+        if not obj.pk:
+            return '-'
+        return format_html_join(
+            mark_safe('<br>'), '<strong>{}</strong>: {}',
+            obj.get_extra_fields()) or '-'
 
 
 class TalkTypeAdmin(VersionAdmin):

@@ -13,8 +13,10 @@ from crispy_forms.layout import Submit, HTML
 from django_select2.forms import Select2MultipleWidget
 from markitup.widgets import MarkItUpWidget
 
+from wafer.kv.forms import KeyValueFieldsMixin
 from wafer.talks.models import (
-    Review, ReviewAspect, Score, Talk, TalkType, Track, render_author)
+    Review, ReviewAspect, Score, Talk, TalkType, Track, render_author,
+    TALK_EXTRA_FIELDS_GROUP)
 
 
 def get_talk_form_class():
@@ -69,9 +71,15 @@ class TalkCategorisationField(forms.ModelChoiceField):
         return u'%s: %s' % (obj.name, obj.description)
 
 
-class TalkForm(forms.ModelForm):
+class TalkForm(KeyValueFieldsMixin, forms.ModelForm):
     talk_type = TalkCategorisationField(model=TalkType)
     track = TalkCategorisationField(model=Track)
+
+    kv_group_name = TALK_EXTRA_FIELDS_GROUP
+
+    @classmethod
+    def get_kv_fields(cls):
+        return settings.WAFER_TALK_EXTRA_FIELDS
 
     def __init__(self, *args, **kwargs):
         self.user = kwargs.pop('user')
