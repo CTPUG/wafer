@@ -148,10 +148,17 @@ Wafer's settings
     A list of SSO mechanisms in use.
     Possible options are: ``'github'``, ``'gitlab'``.
 
+``WAFER_TALK_EXTRA_FIELDS``
+    A dictionary of extra, conference specific, fields to add to the
+    talk submission form. The answers are stored in the key-value store.
+    See :ref:`talk_extra_fields` for the format.
+    Default: ``{}``.
+
 ``WAFER_TALK_FORM``
     The form used for talk/event submission.
     There is a reasonable default form, but this can be changed to
     customise the submission process.
+    See also ``WAFER_TALK_EXTRA_FIELDS``.
 
 ``WAFER_TALK_LANGUAGUES``
     A tuple of tuples, indicating the languages that users can select when

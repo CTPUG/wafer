@@ -148,6 +148,21 @@
       </div>
     {% endif %}
   {% endif %}
+  {% if extra_fields %}
+    <div id="extra_fields" class="card mb-3">
+      <div class="card-header">
+        <h2>{% trans "Additional information" %}</h2>
+      </div>
+      <div class="card-body">
+        <dl class="card-text">
+          {% for label, value in extra_fields %}
+            <dt>{{ label }}</dt>
+            <dd>{{ value|urlize|linebreaksbr }}</dd>
+          {% endfor %}
+        </dl>
+      </div>
+    </div>
+  {% endif %}
   {% if perms.talks.edit_private_notes and object.private_notes %}
     <div id="private_notes" class="card mb-3">
       <div class="card-header">

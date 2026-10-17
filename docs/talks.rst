@@ -47,6 +47,86 @@ not be public.
 Talks can have multiple authors, but only one corresponding author. Only
 the corresponding author can edit the talk submission.
 
+.. _talk_extra_fields:
+
+Adding conference-specific questions
+====================================
+
+Conferences often want to ask questions on the talk form that are specific
+to that conference, such as whether there will be multiple presenters, or
+asking the speaker to acknowledge the conference guidelines. These can be
+added without changing the database, using the ``WAFER_TALK_EXTRA_FIELDS``
+setting. The answers are stored as key-value pairs (in the
+``Talk Extra Fields`` group) on the talk.
+
+``WAFER_TALK_EXTRA_FIELDS`` is a dictionary mapping a key to a description
+of the field::
+
+    WAFER_TALK_EXTRA_FIELDS = {
+        'multiple_presenters': {
+            'label': 'Will there be multiple presenters?',
+            'type': 'boolean',
+            'visibility': 'public',
+        },
+        'shows_video': {
+            'label': 'Will you be showing video?',
+            'type': 'choice',
+            'choices': (('no', 'No'), ('silent', 'Yes, without audio'),
+                        ('audio', 'Yes, with audio')),
+            'required': True,
+        },
+        'guidelines': {
+            'label': 'I have read and accept the conference guidelines',
+            'help_text': 'See https://example.com/guidelines',
+            'type': 'boolean',
+            'required': True,
+            'visibility': 'organisers',
+        },
+    }
+
+Each field description can contain:
+
+``label``
+    The label shown on the form and when displaying the answer.
+
+``type``
+    One of ``boolean``, ``char``, ``text``, ``integer``, ``url``, ``choice``
+    or ``multiple_choice``. Defaults to ``char``.
+
+``choices``
+    For ``choice`` and ``multiple_choice`` fields, a sequence of
+    ``(value, label)`` pairs.
+
+``required``
+    Whether the field must be filled in. Defaults to ``False``.
+    For ``boolean`` fields, this means the box must be ticked.
+
+``help_text``
+    Optional help text displayed with the field.
+
+``visibility``
+    Who may see the answer on the talk page. One of ``public`` (everyone
+    who can see the talk), ``reviewers`` (users who can review the talk or
+    view all talks) or ``organisers`` (users who can edit all talks).
+    Defaults to ``reviewers``. The talk's authors can always see their own
+    answers, and all answers are shown on the talk's admin page.
+
+The keys must not clash with the names of the existing talk form fields.
+
+For more complex cases, such as fields which depend on the talk type, a
+custom form can be specified with ``WAFER_TALK_FORM``. A subclass of
+``wafer.talks.forms.TalkForm`` can override the ``get_kv_fields``
+classmethod to return the field descriptions.
+
+The answers can be queried from the key-value store, for example::
+
+    from wafer.kv.models import KeyValue
+    from wafer.talks.models import TALK_EXTRA_FIELDS_GROUP
+
+    for kv in KeyValue.objects.filter(group__name=TALK_EXTRA_FIELDS_GROUP,
+                                      key='shows_video', value='audio'):
+        print(kv.talk_set.get())
+
 Talk Mentors
 ============
 

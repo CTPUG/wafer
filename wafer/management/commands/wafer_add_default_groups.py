@@ -31,6 +31,7 @@ class Command(BaseCommand):
         ),
         'Registration': (),
         'Online Profiles': (),
+        'Talk Extra Fields': (),
     }
 
     def add_wafer_groups(self):

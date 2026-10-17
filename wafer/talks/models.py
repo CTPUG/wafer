@@ -24,6 +24,9 @@ REJECTED = 'R'
 CANCELLED = 'C'
 WITHDRAWN = 'W'
 
+# KeyValue group used to store the extra fields from the talk form
+TALK_EXTRA_FIELDS_GROUP = 'Talk Extra Fields'
+
 
 # Utility functions used in the forms
 # We define this here, rather than in the users model, to avoid import
@@ -376,6 +379,44 @@ class Talk(models.Model):
     def can_review(self, user):
         return (user.has_perm('talks.add_review')
                 and not self._is_among_authors(user))
+
+    def get_extra_fields(self, user=None):
+        """Return (label, value) pairs for the key-value backed extra
+           fields from the talk form that the given user may see.
+
+           If no user is given, all the fields are returned."""
+        # Imported here to avoid an import loop
+        from wafer.kv.forms import (
+            PUBLIC, REVIEWERS, ORGANISERS, kv_display_value)
+        from wafer.talks.forms import get_talk_form_class
+
+        # Custom talk forms may not include the key-value mixin
+        get_kv_fields = getattr(get_talk_form_class(), 'get_kv_fields', dict)
+        kv_fields = get_kv_fields()
+        if not kv_fields:
+            return []
+        allowed = {PUBLIC}
+        if user is None:
+            allowed.update((REVIEWERS, ORGANISERS))
+        else:
+            is_author = (user.is_authenticated
+                         and self._is_among_authors(user))
+            if (is_author or user.has_perm('talks.view_all_talks')
+                    or self.can_review(user)):
+                allowed.add(REVIEWERS)
+            if is_author or user.has_perm('talks.change_talk'):
+                allowed.add(ORGANISERS)
+        values = {kv.key: kv.value for kv in self.kv.filter(
+            group__name=TALK_EXTRA_FIELDS_GROUP)}
+        extra_fields = []
+        for key, spec in kv_fields.items():
+            if key not in values:
+                continue
+            if spec.get('visibility', REVIEWERS) not in allowed:
+                continue
+            extra_fields.append(
+                (spec.get('label', key), kv_display_value(spec, values[key])))
+        return extra_fields
 
 
 @reversion.register()

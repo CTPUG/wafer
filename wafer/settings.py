@@ -270,6 +270,11 @@ WAFER_TALKS_OPEN = True
 # The form used for talk submission
 WAFER_TALK_FORM = 'wafer.talks.forms.TalkForm'
 
+# Extra, conference specific, fields on the talk form.
+# These are stored as KeyValue pairs on the talk. See the documentation for
+# the format.
+WAFER_TALK_EXTRA_FIELDS = {}
+
 # Languages the talks can be in
 WAFER_TALK_LANGUAGES = ()
 
