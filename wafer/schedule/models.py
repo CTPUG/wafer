@@ -85,6 +85,12 @@ class Venue(models.Model):
         default=False,
         help_text=_("Venue has video coverage"))
 
+    slug = models.SlugField(
+        blank=True,
+        help_text=_(
+            "Short name used in stream URLs and IRC channel names. " 
+            "Keep it unchanged if the venue is renamed"))
+
     class Meta:
         ordering = ['order', 'name']
 
