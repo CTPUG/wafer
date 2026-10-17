@@ -9,7 +9,8 @@ from wafer.schedule.admin import (
     SlotAdmin, SlotBlockFilter, SlotStartTimeFilter,
     check_schedule, find_clashes, find_duplicate_schedule_items,
     find_invalid_venues, find_non_contiguous, prefetch_schedule_items,
-    validate_items, validate_schedule)
+    validate_items_no_item, validate_items_both_talk_and_page,
+    validate_items_invalid_talk, validate_schedule)
 from wafer.schedule.models import ScheduleBlock, Venue, Slot, ScheduleItem
 from wafer.talks.models import (ACCEPTED, REJECTED, CANCELLED, SUBMITTED,
                                 UNDER_CONSIDERATION)
@@ -434,22 +435,22 @@ class ValidationTests(TestCase):
         all_items = prefetch_schedule_items()
         # Needs to be an explicit list, not a generator on python 3 here
         clashes = list(find_clashes(all_items))
-        assert len(clashes) == 1
+        self.assertEqual(len(clashes), 1)
         pos = (venue1, slot1)
-        assert pos == clashes[0][0]
-        assert item1 in clashes[0][1]
-        assert item2 in clashes[0][1]
+        self.assertEqual(pos, clashes[0][0])
+        self.assertIn(item1, clashes[0][1])
+        self.assertIn(item2, clashes[0][1])
         # Create a overlapping clashes
         item2.slots.remove(slot1)
         item1.slots.add(slot2)
         item2.slots.add(slot2)
         all_items = prefetch_schedule_items()
         clashes = list(find_clashes(all_items))
-        assert len(clashes) == 1
+        self.assertEqual(len(clashes), 1)
         pos = (venue1, slot2)
-        assert pos == clashes[0][0]
-        assert item1 in clashes[0][1]
-        assert item2 in clashes[0][1]
+        self.assertEqual(pos, clashes[0][0])
+        self.assertIn(item1, clashes[0][1])
+        self.assertIn(item2, clashes[0][1])
         # Add a clash in a second venue
         item3 = ScheduleItem.objects.create(venue=venue2, details="Item 3")
         item4 = ScheduleItem.objects.create(venue=venue2, details="Item 4")
@@ -457,22 +458,22 @@ class ValidationTests(TestCase):
         item4.slots.add(slot2)
         all_items = prefetch_schedule_items()
         clashes = list(find_clashes(all_items))
-        assert len(clashes) == 2
+        self.assertEqual(len(clashes), 2)
         pos = (venue2, slot2)
-        assert pos in [x[0] for x in clashes]
+        self.assertIn(pos, [x[0] for x in clashes])
         clash_items = []
         for sublist in clashes:
             if sublist[0] == pos:
                 clash_items.extend(sublist[1])
-        assert item3 in clash_items
-        assert item4 in clash_items
+        self.assertIn(item3, clash_items)
+        self.assertIn(item4, clash_items)
         # Fix clashes
         item1.slots.remove(slot2)
         item3.slots.remove(slot2)
         item3.slots.add(slot1)
         all_items = prefetch_schedule_items()
         clashes = find_clashes(all_items)
-        assert len(clashes) == 0
+        self.assertEqual(len(clashes), 0)
 
     def test_validation(self):
         """Test that we detect validation errors correctly"""
@@ -501,8 +502,14 @@ class ValidationTests(TestCase):
         item1.slots.add(slot1)
 
         all_items = prefetch_schedule_items()
-        invalid = validate_items(all_items)
-        assert set(invalid) == set([item1])
+        invalid = validate_items_both_talk_and_page(all_items)
+        self.assertEqual(set(invalid), set([item1]))
+
+        invalid = validate_items_no_item(all_items)
+        self.assertEqual(set(invalid), set([]))
+
+        invalid = validate_items_invalid_talk(all_items)
+        self.assertEqual(set(invalid), set([]))
 
         item2 = ScheduleItem.objects.create(venue=venue1,
                                             talk_id=talk.pk)
@@ -512,40 +519,78 @@ class ValidationTests(TestCase):
         talk.status = REJECTED
         talk.save()
         all_items = prefetch_schedule_items()
-        invalid = validate_items(all_items)
-        assert set(invalid) == set([item1, item2])
+        invalid = validate_items_both_talk_and_page(all_items)
+        self.assertEqual(set(invalid), set([item1]))
+
+        invalid = validate_items_no_item(all_items)
+        self.assertEqual(set(invalid), set([]))
+
+        invalid = validate_items_invalid_talk(all_items)
+        # We expect both here, becaue the invalid talk is
+        # on both items
+        set(invalid) == set([item1, item2])
 
         talk.status = SUBMITTED
         talk.save()
         all_items = prefetch_schedule_items()
-        invalid = validate_items(all_items)
-        assert set(invalid) == set([item1, item2])
+        invalid = validate_items_both_talk_and_page(all_items)
+        self.assertEqual(set(invalid), set([item1]))
+
+        invalid = validate_items_no_item(all_items)
+        self.assertEqual(set(invalid), set([]))
+
+        invalid = validate_items_invalid_talk(all_items)
+        self.assertEqual(set(invalid), set([item1, item2]))
 
         talk.status = CANCELLED
         talk.save()
         all_items = prefetch_schedule_items()
-        invalid = validate_items(all_items)
-        assert set(invalid) == set([item1])
+        invalid = validate_items_both_talk_and_page(all_items)
+        self.assertEqual(set(invalid), set([item1]))
+
+        invalid = validate_items_no_item(all_items)
+        self.assertEqual(set(invalid), set([]))
+
+        invalid = validate_items_invalid_talk(all_items)
+        self.assertEqual(set(invalid), set([]))
 
         talk.status = UNDER_CONSIDERATION
         talk.save()
         all_items = prefetch_schedule_items()
-        invalid = validate_items(all_items)
-        assert set(invalid) == set([item1, item2])
+        invalid = validate_items_both_talk_and_page(all_items)
+        self.assertEqual(set(invalid), set([item1]))
+
+        invalid = validate_items_no_item(all_items)
+        self.assertEqual(set(invalid), set([]))
+
+        invalid = validate_items_invalid_talk(all_items)
+        self.assertEqual(set(invalid), set([item1, item2]))
 
         talk.status = ACCEPTED
         talk.save()
         all_items = prefetch_schedule_items()
-        invalid = validate_items(all_items)
-        assert set(invalid) == set([item1])
+        invalid = validate_items_both_talk_and_page(all_items)
+        self.assertEqual(set(invalid), set([item1]))
+
+        invalid = validate_items_no_item(all_items)
+        self.assertEqual(set(invalid), set([]))
+
+        invalid = validate_items_invalid_talk(all_items)
+        self.assertEqual(set(invalid), set([]))
 
         item3 = ScheduleItem.objects.create(venue=venue1,
                                             talk_id=None, page_id=None)
         item3.slots.add(slot2)
 
         all_items = prefetch_schedule_items()
-        invalid = validate_items(all_items)
-        assert set(invalid) == set([item1, item3])
+        invalid = validate_items_both_talk_and_page(all_items)
+        self.assertEqual(set(invalid), set([item1]))
+
+        invalid = validate_items_no_item(all_items)
+        self.assertEqual(set(invalid), set([item3]))
+
+        invalid = validate_items_invalid_talk(all_items)
+        self.assertEqual(set(invalid), set([]))
 
     def test_non_contiguous(self):
         """Test that we detect items with non contiguous slots"""
@@ -582,7 +627,7 @@ class ValidationTests(TestCase):
         all_items = prefetch_schedule_items()
         invalid = find_non_contiguous(all_items)
         # Only item1 is invalid
-        assert set(invalid) == set([item1])
+        self.assertEqual(set(invalid), set([item1]))
 
         item1.slots.add(slot2)
         item1.slots.remove(slot1)
@@ -590,9 +635,13 @@ class ValidationTests(TestCase):
         item2.slots.remove(slot2)
 
         all_items = prefetch_schedule_items()
-        invalid = validate_items(all_items)
         # Everything is valid now
-        assert set(invalid) == set([])
+        invalid = validate_items_both_talk_and_page(all_items)
+        self.assertEqual(set(invalid), set([]))
+        invalid = validate_items_no_item(all_items)
+        self.assertEqual(set(invalid), set([]))
+        invalid = validate_items_invalid_talk(all_items)
+        self.assertEqual(set(invalid), set([]))
 
     def test_duplicates(self):
         """Test that we can detect duplicates talks and pages"""
@@ -632,7 +681,7 @@ class ValidationTests(TestCase):
 
         all_items = prefetch_schedule_items()
         duplicates = find_duplicate_schedule_items(all_items)
-        assert set(duplicates) == set([item1, item2])
+        self.assertEqual(set(duplicates), set([item1, item2]))
 
         item3 = ScheduleItem.objects.create(venue=venue1,
                                             page_id=page1.pk)
@@ -643,7 +692,7 @@ class ValidationTests(TestCase):
 
         all_items = prefetch_schedule_items()
         duplicates = find_duplicate_schedule_items(all_items)
-        assert set(duplicates) == set([item1, item2, item4])
+        self.assertEqual(set(duplicates), set([item1, item2, item4]))
 
         item4.page_id = page2.pk
         item4.talk_id = None
@@ -651,7 +700,7 @@ class ValidationTests(TestCase):
 
         all_items = prefetch_schedule_items()
         duplicates = find_duplicate_schedule_items(all_items)
-        assert set(duplicates) == set([item1, item2])
+        self.assertEqual(set(duplicates), set([item1, item2]))
 
         # Change the allowed duplicate number
         talk.num_schedulable = 2
@@ -711,8 +760,8 @@ class ValidationTests(TestCase):
         all_items = prefetch_schedule_items()
         # Needs to be an explicit list, as in the find_clashes test
         venues = list(find_invalid_venues(all_items))
-        assert venues[0][0] == venue2
-        assert set(venues[0][1]) == set([item2])
+        self.assertEqual(venues[0][0], venue2)
+        self.assertEqual(set(venues[0][1]), set([item2]))
 
         start1d2 = D.datetime(2013, 9, 23, 10, 0, 0, tzinfo=D.timezone.utc)
         start2d2 = D.datetime(2013, 9, 23, 11, 0, 0, tzinfo=D.timezone.utc)
@@ -722,8 +771,8 @@ class ValidationTests(TestCase):
         item3.slots.add(slot2)
         all_items = prefetch_schedule_items()
         venues = list(find_invalid_venues(all_items))
-        assert venues[0][0] == venue2
-        assert set(venues[0][1]) == set([item2])
+        self.assertEqual(venues[0][0], venue2)
+        self.assertEqual(set(venues[0][1]), set([item2]))
 
         item4 = ScheduleItem.objects.create(venue=venue1, page_id=page.pk)
         item5 = ScheduleItem.objects.create(venue=venue2, page_id=page.pk)
@@ -732,7 +781,7 @@ class ValidationTests(TestCase):
         item5.slots.add(slot1)
         all_items = prefetch_schedule_items()
         venues = list(find_invalid_venues(all_items))
-        assert set([x[0] for x in venues]) == set([venue1, venue2])
+        self.assertEqual(set([x[0] for x in venues]), set([venue1, venue2]))
         venue_1_items = []
         venue_2_items = []
         for sublist in venues:
@@ -740,8 +789,8 @@ class ValidationTests(TestCase):
                 venue_1_items.extend(sublist[1])
             elif sublist[0] == venue2:
                 venue_2_items.extend(sublist[1])
-        assert set(venue_1_items) == set([item4])
-        assert set(venue_2_items) == set([item2, item5])
+        self.assertEqual(set(venue_1_items), set([item4]))
+        self.assertEqual(set(venue_2_items), set([item2, item5]))
 
     def test_validate_schedule(self):
         """Check the behaviour of validate schedule
@@ -780,6 +829,10 @@ class ValidationTests(TestCase):
         # Invalid item & clash should be reported
         errors = validate_schedule()
         self.assertEqual(len(errors), 2)
+        # Check that the right error message is reported
+        self.assertIn('Clashes found in schedule', ''.join(errors))
+        self.assertIn('items with no talk or page asigned', ''.join(errors))
+
         # Fix the invalid item
         item2.page_id = page2.pk
         item2.save()
@@ -788,6 +841,7 @@ class ValidationTests(TestCase):
         self.assertFalse(check_schedule())
         errors = validate_schedule()
         self.assertEqual(len(errors), 1)
+        self.assertIn('Clashes found in schedule', ''.join(errors))
         # Fix clashes
         item2.slots.remove(slot1)
         item2.slots.add(slot2)

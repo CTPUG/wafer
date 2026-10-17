@@ -37,19 +37,35 @@ def find_non_contiguous(all_items):
     return non_contiguous
 
 
-def validate_items(all_items):
+def validate_items_no_item(all_items):
     """Find errors in the schedule. Check for:
-         - pending / rejected talks in the schedule
-         - items with both talks and pages assigned
          - items with neither talks nor pages assigned
+         """
+    validation = []
+    for item in all_items:
+        if item.talk is None and item.page is None:
+            validation.append(item)
+    return validation
+
+
+def validate_items_both_talk_and_page(all_items):
+    """Find errors in the schedule. Check for:
+         - items with both talks and pages assigned
          """
     validation = []
     for item in all_items:
         if item.talk is not None and item.page is not None:
             validation.append(item)
-        elif item.talk is None and item.page is None:
-            validation.append(item)
-        elif item.talk and item.talk.status not in [ACCEPTED, CANCELLED]:
+    return validation
+
+
+def validate_items_invalid_talk(all_items):
+    """Find errors in the schedule. Check for:
+         - pending / rejected talks in the schedule
+         """
+    validation = []
+    for item in all_items:
+         if item.talk and item.talk.status not in [ACCEPTED, CANCELLED]:
             validation.append(item)
     return validation
 
@@ -177,8 +193,14 @@ register_schedule_item_validator(
         find_duplicate_schedule_items, 'duplicates',
         _('Schedule items found in schedule which exceed allowed number of duplicates.'))
 register_schedule_item_validator(
-        validate_items, 'validation',
-        _('Invalid schedule items found in schedule.'))
+        validate_items_no_item, 'validation_no_item',
+        _('Schedule items with no talk or page asigned found in schedule.'))
+register_schedule_item_validator(
+        validate_items_both_talk_and_page, 'validation_both_items',
+        _('Schedule items with both a talk and a page asigned found in schedule.'))
+register_schedule_item_validator(
+        validate_items_invalid_talk, 'validation_invalid_talk',
+        _('Schedule items with a talk an incorrect state asigned found in schedule.'))
 register_schedule_item_validator(
         find_non_contiguous, 'non_contiguous',
         _('Non contiguous slots found in schedule.'))

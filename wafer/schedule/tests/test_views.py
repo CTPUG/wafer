@@ -130,34 +130,34 @@ class ScheduleViewTests(TestCase):
 
         [day1] = response.context['schedule_pages']
 
-        assert len(day1.rows) == 3
-        assert day1.venues == [venue1, venue2]
-        assert day1.rows[0].slot.get_start_time() == start1
-        assert day1.rows[0].slot.end_time == start2
-        assert day1.rows[1].slot.get_start_time() == start2
-        assert day1.rows[1].slot.end_time == start3
-        assert day1.rows[2].slot.get_start_time() == start3
-        assert day1.rows[2].slot.end_time == end
+        self.assertEqual(len(day1.rows), 3)
+        self.assertEqual(day1.venues, [venue1, venue2])
+        self.assertEqual(day1.rows[0].slot.get_start_time(), start1)
+        self.assertEqual(day1.rows[0].slot.end_time, start2)
+        self.assertEqual(day1.rows[1].slot.get_start_time(), start2)
+        self.assertEqual(day1.rows[1].slot.end_time, start3)
+        self.assertEqual(day1.rows[2].slot.get_start_time(), start3)
+        self.assertEqual(day1.rows[2].slot.end_time, end)
 
-        assert len(day1.rows[0].items) == 2
-        assert len(day1.rows[1].items) == 2
-        assert len(day1.rows[2].items) == 2
+        self.assertEqual(len(day1.rows[0].items), 2)
+        self.assertEqual(len(day1.rows[1].items), 2)
+        self.assertEqual(len(day1.rows[2].items), 2)
 
-        assert day1.rows[0].get_sorted_items()[0]['item'] == items[0]
-        assert day1.rows[0].get_sorted_items()[0]['rowspan'] == 1
-        assert day1.rows[0].get_sorted_items()[0]['colspan'] == 1
+        self.assertEqual(day1.rows[0].get_sorted_items()[0]['item'], items[0])
+        self.assertEqual(day1.rows[0].get_sorted_items()[0]['rowspan'], 1)
+        self.assertEqual(day1.rows[0].get_sorted_items()[0]['colspan'], 1)
 
-        assert day1.rows[0].get_sorted_items()[1]['item'] == items[3]
-        assert day1.rows[0].get_sorted_items()[1]['rowspan'] == 1
-        assert day1.rows[0].get_sorted_items()[1]['colspan'] == 1
+        self.assertEqual(day1.rows[0].get_sorted_items()[1]['item'], items[3])
+        self.assertEqual(day1.rows[0].get_sorted_items()[1]['rowspan'], 1)
+        self.assertEqual(day1.rows[0].get_sorted_items()[1]['colspan'], 1)
 
-        assert day1.rows[1].get_sorted_items()[0]['item'] == items[1]
-        assert day1.rows[1].get_sorted_items()[0]['rowspan'] == 1
-        assert day1.rows[1].get_sorted_items()[0]['colspan'] == 1
+        self.assertEqual(day1.rows[1].get_sorted_items()[0]['item'], items[1])
+        self.assertEqual(day1.rows[1].get_sorted_items()[0]['rowspan'], 1)
+        self.assertEqual(day1.rows[1].get_sorted_items()[0]['colspan'], 1)
 
-        assert day1.rows[2].get_sorted_items()[1]['item'] == items[5]
-        assert day1.rows[2].get_sorted_items()[1]['rowspan'] == 1
-        assert day1.rows[2].get_sorted_items()[1]['colspan'] == 1
+        self.assertEqual(day1.rows[2].get_sorted_items()[1]['item'], items[5])
+        self.assertEqual(day1.rows[2].get_sorted_items()[1]['rowspan'], 1)
+        self.assertEqual(day1.rows[2].get_sorted_items()[1]['colspan'], 1)
 
     def test_ordering(self):
         """Ensure we handle oddly ordered creation of items correctly"""
@@ -206,34 +206,34 @@ class ScheduleViewTests(TestCase):
 
         [day1] = response.context['schedule_pages']
 
-        assert len(day1.rows) == 3
-        assert day1.venues == [venue1, venue2]
-        assert day1.rows[0].slot.get_start_time() == start1
-        assert day1.rows[0].slot.end_time == start2
-        assert day1.rows[1].slot.get_start_time() == start2
-        assert day1.rows[1].slot.end_time == start3
-        assert day1.rows[2].slot.get_start_time() == start3
-        assert day1.rows[2].slot.end_time == end
+        self.assertEqual(len(day1.rows), 3)
+        self.assertEqual(day1.venues, [venue1, venue2])
+        self.assertEqual(day1.rows[0].slot.get_start_time(), start1)
+        self.assertEqual(day1.rows[0].slot.end_time, start2)
+        self.assertEqual(day1.rows[1].slot.get_start_time(), start2)
+        self.assertEqual(day1.rows[1].slot.end_time, start3)
+        self.assertEqual(day1.rows[2].slot.get_start_time(), start3)
+        self.assertEqual(day1.rows[2].slot.end_time, end)
 
-        assert len(day1.rows[0].items) == 2
-        assert len(day1.rows[1].items) == 2
-        assert len(day1.rows[2].items) == 2
+        self.assertEqual(len(day1.rows[0].items), 2)
+        self.assertEqual(len(day1.rows[1].items), 2)
+        self.assertEqual(len(day1.rows[2].items), 2)
 
-        assert day1.rows[0].get_sorted_items()[0]['item'] == items[2]
-        assert day1.rows[0].get_sorted_items()[0]['rowspan'] == 1
-        assert day1.rows[0].get_sorted_items()[0]['colspan'] == 1
+        self.assertEqual(day1.rows[0].get_sorted_items()[0]['item'], items[2])
+        self.assertEqual(day1.rows[0].get_sorted_items()[0]['rowspan'], 1)
+        self.assertEqual(day1.rows[0].get_sorted_items()[0]['colspan'], 1)
 
-        assert day1.rows[0].get_sorted_items()[1]['item'] == items[5]
-        assert day1.rows[0].get_sorted_items()[1]['rowspan'] == 1
-        assert day1.rows[0].get_sorted_items()[1]['colspan'] == 1
+        self.assertEqual(day1.rows[0].get_sorted_items()[1]['item'], items[5])
+        self.assertEqual(day1.rows[0].get_sorted_items()[1]['rowspan'], 1)
+        self.assertEqual(day1.rows[0].get_sorted_items()[1]['colspan'], 1)
 
-        assert day1.rows[1].get_sorted_items()[0]['item'] == items[1]
-        assert day1.rows[1].get_sorted_items()[0]['rowspan'] == 1
-        assert day1.rows[1].get_sorted_items()[0]['colspan'] == 1
+        self.assertEqual(day1.rows[1].get_sorted_items()[0]['item'], items[1])
+        self.assertEqual(day1.rows[1].get_sorted_items()[0]['rowspan'], 1)
+        self.assertEqual(day1.rows[1].get_sorted_items()[0]['colspan'], 1)
 
-        assert day1.rows[2].get_sorted_items()[1]['item'] == items[3]
-        assert day1.rows[2].get_sorted_items()[1]['rowspan'] == 1
-        assert day1.rows[2].get_sorted_items()[1]['colspan'] == 1
+        self.assertEqual(day1.rows[2].get_sorted_items()[1]['item'], items[3])
+        self.assertEqual(day1.rows[2].get_sorted_items()[1]['rowspan'], 1)
+        self.assertEqual(day1.rows[2].get_sorted_items()[1]['colspan'], 1)
 
     def test_multiple_days(self):
         """Create a multiple day table with 3 slots and 2 venues and
@@ -291,28 +291,28 @@ class ScheduleViewTests(TestCase):
 
         [day1, day2] = response.context['schedule_pages']
 
-        assert len(day1.rows) == 2
-        assert day1.venues == [venue1, venue2]
-        assert len(day2.rows) == 1
-        assert day2.venues == [venue1, venue2]
-        assert day1.rows[0].slot.get_start_time() == start1
-        assert day1.rows[0].slot.end_time == start2
-        assert day1.rows[1].slot.get_start_time() == start2
-        assert day1.rows[1].slot.end_time == end1
-        assert day2.rows[0].slot.get_start_time() == start3
-        assert day2.rows[0].slot.end_time == end2
+        self.assertEqual(len(day1.rows), 2)
+        self.assertEqual(day1.venues, [venue1, venue2])
+        self.assertEqual(len(day2.rows), 1)
+        self.assertEqual(day2.venues, [venue1, venue2])
+        self.assertEqual(day1.rows[0].slot.get_start_time(), start1)
+        self.assertEqual(day1.rows[0].slot.end_time, start2)
+        self.assertEqual(day1.rows[1].slot.get_start_time(), start2)
+        self.assertEqual(day1.rows[1].slot.end_time, end1)
+        self.assertEqual(day2.rows[0].slot.get_start_time(), start3)
+        self.assertEqual(day2.rows[0].slot.end_time, end2)
 
-        assert len(day1.rows[0].items) == 2
-        assert len(day1.rows[1].items) == 2
-        assert len(day2.rows[0].items) == 2
+        self.assertEqual(len(day1.rows[0].items), 2)
+        self.assertEqual(len(day1.rows[1].items), 2)
+        self.assertEqual(len(day2.rows[0].items), 2)
 
-        assert day1.rows[0].get_sorted_items()[0]['item'] == items[0]
-        assert day1.rows[0].get_sorted_items()[0]['rowspan'] == 1
-        assert day1.rows[0].get_sorted_items()[0]['colspan'] == 1
+        self.assertEqual(day1.rows[0].get_sorted_items()[0]['item'], items[0])
+        self.assertEqual(day1.rows[0].get_sorted_items()[0]['rowspan'], 1)
+        self.assertEqual(day1.rows[0].get_sorted_items()[0]['colspan'], 1)
 
-        assert day2.rows[0].get_sorted_items()[1]['item'] == items[5]
-        assert day2.rows[0].get_sorted_items()[1]['rowspan'] == 1
-        assert day2.rows[0].get_sorted_items()[1]['colspan'] == 1
+        self.assertEqual(day2.rows[0].get_sorted_items()[1]['item'], items[5])
+        self.assertEqual(day2.rows[0].get_sorted_items()[1]['rowspan'], 1)
+        self.assertEqual(day2.rows[0].get_sorted_items()[1]['colspan'], 1)
 
     def test_per_day_view(self):
         """Create a multiple day table with 3 slots and 2 venues and
@@ -471,28 +471,28 @@ class ScheduleViewTests(TestCase):
 
         [day1, day2] = response.context['schedule_pages']
 
-        assert len(day1.rows) == 2
-        assert day1.venues == [venue1]
-        assert len(day2.rows) == 1
-        assert day2.venues == [venue2]
-        assert day1.rows[0].slot.get_start_time() == start1
-        assert day1.rows[0].slot.end_time == start2
-        assert day1.rows[1].slot.get_start_time() == start2
-        assert day1.rows[1].slot.end_time == end1
-        assert day2.rows[0].slot.get_start_time() == start3
-        assert day2.rows[0].slot.end_time == end2
+        self.assertEqual(len(day1.rows), 2)
+        self.assertEqual(day1.venues, [venue1])
+        self.assertEqual(len(day2.rows), 1)
+        self.assertEqual(day2.venues, [venue2])
+        self.assertEqual(day1.rows[0].slot.get_start_time(), start1)
+        self.assertEqual(day1.rows[0].slot.end_time, start2)
+        self.assertEqual(day1.rows[1].slot.get_start_time(), start2)
+        self.assertEqual(day1.rows[1].slot.end_time, end1)
+        self.assertEqual(day2.rows[0].slot.get_start_time(), start3)
+        self.assertEqual(day2.rows[0].slot.end_time, end2)
 
-        assert len(day1.rows[0].items) == 1
-        assert len(day1.rows[1].items) == 1
-        assert len(day2.rows[0].items) == 1
+        self.assertEqual(len(day1.rows[0].items), 1)
+        self.assertEqual(len(day1.rows[1].items), 1)
+        self.assertEqual(len(day2.rows[0].items), 1)
 
-        assert day1.rows[0].get_sorted_items()[0]['item'] == items[0]
-        assert day1.rows[0].get_sorted_items()[0]['rowspan'] == 1
-        assert day1.rows[0].get_sorted_items()[0]['colspan'] == 1
+        self.assertEqual(day1.rows[0].get_sorted_items()[0]['item'], items[0])
+        self.assertEqual(day1.rows[0].get_sorted_items()[0]['rowspan'], 1)
+        self.assertEqual(day1.rows[0].get_sorted_items()[0]['colspan'], 1)
 
-        assert day2.rows[0].get_sorted_items()[0]['item'] == items[2]
-        assert day2.rows[0].get_sorted_items()[0]['rowspan'] == 1
-        assert day2.rows[0].get_sorted_items()[0]['colspan'] == 1
+        self.assertEqual(day2.rows[0].get_sorted_items()[0]['item'], items[2])
+        self.assertEqual(day2.rows[0].get_sorted_items()[0]['rowspan'], 1)
+        self.assertEqual(day2.rows[0].get_sorted_items()[0]['colspan'], 1)
 
     def test_col_span(self):
         """Create table with 3 venues and some interesting
@@ -556,67 +556,67 @@ class ScheduleViewTests(TestCase):
 
         [day1] = response.context['schedule_pages']
 
-        assert len(day1.rows) == 5
-        assert day1.venues == [venue1, venue2, venue3]
-        assert day1.rows[0].slot.get_start_time() == start1
-        assert day1.rows[1].slot.get_start_time() == start2
-        assert day1.rows[2].slot.get_start_time() == start3
-        assert day1.rows[3].slot.get_start_time() == start4
-        assert day1.rows[4].slot.get_start_time() == start5
+        self.assertEqual(len(day1.rows), 5)
+        self.assertEqual(day1.venues, [venue1, venue2, venue3])
+        self.assertEqual(day1.rows[0].slot.get_start_time(), start1)
+        self.assertEqual(day1.rows[1].slot.get_start_time(), start2)
+        self.assertEqual(day1.rows[2].slot.get_start_time(), start3)
+        self.assertEqual(day1.rows[3].slot.get_start_time(), start4)
+        self.assertEqual(day1.rows[4].slot.get_start_time(), start5)
 
-        assert len(day1.rows[0].items) == 2
+        self.assertEqual(len(day1.rows[0].items), 2)
 
-        assert day1.rows[0].get_sorted_items()[0]['item'] == items[0]
-        assert day1.rows[0].get_sorted_items()[0]['rowspan'] == 1
-        assert day1.rows[0].get_sorted_items()[0]['colspan'] == 1
+        self.assertEqual(day1.rows[0].get_sorted_items()[0]['item'], items[0])
+        self.assertEqual(day1.rows[0].get_sorted_items()[0]['rowspan'], 1)
+        self.assertEqual(day1.rows[0].get_sorted_items()[0]['colspan'], 1)
 
-        assert day1.rows[0].get_sorted_items()[1]['item'] == items[6]
-        assert day1.rows[0].get_sorted_items()[1]['rowspan'] == 1
-        assert day1.rows[0].get_sorted_items()[1]['colspan'] == 2
+        self.assertEqual(day1.rows[0].get_sorted_items()[1]['item'], items[6])
+        self.assertEqual(day1.rows[0].get_sorted_items()[1]['rowspan'], 1)
+        self.assertEqual(day1.rows[0].get_sorted_items()[1]['colspan'], 2)
 
-        assert len(day1.rows[1].items) == 2
+        self.assertEqual(len(day1.rows[1].items), 2)
 
-        assert day1.rows[1].get_sorted_items()[0]['item'] == items[1]
-        assert day1.rows[1].get_sorted_items()[0]['rowspan'] == 1
-        assert day1.rows[1].get_sorted_items()[0]['colspan'] == 2
+        self.assertEqual(day1.rows[1].get_sorted_items()[0]['item'], items[1])
+        self.assertEqual(day1.rows[1].get_sorted_items()[0]['rowspan'], 1)
+        self.assertEqual(day1.rows[1].get_sorted_items()[0]['colspan'], 2)
 
-        assert day1.rows[1].get_sorted_items()[1]['item'] == items[7]
-        assert day1.rows[1].get_sorted_items()[1]['rowspan'] == 1
-        assert day1.rows[1].get_sorted_items()[1]['colspan'] == 1
+        self.assertEqual(day1.rows[1].get_sorted_items()[1]['item'], items[7])
+        self.assertEqual(day1.rows[1].get_sorted_items()[1]['rowspan'], 1)
+        self.assertEqual(day1.rows[1].get_sorted_items()[1]['colspan'], 1)
 
-        assert len(day1.rows[2].items) == 3
+        self.assertEqual(len(day1.rows[2].items), 3)
 
-        assert day1.rows[2].get_sorted_items()[0]['item'] == items[2]
-        assert day1.rows[2].get_sorted_items()[0]['rowspan'] == 1
-        assert day1.rows[2].get_sorted_items()[0]['colspan'] == 1
+        self.assertEqual(day1.rows[2].get_sorted_items()[0]['item'], items[2])
+        self.assertEqual(day1.rows[2].get_sorted_items()[0]['rowspan'], 1)
+        self.assertEqual(day1.rows[2].get_sorted_items()[0]['colspan'], 1)
 
-        assert day1.rows[2].get_sorted_items()[1]['item'] is None
-        assert day1.rows[2].get_sorted_items()[1]['rowspan'] == 1
-        assert day1.rows[2].get_sorted_items()[1]['colspan'] == 1
+        self.assertIs(day1.rows[2].get_sorted_items()[1]['item'], None)
+        self.assertEqual(day1.rows[2].get_sorted_items()[1]['rowspan'], 1)
+        self.assertEqual(day1.rows[2].get_sorted_items()[1]['colspan'], 1)
 
-        assert day1.rows[2].get_sorted_items()[2]['item'] == items[8]
-        assert day1.rows[2].get_sorted_items()[2]['rowspan'] == 1
-        assert day1.rows[2].get_sorted_items()[2]['colspan'] == 1
+        self.assertEqual(day1.rows[2].get_sorted_items()[2]['item'], items[8])
+        self.assertEqual(day1.rows[2].get_sorted_items()[2]['rowspan'], 1)
+        self.assertEqual(day1.rows[2].get_sorted_items()[2]['colspan'], 1)
 
-        assert len(day1.rows[3].items) == 1
+        self.assertEqual(len(day1.rows[3].items), 1)
 
-        assert day1.rows[3].get_sorted_items()[0]['item'] == items[4]
-        assert day1.rows[3].get_sorted_items()[0]['rowspan'] == 1
-        assert day1.rows[3].get_sorted_items()[0]['colspan'] == 3
+        self.assertEqual(day1.rows[3].get_sorted_items()[0]['item'], items[4])
+        self.assertEqual(day1.rows[3].get_sorted_items()[0]['rowspan'], 1)
+        self.assertEqual(day1.rows[3].get_sorted_items()[0]['colspan'], 3)
 
-        assert len(day1.rows[4].items) == 3
+        self.assertEqual(len(day1.rows[4].items), 3)
 
-        assert day1.rows[4].get_sorted_items()[0]['item'] == items[3]
-        assert day1.rows[4].get_sorted_items()[0]['rowspan'] == 1
-        assert day1.rows[4].get_sorted_items()[0]['colspan'] == 1
+        self.assertEqual(day1.rows[4].get_sorted_items()[0]['item'], items[3])
+        self.assertEqual(day1.rows[4].get_sorted_items()[0]['rowspan'], 1)
+        self.assertEqual(day1.rows[4].get_sorted_items()[0]['colspan'], 1)
 
-        assert day1.rows[4].get_sorted_items()[1]['item'] == items[5]
-        assert day1.rows[4].get_sorted_items()[1]['rowspan'] == 1
-        assert day1.rows[4].get_sorted_items()[1]['colspan'] == 1
+        self.assertEqual(day1.rows[4].get_sorted_items()[1]['item'], items[5])
+        self.assertEqual(day1.rows[4].get_sorted_items()[1]['rowspan'], 1)
+        self.assertEqual(day1.rows[4].get_sorted_items()[1]['colspan'], 1)
 
-        assert day1.rows[4].get_sorted_items()[2]['item'] is None
-        assert day1.rows[4].get_sorted_items()[2]['rowspan'] == 1
-        assert day1.rows[4].get_sorted_items()[1]['colspan'] == 1
+        self.assertIs(day1.rows[4].get_sorted_items()[2]['item'], None)
+        self.assertEqual(day1.rows[4].get_sorted_items()[2]['rowspan'], 1)
+        self.assertEqual(day1.rows[4].get_sorted_items()[1]['colspan'], 1)
 
     def test_row_span(self):
         """Create a day table with multiple slot items"""
@@ -671,45 +671,45 @@ class ScheduleViewTests(TestCase):
 
         [day1] = response.context['schedule_pages']
 
-        assert len(day1.rows) == 5
-        assert day1.venues == [venue1, venue2]
-        assert day1.rows[0].slot.get_start_time() == start1
-        assert day1.rows[1].slot.get_start_time() == start2
-        assert day1.rows[4].slot.end_time == end
+        self.assertEqual(len(day1.rows), 5)
+        self.assertEqual(day1.venues, [venue1, venue2])
+        self.assertEqual(day1.rows[0].slot.get_start_time(), start1)
+        self.assertEqual(day1.rows[1].slot.get_start_time(), start2)
+        self.assertEqual(day1.rows[4].slot.end_time, end)
 
-        assert len(day1.rows[0].items) == 2
-        assert len(day1.rows[1].items) == 1
-        assert len(day1.rows[2].items) == 2
-        assert len(day1.rows[3].items) == 1
-        assert len(day1.rows[4].items) == 1
+        self.assertEqual(len(day1.rows[0].items), 2)
+        self.assertEqual(len(day1.rows[1].items), 1)
+        self.assertEqual(len(day1.rows[2].items), 2)
+        self.assertEqual(len(day1.rows[3].items), 1)
+        self.assertEqual(len(day1.rows[4].items), 1)
 
-        assert day1.rows[0].get_sorted_items()[0]['item'] == items[0]
-        assert day1.rows[0].get_sorted_items()[0]['rowspan'] == 2
-        assert day1.rows[0].get_sorted_items()[0]['colspan'] == 1
+        self.assertEqual(day1.rows[0].get_sorted_items()[0]['item'], items[0])
+        self.assertEqual(day1.rows[0].get_sorted_items()[0]['rowspan'], 2)
+        self.assertEqual(day1.rows[0].get_sorted_items()[0]['colspan'], 1)
 
-        assert day1.rows[0].get_sorted_items()[1]['item'] == items[4]
-        assert day1.rows[0].get_sorted_items()[1]['rowspan'] == 1
-        assert day1.rows[0].get_sorted_items()[1]['colspan'] == 1
+        self.assertEqual(day1.rows[0].get_sorted_items()[1]['item'], items[4])
+        self.assertEqual(day1.rows[0].get_sorted_items()[1]['rowspan'], 1)
+        self.assertEqual(day1.rows[0].get_sorted_items()[1]['colspan'], 1)
 
-        assert day1.rows[1].get_sorted_items()[0]['item'] == items[5]
-        assert day1.rows[1].get_sorted_items()[0]['rowspan'] == 1
-        assert day1.rows[1].get_sorted_items()[0]['colspan'] == 1
+        self.assertEqual(day1.rows[1].get_sorted_items()[0]['item'], items[5])
+        self.assertEqual(day1.rows[1].get_sorted_items()[0]['rowspan'], 1)
+        self.assertEqual(day1.rows[1].get_sorted_items()[0]['colspan'], 1)
 
-        assert day1.rows[2].get_sorted_items()[0]['item'] == items[1]
-        assert day1.rows[2].get_sorted_items()[0]['rowspan'] == 1
-        assert day1.rows[2].get_sorted_items()[0]['colspan'] == 1
+        self.assertEqual(day1.rows[2].get_sorted_items()[0]['item'], items[1])
+        self.assertEqual(day1.rows[2].get_sorted_items()[0]['rowspan'], 1)
+        self.assertEqual(day1.rows[2].get_sorted_items()[0]['colspan'], 1)
 
-        assert day1.rows[2].get_sorted_items()[1]['item'] == items[6]
-        assert day1.rows[2].get_sorted_items()[1]['rowspan'] == 3
-        assert day1.rows[2].get_sorted_items()[1]['colspan'] == 1
+        self.assertEqual(day1.rows[2].get_sorted_items()[1]['item'], items[6])
+        self.assertEqual(day1.rows[2].get_sorted_items()[1]['rowspan'], 3)
+        self.assertEqual(day1.rows[2].get_sorted_items()[1]['colspan'], 1)
 
-        assert day1.rows[3].get_sorted_items()[0]['item'] == items[2]
-        assert day1.rows[3].get_sorted_items()[0]['rowspan'] == 1
-        assert day1.rows[3].get_sorted_items()[0]['colspan'] == 1
+        self.assertEqual(day1.rows[3].get_sorted_items()[0]['item'], items[2])
+        self.assertEqual(day1.rows[3].get_sorted_items()[0]['rowspan'], 1)
+        self.assertEqual(day1.rows[3].get_sorted_items()[0]['colspan'], 1)
 
-        assert day1.rows[4].get_sorted_items()[0]['item'] == items[3]
-        assert day1.rows[4].get_sorted_items()[0]['rowspan'] == 1
-        assert day1.rows[4].get_sorted_items()[0]['colspan'] == 1
+        self.assertEqual(day1.rows[4].get_sorted_items()[0]['item'], items[3])
+        self.assertEqual(day1.rows[4].get_sorted_items()[0]['rowspan'], 1)
+        self.assertEqual(day1.rows[4].get_sorted_items()[0]['colspan'], 1)
 
     def test_row_col_span(self):
         """Create table with 3 venues and both row & col
@@ -770,55 +770,55 @@ class ScheduleViewTests(TestCase):
 
         [day1] = response.context['schedule_pages']
 
-        assert len(day1.rows) == 5
-        assert day1.venues == [venue1, venue2, venue3]
-        assert day1.rows[0].slot.get_start_time() == start1
-        assert day1.rows[1].slot.get_start_time() == start2
-        assert day1.rows[2].slot.get_start_time() == start3
-        assert day1.rows[3].slot.get_start_time() == start4
-        assert day1.rows[4].slot.get_start_time() == start5
+        self.assertEqual(len(day1.rows), 5)
+        self.assertEqual(day1.venues, [venue1, venue2, venue3])
+        self.assertEqual(day1.rows[0].slot.get_start_time(), start1)
+        self.assertEqual(day1.rows[1].slot.get_start_time(), start2)
+        self.assertEqual(day1.rows[2].slot.get_start_time(), start3)
+        self.assertEqual(day1.rows[3].slot.get_start_time(), start4)
+        self.assertEqual(day1.rows[4].slot.get_start_time(), start5)
 
-        assert len(day1.rows[0].items) == 2
+        self.assertEqual(len(day1.rows[0].items), 2)
 
-        assert day1.rows[0].get_sorted_items()[0]['item'] == items[0]
-        assert day1.rows[0].get_sorted_items()[0]['rowspan'] == 1
-        assert day1.rows[0].get_sorted_items()[0]['colspan'] == 1
+        self.assertEqual(day1.rows[0].get_sorted_items()[0]['item'], items[0])
+        self.assertEqual(day1.rows[0].get_sorted_items()[0]['rowspan'], 1)
+        self.assertEqual(day1.rows[0].get_sorted_items()[0]['colspan'], 1)
 
-        assert day1.rows[0].get_sorted_items()[1]['item'] == items[5]
-        assert day1.rows[0].get_sorted_items()[1]['rowspan'] == 1
-        assert day1.rows[0].get_sorted_items()[1]['colspan'] == 2
+        self.assertEqual(day1.rows[0].get_sorted_items()[1]['item'], items[5])
+        self.assertEqual(day1.rows[0].get_sorted_items()[1]['rowspan'], 1)
+        self.assertEqual(day1.rows[0].get_sorted_items()[1]['colspan'], 2)
 
-        assert len(day1.rows[1].items) == 2
+        self.assertEqual(len(day1.rows[1].items), 2)
 
-        assert day1.rows[1].get_sorted_items()[0]['item'] == items[1]
-        assert day1.rows[1].get_sorted_items()[0]['rowspan'] == 2
-        assert day1.rows[1].get_sorted_items()[0]['colspan'] == 2
+        self.assertEqual(day1.rows[1].get_sorted_items()[0]['item'], items[1])
+        self.assertEqual(day1.rows[1].get_sorted_items()[0]['rowspan'], 2)
+        self.assertEqual(day1.rows[1].get_sorted_items()[0]['colspan'], 2)
 
-        assert day1.rows[1].get_sorted_items()[1]['item'] == items[6]
-        assert day1.rows[1].get_sorted_items()[1]['rowspan'] == 1
-        assert day1.rows[1].get_sorted_items()[1]['colspan'] == 1
+        self.assertEqual(day1.rows[1].get_sorted_items()[1]['item'], items[6])
+        self.assertEqual(day1.rows[1].get_sorted_items()[1]['rowspan'], 1)
+        self.assertEqual(day1.rows[1].get_sorted_items()[1]['colspan'], 1)
 
-        assert len(day1.rows[2].items) == 1
+        self.assertEqual(len(day1.rows[2].items), 1)
 
-        assert day1.rows[2].get_sorted_items()[0]['item'] == items[7]
-        assert day1.rows[2].get_sorted_items()[0]['rowspan'] == 2
-        assert day1.rows[2].get_sorted_items()[0]['colspan'] == 1
+        self.assertEqual(day1.rows[2].get_sorted_items()[0]['item'], items[7])
+        self.assertEqual(day1.rows[2].get_sorted_items()[0]['rowspan'], 2)
+        self.assertEqual(day1.rows[2].get_sorted_items()[0]['colspan'], 1)
 
-        assert len(day1.rows[3].items) == 1
+        self.assertEqual(len(day1.rows[3].items), 1)
 
-        assert day1.rows[3].get_sorted_items()[0]['item'] == items[2]
-        assert day1.rows[3].get_sorted_items()[0]['rowspan'] == 1
-        assert day1.rows[3].get_sorted_items()[0]['colspan'] == 2
+        self.assertEqual(day1.rows[3].get_sorted_items()[0]['item'], items[2])
+        self.assertEqual(day1.rows[3].get_sorted_items()[0]['rowspan'], 1)
+        self.assertEqual(day1.rows[3].get_sorted_items()[0]['colspan'], 2)
 
-        assert len(day1.rows[4].items) == 2
+        self.assertEqual(len(day1.rows[4].items), 2)
 
-        assert day1.rows[4].get_sorted_items()[0]['item'] == items[3]
-        assert day1.rows[4].get_sorted_items()[0]['rowspan'] == 1
-        assert day1.rows[4].get_sorted_items()[0]['colspan'] == 1
+        self.assertEqual(day1.rows[4].get_sorted_items()[0]['item'], items[3])
+        self.assertEqual(day1.rows[4].get_sorted_items()[0]['rowspan'], 1)
+        self.assertEqual(day1.rows[4].get_sorted_items()[0]['colspan'], 1)
 
-        assert day1.rows[4].get_sorted_items()[1]['item'] == items[4]
-        assert day1.rows[4].get_sorted_items()[1]['rowspan'] == 1
-        assert day1.rows[4].get_sorted_items()[1]['colspan'] == 2
+        self.assertEqual(day1.rows[4].get_sorted_items()[1]['item'], items[4])
+        self.assertEqual(day1.rows[4].get_sorted_items()[1]['rowspan'], 1)
+        self.assertEqual(day1.rows[4].get_sorted_items()[1]['colspan'], 2)
 
     def test_highlight_venue_view(self):
         """Test that the highlight-venue option works"""
@@ -1021,21 +1021,21 @@ class ScheduleViewTests(TestCase):
 
         c = Client()
         response = c.get('/schedule/')
-        assert response.context['active'] is False
-        assert 'validation_errors' not in response.context
+        self.assertIs(response.context['active'], False)
+        self.assertNotIn('validation_errors', response.context)
 
         # Check the logged in users get the same result
         ordinary = create_client('jill', False)
         response = ordinary.get('/schedule/')
-        assert response.context['active'] is False
-        assert 'validation_errors' not in response.context
+        self.assertIs(response.context['active'], False)
+        self.assertNotIn('validation_errors', response.context)
 
         # Check that a user with elevated privileges sees validation errors
         admin = create_client('admin', True)
 
         response = admin.get('/schedule/')
-        assert response.context['active'] is False
-        assert 'validation_errors' in response.context
+        self.assertIs(response.context['active'], False)
+        self.assertIn('validation_errors', response.context)
 
     def test_view_hidden(self):
         """Test that the schedule is hidden by the appropriate setting."""
@@ -1083,22 +1083,22 @@ class ScheduleViewTests(TestCase):
 
             c = Client()
             response = c.get('/schedule/')
-            assert response.context['active'] is False
-            assert 'draft_warning' not in response.context
+            self.assertIs(response.context['active'], False)
+            self.assertNotIn('draft_warning', response.context)
 
             # Check the logged in users get the same result
             ordinary = create_client('jill', False)
             response = ordinary.get('/schedule/')
-            assert response.context['active'] is False
-            assert 'draft_warning' not in response.context
+            self.assertIs(response.context['active'], False)
+            self.assertNotIn('draft_warning', response.context)
 
             # Check that a user with elevated privileges sees the schedule
             # and the appropriate warning
             admin = create_client('admin', True)
 
             response = admin.get('/schedule/')
-            assert response.context['active'] is True
-            assert 'draft_warning' in response.context
+            self.assertIs(response.context['active'], True)
+            self.assertIn('draft_warning', response.context)
 
 
 class CurrentViewTests(TestCase):
@@ -1159,54 +1159,54 @@ class CurrentViewTests(TestCase):
         response = c.get('/schedule/current/', {'timestamp': cur1.isoformat()})
         context = response.context
 
-        assert context['cur_slot'] == slots[0]
-        assert len(context['schedule_page'].venues) == 2
+        self.assertEqual(context['cur_slot'], slots[0])
+        self.assertEqual(len(context['schedule_page'].venues), 2)
         # Only cur and next slot
-        assert len(context['slots']) == 2
-        assert context['slots'][0].items[venue1]['note'] == 'current'
-        assert context['slots'][1].items[venue1]['note'] == 'forthcoming'
+        self.assertEqual(len(context['slots']), 2)
+        self.assertEqual(context['slots'][0].items[venue1]['note'], 'current')
+        self.assertEqual(context['slots'][1].items[venue1]['note'], 'forthcoming')
 
         response = c.get('/schedule/current/', {'timestamp': cur2.isoformat()})
         context = response.context
-        assert context['cur_slot'] == slots[1]
-        assert len(context['schedule_page'].venues) == 2
+        self.assertEqual(context['cur_slot'], slots[1])
+        self.assertEqual(len(context['schedule_page'].venues), 2)
         # prev, cur and next slot
-        assert len(context['slots']) == 3
-        assert context['slots'][0].items[venue1]['note'] == 'complete'
-        assert context['slots'][1].items[venue1]['note'] == 'current'
-        assert context['slots'][2].items[venue1]['note'] == 'forthcoming'
+        self.assertEqual(len(context['slots']), 3)
+        self.assertEqual(context['slots'][0].items[venue1]['note'], 'complete')
+        self.assertEqual(context['slots'][1].items[venue1]['note'], 'current')
+        self.assertEqual(context['slots'][2].items[venue1]['note'], 'forthcoming')
 
         response = c.get('/schedule/current/', {'timestamp': cur3.isoformat()})
         context = response.context
-        assert context['cur_slot'] == slots[2]
-        assert len(context['schedule_page'].venues) == 2
+        self.assertEqual(context['cur_slot'], slots[2])
+        self.assertEqual(len(context['schedule_page'].venues), 2)
         # prev and cur
-        assert len(context['slots']) == 3
-        assert context['slots'][0].items[venue1]['note'] == 'complete'
-        assert context['slots'][1].items[venue1]['note'] == 'current'
-        assert context['slots'][2].items[venue1]['note'] == 'forthcoming'
+        self.assertEqual(len(context['slots']), 3)
+        self.assertEqual(context['slots'][0].items[venue1]['note'], 'complete')
+        self.assertEqual(context['slots'][1].items[venue1]['note'], 'current')
+        self.assertEqual(context['slots'][2].items[venue1]['note'], 'forthcoming')
 
         response = c.get('/schedule/current/', {'timestamp': cur4.isoformat()})
         context = response.context
-        assert context['cur_slot'] == slots[3]
-        assert len(context['schedule_page'].venues) == 2
+        self.assertEqual(context['cur_slot'], slots[3])
+        self.assertEqual(len(context['schedule_page'].venues), 2)
         # preve and cur slot
-        assert len(context['slots']) == 2
-        assert context['slots'][0].items[venue1]['note'] == 'complete'
-        assert context['slots'][1].items[venue1]['note'] == 'current'
+        self.assertEqual(len(context['slots']), 2)
+        self.assertEqual(context['slots'][0].items[venue1]['note'], 'complete')
+        self.assertEqual(context['slots'][1].items[venue1]['note'], 'current')
 
         response = c.get('/schedule/current/', {'timestamp': cur5.isoformat()})
         context = response.context
-        assert context['cur_slot'] is None
-        assert len(context['schedule_page'].venues) == 2
+        self.assertIs(context['cur_slot'], None)
+        self.assertEqual(len(context['schedule_page'].venues), 2)
         # prev slot only
-        assert len(context['slots']) == 1
-        assert context['slots'][0].items[venue1]['note'] == 'complete'
+        self.assertEqual(len(context['slots']), 1)
+        self.assertEqual(context['slots'][0].items[venue1]['note'], 'complete')
 
         # Check that next day is an empty current view
         response = c.get('/schedule/current/',
             {'timestamp': (cur3 + D.timedelta(days=1)).isoformat()})
-        assert len(response.context['slots']) == 0
+        self.assertEqual(len(response.context['slots']), 0)
 
     def test_current_view_complex(self):
         """Create a schedule with overlapping venues and slotes and check that
@@ -1274,46 +1274,46 @@ class CurrentViewTests(TestCase):
         c = Client()
         response = c.get('/schedule/current/', {'timestamp': cur1.isoformat()})
         context = response.context
-        assert context['cur_slot'] == slot1
-        assert len(context['schedule_page'].venues) == 3
-        assert len(context['slots']) == 2
-        assert context['slots'][0].items[venue1]['note'] == 'current'
-        assert context['slots'][0].items[venue1]['colspan'] == 1
-        assert context['slots'][0].items[venue2]['item'] is None
+        self.assertEqual(context['cur_slot'], slot1)
+        self.assertEqual(len(context['schedule_page'].venues), 3)
+        self.assertEqual(len(context['slots']), 2)
+        self.assertEqual(context['slots'][0].items[venue1]['note'], 'current')
+        self.assertEqual(context['slots'][0].items[venue1]['colspan'], 1)
+        self.assertIs(context['slots'][0].items[venue2]['item'], None)
 
         response = c.get('/schedule/current/', {'timestamp': cur2.isoformat()})
         context = response.context
-        assert context['cur_slot'] == slot2
-        assert len(context['slots']) == 3
-        assert context['slots'][0].items[venue1]['note'] == 'complete'
-        assert context['slots'][1].items[venue1]['note'] == 'current'
-        assert context['slots'][1].items[venue1]['rowspan'] == 2
-        assert context['slots'][1].items[venue2]['note'] == 'current'
-        assert context['slots'][1].items[venue2]['rowspan'] == 1
+        self.assertEqual(context['cur_slot'], slot2)
+        self.assertEqual(len(context['slots']), 3)
+        self.assertEqual(context['slots'][0].items[venue1]['note'], 'complete')
+        self.assertEqual(context['slots'][1].items[venue1]['note'], 'current')
+        self.assertEqual(context['slots'][1].items[venue1]['rowspan'], 2)
+        self.assertEqual(context['slots'][1].items[venue2]['note'], 'current')
+        self.assertEqual(context['slots'][1].items[venue2]['rowspan'], 1)
         # We truncate the rowspan for this event
-        assert context['slots'][2].items[venue2]['note'] == 'forthcoming'
-        assert context['slots'][2].items[venue2]['rowspan'] == 1
+        self.assertEqual(context['slots'][2].items[venue2]['note'], 'forthcoming')
+        self.assertEqual(context['slots'][2].items[venue2]['rowspan'], 1)
 
         response = c.get('/schedule/current/', {'timestamp': cur3.isoformat()})
         context = response.context
-        assert context['cur_slot'] == slot3
-        assert len(context['slots']) == 3
+        self.assertEqual(context['cur_slot'], slot3)
+        self.assertEqual(len(context['slots']), 3)
         # This event is still current, even though it started last slot
-        assert context['slots'][0].items[venue1]['note'] == 'current'
-        assert context['slots'][0].items[venue1]['rowspan'] == 2
+        self.assertEqual(context['slots'][0].items[venue1]['note'], 'current')
+        self.assertEqual(context['slots'][0].items[venue1]['rowspan'], 2)
         # Venue 2 now has rowspan 2
-        assert context['slots'][1].items[venue2]['note'] == 'current'
-        assert context['slots'][1].items[venue2]['rowspan'] == 2
+        self.assertEqual(context['slots'][1].items[venue2]['note'], 'current')
+        self.assertEqual(context['slots'][1].items[venue2]['rowspan'], 2)
 
         response = c.get('/schedule/current/', {'timestamp': cur4.isoformat()})
         context = response.context
-        assert context['cur_slot'] == slot5
-        assert len(context['slots']) == 2
-        assert context['slots'][0].items[venue1]['note'] == 'complete'
-        assert context['slots'][0].items[venue1]['rowspan'] == 1
+        self.assertEqual(context['cur_slot'], slot5)
+        self.assertEqual(len(context['slots']), 2)
+        self.assertEqual(context['slots'][0].items[venue1]['note'], 'complete')
+        self.assertEqual(context['slots'][0].items[venue1]['rowspan'], 1)
         # Items are truncated to 1 row
-        assert context['slots'][0].items[venue2]['note'] == 'complete'
-        assert context['slots'][0].items[venue2]['rowspan'] == 1
+        self.assertEqual(context['slots'][0].items[venue2]['note'], 'complete')
+        self.assertEqual(context['slots'][0].items[venue2]['rowspan'], 1)
 
     def test_current_view_highlight_venue(self):
         """Test that the current view highlight's stuff correctly"""
@@ -1372,16 +1372,16 @@ class CurrentViewTests(TestCase):
         def validate_current(response):
             """Validate that the current view is still has the expected content"""
             context = response.context
-            assert context['cur_slot'] == slot2
-            assert len(context['slots']) == 3
-            assert context['slots'][0].items[venue1]['note'] == 'complete'
-            assert context['slots'][1].items[venue1]['note'] == 'current'
-            assert context['slots'][1].items[venue1]['rowspan'] == 2
-            assert context['slots'][1].items[venue2]['note'] == 'current'
-            assert context['slots'][1].items[venue2]['rowspan'] == 1
+            self.assertEqual(context['cur_slot'], slot2)
+            self.assertEqual(len(context['slots']), 3)
+            self.assertEqual(context['slots'][0].items[venue1]['note'], 'complete')
+            self.assertEqual(context['slots'][1].items[venue1]['note'], 'current')
+            self.assertEqual(context['slots'][1].items[venue1]['rowspan'], 2)
+            self.assertEqual(context['slots'][1].items[venue2]['note'], 'current')
+            self.assertEqual(context['slots'][1].items[venue2]['rowspan'], 1)
             # We truncate the rowspan for this event
-            assert context['slots'][2].items[venue2]['note'] == 'forthcoming'
-            assert context['slots'][2].items[venue2]['rowspan'] == 1
+            self.assertEqual(context['slots'][2].items[venue2]['note'], 'forthcoming')
+            self.assertEqual(context['slots'][2].items[venue2]['rowspan'], 1)
 
         c = Client()
         # Check that we don't highlight if not asked
@@ -1569,23 +1569,23 @@ class CurrentViewTests(TestCase):
         c = Client()
         response = c.get('/schedule/current/',
                          {'timestamp': cur1.isoformat()})
-        assert response.context['active'] is False
-        assert 'validation_errors' not in response.context
+        self.assertIs(response.context['active'], False)
+        self.assertNotIn('validation_errors', response.context)
 
         # Check the logged in users get the same result
         ordinary = create_client('jill', False)
         response = ordinary.get('/schedule/current/',
                                 {'timestamp': cur1.isoformat()})
-        assert response.context['active'] is False
-        assert 'validation_errors' not in response.context
+        self.assertIs(response.context['active'], False)
+        self.assertNotIn('validation_errors', response.context)
 
         # Check that a user with elevated privileges sees validation errors
         admin = create_client('admin', True)
 
         response = admin.get('/schedule/current/',
                              {'timestamp': cur1.isoformat()})
-        assert response.context['active'] is False
-        assert 'validation_errors' in response.context
+        self.assertIs(response.context['active'], False)
+        self.assertIn('validation_errors', response.context)
 
     def test_view_hidden(self):
         """Test that the schedule is hidden by the appropriate setting."""
@@ -1632,21 +1632,21 @@ class CurrentViewTests(TestCase):
 
             c = Client()
             response = c.get('/schedule/current/')
-            assert response.context['active'] is False
-            assert 'draft_warning' not in response.context
+            self.assertIs(response.context['active'], False)
+            self.assertNotIn('draft_warning', response.context)
 
             # Check the logged in users get the same result
             ordinary = create_client('jill', False)
             response = ordinary.get('/schedule/current/')
-            assert response.context['active'] is False
-            assert 'draft_warning' not in response.context
+            self.assertIs(response.context['active'], False)
+            self.assertNotIn('draft_warning', response.context)
 
             # Check that a user with elevated privileges sees validation errors
             admin = create_client('admin', True)
 
             response = admin.get('/schedule/current/')
-            assert response.context['active'] is True
-            assert 'draft_warning' in response.context
+            self.assertIs(response.context['active'], True)
+            self.assertIn('draft_warning', response.context)
 
 
 class NonHTMLViewTests(TestCase):
