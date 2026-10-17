@@ -1,0 +1,18 @@
+{% extends "wafer.schedule/checklist_base.html" %}
+{% load i18n %}
+{% block title %}{{ venue.name }} - {% trans "Session Chair Checklist" %} - {{ WAFER_CONFERENCE_NAME }}{% endblock %}
+{% block content %}
+<h1>{% trans "Session Chair Checklists" %}: {{ venue.name }}</h1>
+{% for day, day_items in days %}
+  <div class="checklist-day">
+    {% if day %}
+      <h2>{{ day|date:"l j F Y" }} — {{ venue.name }}</h2>
+    {% endif %}
+    {% for item in day_items %}
+      {% include "wafer.schedule/checklist_item_detail.html" %}
+    {% endfor %}
+  </div>
+{% empty %}
+  <p>{% trans "No scheduled talks in this venue." %}</p>
+{% endfor %}
+{% endblock %}
