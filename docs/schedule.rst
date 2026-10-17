@@ -143,6 +143,19 @@ errors as well, to help diagnose the problem preventing the schedule from
 rendering correctly. These errors will also be displayed in the schedule editor
 and in the admin site.
 
+Duplicate items
+===============
+
+Wafer supports having duplicates of an item in the schedule, but the number
+of times an item can be scheduled needs to be set on the item via the
+``num_schedulable`` property.
+
+By default, talks are created with an allowed count of 1 (so they can be added
+to the schedule) and pages with a allowed count of 0 (so are not schedulable by
+default).
+
+The schedule validation will warn if the number of allowed instances in the
+schedule is exceeded.
 
 Hiding the schedule while editing
 =================================
@@ -150,3 +163,26 @@ Hiding the schedule while editing
 The setting ``WAFER_HIDE_SCHEDULE`` will prevent the schedule from rendering for
 users without admin access. Users with admin access will see a note that the
 schedule is a draft and not public.
+
+
+Javascript Schedule Editor
+==========================
+
+There is a simple drag-n-drop schedule editor available to users with the
+appropriate permission.
+
+The editor displays the schedule table for the selected block, and displays
+lists of schedulable items (public talk, not yet scheduled public talks and
+schedulable pages) and allows talks and pages to be dragged from the list onto
+the schedule to populate it, or for scheduled items to be dragged to new times.
+
+Scheduled items can be removed by clicking on the 'X' at the top right of
+the item.
+
+Validation issues with the current schedule are displayed after each update.
+
+The editor only creates Schedule Items that are one slot long - extending
+items to multiple slots requires using the admin interface.
+
+The editor excludes pages and talks with an allowed duplicate count of 0, since these
+can't be part of a valid schedule.

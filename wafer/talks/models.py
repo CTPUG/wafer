@@ -246,6 +246,16 @@ class Talk(models.Model):
 
     submission_time = models.DateTimeField(auto_now_add=True)
 
+    num_schedulable = models.IntegerField(
+            verbose_name=_("copies allowed in the schedule"),
+            default=1, validators=[validators.MinValueValidator(-1)],
+            help_text=_(
+                "Number of times this can be added to the schedule. "
+                "Setting this to 0 means this cannot be scheduled, "
+                "while the special value of -1 allows for it to be "
+                "scheduled an unlimited number of times."
+        ))
+
     @property
     def slug(self):
         return slugify(self.title)
