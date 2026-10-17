@@ -515,7 +515,7 @@ class ScheduleBlockAdmin(VersionAdmin):
 
 
 class VenueAdmin(VersionAdmin):
-    pass
+    prepopulated_fields = {'slug': ('name',)}
 
 
 admin.site.register(ScheduleBlock, ScheduleBlockAdmin)
