@@ -1,0 +1,6 @@
+{% extends "wafer.schedule/checklist_base.html" %}
+{% load i18n %}
+{% block title %}{{ item.talk.title }} - {% trans "Session Chair Checklist" %} - {{ WAFER_CONFERENCE_NAME }}{% endblock %}
+{% block content %}
+{% include "wafer.schedule/checklist_item_detail.html" %}
+{% endblock %}

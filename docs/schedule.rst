@@ -81,6 +81,26 @@ A specific time can be passed via the ``time`` parameter to the current view,
 specified as ``HH:mm`` e.g. ``https://localhost/schedule/current/?time=08:30``
 will generate the current view for 8:30 am.
 
+Session chair checklists
+========================
+
+Wafer provides printable session chair checklists, which are only
+available to conference admins (staff users):
+
+* ``schedule/checklist/item/<pk>/`` renders the session chair checklist
+  for a single scheduled talk.
+
+* ``schedule/checklist/venue/<pk>/`` renders the session chair checklists
+  for all scheduled talks in a venue, grouped on one printed page per day.
+
+Pages and breaks do not get checklists - only scheduled talks do.
+
+The checklist warning times are computed relative to the presumed end of
+the talk, which is the end of the talk's schedule slot, less the number of
+minutes given by the ``WAFER_CHECKLIST_TALK_END_BUFFER_MINUTES`` setting.
+The set of warning times shown is configurable via the
+``WAFER_CHECKLIST_WARNING_OFFSETS_MINUTES`` setting.
+
 Styling notes
 =============
 

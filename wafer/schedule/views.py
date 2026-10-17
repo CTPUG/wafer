@@ -7,15 +7,17 @@ from icalendar import Calendar, Event
 
 from django.conf import settings
 from django.contrib import messages
+from django.contrib.auth.mixins import UserPassesTestMixin
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
 from django.db.models import Q
 from django.http import HttpResponse, JsonResponse
 from django.utils import timezone
 from django.utils.dateparse import parse_datetime
+from django.utils.timezone import localtime
 from django.utils.decorators import method_decorator
 from django.views.decorators.http import condition
-from django.views.generic import TemplateView, View
+from django.views.generic import DetailView, TemplateView, View
 
 from bakery.views import BuildableDetailView, BuildableTemplateView, BuildableMixin
 from rest_framework import viewsets
@@ -34,6 +36,76 @@ from wafer.talks.models import Talk
 
 
 logger = logging.getLogger(__name__)
+
+
+class ChecklistMixin(UserPassesTestMixin):
+    """Session chair checklists are restricted to conference admins."""
+
+    def test_func(self):
+        return self.request.user.is_staff
+
+
+class ChecklistItemView(ChecklistMixin, DetailView):
+    """Printable session chair checklist for a single scheduled talk."""
+
+    context_object_name = 'item'
+    template_name = 'wafer.schedule/checklist_item.html'
+
+    def get_queryset(self):
+        # Checklists only make sense for scheduled talks, so pages
+        # and items with no talk are considered invalid.
+        return ScheduleItem.objects.filter(
+            talk__isnull=False).prefetch_related(
+                'slots__previous_slot',
+                'talk__authors__userprofile',
+                'talk__corresponding_author__userprofile')
+
+
+def get_sorted_checklist_items(venue):
+    """Return the scheduled talks for a venue, grouped by day.
+
+       Returns a list of (day, items) pairs, with the days in order and
+       the items within each day ordered by start time. Items with no
+       slots are sorted last and grouped under a day of None."""
+    items = (ScheduleItem.objects.filter(venue=venue,
+                                         talk__isnull=False)
+             .prefetch_related(
+                 'slots__previous_slot',
+                 'talk__authors__userprofile',
+                 'talk__corresponding_author__userprofile'))
+    # Group the items by day, ordered by start time, so we can
+    # render one printed page per day.
+    days = {}
+    for item in items:
+        start = item.get_start_datetime()
+        day = localtime(start).date() if start else None
+        days.setdefault(day, []).append((start, item))
+
+    def day_key(entry):
+        day, _ = entry
+        # Days in chronological order; unscheduled items come last.
+        return (day is None, day or datetime.date.min)
+
+    def item_key(entry):
+        start, _ = entry
+        # Items without a start time sort last within their (None) day.
+        return (start is None, start.timestamp() if start else 0)
+
+    return [(day, [item for _, item in sorted(group, key=item_key)])
+            for day, group in sorted(days.items(), key=day_key)]
+
+
+class ChecklistVenueView(ChecklistMixin, DetailView):
+    """Printable session chair checklists for all talks in a venue."""
+
+    model = Venue
+    context_object_name = 'venue'
+    template_name = 'wafer.schedule/checklist_venue.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['days'] = get_sorted_checklist_items(self.object)
+        return context
 
 
 class ScheduleRow(object):

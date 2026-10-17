@@ -3,8 +3,9 @@ from rest_framework import routers
 
 
 from wafer.schedule.views import (
-    CurrentView, ScheduleView, ScheduleItemViewSet, ScheduleXmlView,
-    VenueView, ICalView, JsonDataView, get_validation_info)
+    ChecklistItemView, ChecklistVenueView, CurrentView, ScheduleView,
+    ScheduleItemViewSet, ScheduleXmlView, VenueView, ICalView, JsonDataView,
+    get_validation_info)
 
 router = routers.DefaultRouter()
 router.register(r'scheduleitems', ScheduleItemViewSet)
@@ -12,6 +13,10 @@ router.register(r'scheduleitems', ScheduleItemViewSet)
 urlpatterns = [
     re_path(r'^$', ScheduleView.as_view(), name='wafer_full_schedule'),
     re_path(r'^venue/(?P<pk>\d+)/$', VenueView.as_view(), name='wafer_venue'),
+    re_path(r'^checklist/item/(?P<pk>\d+)/$', ChecklistItemView.as_view(),
+            name='wafer_checklist_item'),
+    re_path(r'^checklist/venue/(?P<pk>\d+)/$', ChecklistVenueView.as_view(),
+            name='wafer_checklist_venue'),
     re_path(r'^current/$', CurrentView.as_view(), name='wafer_current'),
     re_path(r'^pentabarf\.xml$', ScheduleXmlView.as_view(),
         name='wafer_pentabarf_xml'),

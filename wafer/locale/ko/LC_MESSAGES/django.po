@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-20 16:53+0000\n"
+"POT-Creation-Date: 2026-10-06 15:24+0000\n"
 "PO-Revision-Date: 2026-03-03 02:09+0000\n"
 "Last-Translator: Sung sion <sionsbed2@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/wafer/wafer/ko/>\n"
@@ -340,78 +340,78 @@ msgstr ""
 msgid "You can register after your account is activated."
 msgstr "계정이 활성화된 후에 등록하실 수 있습니다."
 
-#: wafer/schedule/admin.py:166
+#: wafer/schedule/admin.py:168
 msgid "Clashes found in schedule."
 msgstr "일정에 충돌이 발견되었습니다."
 
-#: wafer/schedule/admin.py:169
+#: wafer/schedule/admin.py:171
 msgid "Duplicate schedule items found in schedule."
 msgstr "일정에서 중복된 항목이 발견되었습니다."
 
-#: wafer/schedule/admin.py:172
+#: wafer/schedule/admin.py:174
 msgid "Invalid schedule items found in schedule."
 msgstr "일정에서 유효하지 않은 항목이 발견되었습니다."
 
-#: wafer/schedule/admin.py:175
+#: wafer/schedule/admin.py:177
 msgid "Non contiguous slots found in schedule."
 msgstr "일정에 연속되지 않은 시간 구간이 있음."
 
-#: wafer/schedule/admin.py:178
+#: wafer/schedule/admin.py:180
 msgid "Invalid venues found in schedule."
 msgstr "일정에 유효하지 않은 항목들 발견."
 
-#: wafer/schedule/admin.py:181
+#: wafer/schedule/admin.py:183
 #: wafer/schedule/templates/admin/scheduleitem_list.html:61
 #, fuzzy
 msgid "Common speaker in simultaneous schedule items"
 msgstr "동 시간대의 일반 발화자"
 
-#: wafer/schedule/admin.py:221
+#: wafer/schedule/admin.py:223
 msgid "Block"
 msgstr "차단"
 
-#: wafer/schedule/admin.py:273 wafer/schedule/models.py:327
+#: wafer/schedule/admin.py:275 wafer/schedule/models.py:329
 msgid "Start Time"
 msgstr "시작 시간"
 
-#: wafer/schedule/admin.py:329
+#: wafer/schedule/admin.py:331
 #, fuzzy
 msgid "Venue"
 msgstr "항목"
 
-#: wafer/schedule/admin.py:415
+#: wafer/schedule/admin.py:417
 msgid "Additional slots"
 msgstr "추가 시간 구간들"
 
-#: wafer/schedule/admin.py:416
+#: wafer/schedule/admin.py:418
 #, fuzzy
 msgid "Create this number of additional slots following this one"
 msgstr "이를 따르는 일련의 추가 시간 구간들을 생성하세요."
 
-#: wafer/schedule/admin.py:477
+#: wafer/schedule/admin.py:479
 #, fuzzy, python-format
-msgid "Additional slot %(obj)s added sucessfully"
+msgid "Additional slot %(obj)s added successfully"
 msgstr "성공적으로 추가된 추가 시간 구간 %(obj)s 들."
 
-#: wafer/schedule/admin.py:484
+#: wafer/schedule/admin.py:486
 #, fuzzy, python-format
 msgid "Failed to create new slot - %s"
 msgstr "새로운 시간 구간 생성 실패- %s"
 
-#: wafer/schedule/models.py:78
+#: wafer/schedule/models.py:80
 #, fuzzy
 msgid "Notes or directions that will be useful to conference attendees"
 msgstr "컨퍼런스 참석자들에게 유용할 수 있는 메모 또는 위치 방향"
 
-#: wafer/schedule/models.py:82
+#: wafer/schedule/models.py:84
 msgid "Blocks (days) on which this venue will be used."
 msgstr "이 장소가 사용될 블록 (일자)."
 
-#: wafer/schedule/models.py:86
+#: wafer/schedule/models.py:88
 msgid "Venue has video coverage"
 msgstr "이 장소는 영상 촬영이 지원됨"
 
-#: wafer/schedule/models.py:106
+#: wafer/schedule/models.py:108
 #, fuzzy
 msgid ""
 "Previous slot if applicable (slots should have either a previous slot OR a "
@@ -420,48 +420,48 @@ msgstr ""
 "필요한 경우 이전 시간 구간을 지정하세요. (모든 시간 구간은 이전 구간이 있거"
 "나 시작 시간으로 설정되어 있어야 합니다)"
 
-#: wafer/schedule/models.py:112
+#: wafer/schedule/models.py:114
 #, fuzzy
 msgid "Start time (if no previous slot selected)"
 msgstr "시작 시간을 선택하세요(만약 선택된 이전 시간 구간이 없을 경우)"
 
-#: wafer/schedule/models.py:114
+#: wafer/schedule/models.py:116
 msgid "Slot end time"
 msgstr "끝나는 시간 구간을 선택하세요"
 
-#: wafer/schedule/models.py:117
+#: wafer/schedule/models.py:119
 msgid "Identifier for use in the admin panel"
 msgstr "관리자 패널에서 사용되는 식별자"
 
-#: wafer/schedule/models.py:152
+#: wafer/schedule/models.py:154
 msgid "Start Date & Time"
 msgstr "시작 일자 및 시간"
 
-#: wafer/schedule/models.py:180
+#: wafer/schedule/models.py:182
 msgid "Schedule Block"
 msgstr "일정 차단"
 
-#: wafer/schedule/models.py:239
+#: wafer/schedule/models.py:241
 msgid "Additional details (if required)"
 msgstr "추가 정보들 (필요 시)"
 
-#: wafer/schedule/models.py:243
+#: wafer/schedule/models.py:245
 msgid "Notes for the conference organisers"
 msgstr "컨퍼런스 운영 담당자용 메모"
 
-#: wafer/schedule/models.py:247
+#: wafer/schedule/models.py:249
 msgid "Custom css class for this schedule item"
 msgstr "이 일정 항목에 적용할 사용자 정의 CSS 클래스"
 
-#: wafer/schedule/models.py:251
+#: wafer/schedule/models.py:253
 msgid "Expand to neighbouring venues"
 msgstr "주변 장소 둘러보기"
 
-#: wafer/schedule/models.py:255
+#: wafer/schedule/models.py:257
 msgid "Date & Time this was last updated"
 msgstr "마지막으로 업데이트 된 날짜 & 시간"
 
-#: wafer/schedule/models.py:284
+#: wafer/schedule/models.py:286
 msgid "Talk Type & Track CSS classes"
 msgstr "발표 유형 및 트랙 CSS 클래스"
 
@@ -501,6 +501,147 @@ msgstr "시간 구간에 오류가 있음"
 #: wafer/schedule/templates/admin/slot_list.html:13
 msgid "Overlapping slots"
 msgstr "시간 구간 중복"
+
+#: wafer/schedule/templates/wafer.schedule/checklist_base.html:5
+#: wafer/schedule/templates/wafer.schedule/checklist_item.html:3
+#: wafer/schedule/templates/wafer.schedule/checklist_venue.html:3
+msgid "Session Chair Checklist"
+msgstr ""
+
+#: wafer/schedule/templates/wafer.schedule/checklist_item_detail.html:11
+#, fuzzy
+#| msgid "notes"
+msgid "Notes"
+msgstr "메모"
+
+#: wafer/schedule/templates/wafer.schedule/checklist_item_detail.html:14
+msgid "Preparation Checklist"
+msgstr ""
+
+#: wafer/schedule/templates/wafer.schedule/checklist_item_detail.html:16
+msgid ""
+"Introduce yourself to the speaker and confirm their talk description and how "
+"to pronounce their names"
+msgstr ""
+
+#: wafer/schedule/templates/wafer.schedule/checklist_item_detail.html:17
+msgid "Ask if there is anything you need to take note of."
+msgstr ""
+
+#: wafer/schedule/templates/wafer.schedule/checklist_item_detail.html:18
+msgid ""
+"Show the speaker cards that indicate how close they are to the end of the "
+"talk"
+msgstr ""
+
+#: wafer/schedule/templates/wafer.schedule/checklist_item_detail.html:19
+msgid ""
+"Make sure the speaker has tested their laptop with the projector (AV team "
+"may need to assist)"
+msgstr ""
+
+#: wafer/schedule/templates/wafer.schedule/checklist_item_detail.html:20
+msgid ""
+"Make sure the speaker is familiar with their microphone (AV team may need to "
+"assist)"
+msgstr ""
+
+#: wafer/schedule/templates/wafer.schedule/checklist_item_detail.html:23
+msgid "Talk checklist"
+msgstr ""
+
+#: wafer/schedule/templates/wafer.schedule/checklist_item_detail.html:25
+msgid "At the start, introduce the speaker and the talk,"
+msgstr ""
+
+#: wafer/schedule/templates/wafer.schedule/checklist_item_detail.html:26
+msgid ""
+"Let the online attendees know that they can ask questions, but to use <code>!"
+"question</code> so that they show up."
+msgstr ""
+
+#: wafer/schedule/templates/wafer.schedule/checklist_item_detail.html:27
+msgid "Ask the audience to give them a round of applause to begin the talk."
+msgstr ""
+
+#: wafer/schedule/templates/wafer.schedule/checklist_item_detail.html:30
+msgid "During the talk"
+msgstr ""
+
+#: wafer/schedule/templates/wafer.schedule/checklist_item_detail.html:32
+msgid "Warn the speaker with the cards when their talk is about to end"
+msgstr ""
+
+#: wafer/schedule/templates/wafer.schedule/checklist_item_detail.html:34
+msgid ""
+"The below times are only indicative. We usually have, for example, a 15-"
+"minute buffer for a 30-minute talk in a 45-minute schedule slot, so if the "
+"speaker starts 10 minutes late, then they still get their full 30 minutes, "
+"and 5 minutes of Q&A."
+msgstr ""
+
+#: wafer/schedule/templates/wafer.schedule/checklist_item_detail.html:35
+msgid ""
+"So note the actual times next to the suggested ones, depending on when the "
+"speaker actually starts."
+msgstr ""
+
+#: wafer/schedule/templates/wafer.schedule/checklist_item_detail.html:39
+msgid "Time of talk end"
+msgstr ""
+
+#: wafer/schedule/templates/wafer.schedule/checklist_item_detail.html:41
+#, python-format
+msgid "Time %(minutes)s minutes before talk end"
+msgstr ""
+
+#: wafer/schedule/templates/wafer.schedule/checklist_item_detail.html:44
+msgid "WARNING: No time and day specified for this talk"
+msgstr ""
+
+#: wafer/schedule/templates/wafer.schedule/checklist_item_detail.html:48
+msgid "Q&amp;A"
+msgstr ""
+
+#: wafer/schedule/templates/wafer.schedule/checklist_item_detail.html:49
+msgid "When the speaker has finished, and there is time for questions:"
+msgstr ""
+
+#: wafer/schedule/templates/wafer.schedule/checklist_item_detail.html:51
+msgid ""
+"Thank the speaker and compliment them on the talk, and announce that they "
+"are ready for Q&amp;A"
+msgstr ""
+
+#: wafer/schedule/templates/wafer.schedule/checklist_item_detail.html:52
+msgid ""
+"EVERY audience member who is asking questions is using the handheld "
+"microphone (otherwise online viewers won't hear them)"
+msgstr ""
+
+#: wafer/schedule/templates/wafer.schedule/checklist_item_detail.html:53
+msgid ""
+"When there are no more questions, or there is no more time left, thank the "
+"speaker again and ask for a final applause"
+msgstr ""
+
+#: wafer/schedule/templates/wafer.schedule/checklist_item_detail.html:56
+#, fuzzy
+#| msgid "talk"
+msgid "Post talk"
+msgstr "연설"
+
+#: wafer/schedule/templates/wafer.schedule/checklist_item_detail.html:58
+msgid "Make sure the microphones are turned off and returned to the AV desk."
+msgstr ""
+
+#: wafer/schedule/templates/wafer.schedule/checklist_venue.html:5
+msgid "Session Chair Checklists"
+msgstr ""
+
+#: wafer/schedule/templates/wafer.schedule/checklist_venue.html:16
+msgid "No scheduled talks in this venue."
+msgstr ""
 
 #: wafer/schedule/templates/wafer.schedule/current.html:3
 #: wafer/schedule/templates/wafer.schedule/current.html:6
@@ -1095,7 +1236,7 @@ msgstr "검토됨, 그러나 최신이 아님 (마지막 검토 후 수정됨)"
 
 #: wafer/talks/templates/wafer.talks/speakers.html:3
 #: wafer/talks/templates/wafer.talks/speakers.html:8
-#: wafer/talks/templates/wafer.talks/speakers.html:39
+#: wafer/talks/templates/wafer.talks/speakers.html:43
 #: wafer/talks/templates/wafer.talks/talks.html:51
 #: wafer/talks/templates/wafer.talks/talks.html:99
 #, fuzzy

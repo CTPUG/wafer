@@ -44,6 +44,16 @@ Wafer's settings
     The name of the Django cache backend that wafer can use.
     Defaults to ``'wafer_cache'``.
 
+``WAFER_CHECKLIST_TALK_END_BUFFER_MINUTES``
+    The number of minutes before the end of a talk's schedule slot
+    that the talk is presumed to end, for the session chair
+    checklists. Defaults to 5 minutes.
+
+``WAFER_CHECKLIST_WARNING_OFFSETS_MINUTES``
+    The warning times, in minutes before the presumed end of the
+    talk, shown on the session chair checklists. Defaults to
+    ``(15, 10, 5, 0)``.
+
 ``WAFER_CONFERENCE_ACRONYM``
     The abbreviated name of the conference.
 
