@@ -67,7 +67,12 @@ does the minium required to create / remove slots.
 
 When a slot is split, the newly created slot will have no schedule
 items associated with it. This can result in a valid schedule
-becoming invalid.
+becoming invalid. The existing slot will have time reduced to half
+of it's current time and the new slot will be added after it. The new
+slots `previous_slot` will be set to the shortened original slot, so
+the relative time of the two slots can be changed by editing the
+end_time of the original time. If a slot had the original slot set
+as `previous_slot`, that will be updated to the new slot.
 
 When slots are merged, only schedule items assigned to the first
 slot in the list of merged slots are retained. Any other schedule
