@@ -499,7 +499,7 @@ class ScheduleEditView(TemplateView):
         context['slots'] = aggregated_slots
         context['talks_all'] = public_talks
         context['talks_unassigned'] = public_talks.filter(scheduleitem=None)
-        context['pages'] = Page.objects.filter(num_schedulable__gt=0)
+        context['pages'] = Page.objects.exclude(num_schedulable=0)
         context['all_blocks'] = blocks
         context['validation_errors'] = validate_schedule()
         return context
