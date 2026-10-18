@@ -193,14 +193,18 @@ class SlotAdminTests(TestCase):
         self.assertEqual(Slot.objects.count(), 2)
         self.assertIn("Splitting only works on a single slot", get_message_list(request))
         self.assertNotIn("Successfully split slot", get_message_list(request))
+
         # Split a single slot
         slots = Slot.objects.filter(start_time=D.datetime(2013, 9, 22, 11, 0, 0, tzinfo=D.timezone.utc))
         self.admin.split_slot(request, slots)
+        slot1.refresh_from_db()
+        slot2.refresh_from_db()
+
         self.assertEqual(Slot.objects.count(), 3)
         self.assertEqual(slot1.end_time,
                          D.datetime(2013, 9, 22, 11, 15, 0, tzinfo=D.timezone.utc))
         self.assertNotEqual(slot2.previous_slot, slot1)
-        slot3 = Slot.object.filter(previous_slot=slot1)
+        slot3 = Slot.objects.filter(previous_slot=slot1)[0]
         self.assertEqual(slot3.end_time,
                          D.datetime(2013, 9, 22, 11, 30, 0, tzinfo=D.timezone.utc))
         self.assertEqual(slot2.previous_slot, slot3)
