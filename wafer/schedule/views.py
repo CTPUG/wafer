@@ -31,7 +31,7 @@ from wafer.schedule.models import (
     Venue, Slot, ScheduleBlock, ScheduleItem, get_schedule_version)
 from wafer.schedule.admin import check_schedule, validate_schedule
 from wafer.schedule.serializers import ScheduleItemSerializer
-from wafer.talks.models import ACCEPTED, CANCELLED
+from wafer.talks.models import ACCEPTED, CANCELLED, PROVISIONAL
 from wafer.talks.models import Talk
 
 
@@ -479,7 +479,8 @@ class ScheduleEditView(TemplateView):
             block = blocks.first()
 
         public_talks = Talk.objects.filter(Q(status=ACCEPTED) |
-                                           Q(status=CANCELLED),
+                                           Q(status=CANCELLED) |
+                                           Q(status=PROVISIONAL),
                                            num_schedulable__gt=0)
         public_talks = public_talks.order_by("talk_type", "talk_id")
         venues = Venue.objects.filter(blocks__in=[block])
