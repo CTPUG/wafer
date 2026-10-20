@@ -13,8 +13,9 @@ from django import forms
 from reversion.admin import VersionAdmin
 
 from wafer.compare.admin import CompareVersionAdmin
-from wafer.schedule.models import ScheduleBlock, Venue, Slot, ScheduleItem
-from wafer.talks.models import Talk, ACCEPTED, CANCELLED
+from wafer.schedule.models import (
+    ScheduleBlock, Venue, Slot, ScheduleItem, schedulable_talk_statuses)
+from wafer.talks.models import Talk
 from wafer.pages.models import Page
 from wafer.utils import cache_result
 
@@ -64,8 +65,9 @@ def validate_items_invalid_talk(all_items):
          - pending / rejected talks in the schedule
          """
     validation = []
+    statuses = schedulable_talk_statuses()
     for item in all_items:
-         if item.talk and item.talk.status not in [ACCEPTED, CANCELLED]:
+         if item.talk and item.talk.status not in statuses:
             validation.append(item)
     return validation
 
@@ -382,7 +384,7 @@ class ScheduleItemAdminForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['talk'].queryset = Talk.objects.filter(
-            Q(status=ACCEPTED) | Q(status=CANCELLED))
+            status__in=schedulable_talk_statuses())
         # Present all pages as possible entries in the schedule
         self.fields['page'].queryset = Page.objects.all()
 

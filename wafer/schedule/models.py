@@ -13,7 +13,15 @@ from django.utils.timezone import localtime
 
 from wafer.pages.models import Page
 from wafer.snippets.markdown_field import MarkdownTextField
-from wafer.talks.models import Talk
+from wafer.talks.models import ACCEPTED, CANCELLED, PROVISIONAL, Talk
+
+
+def schedulable_talk_statuses():
+    """The talk statuses that can be added to the schedule"""
+    statuses = [ACCEPTED, CANCELLED]
+    if settings.WAFER_SCHEDULE_PROVISIONAL_TALKS:
+        statuses.append(PROVISIONAL)
+    return statuses
 
 
 # Validation Helpers
