@@ -1,6 +1,7 @@
 import logging
 
 from django.conf import settings
+from wafer.users.profile_urls import render_profile_url
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import AnonymousUser, Group
 from django.core.exceptions import PermissionDenied
@@ -109,14 +110,16 @@ class ProfileView(Hide404Mixin, BuildableDetailView):
         for field in settings.SOCIAL_MEDIA_ENTRIES:
             if profile.kv.filter(group=group, key=field).exists():
                 value = profile.kv.get(group=group, key=field).value
-                if value:
-                    context['social_sites'][settings.SOCIAL_MEDIA_ENTRIES[field]] = value
+                url = render_profile_url('SOCIAL_MEDIA', field, value)
+                if url:
+                    context['social_sites'][settings.SOCIAL_MEDIA_ENTRIES[field]] = url
 
         for field in settings.CODE_HOSTING_ENTRIES:
             if profile.kv.filter(group=group, key=field).exists():
                 value = profile.kv.get(group=group, key=field).value
-                if value:
-                    context['code_sites'][settings.CODE_HOSTING_ENTRIES[field]] = value
+                url = render_profile_url('CODE_HOSTING', field, value)
+                if url:
+                    context['code_sites'][settings.CODE_HOSTING_ENTRIES[field]] = url
 
         return context
 

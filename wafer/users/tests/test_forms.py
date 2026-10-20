@@ -1,9 +1,20 @@
 """Test user profile forms, especially the content influenced by settings"""
 
 from django.test import Client, TestCase
+from django.core.exceptions import ValidationError
+from wafer.users.profile_urls import make_profile_field, render_profile_url
 from wafer.tests.utils import create_group, create_user
 from wafer.users.models import PROFILE_GROUP
 from wafer.kv.models import KeyValue
+
+
+def validate_test_username(value):
+    if not value.isalnum():
+        raise ValidationError("Use letters and numbers only.")
+
+
+def render_test_github_username(value):
+    return f"https://github.com/{value}"
 
 
 class UserProfileFormContentTests(TestCase):
@@ -12,6 +23,26 @@ class UserProfileFormContentTests(TestCase):
         self.user1 = create_user('test1')
         self.group = create_group(PROFILE_GROUP)
         self.client = Client()
+
+    def test_custom_profile_validation_and_rendering(self):
+        with self.settings(
+            CODE_HOSTING_VALIDATORS={
+                "github": "wafer.users.tests.test_forms.validate_test_username",
+            },
+            CODE_HOSTING_RENDERERS={
+                "github": "wafer.users.tests.test_forms.render_test_github_username",
+            },
+        ):
+            field = make_profile_field("CODE_HOSTING", "github", "GitHub")
+            self.assertEqual(field.clean("olabodeIdowu"), "olabodeIdowu")
+
+            with self.assertRaises(ValidationError):
+                field.clean("invalid-name!")
+
+            self.assertEqual(
+                render_profile_url("CODE_HOSTING", "github", "olabodeIdowu"),
+                "https://github.com/olabodeIdowu",
+            )
 
     def test_entires(self):
         """Test that all the fields in the settings show up as expected"""
