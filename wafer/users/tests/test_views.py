@@ -25,6 +25,45 @@ class UserProfilePermissionTests(TestCase):
         create_talk(title="Test talk", status=ACCEPTED, username='test3')
         self.client = Client()
 
+    def test_private_userlist_includes_opted_in_users(self):
+        """Opted-in users should be listed with the speakers"""
+        user = create_user('test4')
+        user.userprofile.public_attendee = True
+        user.userprofile.save()
+        with self.settings(WAFER_PUBLIC_ATTENDEE_LIST=False):
+            response = self.client.get('/users/')
+            self.assertEqual(response.status_code, 200)
+            usernames = [u.username for u in response.context['user_list']]
+            self.assertIn('test3', usernames)
+            self.assertIn('test4', usernames)
+            self.assertNotIn('test1', usernames)
+            self.assertNotIn('test2', usernames)
+
+    def test_public_userlist_includes_all_users(self):
+        """The global public attendee list should still include everyone"""
+        with self.settings(WAFER_PUBLIC_ATTENDEE_LIST=True):
+            response = self.client.get('/users/')
+            self.assertEqual(response.status_code, 200)
+            usernames = [u.username for u in response.context['user_list']]
+            self.assertEqual(
+                set(usernames), {'test1', 'test2', 'test3'})
+
+    @mock.patch('wafer.users.models.UserProfile.avatar_url', mock_avatar_url)
+    def test_opted_in_profile_is_public(self):
+        """An opted-in profile should be visible when the list is private"""
+        user = create_user('test4')
+        user.userprofile.public_attendee = True
+        user.userprofile.save()
+        with self.settings(WAFER_PUBLIC_ATTENDEE_LIST=False):
+            response = self.client.get('/users/test4/')
+            self.assertEqual(response.status_code, 200)
+            response = self.client.get('/users/test4/edit_profile/')
+            self.assertEqual(response.status_code, 403)
+
+            self.client.login(username='test4', password='test4_password')
+            response = self.client.get('/users/test4/edit_profile/')
+            self.assertEqual(response.status_code, 200)
+
     @mock.patch('wafer.users.models.UserProfile.avatar_url', mock_avatar_url)
     def test_not_logged_in_private_userlist(self):
         """We should get 403 for both existing and non-existant users.

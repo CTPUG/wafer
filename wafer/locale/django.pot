@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-17 09:06+0000\n"
+"POT-Creation-Date: 2026-10-20 11:27+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -698,27 +698,27 @@ msgstr ""
 msgid "Next"
 msgstr ""
 
-#: wafer/settings.py:350
+#: wafer/settings.py:351
 msgid "Twitter Profile link"
 msgstr ""
 
-#: wafer/settings.py:351
+#: wafer/settings.py:352
 msgid "Fediverse Profile link"
 msgstr ""
 
-#: wafer/settings.py:352
+#: wafer/settings.py:353
 msgid "Other Social"
 msgstr ""
 
-#: wafer/settings.py:358
+#: wafer/settings.py:359
 msgid "github profile"
 msgstr ""
 
-#: wafer/settings.py:359
+#: wafer/settings.py:360
 msgid "gitlab profile"
 msgstr ""
 
-#: wafer/settings.py:360
+#: wafer/settings.py:361
 msgid "bitbucket profile"
 msgstr ""
 
@@ -858,7 +858,7 @@ msgstr ""
 msgid "Mark selected talks as Accepted"
 msgstr ""
 
-#: wafer/talks/forms.py:124 wafer/users/forms.py:23 wafer/users/forms.py:77
+#: wafer/talks/forms.py:124 wafer/users/forms.py:23 wafer/users/forms.py:90
 msgid "Save"
 msgstr ""
 
@@ -1476,32 +1476,53 @@ msgstr ""
 msgid "profiles"
 msgstr ""
 
-#: wafer/users/forms.py:71
+#: wafer/users/forms.py:48
+msgid "List me publicly as an attendee"
+msgstr ""
+
+#: wafer/users/forms.py:50
+msgid ""
+"Your name will appear in the public attendee list and your profile will be "
+"publicly visible. This does not register you for the conference. Speakers "
+"with accepted talks are already listed."
+msgstr ""
+
+#: wafer/users/forms.py:84
 msgid "<p>Code Hosting Profiles</p>"
 msgstr ""
 
-#: wafer/users/forms.py:75
+#: wafer/users/forms.py:88
 msgid "<p>Social Profiles</p>"
 msgstr ""
 
-#: wafer/users/models.py:33
+#: wafer/users/models.py:50
 msgid "user profile"
 msgstr ""
 
-#: wafer/users/models.py:34
+#: wafer/users/models.py:51
 msgid "user profiles"
 msgstr ""
 
-#: wafer/users/models.py:38
+#: wafer/users/models.py:55
 msgid "contact number"
 msgstr ""
 
-#: wafer/users/models.py:39
+#: wafer/users/models.py:56
 msgid "bio"
 msgstr ""
 
-#: wafer/users/models.py:41
+#: wafer/users/models.py:58
 msgid "homepage"
+msgstr ""
+
+#: wafer/users/models.py:60
+msgid "public attendee"
+msgstr ""
+
+#: wafer/users/models.py:61
+msgid ""
+"List this user in the public attendee list, even when the full attendee list "
+"is disabled."
 msgstr ""
 
 #: wafer/users/templates/wafer.users/edit_profile.html:5

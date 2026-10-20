@@ -25,6 +25,18 @@ from wafer.talks.models import (ACCEPTED, SUBMITTED, UNDER_CONSIDERATION,
 
 PROFILE_GROUP = 'Online Profiles'
 
+PUBLISHED_TALK_STATUSES = (ACCEPTED, CANCELLED)
+PENDING_PUBLIC_TALK_STATUSES = (SUBMITTED, UNDER_CONSIDERATION, PROVISIONAL)
+
+
+def public_user_q():
+    return (
+        Q(userprofile__public_attendee=True)
+        | Q(talks__status__in=PUBLISHED_TALK_STATUSES)
+        | Q(talks__status__in=PENDING_PUBLIC_TALK_STATUSES,
+            talks__talk_type__show_pending_submissions=True)
+    )
+
 
 class UserProfile(models.Model):
 
@@ -39,6 +51,9 @@ class UserProfile(models.Model):
     bio = models.TextField(_('bio'), null=True, blank=True)
 
     homepage = models.CharField(_('homepage'), max_length=256, null=True, blank=True)
+    public_attendee = models.BooleanField(
+        _('public attendee'), default=False,
+        help_text=_('List this user in the public attendee list.'))
 
     def __str__(self):
         return u'%s' % self.user
@@ -57,7 +72,7 @@ class UserProfile(models.Model):
         return self.user.talks.filter(status=CANCELLED)
 
     def published_talks(self):
-        return self.user.talks.filter(status__in=(ACCEPTED, CANCELLED))
+        return self.user.talks.filter(status__in=PUBLISHED_TALK_STATUSES)
 
     def avatar_url(self, size=96, https=True, default='mm'):
         if not self.user.email:
