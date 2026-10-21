@@ -333,23 +333,48 @@ class ScheduleItem(models.Model):
                                     self.get_start_time())
 
     def get_duration(self):
-        """Return the total duration of the item.
+        """Return the configured duration of this schedule item.
 
-           This is the sum of all the slot durations."""
-        # This is intended for the pentabarf xml file
-        # It will do the wrong thing if the slots aren't
-        # contigious, which we should address sometime.
+        WAFER_SCHEDULE_ITEM_DURATION_METHOD supports:
+        - sum: add every slot duration (the default)
+        - average: use the average slot duration
+        - minimum: use the shortest slot duration
+        - span: include gaps between the earliest start and latest end
+        """
+        from django.conf import settings
+
         slots = list(self.slots.all())
-        result = {'hours': 0, 'minutes': 0}
-        if slots:
-            for slot in slots:
-                dur = slot.get_duration()
-                result['hours'] += dur['hours']
-                result['minutes'] += dur['minutes']
-            # Normalise again
-            hours, result['minutes'] = divmod(result['minutes'], 60)
-            result['hours'] += hours
-        return result
+        if not slots:
+            return {'hours': 0, 'minutes': 0}
+
+        method = getattr(
+            settings, 'WAFER_SCHEDULE_ITEM_DURATION_METHOD', 'sum'
+        )
+        slot_minutes = []
+        for slot in slots:
+            duration = slot.get_duration()
+            slot_minutes.append(
+                int(duration['hours'] * 60 + duration['minutes'])
+            )
+
+        if method == 'sum':
+            total_minutes = sum(slot_minutes)
+        elif method == 'average':
+            total_minutes = sum(slot_minutes) // len(slot_minutes)
+        elif method == 'minimum':
+            total_minutes = min(slot_minutes)
+        elif method == 'span':
+            start = min(slot.get_start_time() for slot in slots)
+            end = max(slot.end_time for slot in slots)
+            total_minutes = int((end - start).total_seconds() // 60)
+        else:
+            raise ValueError(
+                "Unknown WAFER_SCHEDULE_ITEM_DURATION_METHOD: "
+                f"{method!r}"
+            )
+
+        hours, minutes = divmod(total_minutes, 60)
+        return {'hours': hours, 'minutes': minutes}
 
     def get_duration_minutes(self):
         """Return the duration in total number of minutes."""

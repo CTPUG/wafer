@@ -502,3 +502,100 @@ class ScheduleItemGUIDTests(TestCase):
         pages = make_pages(1)
         items = make_items(self.venues * 2, pages * 2)
         self.assertNotEqual(items[0].guid, items[1].guid)
+
+
+class ScheduleItemDurationCalculationTests(TestCase):
+    """Tests for configurable multi-slot schedule item durations."""
+
+    def _item(self, durations, starts=None, ends=None):
+        from types import SimpleNamespace
+        from wafer.schedule.models import ScheduleItem
+
+        from datetime import datetime, timezone, timedelta
+
+        if starts is None:
+            starts = [
+                datetime(2026, 1, 1, 9, 0, tzinfo=timezone.utc)
+                + timedelta(minutes=i * 60)
+                for i in range(len(durations))
+            ]
+        if ends is None:
+            ends = [
+                start + timedelta(minutes=duration)
+                for start, duration in zip(starts, durations)
+            ]
+
+        slots = []
+        for duration, start, end in zip(durations, starts, ends):
+            hours, minutes = divmod(duration, 60)
+            slots.append(SimpleNamespace(
+                get_duration=lambda h=hours, m=minutes:
+                    {'hours': h, 'minutes': m},
+                get_start_time=lambda value=start: value,
+                end_time=end,
+            ))
+
+        item = SimpleNamespace(
+            slots=SimpleNamespace(all=lambda: slots)
+        )
+        return ScheduleItem.get_duration(item)
+
+    def test_sum_duration(self):
+        from django.test import override_settings
+
+        with override_settings(
+            WAFER_SCHEDULE_ITEM_DURATION_METHOD='sum'
+        ):
+            self.assertEqual(
+                self._item([30, 45]),
+                {'hours': 1, 'minutes': 15},
+            )
+
+    def test_item_without_slots_has_zero_duration(self):
+        self.assertEqual(
+            self._item([]),
+            {'hours': 0, 'minutes': 0},
+        )
+
+    def test_average_duration(self):
+        from django.test import override_settings
+
+        with override_settings(
+            WAFER_SCHEDULE_ITEM_DURATION_METHOD='average'
+        ):
+            self.assertEqual(
+                self._item([30, 60]),
+                {'hours': 0, 'minutes': 45},
+            )
+
+    def test_minimum_duration(self):
+        from django.test import override_settings
+
+        with override_settings(
+            WAFER_SCHEDULE_ITEM_DURATION_METHOD='minimum'
+        ):
+            self.assertEqual(
+                self._item([30, 60]),
+                {'hours': 0, 'minutes': 30},
+            )
+
+    def test_span_includes_gaps(self):
+        from datetime import datetime, timezone, timedelta
+        from django.test import override_settings
+
+        start = datetime(2026, 1, 1, 9, 0, tzinfo=timezone.utc)
+        later_start = start + timedelta(minutes=60)
+        first_end = start + timedelta(minutes=30)
+        last_end = later_start + timedelta(minutes=30)
+
+        with override_settings(
+            WAFER_SCHEDULE_ITEM_DURATION_METHOD='span'
+        ):
+            self.assertEqual(
+                self._item(
+                    [30, 30],
+                    starts=[start, later_start],
+                    ends=[first_end, last_end],
+                ),
+                {'hours': 1, 'minutes': 30},
+            )
