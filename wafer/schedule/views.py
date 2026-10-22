@@ -454,18 +454,17 @@ class ScheduleEditView(TemplateView):
                 'name': venue.name,
                 'id': venue.id,
             }
-            for schedule_item in slot.scheduleitem_set.all():
-                if schedule_item.venue.name == venue.name:
-                    venue_context['scheduleitem_id'] = schedule_item.id
-                    if schedule_item.talk:
-                        talk = schedule_item.talk
-                        venue_context['title'] = talk.title
-                        venue_context['talk'] = talk
-                    if (schedule_item.page and
-                            not schedule_item.page.exclude_from_static):
-                        page = schedule_item.page
-                        venue_context['title'] = page.name
-                        venue_context['page'] = page
+            for schedule_item in slot.scheduleitem_set.filter(venue=venue):
+                venue_context['scheduleitem_id'] = schedule_item.id
+                if schedule_item.talk:
+                    talk = schedule_item.talk
+                    venue_context['title'] = talk.title
+                    venue_context['talk'] = talk
+                if (schedule_item.page and
+                        not schedule_item.page.exclude_from_static):
+                    page = schedule_item.page
+                    venue_context['title'] = page.name
+                    venue_context['page'] = page
             slot_context['venues'].append(venue_context)
         return slot_context
 
