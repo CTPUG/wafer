@@ -136,6 +136,7 @@
                   {{ talk.title }}
                   <br/>
                   <small>{{ talk.track }}</small>
+                  <a href="{{ talk.get_absolute_url }}" target="_blank" rel="noopener">view</a>
                 {% else %}
                   <del title='{% trans 'Cancelled' %}'>{{ talk.title }}</del>
                 {% endif %}
@@ -162,6 +163,7 @@
                   {{ talk.title }}
                   <br/>
                   <small>{{ talk.track }}</small>
+                  <a href="{{ talk.get_absolute_url }}" target="_blank" rel="noopener">view</a>
                 {% else %}
                   <del title='{% trans 'Cancelled' %}'>{{ talk.title }}</del>
                 {% endif %}
