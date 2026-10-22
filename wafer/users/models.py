@@ -39,6 +39,10 @@ class UserProfile(models.Model):
     bio = models.TextField(_('bio'), null=True, blank=True)
 
     homepage = models.CharField(_('homepage'), max_length=256, null=True, blank=True)
+    show_in_attendee_list = models.BooleanField(
+        _('show me in the public attendee list'),
+        default=False,
+     )
 
     def __str__(self):
         return u'%s' % self.user

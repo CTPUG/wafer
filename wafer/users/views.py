@@ -37,6 +37,7 @@ class UsersView(PaginatedBuildableListView):
                 | Q(talks__status__in=(SUBMITTED, UNDER_CONSIDERATION,
                                        PROVISIONAL),
                     talks__talk_type__show_pending_submissions=True)
+                | Q(userprofile__show_in_attendee_list=True)
             ).distinct()
         qs = qs.order_by('first_name', 'last_name', 'username')
         return qs
