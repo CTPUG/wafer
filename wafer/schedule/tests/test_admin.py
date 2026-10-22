@@ -6,14 +6,14 @@ from django.utils import timezone, version
 
 from wafer.pages.models import Page
 from wafer.schedule.admin import (
-    SlotAdmin, SlotBlockFilter, SlotStartTimeFilter,
+    SlotAdmin, SlotBlockFilter, SlotStartTimeFilter, ScheduleItemAdminForm,
     check_schedule, find_clashes, find_duplicate_schedule_items,
     find_invalid_venues, find_non_contiguous, prefetch_schedule_items,
     validate_items_no_item, validate_items_both_talk_and_page,
     validate_items_invalid_talk, validate_schedule)
 from wafer.schedule.models import ScheduleBlock, Venue, Slot, ScheduleItem
 from wafer.talks.models import (ACCEPTED, REJECTED, CANCELLED, SUBMITTED,
-                                UNDER_CONSIDERATION)
+                                UNDER_CONSIDERATION, PROVISIONAL)
 from wafer.talks.tests.fixtures import create_talk
 
 
@@ -851,3 +851,18 @@ class ValidationTests(TestCase):
         self.assertTrue(check_schedule())
         errors = validate_schedule()
         self.assertEqual(len(errors), 0)
+
+
+class ScheduleItemTalkChoicesTests(TestCase):
+    def test_provisional_talk_offered(self):
+        talk = create_talk('Provisional', PROVISIONAL, 'author_p')
+        form = ScheduleItemAdminForm()
+        self.assertIn(talk, form.fields['talk'].queryset)
+
+    def test_unschedulable_talks_not_offered(self):
+        rejected = create_talk('Rejected', REJECTED, 'author_r')
+        submitted = create_talk('Submitted', SUBMITTED, 'author_s')
+        form = ScheduleItemAdminForm()
+        queryset = form.fields['talk'].queryset
+        self.assertNotIn(rejected, queryset)
+        self.assertNotIn(submitted, queryset)
