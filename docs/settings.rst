@@ -119,9 +119,12 @@ Wafer's settings
 
 ``WAFER_PUBLIC_ATTENDEE_LIST``
     A boolean flag.
-    When ``True``, all registered users' profiles are publicly visible.
-    Otherwise, only users with associated public talks have public
-    profiles.
+    When ``True``, all user accounts are listed publicly and their
+    profiles are publicly visible.
+    Otherwise, only users with associated public talks, and users who
+    have opted in to the public attendee list in their profile, have
+    public profiles.
+    The per-user opt-in defaults to off.
 
 ``WAFER_REGISTRATION_MODE``
     The mechanisms users will register for the conference, with.

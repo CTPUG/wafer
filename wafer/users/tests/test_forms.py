@@ -2,7 +2,7 @@
 
 from django.test import Client, TestCase
 from wafer.tests.utils import create_group, create_user
-from wafer.users.models import PROFILE_GROUP
+from wafer.users.models import UserProfile, PROFILE_GROUP
 from wafer.kv.models import KeyValue
 
 
@@ -32,6 +32,27 @@ class UserProfileFormContentTests(TestCase):
             self.assertTrue(b'Fediverse' not in form)
             self.assertTrue(b'GitLab' in form)
             self.assertTrue(b'GitHub' not in form)
+
+    def test_public_attendee_opt_in(self):
+        """Test the public attendee opt-in is only shown when needed"""
+        self.client.login(username='test1', password='test1_password')
+        with self.settings(WAFER_PUBLIC_ATTENDEE_LIST=True):
+            response = self.client.get('/users/test1/edit_profile/')
+            self.assertNotIn('public_attendee', response.context['form'].fields)
+
+        with self.settings(WAFER_PUBLIC_ATTENDEE_LIST=False):
+            response = self.client.get('/users/test1/edit_profile/')
+            self.assertIn('public_attendee', response.context['form'].fields)
+            self.assertContains(response, 'List me publicly as an attendee')
+
+            self.client.post('/users/test1/edit_profile/',
+                             data={'public_attendee': 'on'})
+            profile = UserProfile.objects.get(user=self.user1)
+            self.assertTrue(profile.public_attendee)
+
+            self.client.post('/users/test1/edit_profile/', data={})
+            profile.refresh_from_db()
+            self.assertFalse(profile.public_attendee)
 
     def test_save(self):
         """Test that saving a form adds the data correctly"""

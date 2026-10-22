@@ -295,7 +295,8 @@ WAFER_USER_IS_REGISTERED = 'wafer.tickets.models.user_is_registered'
 # the ticket types associated with the user as a list
 WAFER_USER_TICKET_TYPES = 'wafer.tickets.models.get_user_ticket_types'
 
-# Allow registered and anonymous users to see registered users
+# Allow registered and anonymous users to see all users.
+# When False, only speakers and users who opt in are listed.
 WAFER_PUBLIC_ATTENDEE_LIST = True
 
 # Ticket registration with Quicket

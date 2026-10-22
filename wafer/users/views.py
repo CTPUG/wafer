@@ -4,7 +4,6 @@ from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import AnonymousUser, Group
 from django.core.exceptions import PermissionDenied
-from django.db.models import Q
 from django.http import Http404
 from django.urls import reverse
 from django.views.generic import UpdateView
@@ -13,11 +12,9 @@ from bakery.views import BuildableDetailView
 from rest_framework import viewsets
 from rest_framework.permissions import IsAdminUser
 
-from wafer.talks.models import (
-    ACCEPTED, CANCELLED, PROVISIONAL, SUBMITTED, UNDER_CONSIDERATION)
 from wafer.users.forms import UserForm, UserProfileForm
 from wafer.users.serializers import UserSerializer
-from wafer.users.models import UserProfile, PROFILE_GROUP
+from wafer.users.models import UserProfile, PROFILE_GROUP, public_user_q
 from wafer.utils import PaginatedBuildableListView
 
 log = logging.getLogger(__name__)
@@ -32,12 +29,7 @@ class UsersView(PaginatedBuildableListView):
     def get_queryset(self, *args, **kwargs):
         qs = super().get_queryset(*args, **kwargs)
         if not settings.WAFER_PUBLIC_ATTENDEE_LIST:
-            qs = qs.filter(
-                Q(talks__status__in=(ACCEPTED, CANCELLED))
-                | Q(talks__status__in=(SUBMITTED, UNDER_CONSIDERATION,
-                                       PROVISIONAL),
-                    talks__talk_type__show_pending_submissions=True)
-            ).distinct()
+            qs = qs.filter(public_user_q()).distinct()
         qs = qs.order_by('first_name', 'last_name', 'username')
         return qs
 
@@ -89,10 +81,11 @@ class ProfileView(Hide404Mixin, BuildableDetailView):
 
     def get_object(self, *args, **kwargs):
         object_ = super().get_object(*args, **kwargs)
-        if not settings.WAFER_PUBLIC_ATTENDEE_LIST:
-            if (not self.can_edit(object_) and
-                    not object_.userprofile.published_talks().exists()):
-                raise PermissionDenied()
+        if (not settings.WAFER_PUBLIC_ATTENDEE_LIST
+                and not self.can_edit(object_)
+                and not get_user_model().objects.filter(
+                    pk=object_.pk).filter(public_user_q()).exists()):
+            raise PermissionDenied()
         return object_
 
     def get_context_data(self, **kwargs):
@@ -104,7 +97,7 @@ class ProfileView(Hide404Mixin, BuildableDetailView):
         context['social_sites'] = {}
         context['code_sites'] = {}
 
-        profile = self.get_object().userprofile
+        profile = context['object'].userprofile
 
         for field in settings.SOCIAL_MEDIA_ENTRIES:
             if profile.kv.filter(group=group, key=field).exists():

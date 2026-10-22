@@ -39,6 +39,17 @@ class UserProfileForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
+        if settings.WAFER_PUBLIC_ATTENDEE_LIST:
+            del self.fields['public_attendee']
+        else:
+            self.fields['public_attendee'].label = _(
+                'List me publicly as an attendee')
+            self.fields['public_attendee'].help_text = _(
+                'Your name will appear in the public attendee list and your '
+                'profile will be publicly visible. This does not register '
+                'you for the conference. Speakers with accepted talks are '
+                'already listed.')
+
         pre_social_index = len(self.fields)
 
         user_profile = kwargs.get('instance')
@@ -47,7 +58,7 @@ class UserProfileForm(forms.ModelForm):
         # currently everything I'm asking for is an url, and this adds some
         # validation - we may need to revisit this later
         for field_name in settings.SOCIAL_MEDIA_ENTRIES:
-            self.fields[field_name] = forms.URLField(label=settings.SOCIAL_MEDIA_ENTRIES[field_name], 
+            self.fields[field_name] = forms.URLField(label=settings.SOCIAL_MEDIA_ENTRIES[field_name],
                                                      max_length=1024, required=False,
                                                      initial=profile_kv.get(field_name, ''))
 
@@ -98,4 +109,3 @@ class UserProfileForm(forms.ModelForm):
     class Meta:
         model = UserProfile
         exclude = ('user', 'kv')
-
