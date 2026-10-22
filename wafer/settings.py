@@ -371,6 +371,11 @@ WAFER_SCHEDULE_MAX_AUTHORS = 2
 # end of its schedule slot (used for the "warn the speaker" times).
 WAFER_CHECKLIST_TALK_END_BUFFER_MINUTES = 5
 
+# How to calculate the duration of a schedule item with multiple slots.
+# Options: "sum" (default), "average", "minimum", or "span".
+WAFER_SCHEDULE_ITEM_DURATION_METHOD = "sum"
+
+
 # Warning times (in minutes before the presumed end of the talk) shown on
 # the session chair checklists.
 WAFER_CHECKLIST_WARNING_OFFSETS_MINUTES = (15, 10, 5, 0)
