@@ -276,6 +276,8 @@ WAFER_TALK_LANGUAGES = ()
 # Ask speakers for video release, and an email address of a reviewer
 WAFER_VIDEO = True
 WAFER_VIDEO_REVIEWER = True
+# Optional Markdown shown above the video reviewer field.
+WAFER_VIDEO_REVIEWER_DESCRIPTION = ''
 WAFER_VIDEO_LICENSE = 'CC BY-SA 4.0'
 WAFER_VIDEO_LICENSE_URL = 'https://creativecommons.org/licenses/by-sa/4.0/'
 
