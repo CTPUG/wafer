@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-25 12:47+0000\n"
+"POT-Creation-Date: 2026-10-25 13:01+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -317,127 +317,136 @@ msgstr ""
 msgid "You can register after your account is activated."
 msgstr ""
 
-#: wafer/schedule/admin.py:175
+#: wafer/schedule/admin.py:191
 msgid "Clashes found in schedule."
 msgstr ""
 
-#: wafer/schedule/admin.py:178
+#: wafer/schedule/admin.py:194
 msgid ""
 "Schedule items found in schedule which exceed allowed number of duplicates."
 msgstr ""
 
-#: wafer/schedule/admin.py:181
-msgid "Invalid schedule items found in schedule."
+#: wafer/schedule/admin.py:197
+msgid "Schedule items with no talk or page asigned found in schedule."
 msgstr ""
 
-#: wafer/schedule/admin.py:184
+#: wafer/schedule/admin.py:200
+msgid "Schedule items with both a talk and a page asigned found in schedule."
+msgstr ""
+
+#: wafer/schedule/admin.py:203
+msgid ""
+"Schedule items with a talk an incorrect state asigned found in schedule."
+msgstr ""
+
+#: wafer/schedule/admin.py:206
 msgid "Non contiguous slots found in schedule."
 msgstr ""
 
-#: wafer/schedule/admin.py:187
+#: wafer/schedule/admin.py:209
 msgid "Invalid venues found in schedule."
 msgstr ""
 
-#: wafer/schedule/admin.py:190
+#: wafer/schedule/admin.py:212
 #: wafer/schedule/templates/admin/scheduleitem_list.html:61
 msgid "Common speaker in simultaneous schedule items"
 msgstr ""
 
-#: wafer/schedule/admin.py:230
+#: wafer/schedule/admin.py:252
 msgid "Block"
 msgstr ""
 
-#: wafer/schedule/admin.py:282 wafer/schedule/models.py:333
+#: wafer/schedule/admin.py:304 wafer/schedule/models.py:335
 msgid "Start Time"
 msgstr ""
 
-#: wafer/schedule/admin.py:338
+#: wafer/schedule/admin.py:360
 msgid "Venue"
 msgstr ""
 
-#: wafer/schedule/admin.py:424
+#: wafer/schedule/admin.py:446
 msgid "Additional slots"
 msgstr ""
 
-#: wafer/schedule/admin.py:425
+#: wafer/schedule/admin.py:447
 msgid "Create this number of additional slots following this one"
 msgstr ""
 
-#: wafer/schedule/admin.py:486
+#: wafer/schedule/admin.py:508
 #, python-format
 msgid "Additional slot %(obj)s added successfully"
 msgstr ""
 
-#: wafer/schedule/admin.py:493
+#: wafer/schedule/admin.py:515
 #, python-format
 msgid "Failed to create new slot - %s"
 msgstr ""
 
-#: wafer/schedule/models.py:78
+#: wafer/schedule/models.py:80
 msgid "Notes or directions that will be useful to conference attendees"
 msgstr ""
 
-#: wafer/schedule/models.py:82
+#: wafer/schedule/models.py:84
 msgid "Blocks (days) on which this venue will be used."
 msgstr ""
 
-#: wafer/schedule/models.py:86
+#: wafer/schedule/models.py:88
 msgid "Venue has video coverage"
 msgstr ""
 
-#: wafer/schedule/models.py:91
+#: wafer/schedule/models.py:93
 msgid ""
 "Short name used in stream URLs and IRC channel names. Keep it unchanged if "
 "the venue is renamed"
 msgstr ""
 
-#: wafer/schedule/models.py:112
+#: wafer/schedule/models.py:114
 msgid ""
 "Previous slot if applicable (slots should have either a previous slot OR a "
 "start time set)"
 msgstr ""
 
-#: wafer/schedule/models.py:118
+#: wafer/schedule/models.py:120
 msgid "Start time (if no previous slot selected)"
 msgstr ""
 
-#: wafer/schedule/models.py:120
+#: wafer/schedule/models.py:122
 msgid "Slot end time"
 msgstr ""
 
-#: wafer/schedule/models.py:123
+#: wafer/schedule/models.py:125
 msgid "Identifier for use in the admin panel"
 msgstr ""
 
-#: wafer/schedule/models.py:158
+#: wafer/schedule/models.py:160
 msgid "Start Date & Time"
 msgstr ""
 
-#: wafer/schedule/models.py:186
+#: wafer/schedule/models.py:188
 msgid "Schedule Block"
 msgstr ""
 
-#: wafer/schedule/models.py:245
+#: wafer/schedule/models.py:247
 msgid "Additional details (if required)"
 msgstr ""
 
-#: wafer/schedule/models.py:249
+#: wafer/schedule/models.py:251
 msgid "Notes for the conference organisers"
 msgstr ""
 
-#: wafer/schedule/models.py:253
+#: wafer/schedule/models.py:255
 msgid "Custom css class for this schedule item"
 msgstr ""
 
-#: wafer/schedule/models.py:257
+#: wafer/schedule/models.py:259
 msgid "Expand to neighbouring venues"
 msgstr ""
 
-#: wafer/schedule/models.py:261
+#: wafer/schedule/models.py:263
 msgid "Date & Time this was last updated"
 msgstr ""
 
-#: wafer/schedule/models.py:290
+#: wafer/schedule/models.py:292
 msgid "Talk Type & Track CSS classes"
 msgstr ""
 
@@ -476,6 +485,135 @@ msgstr ""
 
 #: wafer/schedule/templates/admin/slot_list.html:13
 msgid "Overlapping slots"
+msgstr ""
+
+#: wafer/schedule/templates/wafer.schedule/checklist_base.html:5
+#: wafer/schedule/templates/wafer.schedule/checklist_item.html:3
+#: wafer/schedule/templates/wafer.schedule/checklist_venue.html:3
+msgid "Session Chair Checklist"
+msgstr ""
+
+#: wafer/schedule/templates/wafer.schedule/checklist_item_detail_base.html:12
+msgid "Notes"
+msgstr ""
+
+#: wafer/schedule/templates/wafer.schedule/checklist_item_detail_base.html:17
+msgid "Preparation Checklist"
+msgstr ""
+
+#: wafer/schedule/templates/wafer.schedule/checklist_item_detail_base.html:19
+msgid ""
+"Introduce yourself to the speaker and confirm their talk description and how "
+"to pronounce their names"
+msgstr ""
+
+#: wafer/schedule/templates/wafer.schedule/checklist_item_detail_base.html:20
+msgid "Ask if there is anything you need to take note of."
+msgstr ""
+
+#: wafer/schedule/templates/wafer.schedule/checklist_item_detail_base.html:21
+msgid ""
+"Show the speaker cards that indicate how close they are to the end of the "
+"talk"
+msgstr ""
+
+#: wafer/schedule/templates/wafer.schedule/checklist_item_detail_base.html:22
+msgid ""
+"Make sure the speaker has tested their laptop with the projector (AV team "
+"may need to assist)"
+msgstr ""
+
+#: wafer/schedule/templates/wafer.schedule/checklist_item_detail_base.html:23
+msgid ""
+"Make sure the speaker is familiar with their microphone (AV team may need to "
+"assist)"
+msgstr ""
+
+#: wafer/schedule/templates/wafer.schedule/checklist_item_detail_base.html:28
+msgid "Talk checklist"
+msgstr ""
+
+#: wafer/schedule/templates/wafer.schedule/checklist_item_detail_base.html:30
+msgid "At the start, introduce the speaker and the talk,"
+msgstr ""
+
+#: wafer/schedule/templates/wafer.schedule/checklist_item_detail_base.html:31
+msgid "Ask the audience to give them a round of applause to begin the talk."
+msgstr ""
+
+#: wafer/schedule/templates/wafer.schedule/checklist_item_detail_base.html:36
+msgid "During the talk"
+msgstr ""
+
+#: wafer/schedule/templates/wafer.schedule/checklist_item_detail_base.html:38
+msgid "Warn the speaker with the cards when their talk is about to end"
+msgstr ""
+
+#: wafer/schedule/templates/wafer.schedule/checklist_item_detail_base.html:40
+msgid ""
+"The below times are only indicative and should be adjusted as needed for "
+"unexpected delays or changes to the schedule"
+msgstr ""
+
+#: wafer/schedule/templates/wafer.schedule/checklist_item_detail_base.html:41
+msgid ""
+"So note the actual times next to the suggested ones, depending on when the "
+"speaker actually starts."
+msgstr ""
+
+#: wafer/schedule/templates/wafer.schedule/checklist_item_detail_base.html:45
+msgid "Time of talk end"
+msgstr ""
+
+#: wafer/schedule/templates/wafer.schedule/checklist_item_detail_base.html:47
+#, python-format
+msgid "Time %(minutes)s minutes before talk end"
+msgstr ""
+
+#: wafer/schedule/templates/wafer.schedule/checklist_item_detail_base.html:50
+msgid "WARNING: No time and day specified for this talk"
+msgstr ""
+
+#: wafer/schedule/templates/wafer.schedule/checklist_item_detail_base.html:56
+msgid "Q&amp;A"
+msgstr ""
+
+#: wafer/schedule/templates/wafer.schedule/checklist_item_detail_base.html:57
+msgid "When the speaker has finished, and there is time for questions:"
+msgstr ""
+
+#: wafer/schedule/templates/wafer.schedule/checklist_item_detail_base.html:59
+msgid ""
+"Thank the speaker and compliment them on the talk, and announce that they "
+"are ready for Q&amp;A"
+msgstr ""
+
+#: wafer/schedule/templates/wafer.schedule/checklist_item_detail_base.html:60
+msgid ""
+"EVERY audience member who is asking questions is using the handheld "
+"microphone"
+msgstr ""
+
+#: wafer/schedule/templates/wafer.schedule/checklist_item_detail_base.html:61
+msgid ""
+"When there are no more questions, or there is no more time left, thank the "
+"speaker again and ask for a final applause"
+msgstr ""
+
+#: wafer/schedule/templates/wafer.schedule/checklist_item_detail_base.html:66
+msgid "Post talk"
+msgstr ""
+
+#: wafer/schedule/templates/wafer.schedule/checklist_item_detail_base.html:68
+msgid "Make sure the microphones are turned off and returned to the AV desk."
+msgstr ""
+
+#: wafer/schedule/templates/wafer.schedule/checklist_venue.html:5
+msgid "Session Chair Checklists"
+msgstr ""
+
+#: wafer/schedule/templates/wafer.schedule/checklist_venue.html:16
+msgid "No scheduled talks in this venue."
 msgstr ""
 
 #: wafer/schedule/templates/wafer.schedule/current.html:3

@@ -59,6 +59,7 @@ class Command(BaseCommand):
         page.content = content
         page.include_in_menu = meta.get('include_in_menu', False)
         page.exclude_from_static = meta.get('exclude_from_static', False)
+        page.num_schedulable = meta.get('num_schedulable', 1)
         page.people.clear()
         page.people.add(*(
             get_user_model().objects.get(username=person)

@@ -545,6 +545,9 @@ class EditorTestsMixin:
         close.click()
         talks_link = self.driver.find_element(By.PARTIAL_LINK_TEXT, "Unassigned Talks")
         talks_link.click()
+        # Pause briefly to make sure the server has a chance to do stuff
+        actions = webdriver.ActionChains(self.driver)
+        actions.pause(0.5)
         tab_pane = None
         for pane in self.driver.find_elements(By.CLASS_NAME, "tab-pane"):
             if 'active' in pane.get_attribute('class'):

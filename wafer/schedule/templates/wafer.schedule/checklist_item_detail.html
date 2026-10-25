@@ -1,0 +1,19 @@
+{% extends "wafer.schedule/checklist_item_detail_base.html" %}
+{% comment %}
+Thin shell around checklist_item_detail_base.html.
+
+Conferences can customize individual checklist sections by shadowing this
+template (placing their own wafer.schedule/checklist_item_detail.html
+earlier in the template loader path) with content like:
+
+    {% extends "wafer.schedule/checklist_item_detail_base.html" %}
+    {% block qa %}
+      ... conference-specific Q&A instructions ...
+    {% endblock qa %}
+
+Extending the _base template (rather than overriding the whole detail
+template) avoids infinite recursion from same-name extends, and means
+upstream changes to unmodified sections are picked up automatically.
+Overrides apply to both the per-talk checklist page and the per-venue
+printable checklists.
+{% endcomment %}

@@ -1,0 +1,56 @@
+/* Session Chair Checklist
+ *
+ * Printable checklist styles, loaded via wafer.schedule/checklist_base.html.
+ */
+
+body {
+  font-size: 12pt;
+}
+
+.checklist-talk {
+  page-break-inside: avoid;
+}
+
+.checklist-talk ul,
+.checklist-talk ol {
+  list-style: none;
+  padding-left: 0;
+}
+
+.checklist-talk li.check::before {
+  content: "\2610\00a0\00a0";
+}
+
+.checklist-talk .fill-in {
+  border-bottom: 1px solid #000;
+  display: inline-block;
+  min-width: 6em;
+}
+
+.checklist-notes {
+  border-bottom: 1px solid #000;
+  height: 2.5em;
+}
+
+@media screen {
+  .container {
+    max-width: 21cm;
+    margin: 1em auto;
+    padding: 1em 2em;
+    border: 1px solid #ccc;
+  }
+}
+
+@media print {
+  .checklist-day {
+    page-break-after: always;
+  }
+
+  .checklist-day:last-child {
+    page-break-after: auto;
+  }
+
+  .no-print {
+    display: none;
+  }
+}
