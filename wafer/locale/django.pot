@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-17 09:06+0000\n"
+"POT-Creation-Date: 2026-10-25 13:01+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -356,7 +356,7 @@ msgstr ""
 msgid "Block"
 msgstr ""
 
-#: wafer/schedule/admin.py:304 wafer/schedule/models.py:329
+#: wafer/schedule/admin.py:304 wafer/schedule/models.py:335
 msgid "Start Time"
 msgstr ""
 
@@ -394,53 +394,59 @@ msgstr ""
 msgid "Venue has video coverage"
 msgstr ""
 
-#: wafer/schedule/models.py:108
+#: wafer/schedule/models.py:93
+msgid ""
+"Short name used in stream URLs and IRC channel names. Keep it unchanged if "
+"the venue is renamed"
+msgstr ""
+
+#: wafer/schedule/models.py:114
 msgid ""
 "Previous slot if applicable (slots should have either a previous slot OR a "
 "start time set)"
 msgstr ""
 
-#: wafer/schedule/models.py:114
+#: wafer/schedule/models.py:120
 msgid "Start time (if no previous slot selected)"
 msgstr ""
 
-#: wafer/schedule/models.py:116
+#: wafer/schedule/models.py:122
 msgid "Slot end time"
 msgstr ""
 
-#: wafer/schedule/models.py:119
+#: wafer/schedule/models.py:125
 msgid "Identifier for use in the admin panel"
 msgstr ""
 
-#: wafer/schedule/models.py:154
+#: wafer/schedule/models.py:160
 msgid "Start Date & Time"
 msgstr ""
 
-#: wafer/schedule/models.py:182
+#: wafer/schedule/models.py:188
 msgid "Schedule Block"
 msgstr ""
 
-#: wafer/schedule/models.py:241
+#: wafer/schedule/models.py:247
 msgid "Additional details (if required)"
 msgstr ""
 
-#: wafer/schedule/models.py:245
+#: wafer/schedule/models.py:251
 msgid "Notes for the conference organisers"
 msgstr ""
 
-#: wafer/schedule/models.py:249
+#: wafer/schedule/models.py:255
 msgid "Custom css class for this schedule item"
 msgstr ""
 
-#: wafer/schedule/models.py:253
+#: wafer/schedule/models.py:259
 msgid "Expand to neighbouring venues"
 msgstr ""
 
-#: wafer/schedule/models.py:257
+#: wafer/schedule/models.py:263
 msgid "Date & Time this was last updated"
 msgstr ""
 
-#: wafer/schedule/models.py:286
+#: wafer/schedule/models.py:292
 msgid "Talk Type & Track CSS classes"
 msgstr ""
 

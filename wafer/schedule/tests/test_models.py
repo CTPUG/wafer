@@ -502,3 +502,25 @@ class ScheduleItemGUIDTests(TestCase):
         pages = make_pages(1)
         items = make_items(self.venues * 2, pages * 2)
         self.assertNotEqual(items[0].guid, items[1].guid)
+
+
+class VenueSlugsTests(TestCase):
+    def test_slug_defaults_to_blank(self):
+        """Tests that a venue created without a slug still works."""
+        venue = Venue.objects.create(order=1, name='Main Hall')
+        venue.refresh_from_db()
+        self.assertEqual(venue.slug, '')
+
+    def test_slug_can_be_set_explicitly(self):
+        """Tests that the slug is stored as given."""
+        venue = Venue.objects.create(order=1, name='Main Hall', slug='hall-1')
+        venue.refresh_from_db()
+        self.assertEqual(venue.slug, 'hall-1')
+
+    def test_slug_independent_of_name(self):
+        """Tests that renaming the venue doesn't change the slug."""
+        venue = Venue.objects.create(order=1, name='Main Hall', slug='hall-1')
+        venue.name = 'Renamed Hall'
+        venue.save()
+        venue.refresh_from_db()
+        self.assertEqual(venue.slug, 'hall-1')
