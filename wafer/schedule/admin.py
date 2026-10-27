@@ -462,8 +462,87 @@ class SlotAdmin(CompareVersionAdmin):
 
     list_filter = (SlotBlockFilter, SlotStartTimeFilter)
 
+    actions = ["split_slot", "combine_slots"]
+
     class Media:
         js = ('js/scheduledatetime.js',)
+
+
+    @admin.action(description="Split the selected slot into two equal-length slots")
+    def split_slot(self, request, queryset):
+        # First check that only one slot is selected
+        if queryset.count() != 1:
+            self.message_user(request, "Splitting only works on a single slot", level=messages.ERROR)
+            return
+        # Split the slot
+        # Work out the correct duration
+        to_split = queryset[0]
+        old_end_time = to_split.end_time
+        duration = old_end_time - to_split.get_start_time()
+        new_end_time = to_split.get_start_time() + duration/2
+        # Find any slot using our existing slot as previous slot
+        to_change = list(Slot.objects.filter(previous_slot=to_split))
+        # Create the new slot
+        to_split.end_time = new_end_time
+        new_slot = Slot(previous_slot=to_split, end_time=old_end_time)
+        new_slot.save()
+        to_split.save()
+        # Fix any slot using our existing slot as previous slot
+        for slot in to_change:
+            slot.previous_slot = new_slot
+            slot.save()
+        # We don't change any schedule items here - this can
+        # create invalid schedule as we introduce gaps, etc,
+        # While we could keep the schedule valid by adding
+        # slots to existing schedule items, we don't know
+        # what the user wants to do with the new slot,
+        # and so refuse to guess
+        check_schedule.invalidate()
+        self.message_user(request, "Successfully split slot", level=messages.SUCCESS)
+
+    @admin.action(description="Combine the two contigious selected slots into a single slot")
+    def combine_slots(self, request, queryset):
+        # Check that we have only two selected slots
+        if queryset.count() != 2:
+            self.message_user(request, "Combining requires 2 (and only 2) slots",
+                              level=messages.ERROR)
+            return
+        # Check that the slots are contigious (same block, slot1.start == slot2.end, etc)
+        # This is not quite the same as the existing check for schedule items and we
+        # should figure out how not to duplicate this logic at some point.
+        last_slot = None
+        first_slot = None
+        non_contigious = False
+        for slot in queryset.order_by('end_time'):
+            # We'll need this shortly
+            if not first_slot:
+                first_slot = slot
+            if last_slot:
+                if last_slot.end_time != slot.get_start_time():
+                    non_contigious = True
+            last_slot = slot
+        if non_contigious:
+            self.message_user(request, "Slots to combine must be contigious",
+                              level=messages.ERROR)
+            return
+        # Extend the time of the first slot to the end of the last
+        first_slot.end_time = last_slot.end_time
+        first_slot.save()
+        # Fix any previous slot references that will be broken
+        for slot in Slot.objects.filter(previous_slot=last_slot):
+            slot.previous_slot = first_slot
+            slot.save()
+        # remove slots we will remove from schedule items using them
+        # This can create dangling schedule items, but we again
+        # refuse to guess what the user wants and leave it to
+        # them to sort out
+        for item in ScheduleItem.objects.filter(slots__pk=last_slot.pk):
+            item.slots.remove(last_slot)
+            item.save()
+        # remove now unused slot
+        last_slot.delete()
+        check_schedule.invalidate()
+        self.message_user(request, "Combined 2 slots", level=messages.SUCCESS)
 
     def changelist_view(self, request, extra_context=None):
         extra_context = extra_context or {}
