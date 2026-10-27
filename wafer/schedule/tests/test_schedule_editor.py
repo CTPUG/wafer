@@ -205,7 +205,7 @@ class EditorTestsMixin:
                 source = x
                 break
         # Find the first schedule item in the schedule tabls
-        target = self.driver.find_element(By.ID, "scheduleItem")
+        target = self.driver.find_element(By.CSS_SELECTOR, 'td.droppable[data-type=""]')
         actions = webdriver.ActionChains(self.driver)
         actions.drag_and_drop(source, target)
         # Pause briefly to make sure the server has a chance to do stuff
@@ -227,7 +227,7 @@ class EditorTestsMixin:
                 source = x
                 break
         # Find the first schedule item in the schedule tabls
-        target = self.driver.find_element(By.ID, "scheduleItem")
+        target = self.driver.find_element(By.CSS_SELECTOR, 'td.droppable[data-type=""]')
         actions.reset_actions()
         actions.drag_and_drop(source, target)
         actions.pause(0.5)
@@ -266,7 +266,7 @@ class EditorTestsMixin:
                 source = x
             tab_items.append(x.text)
         # Find the first schedule item in the schedule tabls
-        target = self.driver.find_element(By.ID, "scheduleItem")
+        target = self.driver.find_element(By.CSS_SELECTOR, 'td.droppable[data-type=""]')
         actions = webdriver.ActionChains(self.driver)
         actions.drag_and_drop(source, target)
         actions.pause(0.5)
@@ -292,7 +292,7 @@ class EditorTestsMixin:
                 source = x
                 break
         # Find the first schedule item in the schedule tabls
-        target = self.driver.find_element(By.ID, "scheduleItem")
+        target = self.driver.find_element(By.CSS_SELECTOR, 'td.droppable[data-type=""]')
         actions = webdriver.ActionChains(self.driver)
         actions.drag_and_drop(source, target)
         actions.pause(0.5)
@@ -342,13 +342,13 @@ class EditorTestsMixin:
         self._start()
         # Verify we see the expected schedule items on day 1
         td1 = WebDriverWait(self.driver, SELENIUM_WAIT_TIME).until(
-            expected_conditions.presence_of_element_located((By.ID, f"scheduleItem{item1.pk}"))
+            expected_conditions.presence_of_element_located((By.CSS_SELECTOR, f'td[data-scheduleitem-id="{item1.pk}"]'))
         )
         self.assertEqual(td1.tag_name, 'td')
-        td2 = self.driver.find_element(By.ID, f"scheduleItem{item2.pk}")
+        td2 = self.driver.find_element(By.CSS_SELECTOR, f'td[data-scheduleitem-id="{item2.pk}"]')
         self.assertEqual(td2.tag_name, 'td')
         with self.assertRaises(NoSuchElementException):
-            self.driver.find_element(By.ID, f"scheduleItem{item3.pk}")
+            self.driver.find_element(By.CSS_SELECTOR, f'td[data-scheduleitem-id="{item3.pk}"]')
         # Switch day
         buttons = self.driver.find_elements(By.TAG_NAME, 'button')
         self.assertIn('Sep', buttons[1].text)
@@ -362,16 +362,16 @@ class EditorTestsMixin:
            expected_conditions.presence_of_element_located((By.CLASS_NAME, "close"))
         )
         # Verify we see the expected schedule items on day 2
-        td3 = self.driver.find_element(By.ID, f"scheduleItem{item3.pk}")
+        td3 = self.driver.find_element(By.CSS_SELECTOR, f'td[data-scheduleitem-id="{item3.pk}"]')
         self.assertEqual(td3.tag_name, 'td')
-        td4 = self.driver.find_element(By.ID, f"scheduleItem{item4.pk}")
+        td4 = self.driver.find_element(By.CSS_SELECTOR, f'td[data-scheduleitem-id="{item4.pk}"]')
         self.assertEqual(td4.tag_name, 'td')
-        td5 = self.driver.find_element(By.ID, f"scheduleItem{item5.pk}")
+        td5 = self.driver.find_element(By.CSS_SELECTOR, f'td[data-scheduleitem-id="{item5.pk}"]')
         self.assertEqual(td5.tag_name, 'td')
         with self.assertRaises(NoSuchElementException):
-            self.driver.find_element(By.ID, f"scheduleItem{item1.pk}")
+            self.driver.find_element(By.CSS_SELECTOR, f'td[data-scheduleitem-id="{item1.pk}"]')
         with self.assertRaises(NoSuchElementException):
-            self.driver.find_element(By.ID, f"scheduleItem{item2.pk}")
+            self.driver.find_element(By.CSS_SELECTOR, f'td[data-scheduleitem-id="{item2.pk}"]')
 
     def test_drag_over_talk(self):
         """Test that dragging over an item replaces it"""
@@ -383,7 +383,7 @@ class EditorTestsMixin:
         self._start()
         # Test dragging a talk over an existing talk
         target = WebDriverWait(self.driver, SELENIUM_WAIT_TIME).until(
-            expected_conditions.presence_of_element_located((By.ID, f"scheduleItem{item1.pk}"))
+            expected_conditions.presence_of_element_located((By.CSS_SELECTOR, f'td[data-scheduleitem-id="{item1.pk}"]'))
         )
         talks_link = self.driver.find_element(By.PARTIAL_LINK_TEXT, "Unassigned Talks")
         talks_link.click()
@@ -411,7 +411,7 @@ class EditorTestsMixin:
         # Check that schedule item and table entry are correct
         item = ScheduleItem.objects.first()
         self.assertEqual(item.talk, self.talk2)
-        target = self.driver.find_element(By.ID, f"scheduleItem{item1.pk}")
+        target = self.driver.find_element(By.CSS_SELECTOR, f'td[data-scheduleitem-id="{item1.pk}"]')
         self.assertIn(self.talk2.title, target.text)
         # Check that Unassigned list has been updated correctly
         # (Talk 1 added, and talk 2 removed)
@@ -437,7 +437,7 @@ class EditorTestsMixin:
         self._start()
         # Test dragging a page over an existing page
         target = WebDriverWait(self.driver, SELENIUM_WAIT_TIME).until(
-            expected_conditions.presence_of_element_located((By.ID, f"scheduleItem{item1.pk}"))
+            expected_conditions.presence_of_element_located((By.CSS_SELECTOR, f'td[data-scheduleitem-id="{item1.pk}"]'))
         )
         page_link = self.driver.find_element(By.PARTIAL_LINK_TEXT, "Pages")
         page_link.click()
@@ -463,7 +463,7 @@ class EditorTestsMixin:
         # Check that schedule item and table entry are correct
         item = ScheduleItem.objects.first()
         self.assertEqual(item.page, self.pages[3])
-        target = self.driver.find_element(By.ID, f"scheduleItem{item1.pk}")
+        target = self.driver.find_element(By.CSS_SELECTOR, f'td[data-scheduleitem-id="{item1.pk}"]')
         self.assertIn('test page 3', target.text)
         # Check that the list is unchanged
         after = []
@@ -491,7 +491,7 @@ class EditorTestsMixin:
         )
         self.assertFalse(validation.is_displayed())
         # Drag a talk into a clashing slot
-        target = self.driver.find_element(By.ID, f"scheduleItem{item2.pk}")
+        target = self.driver.find_element(By.CSS_SELECTOR, f'td[data-scheduleitem-id="{item2.pk}"]')
         talks_link = self.driver.find_element(By.PARTIAL_LINK_TEXT, "Unassigned Talks")
         talks_link.click()
         tab_pane = None
@@ -540,14 +540,16 @@ class EditorTestsMixin:
         error_item = validation.find_element(By.TAG_NAME, "li")
         self.assertIn('Common speaker', error_item.text)
         # Delete the clashing talk
-        target = self.driver.find_element(By.ID, f"scheduleItem{item2.pk}")
+        target = self.driver.find_element(By.CSS_SELECTOR, f'td[data-scheduleitem-id="{item2.pk}"]')
         close = target.find_element(By.CLASS_NAME, 'close')
         close.click()
         talks_link = self.driver.find_element(By.PARTIAL_LINK_TEXT, "Unassigned Talks")
         talks_link.click()
-        # Pause briefly to make sure the server has a chance to do stuff
-        actions = webdriver.ActionChains(self.driver)
-        actions.pause(0.5)
+
+        # Wait for the asynchronous validation update after deletion.
+        WebDriverWait(self.driver, SELENIUM_WAIT_TIME).until(
+            expected_conditions.invisibility_of_element(validation)
+        )
         tab_pane = None
         for pane in self.driver.find_elements(By.CLASS_NAME, "tab-pane"):
             if 'active' in pane.get_attribute('class'):
@@ -635,9 +637,265 @@ class EditorTestsMixin:
             tab_items.append(x.text)
         self.assertEqual(len(tab_items), 5)
 
-
 class ChromeScheduleEditorTests(EditorTestsMixin, ChromeTestRunner):
-    pass
+
+    def _test_extend_item(self, item_type, target_index):
+        """Extend one item while preserving its original slot."""
+        content = (
+            {"talk": self.talk1}
+            if item_type == "talk"
+            else {"page": self.pages[0]}
+        )
+        item = ScheduleItem.objects.create(
+            venue=self.venues[0], **content
+        )
+        original_slot = self.block1_slots[0]
+        target_slot = self.block1_slots[target_index]
+        item.slots.add(original_slot)
+        self._start()
+
+        source = self.driver.find_element(
+            By.CSS_SELECTOR,
+            f'td[data-scheduleitem-id="{item.pk}"]'
+            f'[data-slot="{original_slot.pk}"]',
+        )
+        target = self.driver.find_element(
+            By.CSS_SELECTOR,
+            f'td[data-venue="{self.venues[0].pk}"]'
+            f'[data-slot="{target_slot.pk}"]',
+        )
+
+        webdriver.ActionChains(self.driver).drag_and_drop(
+            source, target
+        ).perform()
+
+        expected_slots = {original_slot.pk, target_slot.pk}
+        WebDriverWait(self.driver, SELENIUM_WAIT_TIME).until(
+            lambda driver: set(
+                item.slots.values_list("pk", flat=True)
+            ) == expected_slots
+        )
+        WebDriverWait(self.driver, SELENIUM_WAIT_TIME).until(
+            expected_conditions.staleness_of(source)
+        )
+
+        self.assertEqual(ScheduleItem.objects.count(), 1)
+
+        # Confirm both placements also survive a fresh page load.
+        self.driver.refresh()
+        for slot in (original_slot, target_slot):
+            cell = WebDriverWait(
+                self.driver, SELENIUM_WAIT_TIME
+            ).until(
+                expected_conditions.presence_of_element_located((
+                    By.CSS_SELECTOR,
+                    f'td[data-scheduleitem-id="{item.pk}"]'
+                    f'[data-slot="{slot.pk}"]',
+                ))
+            )
+            title = (
+                self.talk1.title
+                if item_type == "talk"
+                else self.pages[0].name
+            )
+            self.assertIn(title, cell.text)
+
+    def test_extend_talk_adjacent(self):
+        self._test_extend_item("talk", 1)
+
+    def test_extend_talk_non_contiguous(self):
+        self._test_extend_item("talk", 2)
+
+    def test_extend_page_adjacent(self):
+        self._test_extend_item("page", 1)
+
+    def test_extend_page_non_contiguous(self):
+        self._test_extend_item("page", 2)
+
+    def _test_remove_item_slots(self, item_type):
+        """Remove one slot, then delete the final placement."""
+        content = (
+            {"talk": self.talk1}
+            if item_type == "talk"
+            else {"page": self.pages[0]}
+        )
+        item = ScheduleItem.objects.create(
+            venue=self.venues[0], **content
+        )
+        first_slot, last_slot = self.block1_slots[:2]
+        item.slots.add(first_slot, last_slot)
+        self._start()
+
+        first_cell = self.driver.find_element(
+            By.CSS_SELECTOR,
+            f'td[data-scheduleitem-id="{item.pk}"]'
+            f'[data-slot="{first_slot.pk}"]',
+        )
+        first_cell.find_element(By.CLASS_NAME, "close").click()
+
+        WebDriverWait(self.driver, SELENIUM_WAIT_TIME).until(
+            lambda driver: set(
+                item.slots.values_list("pk", flat=True)
+            ) == {last_slot.pk}
+        )
+        WebDriverWait(self.driver, SELENIUM_WAIT_TIME).until(
+            lambda driver: not first_cell.get_attribute(
+                "data-scheduleitem-id"
+            )
+        )
+        self.assertEqual(ScheduleItem.objects.count(), 1)
+
+        self.driver.refresh()
+        last_cell = self.driver.find_element(
+            By.CSS_SELECTOR,
+            f'td[data-scheduleitem-id="{item.pk}"]'
+            f'[data-slot="{last_slot.pk}"]',
+        )
+        last_cell.find_element(By.CLASS_NAME, "close").click()
+
+        WebDriverWait(self.driver, SELENIUM_WAIT_TIME).until(
+            lambda driver: not ScheduleItem.objects.filter(
+                pk=item.pk
+            ).exists()
+        )
+        WebDriverWait(self.driver, SELENIUM_WAIT_TIME).until(
+            lambda driver: not last_cell.get_attribute(
+                "data-scheduleitem-id"
+            )
+        )
+        self.assertEqual(ScheduleItem.objects.count(), 0)
+
+        if item_type == "talk":
+            self.driver.find_element(
+                By.PARTIAL_LINK_TEXT, "Unassigned Talks"
+            ).click()
+            unassigned = self.driver.find_element(
+                By.ID, f"talk{self.talk1.pk}"
+            )
+            self.assertTrue(unassigned.is_displayed())
+
+    def test_remove_talk_slots(self):
+        self._test_remove_item_slots("talk")
+
+    def test_remove_page_slots(self):
+        self._test_remove_item_slots("page")
+
+    def _test_rejected_extension(self, occupied):
+        item = ScheduleItem.objects.create(
+            venue=self.venues[0], talk=self.talk1
+        )
+        original_slot = self.block1_slots[0]
+        target_slot = self.block1_slots[1]
+        item.slots.add(original_slot)
+
+        target_venue = self.venues[0] if occupied else self.venues[1]
+        other = None
+        if occupied:
+            other = ScheduleItem.objects.create(
+                venue=target_venue, talk=self.talk2
+            )
+            other.slots.add(target_slot)
+
+        self._start()
+        source = self.driver.find_element(
+            By.CSS_SELECTOR,
+            f'td[data-scheduleitem-id="{item.pk}"]',
+        )
+        target = self.driver.find_element(
+            By.CSS_SELECTOR,
+            f'td[data-venue="{target_venue.pk}"]'
+            f'[data-slot="{target_slot.pk}"]',
+        )
+
+        webdriver.ActionChains(self.driver).drag_and_drop(
+            source, target
+        ).perform()
+
+        alert = WebDriverWait(
+            self.driver, SELENIUM_WAIT_TIME
+        ).until(expected_conditions.alert_is_present())
+        expected_message = (
+            "Please choose an empty slot to extend this item."
+            if occupied
+            else "Additional slots must be in the same venue."
+        )
+        self.assertEqual(alert.text, expected_message)
+        alert.accept()
+
+        item.refresh_from_db()
+        self.assertEqual(item.venue_id, self.venues[0].pk)
+        self.assertSetEqual(
+            set(item.slots.values_list("pk", flat=True)),
+            {original_slot.pk},
+        )
+        self.assertEqual(
+            ScheduleItem.objects.count(), 2 if occupied else 1
+        )
+        if other:
+            other.refresh_from_db()
+            self.assertEqual(other.talk_id, self.talk2.pk)
+            self.assertSetEqual(
+                set(other.slots.values_list("pk", flat=True)),
+                {target_slot.pk},
+            )
+
+    def test_extend_into_occupied_cell_rejected(self):
+        self._test_rejected_extension(occupied=True)
+
+    def test_extend_into_other_venue_rejected(self):
+        self._test_rejected_extension(occupied=False)
+
+    def test_extend_new_talk_without_refresh(self):
+        """A newly placed talk can immediately gain another slot."""
+        self._start()
+        self.driver.find_element(
+            By.PARTIAL_LINK_TEXT, "Unassigned Talks"
+        ).click()
+        source = self.driver.find_element(
+            By.ID, f"talk{self.talk1.pk}"
+        )
+        first_slot, next_slot = self.block1_slots[:2]
+        first_cell = self.driver.find_element(
+            By.CSS_SELECTOR,
+            f'td[data-venue="{self.venues[0].pk}"]'
+            f'[data-slot="{first_slot.pk}"]',
+        )
+
+        webdriver.ActionChains(self.driver).drag_and_drop(
+            source, first_cell
+        ).perform()
+
+
+        WebDriverWait(self.driver, SELENIUM_WAIT_TIME).until(
+            lambda driver: first_cell.get_attribute("draggable") == "true"
+            and first_cell.get_attribute("data-scheduleitem-id")
+            not in (None, "", "null")
+        )
+        item = ScheduleItem.objects.get(talk=self.talk1)
+
+
+        # Extend directly from the new cell without refreshing.
+        target = self.driver.find_element(
+            By.CSS_SELECTOR,
+            f'td[data-venue="{self.venues[0].pk}"]'
+            f'[data-slot="{next_slot.pk}"]',
+        )
+        webdriver.ActionChains(self.driver).drag_and_drop(
+            first_cell, target
+        ).perform()
+
+
+        expected_slots = {first_slot.pk, next_slot.pk}
+        WebDriverWait(self.driver, SELENIUM_WAIT_TIME).until(
+            lambda driver: set(
+                item.slots.values_list("pk", flat=True)
+            ) == expected_slots
+        )
+        WebDriverWait(self.driver, SELENIUM_WAIT_TIME).until(
+            expected_conditions.staleness_of(first_cell)
+        )
+        self.assertEqual(ScheduleItem.objects.count(), 1)
+
 
 
 class FirefoxSchedultEditorTests(EditorTestsMixin, FirefoxTestRunner):
