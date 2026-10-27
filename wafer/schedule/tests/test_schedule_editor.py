@@ -317,7 +317,7 @@ class EditorTestsMixin:
         self.assertTrue(found2)
         self.assertEqual(tab_items, post_drag_tab_items)
 
-    def test_swicth_day(self):
+    def test_switch_day(self):
         """Test selecting different days"""
         # Create a couple of schedule items on each day
         item1 = ScheduleItem.objects.create(venue=self.venues[0],
@@ -351,8 +351,8 @@ class EditorTestsMixin:
             self.driver.find_element(By.ID, f"scheduleItem{item3.pk}")
         # Switch day
         buttons = self.driver.find_elements(By.TAG_NAME, 'button')
-        self.assertIn('Sep', buttons[1].text)
-        buttons[1].click()
+        self.assertIn('Sep', buttons[2].text)
+        buttons[2].click()
         WebDriverWait(self.driver, SELENIUM_WAIT_TIME).until(
            expected_conditions.presence_of_element_located((By.CLASS_NAME, "show"))
         )
