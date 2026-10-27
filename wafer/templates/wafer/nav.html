@@ -64,9 +64,14 @@
                     {% trans 'Site admin' %}
                   </a></li>
                   {% endif %}
-                  <li><a class="dropdown-item" href="{% url 'auth_logout' %}">
-                    {% trans 'Log out' %}
-                  </a></li>
+                  <li>
+                    <form method="post" action="{% url 'auth_logout' %}">
+                      {% csrf_token %}
+                      <button type="submit" class="dropdown-item">
+                        {% trans 'Log out' %}
+                      </button>
+                    </form>
+                  </li>
                 </ul>
               </li>
             {% endblock navauthenticated %}
