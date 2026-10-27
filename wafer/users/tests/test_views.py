@@ -165,7 +165,9 @@ class UserProfileViewTests(TestCase):
         # Test that we see the expected results with the default setting
         user1_view = self.client.get('/users/test1/').content
         self.assertTrue(b'https://twitter.com/aaa' in user1_view)
+        self.assertTrue(b'href="https://twitter.com/aaa"' in user1_view)
         self.assertTrue(b'https://myserver.org/fediverse/aaa' in user1_view)
+        self.assertTrue(b'href="https://myserver.org/fediverse/aaa"' in user1_view)
         self.assertTrue(b'https://twitter.com/bbb' not in user1_view)
 
         user2_view = self.client.get('/users/test2/').content
@@ -179,6 +181,26 @@ class UserProfileViewTests(TestCase):
 
             user2_view = self.client.get('/users/test2/').content
             self.assertTrue(b'https://twitter.com/bbb' not in user2_view)
+
+    @mock.patch('wafer.users.models.UserProfile.avatar_url', mock_avatar_url)
+    def test_custom_profile_renderer(self):
+        from wafer.kv.models import KeyValue
+
+        KeyValue.objects.filter(
+            key='github', value='https://github.com/aaa'
+        ).update(value='aaa')
+
+        with self.settings(
+            CODE_HOSTING_RENDERERS={
+                'github':
+                    'wafer.users.tests.test_forms.render_test_github_username',
+            },
+        ):
+            response = self.client.get('/users/test1/')
+            self.assertEqual(response.status_code, 200)
+            self.assertContains(
+                response, 'href="https://github.com/aaa"', html=False
+            )
 
     @mock.patch('wafer.users.models.UserProfile.avatar_url', mock_avatar_url)
     def test_code_entries(self):

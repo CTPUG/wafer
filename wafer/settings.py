@@ -360,6 +360,20 @@ CODE_HOSTING_ENTRIES = {
     'bitbucket': _('bitbucket profile'),
 }
 
+# Optional profile URL customization.
+# Keys must match SOCIAL_MEDIA_ENTRIES or CODE_HOSTING_ENTRIES.
+# Values are dotted paths to Python callables.
+# A validator receives the submitted value and raises ValidationError if invalid.
+# A renderer receives the saved value and returns its HTTP(S) profile URL.
+# Without a renderer, profile fields continue to accept complete URLs.
+# Example:
+# CODE_HOSTING_VALIDATORS = {
+#     'github': 'myproject.profile_urls.validate_github_username',
+# }
+# CODE_HOSTING_RENDERERS = {
+#     'github': 'myproject.profile_urls.render_github_username',
+# }
+
 # Hide the schedule from users without permission to edit it
 WAFER_HIDE_SCHEDULE = False
 

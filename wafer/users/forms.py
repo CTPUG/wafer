@@ -10,6 +10,7 @@ from crispy_forms.layout import HTML, Submit
 
 from wafer.registration.validators import validate_username
 from wafer.users.models import UserProfile, PROFILE_GROUP
+from wafer.users.profile_urls import make_profile_field
 
 
 class UserForm(forms.ModelForm):
@@ -44,19 +45,19 @@ class UserProfileForm(forms.ModelForm):
         user_profile = kwargs.get('instance')
         profile_kv = {kv.key: kv.value for kv in user_profile.kv.all()} if user_profile else {}
 
-        # currently everything I'm asking for is an url, and this adds some
-        # validation - we may need to revisit this later
-        for field_name in settings.SOCIAL_MEDIA_ENTRIES:
-            self.fields[field_name] = forms.URLField(label=settings.SOCIAL_MEDIA_ENTRIES[field_name], 
-                                                     max_length=1024, required=False,
-                                                     initial=profile_kv.get(field_name, ''))
+        for field_name, label in settings.SOCIAL_MEDIA_ENTRIES.items():
+            self.fields[field_name] = make_profile_field(
+                'SOCIAL_MEDIA', field_name, label,
+                initial=profile_kv.get(field_name, ''),
+            )
 
         pre_code_index = len(self.fields)
 
-        for field_name in settings.CODE_HOSTING_ENTRIES:
-            self.fields[field_name] = forms.URLField(label=settings.CODE_HOSTING_ENTRIES[field_name],
-                                                    max_length=1024, required=False,
-                                                    initial=profile_kv.get(field_name, ''))
+        for field_name, label in settings.CODE_HOSTING_ENTRIES.items():
+            self.fields[field_name] = make_profile_field(
+                'CODE_HOSTING', field_name, label,
+                initial=profile_kv.get(field_name, ''),
+            )
 
         self.helper = FormHelper(self)
         self.helper.include_media = False
