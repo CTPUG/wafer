@@ -5,7 +5,7 @@ from django.test import TestCase
 
 from wafer.tests.utils import create_user
 from wafer.talks.tests.fixtures import create_talk
-from wafer.talks.models import ACCEPTED, CANCELLED, REJECTED
+from wafer.talks.models import ACCEPTED, CANCELLED, PROVISIONAL, REJECTED
 
 from wafer.schedule.models import ScheduleBlock, Slot, ScheduleItem, Venue
 from wafer.schedule.admin import (find_clashes, find_invalid_venues,
@@ -185,6 +185,18 @@ class ScheduleValidationTests(TestCase):
         result = []
         self.assertEqual(list(validate_items_no_item(all_items)), [self.items[0]])
         self.assertEqual(list(validate_items_both_talk_and_page(all_items)), [self.items[1]])
+        self.assertEqual(list(validate_items_invalid_talk(all_items)), [self.items[2]])
+
+    def test_validate_items_provisional_talk(self):
+        """Test that a provisionally accepted talk is still flagged by the check, 
+        so the schedule isn't publisjed with unconfirmed talks."""
+        provisional_talk = create_talk(
+            'Talk Provisional', PROVISIONAL, user=self.author1)
+
+        self.items[2].page_id = None
+        self.items[2].talk_id = provisional_talk.pk
+        self.items[2].save()
+        all_items = prefetch_schedule_items()
         self.assertEqual(list(validate_items_invalid_talk(all_items)), [self.items[2]])
 
     def test_find_speaker_clashes(self):

@@ -14,7 +14,7 @@ from reversion.admin import VersionAdmin
 
 from wafer.compare.admin import CompareVersionAdmin
 from wafer.schedule.models import ScheduleBlock, Venue, Slot, ScheduleItem
-from wafer.talks.models import Talk, ACCEPTED, CANCELLED
+from wafer.talks.models import Talk, ACCEPTED, CANCELLED, PROVISIONAL
 from wafer.pages.models import Page
 from wafer.utils import cache_result
 
@@ -382,7 +382,7 @@ class ScheduleItemAdminForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['talk'].queryset = Talk.objects.filter(
-            Q(status=ACCEPTED) | Q(status=CANCELLED))
+            Q(status=ACCEPTED) | Q(status=CANCELLED) | Q(status=PROVISIONAL))
         # Present all pages as possible entries in the schedule
         self.fields['page'].queryset = Page.objects.all()
 
