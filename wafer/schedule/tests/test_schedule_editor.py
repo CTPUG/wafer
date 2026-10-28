@@ -349,17 +349,42 @@ class EditorTestsMixin:
         self.assertEqual(td2.tag_name, 'td')
         with self.assertRaises(NoSuchElementException):
             self.driver.find_element(By.CSS_SELECTOR, f'td[data-scheduleitem-id="{item3.pk}"]')
-        # Switch day
-        buttons = self.driver.find_elements(By.TAG_NAME, 'button')
-        self.assertIn('Sep', buttons[1].text)
-        buttons[1].click()
-        WebDriverWait(self.driver, SELENIUM_WAIT_TIME).until(
-           expected_conditions.presence_of_element_located((By.CLASS_NAME, "show"))
+        # Switch day using the schedule block dropdown.
+        dropdown_selector = (
+            ".col-md-8 .dropdown > button.dropdown-toggle"
         )
-        days = self.driver.find_elements(By.PARTIAL_LINK_TEXT, "Sep")
+        dropdown = WebDriverWait(
+            self.driver, SELENIUM_WAIT_TIME
+        ).until(
+            expected_conditions.element_to_be_clickable((
+                By.CSS_SELECTOR, dropdown_selector,
+            ))
+        )
+        self.assertIn("Sep", dropdown.text)
+        dropdown.click()
+
+        day_selector = (
+            ".col-md-8 .dropdown .dropdown-menu a.dropdown-item"
+        )
+        days = WebDriverWait(
+            self.driver, SELENIUM_WAIT_TIME
+        ).until(
+            expected_conditions.visibility_of_all_elements_located((
+                By.CSS_SELECTOR, day_selector,
+            ))
+        )
+        self.assertGreaterEqual(len(days), 2)
+        self.assertIn("Sep", days[1].text)
         days[1].click()
+
         WebDriverWait(self.driver, SELENIUM_WAIT_TIME).until(
-           expected_conditions.presence_of_element_located((By.CLASS_NAME, "close"))
+            expected_conditions.staleness_of(td1)
+        )
+        WebDriverWait(self.driver, SELENIUM_WAIT_TIME).until(
+            expected_conditions.visibility_of_element_located((
+                By.CSS_SELECTOR,
+                f'td[data-scheduleitem-id="{item3.pk}"]',
+            ))
         )
         # Verify we see the expected schedule items on day 2
         td3 = self.driver.find_element(By.CSS_SELECTOR, f'td[data-scheduleitem-id="{item3.pk}"]')
