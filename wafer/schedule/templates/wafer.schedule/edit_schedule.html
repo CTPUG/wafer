@@ -57,14 +57,15 @@
               <small>{{ slot.start_time }} - {{ slot.end_time }}</small>
             </th>
             {% for venue in slot.venues %}
-              <td id="scheduleItem{{ venue.scheduleitem_id }}" data-venue="{{ venue.id }}" data-slot="{{ slot.id }}"
+              <td id="scheduleCell{{ venue.id }}-{{ slot.id }}" data-venue="{{ venue.id }}" data-slot="{{ slot.id }}"
                   class="table-{% if venue.talk %}success{% elif venue.page %}info{% endif %} droppable {% if venue.talk or venue.page %}draggable{% endif %}"
+                  draggable="{% if venue.talk or venue.page %}true{% else %}false{% endif %}"
                   data-scheduleitem-id="{{ venue.scheduleitem_id }}"
                   data-talk-id="{{ venue.talk.talk_id }}"
                   data-page-id="{{ venue.page.id }}"
                   data-type="{% if venue.talk %}talk{% elif venue.page %}page{% endif %}">
                 {% if venue.scheduleitem_id %}
-                  <button id="delete{{venue.scheduleitem_id}}"
+                  <button id="delete{{ venue.id }}-{{ slot.id }}"
                           data-id="{{ venue.scheduleitem_id }}"
                           type="button" class="close"
                           aria-label="{% trans 'Close' %}">
@@ -154,7 +155,7 @@
             {% endif %}
             {% for talk in talks %}
               <div draggable="true" class="badge bg-warning draggable"
-                    class="talk{{ talk.talk_id }}"
+                    id="allTalk{{ talk.talk_id }}"
                     data-bs-toggle="tooltip" data-bs-placement="left"
                     title="{{ talk.title }}"
                     data-type="talk" data-talk-id="{{ talk.talk_id }}">

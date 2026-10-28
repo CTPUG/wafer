@@ -100,14 +100,24 @@
             scheduleItemType = 'page';
         }
 
-        var newItem = document.querySelectorAll('[id=scheduleItemnull]')[0];
+        var newItem = document.querySelector(
+            'td[data-venue="' + venue + '"]' +
+            '[data-slot="' + slots[0] + '"]'
+        );
 
-        newItem.id = 'scheduleItem' + scheduleItemId;
+        newItem.setAttribute('data-scheduleitem-id', scheduleItemId);
+        newItem.setAttribute('draggable', 'true');
+
+        // Enable dragging immediately after placing an item.
+        newItem.classList.add('draggable');
+        newItem.addEventListener('dragstart', handleDragStart, false);
+        newItem.addEventListener('dragend', handleDragEnd, false);
 
         // Add a close button, since we've deleted it if one
         // existed, and we're not going back through the template
         var closeButton = document.createElement("BUTTON");
-        closeButton.id = "delete" + scheduleItemId;
+        closeButton.id = "delete" + venue + "-" +
+            newItem.getAttribute('data-slot');
         closeButton.setAttribute("data-id", scheduleItemId);
         closeButton.classList.add("close");
         closeButton.setAttribute("aria-label", "Close");
@@ -144,6 +154,63 @@
         var scheduleItemId = data.getAttribute('data-scheduleitem-id');
         var scheduleItemType = data.getAttribute('data-type');
 
+        var target = e.currentTarget;
+        if (scheduleItemId) {
+            var targetItemId = target.getAttribute('data-scheduleitem-id');
+
+            // Dropping onto another slot of the same item changes nothing.
+            if (targetItemId === scheduleItemId) {
+                return false;
+            }
+
+            if (targetItemId) {
+                window.alert(
+                    'Please choose an empty slot to extend this item.'
+                );
+                return false;
+            }
+
+            if (data.getAttribute('data-venue') !==
+                    target.getAttribute('data-venue')) {
+                window.alert(
+                    'Additional slots must be in the same venue.'
+                );
+                return false;
+            }
+        }
+
+        // Extend a scheduled item into an empty slot in the same venue.
+        if (scheduleItemId &&
+                !target.getAttribute('data-scheduleitem-id') &&
+                data.getAttribute('data-venue') ===
+                    target.getAttribute('data-venue')) {
+            var itemUrl = '/schedule/api/scheduleitems/' +
+                scheduleItemId + '/';
+            var targetSlot = Number(target.getAttribute('data-slot'));
+
+            $.get(itemUrl).then(function (item) {
+                var slots = item.slots.slice();
+
+                if (slots.indexOf(targetSlot) === -1) {
+                    slots.push(targetSlot);
+                }
+
+                return $.ajax({
+                    method: 'PATCH',
+                    url: itemUrl,
+                    data: JSON.stringify({slots: slots})
+                });
+            }).then(function () {
+                window.location.reload();
+            }).fail(function () {
+                window.alert(
+                    'Could not save the additional slot. Please refresh and try again.'
+                );
+            });
+
+            return false;
+        }
+
         var curScheduleItemId = e.target.getAttribute('data-scheduleitem-id');
         if (curScheduleItemId)
         {
@@ -159,7 +226,6 @@
         e.target.innerHTML = data.getAttribute('title');
         e.target.setAttribute('data-scheduleitem-id', scheduleItemId);
         e.target.setAttribute('data-type', scheduleItemType);
-        e.target.id = 'scheduleItem' + scheduleItemId;
 
         var talkId = '';
         var pageId = '';
@@ -204,46 +270,65 @@
     }
 
     function handleClickDelete(mouseEvent) {
-        var path = eventPath(mouseEvent);
-        var offset = 0;
-        // composedPath and path start at different points, so
-        // we need to see where closeButton is in the list
-        if (isButton(path[0])) {
-            offset = 0;
-        } else {
-            offset = 1;
-        }
-        var closeButton = path[offset];
-        var scheduleItemCell = path[offset + 1];
+        mouseEvent.preventDefault();
+        mouseEvent.stopPropagation();
 
+        var closeButton = mouseEvent.currentTarget;
+        var scheduleItemCell = closeButton.closest('td');
         var scheduleItemId = closeButton.getAttribute('data-id');
-
-        scheduleItemCell.removeAttribute('id');
-        scheduleItemCell.classList.remove('draggable');
-        scheduleItemCell.classList.remove('table-info');
-        scheduleItemCell.classList.remove('table-success');
-        scheduleItemCell.removeAttribute('data-scheduleitem-id');
-        var talkId = scheduleItemCell.getAttribute('data-talk-id');
-        scheduleItemCell.removeAttribute('data-talk-id');
-        scheduleItemCell.removeAttribute('data-page-id');
-        scheduleItemCell.removeAttribute('data-type');
-
-        closeButton.removeAttribute('data-id');
-        closeButton.classList.add('hide');
-        scheduleItemCell.innerHTML = '';
-
-        if (talkId) {
-            var unassigned = document.getElementById('talk' + talkId);
-            unassigned.hidden = false;
-        }
-
-        $.ajax(
-            {
-                type: 'DELETE',
-                url: '/schedule/api/scheduleitems/' + scheduleItemId + '/',
-                success: handleItemDelete
-            }
+        var slotId = Number(
+            scheduleItemCell.getAttribute('data-slot')
         );
+        var itemUrl = '/schedule/api/scheduleitems/' +
+            scheduleItemId + '/';
+
+        $.get(itemUrl).then(function (item) {
+            var remainingSlots = item.slots.filter(function (slot) {
+                return slot !== slotId;
+            });
+
+            if (remainingSlots.length) {
+                return $.ajax({
+                    method: 'PATCH',
+                    url: itemUrl,
+                    data: JSON.stringify({slots: remainingSlots})
+                });
+            }
+
+            return $.ajax({
+                method: 'DELETE',
+                url: itemUrl
+            });
+        }).then(function () {
+            var talkId = scheduleItemCell.getAttribute('data-talk-id');
+
+            scheduleItemCell.replaceChildren();
+            scheduleItemCell.removeAttribute('data-scheduleitem-id');
+            scheduleItemCell.removeAttribute('data-talk-id');
+            scheduleItemCell.removeAttribute('data-page-id');
+            scheduleItemCell.removeAttribute('data-type');
+            scheduleItemCell.setAttribute('draggable', 'false');
+            scheduleItemCell.classList.remove(
+                'draggable', 'table-success', 'table-info'
+            );
+
+            if (talkId) {
+                var stillScheduled = document.querySelector(
+                    'td[data-talk-id="' + talkId + '"]'
+                );
+                var unassigned = document.getElementById('talk' + talkId);
+
+                if (unassigned) {
+                    unassigned.hidden = Boolean(stillScheduled);
+                }
+            }
+
+            return $.get('/schedule/api/validate/', updateValidation);
+        }).fail(function () {
+            window.alert(
+                'Could not remove the slot. Please refresh and try again.'
+            );
+        });
     }
 
     function getCookie(name) {
