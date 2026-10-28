@@ -13,6 +13,8 @@ from crispy_forms.layout import Submit, HTML
 from django_select2.forms import Select2MultipleWidget
 from markitup.widgets import MarkItUpWidget
 
+from wafer.markdown import bleached_markdown
+
 from wafer.talks.models import (
     Review, ReviewAspect, Score, Talk, TalkType, Track, render_author)
 
@@ -118,6 +120,15 @@ class TalkForm(forms.ModelForm):
         self.fields['authors'].label_from_instance = render_author
 
         self.helper = FormHelper(self)
+
+        reviewer_description = settings.WAFER_VIDEO_REVIEWER_DESCRIPTION
+        if reviewer_description and 'video_reviewer' in self.fields:
+            reviewer_index = self.helper.layout.fields.index('video_reviewer')
+            self.helper.layout.insert(
+                reviewer_index,
+                HTML(bleached_markdown(reviewer_description)),
+            )
+
         self.helper.form_tag = False
         self.helper.include_media = False
         instance = kwargs['instance']
