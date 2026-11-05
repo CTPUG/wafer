@@ -4,7 +4,7 @@ from rest_framework_extensions import routers
 from wafer.talks.views import (
     Speakers, ReviewViewSet, TalkCreate, TalkReview, TalkTypesView, TalkUpdate,
     TalkUrlsViewSet, TalkView, TalkWithdraw, TalksViewSet, TracksView,
-    UsersTalks)
+    UsersTalks, TalkAttachmentUpload, TalkAttachmentDownload)
 
 router = routers.ExtendedSimpleRouter()
 
@@ -18,19 +18,40 @@ talks_router.register(
 
 urlpatterns = [
     re_path(r'^$', UsersTalks.as_view(), name='wafer_users_talks'),
+
     re_path(r'^page/(?P<page>\d+)/$', UsersTalks.as_view(),
         name='wafer_users_talks_page'),
+
     re_path(r'^new/$', TalkCreate.as_view(), name='wafer_talk_submit'),
-    re_path(r'^(?P<pk>\d+)(?:-(?P<slug>[\w-]*))?/$', TalkView.as_view(),
-        name='wafer_talk'),
+
+    re_path(
+        r'^(?P<pk>\d+)/files/upload/$',
+        TalkAttachmentUpload.as_view(),
+        name='wafer_talk_file_upload',
+    ),
+
+    re_path(
+        r'^files/(?P<file_pk>\d+)/download/$',
+        TalkAttachmentDownload.as_view(),
+        name='wafer_talk_file_download',
+    ),
+
     re_path(r'^(?P<pk>\d+)/edit/$', TalkUpdate.as_view(),
         name='wafer_talk_edit'),
+
     re_path(r'^(?P<pk>\d+)/review/$', TalkReview.as_view(),
         name='wafer_talk_review'),
+
     re_path(r'^(?P<pk>\d+)/withdraw/$', TalkWithdraw.as_view(),
         name='wafer_talk_withdraw'),
+
+    re_path(r'^(?P<pk>\d+)(?:-(?P<slug>[\w-]*))?/$', TalkView.as_view(), name='wafer_talk'),
+
     re_path(r'^speakers/$', Speakers.as_view(), name='wafer_talks_speakers'),
+
     re_path(r'^tracks/', TracksView.as_view(), name='wafer_talk_tracks'),
+
     re_path(r'^types/', TalkTypesView.as_view(), name='wafer_talk_types'),
+
     re_path(r'^api/', include(router.urls)),
 ]

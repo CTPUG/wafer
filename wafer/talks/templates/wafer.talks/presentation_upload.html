@@ -1,0 +1,41 @@
+{% extends "wafer/base.html" %}
+{% load i18n %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+  {% trans "Upload Talk Files" %} - {{ WAFER_CONFERENCE_NAME }}
+{% endblock %}
+
+{% block content %}
+<section class="wafer wafer-talk">
+  <h1>{% trans "Upload Talk Files" %}</h1>
+
+  <p>
+    {% trans "Talk:" %}
+    <strong>{{ talk.title }}</strong>
+  </p>
+
+  <p>
+    {% trans "Select one or more files to attach to this talk." %}
+  </p>
+
+  <p>
+    {% trans "New uploads are private. Conference organisers can review them and decide which files become publicly available." %}
+  </p>
+
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    {{ form|crispy }}
+
+    <button type="submit" class="btn btn-primary">
+      {% trans "Upload Files" %}
+    </button>
+
+    <a href="{{ talk.get_absolute_url }}"
+       class="btn btn-secondary">
+      {% trans "Cancel" %}
+    </a>
+  </form>
+</section>
+{% endblock %}

@@ -13,6 +13,7 @@ from markitup.fields import MarkupField
 from reversion.models import Version
 
 from wafer.kv.models import KeyValue
+from wafer.talks.storage import PrivateTalkStorage
 
 
 # constants to make things clearer elsewhere
@@ -392,6 +393,32 @@ class TalkUrl(models.Model):
     talk = models.ForeignKey(Talk, related_name='urls',
                              on_delete=models.CASCADE)
     public = models.BooleanField(default=True)
+
+
+@reversion.register()
+class TalkFile(models.Model):
+    """A file attachment associated with a talk."""
+
+    name = models.CharField(max_length=255)
+    description = models.TextField(blank=True)
+    talk = models.ForeignKey(
+        Talk,
+        related_name='attachments',
+        on_delete=models.CASCADE,
+    )
+    item = models.FileField(
+        upload_to='talk_files/',
+        storage=PrivateTalkStorage(),
+    )
+    public = models.BooleanField(
+        default=False,
+        help_text=_(
+            "Make this attachment publicly downloadable."
+        ),
+    )
+
+    def __str__(self):
+        return self.name
 
 
 @reversion.register(follow=('scores',))

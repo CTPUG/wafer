@@ -1,3 +1,4 @@
+import os
 from itertools import groupby
 
 from django.conf import settings
@@ -6,11 +7,12 @@ from django.contrib.auth.mixins import (
 from django.contrib.auth.models import AnonymousUser
 from django.core.exceptions import PermissionDenied, ValidationError
 from django.db.models import Q, F
-from django.http import Http404
-from django.http import HttpResponseRedirect
+from django.http import (
+    FileResponse, Http404, HttpResponseRedirect)
+from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
+from django.views import View
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
-
 from bakery.views import BuildableDetailView, BuildableListView
 from rest_framework import viewsets
 from rest_framework.permissions import (
@@ -20,10 +22,14 @@ from rest_framework_extensions.mixins import NestedViewSetMixin
 from reversion import revisions
 
 from wafer.talks.models import (
-    Review, Talk, TalkType, TalkUrl, Track,
+    Review, Talk, TalkFile, TalkType, TalkUrl, Track,
     ACCEPTED, CANCELLED, PROVISIONAL, SUBMITTED, UNDER_CONSIDERATION,
     WITHDRAWN)
-from wafer.talks.forms import ReviewForm, get_talk_form_class
+from wafer.talks.forms import (
+    TalkAttachmentUploadForm,
+    ReviewForm,
+    get_talk_form_class,
+)
 from wafer.talks.serializers import TalkSerializer, TalkUrlSerializer, ReviewSerializer
 from wafer.users.models import UserProfile
 from wafer.utils import order_results_by, PaginatedBuildableListView
@@ -125,6 +131,30 @@ class TalkView(BuildableDetailView):
         user = self.request.user
 
         context['can_edit'] = talk.can_edit(user)
+        context['can_upload_attachments'] = (
+            user.is_authenticated
+            and (
+                talk._is_among_authors(user)
+                or user.has_perm('talks.change_talk')
+            )
+        )
+
+        can_see_private_attachments = (
+            user.is_authenticated
+            and (
+                talk._is_among_authors(user)
+                or user.has_perm('talks.change_talk')
+                or user.has_perm('talks.view_all_talks')
+                or talk.can_review(user)
+            )
+        )
+
+        if can_see_private_attachments:
+            context['talk_attachments'] = talk.attachments.all()
+        else:
+            context['talk_attachments'] = talk.attachments.filter(
+                public=True
+            )
 
         can_review = talk.can_review(user)
         context['can_review'] = can_review
@@ -134,6 +164,100 @@ class TalkView(BuildableDetailView):
                 instance=review, talk=talk, user=user)
 
         return context
+
+class TalkAttachmentUpload(LoginRequiredMixin, View):
+    template_name = 'wafer.talks/presentation_upload.html'
+
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return self.handle_no_permission()
+
+        self.talk = get_object_or_404(Talk, pk=kwargs['pk'])
+
+        user = request.user
+        is_author = self.talk._is_among_authors(user)
+        is_admin = user.has_perm('talks.change_talk')
+
+        if not (is_author or is_admin):
+            raise PermissionDenied
+
+        return super().dispatch(request, *args, **kwargs)
+
+    def get(self, request, *args, **kwargs):
+        form = TalkAttachmentUploadForm()
+
+        return render(request, self.template_name, {
+            'talk': self.talk,
+            'form': form,
+        })
+
+    def post(self, request, *args, **kwargs):
+        form = TalkAttachmentUploadForm(
+            request.POST,
+            request.FILES,
+        )
+
+        if form.is_valid():
+            for uploaded_file in form.cleaned_data['files']:
+                filename = os.path.basename(uploaded_file.name)
+
+                attachment = TalkFile(
+                    talk=self.talk,
+                    name=filename,
+                    description='',
+                    public=False,
+                )
+
+                attachment.item.save(
+                    filename,
+                    uploaded_file,
+                    save=False,
+                )
+                attachment.save()
+
+            return redirect(self.talk.get_absolute_url())
+
+        return render(request, self.template_name, {
+            'talk': self.talk,
+            'form': form,
+        })
+
+
+class TalkAttachmentDownload(View):
+    def get(self, request, *args, **kwargs):
+        attachment = get_object_or_404(
+            TalkFile,
+            pk=kwargs['file_pk'],
+        )
+        talk = attachment.talk
+        user = request.user
+
+        if attachment.public:
+            if not talk.can_view(user):
+                raise PermissionDenied
+        else:
+            if not user.is_authenticated:
+                raise PermissionDenied
+
+            is_author = talk._is_among_authors(user)
+            is_organiser = (
+                user.has_perm('talks.change_talk')
+                or user.has_perm('talks.view_all_talks')
+            )
+            is_reviewer = talk.can_review(user)
+
+            if not (is_author or is_organiser or is_reviewer):
+                raise PermissionDenied
+
+        if not attachment.item:
+            raise Http404
+
+        return FileResponse(
+            attachment.item.open('rb'),
+            as_attachment=True,
+            filename=os.path.basename(attachment.item.name),
+            content_type='application/octet-stream',
+        )
 
 
 class TalkCreate(LoginRequiredMixin, CreateView):
