@@ -1,5 +1,6 @@
 import copy
 import os
+import zipfile
 
 from django import forms
 from django.conf import settings
@@ -221,10 +222,37 @@ class MultipleFileField(forms.FileField):
         if not isinstance(data, (list, tuple)):
             data = [data]
 
-        return [
+        cleaned_files = [
             super(MultipleFileField, self).clean(file, initial)
             for file in data
         ]
+
+        for uploaded_file in cleaned_files:
+            extension = os.path.splitext(uploaded_file.name)[1].lower()
+
+            if extension not in ('.pdf', '.zip'):
+                raise forms.ValidationError(
+                    _('Only PDF and ZIP files are allowed.')
+                )
+
+            uploaded_file.seek(0)
+
+            try:
+                if extension == '.pdf':
+                    header = uploaded_file.read(1024)
+                    valid_file = b'%PDF-' in header
+                else:
+                    valid_file = zipfile.is_zipfile(uploaded_file)
+            finally:
+                uploaded_file.seek(0)
+
+            if not valid_file:
+                raise forms.ValidationError(
+                    _('The uploaded file is not a valid %(extension)s file.')
+                    % {'extension': extension[1:].upper()}
+                )
+
+        return cleaned_files
 
 
 class TalkAttachmentUploadForm(forms.Form):

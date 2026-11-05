@@ -1,7 +1,9 @@
 """Tests for talk attachment uploads and downloads."""
 
+import io
 import os
 import tempfile
+import zipfile
 
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import TestCase, override_settings
@@ -37,10 +39,25 @@ class TalkAttachmentTests(TestCase):
         )
 
     @staticmethod
-    def uploaded_file(name='slides.pdf', content=b'Test file content'):
+    def uploaded_file(name='slides.pdf', content=None):
+        if content is None:
+            content = b'%PDF-1.7\\nValid test PDF content'
+
         return SimpleUploadedFile(
             name, content, content_type='application/octet-stream'
         )
+
+    @classmethod
+    def zip_upload(cls, name='slides.zip'):
+        archive = io.BytesIO()
+
+        with zipfile.ZipFile(archive, 'w') as zip_file:
+            zip_file.writestr(
+                'index.html',
+                '<html><body>Presentation slides</body></html>',
+            )
+
+        return cls.uploaded_file(name, archive.getvalue())
 
     def download_url(self, attachment):
         return reverse(
@@ -70,7 +87,7 @@ class TalkAttachmentTests(TestCase):
             {
                 'files': [
                     self.uploaded_file('slides.pdf'),
-                    self.uploaded_file('example.py', b'print("hello")'),
+                    self.zip_upload('slides.zip'),
                 ],
             },
         )
@@ -81,7 +98,7 @@ class TalkAttachmentTests(TestCase):
         self.assertEqual(len(attachments), 2)
         self.assertEqual(
             {item.name for item in attachments},
-            {'slides.pdf', 'example.py'},
+            {'slides.pdf', 'slides.zip'},
         )
 
         for attachment in attachments:
@@ -90,18 +107,98 @@ class TalkAttachmentTests(TestCase):
                 attachment.item.name
             ))
 
-    def test_speaker_can_upload_non_pdf_file(self):
+    def test_speaker_can_upload_zip_containing_html_slides(self):
         self.client.force_login(self.speaker)
 
         response = self.client.post(
             self.upload_url,
-            {'files': self.uploaded_file('notes.txt', b'Example notes')},
+            {'files': self.zip_upload()},
         )
 
         self.assertEqual(response.status_code, 302)
         self.assertTrue(
-            self.talk.attachments.filter(name='notes.txt').exists()
+            self.talk.attachments.filter(name='slides.zip').exists()
         )
+
+    def test_html_upload_is_rejected(self):
+        self.client.force_login(self.speaker)
+
+        response = self.client.post(
+            self.upload_url,
+            {
+                'files': self.uploaded_file(
+                    'slides.html',
+                    b'<html><body>Slides</body></html>',
+                )
+            },
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertFalse(self.talk.attachments.exists())
+
+    def test_htm_upload_is_rejected(self):
+        self.client.force_login(self.speaker)
+
+        response = self.client.post(
+            self.upload_url,
+            {
+                'files': self.uploaded_file(
+                    'slides.htm',
+                    b'<html><body>Slides</body></html>',
+                )
+            },
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertFalse(self.talk.attachments.exists())
+
+    def test_unsupported_extension_is_rejected(self):
+        self.client.force_login(self.speaker)
+
+        response = self.client.post(
+            self.upload_url,
+            {
+                'files': self.uploaded_file(
+                    'example.py',
+                    b'print("hello")',
+                )
+            },
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertFalse(self.talk.attachments.exists())
+
+    def test_invalid_pdf_contents_are_rejected(self):
+        self.client.force_login(self.speaker)
+
+        response = self.client.post(
+            self.upload_url,
+            {
+                'files': self.uploaded_file(
+                    'fake.pdf',
+                    b'This is not a PDF file',
+                )
+            },
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertFalse(self.talk.attachments.exists())
+
+    def test_invalid_zip_contents_are_rejected(self):
+        self.client.force_login(self.speaker)
+
+        response = self.client.post(
+            self.upload_url,
+            {
+                'files': self.uploaded_file(
+                    'fake.zip',
+                    b'This is not a ZIP archive',
+                )
+            },
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertFalse(self.talk.attachments.exists())
 
     def test_new_uploads_are_private_by_default(self):
         self.client.force_login(self.speaker)
