@@ -1,0 +1,37 @@
+{% extends "wafer/base.html" %}
+{% load i18n %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+  {% trans "Upload Presentation" %} - {{ WAFER_CONFERENCE_NAME }}
+{% endblock %}
+
+{% block content %}
+<section class="wafer wafer-talk">
+  <h1>{% trans "Upload Presentation" %}</h1>
+
+  <p>
+    {% trans "Talk:" %}
+    <strong>{{ talk.title }}</strong>
+  </p>
+
+  <p>
+    {% trans "Upload your presentation as a PDF or ZIP file." %}
+  </p>
+
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    {{ form|crispy }}
+
+    <button type="submit" class="btn btn-primary">
+      {% trans "Upload Presentation" %}
+    </button>
+
+    <a href="{{ talk.get_absolute_url }}"
+       class="btn btn-secondary">
+      {% trans "Cancel" %}
+    </a>
+  </form>
+</section>
+{% endblock %}

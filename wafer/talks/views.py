@@ -1,3 +1,4 @@
+import os
 from itertools import groupby
 
 from django.conf import settings
@@ -6,11 +7,12 @@ from django.contrib.auth.mixins import (
 from django.contrib.auth.models import AnonymousUser
 from django.core.exceptions import PermissionDenied, ValidationError
 from django.db.models import Q, F
-from django.http import Http404
-from django.http import HttpResponseRedirect
+from django.http import (
+    FileResponse, Http404, HttpResponseRedirect)
+from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
+from django.views import View
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
-
 from bakery.views import BuildableDetailView, BuildableListView
 from rest_framework import viewsets
 from rest_framework.permissions import (
@@ -23,7 +25,11 @@ from wafer.talks.models import (
     Review, Talk, TalkType, TalkUrl, Track,
     ACCEPTED, CANCELLED, PROVISIONAL, SUBMITTED, UNDER_CONSIDERATION,
     WITHDRAWN)
-from wafer.talks.forms import ReviewForm, get_talk_form_class
+from wafer.talks.forms import (
+    PresentationUploadForm,
+    ReviewForm,
+    get_talk_form_class,
+)
 from wafer.talks.serializers import TalkSerializer, TalkUrlSerializer, ReviewSerializer
 from wafer.users.models import UserProfile
 from wafer.utils import order_results_by, PaginatedBuildableListView
@@ -125,7 +131,13 @@ class TalkView(BuildableDetailView):
         user = self.request.user
 
         context['can_edit'] = talk.can_edit(user)
-
+        context['can_upload_presentation'] = (
+            user.is_authenticated
+            and (
+                talk._is_among_authors(user)
+                or user.has_perm('talks.change_talk')
+            )
+        )
         can_review = talk.can_review(user)
         context['can_review'] = can_review
         if can_review:
@@ -134,6 +146,86 @@ class TalkView(BuildableDetailView):
                 instance=review, talk=talk, user=user)
 
         return context
+
+class TalkPresentationUpload(LoginRequiredMixin, View):
+    template_name = 'wafer.talks/presentation_upload.html'
+
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return self.handle_no_permission()
+
+        self.talk = get_object_or_404(Talk, pk=kwargs['pk'])
+
+        user = request.user
+        is_author = self.talk._is_among_authors(user)
+        is_admin = user.has_perm('talks.change_talk')
+
+        if not (is_author or is_admin):
+            raise PermissionDenied
+
+        return super().dispatch(request, *args, **kwargs)
+
+    def get(self, request, *args, **kwargs):
+        form = PresentationUploadForm()
+
+        return render(request, self.template_name, {
+            'talk': self.talk,
+            'form': form,
+        })
+
+    def post(self, request, *args, **kwargs):
+        form = PresentationUploadForm(
+            request.POST,
+            request.FILES,
+        )
+
+        if form.is_valid():
+            old_presentation = self.talk.presentation
+
+            self.talk.presentation = form.cleaned_data['presentation']
+            self.talk.save(update_fields=['presentation'])
+
+            if old_presentation:
+                old_presentation.delete(save=False)
+
+            return redirect(self.talk.get_absolute_url())
+
+        return render(request, self.template_name, {
+            'talk': self.talk,
+            'form': form,
+        })
+
+
+class TalkPresentationDownload(View):
+    def get(self, request, *args, **kwargs):
+        talk = get_object_or_404(Talk, pk=kwargs['pk'])
+
+        user = request.user
+
+        if not (
+            talk.can_view(user)
+            or user.has_perm('talks.change_talk')
+        ):
+            raise PermissionDenied
+
+        if not talk.presentation:
+            raise Http404
+
+        extension = os.path.splitext(
+            talk.presentation.name
+        )[1].lower()
+
+        content_type = {
+            '.pdf': 'application/pdf',
+            '.zip': 'application/zip',
+        }.get(extension, 'application/octet-stream')
+
+        return FileResponse(
+            talk.presentation.open('rb'),
+            as_attachment=True,
+            filename=os.path.basename(talk.presentation.name),
+            content_type=content_type,
+        )
 
 
 class TalkCreate(LoginRequiredMixin, CreateView):

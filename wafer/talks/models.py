@@ -256,6 +256,14 @@ class Talk(models.Model):
                 "scheduled an unlimited number of times."
         ))
 
+    presentation = models.FileField(
+        _('presentation'),
+        upload_to='talk_presentations/',
+        null=True,
+        blank=True,
+        help_text=_('PDF or ZIP presentation file.')
+    )
+
     @property
     def slug(self):
         return slugify(self.title)

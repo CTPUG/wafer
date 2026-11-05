@@ -168,10 +168,35 @@
     <ul class="list-group" id="urls">
       {% for talkurl in talk.urls.all %}
         {% if talkurl.public %}
-          <li class="list-group-item"><a href="{{ talkurl.url }}">{{ talkurl.description }}</a></li>
+          <li class="list-group-item">
+            <a href="{{ talkurl.url }}">{{ talkurl.description }}</a>
+          </li>
         {% endif %}
       {% endfor %}
     </ul>
+  {% endif %}
+
+  {% if object.presentation %}
+    <div class="mt-3">
+      <h3>{% trans "Presentation" %}</h3>
+      <a href="{% url 'wafer_talk_presentation_download' object.pk %}"
+         class="btn btn-secondary">
+        {% trans "Download Presentation" %}
+      </a>
+    </div>
+  {% endif %}
+
+  {% if can_upload_presentation %}
+    <div class="mt-3">
+      <a href="{% url 'wafer_talk_presentation_upload' object.pk %}"
+         class="btn btn-secondary">
+        {% if object.presentation %}
+          {% trans "Replace Presentation" %}
+        {% else %}
+          {% trans "Upload Presentation" %}
+        {% endif %}
+      </a>
+    </div>
   {% endif %}
 </section>
 {% if can_review %}

@@ -1,4 +1,6 @@
 import copy
+import os
+import zipfile
 
 from django import forms
 from django.conf import settings
@@ -204,3 +206,41 @@ class ReviewForm(forms.Form):
                 score = Score(review=review, aspect=aspect)
             score.value = self.cleaned_data[make_aspect_key(aspect)]
             score.save()
+
+
+class PresentationUploadForm(forms.Form):
+    presentation = forms.FileField(
+        label=_('Presentation'),
+        help_text=_('Upload a PDF or ZIP file.')
+    )
+
+    def clean_presentation(self):
+        uploaded_file = self.cleaned_data['presentation']
+        extension = os.path.splitext(uploaded_file.name)[1].lower()
+
+        if extension not in ('.pdf', '.zip'):
+            raise forms.ValidationError(
+                _('Only PDF and ZIP files are allowed.')
+            )
+
+        if extension == '.pdf':
+            uploaded_file.seek(0)
+            file_header = uploaded_file.read(5)
+            uploaded_file.seek(0)
+
+            if file_header != b'%PDF-':
+                raise forms.ValidationError(
+                    _('The uploaded file is not a valid PDF.')
+                )
+
+        elif extension == '.zip':
+            uploaded_file.seek(0)
+            valid_zip = zipfile.is_zipfile(uploaded_file)
+            uploaded_file.seek(0)
+
+            if not valid_zip:
+                raise forms.ValidationError(
+                    _('The uploaded file is not a valid ZIP archive.')
+                )
+
+        return uploaded_file
