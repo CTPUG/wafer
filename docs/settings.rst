@@ -144,6 +144,12 @@ Wafer's settings
    schedule. If the number of talk authors is higher than this, then they get
    displayed as "First Author, et al."
 
+``WAFER_SCHEDULE_PROVISIONAL_TALKS``
+   A boolean, ``False`` by default.
+   If ``True``, provisionally accepted talks can be added to the schedule,
+   in addition to accepted (and cancelled) talks. This allows drafting a
+   schedule before all talks are confirmed.
+
 ``WAFER_SSO``
     A list of SSO mechanisms in use.
     Possible options are: ``'github'``, ``'gitlab'``.

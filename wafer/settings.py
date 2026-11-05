@@ -367,6 +367,9 @@ WAFER_HIDE_SCHEDULE = False
 # Author, et al."
 WAFER_SCHEDULE_MAX_AUTHORS = 2
 
+# Allow provisionally accepted talks to be added to the schedule
+WAFER_SCHEDULE_PROVISIONAL_TALKS = False
+
 # Session chair checklists assume a talk ends this many minutes before the
 # end of its schedule slot (used for the "warn the speaker" times).
 WAFER_CHECKLIST_TALK_END_BUFFER_MINUTES = 5

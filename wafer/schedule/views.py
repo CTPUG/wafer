@@ -10,7 +10,6 @@ from django.contrib import messages
 from django.contrib.auth.mixins import UserPassesTestMixin
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
-from django.db.models import Q
 from django.http import HttpResponse, JsonResponse
 from django.utils import timezone
 from django.utils.dateparse import parse_datetime
@@ -28,10 +27,10 @@ from rest_framework.response import Response
 from wafer import __version__
 from wafer.pages.models import Page
 from wafer.schedule.models import (
-    Venue, Slot, ScheduleBlock, ScheduleItem, get_schedule_version)
+    Venue, Slot, ScheduleBlock, ScheduleItem, get_schedule_version,
+    schedulable_talk_statuses)
 from wafer.schedule.admin import check_schedule, validate_schedule
 from wafer.schedule.serializers import ScheduleItemSerializer
-from wafer.talks.models import ACCEPTED, CANCELLED
 from wafer.talks.models import Talk
 
 
@@ -477,9 +476,8 @@ class ScheduleEditView(TemplateView):
         else:
             block = blocks.first()
 
-        public_talks = Talk.objects.filter(Q(status=ACCEPTED) |
-                                           Q(status=CANCELLED),
-                                           num_schedulable__gt=0)
+        public_talks = Talk.objects.filter(
+            status__in=schedulable_talk_statuses(), num_schedulable__gt=0)
         public_talks = public_talks.order_by("talk_type", "talk_id")
         venues = Venue.objects.filter(blocks__in=[block])
         slots = Slot.objects.all().select_related(
