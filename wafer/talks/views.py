@@ -22,11 +22,11 @@ from rest_framework_extensions.mixins import NestedViewSetMixin
 from reversion import revisions
 
 from wafer.talks.models import (
-    Review, Talk, TalkType, TalkUrl, Track,
+    Review, Talk, TalkFile, TalkType, TalkUrl, Track,
     ACCEPTED, CANCELLED, PROVISIONAL, SUBMITTED, UNDER_CONSIDERATION,
     WITHDRAWN)
 from wafer.talks.forms import (
-    PresentationUploadForm,
+    TalkAttachmentUploadForm,
     ReviewForm,
     get_talk_form_class,
 )
@@ -131,13 +131,31 @@ class TalkView(BuildableDetailView):
         user = self.request.user
 
         context['can_edit'] = talk.can_edit(user)
-        context['can_upload_presentation'] = (
+        context['can_upload_attachments'] = (
             user.is_authenticated
             and (
                 talk._is_among_authors(user)
                 or user.has_perm('talks.change_talk')
             )
         )
+
+        can_see_private_attachments = (
+            user.is_authenticated
+            and (
+                talk._is_among_authors(user)
+                or user.has_perm('talks.change_talk')
+                or user.has_perm('talks.view_all_talks')
+                or talk.can_review(user)
+            )
+        )
+
+        if can_see_private_attachments:
+            context['talk_attachments'] = talk.attachments.all()
+        else:
+            context['talk_attachments'] = talk.attachments.filter(
+                public=True
+            )
+
         can_review = talk.can_review(user)
         context['can_review'] = can_review
         if can_review:
@@ -147,7 +165,7 @@ class TalkView(BuildableDetailView):
 
         return context
 
-class TalkPresentationUpload(LoginRequiredMixin, View):
+class TalkAttachmentUpload(LoginRequiredMixin, View):
     template_name = 'wafer.talks/presentation_upload.html'
 
     def dispatch(self, request, *args, **kwargs):
@@ -166,7 +184,7 @@ class TalkPresentationUpload(LoginRequiredMixin, View):
         return super().dispatch(request, *args, **kwargs)
 
     def get(self, request, *args, **kwargs):
-        form = PresentationUploadForm()
+        form = TalkAttachmentUploadForm()
 
         return render(request, self.template_name, {
             'talk': self.talk,
@@ -174,19 +192,28 @@ class TalkPresentationUpload(LoginRequiredMixin, View):
         })
 
     def post(self, request, *args, **kwargs):
-        form = PresentationUploadForm(
+        form = TalkAttachmentUploadForm(
             request.POST,
             request.FILES,
         )
 
         if form.is_valid():
-            old_presentation = self.talk.presentation
+            for uploaded_file in form.cleaned_data['files']:
+                filename = os.path.basename(uploaded_file.name)
 
-            self.talk.presentation = form.cleaned_data['presentation']
-            self.talk.save(update_fields=['presentation'])
+                attachment = TalkFile(
+                    talk=self.talk,
+                    name=filename,
+                    description='',
+                    public=False,
+                )
 
-            if old_presentation:
-                old_presentation.delete(save=False)
+                attachment.item.save(
+                    filename,
+                    uploaded_file,
+                    save=False,
+                )
+                attachment.save()
 
             return redirect(self.talk.get_absolute_url())
 
@@ -196,35 +223,40 @@ class TalkPresentationUpload(LoginRequiredMixin, View):
         })
 
 
-class TalkPresentationDownload(View):
+class TalkAttachmentDownload(View):
     def get(self, request, *args, **kwargs):
-        talk = get_object_or_404(Talk, pk=kwargs['pk'])
-
+        attachment = get_object_or_404(
+            TalkFile,
+            pk=kwargs['file_pk'],
+        )
+        talk = attachment.talk
         user = request.user
 
-        if not (
-            talk.can_view(user)
-            or user.has_perm('talks.change_talk')
-        ):
-            raise PermissionDenied
+        if attachment.public:
+            if not talk.can_view(user):
+                raise PermissionDenied
+        else:
+            if not user.is_authenticated:
+                raise PermissionDenied
 
-        if not talk.presentation:
+            is_author = talk._is_among_authors(user)
+            is_organiser = (
+                user.has_perm('talks.change_talk')
+                or user.has_perm('talks.view_all_talks')
+            )
+            is_reviewer = talk.can_review(user)
+
+            if not (is_author or is_organiser or is_reviewer):
+                raise PermissionDenied
+
+        if not attachment.item:
             raise Http404
 
-        extension = os.path.splitext(
-            talk.presentation.name
-        )[1].lower()
-
-        content_type = {
-            '.pdf': 'application/pdf',
-            '.zip': 'application/zip',
-        }.get(extension, 'application/octet-stream')
-
         return FileResponse(
-            talk.presentation.open('rb'),
+            attachment.item.open('rb'),
             as_attachment=True,
-            filename=os.path.basename(talk.presentation.name),
-            content_type=content_type,
+            filename=os.path.basename(attachment.item.name),
+            content_type='application/octet-stream',
         )
 
 

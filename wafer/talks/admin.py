@@ -7,7 +7,7 @@ from reversion.admin import VersionAdmin
 
 from wafer.compare.admin import CompareVersionAdmin, DateModifiedFilter
 from wafer.talks.models import (
-    Review, ReviewAspect, Score, Talk, TalkType, TalkUrl, Track)
+    Review, ReviewAspect, Score, Talk, TalkFile, TalkType, TalkUrl, Track)
 from wafer.talks.models import (
     SUBMITTED,
     WITHDRAWN,
@@ -86,6 +86,13 @@ class TalkUrlInline(admin.TabularInline):
     model = TalkUrl
 
 
+class TalkFileInline(admin.TabularInline):
+    model = TalkFile
+    fields = ('name', 'description', 'item', 'public')
+    readonly_fields = ()
+    extra = 0
+
+
 class ReviewInline(admin.TabularInline):
     model = Review
     readonly_fields = ('reviewer', 'notes', 'avg_score', 'scores')
@@ -147,6 +154,7 @@ class TalkAdmin(CompareVersionAdmin):
 
     inlines = [
         TalkUrlInline,
+        TalkFileInline,
         ReviewInline,
     ]
 

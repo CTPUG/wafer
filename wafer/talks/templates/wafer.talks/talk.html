@@ -176,25 +176,34 @@
     </ul>
   {% endif %}
 
-  {% if object.presentation %}
+  {% if talk_attachments %}
     <div class="mt-3">
-      <h3>{% trans "Presentation" %}</h3>
-      <a href="{% url 'wafer_talk_presentation_download' object.pk %}"
-         class="btn btn-secondary">
-        {% trans "Download Presentation" %}
-      </a>
+      <h3>{% trans "Talk Files" %}</h3>
+      <ul class="list-group">
+        {% for attachment in talk_attachments %}
+          <li class="list-group-item">
+            <a href="{% url 'wafer_talk_file_download' attachment.pk %}">
+              {{ attachment.name }}
+            </a>
+            {% if attachment.description %}
+              <p>{{ attachment.description }}</p>
+            {% endif %}
+            {% if not attachment.public %}
+              <span class="badge badge-secondary">
+                {% trans "Private" %}
+              </span>
+            {% endif %}
+          </li>
+        {% endfor %}
+      </ul>
     </div>
   {% endif %}
 
-  {% if can_upload_presentation %}
+  {% if can_upload_attachments %}
     <div class="mt-3">
-      <a href="{% url 'wafer_talk_presentation_upload' object.pk %}"
+      <a href="{% url 'wafer_talk_file_upload' object.pk %}"
          class="btn btn-secondary">
-        {% if object.presentation %}
-          {% trans "Replace Presentation" %}
-        {% else %}
-          {% trans "Upload Presentation" %}
-        {% endif %}
+        {% trans "Upload Files" %}
       </a>
     </div>
   {% endif %}

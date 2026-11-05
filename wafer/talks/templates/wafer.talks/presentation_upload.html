@@ -3,12 +3,12 @@
 {% load crispy_forms_tags %}
 
 {% block title %}
-  {% trans "Upload Presentation" %} - {{ WAFER_CONFERENCE_NAME }}
+  {% trans "Upload Talk Files" %} - {{ WAFER_CONFERENCE_NAME }}
 {% endblock %}
 
 {% block content %}
 <section class="wafer wafer-talk">
-  <h1>{% trans "Upload Presentation" %}</h1>
+  <h1>{% trans "Upload Talk Files" %}</h1>
 
   <p>
     {% trans "Talk:" %}
@@ -16,7 +16,11 @@
   </p>
 
   <p>
-    {% trans "Upload your presentation as a PDF or ZIP file." %}
+    {% trans "Select one or more files to attach to this talk." %}
+  </p>
+
+  <p>
+    {% trans "New uploads are private. Conference organisers can review them and decide which files become publicly available." %}
   </p>
 
   <form method="post" enctype="multipart/form-data">
@@ -25,7 +29,7 @@
     {{ form|crispy }}
 
     <button type="submit" class="btn btn-primary">
-      {% trans "Upload Presentation" %}
+      {% trans "Upload Files" %}
     </button>
 
     <a href="{{ talk.get_absolute_url }}"

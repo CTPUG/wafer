@@ -1,105 +1,118 @@
-"""Tests for talk presentation uploads and downloads."""
+"""Tests for talk attachment uploads and downloads."""
 
-import io
 import os
 import tempfile
-import zipfile
 
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import TestCase, override_settings
 from django.urls import reverse
 
 from wafer.tests.utils import create_user
-from wafer.talks.models import ACCEPTED, REJECTED
+from wafer.talks.models import ACCEPTED, REJECTED, TalkFile
 from wafer.talks.tests.fixtures import create_talk
 
 
-class TalkPresentationUploadTests(TestCase):
+class TalkAttachmentTests(TestCase):
+
     def setUp(self):
-        self.media_directory = tempfile.TemporaryDirectory()
-        self.addCleanup(self.media_directory.cleanup)
+        self.private_directory = tempfile.TemporaryDirectory()
+        self.addCleanup(self.private_directory.cleanup)
 
-        media_settings = override_settings(MEDIA_ROOT=self.media_directory.name)
-        media_settings.enable()
-        self.addCleanup(media_settings.disable)
+        self.storage = TalkFile._meta.get_field('item').storage
+        self.original_storage_location = self.storage.location
+        self.storage.location = self.private_directory.name
+        self.addCleanup(
+            lambda: setattr(
+                self.storage, 'location', self.original_storage_location
+            )
+        )
 
-        self.speaker = create_user('presentation_speaker')
+        self.speaker = create_user('attachment_speaker')
         self.talk = create_talk(
-            'Presentation upload test', ACCEPTED, user=self.speaker)
+            'Attachment upload test', ACCEPTED, user=self.speaker
+        )
 
         self.upload_url = reverse(
-            'wafer_talk_presentation_upload', kwargs={'pk': self.talk.pk})
-        self.download_url = reverse(
-            'wafer_talk_presentation_download', kwargs={'pk': self.talk.pk})
+            'wafer_talk_file_upload', kwargs={'pk': self.talk.pk}
+        )
 
     @staticmethod
-    def pdf_file(name='slides.pdf'):
+    def uploaded_file(name='slides.pdf', content=b'Test file content'):
         return SimpleUploadedFile(
-            name, b'%PDF-1.4\nTest presentation\n',
-            content_type='application/pdf')
+            name, content, content_type='application/octet-stream'
+        )
 
-    @staticmethod
-    def zip_file(name='slides.zip'):
-        buffer = io.BytesIO()
-        with zipfile.ZipFile(buffer, 'w') as archive:
-            archive.writestr('index.html', '<h1>Presentation</h1>')
-        return SimpleUploadedFile(
-            name, buffer.getvalue(), content_type='application/zip')
+    def download_url(self, attachment):
+        return reverse(
+            'wafer_talk_file_download',
+            kwargs={'file_pk': attachment.pk},
+        )
 
-    def test_speaker_can_upload_pdf(self):
+    def create_attachment(self, public=False, talk=None):
+        attachment = TalkFile(
+            talk=talk or self.talk,
+            name='test-document.txt',
+            description='Test attachment',
+            public=public,
+        )
+        attachment.item.save(
+            'test-document.txt',
+            self.uploaded_file('test-document.txt'),
+            save=True,
+        )
+        return attachment
+
+    def test_speaker_can_upload_multiple_files(self):
         self.client.force_login(self.speaker)
 
         response = self.client.post(
-            self.upload_url, {'presentation': self.pdf_file()})
+            self.upload_url,
+            {
+                'files': [
+                    self.uploaded_file('slides.pdf'),
+                    self.uploaded_file('example.py', b'print("hello")'),
+                ],
+            },
+        )
 
         self.assertEqual(response.status_code, 302)
-        self.talk.refresh_from_db()
-        self.assertTrue(self.talk.presentation.name.endswith('.pdf'))
-        self.assertTrue(os.path.exists(self.talk.presentation.path))
 
-    def test_speaker_can_upload_zip(self):
+        attachments = list(self.talk.attachments.order_by('name'))
+        self.assertEqual(len(attachments), 2)
+        self.assertEqual(
+            {item.name for item in attachments},
+            {'slides.pdf', 'example.py'},
+        )
+
+        for attachment in attachments:
+            self.assertFalse(attachment.public)
+            self.assertTrue(attachment.item.storage.exists(
+                attachment.item.name
+            ))
+
+    def test_speaker_can_upload_non_pdf_file(self):
         self.client.force_login(self.speaker)
 
         response = self.client.post(
-            self.upload_url, {'presentation': self.zip_file()})
+            self.upload_url,
+            {'files': self.uploaded_file('notes.txt', b'Example notes')},
+        )
 
         self.assertEqual(response.status_code, 302)
-        self.talk.refresh_from_db()
-        self.assertTrue(self.talk.presentation.name.endswith('.zip'))
-        self.assertTrue(os.path.exists(self.talk.presentation.path))
+        self.assertTrue(
+            self.talk.attachments.filter(name='notes.txt').exists()
+        )
 
-    def test_rejects_unsupported_file_extension(self):
+    def test_new_uploads_are_private_by_default(self):
         self.client.force_login(self.speaker)
-        file = SimpleUploadedFile('slides.txt', b'not a presentation')
 
-        response = self.client.post(
-            self.upload_url, {'presentation': file})
+        self.client.post(
+            self.upload_url,
+            {'files': self.uploaded_file('private.pdf')},
+        )
 
-        self.assertEqual(response.status_code, 200)
-        self.talk.refresh_from_db()
-        self.assertFalse(self.talk.presentation)
-
-    def test_rejects_invalid_pdf_content(self):
-        self.client.force_login(self.speaker)
-        file = SimpleUploadedFile('slides.pdf', b'This is not a PDF')
-
-        response = self.client.post(
-            self.upload_url, {'presentation': file})
-
-        self.assertEqual(response.status_code, 200)
-        self.talk.refresh_from_db()
-        self.assertFalse(self.talk.presentation)
-
-    def test_rejects_invalid_zip_content(self):
-        self.client.force_login(self.speaker)
-        file = SimpleUploadedFile('slides.zip', b'This is not a ZIP archive')
-
-        response = self.client.post(
-            self.upload_url, {'presentation': file})
-
-        self.assertEqual(response.status_code, 200)
-        self.talk.refresh_from_db()
-        self.assertFalse(self.talk.presentation)
+        attachment = self.talk.attachments.get()
+        self.assertFalse(attachment.public)
 
     def test_anonymous_user_is_redirected_to_login(self):
         response = self.client.get(self.upload_url)
@@ -108,7 +121,7 @@ class TalkPresentationUploadTests(TestCase):
         self.assertIn('login', response.url.lower())
 
     def test_non_speaker_cannot_upload(self):
-        other_user = create_user('presentation_other_user')
+        other_user = create_user('attachment_other_user')
         self.client.force_login(other_user)
 
         response = self.client.get(self.upload_url)
@@ -116,57 +129,92 @@ class TalkPresentationUploadTests(TestCase):
         self.assertEqual(response.status_code, 403)
 
     def test_administrator_can_upload(self):
-        administrator = create_user('presentation_admin', superuser=True)
+        administrator = create_user(
+            'attachment_admin', superuser=True
+        )
         self.client.force_login(administrator)
 
         response = self.client.post(
-            self.upload_url, {'presentation': self.pdf_file()})
+            self.upload_url,
+            {'files': self.uploaded_file('admin-file.pdf')},
+        )
 
         self.assertEqual(response.status_code, 302)
-        self.talk.refresh_from_db()
-        self.assertTrue(self.talk.presentation)
+        self.assertTrue(
+            self.talk.attachments.filter(name='admin-file.pdf').exists()
+        )
 
-    def test_new_upload_replaces_old_file(self):
-        self.talk.presentation.save(
-            'old-slides.pdf', self.pdf_file(), save=True)
-        old_file_path = self.talk.presentation.path
+    def test_author_can_download_private_attachment(self):
+        attachment = self.create_attachment(public=False)
         self.client.force_login(self.speaker)
 
-        response = self.client.post(
-            self.upload_url, {'presentation': self.zip_file()})
-
-        self.assertEqual(response.status_code, 302)
-        self.talk.refresh_from_db()
-        self.assertTrue(self.talk.presentation.name.endswith('.zip'))
-        self.assertFalse(os.path.exists(old_file_path))
-        self.assertTrue(os.path.exists(self.talk.presentation.path))
-
-    def test_talk_viewer_can_download_presentation(self):
-        self.talk.presentation.save('slides.pdf', self.pdf_file(), save=True)
-
-        response = self.client.get(self.download_url)
+        response = self.client.get(self.download_url(attachment))
 
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response['Content-Type'], 'application/pdf')
         self.assertIn('attachment', response['Content-Disposition'])
         response.close()
 
-    def test_non_viewer_cannot_download_presentation(self):
-        private_talk = create_talk(
-            'Private presentation test', REJECTED, username='private_speaker')
-        private_talk.presentation.save(
-            'private-slides.pdf', self.pdf_file(), save=True)
-        other_user = create_user('presentation_non_viewer')
-        self.client.force_login(other_user)
-        url = reverse(
-            'wafer_talk_presentation_download',
-            kwargs={'pk': private_talk.pk})
+    def test_anonymous_user_cannot_download_private_attachment(self):
+        attachment = self.create_attachment(public=False)
 
-        response = self.client.get(url)
+        response = self.client.get(self.download_url(attachment))
 
         self.assertEqual(response.status_code, 403)
 
-    def test_missing_presentation_returns_404(self):
-        response = self.client.get(self.download_url)
+    def test_unrelated_user_cannot_download_private_attachment(self):
+        attachment = self.create_attachment(public=False)
+        other_user = create_user('attachment_unrelated_user')
+        self.client.force_login(other_user)
+
+        response = self.client.get(self.download_url(attachment))
+
+        self.assertEqual(response.status_code, 403)
+
+    def test_public_attachment_can_be_downloaded_by_viewer(self):
+        attachment = self.create_attachment(public=True)
+
+        response = self.client.get(self.download_url(attachment))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('attachment', response['Content-Disposition'])
+        response.close()
+
+    def test_public_attachment_is_not_available_for_private_talk(self):
+        private_talk = create_talk(
+            'Rejected attachment test',
+            REJECTED,
+            username='attachment_private_speaker',
+        )
+        attachment = self.create_attachment(
+            public=True,
+            talk=private_talk,
+        )
+
+        other_user = create_user('attachment_private_viewer')
+        self.client.force_login(other_user)
+
+        response = self.client.get(self.download_url(attachment))
+
+        self.assertEqual(response.status_code, 403)
+
+    def test_administrator_can_download_private_attachment(self):
+        attachment = self.create_attachment(public=False)
+        administrator = create_user(
+            'attachment_download_admin', superuser=True
+        )
+        self.client.force_login(administrator)
+
+        response = self.client.get(self.download_url(attachment))
+
+        self.assertEqual(response.status_code, 200)
+        response.close()
+
+    def test_missing_attachment_returns_404(self):
+        response = self.client.get(
+            reverse(
+                'wafer_talk_file_download',
+                kwargs={'file_pk': 999999},
+            )
+        )
 
         self.assertEqual(response.status_code, 404)

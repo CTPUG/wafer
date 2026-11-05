@@ -1,6 +1,5 @@
 import copy
 import os
-import zipfile
 
 from django import forms
 from django.conf import settings
@@ -208,39 +207,31 @@ class ReviewForm(forms.Form):
             score.save()
 
 
-class PresentationUploadForm(forms.Form):
-    presentation = forms.FileField(
-        label=_('Presentation'),
-        help_text=_('Upload a PDF or ZIP file.')
+class MultipleFileInput(forms.ClearableFileInput):
+    allow_multiple_selected = True
+
+
+class MultipleFileField(forms.FileField):
+    widget = MultipleFileInput
+
+    def clean(self, data, initial=None):
+        if not data:
+            return super().clean(data, initial)
+
+        if not isinstance(data, (list, tuple)):
+            data = [data]
+
+        return [
+            super(MultipleFileField, self).clean(file, initial)
+            for file in data
+        ]
+
+
+class TalkAttachmentUploadForm(forms.Form):
+    files = MultipleFileField(
+        label=_('Files'),
+        help_text=_(
+            'Select one or more files to attach to this talk. '
+            'New uploads remain private until an organiser publishes them.'
+        ),
     )
-
-    def clean_presentation(self):
-        uploaded_file = self.cleaned_data['presentation']
-        extension = os.path.splitext(uploaded_file.name)[1].lower()
-
-        if extension not in ('.pdf', '.zip'):
-            raise forms.ValidationError(
-                _('Only PDF and ZIP files are allowed.')
-            )
-
-        if extension == '.pdf':
-            uploaded_file.seek(0)
-            file_header = uploaded_file.read(5)
-            uploaded_file.seek(0)
-
-            if file_header != b'%PDF-':
-                raise forms.ValidationError(
-                    _('The uploaded file is not a valid PDF.')
-                )
-
-        elif extension == '.zip':
-            uploaded_file.seek(0)
-            valid_zip = zipfile.is_zipfile(uploaded_file)
-            uploaded_file.seek(0)
-
-            if not valid_zip:
-                raise forms.ValidationError(
-                    _('The uploaded file is not a valid ZIP archive.')
-                )
-
-        return uploaded_file

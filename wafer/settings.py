@@ -58,6 +58,9 @@ USE_TZ = True
 project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 MEDIA_ROOT = os.path.join(project_root, 'media')
 
+# Private files must not be served directly as public media.
+PRIVATE_MEDIA_ROOT = os.path.join(project_root, 'private_media')
+
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash.
 # Examples: "http://example.com/media/", "http://media.example.com/"

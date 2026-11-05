@@ -4,7 +4,7 @@ from rest_framework_extensions import routers
 from wafer.talks.views import (
     Speakers, ReviewViewSet, TalkCreate, TalkReview, TalkTypesView, TalkUpdate,
     TalkUrlsViewSet, TalkView, TalkWithdraw, TalksViewSet, TracksView,
-    UsersTalks, TalkPresentationUpload, TalkPresentationDownload)
+    UsersTalks, TalkAttachmentUpload, TalkAttachmentDownload)
 
 router = routers.ExtendedSimpleRouter()
 
@@ -25,15 +25,15 @@ urlpatterns = [
     re_path(r'^new/$', TalkCreate.as_view(), name='wafer_talk_submit'),
 
     re_path(
-        r'^(?P<pk>\d+)/presentation/upload/$',
-        TalkPresentationUpload.as_view(),
-        name='wafer_talk_presentation_upload',
+        r'^(?P<pk>\d+)/files/upload/$',
+        TalkAttachmentUpload.as_view(),
+        name='wafer_talk_file_upload',
     ),
 
     re_path(
-        r'^(?P<pk>\d+)/presentation/$',
-        TalkPresentationDownload.as_view(),
-        name='wafer_talk_presentation_download',
+        r'^files/(?P<file_pk>\d+)/download/$',
+        TalkAttachmentDownload.as_view(),
+        name='wafer_talk_file_download',
     ),
 
     re_path(r'^(?P<pk>\d+)/edit/$', TalkUpdate.as_view(),
