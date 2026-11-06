@@ -178,6 +178,15 @@
             e.target.setAttribute('data-talk-id', talkId);
             var unassigned = document.getElementById("talk" + talkId);
             unassigned.hidden = true;
+            var talkUrl = data.getAttribute('data-talk-url');
+            e.target.setAttribute('data-talk-url', talkUrl);
+
+            var talkLink = document.createElement('a');
+            talkLink.setAttribute('href', talkUrl);
+            talkLink.setAttribute('target', '_blank');
+            talkLink.setAttribute('rel', 'noopener');
+            talkLink.textContent = 'view';
+            e.target.appendChild(talkLink);
         }
 
         var ajaxData = {
@@ -225,6 +234,7 @@
         scheduleItemCell.removeAttribute('data-scheduleitem-id');
         var talkId = scheduleItemCell.getAttribute('data-talk-id');
         scheduleItemCell.removeAttribute('data-talk-id');
+        scheduleItemCell.removeAttribute('data-talk-url');
         scheduleItemCell.removeAttribute('data-page-id');
         scheduleItemCell.removeAttribute('data-type');
 

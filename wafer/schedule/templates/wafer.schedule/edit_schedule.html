@@ -61,6 +61,7 @@
                   class="table-{% if venue.talk %}success{% elif venue.page %}info{% endif %} droppable {% if venue.talk or venue.page %}draggable{% endif %}"
                   data-scheduleitem-id="{{ venue.scheduleitem_id }}"
                   data-talk-id="{{ venue.talk.talk_id }}"
+                  data-talk-url="{{ venue.talk.get_absolute_url }}"
                   data-page-id="{{ venue.page.id }}"
                   data-type="{% if venue.talk %}talk{% elif venue.page %}page{% endif %}">
                 {% if venue.scheduleitem_id %}
@@ -77,6 +78,9 @@
                   <del>{{ venue.title }} ({% trans 'Cancelled' %})</del>
                 {% else %}
                   {{ venue.title }}
+                  {% if venue.talk %}
+                    <a href="{{ venue.talk.get_absolute_url }}" target="_blank" rel="noopener">view</a>
+                  {% endif %}
                 {% endif %}
               </td>
             {% endfor %}
@@ -131,11 +135,12 @@
                     {% if talk not in talks_unassigned %}
                       hidden
                     {% endif %}
-                    data-type="talk" data-talk-id="{{ talk.talk_id }}">
+                    data-type="talk" data-talk-id="{{ talk.talk_id }}" data-talk-url="{{ talk.get_absolute_url }}">
                 {% if not talk.cancelled %}
                   {{ talk.title }}
                   <br/>
                   <small>{{ talk.track }}</small>
+                  <a href="{{ talk.get_absolute_url }}" target="_blank" rel="noopener">view</a>
                 {% else %}
                   <del title='{% trans 'Cancelled' %}'>{{ talk.title }}</del>
                 {% endif %}
@@ -157,11 +162,12 @@
                     class="talk{{ talk.talk_id }}"
                     data-bs-toggle="tooltip" data-bs-placement="left"
                     title="{{ talk.title }}"
-                    data-type="talk" data-talk-id="{{ talk.talk_id }}">
+                    data-type="talk" data-talk-id="{{ talk.talk_id }}" data-talk-url="{{ talk.get_absolute_url }}">
                 {% if not talk.cancelled %}
                   {{ talk.title }}
                   <br/>
                   <small>{{ talk.track }}</small>
+                  <a href="{{ talk.get_absolute_url }}" target="_blank" rel="noopener">view</a>
                 {% else %}
                   <del title='{% trans 'Cancelled' %}'>{{ talk.title }}</del>
                 {% endif %}
