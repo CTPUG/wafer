@@ -41,7 +41,6 @@ Each slot can have a name to make it easier to distinguish.
 Slots cannot overlap, but items can use multiple slots, so this can be
 emulated by breaking the slots down into small enough time intervals.
 
-
 Assigning items to slots
 ========================
 
@@ -54,6 +53,30 @@ as tea breaks to the schedule.
 If the schedule item has been assigned to a page, the details field can be
 used to override the information from the page. For talks, details will
 be added to the information from the talk.
+
+
+Slot splitting / merging
+========================
+
+The slot admin allowing spliting a slot into two slots or merging
+two contigious slots into a single slot.
+
+Care must be taken when schedule items have already be assigned to
+slots which need to be modified, as the current implementation
+does the minium required to create / remove slots.
+
+When a slot is split, the newly created slot will have no schedule
+items associated with it. This can result in a valid schedule
+becoming invalid. The existing slot will have time reduced to half
+of it's current time and the new slot will be added after it. The new
+slots `previous_slot` will be set to the shortened original slot, so
+the relative time of the two slots can be changed by editing the
+end_time of the original time. If a slot had the original slot set
+as `previous_slot`, that will be updated to the new slot.
+
+When slots are merged, only schedule items assigned to the first
+slot in the list of merged slots are retained. Any other schedule
+items are deleted. This can cause schedules to become invalid.
 
 Schedule views
 ==============

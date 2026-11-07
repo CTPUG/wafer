@@ -1,8 +1,11 @@
 import datetime as D
 
-from django.test import TestCase
+from django.test import TestCase, RequestFactory
 from django.http import HttpRequest
 from django.utils import timezone, version
+
+from django.contrib.messages import set_level, get_messages, INFO
+from django.contrib.messages.storage.fallback import FallbackStorage
 
 from wafer.pages.models import Page
 from wafer.schedule.admin import (
@@ -23,6 +26,10 @@ class DummyForm(object):
         self.cleaned_data = {}
 
 
+def get_message_list(request):
+    return [x.message for x in get_messages(request)]
+
+
 def make_dummy_form(additional):
     """Fake a form object for the tests"""
     form = DummyForm()
@@ -41,6 +48,8 @@ class SlotAdminTests(TestCase):
                 end_time=D.datetime(2013, 9, 22, 23, 0, 0,
                                     tzinfo=D.timezone.utc))
         self.admin = SlotAdmin(Slot, None)
+
+        self.factory = RequestFactory()
 
     def test_save_model_single_new(self):
         """Test save_model creating a new slot, but no additional slots"""
@@ -163,6 +172,82 @@ class SlotAdminTests(TestCase):
         slot2 = Slot.objects.filter(previous_slot=slot1).get()
         self.assertEqual(slot2.get_start_time(), slot1.end_time)
         self.assertEqual(slot2.end_time, D.datetime(2013, 9, 22, 13, 00, 0, tzinfo=D.timezone.utc))
+
+    def test_split_slot(self):
+        """Test that splitting one of 2 slots results in 3 slots with the expected
+           behaviour"""
+        slot1 = Slot(start_time=D.datetime(2013, 9, 22, 11, 0, 0, tzinfo=D.timezone.utc),
+                     end_time=D.datetime(2013, 9, 22, 11, 30, 0, tzinfo=D.timezone.utc))
+        slot2 = Slot(previous_slot=slot1,
+                     end_time=D.datetime(2013, 9, 22, 11, 45, 0, tzinfo=D.timezone.utc))
+        slot1.save()
+        slot2.save()
+
+        # Approximate middleware for the tests
+        request = self.factory.post("/admin/schedule/slot/")
+        request.session = "session"
+        request._messages = FallbackStorage(request)
+
+        # Check that we don't split multiple slots
+        self.admin.split_slot(request, Slot.objects.all())
+        self.assertEqual(Slot.objects.count(), 2)
+        self.assertIn("Splitting only works on a single slot", get_message_list(request))
+        self.assertNotIn("Successfully split slot", get_message_list(request))
+
+        # Split a single slot
+        slots = Slot.objects.filter(start_time=D.datetime(2013, 9, 22, 11, 0, 0, tzinfo=D.timezone.utc))
+        self.admin.split_slot(request, slots)
+        slot1.refresh_from_db()
+        slot2.refresh_from_db()
+
+        self.assertEqual(Slot.objects.count(), 3)
+        self.assertEqual(slot1.end_time,
+                         D.datetime(2013, 9, 22, 11, 15, 0, tzinfo=D.timezone.utc))
+        self.assertNotEqual(slot2.previous_slot, slot1)
+        slot3 = Slot.objects.filter(previous_slot=slot1)[0]
+        self.assertEqual(slot3.end_time,
+                         D.datetime(2013, 9, 22, 11, 30, 0, tzinfo=D.timezone.utc))
+        self.assertEqual(slot2.previous_slot, slot3)
+        self.assertIn("Successfully split slot", get_message_list(request))
+
+    def test_combine_slots(self):
+        """Test that combining two slots out of 3 results in 2 slots with the expected
+           connections"""
+        slot1 = Slot(start_time=D.datetime(2013, 9, 22, 11, 0, 0, tzinfo=D.timezone.utc),
+                     end_time=D.datetime(2013, 9, 22, 11, 15, 0, tzinfo=D.timezone.utc))
+        slot2 = Slot(previous_slot=slot1,
+                     end_time=D.datetime(2013, 9, 22, 11, 30, 0, tzinfo=D.timezone.utc))
+        slot3 = Slot(previous_slot=slot2,
+                     end_time=D.datetime(2013, 9, 22, 11, 45, 0, tzinfo=D.timezone.utc))
+
+        slot1.save()
+        slot2.save()
+        slot3.save()
+        request = self.factory.post("/admin/schedule/slot/")
+        request.session = "session"
+        request._messages = FallbackStorage(request)
+        set_level(request, INFO)
+        # Check that we only split two slots
+        self.admin.combine_slots(request, Slot.objects.all())
+        self.assertEqual(Slot.objects.count(), 3)
+        self.assertIn("Combining requires 2 (and only 2) slots", get_message_list(request))
+        self.assertNotIn("Slots to combine must be contigious", get_message_list(request))
+        self.assertNotIn("Combined 2 slots", get_message_list(request))
+        # Check that we don't combine non-contigious slots
+        self.admin.combine_slots(request,
+                                 Slot.objects.exclude(end_time=D.datetime(2013, 9, 22, 11, 30, 0, tzinfo=D.timezone.utc)))
+        self.assertEqual(Slot.objects.count(), 3)
+        self.assertIn("Slots to combine must be contigious", get_message_list(request))
+        self.assertNotIn("Combined 2 slots", get_message_list(request))
+        # Combine slot1 & slot2
+        self.admin.combine_slots(request,
+                                 Slot.objects.exclude(end_time=D.datetime(2013, 9, 22, 11, 45, 0, tzinfo=D.timezone.utc)))
+        self.assertEqual(Slot.objects.count(), 2)
+        self.assertIn("Combined 2 slots", get_message_list(request))
+        slot1.refresh_from_db()
+        slot3.refresh_from_db()
+        self.assertEqual(slot3.previous_slot, slot1)
+        self.assertEqual(slot1.end_time, D.datetime(2013, 9, 22, 11, 30, 0, tzinfo=D.timezone.utc))
 
 
 class SlotListFilterTest(TestCase):
